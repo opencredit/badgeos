@@ -11,7 +11,7 @@
 
 //Check if we've defined our url elsewhere, if not, set it here.
 if ( !defined( 'BADGEOS_CREDLY_API_URL' ) )
-    define( 'BADGEOS_CREDLY_API_URL', 'https://apidev.credly.com/v0.2/' ); //Dev API. Not for production.
+    define( 'BADGEOS_CREDLY_API_URL', 'https://api.credly.com/v0.2/' );
 
 /**
  * Build our Credly object
