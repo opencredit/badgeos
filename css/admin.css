@@ -1,0 +1,35 @@
+#icon-badgeos_badgeos {
+	background-image: url('../images/badgeos_screen_icon.png');
+}
+
+/* For the Triggers UI */
+li.step-row {
+	background:#fff;
+	border-radius: 5px;
+	border: 1px solid #DDD;
+	padding: 5px 10px;
+}
+li.step-row .step-handle {
+	display: block;
+	background:url( '../images/ui_handle.png' );
+	width:7px;
+	height:4em;
+	margin:5px 10px 5px 0;
+	position: relative;
+	float: left;
+}
+li.step-row .required-duration {
+	text-align: right;
+}
+li.step-row .step-title {
+	display: block;
+	padding-top:5px;
+}
+li.step-row .title {
+	width:300px;
+}
+li.step-row .delete-step {
+	position: relative;
+	float: right;
+	line-height:4.5em;
+}

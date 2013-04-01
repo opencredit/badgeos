@@ -1,0 +1,97 @@
+.achievement-template-part {
+	border: #fff 1px solid;
+	border-width: 1px;
+	border-style: solid;
+	padding: 0.6em 0.6em;
+	margin: 5px 0 15px;
+	background-color: #ddd;
+	border-color: #999;
+	color: black;
+	clear: both;
+}
+#badgeos-achievements-filter, #badgeos-achievements-search {
+	max-width: 46%;
+	min-width: 250px;
+	float: left;
+	padding: 0 2% 20px 0;
+}
+#achievements_list_search {
+	margin-right: 5px;
+}
+#badgeos-achievements-container, #achievements_list_load_more, #badgeos-achievements-filters-wrap {
+	display: block;
+	margin: 0 auto;
+	clear: both;
+}
+#badgeos-achievements-container {
+	border-top: 1px dotted #aaa;
+}
+#badgeos-achievements-filter select {
+	max-width: 100%;
+	margin-left: 5px;
+}
+.badgeos-achievements-list-item {
+	clear: both;
+	padding: 20px 0;
+	border-bottom: 1px dotted #aaa;
+	overflow: hidden;
+}
+.badgeos-achievements-list-item .badgeos-item-image {
+	width: 16%;
+	padding-right: 4%;
+	display: block;
+	float: left;
+	/*margin: 0 10px 10px 0;*/
+	opacity: .4;
+}
+.badgeos-achievements-list-item .badgeos-item-image img {
+	width: 100%;
+	height: auto;
+}
+.badgeos-achievements-list-item .badgeos-item-description {
+	width: 80%;
+	float: right;
+}
+.badgeos-item-points {
+	font-weight: bold;
+}
+.badgeos-achievements-list-item.user-has-earned .badgeos-item-image {
+	opacity: 1;
+}
+#badgeos-achievements-container .badgeos-item-title {
+	display: inline-block;
+	margin-top: 0;
+}
+#achievements_list_load_more {
+	margin: 20px auto;
+}
+.badgeos-open-close-switch {
+	text-align: right;
+}
+.badgeos-open-close-switch a {
+	display: block;
+}
+.badgeos-extras-window {
+	display: none;
+	clear: both;
+}
+.badgeos-required-achievements .user-has-earned, .badgeos-achievements-list-item.user-has-earned .badgeos-extras-window li {
+	text-decoration: line-through;
+}
+.badgeos-required-achievements .user-has-earned:hover, .badgeos-achievements-list-item.user-has-earned .badgeos-extras-window li:hover {
+	text-decoration: none;
+}
+.show-hide-open:after, .show-hide-close:after {
+	content: '';
+	display: block;
+	overflow: hidden;
+	background: url('../images/arrows.png') top no-repeat;
+	width: 22px;
+	height: 7px;
+	float:right;
+	margin: .7em 0 0 5px;
+	background-position: 0 -14px;
+}
+.show-hide-close:after {
+	background-position: 0 -21px;
+}
