@@ -543,7 +543,7 @@ function credly_issue_badge( $user_id, $achievement_id ) {
 
 	if ( 'true' === $GLOBALS['badgeos_credly']->user_enabled ) {
 
-		$GLOBALS['badgeos_credly']->post_credly_user_badge( $achievement_id );
+		$GLOBALS['badgeos_credly']->post_credly_user_badge( $user_id, $achievement_id );
 
 	}
 

@@ -41,7 +41,6 @@ class BadgeOS_Credly {
         // Set our user settings
         $this->user_id                 = get_current_user_id();
         $this->user_enabled            = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
-        $this->credly_user_id          = ( get_user_meta( $this->user_id, 'credly_user_id', true ) != '' ? get_user_meta( $this->user_id, 'credly_user_id', true ) : $this->credly_user_get_id() );
 
         // Hook in to WordPress
         $this->hooks();
@@ -55,8 +54,8 @@ class BadgeOS_Credly {
      */
     public function hooks() {
 
-		//admin notice
-		add_action( 'admin_notices', array( $this, 'credly_admin_notice' ) );
+        //admin notice
+        add_action( 'admin_notices', array( $this, 'credly_admin_notice' ) );
 
         // Badge Metabox
         add_action( 'add_meta_boxes', array( $this, 'badge_metabox_add' ) );
@@ -71,7 +70,7 @@ class BadgeOS_Credly {
         add_action( 'init', array( $this, 'credly_profile_setting_force_enable' ), 999 );
 
         // Update Credly ID on profile save
-        add_action( 'personal_options_update', array( $this, 'credly_user_get_id' ) );
+        add_action( 'personal_options_update', array( $this, 'credly_get_user_id' ) );
 
     }
 
@@ -81,18 +80,18 @@ class BadgeOS_Credly {
      * @since  1.0.0
      * @return string      Admin notice if API key is empty
      */
-	public function credly_admin_notice() {
+    public function credly_admin_notice() {
 
-		$credly_settings = get_option( 'credly_settings' );
+        $credly_settings = get_option( 'credly_settings' );
 
-		//check if Credly is enabled and if an API key exists
-		if ( empty( $credly_settings ) || 'false' === $credly_settings['credly_enable'] || ! empty( $credly_settings['api_key'] ) )
-			return;
+        //check if Credly is enabled and if an API key exists
+        if ( empty( $credly_settings ) || 'false' === $credly_settings['credly_enable'] || ! empty( $credly_settings['api_key'] ) )
+            return;
 
-		//display the admin notice
-		printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared and by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
+        //display the admin notice
+        printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared and by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
 
-	}
+    }
 
     /**
      * Append our url with our access token
@@ -434,7 +433,7 @@ class BadgeOS_Credly {
 
         <tr>
             <th scope="row"><?php _e( 'Badge Sharing', 'badgeos' ); ?></th>
-			<td><label for="credly_user_enable"><input type="checkbox" name="credly_user_enable" value="true" <?php checked( $user->credly_user_enable, 'true' ); ?>/> <?php _e( 'Send eligible earned badges to Credly', 'badgeos' ); ?></td>
+            <td><label for="credly_user_enable"><input type="checkbox" name="credly_user_enable" value="true" <?php checked( $user->credly_user_enable, 'true' ); ?>/> <?php _e( 'Send eligible earned badges to Credly', 'badgeos' ); ?></td>
         </tr>
 
     <?php
@@ -497,14 +496,17 @@ class BadgeOS_Credly {
      * Gets our Credly user ID or defaults to user email
      *
      * @since  1.0.0
+     * @param  int     User ID we're checking
      * @return string  A numeric user ID from credly or the user email
      */
-    public function credly_user_get_id() {
+    public function credly_get_user_id( $user_id = 0 ) {
 
-        global $user_email;
+        $user_id = ( ! empty( $user_id ) ? $user_id : $this->user_id );
+
+        $user = get_userdata( $user_id );
 
         // If we're saving our profile use that value, otherwise the current user email
-        $user_email = ( ! empty( $_POST['email'] ) ? $_POST['email'] : $user_email );
+        $user_email = ( ! empty( $_POST['email'] ) ? $_POST['email'] : $user->user_email );
 
         // Run our search against the Credly API
         $credly_id = $this->credly_user_email_search( $user_email );
@@ -514,7 +516,7 @@ class BadgeOS_Credly {
             $credly_id = $user_email;
 
         // Set our local meta
-        $this->credly_user_set_id( $credly_id );
+        $this->credly_user_set_id( $user_id, $credly_id );
 
         return $credly_id;
 
@@ -616,17 +618,20 @@ class BadgeOS_Credly {
      * @param  int  $badge_id The badge ID the user is earning
      * @return string         Results of the API call
      */
-    public function post_credly_user_badge( $badge_id ) {
+    public function post_credly_user_badge( $user_id = 0, $badge_id ) {
 
         // Bail if the badge isn't in Credly
         if ( ! credly_is_achievement_giveable( $badge_id ) )
             return false;
 
+        if ( empty( $user_id ) )
+            $user_id = $this->user_id;
+
         // Generate our API URL endpoint
         $url = $this->api_url_with_token( $this->api_url_user_badge() );
 
         // Generate our args
-        $body = $this->post_user_badge_args( $badge_id );
+        $body = $this->post_user_badge_args( $user_id, $badge_id );
 
         // POST our data to the Credly API
         $response = $this->credly_api_post( $url, $body );
@@ -637,11 +642,11 @@ class BadgeOS_Credly {
 
         if ( $results ) {
 
-            $user = get_userdata( $this->user_id );
+            $user = get_userdata( $user_id );
             $username = $user->user_login;
             $badge_name = get_the_title( $badge_id );
 
-            badgeos_post_log_entry( $badge_id, $this->user_id, null, sprintf( "%s sent %s badge to Credly", $username, $badge_name ) );
+            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%s sent %s badge to Credly", $username, $badge_name ) );
 
         }
 
@@ -654,35 +659,40 @@ class BadgeOS_Credly {
      * Generate the array for user badge API call
      *
      * @since  1.0.0
+     * @param  int  $user_id  The ID of the user earning a badge
      * @param  int  $badge_id The badge ID the user is earning
      * @return array          An array of args
      */
-    private function post_user_badge_args( $badge_id = '' ) {
+    private function post_user_badge_args( $user_id, $badge_id ) {
 
         $args = '';
+
+        $user_id = ( ! empty( $user_id ) ? $user_id : $this->user_id );
+
+        $credly_user_id = $this->credly_get_user_id( $user_id );
 
         $credly_badge_id = get_post_meta( $badge_id, '_badgeos_credly_badge_id', true );
 
         $testimonial = credly_fieldmap_get_field_value( $badge_id, $this->field_testimonial );
         $testimonial = ( strlen( $testimonial ) > 1000 ? ( substr( $testimonial, 0, 996 ) . '...' ) : $testimonial );
 
-        if ( is_numeric( $this->credly_user_id ) ) {
+        if ( is_numeric( $credly_user_id ) ) {
 
             $args = array(
-                'member_id'     => $this->credly_user_id,
+                'member_id'     => $credly_user_id,
                 'badge_id'      => $credly_badge_id,
                 'evidence_file' => credly_fieldmap_get_field_value( $badge_id, $this->field_evidence ),
                 'testimonial'   => $testimonial,
                 'notify'        => (bool) $this->send_email,
             );
 
-        } elseif ( is_email( $this->credly_user_id ) ) {
+        } elseif ( is_email( $credly_user_id ) ) {
 
             // Get the userdata object for our current user
-            $user_info = get_userdata( $this->user_id );
+            $user_info = get_userdata( $user_id );
 
             $args = array(
-                'email'         => $this->credly_user_id,
+                'email'         => $credly_user_id,
                 'first_name'    => $user_info->user_firstname,
                 'last_name'     => $user_info->user_lastname,
                 'badge_id'      => $credly_badge_id,
@@ -792,9 +802,9 @@ class BadgeOS_Credly {
     ?>
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
         <table class="form-table">
-			<tr valign="top">
-				<td colspan="2"><?php _e( 'This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner’s own blog or site.', 'badgeos' ); ?> (<?php printf( __( '<a href="%s">Configure global settings</a> for Credly integration.', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?> )</td>
-			</tr>
+            <tr valign="top">
+                <td colspan="2"><?php _e( 'This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner’s own blog or site.', 'badgeos' ); ?> (<?php printf( __( '<a href="%s">Configure global settings</a> for Credly integration.', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?> )</td>
+            </tr>
             <tr valign="top"><th scope="row"><label for="_badgeos_send_to_credly"><?php _e( 'Send to Credly when earned', 'badgeos' ); ?></label></th>
                 <td>
                     <select id="_badgeos_send_to_credly" name="_badgeos_send_to_credly">
