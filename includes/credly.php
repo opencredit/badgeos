@@ -284,6 +284,8 @@ class BadgeOS_Credly {
             'categories'        => $categories, // comma separated string of ids
             );
 
+        $args = array_filter( $args );
+
         return $args;
 
     }
