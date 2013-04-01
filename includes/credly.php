@@ -705,6 +705,8 @@ class BadgeOS_Credly {
 
         }
 
+        $args = array_filter( $args );
+
         return $args;
 
     }
