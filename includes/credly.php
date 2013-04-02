@@ -284,7 +284,8 @@ class BadgeOS_Credly {
             'categories'        => $categories, // comma separated string of ids
             );
 
-        $args = array_filter( $args );
+        // Remove array keys with an empty value
+        $args = array_diff( $args, array( '' ) );
 
         return $args;
 
@@ -705,7 +706,8 @@ class BadgeOS_Credly {
 
         }
 
-        $args = array_filter( $args );
+        // Remove array keys with an empty value
+        $args = array_diff( $args, array( '' ) );
 
         return $args;
 
