@@ -41,7 +41,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 **Sharable Badges with Credly Integration**
 
-*   Badges are Mozilla Open Badge (OBI) compatible through integration of the "Open Credit" API by [Credly](https://credly.com/ "Credly.com"), the free web service for issuing, earning and sharing badges.
+*   Badges are Mozilla Open Badge (OBI) compatible through [integration](http://badgeos.org/about/credly-integration/ "Credly Integration") of the "Open Credit" API by [Credly](https://credly.com/ "Credly.com"), the free web service for issuing, earning and sharing badges.
 *   Connect your Credly account to your BadgeOS site and voila! You're using WordPress to issue "Open Badges" that can be displayed virtually anywhere.
 *   Badges you create in BadgeOS automatically appear and update on Credly
 *   Use Credly iOS app to issue badges you created on your WordPress site.
