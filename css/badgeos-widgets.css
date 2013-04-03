@@ -1,0 +1,109 @@
+.badgeos-spinner {
+	display: none;
+}
+.widget-achievements-listing li {
+	display: block;
+	position: relative;
+	padding: 0 0 5px;
+	min-height: 25px;
+}
+.widget-achievements-listing li.has-thumb {
+	min-height: 55px;
+}
+.widget-achievements-listing .badgeos-item-thumb {
+	position: absolute;
+	top: 50%;
+	left: 0;
+}
+.widget-achievements-listing .widget-badgeos-item-title {
+	font-weight: bold;
+}
+.widget-achievements-listing .has-thumb .widget-badgeos-item-title {
+	display: block;
+	text-indent: 60px;
+}
+.widget-achievements-listing .credly-share {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	height: 18px;
+	width: 23px;
+	z-index: 20;
+	padding: 5px 6px 5px 5px;
+	margin-top: -15px;
+	background-position: -29px 5px !important;
+	background-repeat: no-repeat !important;
+	background-image: url(../images/arrows.png) !important;
+	background-color: #666;
+	-moz-border-radius-top-right: 7px;
+	-webkit-border-top-right-radius: 7px;
+	-khtml-border-top-right-radius: 7px;
+	border-top-right-radius: 7px;
+	-moz-border-radius-bottom-right: 7px;
+	-webkit-border-bottom-right-radius: 7px;
+	-khtml-border-bottom-right-radius: 7px;
+	border-bottom-right-radius: 7px;
+}
+.widget-achievements-listing .credly-share:hover {
+	background-color: #444;
+}
+.widget-achievements-listing li:hover .credly-share {
+	display: block !important;
+}
+.credly-share-popup {
+	position: absolute;
+	z-index: 9999;
+	padding-bottom: 12px;
+}
+.credly-share-popup .credly-wrap {
+	background: #fff;
+	border: 2px solid #ccc;
+	padding: 6px 10px;
+	text-align: center;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+}
+.credly-share-popup .credly-wrap:before, .credly-share-popup .credly-wrap:after {
+	content: '';
+	position: absolute;
+	bottom: 1px;
+	left: 50%;
+	margin-left: -12px;
+	border-top: 12px solid #ccc;
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-bottom: 0;
+}
+.credly-share-popup .credly-wrap:after {
+	bottom: 3px;
+	margin-left: -10px;
+	border-top: 11px solid #fff ;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+}
+.credly-share-popup span {
+	display: block;
+	margin-bottom: .5em;
+}
+.credly-share-popup .credly-button {
+	cursor: pointer;
+	display: block;
+	float: left;
+}
+.credly-share-popup .credly-button.credly-cancel {
+	vertical-align: bottom;
+	float: right;
+	clear: right;
+}
+.credly-message {
+	display: block;
+}
+.credly-wrap .error {
+	color: red;
+}
+.credly-wrap .success {
+	color: green;
+}
