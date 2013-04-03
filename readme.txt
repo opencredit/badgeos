@@ -109,7 +109,7 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
-* [E-Mailing List](https://http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
+* [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
 * [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
 
 
