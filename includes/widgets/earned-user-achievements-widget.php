@@ -64,8 +64,8 @@ class earned_user_achievements_widget extends WP_Widget {
 
 				if ( $image_attr ) {
 
-					$img = '<img class="wp-post-image" width="'. $image_attr[1] .'" height="'. $image_attr[2] .'" src="'. $image_attr[0] .'">';
-					$thumb = '<a style="margin-top: -'. floor( $image_attr[2] / 2 ) .'px;" class="badgeos-item-thumb" href="'. $permalink .'">' . $img .'</a>';
+					$img = '<img class="wp-post-image" width="'. absint( $image_attr[1] ) .'" height="'. absint( $image_attr[2] ) .'" src="'. esc_url( $image_attr[0] ) .'">';
+					$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
 				}
 
 				$class = 'widget-badgeos-item-title';
@@ -73,10 +73,10 @@ class earned_user_achievements_widget extends WP_Widget {
 				$item_class .= credly_is_achievement_giveable( $achievement->ID ) ? ' share-credly' : '';
 
 
-				echo '<li id="widget-achievements-listing-item-'. $achievement->ID .'" class="widget-achievements-listing-item'. $item_class .'">';
+				echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
 
 				echo $thumb;
-				echo '<a class="widget-badgeos-item-title '. $class .'" href="'. $permalink .'">'. $title .'</a>';
+				echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
 				echo '</li>';
 
 				$thecount++;
