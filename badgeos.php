@@ -219,7 +219,7 @@ class BadgeOS {
 		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0', true );
 
 		$data = array(
-			'message' => __( 'Would you like to display this badge on social networks or add it to your lifelong badge collection?', 'badgeos' ),
+			'message' => __( 'Would you like to display this badge on social networks and add it to your lifelong badge collection?', 'badgeos' ),
 			'confirm' => __( 'Yes, send to Credly', 'badgeos' ),
 			'cancel' => __( 'Cancel', 'badgeos' ),
 			'share' => __( 'Share on Credly!', 'badgeos' ),
