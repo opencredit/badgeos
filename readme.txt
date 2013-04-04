@@ -21,13 +21,13 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 **Many ways to define achievements and give badges**
 
-*   Reviewed submissions,
-*   Auto-approving submissions,
-*   Nominations and review,
-*   Site activity (triggers based on commenting and logging in to your site),
-*   Completing specific other achievements one or a specific number of times,
-*   Completing one, select or all achievements of a specific type,
-*   Point thresholds,
+*   Reviewed submissions
+*   Auto-approving submissions
+*   Nominations and review
+*   Site activity (triggers based on commenting and logging in to your site)
+*   Completing specific other achievements one or a specific number of times
+*   Completing one, select or all achievements of a specific type
+*   Point thresholds
 *   Admin Given Badges
 
 
