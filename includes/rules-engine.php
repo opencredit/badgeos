@@ -4,9 +4,9 @@
  *
  * @package BadgeOS
  * @subpackage Achievements
- * @author LearningTimes
- * @license http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
- * @link http://www.LearningTimes.com
+ * @author Credly, LLC
+ * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
+ * @link https://credly.com
  */
 
 /**

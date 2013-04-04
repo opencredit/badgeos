@@ -4,9 +4,9 @@
  *
  * @package BadgeOS
  * @subpackage Admin
- * @author LearningTimes
- * @license http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
- * @link http://www.LearningTimes.com
+ * @author Credly, LLC
+ * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
+ * @link https://credly.com
  */
 
 /**
@@ -238,7 +238,7 @@ function badgeos_help_support_page() { ?>
 		<p><?php _e( 'BadgeOS is extremely extensible. Check out examples of what we’ve built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.', 'badgeos' ); ?></p>
 
 		<h3><?php _e( 'Help / Support', 'badgeos' ); ?>:</h3>
-		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the BadgeOS site at http://#.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. Contact us at http://# with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
+		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
 		<p><?php _e( 'Please submit bugs or issues to our Github site for the BadgeOS Project.', 'badgeos' ); ?></p>
 
 		<h3><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h3>

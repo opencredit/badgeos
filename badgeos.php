@@ -222,9 +222,9 @@ class BadgeOS {
 			'message' => __( 'Would you like to display this badge on social networks or add it to your lifelong badge collection?', 'badgeos' ),
 			'confirm' => __( 'Yes, send to Credly', 'badgeos' ),
 			'cancel' => __( 'Cancel', 'badgeos' ),
-			'share' => __( 'Share on Credly!', 'dsgnwrks' ),
-			'localized_error' => __( 'Error:' ),
-			'errormessage' => __( 'Error: Timed out', 'dsgnwrks' )
+			'share' => __( 'Share on Credly!', 'badgeos' ),
+			'localized_error' => __( 'Error:', 'badgeos' ),
+			'errormessage' => __( 'Error: Timed out', 'badgeos' )
 		);
 		wp_localize_script( 'badgeos-achievements', 'BadgeosCredlyData', $data );
 
