@@ -114,19 +114,9 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 
 = License Info =
 
-Copyright © 2012-2013 Credly, LLC
+Credly, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 
-This program is free software: you can redistribute it and/or modify it
-under the terms of the GNU Affero General Public License, version 3,
-as published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General
-Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/ "GNU AGPLv3").
+There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License, version 3, at [http://www.gnu.org/licenses/agpl-3.0.html](http://www.gnu.org/licenses/agpl-3.0.html, "License") for more details.
 
 == Installation ==
 
