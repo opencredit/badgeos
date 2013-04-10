@@ -1,5 +1,5 @@
 ﻿=== BadgeOS ===
-Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, messenlehner, lisasabinwilson
+Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
