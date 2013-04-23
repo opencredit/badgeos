@@ -11,6 +11,7 @@ jQuery(document).ready(function($){
 				'show_parent': badgeos.show_parent,
 				'show_child':  badgeos.show_child,
 				'group_id':    badgeos.group_id,
+				'user_id':     badgeos.user_id,
 				'offset':      $('#badgeos_achievements_offset').val(),
 				'count':       $('#badgeos_achievements_count').val(),
 				'filter':      $('#achievements_list_filter').val(),
