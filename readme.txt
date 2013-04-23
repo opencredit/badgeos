@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -173,11 +173,17 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.0.1 =
+* Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
+
 = 1.0 =
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+* Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
 
 = 1.0 =
 * Initial release
