@@ -226,6 +226,8 @@ function badgeos_user_profile_data( $user ) {
 				echo '<th>'. __( 'Action', 'badgeos' ) .'</th>';
 			echo '</tr></thead>';
 
+			$achievement_ids = array();
+
 			foreach ( $achievements as $achievement ) {
 
 				// Setup our revoke URL
@@ -238,8 +240,10 @@ function badgeos_user_profile_data( $user ) {
 				echo '<tr>';
 					echo '<td>'. get_the_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
 					echo '<td>', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
-					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Achievement', 'badgeos' ) . '</a></span></td>';
+					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Award', 'badgeos' ) . '</a></span></td>';
 				echo '</tr>';
+
+				$achievement_ids[] = $achievement->ID;
 
 			}
 			echo '</table>';
@@ -261,7 +265,7 @@ function badgeos_user_profile_data( $user ) {
 		echo '<br/>';
 
 		// Output markup for awarding achievement for user
-		badgeos_profile_award_achievement( $user );
+		badgeos_profile_award_achievement( $user, $achievement_ids );
 
 	}
 
@@ -274,7 +278,7 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  * Save extra user meta fields to the Edit Profile screen
  *
  * @since  1.0
- * @param  string  $user_id  User ID being saved
+ * @param  string  $user_id      User ID being saved
  * @return nothing
  */
 function badgeos_save_user_profile_fields( $user_id ) {
@@ -294,8 +298,10 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
  * Generate markup for awarding an achievement to a user
  *
  * @since 1.0.0
+ * @param object $user         The current user's $user object
+ * @param array  $achievements array of user-earned achievement IDs
  */
-function badgeos_profile_award_achievement( $user ) {
+function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) {
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
@@ -324,6 +330,7 @@ function badgeos_profile_award_achievement( $user ) {
 						<th><?php _e( 'Image', 'badgeos' ); ?></th>
 						<th><?php echo ucwords( $achievement_type['single_name'] ); ?></th>
 						<th><?php _e( 'Action', 'badgeos' ); ?></th>
+						<th><?php _e( 'Awarded', 'badgeos' ); ?></th>
 					</tr></thead>
 					<tbody>
 					<?php
@@ -351,7 +358,19 @@ function badgeos_profile_award_achievement( $user ) {
 									<?php echo edit_post_link( get_the_title() ); ?>
 								</td>
 								<td>
-									<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
+									<?php if ( in_array( get_the_ID(), $achievement_ids ) ) :
+										// Setup our revoke URL
+										$revoke_url = add_query_arg( array(
+											'action'         => 'revoke',
+											'user_id'        => absint( $user->ID ),
+											'achievement_id' => absint( get_the_ID() ),
+										) );
+										?>
+										<span class="delete"><a class="error" href="<?php echo esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ); ?>"><?php _e( 'Revoke Award', 'badgeos' ); ?></a></span>
+									<?php else : ?>
+										<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
+									<?php endif; ?>
+
 								</td>
 							</tr>
 						<?php endwhile; ?>
