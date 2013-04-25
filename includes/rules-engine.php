@@ -293,7 +293,7 @@ function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 		$user_id = wp_get_current_user()->ID;
 
 	// Grab the parent badge of the step
-	$parent_achievement = badgestack_get_parent_of_achievement( $step_id );
+	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
 
 	// If step doesn't have a parent, bail
 	if ( empty( $parent_achievement ) )

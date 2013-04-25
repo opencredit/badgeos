@@ -1,10 +1,10 @@
-﻿=== BadgeOS ===
+=== BadgeOS ===
 Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -21,13 +21,13 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 **Many ways to define achievements and give badges**
 
-*   Reviewed submissions,
-*   Auto-approving submissions,
-*   Nominations and review,
-*   Site activity (triggers based on commenting and logging in to your site),
-*   Completing specific other achievements one or a specific number of times,
-*   Completing one, select or all achievements of a specific type,
-*   Point thresholds,
+*   Reviewed submissions
+*   Auto-approving submissions
+*   Nominations and review
+*   Site activity (triggers based on commenting and logging in to your site)
+*   Completing specific other achievements one or a specific number of times
+*   Completing one, select or all achievements of a specific type
+*   Point thresholds
 *   Admin Given Badges
 
 
@@ -114,19 +114,9 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 
 = License Info =
 
-Copyright © 2012-2013 Credly, LLC
+Credly, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 
-This program is free software: you can redistribute it and/or modify it
-under the terms of the GNU Affero General Public License, version 3,
-as published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General
-Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.gnu.org/licenses/ "GNU AGPLv3").
+There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License, version 3, at [http://www.gnu.org/licenses/agpl-3.0.html](http://www.gnu.org/licenses/agpl-3.0.html "License") for more details.
 
 == Installation ==
 
@@ -183,11 +173,25 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.0.1 =
+* Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
+* Fix: Updated an incorrectly named function.
+* Fix: Stop completed filter from showing all achievements if no achievements have been completed
+* Updated: Achievement display and awarding UI improvement.
+* Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
+
 = 1.0 =
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+* Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
+* Fix: Updated an incorrectly named function.
+* Fix: Stop completed filter from showing all achievements if no achievements have been completed
+* Updated: Achievement display and awarding UI improvement.
+* Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
 = 1.0 =
 * Initial release

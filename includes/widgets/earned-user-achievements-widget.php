@@ -56,33 +56,38 @@ class earned_user_achievements_widget extends WP_Widget {
 			echo '<ul class="widget-achievements-listing">';
 			foreach ( $achievements as $achievement ) {
 
-				$permalink = get_permalink( $achievement->ID );
-				$title = get_the_title( $achievement->ID );
+				//exclude step CPT entries from displaying in the widget
+				if ( get_post_type( $achievement->ID ) != 'step' ) {
+				
+					$permalink = get_permalink( $achievement->ID );
+					$title = get_the_title( $achievement->ID );
 
-				$thumb = '';
-				$image_attr = wp_get_attachment_image_src( get_post_thumbnail_id( $achievement->ID ), array( 50, 50 ) );
+					$thumb = '';
+					$image_attr = wp_get_attachment_image_src( get_post_thumbnail_id( $achievement->ID ), array( 50, 50 ) );
 
-				if ( $image_attr ) {
+					if ( $image_attr ) {
 
-					$img = '<img class="wp-post-image" width="'. $image_attr[1] .'" height="'. $image_attr[2] .'" src="'. $image_attr[0] .'">';
-					$thumb = '<a style="margin-top: -'. floor( $image_attr[2] / 2 ) .'px;" class="badgeos-item-thumb" href="'. $permalink .'">' . $img .'</a>';
+						$img = '<img class="wp-post-image" width="'. absint( $image_attr[1] ) .'" height="'. absint( $image_attr[2] ) .'" src="'. esc_url( $image_attr[0] ) .'">';
+						$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
+					}
+
+					$class = 'widget-badgeos-item-title';
+					$item_class = $image_attr ? ' has-thumb' : '';
+					$item_class .= credly_is_achievement_giveable( $achievement->ID ) ? ' share-credly' : '';
+
+
+					echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
+
+					echo $thumb;
+					echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
+					echo '</li>';
+
+					$thecount++;
+
+					if ( $thecount == $number_to_show && $number_to_show != 0 )
+						break;
+				
 				}
-
-				$class = 'widget-badgeos-item-title';
-				$item_class = $image_attr ? ' has-thumb' : '';
-				$item_class .= credly_is_achievement_giveable( $achievement->ID ) ? ' share-credly' : '';
-
-
-				echo '<li id="widget-achievements-listing-item-'. $achievement->ID .'" class="widget-achievements-listing-item'. $item_class .'">';
-
-				echo $thumb;
-				echo '<a class="widget-badgeos-item-title '. $class .'" href="'. $permalink .'">'. $title .'</a>';
-				echo '</li>';
-
-				$thecount++;
-
-				if ( $thecount == $number_to_show && $number_to_show != 0 )
-					break;
 			}
 
 			echo '</ul><!-- widget-achievements-listing -->';

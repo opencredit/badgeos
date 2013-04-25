@@ -33,3 +33,12 @@ li.step-row .delete-step {
 	float: right;
 	line-height:4.5em;
 }
+
+/* User Profile Area */
+.badgeos-table tr {
+	/*padding: 5px 10px;*/
+}
+.badgeos-table .th {
+	font-weight: bold;
+	text-transform: uppercase;
+}

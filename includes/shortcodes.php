@@ -24,9 +24,10 @@ function badgeos_achievements_list_shortcode($atts){
 	extract( shortcode_atts( array(
 		'type'        => 'all',
 		'limit'       => '10',
-		'show_parent' => 'true',
-		'show_child'  => 'true',
+		'show_filter' => 'true',
+		'show_search'  => 'true',
 		'group_id'    => '0',
+		'user_id'    => '0',
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -36,9 +37,10 @@ function badgeos_achievements_list_shortcode($atts){
 		'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 		'type'        => $type,
 		'limit'       => $limit,
-		'show_parent' => $show_parent,
-		'show_child'  => $show_child,
+		'show_filter' => $show_filter,
+		'show_search'  => $show_search,
 		'group_id'    => $group_id,
+		'user_id'    => $user_id,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -48,35 +50,49 @@ function badgeos_achievements_list_shortcode($atts){
 
 	$badges .= '<div id="badgeos-achievements-filters-wrap">';
 		// Filter
-		$badges .= '<div id="badgeos-achievements-filter">';
+		if ( $show_filter == 'false' ) {
 
-			$badges .= 'Filter: <select name="achievements_list_filter" id="achievements_list_filter">';
+			$filter_value = 'all';
+			if( $user_id ){
+				$filter_value = 'completed';
+				$badges .= '<input type="hidden" name="user_id" id="user_id" value="'.$user_id.'">';
+			}
+			$badges .= '<input type="hidden" name="achievements_list_filter" id="achievements_list_filter" value="'.$filter_value.'">';
 
-				$badges .= '<option value="all">All '.$post_type_plural;
-				if ( $show_parent ) {
-					// get post type of parent
-					//$badges .= '<option value="parent">'.$post_type_plural.' by Level';
-				}
-				// If logged in
-				if ( $user_ID >0 ) {
-					$badges .= '<option value="completed">Completed '.$post_type_plural;
-					$badges .= '<option value="not-completed">Not Completed '.$post_type_plural;
-				}
-				// TODO: if show_points is true "Badges by Points"
-				// TODO: if dev adds a custom taxonomy to this post type then load all of the terms to filter by
+		}else{
 
-			$badges .= '</select>';
+			$badges .= '<div id="badgeos-achievements-filter">';
 
-		$badges .= '</div>';
+				$badges .= 'Filter: <select name="achievements_list_filter" id="achievements_list_filter">';
+
+					$badges .= '<option value="all">All '.$post_type_plural;
+					// If logged in
+					if ( $user_ID >0 ) {
+						$badges .= '<option value="completed">Completed '.$post_type_plural;
+						$badges .= '<option value="not-completed">Not Completed '.$post_type_plural;
+					}
+					// TODO: if show_points is true "Badges by Points"
+					// TODO: if dev adds a custom taxonomy to this post type then load all of the terms to filter by
+
+				$badges .= '</select>';
+
+			$badges .= '</div>';
+
+		}
 
 		// Search
-		$search = isset( $_POST['achievements_list_search'] ) ? $_POST['achievements_list_search'] : '';
-		$badges .= '<div id="badgeos-achievements-search">';
-			$badges .= '<form id="achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
-			$badges .= 'Search: <input type="text" id="achievements_list_search" name="achievements_list_search" value="'. $search .'">';
-			$badges .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="Go">';
-			$badges .= '</form>';
-		$badges .= '</div>';
+		if ( $show_search != 'false' ) {
+
+			$search = isset( $_POST['achievements_list_search'] ) ? $_POST['achievements_list_search'] : '';
+			$badges .= '<div id="badgeos-achievements-search">';
+				$badges .= '<form id="achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+				$badges .= 'Search: <input type="text" id="achievements_list_search" name="achievements_list_search" value="'. $search .'">';
+				$badges .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="Go">';
+				$badges .= '</form>';
+			$badges .= '</div>';
+
+		}
+
 	$badges .= '</div><!-- #badgeos-achievements-filters-wrap -->';
 
 	// AJAX Container
@@ -114,11 +130,15 @@ function achievements_list_load_more(){
 	$count  = isset( $_REQUEST['count'] ) ? $_REQUEST['count'] : false;
 	$filter = isset( $_REQUEST['filter'] ) ? $_REQUEST['filter'] : false;
 	$search = isset( $_REQUEST['search'] ) ? $_REQUEST['search'] : false;
+	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
+	if( !$user_id )
+		$user_id = $user_ID;
+	
 	$badges = null;
 
 	// Grab our hidden and earned badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
-	$earned_ids = badgeos_get_user_earned_achievement_ids( $user_ID, $type );
+	$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
 
 	// Query Achievements
 	$args = array(
@@ -133,7 +153,7 @@ function achievements_list_load_more(){
 
 	// Filter - query completed or non completed achievements
 	if ( $filter == 'completed' ) {
-		$args = array_merge( $args, array( 'post__in' => $earned_ids ) );
+		$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
 	}elseif( $filter == 'not-completed' ) {
 		$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
 	}
@@ -151,7 +171,7 @@ function achievements_list_load_more(){
 		$badge_id = get_the_ID();
 
 		// check if user has earned this Achievement, and add an 'earned' class
-		$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $badge_id ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+		$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => absint( $badge_id ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
 		// Only include the achievement if it HAS been earned -or- it is NOT hidden
 		// if ( 'user-has-earned' == $earned_status || 'show' == get_post_meta( $badge_id, '_badgeos_hidden', true ) ) {
@@ -197,6 +217,18 @@ function achievements_list_load_more(){
 		// }
 
 	endwhile;
+
+	//display a message for no results
+	if ( !$badge_id ) {
+		$post_type_plural = get_post_type_object( $type )->labels->name;
+		$badges .= '<div class="badgeos-no-results">';
+		if ( 'completed' == $filter ) {
+			$badges .= __('No completed '.strtolower($post_type_plural).' yet.','badgeos');
+		}else{
+			$badges .= __('There are no '.strtolower($post_type_plural).' at this time.','badgeos');
+		}
+		$badges .= '</div><!-- .badgeos-no-results -->';
+	}
 
 	$response['message']     = $badges;
 	$response['offset']      = $offset + $limit;

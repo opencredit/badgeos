@@ -10,7 +10,7 @@
  */
 
 /**
- * Get a user's badgestack achievements
+ * Get a user's badgeos achievements
  *
  * @since  1.0.0
  * @param  array $args An array of all our relevant arguments
@@ -215,10 +215,18 @@ function badgeos_user_profile_data( $user ) {
 				echo '<span class="description">' . __( "The user's points total. Entering a new total will automatically log the change and difference between totals.", 'badgeos' ) . '</span>';
 			echo '</td>';
 		echo '</tr>';
-		echo '</table>';
 
+		echo '<tr><td colspan="2">';
 		// List all of a user's earned achievements
 		if ( $achievements ) {
+			echo '<table class="widefat badgeos-table">';
+			echo '<thead><tr>';
+				echo '<th>'. __( 'Image', 'badgeos' ) .'</th>';
+				echo '<th>'. __( 'Name', 'badgeos' ) .'</th>';
+				echo '<th>'. __( 'Action', 'badgeos' ) .'</th>';
+			echo '</tr></thead>';
+
+			$achievement_ids = array();
 
 			foreach ( $achievements as $achievement ) {
 
@@ -229,10 +237,20 @@ function badgeos_user_profile_data( $user ) {
 					'achievement_id' => absint( $achievement->ID ),
 				) );
 
-				echo get_the_title( $achievement->ID ) .' <a href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Achievement', 'badgeos' ) . '</a><br />';
+				echo '<tr>';
+					echo '<td>'. get_the_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
+					echo '<td>', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
+					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Award', 'badgeos' ) . '</a></span></td>';
+				echo '</tr>';
+
+				$achievement_ids[] = $achievement->ID;
 
 			}
+			echo '</table>';
 		}
+
+		echo '</td></tr>';
+		echo '</table>';
 
 		// If debug mode is on, output our achievements array
 		if ( badgeos_is_debug_mode() ) {
@@ -247,7 +265,7 @@ function badgeos_user_profile_data( $user ) {
 		echo '<br/>';
 
 		// Output markup for awarding achievement for user
-		badgeos_profile_award_achievement( $user );
+		badgeos_profile_award_achievement( $user, $achievement_ids );
 
 	}
 
@@ -260,7 +278,7 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  * Save extra user meta fields to the Edit Profile screen
  *
  * @since  1.0
- * @param  string  $user_id  User ID being saved
+ * @param  string  $user_id      User ID being saved
  * @return nothing
  */
 function badgeos_save_user_profile_fields( $user_id ) {
@@ -280,67 +298,99 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
  * Generate markup for awarding an achievement to a user
  *
  * @since 1.0.0
+ * @param object $user         The current user's $user object
+ * @param array  $achievements array of user-earned achievement IDs
  */
-function badgeos_profile_award_achievement( $user ) {
+function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) {
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
-
-	$output = '';
-	$output .= '<h2>' . __( 'Award an Achievement', 'badgeos' ) . '</h2>';
-	$output .= __( 'Select an Achievement Type to Award:', 'badgeos' ) . ' ';
-
-	$output .= '<select id="thechoices">';
-	$output .= '<option></option>';
-	foreach ( $achievement_types as $achievement_type ) {
-		$output .= '<option value="'.$achievement_type['single_name'].'">' . ucfirst( $achievement_type['single_name'] ) .'</option>';
-	}
-	$output .= '</select>';
-
-	$output .= '<div id="boxes">';
-	foreach ( $achievement_types as $achievement_type ) {
-
-		$output .= '<div id="'.esc_attr( $achievement_type['single_name'] ).'">';
-
-		// Load achievement type entries
-		$the_query = new WP_Query( array(
-			'post_type'      =>	$achievement_type['single_name'],
-			'posts_per_page' =>	'-1'
-		) );
-
-		// Loop through achievement entries
-		while ( $the_query->have_posts() ) : $the_query->the_post();
-
-			// Setup our award URL
-			$award_url = add_query_arg( array(
-				'action'         => 'award',
-				'achievement_id' => absint( get_the_ID() ),
-				'user_id'        => absint( $user->ID )
-			) );
-
-			$output .= '<p>';
-			$output .= '<strong>' . ucfirst( $achievement_type['single_name'] ) . '</strong>: ' . get_the_title() . '<br />';
-			$output .= get_the_post_thumbnail( get_the_ID(), 'thumbnail' );
-			$output .= '<a href="' . esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ). '">' . sprintf( __( 'Award %s', 'badgeos' ), ucfirst( $achievement_type['single_name'] ) ) . '</a>';
-			$output .= '</p>';
-
-		endwhile;
-
-		// Reset Post Data
-		wp_reset_postdata();
-
-		$output .= '</div>';
-
-	}
-	$output .= '</div>';
-
-	echo $output;
-
 	?>
+
+	<h2><?php _e( 'Award an Achievement', 'badgeos' ); ?></h2>
+
+	<table class="form-table">
+		<tr>
+			<th><label for="thechoices"><?php _e( 'Select an Achievement Type to Award:', 'badgeos' ); ?></label></th>
+			<td>
+				<select id="thechoices">
+				<option></option>
+				<?php
+				foreach ( $achievement_types as $achievement_slug => $achievement_type ) {
+					echo '<option value="'. $achievement_slug .'">' . ucwords( $achievement_type['single_name'] ) .'</option>';
+				}
+				?>
+				</select>
+			</td>
+		</tr>
+		<tr><td id="boxes" colspan="2">
+			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) : ?>
+				<table id="<?php echo esc_attr( $achievement_slug ); ?>" class="widefat badgeos-table">
+					<thead><tr>
+						<th><?php _e( 'Image', 'badgeos' ); ?></th>
+						<th><?php echo ucwords( $achievement_type['single_name'] ); ?></th>
+						<th><?php _e( 'Action', 'badgeos' ); ?></th>
+						<th><?php _e( 'Awarded', 'badgeos' ); ?></th>
+					</tr></thead>
+					<tbody>
+					<?php
+					// Load achievement type entries
+					$the_query = new WP_Query( array(
+						'post_type'      => $achievement_slug,
+						'posts_per_page' => '999',
+						'post_status'    => 'publish'
+					) );
+
+					if ( $the_query->have_posts() ) : ?>
+
+						<?php while ( $the_query->have_posts() ) : $the_query->the_post();
+
+							// Setup our award URL
+							$award_url = add_query_arg( array(
+								'action'         => 'award',
+								'achievement_id' => absint( get_the_ID() ),
+								'user_id'        => absint( $user->ID )
+							) );
+							?>
+							<tr>
+								<td><?php the_post_thumbnail( array( 50, 50 ) ); ?></td>
+								<td>
+									<?php echo edit_post_link( get_the_title() ); ?>
+								</td>
+								<td>
+									<?php if ( in_array( get_the_ID(), $achievement_ids ) ) :
+										// Setup our revoke URL
+										$revoke_url = add_query_arg( array(
+											'action'         => 'revoke',
+											'user_id'        => absint( $user->ID ),
+											'achievement_id' => absint( get_the_ID() ),
+										) );
+										?>
+										<span class="delete"><a class="error" href="<?php echo esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ); ?>"><?php _e( 'Revoke Award', 'badgeos' ); ?></a></span>
+									<?php else : ?>
+										<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
+									<?php endif; ?>
+
+								</td>
+							</tr>
+						<?php endwhile; ?>
+
+					<?php else : ?>
+						<tr>
+							<th><?php printf( __( 'No %s found.', 'badgeos' ), $achievement_type['plural_name'] ); ?></th>
+						</tr>
+					<?php endif; wp_reset_postdata(); ?>
+
+					</tbody>
+					</table><!-- #<?php echo esc_attr( $achievement_slug ); ?> -->
+			<?php endforeach; ?>
+		</td><!-- #boxes --></tr>
+	</table>
+
 	<script type="text/javascript">
 		jQuery(document).ready(function($){
-			<?php foreach ( $achievement_types as $achievement_type ) { ?>
-				$('#<?php echo $achievement_type['single_name']; ?>').hide();
+			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) { ?>
+				$('#<?php echo $achievement_slug; ?>').hide();
 			<?php } ?>
 			$("#thechoices").change(function(){
 				if ( 'all' == this.value )
