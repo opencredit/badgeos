@@ -253,6 +253,8 @@ function badgeos_help_support_page() { ?>
 					<ul>
 						<li><?php _e( 'type', 'badgeos' ); ?> - <?php _e( 'Custom post type of achievements to list.  Default: all', 'badgeos' ); ?></li>
 						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php _e( 'Number of achievements to display per page.  Default: 10', 'badgeos' ); ?></li>
+						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php _e( 'Display the filter options.  Default: true', 'badgeos' ); ?></li>
+						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
 					</ul>
 					</div>
 				</li>
