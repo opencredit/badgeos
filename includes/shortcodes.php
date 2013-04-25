@@ -153,7 +153,7 @@ function achievements_list_load_more(){
 
 	// Filter - query completed or non completed achievements
 	if ( $filter == 'completed' ) {
-		$args = array_merge( $args, array( 'post__in' => $earned_ids ) );
+		$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
 	}elseif( $filter == 'not-completed' ) {
 		$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
 	}
@@ -217,6 +217,18 @@ function achievements_list_load_more(){
 		// }
 
 	endwhile;
+
+	//display a message for no results
+	if ( !$badge_id ) {
+		$post_type_plural = get_post_type_object( $type )->labels->name;
+		$badges .= '<div class="badgeos-no-results">';
+		if ( 'completed' == $filter ) {
+			$badges .= __('No completed '.strtolower($post_type_plural).' yet.','badgeos');
+		}else{
+			$badges .= __('There are no '.strtolower($post_type_plural).' at this time.','badgeos');
+		}
+		$badges .= '</div><!-- .badgeos-no-results -->';
+	}
 
 	$response['message']     = $badges;
 	$response['offset']      = $offset + $limit;
