@@ -176,7 +176,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
 * Fix: Updated an incorrectly named function.
+* Fix: Stop completed filter from showing all achievements if no achievements have been completed
 * Updated: Achievement display and awarding UI improvement.
+* Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
 = 1.0 =
 * BadgeOS says "hello world", earns "Hello World" badge.
@@ -187,7 +189,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
 * Fix: Updated an incorrectly named function.
+* Fix: Stop completed filter from showing all achievements if no achievements have been completed
 * Updated: Achievement display and awarding UI improvement.
+* Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
 = 1.0 =
 * Initial release
