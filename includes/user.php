@@ -10,7 +10,7 @@
  */
 
 /**
- * Get a user's badgestack achievements
+ * Get a user's badgeos achievements
  *
  * @since  1.0.0
  * @param  array $args An array of all our relevant arguments
