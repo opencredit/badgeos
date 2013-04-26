@@ -91,7 +91,7 @@ jQuery(document).ready(function($){
 	var spinnerTimer;
 
 	// add credly share button to achievements in widget
-	$('.widget-achievements-listing-item.share-credly').append('<a class="credly-share" style="display: none;" href="#" title="' + BadgeosCredlyData.share + '"></a>').on( 'click', '.credly-share', function(event) {
+	$('.share-credly').append('<a class="credly-share" style="display: none;" href="#" title="' + BadgeosCredlyData.share + '"></a>').on( 'click', '.credly-share', function(event) {
 		event.preventDefault();
 
 		credlyHide();
