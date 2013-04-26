@@ -216,9 +216,10 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0', true );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0.1', true );
 
 		$data = array(
+			'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
 			'message' => __( 'Would you like to display this badge on social networks and add it to your lifelong badge collection?', 'badgeos' ),
 			'confirm' => __( 'Yes, send to Credly', 'badgeos' ),
 			'cancel' => __( 'Cancel', 'badgeos' ),
@@ -232,19 +233,19 @@ class BadgeOS {
 			? get_stylesheet_directory_uri() .'/badgeos.css' :
 			$this->directory_url . 'css/badgeos-front.css';
 
-		wp_register_style( 'badgeos-front', $css_file, null, '1.0' );
+		wp_register_style( 'badgeos-front', $css_file, null, '1.0.1' );
 
 		$css_single_file = file_exists( get_stylesheet_directory() .'/badgeos-single.css' )
 			? get_stylesheet_directory_uri() .'/badgeos-single.css'
 			: $this->directory_url . 'css/badgeos-single.css';
 
-		wp_register_style( 'badgeos-single', $css_single_file, null, '1.0' );
+		wp_register_style( 'badgeos-single', $css_single_file, null, '1.0.1' );
 
 		$css_widget_file = file_exists( get_stylesheet_directory() .'/badgeos-widgets.css' )
 			? get_stylesheet_directory_uri() .'/badgeos-widgets.css'
 			: $this->directory_url . 'css/badgeos-widgets.css';
 
-		wp_register_style( 'badgeos-widget', $css_widget_file, null, '1.0' );
+		wp_register_style( 'badgeos-widget', $css_widget_file, null, '1.0.1' );
 	}
 
 	/**
