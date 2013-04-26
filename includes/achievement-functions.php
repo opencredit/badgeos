@@ -350,6 +350,22 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 }
 
 /**
+ * Get an array of unique achievement types a user has earned
+ *
+ * @since  1.0.1
+ *
+ * @param  int  $user_id The ID of the user earning the achievement
+ */
+function badgeos_get_user_earned_achievement_types($user_id){
+	
+	$achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
+
+	$achievement_types = wp_list_pluck( $achievements, 'post_type' );
+
+	return array_unique( $achievement_types );
+}
+
+/**
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
