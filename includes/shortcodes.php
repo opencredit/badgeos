@@ -183,8 +183,12 @@ function achievements_list_load_more(){
 				$badges .= '<div class="badgeos-item-image">';
 
 					// check if current user has completed this achievement and display a div to overlay on image
-					if ( 'user-has-earned' == $earned_status )
-						$badges .= '<div class="achievement-completed"></div>';
+					if ( 'user-has-earned' == $earned_status ) {
+						// Credly Share
+						$credly_class = credly_is_achievement_giveable( $badge_id ) ? ' share-credly' : '';
+						// Completed Achievement div
+						$badges .= '<div class="achievement-completed'.$credly_class.'"></div>';
+					}
 					$badges .= '<a href="'.get_permalink().'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
 
 				$badges .= '</div><!-- .badgeos-item-image -->';
