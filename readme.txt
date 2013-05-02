@@ -176,6 +176,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.0.2 =
 * New: Added "Display users who have earned achievement" option to achievements
 * Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
+* Updated: [badgeos_achievements_list] shortcode now shows send to Credly link on earned achievements.
 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
