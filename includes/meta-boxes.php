@@ -105,6 +105,12 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 				'type' => 'checkbox',
 			),
 			array(
+				'name' => __( 'Show Earners', 'badgeos' ),
+				'desc' => ' '.__( 'Yes, display a list of users who have earned this achievement.', 'badgeos' ),
+				'id'   => $prefix . 'show_earners',
+				'type' => 'checkbox',
+			),
+			array(
 				'name' => __( 'Congratulations Text', 'badgeos' ),
 				'desc' => __( 'Displayed after achievement is earned. If sending to Credly, a great place for a testimonial for those who complete this achievement.', 'badgeos' ),
 				'id'   => $prefix . 'congratulations_text',
