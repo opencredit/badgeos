@@ -52,6 +52,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 *   Simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
 *   Easily link together one or more triggers, steps or actions into the conditions needed to earn a badge or mark an achievement.
+*   Extend the Required Steps options using the free [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on")
 
 
 **Reward User Progress**
