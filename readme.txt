@@ -29,7 +29,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Completing one, select or all achievements of a specific type
 *   Point thresholds
 *   Admin Given Badges
-
+*   Community Activity (with the powerful [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
 
 **Define an Unlimited Number of Achievement Types**
 
@@ -96,7 +96,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * BadgeOS is designed to be a true operating system for turning any WordPress site into an engagement management application.
 * Built with expandability in mind to allow virtually anything to trigger and recognize achievement.
-* BadgeOS plans to release a range of Add-Ons to the plugin that enhance core functionality with specialized functions.
+* BadgeOS plans to continue to release a range of [Add-ons](http://badgeos.org/download/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
 * Check out some of the [BadgeOS customizations](http://badgeos.org/services/badgeos-customization/ "We'll help you customize your BadgeOS site") we've already implemented to get a sense for what you might expect.
 
 
