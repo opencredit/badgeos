@@ -218,9 +218,19 @@ function badgeos_settings_page() {
  */
 function badgeos_add_ons_page() { ?>
 	<div class="wrap" >
-		<div id="icon-options-general" class="icon32"></div>
-		<h2><?php _e( 'BadgeOS Add-Ons', 'badgeos' ); ?></h2>
-	</div>
+        <div id="icon-options-general" class="icon32"></div>
+        <h2><?php _e( 'BadgeOS Add-Ons', 'badgeos' ); ?></h2>
+
+        <h3>Community Add-on</h3>
+        <p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">http://wordpress.org/extend/plugins/badgeos-community-add-on/</a></p>
+        The "BadgeOS Community Add-on" integrates BadgeOS features into BuddyPress and bbPress. Site members complete achievements and earn badges based on a range of community activity and triggers. This add-on to BadgeOS also includes the ability to display badges and achievements on user profiles and activity feeds. 
+        <hr>
+
+        <h3>BadgeStack Add-on</h3>
+        <p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/">http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/</a></p>
+        The BadgeStack add-on to BadgeOS automatically creates all the achievement types and pages needed to quickly set up your very own badging system. Levels, Quest Badges, Quests and Community Badges are all ready upon activating the plugin, as are pages with shortcodes for each achievement type. BadgeStack also includes a set of sample achievements and badges. A great way to bring some instant organization to your site and to get started with badging. This add-on is made possible in part due to the generous support of HASTAC, through the DML Badging Competition.
+           
+    </div>
 	<?php
 }
 
