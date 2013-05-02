@@ -599,7 +599,8 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	$users = badgeos_get_achievement_earners( $achievement_id );
 
 	// Loop through each user and build our output
-	$output = '<ul class="achievement-earners-list achievement-' . $achievement_id . '-earners-list">';
+	$output = '<h4>' . apply_filters( 'badgeos_earners_heading', __( 'People Who Have Earned This', 'badgeos' ) ) . '</h4>';
+	$output .= '<ul class="badgeos-achievement-earners-list achievement-' . $achievement_id . '-earners-list">';
 	foreach ( $users as $user ) {
 		$user_content = '<li><a href="' . get_author_posts_url( $user->ID ) . '">' . get_avatar( $user->ID ) . '</a></li>';
 		$output .= apply_filters( 'badgeos_get_achievement_earners_list_user', $user_content, $user->ID );

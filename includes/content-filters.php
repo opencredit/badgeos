@@ -204,6 +204,8 @@ add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
  */
 function badgeos_reformat_entries( $content ) {
 
+	wp_enqueue_style( 'badgeos-front' );
+
 	$badge_id = get_the_ID();
 
 	// filter, but only on the main loop!
@@ -230,6 +232,10 @@ function badgeos_reformat_entries( $content ) {
 
 	// Include output for our steps
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
+
+	// Include achievement earners, if this achievement supports it
+	if ( $show_earners = get_post_meta( $badge_id, '_badgeos_show_earners', true ) )
+		$newcontent .= badgeos_get_achievement_earners_list( $badge_id );
 
 	$newcontent .= '</div><!-- .achievement-wrap -->';
 
