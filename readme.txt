@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -172,6 +172,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 
 == Changelog ==
+
+= 1.0.2 =
+* New: Added "Display users who have earned achievement" option to achievements
+* Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
