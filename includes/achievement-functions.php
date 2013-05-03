@@ -350,6 +350,22 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 }
 
 /**
+ * Get an array of unique achievement types a user has earned
+ *
+ * @since  1.0.1
+ *
+ * @param  int  $user_id The ID of the user earning the achievement
+ */
+function badgeos_get_user_earned_achievement_types($user_id){
+
+	$achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
+
+	$achievement_types = wp_list_pluck( $achievements, 'post_type' );
+
+	return array_unique( $achievement_types );
+}
+
+/**
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
@@ -549,3 +565,48 @@ function credly_issue_badge( $user_id, $achievement_id ) {
 
 }
 add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
+
+/**
+ * Get an array of all users who have earned a given achievement
+ *
+ * @since  1.1.0
+ * @param  integer $achievement_id The given achievement's post ID
+ * @return array                   Array of user objects
+ */
+function badgeos_get_achievement_earners( $achievement_id = 0 ) {
+
+	// Grab our earners
+	$earners = new WP_User_Query( array(
+		'meta_key'     => '_badgeos_achievements',
+		'meta_value'   => $achievement_id,
+		'meta_compare' => 'LIKE'
+	) );
+
+	// Send back our query results
+	return $earners->results;
+}
+
+/**
+ * Build an unordered list of users who have earned a given achievement
+ *
+ * @since  1.1.0
+ * @param  integer $achievement_id The given achievement's post ID
+ * @return string                  Concatenated markup
+ */
+function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
+
+	// Grab our users
+	$users = badgeos_get_achievement_earners( $achievement_id );
+
+	// Loop through each user and build our output
+	$output = '<h4>' . apply_filters( 'badgeos_earners_heading', __( 'People Who Have Earned This', 'badgeos' ) ) . '</h4>';
+	$output .= '<ul class="badgeos-achievement-earners-list achievement-' . $achievement_id . '-earners-list">';
+	foreach ( $users as $user ) {
+		$user_content = '<li><a href="' . get_author_posts_url( $user->ID ) . '">' . get_avatar( $user->ID ) . '</a></li>';
+		$output .= apply_filters( 'badgeos_get_achievement_earners_list_user', $user_content, $user->ID );
+	}
+	$output .= '</ul>';
+
+	// Return our concatenated output
+	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $users );
+}

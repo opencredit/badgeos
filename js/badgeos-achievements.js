@@ -26,6 +26,7 @@ jQuery(document).ready(function($){
 					$('#badgeos-achievements-container').append( response.message );
 					$('#badgeos_achievements_offset').val( response.offset );
 					$('#badgeos_achievements_count').val( response.badge_count );
+					credlyize();
 					//hide/show load more button
 					if( response.query_count <= response.badge_count ){
 						$('#achievements_list_load_more').hide();
@@ -90,8 +91,14 @@ jQuery(document).ready(function($){
 	var credlySend = $('.credly-button.credly-send');
 	var spinnerTimer;
 
+	// make a function so we can call it from our ajax success functions
+	function credlyize() {
+		$('.share-credly.addCredly').append('<a class="credly-share" style="display: none;" href="#" title="' + BadgeosCredlyData.share + '"></a>').removeClass('addCredly');
+	}
+	credlyize();
+
 	// add credly share button to achievements in widget
-	$('.widget-achievements-listing-item.share-credly').append('<a class="credly-share" style="display: none;" href="#" title="' + BadgeosCredlyData.share + '"></a>').on( 'click', '.credly-share', function(event) {
+	$('body').on( 'click', '.credly-share', function(event) {
 		event.preventDefault();
 
 		credlyHide();
@@ -99,7 +106,7 @@ jQuery(document).ready(function($){
 		var parent = el.parent();
 		var width = parent.outerWidth();
 		var elPosition = el.offset();
-		var id = parent.attr('id').replace('widget-achievements-listing-item-', '');
+		var id = parent.data('credlyid');
 
 		console.log( id );
 
@@ -110,7 +117,7 @@ jQuery(document).ready(function($){
 				top: Math.floor(elPosition.top - credly.outerHeight() ), left: Math.floor(elPosition.left)
 			})
 			.show()
-			.data('credlyID',id);
+			.data('credlyid',id);
 	});
 
 	$('body')
@@ -128,8 +135,8 @@ jQuery(document).ready(function($){
 			credlySend.hide();
 			credlySpinner.show();
 
-			console.log( credly.data('credlyID') );
-			badgeos_send_to_credly( credly.data('credlyID') );
+			console.log( credly.data('credlyid') );
+			badgeos_send_to_credly( credly.data('credlyid') );
 
 		});
 
@@ -147,7 +154,7 @@ jQuery(document).ready(function($){
 		$.ajax({
 			type : 'post',
 			dataType : 'json',
-			url: badgeos.ajax_url,
+			url: BadgeosCredlyData.ajax_url,
 			data: {
 				'action': 'achievement_send_to_credly',
 				'ID': ID

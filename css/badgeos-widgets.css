@@ -22,7 +22,10 @@
 	display: block;
 	text-indent: 60px;
 }
-.widget-achievements-listing .credly-share {
+.share-credly {
+	position: relative;
+}
+.credly-share {
 	display: block;
 	position: absolute;
 	top: 50%;
@@ -45,10 +48,10 @@
 	-khtml-border-bottom-right-radius: 7px;
 	border-bottom-right-radius: 7px;
 }
-.widget-achievements-listing .credly-share:hover {
+.credly-share:hover {
 	background-color: #444;
 }
-.widget-achievements-listing li:hover .credly-share {
+.share-credly:hover .credly-share {
 	display: block !important;
 }
 .credly-share-popup {
@@ -65,6 +68,8 @@
 	-webkit-border-radius: 10px;
 	-khtml-border-radius: 10px;
 	border-radius: 10px;
+	max-width: 300px;
+	margin: 0 auto;
 }
 .credly-share-popup .credly-wrap:before, .credly-share-popup .credly-wrap:after {
 	content: '';

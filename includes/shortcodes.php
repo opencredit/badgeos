@@ -133,7 +133,7 @@ function achievements_list_load_more(){
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
 	if( !$user_id )
 		$user_id = $user_ID;
-	
+
 	$badges = null;
 
 	// Grab our hidden and earned badges (used to filter the query)
@@ -176,15 +176,27 @@ function achievements_list_load_more(){
 		// Only include the achievement if it HAS been earned -or- it is NOT hidden
 		// if ( 'user-has-earned' == $earned_status || 'show' == get_post_meta( $badge_id, '_badgeos_hidden', true ) ) {
 
+			$credly_class = '';
+			$credly_ID = '';
+			// check if current user has completed this achievement and check if Credly giveable
+			if ( 'user-has-earned' == $earned_status ) {
+				// Credly Share
+				$giveable = credly_is_achievement_giveable( $badge_id );
+				if ( $giveable ) {
+					// make sure our JS and CSS is enqueued
+					wp_enqueue_script( 'badgeos-achievements' );
+					wp_enqueue_style( 'badgeos-widget' );
+					$credly_class = ' share-credly addCredly';
+					$credly_ID = 'data-credlyid="'. absint( $badge_id ) .'"';
+				}
+			}
+
 			// Each Achievement
-			$badges .= '<div id="badgeos-achievements-list-item-' . $badge_id . '" class="badgeos-achievements-list-item ' . $earned_status . '">';
+			$badges .= '<div id="badgeos-achievements-list-item-' . $badge_id . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
 				// Achievement Image
 				$badges .= '<div class="badgeos-item-image">';
 
-					// check if current user has completed this achievement and display a div to overlay on image
-					if ( 'user-has-earned' == $earned_status )
-						$badges .= '<div class="achievement-completed"></div>';
 					$badges .= '<a href="'.get_permalink().'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
 
 				$badges .= '</div><!-- .badgeos-item-image -->';

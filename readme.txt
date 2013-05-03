@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -29,7 +29,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Completing one, select or all achievements of a specific type
 *   Point thresholds
 *   Admin Given Badges
-
+*   Community Activity (with the powerful [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
 
 **Define an Unlimited Number of Achievement Types**
 
@@ -52,6 +52,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 *   Simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
 *   Easily link together one or more triggers, steps or actions into the conditions needed to earn a badge or mark an achievement.
+*   Extend the Required Steps options using the free [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on")
 
 
 **Reward User Progress**
@@ -96,7 +97,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * BadgeOS is designed to be a true operating system for turning any WordPress site into an engagement management application.
 * Built with expandability in mind to allow virtually anything to trigger and recognize achievement.
-* BadgeOS plans to release a range of Add-Ons to the plugin that enhance core functionality with specialized functions.
+* BadgeOS plans to continue to release a range of [Add-ons](http://badgeos.org/download/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
 * Check out some of the [BadgeOS customizations](http://badgeos.org/services/badgeos-customization/ "We'll help you customize your BadgeOS site") we've already implemented to get a sense for what you might expect.
 
 
@@ -172,6 +173,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 
 == Changelog ==
+
+= 1.0.2 =
+* New: Added "Display users who have earned achievement" option to achievements
+* Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
+* Updated: [badgeos_achievements_list] shortcode now shows send to Credly link on earned achievements.
 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.

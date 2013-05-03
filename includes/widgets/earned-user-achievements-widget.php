@@ -58,7 +58,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 				//exclude step CPT entries from displaying in the widget
 				if ( get_post_type( $achievement->ID ) != 'step' ) {
-				
+
 					$permalink = get_permalink( $achievement->ID );
 					$title = get_the_title( $achievement->ID );
 
@@ -71,12 +71,14 @@ class earned_user_achievements_widget extends WP_Widget {
 						$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
 					}
 
+					// is this achievement Credly giveable?
+					$giveable = credly_is_achievement_giveable( $achievement->ID );
 					$class = 'widget-badgeos-item-title';
 					$item_class = $image_attr ? ' has-thumb' : '';
-					$item_class .= credly_is_achievement_giveable( $achievement->ID ) ? ' share-credly' : '';
+					$item_class .= $giveable ? ' share-credly addCredly' : '';
+					$credly_ID = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
 
-
-					echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
+					echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
 
 					echo $thumb;
 					echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
@@ -86,7 +88,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 					if ( $thecount == $number_to_show && $number_to_show != 0 )
 						break;
-				
+
 				}
 			}
 
