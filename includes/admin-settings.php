@@ -216,7 +216,7 @@ function badgeos_settings_page() {
  * @since  1.0.0
  * @return null
  */
-function badgeos_add_ons_page() { 
+function badgeos_add_ons_page() {
     $image_url = str_replace( 'includes', 'images', plugin_dir_url( __FILE__ ) );?>
     <div class="wrap" >
         <div id="icon-options-general" class="icon32"></div>
@@ -232,7 +232,7 @@ function badgeos_add_ons_page() {
                 <td valign="top">
                     <h3>Community Add-on</h3>
                     <p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">http://wordpress.org/extend/plugins/badgeos-community-add-on/</a></p>
-                    The "BadgeOS Community Add-on" integrates BadgeOS features into BuddyPress and bbPress. Site members complete achievements and earn badges based on a range of community activity and triggers. This add-on to BadgeOS also includes the ability to display badges and achievements on user profiles and activity feeds. 
+                    The "BadgeOS Community Add-on" integrates BadgeOS features into BuddyPress and bbPress. Site members complete achievements and earn badges based on a range of community activity and triggers. This add-on to BadgeOS also includes the ability to display badges and achievements on user profiles and activity feeds.
                 </td>
             </tr>
             <tr>
@@ -264,7 +264,7 @@ function badgeos_help_support_page() { ?>
 		<h2><?php _e( 'BadgeOS Help and Support', 'badgeos' ); ?></h2>
 		<h3><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h3>
 		<p><?php printf( __( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievement, and earn badges. You define the Achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by <a href="%s" target="_blank">Credly</a>, the free web service for issuing, earning and sharing badges.', 'badgeos' ), 'https://credly.com/' ); ?></p>
-		<p><?php _e( 'BadgeOS is extremely extensible. Check out examples of what we’ve built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.', 'badgeos' ); ?></p>
+		<p><?php _e( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.", 'badgeos' ); ?></p>
 
 		<h3><?php _e( 'Help / Support', 'badgeos' ); ?>:</h3>
 		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
@@ -314,7 +314,7 @@ function badgeos_credly_options_page() {
             $credly_settings = get_option( 'credly_settings' );
             settings_fields( 'credly_settings_group' );
             ?>
-            <p><?php printf( __( '<a href="%s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com', 'https://credly.com', 'https://credly.com' ); ?></p>
+            <p><?php printf( __( '<a href="%1$s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%1$s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%1$s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com' ); ?></p>
             <table class="form-table">
                 <tr valign="top"><th scope="row"><label for="credly_enable"><?php _e( 'Enable Badge Sharing via Credly: ', 'badgeos' ); ?></label></th>
                     <td><select id="credly_enable" name="credly_settings[credly_enable]">
@@ -349,7 +349,7 @@ function badgeos_credly_options_page() {
  */
 function badgeos_credly_options_no_api( $credly_settings ) {
     wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
-	
+
     if ( is_array( $credly_settings ) ) {
         foreach ( $credly_settings as $key => $opt ) {
             if (

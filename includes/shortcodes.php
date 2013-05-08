@@ -423,7 +423,7 @@ function badgeos_get_user_submissions() {
 		$sub_data .= wpautop( get_the_content() );
 
 		$sub_data .= '<p class="badgeos-comment-date-by">';
-			$sub_data .= sprintf( __( '%s by %s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
+			$sub_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
 			$sub_data .= '<br/>';
 			$sub_data .= sprintf( $pattern, __( 'Status', 'badgeos' ) );
 			$sub_data .= get_post_meta( get_the_ID(), '_badgeos_submission_status', true );
@@ -448,7 +448,7 @@ function badgeos_get_user_submissions() {
 				$sub_data .= '<li class="badgeos-attachment">';
 				$sub_data .= sprintf( $pattern, __( 'Attachment', 'badgeos' ) );
 				$sub_data .= wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title );
-				$sub_data .= sprintf( __( ' - uploaded %s by %s', 'badgeos' ), mysql2date( 'F j, Y g:i a', $attachment->post_date ), get_userdata( $attachment->post_author )->user_nicename );
+				$sub_data .= sprintf( __( ' - uploaded %1$s by %2$s', 'badgeos' ), mysql2date( 'F j, Y g:i a', $attachment->post_date ), get_userdata( $attachment->post_author )->user_nicename );
 				$sub_data .= '</li><!-- .badgeos-attachment -->';
 			}
 			$sub_data .= '</ul><!-- .badgeos-attachments-list -->';

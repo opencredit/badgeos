@@ -155,9 +155,9 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 
 	// Alter our log message if this was an admin action
 	if ( $admin_id )
-		$log_message = sprintf( __( '%s awarded %s %s points for a new total of %s points', 'dma' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
+		$log_message = sprintf( __( '%1$s awarded %2$s %3$s points for a new total of %4$s points', 'badgeos' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
 	else
-		$log_message = sprintf( __( '%s earned %s points for a new total of %s points', 'dma' ), $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
+		$log_message = sprintf( __( '%1$s earned %2$s points for a new total of %3$s points', 'badgeos' ), $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
 
 	// Create a log entry
 	badgeos_post_log_entry( null, $user_id, 'points', $log_message );

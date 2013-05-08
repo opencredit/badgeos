@@ -94,7 +94,7 @@ function badgeos_trigger_event( $args ) {
 	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $blog_id );
 
 	// Mark the count in the log entry
-	badgeos_post_log_entry( null, $user_id, null, "{$user_data->user_login} triggered $this_trigger ({$new_count}x)" );
+	badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
 
 	// Now determine if any badges are earned based on this trigger event
 	$triggered_achievements = $wpdb->get_results( $wpdb->prepare(

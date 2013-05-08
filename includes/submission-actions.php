@@ -587,7 +587,7 @@ function badgeos_get_comments_for_submission( $post_id = 0 ) {
 		$comment_data .= '</div>';
 
 		$comment_data .= '<p class="badgeos-comment-date-by alignright">';
-		$comment_data .= sprintf( __( '%s by %s', 'badgeos' ), '<span class="badgeos-comment-date">'. mysql2date( 'F j, Y g:i a', $comment->comment_date ) .'<span>', '<cite class="badgeos-comment-author">'. $user_data->display_name ) .'</cite>';
+		$comment_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. mysql2date( 'F j, Y g:i a', $comment->comment_date ) .'<span>', '<cite class="badgeos-comment-author">'. $user_data->display_name ) .'</cite>';
 		$comment_data .= '</p>';
 
 		$comment_data .= '</li><!-- badgeos-submission-comment -->';
