@@ -450,7 +450,7 @@ function badgeos_get_points_based_achievements() {
 
 	if ( empty( $achievements ) ) {
 		// Grab posts that can be earned by unlocking the given achievement
-		$achievements = $wpdb->get_results( $wpdb->prepare(
+		$achievements = $wpdb->get_results(
 			"
 			SELECT *
 			FROM   $wpdb->posts as posts,
@@ -459,7 +459,7 @@ function badgeos_get_points_based_achievements() {
 			       AND meta.meta_key = '_badgeos_earned_by'
 			       AND meta.meta_value = 'points'
 			"
-		) );
+		);
 
 		// Store these posts to a transient
 		set_transient( 'badgeos_points_based_achievements', $achievements, 0 );
