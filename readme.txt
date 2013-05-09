@@ -174,6 +174,13 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.0.3 =
+* Updated: Only show "People Who Have Earned This" when there is at least one earner
+* Updated: Localization strings have been updated throughout for easier translating
+* Updated: Submissions and Nominations were originally publicly searchable, they are now private
+* Fixed: Filter for "Completed Achievements" (would sometimes show ALL achievements if user had earned none)
+* Fixed: A number of minor behind-the-scenes bugs that annoyed our PHP developers
+
 = 1.0.2 =
 * New: Added "Display users who have earned achievement" option to achievements
 * Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
