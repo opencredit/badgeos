@@ -229,6 +229,11 @@ function achievements_list_load_more(){
 
 	endwhile;
 
+	// Sanity helper: if we're filtering for complete and we have no
+	// earned achievements, $badge_id should definitely be false
+	if ( 'completed' == $filter && empty( $earned_ids ) )
+		$badge_id = false;
+
 	//display a message for no results
 	if ( !$badge_id ) {
 		$post_type_plural = get_post_type_object( $type )->labels->name;
