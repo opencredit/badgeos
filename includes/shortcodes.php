@@ -25,9 +25,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => 'all',
 		'limit'       => '10',
 		'show_filter' => 'true',
-		'show_search'  => 'true',
+		'show_search' => 'true',
 		'group_id'    => '0',
-		'user_id'    => '0',
+		'user_id'     => '0',
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -38,9 +38,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => $type,
 		'limit'       => $limit,
 		'show_filter' => $show_filter,
-		'show_search'  => $show_search,
+		'show_search' => $show_search,
 		'group_id'    => $group_id,
-		'user_id'    => $user_id,
+		'user_id'     => $user_id,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -124,12 +124,12 @@ function achievements_list_load_more(){
 	global $user_ID;
 
 	// Setup our AJAX query vars
-	$type   = isset( $_REQUEST['type'] ) ? $_REQUEST['type'] : false;
-	$limit  = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : false;
-	$offset = isset( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : false;
-	$count  = isset( $_REQUEST['count'] ) ? $_REQUEST['count'] : false;
-	$filter = isset( $_REQUEST['filter'] ) ? $_REQUEST['filter'] : false;
-	$search = isset( $_REQUEST['search'] ) ? $_REQUEST['search'] : false;
+	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
+	$limit   = isset( $_REQUEST['limit'] )   ? $_REQUEST['limit']   : false;
+	$offset  = isset( $_REQUEST['offset'] )  ? $_REQUEST['offset']  : false;
+	$count   = isset( $_REQUEST['count'] )   ? $_REQUEST['count']   : false;
+	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
+	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
 	if( !$user_id )
 		$user_id = $user_ID;
@@ -178,6 +178,7 @@ function achievements_list_load_more(){
 
 			$credly_class = '';
 			$credly_ID = '';
+
 			// check if current user has completed this achievement and check if Credly giveable
 			if ( 'user-has-earned' == $earned_status ) {
 				// Credly Share
@@ -196,9 +197,7 @@ function achievements_list_load_more(){
 
 				// Achievement Image
 				$badges .= '<div class="badgeos-item-image">';
-
 					$badges .= '<a href="'.get_permalink().'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
-
 				$badges .= '</div><!-- .badgeos-item-image -->';
 
 				$badges .= '<div class="badgeos-item-description">';
@@ -366,9 +365,9 @@ function badgeos_get_submission_form( $args = array() ) {
 
 
 	$defaults = array(
-		'heading' => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit' => __( 'Submit', 'badgeos' )
+		'submit'     => __( 'Submit', 'badgeos' )
 	);
 	// filter our text
 	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
@@ -398,11 +397,11 @@ function badgeos_get_user_submissions() {
 	global $current_user, $post;
 
 	$submissions = get_posts( array(
-		'post_type'		=>	'submission',
-		'author'			=>	$current_user->ID,
-		'post_status'	=>	'publish',
-		'meta_key'		=>	'_badgeos_submission_achievement_id',
-		'meta_value'	=>	absint( $post->ID ),
+		'post_type'   => 'submission',
+		'author'      => $current_user->ID,
+		'post_status' => 'publish',
+		'meta_key'    => '_badgeos_submission_achievement_id',
+		'meta_value'  => absint( $post->ID ),
 	) );
 
 	$pattern = '<span class="badgeos-submission-label">%s:</span>&nbsp;';
@@ -433,11 +432,11 @@ function badgeos_get_user_submissions() {
 
 		// check for attachments
 		$attachments = get_posts( array(
-			'post_type' => 'attachment',
+			'post_type'      => 'attachment',
 			'posts_per_page' => -1,
-			'post_parent' => $post->ID,
-			'orderby' => 'date',
-			'order' => 'ASC',
+			'post_parent'    => $post->ID,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
 		) );
 
 		if ( $attachments ) {
