@@ -239,9 +239,9 @@ function achievements_list_load_more(){
 		$post_type_plural = get_post_type_object( $type )->labels->name;
 		$badges .= '<div class="badgeos-no-results">';
 		if ( 'completed' == $filter ) {
-			$badges .= __('No completed '.strtolower($post_type_plural).' yet.','badgeos');
+			$badges .= sprintf( __( 'No completed %s yet.', 'badgeos' ), strtolower( $post_type_plural ) );
 		}else{
-			$badges .= __('There are no '.strtolower($post_type_plural).' at this time.','badgeos');
+			$badges .= sprintf( __( 'There are no %s at this time.', 'badgeos' ), strtolower( $post_type_plural ) );
 		}
 		$badges .= '</div><!-- .badgeos-no-results -->';
 	}
