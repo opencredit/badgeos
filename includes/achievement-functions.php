@@ -602,7 +602,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	// Only generate output if we have earners
 	if ( ! empty( $earners ) )  {
 		// Loop through each user and build our output
-		$output .= '<h4>' . apply_filters( 'badgeos_earners_heading', __( 'People Who Have Earned This', 'badgeos' ) ) . '</h4>';
+		$output .= '<h4>' . apply_filters( 'badgeos_earners_heading', __( 'People who have earned this:', 'badgeos' ) ) . '</h4>';
 		$output .= '<ul class="badgeos-achievement-earners-list achievement-' . $achievement_id . '-earners-list">';
 		foreach ( $earners as $user ) {
 			$user_content = '<li><a href="' . get_author_posts_url( $user->ID ) . '">' . get_avatar( $user->ID ) . '</a></li>';
