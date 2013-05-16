@@ -372,7 +372,7 @@ function badgeos_get_user_earned_achievement_types($user_id){
  * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
-function badgeos_get_dependent_achievements( $achievement_id ) {
+function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 	global $wpdb;
 
 	// Grab the current achievement ID if none specified
@@ -382,7 +382,7 @@ function badgeos_get_dependent_achievements( $achievement_id ) {
 	}
 
 	// Grab posts that can be earned by unlocking the given achievement
-	$achievements = $wpdb->get_results( $wpdb->prepare(
+	$specific_achievements = $wpdb->get_results( $wpdb->prepare(
 		"
 		SELECT *
 		FROM   $wpdb->posts as posts,
@@ -393,7 +393,24 @@ function badgeos_get_dependent_achievements( $achievement_id ) {
 		$achievement_id
 	) );
 
-	return $achievements;
+	// Grab posts triggered by unlocing any/all of the given achievement's type
+	$type_achievements = $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT *
+		FROM   $wpdb->posts as posts,
+		       $wpdb->postmeta as meta
+		WHERE  posts.ID = meta.post_id
+		       AND meta.meta_key = '_badgeos_achievement_type'
+		       AND meta.meta_value = %s
+		",
+		get_post_type( $achievement_id )
+	) );
+
+	// Merge our dependent achievements together
+	$achievements = array_merge( $specific_achievements, $type_achievements );
+
+	// Available filter to modify an achievement's dependents
+	return apply_filters( 'badgeos_dependent_achievements', $achievements, $achievement_id );
 }
 
 /**
