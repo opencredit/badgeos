@@ -16,11 +16,15 @@
  * @param integer $achievement_id The given achievement ID to possibly award
  * @param integer $user_id        The given user's ID
  */
-function badgeos_maybe_award_achievement_to_user( $achievement_id, $user_id = 0 ) {
+function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0 ) {
 
 	// Grab current user ID if one isn't specified
 	if ( ! $user_id )
 		$user_id = wp_get_current_user()->ID;
+
+	// If the user does not have access to this achievement, bail here
+	if ( ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id ) )
+		return false;
 
 	// If the user has completed the achievement, award it
 	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) )
@@ -229,6 +233,9 @@ add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achieve
  */
 function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0 ) {
 
+	// Assume we have access
+	$return = true;
+
 	// If the achievement is not published, we do not have access
 	if ( 'publish' != get_post_status( $achievement_id ) )
 		$return = false;
@@ -240,19 +247,19 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 	// If the achievement has a parent...
 	if ( $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) ) {
 
-		// If we don't have access to the parent, we do not have access
+		// If we don't have access to the parent, we do not have access to this
 		if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID ) )
 			$return = false;
 
-		// If we're dealing with a sequential achievement, confirm we've earned the previous siblings
+		// If the parent requires sequential steps, confirm we've earned all previous steps
 		if ( $return && badgeos_is_achievement_sequential( $parent_achievement->ID ) ) {
 			foreach ( badgeos_get_children_of_achievement( $parent_achievement->ID ) as $sibling ) {
-				// If the sibling is our current achievement, we're good to go
+				// If this is the current step, we're good to go
 				if ( $sibling->ID == $achievement_id ) {
 					$return = true;
 					break;
 				}
-				// If we haven't earned the sibling, we do not have access
+				// If we haven't earned any previous step, we can't earn this one
 				if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $sibling->ID ) ) ) ) {
 					$return = false;
 					break;
@@ -285,10 +292,12 @@ function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 		return false;
 
 	// Prevent user from repeatedly earning the same step
+	// Note: we're adding 5 seconds to the "since" timestamp in order
+	// to prevent any weird cross-achievement awarding timing issues.
 	if ( badgeos_get_user_achievements( array(
 			'user_id'        => absint( $user_id ),
 			'achievement_id' => absint( $step_id ),
-			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			'since'          => 5 + absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		) )
 	)
 		return false;
