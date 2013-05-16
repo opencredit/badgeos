@@ -226,7 +226,7 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 
 	// Grab our max allowed times to earn, and if set, see how many times we've earned the badge
 	if ( $max_times_allowed_to_earn = get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) ) {
-		$user_has_badge = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
+		$user_has_badge = badgeos_get_user_achievements( array( 'achievement_id' => absint( $achievement_id ) ) );
 		if ( ! empty( $user_has_badge ) ) {
 			// If we've earned it as many (or more) times than allowed, return true
 			if ( count( $user_has_badge ) >= $max_times_allowed_to_earn ) {
