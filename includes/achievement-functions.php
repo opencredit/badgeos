@@ -226,7 +226,7 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 
 	// Grab our max allowed times to earn, and if set, see how many times we've earned the badge
 	if ( $max_times_allowed_to_earn = get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) ) {
-		$user_has_badge = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
+		$user_has_badge = badgeos_get_user_achievements( array( 'achievement_id' => absint( $achievement_id ) ) );
 		if ( ! empty( $user_has_badge ) ) {
 			// If we've earned it as many (or more) times than allowed, return true
 			if ( count( $user_has_badge ) >= $max_times_allowed_to_earn ) {
@@ -372,7 +372,7 @@ function badgeos_get_user_earned_achievement_types($user_id){
  * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
-function badgeos_get_dependent_achievements( $achievement_id ) {
+function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 	global $wpdb;
 
 	// Grab the current achievement ID if none specified
@@ -382,7 +382,7 @@ function badgeos_get_dependent_achievements( $achievement_id ) {
 	}
 
 	// Grab posts that can be earned by unlocking the given achievement
-	$achievements = $wpdb->get_results( $wpdb->prepare(
+	$specific_achievements = $wpdb->get_results( $wpdb->prepare(
 		"
 		SELECT *
 		FROM   $wpdb->posts as posts,
@@ -393,7 +393,24 @@ function badgeos_get_dependent_achievements( $achievement_id ) {
 		$achievement_id
 	) );
 
-	return $achievements;
+	// Grab posts triggered by unlocing any/all of the given achievement's type
+	$type_achievements = $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT *
+		FROM   $wpdb->posts as posts,
+		       $wpdb->postmeta as meta
+		WHERE  posts.ID = meta.post_id
+		       AND meta.meta_key = '_badgeos_achievement_type'
+		       AND meta.meta_value = %s
+		",
+		get_post_type( $achievement_id )
+	) );
+
+	// Merge our dependent achievements together
+	$achievements = array_merge( $specific_achievements, $type_achievements );
+
+	// Available filter to modify an achievement's dependents
+	return apply_filters( 'badgeos_dependent_achievements', $achievements, $achievement_id );
 }
 
 /**
@@ -520,7 +537,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 
 		// Grab our achievement type's post thumbnail
 		$achievement = get_page_by_path( get_post_type(), OBJECT, 'achievement-type' );
-		$image = get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) );
+		$image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
 		if ( !$image ) {
