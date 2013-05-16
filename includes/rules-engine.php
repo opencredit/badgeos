@@ -239,36 +239,34 @@ add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achieve
  */
 function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0 ) {
 
-	// Grab our current user's ID if none specified
-	if ( ! $user_id )
-		$user_id = wp_get_current_user()->ID;
+	// If the achievement is not published, we do not have access
+	if ( 'publish' != get_post_status( $achievement_id ) )
+		$return = false;
 
-	// Grab the current post's ID if none specifed
-	if ( ! $achievement_id ) {
-		global $post;
-		$achievement_id = $post->ID;
-	}
-	// If there is no parent for the achievement, bail true.
-	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) )
-		return true;
-	if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID ) )
-		return false;
+	// If we've exceeded the max earnings, we do not have acces
+	if ( badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) )
+		$return  = false;
 
-	// Assume the user has access to the achievment
-	$return = true;
+	// If the achievement has a parent...
+	if ( $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) ) {
 
-	// If we're dealing with a sequential achievement, let's look at each step's siblings
-	if ( badgeos_is_achievement_sequential( $parent_achievement->ID ) ) {
-		foreach ( badgeos_get_children_of_achievement( $parent_achievement->ID ) as $sibling ) {
-			// If the sibling ID is our achievement ID we're good to go
-			if ( $sibling->ID == $achievement_id ) {
-				$return = true;
-				break;
-			}
-			// If the user hasn't earned the sibling, their inelligible for the current achievement
-			if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $sibling->ID ) ) ) ) {
-				$return = false;
-				break;
+		// If we don't have access to the parent, we do not have access
+		if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID ) )
+			$return = false;
+
+		// If we're dealing with a sequential achievement, confirm we've earned the previous siblings
+		if ( $return && badgeos_is_achievement_sequential( $parent_achievement->ID ) ) {
+			foreach ( badgeos_get_children_of_achievement( $parent_achievement->ID ) as $sibling ) {
+				// If the sibling is our current achievement, we're good to go
+				if ( $sibling->ID == $achievement_id ) {
+					$return = true;
+					break;
+				}
+				// If we haven't earned the sibling, we do not have access
+				if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $sibling->ID ) ) ) ) {
+					$return = false;
+					break;
+				}
 			}
 		}
 	}
@@ -280,7 +278,7 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 /**
  * Checks if a user is allowed to work on a given step
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  bool    $return   The default return value
  * @param  integer $user_id  The given user's ID
  * @param  integer $step_id  The given step's post ID
@@ -288,23 +286,21 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
  */
 function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 
-	// Get current user's ID if none specified
-	if ( !$user_id )
-		$user_id = wp_get_current_user()->ID;
+	// If we're not working with a step, bail here
+	if ( 'step' != get_post_type( $step_id ) )
+		return $return;
 
-	// Grab the parent badge of the step
-	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
-
-	// If step doesn't have a parent, bail
-	if ( empty( $parent_achievement ) )
+	// Prevent user from earning steps with no parents
+	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
 		return false;
 
-	// If the badge has a max earning limit, stop them from perpetually earning it's steps
-	if ( badgeos_achievement_user_exceeded_max_earnings( $user_id, $parent_achievement->ID ) )
-		return false;
-
-	// Check if user has already earned step while working on badge.
-	if ( badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $step_id ), 'since' => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) ) ) ) )
+	// Prevent user from repeatedly earning the same step
+	if ( badgeos_get_user_achievements( array(
+			'user_id'        => absint( $user_id ),
+			'achievement_id' => absint( $step_id ),
+			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+		) )
+	)
 		return false;
 
 	// If we passed everything else, the user has access to this step
@@ -312,11 +308,10 @@ function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 }
 add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_step', 10, 3 );
 
-
 /**
  * Validate whether or not a user has completed all requirements for a step.
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  bool $return      True if user deserves achievement, false otherwise
  * @param  integer $user_id  The given user's ID
  * @param  integer $step_id  The post ID for our step
@@ -326,17 +321,6 @@ function badgeos_user_deserves_step( $return, $user_id, $step_id ) {
 
 	// Only override the $return data if we're working on a step
 	if ( 'step' == get_post_type( $step_id ) ) {
-
-		// Grab the parent badge for our step
-		$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
-
-		// sanity check for bad data relations.
-		if ( empty( $parent_achievement ) )
-			return false;
-
-		// Prevent users from earning more than the maximum allowed times
-		if ( badgeos_achievement_user_exceeded_max_earnings( $user_id, $parent_achievement->ID ) )
-			$return = false;
 
 		// Get the required number of checkins for the step.
 		$minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
@@ -354,7 +338,6 @@ function badgeos_user_deserves_step( $return, $user_id, $step_id ) {
 	return $return;
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 3 );
-
 
 /**
  * Count a user's relevant actions for a given step
