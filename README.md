@@ -135,7 +135,7 @@ The BadgeOS team welcomes donations in the form of code contributions, add-ons, 
 So, you want to contribute? That's great! Patches are always welcome. Open an Issue and make a Pull Request.
 
 1. [Open an Issue](https://github.com/opencredit/badgeos/issues) (or claim an open Issue).
-2. [Fork StartBox.](https://github.com/opencredit/badgeos/fork_select)
+2. [Fork BadgeOS.](https://github.com/opencredit/badgeos/fork_select)
 3. Create a branch (`git checkout -b MyBadgeos`).
 4. Commit your changes (`git commit -am "Added the best feature ever!"`).
 5. Push to the branch (`git push origin MyBadgeos`).
