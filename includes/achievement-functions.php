@@ -520,7 +520,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 
 		// Grab our achievement type's post thumbnail
 		$achievement = get_page_by_path( get_post_type(), OBJECT, 'achievement-type' );
-		$image = get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) );
+		$image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
 		if ( !$image ) {
