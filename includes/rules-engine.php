@@ -22,7 +22,7 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id, $user_id = 0 
 	if ( ! $user_id )
 		$user_id = wp_get_current_user()->ID;
 
-	// See if the user has completed the achievement, and award if so
+	// If the user has completed the achievement, award it
 	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) )
 		badgeos_award_achievement_to_user( $achievement_id, $user_id );
 }
@@ -35,38 +35,28 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id, $user_id = 0 
  * @param  integer $user_id        The given user's ID
  * @return bool                    True if user has completed achievement, false otherwise
  */
-function badgeos_check_achievement_completion_for_user( $achievement_id, $user_id = 0 ) {
-
-	// Grab the current user ID if one is not specified
-	if ( ! $user_id )
-		$user_id = wp_get_current_user()->ID;
+function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0 ) {
 
 	// Assume the user has completed the achievement
-	$has_achievement = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) );
 	$return = true;
 
-	// If the user already has the achievement, return true
-	if ( $has_achievement )
-		$return = true;
+	// If the user has not already earned the achievement...
+	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
 
-	// Get all required achievements linked to achievement
-	$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
+		// Grab our required achievements for this achievement
+		$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
 
-	// Check if user has completed all required achievements for this achievement
-	if ( ! empty( $required_achievements ) ) {
-		foreach ( $required_achievements as $achievement ) {
-			// If the user doesn't have the achievement, and they haven't completed it just now, fail
-			if (
-				! $has_achievement
-				&& ! badgeos_check_achievement_completion_for_user( $achievement->ID, $user_id )
-			) {
-				$return = false;
-			}
-		}
+		// If we have requirements, loop through each and make sure they've been completed
+		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) )
+			foreach ( $required_achievements as $requirement )
+				// If the user has not completed a requirement, they cannot complete the achievement
+				if ( ! badgeos_check_achievement_completion_for_user( $requirement->ID, $user_id ) )
+					$return = false;
 	}
 
-	// Run our return through a filter to support custom achievement types
+	// Available filter to support custom earning rules
 	return apply_filters( 'user_deserves_achievement', $return, $user_id, $achievement_id );
+
 }
 
 /**
