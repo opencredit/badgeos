@@ -339,11 +339,10 @@ function badgeos_user_deserves_step( $return, $user_id, $step_id ) {
 			$return = false;
 
 		// Get the required number of checkins for the step.
-		$minimum_activity_count = get_post_meta( $step_id, '_badgeos_count', true );
+		$minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
 
 		// Grab the relevent activity for this step
-		$relevant_activities = badgeos_find_relevant_activity_for_step( $user_id, $step_id );
-		$relevant_count = is_array( $relevant_activities ) ? count( $relevant_activities ) : absint( $relevant_activities );
+		$relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
 
 		// If we meet or exceed the required number of checkins, they deserve the step
 		if ( $relevant_count >= $minimum_activity_count )
@@ -356,57 +355,53 @@ function badgeos_user_deserves_step( $return, $user_id, $step_id ) {
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 3 );
 
+
 /**
- * Given a step, find the relevant check-ins that count towards earning the step.
+ * Count a user's relevant actions for a given step
+ *
+ * @since  1.0.0
+ * @param  integer $user_id The given user's ID
+ * @param  integer $step_id The given step's ID
+ * @return integer          The total activity count
  */
-function badgeos_find_relevant_activity_for_step( $user_id, $step_id ) {
-
-	// If we don't have a user ID, use the current user's ID
-	if ( ! $user_id )
-		$user_id = wp_get_current_user()->ID;
-
-	// Grab the badge that owns this step
-	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
-
-	// If this step doesn't have a parent badge, bail here
-	if ( empty( $parent_achievement ) )
-		return false;
+function badgeos_get_step_activity_count( $user_id, $step_id ) {
 
 	// Assume the user has no relevant activities
 	$activities = array();
 
-	// If we have any activity for this achievement, we only want the most recent activities
+	// If the step has no parent, bail here
+	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
+		return false;
+
+	// If the user has any interaction with this achievement, only get activity since that date
 	if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		$since = gmdate( 'Y-m-d H:i:s', ( $date + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 	else
 		$since = 0;
 
-	// Setup our $post object for the step
-	$step = get_post( $step_id );
-
-	// If step depends on other achievements...
+	// Grab the requirements for this step
 	$step_requirements = badgeos_get_step_requirements( $step_id );
-	if ( in_array( $step_requirements['trigger_type'], array( 'specific-achievement', 'any-achievement' ) ) ) {
 
-		// Grab our user's relevant earned achievements
-		$activities = badgeos_get_user_achievements( array(
-			'user_id'          => absint( $user_id ),
-			'achievement_id'   => absint( $step_requirements['achievement_post'] ),
-			'achievement_type' => $step_requirements['achievement_type']
-		) );
-
-	// Otherwise, the step depends on triggering various action hooks...
-	} else {
-
-		// If we're looking for ALL achievements of a particular type
-		if ( 'all-achievements' == $step_requirements['trigger_type'] )
-			$step_requirements['trigger_type'] = 'badgeos_unlock_all_' . $step_requirements['achievement_type'];
-
-		// Determine how man times the person has completed the action hook
-		$activities = badgeos_get_user_trigger_count( $user_id, $step_requirements['trigger_type'] );
-
+	// Determine which type of trigger we're using and return the corresponding activities
+	switch( $step_requirements['trigger_type'] ) {
+		case 'specific-achievement' :
+			$achievements = badgeos_get_user_achievements( array(
+				'user_id'        => absint( $user_id ),
+				'achievement_id' => absint( $step_requirements['achievement_post'] )
+			) );
+			$activities = count( $achievements );
+			break;
+		case 'any-achievement' :
+			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_' . $step_requirements['achievement_type'] );
+			break;
+		case 'all-achievements' :
+			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_all' . $step_requirements['achievement_type'] );
+			break;
+		default :
+			$activities = badgeos_get_user_trigger_count( $user_id, $step_requirements['trigger_type'] );
+			break;
 	}
 
-	// Finally, return our relevant activities
-	return $activities;
+	// Available filter for overriding user activity
+	return absint( apply_filters( 'badgeos_step_activity', $activities, $user_id, $step_id ) );
 }
