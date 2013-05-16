@@ -25,9 +25,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => 'all',
 		'limit'       => '10',
 		'show_filter' => 'true',
-		'show_search' => 'true',
+		'show_search'  => 'true',
 		'group_id'    => '0',
-		'user_id'     => '0',
+		'user_id'    => '0',
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -38,9 +38,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => $type,
 		'limit'       => $limit,
 		'show_filter' => $show_filter,
-		'show_search' => $show_search,
+		'show_search'  => $show_search,
 		'group_id'    => $group_id,
-		'user_id'     => $user_id,
+		'user_id'    => $user_id,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -124,12 +124,12 @@ function achievements_list_load_more(){
 	global $user_ID;
 
 	// Setup our AJAX query vars
-	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
-	$limit   = isset( $_REQUEST['limit'] )   ? $_REQUEST['limit']   : false;
-	$offset  = isset( $_REQUEST['offset'] )  ? $_REQUEST['offset']  : false;
-	$count   = isset( $_REQUEST['count'] )   ? $_REQUEST['count']   : false;
-	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
-	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
+	$type   = isset( $_REQUEST['type'] ) ? $_REQUEST['type'] : false;
+	$limit  = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : false;
+	$offset = isset( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : false;
+	$count  = isset( $_REQUEST['count'] ) ? $_REQUEST['count'] : false;
+	$filter = isset( $_REQUEST['filter'] ) ? $_REQUEST['filter'] : false;
+	$search = isset( $_REQUEST['search'] ) ? $_REQUEST['search'] : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
 	if( !$user_id )
 		$user_id = $user_ID;
@@ -167,66 +167,9 @@ function achievements_list_load_more(){
 
 	// Loop Achievements
 	while ( $the_badges->have_posts() ) : $the_badges->the_post();
-
 		$badge_id = get_the_ID();
-
-		// check if user has earned this Achievement, and add an 'earned' class
-		$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => absint( $badge_id ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
-
-		// Only include the achievement if it HAS been earned -or- it is NOT hidden
-		// if ( 'user-has-earned' == $earned_status || 'show' == get_post_meta( $badge_id, '_badgeos_hidden', true ) ) {
-
-			$credly_class = '';
-			$credly_ID = '';
-
-			// check if current user has completed this achievement and check if Credly giveable
-			if ( 'user-has-earned' == $earned_status ) {
-				// Credly Share
-				$giveable = credly_is_achievement_giveable( $badge_id );
-				if ( $giveable ) {
-					// make sure our JS and CSS is enqueued
-					wp_enqueue_script( 'badgeos-achievements' );
-					wp_enqueue_style( 'badgeos-widget' );
-					$credly_class = ' share-credly addCredly';
-					$credly_ID = 'data-credlyid="'. absint( $badge_id ) .'"';
-				}
-			}
-
-			// Each Achievement
-			$badges .= '<div id="badgeos-achievements-list-item-' . $badge_id . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
-
-				// Achievement Image
-				$badges .= '<div class="badgeos-item-image">';
-					$badges .= '<a href="'.get_permalink().'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
-				$badges .= '</div><!-- .badgeos-item-image -->';
-
-				$badges .= '<div class="badgeos-item-description">';
-
-					// Achievement Title
-					$badges .= '<h2 class="badgeos-item-title"><a href="'.get_permalink().'">' .get_the_title() .'</a></h2>';
-
-					// Achievement Short Description
-					$badges .= '<div class="badgeos-item-excerpt">';
-						$badges .= badgeos_achievement_points_markup();
-						$badges .= wpautop( get_the_excerpt() );
-					$badges .= '</div><!-- .badgeos-item-excerpt -->';
-
-
-					if ( $steps = badgeos_get_required_achievements_for_achievement( $badge_id ) ) {
-						$badges.='<div class="badgeos-item-attached">';
-							$badges.='<div id="show-more-'.$badge_id.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $badge_id .'" data-action="open" href="#">Show Details</a></div>';
-							$badges.='<div id="badgeos_toggle_more_window_'.$badge_id.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps ) .'</div><!-- .badgeos-extras-window -->';
-						$badges.= '</div><!-- .badgeos-item-attached -->';
-					}
-
-				$badges .= '</div><!-- .badgeos-item-description -->';
-
-			$badges .= '</div><!-- .badgeos-achievements-list-item -->';
-
-			$count +=1;
-
-		// }
-
+		$badges .= badgeos_display_badge($badge_id);
+		$count +=1;
 	endwhile;
 
 	// Sanity helper: if we're filtering for complete and we have no
@@ -257,12 +200,84 @@ function achievements_list_load_more(){
 add_action( 'wp_ajax_achievements_list_load_more', 'achievements_list_load_more' );
 add_action( 'wp_ajax_nopriv_achievements_list_load_more', 'achievements_list_load_more' );
 
+// the one and only badge formatting routine
+function badgeos_display_badge($badge_id) {
+	global $user_ID;
+	
+	// check if user has earned this Achievement, and add an 'earned' class
+	$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $badge_id ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+
+	// Only include the achievement if it HAS been earned -or- it is NOT hidden
+	// if ( 'user-has-earned' == $earned_status || 'show' == get_post_meta( $badge_id, '_badgeos_hidden', true ) ) {
+
+	$credly_class = '';
+	$credly_ID = '';
+	// check if current user has completed this achievement and check if Credly giveable
+	if ( 'user-has-earned' == $earned_status ) {
+		// Credly Share
+		$giveable = credly_is_achievement_giveable( $badge_id );
+		if ( $giveable ) {
+			// make sure our JS and CSS is enqueued
+			wp_enqueue_script( 'badgeos-achievements' );
+			wp_enqueue_style( 'badgeos-widget' );
+			$credly_class = ' share-credly addCredly';
+			$credly_ID = 'data-credlyid="'. absint( $badge_id ) .'"';
+		}
+	}
+
+	// Each Achievement
+	$badges .= '<div id="badgeos-achievements-list-item-' . $badge_id . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+
+		// Achievement Image
+		$badges .= '<div class="badgeos-item-image">';
+
+		$badges .= '<a href="'.get_permalink($badge_id).'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
+
+		$badges .= '</div><!-- .badgeos-item-image -->';
+
+		$badges .= '<div class="badgeos-item-description">';
+
+		// Achievement Title
+		$badges .= '<h2 class="badgeos-item-title"><a href="'.get_permalink($badge_id).'">' .get_the_title($badge_id) .'</a></h2>';
+
+		// Achievement Short Description
+		$badges .= '<div class="badgeos-item-excerpt">';
+			$badges .= badgeos_achievement_points_markup($badge_id);
+			$badges .= wpautop( get_the_excerpt_by_id($badge_id) );
+		$badges .= '</div><!-- .badgeos-item-excerpt -->';
+
+		if ( $steps = badgeos_get_required_achievements_for_achievement( $badge_id ) ) {
+			$badges.='<div class="badgeos-item-attached">';
+				$badges.='<div id="show-more-'.$badge_id.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $badge_id .'" data-action="open" href="#">Show Details</a></div>';
+				$badges.='<div id="badgeos_toggle_more_window_'.$badge_id.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $badge_id ) .'</div><!-- .badgeos-extras-window -->';
+			$badges.= '</div><!-- .badgeos-item-attached -->';
+		}
+
+		$badges .= '</div><!-- .badgeos-item-description -->';
+
+	$badges .= '</div><!-- .badgeos-achievements-list-item -->'; 
+	return $badges;
+}
+
+function get_the_excerpt_by_id($badge_id) {
+	$post = get_post($badge_id);		
+	return apply_filters( 'get_the_excerpt', $post->post_excerpt );
+}
+
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
-function badgeos_nomination_form() {
+function badgeos_nomination_form($atts) {
 	global $current_user, $post;
 
-	//verify user is logged in to view any submission data
+	// use the current post id if none is specified
+	extract( shortcode_atts( array(
+		'id' => $post->ID,
+	), $atts ) );
+	$post_id = $id;
+	
+	// ALLAN'S RECOMMENDATION
+	// code should verify this post_id is for a valid post type as the user can put the shortcode anywhere
+	
 	if ( is_user_logged_in() ) {
 
 		// check if step unlock option is set to submission review
@@ -272,20 +287,20 @@ function badgeos_nomination_form() {
 			printf( '<p>%s</p>', __( 'Nomination saved successfully.', 'badgeos' ) );
 
 		// check if user already has a submission for this achievement type
-		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
+		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post_id ) ) {
 
 			// Step Description metadata
 			// TODO: Check if this meta is still in use
-			if ( $step_description = get_post_meta( $post->ID, '_badgeos_step_description', true ) )
+			if ( $step_description = get_post_meta( $post_id, '_badgeos_step_description', true ) )
 				printf( '<p><span class="badgeos-submission-label">%s:</span></p>%s', __( 'Step Description', 'badgeos' ), wpautop( $step_description ) );
 
-			return badgeos_get_nomination_form();
+			return badgeos_get_nomination_form($post_id);
 
 		}
 		// user has an active submission, so show content and comments
 		else {
 
-			return badgeos_get_user_submissions();
+			return badgeos_get_user_submissions($post_id);
 
 		}
 
@@ -297,7 +312,7 @@ function badgeos_nomination_form() {
 
 }
 
-function badgeos_get_nomination_form( $args = array() ) {
+function badgeos_get_nomination_form( $post_id ) {
 
 	$defaults = array(
 		'heading' => sprintf( '<h4>%s</h4>', __( 'Nomination Form', 'badgeos' ) ),
@@ -320,7 +335,8 @@ function badgeos_get_nomination_form( $args = array() ) {
 		$sub_form .= '<fieldset class="badgeos-nomination-content">';
 		$sub_form .= '<p><textarea name="badgeos_nomination_content"></textarea></p>';
 		$sub_form .= '</fieldset>';
-		// submit button
+		// save the post id as the form may be submitted from a different posting than the achievement
+		$sub_form .= '<input name="badgeos_post_id" type="hidden" value="'.$post_id.'"/>';			// submit button
 		$sub_form .= '<p class="badgeos-nomination-submit"><input type="submit" name="badgeos_nomination_submit" value="'. esc_attr( $language['submit'] ) .'" /></p>';
 	$sub_form .= '</form>';
 
@@ -329,8 +345,17 @@ function badgeos_get_nomination_form( $args = array() ) {
 
 add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
 
-function badgeos_submission_form() {
+function badgeos_submission_form($atts) {
 	global $current_user, $post;
+
+	// use the current post id if none is specified
+	extract( shortcode_atts( array(
+		'id' => $post->ID,
+	), $atts ) );
+	$post_id = $id;
+	
+	// ALLAN'S RECOMMENDATION
+	// code should verify this post_id is for a valid post type as the user can put the shortcode anywhere
 
 	//verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
@@ -342,20 +367,20 @@ function badgeos_submission_form() {
 			printf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
 
 		// check if user already has a submission for this achievement type
-		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
+		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post_id ) ) {
 
 			// Step Description metadata
 			// TODO: Check if this meta is still in use
-			if ( $step_description = get_post_meta( $post->ID, '_badgeos_step_description', true ) )
+			if ( $step_description = get_post_meta( $post_id, '_badgeos_step_description', true ) )
 				printf( '<p><span class="badgeos-submission-label">%s:</span></p>%s', __( 'Step Description', 'badgeos' ), wpautop( $step_description ) );
 
-			return badgeos_get_submission_form();
+			return badgeos_get_submission_form( $post_id );
 
 		}
 		// user has an active submission, so show content and comments
 		else {
 
-			return badgeos_get_user_submissions();
+			return badgeos_get_user_submissions($post_id);
 
 		}
 
@@ -366,13 +391,12 @@ function badgeos_submission_form() {
 	}
 }
 
-function badgeos_get_submission_form( $args = array() ) {
-
-
+function badgeos_get_submission_form( $post_id ) {
+	
 	$defaults = array(
-		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'heading' => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit'     => __( 'Submit', 'badgeos' )
+		'submit' => __( 'Submit', 'badgeos' )
 	);
 	// filter our text
 	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
@@ -389,8 +413,11 @@ function badgeos_get_submission_form( $args = array() ) {
 		$sub_form .= '</fieldset>';
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment">';
+		$sub_form .= '<legend>Notes</legend>';
 		$sub_form .= '<p><textarea name="badgeos_submission_content"></textarea></p>';
 		$sub_form .= '</fieldset>';
+		// save the post id as the form may be submitted from a different posting than the achievement
+		$sub_form .= '<input name="badgeos_post_id" type="hidden" value="'.$post_id.'"/>';	
 		// submit button
 		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $language['submit'] .'" /></p>';
 	$sub_form .= '</form>';
@@ -398,21 +425,47 @@ function badgeos_get_submission_form( $args = array() ) {
 	return apply_filters( 'badgeos_get_submission_form', $sub_form );
 }
 
-function badgeos_get_user_submissions() {
-	global $current_user, $post;
+add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
+
+// retrieve an individual badge shortcode
+function badgeos_achievement_shortcode($atts) {
+	
+	// get the post id
+	extract( shortcode_atts( array(
+		'id' => $post->ID,
+	), $atts ) );
+	$post_id = $id;
+	
+	// return if post id not specified
+	if ( empty($post_id) )
+		return;
+		
+	wp_enqueue_style( 'badgeos-front' );
+	wp_enqueue_script( 'badgeos-achievements' );
+		
+	// get the post content and format the badge display
+	$post = get_post($post_id);
+	$output = '<div id=badgeos-achievements-container>';	// necessary for the jquery click handler to be called
+		$output .= badgeos_display_badge($post_id);
+	$output .= '</div>';
+	return $output;
+}
+
+function badgeos_get_user_submissions($post_id) {
+	global $current_user;
 
 	$submissions = get_posts( array(
-		'post_type'   => 'submission',
-		'author'      => $current_user->ID,
-		'post_status' => 'publish',
-		'meta_key'    => '_badgeos_submission_achievement_id',
-		'meta_value'  => absint( $post->ID ),
+		'post_type'		=>	'submission',
+		'author'			=>	$current_user->ID,
+		'post_status'	=>	'publish',
+		'meta_key'		=>	'_badgeos_submission_achievement_id',
+		'meta_value'	=>	absint( $post_id ),
 	) );
 
 	$pattern = '<span class="badgeos-submission-label">%s:</span>&nbsp;';
 	$sub_data = '<div class="badgeos-originial-submission">';
 
-	// return '<pre>'. htmlentities( print_r( $submissions, true ) ) .'</pre>';
+//	echo '<pre>'. htmlentities( print_r( $submissions, true ) ) .'</pre>';
 
 	foreach( $submissions as $post ) :
 
@@ -430,18 +483,18 @@ function badgeos_get_user_submissions() {
 			$sub_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
 			$sub_data .= '<br/>';
 			$sub_data .= sprintf( $pattern, __( 'Status', 'badgeos' ) );
-			$sub_data .= get_post_meta( get_the_ID(), '_badgeos_submission_status', true );
+			$sub_data .= get_post_meta( $post->ID, '_badgeos_submission_status', true );
 		$sub_data .= '</p>';
 
 		$sub_data .= '</div><!-- .badgeos-original-submission -->';
 
 		// check for attachments
 		$attachments = get_posts( array(
-			'post_type'      => 'attachment',
+			'post_type' => 'attachment',
 			'posts_per_page' => -1,
-			'post_parent'    => $post->ID,
-			'orderby'        => 'date',
-			'order'          => 'ASC',
+			'post_parent' => $post->ID,
+			'orderby' => 'date',
+			'order' => 'ASC',
 		) );
 
 		if ( $attachments ) {
