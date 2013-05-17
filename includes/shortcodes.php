@@ -25,9 +25,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => 'all',
 		'limit'       => '10',
 		'show_filter' => 'true',
-		'show_search'  => 'true',
+		'show_search' => 'true',
 		'group_id'    => '0',
-		'user_id'    => '0',
+		'user_id'     => '0',
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -38,9 +38,9 @@ function badgeos_achievements_list_shortcode($atts){
 		'type'        => $type,
 		'limit'       => $limit,
 		'show_filter' => $show_filter,
-		'show_search'  => $show_search,
+		'show_search' => $show_search,
 		'group_id'    => $group_id,
-		'user_id'    => $user_id,
+		'user_id'     => $user_id,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -124,12 +124,12 @@ function achievements_list_load_more(){
 	global $user_ID;
 
 	// Setup our AJAX query vars
-	$type   = isset( $_REQUEST['type'] ) ? $_REQUEST['type'] : false;
-	$limit  = isset( $_REQUEST['limit'] ) ? $_REQUEST['limit'] : false;
-	$offset = isset( $_REQUEST['offset'] ) ? $_REQUEST['offset'] : false;
-	$count  = isset( $_REQUEST['count'] ) ? $_REQUEST['count'] : false;
-	$filter = isset( $_REQUEST['filter'] ) ? $_REQUEST['filter'] : false;
-	$search = isset( $_REQUEST['search'] ) ? $_REQUEST['search'] : false;
+	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
+	$limit   = isset( $_REQUEST['limit'] )   ? $_REQUEST['limit']   : false;
+	$offset  = isset( $_REQUEST['offset'] )  ? $_REQUEST['offset']  : false;
+	$count   = isset( $_REQUEST['count'] )   ? $_REQUEST['count']   : false;
+	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
+	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
 	if( !$user_id )
 		$user_id = $user_ID;
@@ -178,6 +178,7 @@ function achievements_list_load_more(){
 
 			$credly_class = '';
 			$credly_ID = '';
+
 			// check if current user has completed this achievement and check if Credly giveable
 			if ( 'user-has-earned' == $earned_status ) {
 				// Credly Share
@@ -196,9 +197,7 @@ function achievements_list_load_more(){
 
 				// Achievement Image
 				$badges .= '<div class="badgeos-item-image">';
-
 					$badges .= '<a href="'.get_permalink().'">' . badgeos_get_achievement_post_thumbnail( $badge_id ) . '</a>';
-
 				$badges .= '</div><!-- .badgeos-item-image -->';
 
 				$badges .= '<div class="badgeos-item-description">';
@@ -230,14 +229,19 @@ function achievements_list_load_more(){
 
 	endwhile;
 
+	// Sanity helper: if we're filtering for complete and we have no
+	// earned achievements, $badge_id should definitely be false
+	if ( 'completed' == $filter && empty( $earned_ids ) )
+		$badge_id = false;
+
 	//display a message for no results
 	if ( !$badge_id ) {
 		$post_type_plural = get_post_type_object( $type )->labels->name;
 		$badges .= '<div class="badgeos-no-results">';
 		if ( 'completed' == $filter ) {
-			$badges .= __('No completed '.strtolower($post_type_plural).' yet.','badgeos');
+			$badges .= sprintf( __( 'No completed %s yet.', 'badgeos' ), strtolower( $post_type_plural ) );
 		}else{
-			$badges .= __('There are no '.strtolower($post_type_plural).' at this time.','badgeos');
+			$badges .= sprintf( __( 'There are no %s at this time.', 'badgeos' ), strtolower( $post_type_plural ) );
 		}
 		$badges .= '</div><!-- .badgeos-no-results -->';
 	}
@@ -366,9 +370,9 @@ function badgeos_get_submission_form( $args = array() ) {
 
 
 	$defaults = array(
-		'heading' => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit' => __( 'Submit', 'badgeos' )
+		'submit'     => __( 'Submit', 'badgeos' )
 	);
 	// filter our text
 	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
@@ -398,11 +402,11 @@ function badgeos_get_user_submissions() {
 	global $current_user, $post;
 
 	$submissions = get_posts( array(
-		'post_type'		=>	'submission',
-		'author'			=>	$current_user->ID,
-		'post_status'	=>	'publish',
-		'meta_key'		=>	'_badgeos_submission_achievement_id',
-		'meta_value'	=>	absint( $post->ID ),
+		'post_type'   => 'submission',
+		'author'      => $current_user->ID,
+		'post_status' => 'publish',
+		'meta_key'    => '_badgeos_submission_achievement_id',
+		'meta_value'  => absint( $post->ID ),
 	) );
 
 	$pattern = '<span class="badgeos-submission-label">%s:</span>&nbsp;';
@@ -423,7 +427,7 @@ function badgeos_get_user_submissions() {
 		$sub_data .= wpautop( get_the_content() );
 
 		$sub_data .= '<p class="badgeos-comment-date-by">';
-			$sub_data .= sprintf( __( '%s by %s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
+			$sub_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
 			$sub_data .= '<br/>';
 			$sub_data .= sprintf( $pattern, __( 'Status', 'badgeos' ) );
 			$sub_data .= get_post_meta( get_the_ID(), '_badgeos_submission_status', true );
@@ -433,11 +437,11 @@ function badgeos_get_user_submissions() {
 
 		// check for attachments
 		$attachments = get_posts( array(
-			'post_type' => 'attachment',
+			'post_type'      => 'attachment',
 			'posts_per_page' => -1,
-			'post_parent' => $post->ID,
-			'orderby' => 'date',
-			'order' => 'ASC',
+			'post_parent'    => $post->ID,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
 		) );
 
 		if ( $attachments ) {
@@ -448,7 +452,7 @@ function badgeos_get_user_submissions() {
 				$sub_data .= '<li class="badgeos-attachment">';
 				$sub_data .= sprintf( $pattern, __( 'Attachment', 'badgeos' ) );
 				$sub_data .= wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title );
-				$sub_data .= sprintf( __( ' - uploaded %s by %s', 'badgeos' ), mysql2date( 'F j, Y g:i a', $attachment->post_date ), get_userdata( $attachment->post_author )->user_nicename );
+				$sub_data .= sprintf( __( ' - uploaded %1$s by %2$s', 'badgeos' ), mysql2date( 'F j, Y g:i a', $attachment->post_date ), get_userdata( $attachment->post_author )->user_nicename );
 				$sub_data .= '</li><!-- .badgeos-attachment -->';
 			}
 			$sub_data .= '</ul><!-- .badgeos-attachments-list -->';

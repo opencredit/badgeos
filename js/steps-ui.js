@@ -3,9 +3,9 @@ jQuery(document).ready(function($) {
 	// Hide our Triggers metabox if unnecessary
 	$("#_badgeos_earned_by").change( function() {
 		if ( 'triggers' == $(this).val() )
-			$('#badgeos_activity_triggers').show();
+			$('#badgeos_steps_ui').show();
 		else
-			$('#badgeos_activity_triggers').hide();
+			$('#badgeos_steps_ui').hide();
 	}).change();
 
 	// Make our Triggers list sortable

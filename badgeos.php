@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.0.2
+* Version: 1.0.3
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -328,7 +328,7 @@ function badgeos_post_log_entry( $post_id, $user_id = 0, $action = 'unlocked', $
 	$user              = get_userdata( $user_id );
 	$achievement       = get_post( $post_id );
 	$achievement_types = badgeos_get_achievement_types();
-	$achievement_type  = $achievement ? $achievement_types[$achievement->post_type]['single_name'] : '';
+	$achievement_type  = ( $achievement && isset( $achievement_types[$achievement->post_type]['single_name'] ) ) ? $achievement_types[$achievement->post_type]['single_name'] : '';
 	$default_title     = ( !empty( $title ) ? $title : "{$user->user_login} {$action} the \"{$achievement->post_title}\" {$achievement_type}" );
 	$title             = apply_filters( 'badgeos_log_entry_title', $default_title, $post_id, $user_id, $action, $achievement, $achievement_types );
 

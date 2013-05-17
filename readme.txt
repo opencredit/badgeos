@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -173,6 +173,19 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 
 == Changelog ==
+
+= 1.0.3 =
+* Updated: Only show "People Who Have Earned This" when there is at least one earner
+* Updated: Localization strings have been updated throughout for easier translating
+* Updated: Submissions and Nominations were originally publicly searchable, they are now private
+* Fixed: Prevent earning an achievement more times than "max earnings" allows
+* Fixed: Prevent earning steps with no parents
+* Fixed: Prevent earning unpublished, private or trashed achievements
+* Fixed: Inability to earn "any [achievement type]" steps
+* Fixed: Inability to earn "all [achievement type]" steps
+* Fixed: Filter for "Completed Achievements" (would sometimes show ALL achievements if user had earned none)
+* Fixed: A PHP warning that would sometimes appear when manually awarding an achievement via user profile editor
+* Fixed: A number of minor behind-the-scenes bugs that annoyed our PHP developers
 
 = 1.0.2 =
 * New: Added "Display users who have earned achievement" option to achievements

@@ -128,12 +128,13 @@ function badgeos_get_users_points( $user_id = 0 ) {
  * Posts a log entry when a user earns points
  *
  * @since  1.0
- * @param  integer $user_id    The given user's ID
- * @param  integer $new_points The new points the user is being awarded
- * @param  integer $admin_id   If being awarded by an admin, the admin's user ID
- * @return int                 The user's updated point total
+ * @param  integer $user_id        The given user's ID
+ * @param  integer $new_points     The new points the user is being awarded
+ * @param  integer $admin_id       If being awarded by an admin, the admin's user ID
+ * @param  integer $achievement_id The achievement that generated the points, if applicable
+ * @return integer                 The user's updated point total
  */
-function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id = 0 ) {
+function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id = 0, $achievement_id = null ) {
 
 	// Use current user's ID if none specified
 	if ( ! $user_id )
@@ -155,12 +156,18 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 
 	// Alter our log message if this was an admin action
 	if ( $admin_id )
-		$log_message = sprintf( __( '%s awarded %s %s points for a new total of %s points', 'dma' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
+		$log_message = sprintf( __( '%1$s awarded %2$s %3$s points for a new total of %4$s points', 'badgeos' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
 	else
-		$log_message = sprintf( __( '%s earned %s points for a new total of %s points', 'dma' ), $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
+		$log_message = sprintf( __( '%1$s earned %2$s points for a new total of %3$s points', 'badgeos' ), $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
 
 	// Create a log entry
-	badgeos_post_log_entry( null, $user_id, 'points', $log_message );
+	$log_entry_id = badgeos_post_log_entry( $achievement_id, $user_id, 'points', $log_message );
+
+	// Add relevant meta to our log entry
+	update_post_meta( $log_entry_id, '_badgeos_awarded_points', $new_points );
+	update_post_meta( $log_entry_id, '_badgeos_total_user_points', $updated_points_total );
+	if ( $admin_id )
+		update_post_meta( $log_entry_id, '_badgeos_admin_awarded', $admin_id );
 
 	// Maybe award some points-based badges
 	foreach ( badgeos_get_points_based_achievements() as $achievement )
@@ -183,7 +190,7 @@ function badgeos_award_user_points( $user_id, $achievement_id ) {
 	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
 
 	if ( ! empty( $points ) )
-		return badgeos_update_users_points( $user_id, $points );
+		return badgeos_update_users_points( $user_id, $points, false, $achievement_id );
 }
 add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
 
@@ -358,7 +365,7 @@ function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) 
 									<?php echo edit_post_link( get_the_title() ); ?>
 								</td>
 								<td>
-									<?php if ( in_array( get_the_ID(), $achievement_ids ) ) :
+									<?php if ( in_array( get_the_ID(), (array) $achievement_ids ) ) :
 										// Setup our revoke URL
 										$revoke_url = add_query_arg( array(
 											'action'         => 'revoke',

@@ -303,7 +303,7 @@ function badgeos_update_steps_ajax_handler() {
 			update_post_meta( $step_id, '_badgeos_achievement_type', $achievement_type );
 
 			// Available hook for custom Activity Triggers
-			$custom_title = sprintf( __( 'Earn %s %s.', 'badgeos' ), $title, sprintf( _n( '%d time', '%d times', $required_count ), $required_count ) );
+			$custom_title = sprintf( __( 'Earn %1$s %2$s.', 'badgeos' ), $title, sprintf( _n( '%d time', '%d times', $required_count ), $required_count ) );
 			$custom_title = apply_filters( 'badgeos_save_step', $custom_title, $step_id, $step );
 
 			// Update our original post with the new title

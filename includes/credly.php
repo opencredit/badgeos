@@ -649,7 +649,7 @@ class BadgeOS_Credly {
             $username = $user->user_login;
             $badge_name = get_the_title( $badge_id );
 
-            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%s sent %s badge to Credly", $username, $badge_name ) );
+            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
 
         }
 
@@ -809,7 +809,7 @@ class BadgeOS_Credly {
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
         <table class="form-table">
             <tr valign="top">
-                <td colspan="2"><?php _e( 'This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner’s own blog or site.', 'badgeos' ); ?> (<?php printf( __( '<a href="%s">Configure global settings</a> for Credly integration.', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?> )</td>
+                <td colspan="2"><?php _e( "This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner's own blog or site.", 'badgeos' ); ?> (<?php printf( __( '<a href="%s">Configure global settings</a> for Credly integration.', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?> )</td>
             </tr>
             <tr valign="top"><th scope="row"><label for="_badgeos_send_to_credly"><?php _e( 'Send to Credly when earned', 'badgeos' ); ?></label></th>
                 <td>
