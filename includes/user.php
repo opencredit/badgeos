@@ -365,7 +365,7 @@ function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) 
 									<?php echo edit_post_link( get_the_title() ); ?>
 								</td>
 								<td>
-									<?php if ( in_array( get_the_ID(), $achievement_ids ) ) :
+									<?php if ( in_array( get_the_ID(), (array) $achievement_ids ) ) :
 										// Setup our revoke URL
 										$revoke_url = add_query_arg( array(
 											'action'         => 'revoke',
