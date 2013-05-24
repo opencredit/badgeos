@@ -13,13 +13,15 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//build the widget settings form
 	function form( $instance ) {
-		$defaults = array( 'title' => 'My Badges', 'number' => '10' );
+		$defaults = array( 'title' => 'My Badges', 'number' => '10', 'point_total' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$number = $instance['number'];
+		$point_total = $instance['point_total'];
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
 			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
+			<p><?php _e( 'Display user point total?', 'badgeos' ); ?>: <input type="checkbox" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /></p>
         <?php
 	}
 
@@ -29,6 +31,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
 		$instance['number'] = absint( $new_instance['number'] );
+		$instance['point_total'] = ( ! empty( $new_instance['point_total'] ) ) ? sanitize_text_field( $new_instance['point_total'] ) : '';
 
 		return $instance;
 	}
@@ -43,6 +46,10 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
+		//display user's points if widget option is enabled
+		if ( $instance['point_total'] == 'on' )
+			echo '<p>' .__( 'My Total Points', 'badgeos' ) .': ' .badgeos_get_users_points() .'</p>';
+		
 		$achievements = badgeos_get_user_achievements();
 
 		if ( is_array( $achievements ) ) {
