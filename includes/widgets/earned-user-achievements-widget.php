@@ -46,61 +46,71 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
-		//display user's points if widget option is enabled
-		if ( $instance['point_total'] == 'on' )
-			echo '<p>' .__( 'My Total Points', 'badgeos' ) .': ' .badgeos_get_users_points() .'</p>';
-		
-		$achievements = badgeos_get_user_achievements();
+		//user must be logged in to view earned badges and points
+		if ( is_user_logged_in() ) {
 
-		if ( is_array( $achievements ) ) {
+			//display user's points if widget option is enabled
+			if ( $instance['point_total'] == 'on' )
+				echo '<p>' .__( 'My Total Points', 'badgeos' ) .': ' .badgeos_get_users_points() .'</p>';
 
-			$number_to_show = absint( $instance['number'] );
-			$thecount = 0;
+			$achievements = badgeos_get_user_achievements();
 
-			wp_enqueue_script( 'badgeos-achievements' );
-			wp_enqueue_style( 'badgeos-widget' );
+			if ( is_array( $achievements ) ) {
 
-			echo '<ul class="widget-achievements-listing">';
-			foreach ( $achievements as $achievement ) {
+				$number_to_show = absint( $instance['number'] );
+				$thecount = 0;
 
-				//exclude step CPT entries from displaying in the widget
-				if ( get_post_type( $achievement->ID ) != 'step' ) {
+				wp_enqueue_script( 'badgeos-achievements' );
+				wp_enqueue_style( 'badgeos-widget' );
 
-					$permalink = get_permalink( $achievement->ID );
-					$title = get_the_title( $achievement->ID );
+				echo '<ul class="widget-achievements-listing">';
+				foreach ( $achievements as $achievement ) {
 
-					$thumb = '';
-					$image_attr = wp_get_attachment_image_src( get_post_thumbnail_id( $achievement->ID ), array( 50, 50 ) );
+					//exclude step CPT entries from displaying in the widget
+					if ( get_post_type( $achievement->ID ) != 'step' ) {
 
-					if ( $image_attr ) {
+						$permalink = get_permalink( $achievement->ID );
+						$title = get_the_title( $achievement->ID );
 
-						$img = '<img class="wp-post-image" width="'. absint( $image_attr[1] ) .'" height="'. absint( $image_attr[2] ) .'" src="'. esc_url( $image_attr[0] ) .'">';
-						$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
+						$thumb = '';
+						$image_attr = wp_get_attachment_image_src( get_post_thumbnail_id( $achievement->ID ), array( 50, 50 ) );
+
+						if ( $image_attr ) {
+
+							$img = '<img class="wp-post-image" width="'. absint( $image_attr[1] ) .'" height="'. absint( $image_attr[2] ) .'" src="'. esc_url( $image_attr[0] ) .'">';
+							$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
+						}
+
+						// is this achievement Credly giveable?
+						$giveable = credly_is_achievement_giveable( $achievement->ID );
+						$class = 'widget-badgeos-item-title';
+						$item_class = $image_attr ? ' has-thumb' : '';
+						$item_class .= $giveable ? ' share-credly addCredly' : '';
+						$credly_ID = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
+
+						echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
+
+						echo $thumb;
+						echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
+						echo '</li>';
+
+						$thecount++;
+
+						if ( $thecount == $number_to_show && $number_to_show != 0 )
+							break;
+
 					}
-
-					// is this achievement Credly giveable?
-					$giveable = credly_is_achievement_giveable( $achievement->ID );
-					$class = 'widget-badgeos-item-title';
-					$item_class = $image_attr ? ' has-thumb' : '';
-					$item_class .= $giveable ? ' share-credly addCredly' : '';
-					$credly_ID = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
-
-					echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
-
-					echo $thumb;
-					echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
-					echo '</li>';
-
-					$thecount++;
-
-					if ( $thecount == $number_to_show && $number_to_show != 0 )
-						break;
-
 				}
+
+				echo '</ul><!-- widget-achievements-listing -->';
+
 			}
-
-			echo '</ul><!-- widget-achievements-listing -->';
-
+			
+		}else{
+			
+			//user is not logged in so display a message
+			_e( 'You must be logged in to view your earned achievements', 'badgeos' );
+			
 		}
 
 		echo $after_widget;
