@@ -217,7 +217,8 @@ function badgeos_settings_page() {
  * @return null
  */
 function badgeos_add_ons_page() {
-    $image_url = str_replace( 'includes', 'images', plugin_dir_url( __FILE__ ) );?>
+	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
+	?>
     <div class="wrap" >
         <div id="icon-options-general" class="icon32"></div>
         <h2><?php _e( 'BadgeOS Add-Ons', 'badgeos' ); ?></h2>
