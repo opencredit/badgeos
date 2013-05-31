@@ -269,7 +269,7 @@ class BadgeOS_Credly {
 
         $is_giveable       = ( 'true' == $fields['credly_is_giveable'] ? true : false );
 
-        $expires_in        = ( is_numeric( $fields['credly_expiration'] ) ? (int) $fields['credly_expiration'] * 3600 : 0 );
+        $expires_in        = ( is_numeric( $fields['credly_expiration'] ) ? (int) $fields['credly_expiration'] * 86400 : 0 );
 
         $categories        = ( $fields['credly_categories'] ? implode( ',',  $fields['credly_categories'] ) : '' );
 
