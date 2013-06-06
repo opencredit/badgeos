@@ -314,7 +314,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
 		// nomination user
 		$sub_form .= '<label>'.__( 'User to nominate', 'badgeos' ).'</label>';
-		$sub_form .= '<p>' .wp_dropdown_users( array( 'name' => 'badgeos_nomination_user_id', 'echo' => 'false' ) ). '</p>';
+		$sub_form .= '<p>' .wp_dropdown_users( array( 'name' => 'badgeos_nomination_user_id', 'echo' => '0' ) ). '</p>';
 		// nomination content
 		$sub_form .= '<label>'.__( 'Reason for nomination', 'badgeos' ).'</label>';
 		$sub_form .= '<fieldset class="badgeos-nomination-content">';
