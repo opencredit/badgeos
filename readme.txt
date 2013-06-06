@@ -177,6 +177,8 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.1 =
 * Updated: Achievements widget with option to display user's total points
 * Added: New widget to display the Credly Credit Issuer badge
+* Fixed: Nomination user select field from displaying twice on the page
+* Fixed: Nomination listing page from displaying the wrong status for the nomination
 
 = 1.0.3 =
 * Updated: Only show "People Who Have Earned This" when there is at least one earner
