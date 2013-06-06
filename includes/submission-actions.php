@@ -220,9 +220,9 @@ function badgeos_submission_column_action( $column ) {
 
 		case 'status':
 
-			$status = get_post_meta( $post->ID, '_badgeos_submission_status', true );
+			$status = ( get_post_type( $post ) == 'submission' ) ? get_post_meta( $post->ID, '_badgeos_submission_status', true ) : get_post_meta( $post->ID, '_badgeos_nomination_status', true );
 			$status = ( $status ) ? $status : __( 'pending', 'badgeos' );
-			echo $status;
+			echo esc_html( $status );
 			break;
 
 		case 'user':
