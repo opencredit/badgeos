@@ -132,7 +132,7 @@ Contributing
 ------------
 The BadgeOS team welcomes donations in the form of code contributions, add-ons, and shared love for what we’re doing. So spread the word and share back your innovations with the BadgeOS community.
 
-So, you want to contribute? That's great! Patches are always welcome. Open an Issue and make a Pull Request.
+So, you want to contribute? That's great! Patches are always welcome. Open an Issue and make a Pull Request. Note, too, that we do all of our active development in branches separate from "master". If you're looking for the latest – potentially unstable – changesets, you'll find them in the [alpha](https://github.com/opencredit/badgeos/tree/alpha) branch.
 
 1. [Open an Issue](https://github.com/opencredit/badgeos/issues) (or claim an open Issue).
 2. [Fork BadgeOS.](https://github.com/opencredit/badgeos/fork)
