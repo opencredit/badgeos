@@ -161,8 +161,6 @@ function badgeos_settings_page() {
 	if ( badgeos_is_debug_mode() )
 		echo 'debug mode is on';
 
-	// @TODO should we be using do_settings_fields here to be more efficient?
-	// @RESPONSE yes, oh please God, yes
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
@@ -171,31 +169,37 @@ function badgeos_settings_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'badgeos_settings_group' ); ?>
 			<?php $badgeos_settings = get_option( 'badgeos_settings' ); ?>
+			<?php
+			//load settings
+			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
+			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
+			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
+			?>
 			<table class="form-table">
 				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
 					<td>
                         <select id="minimum_role" name="badgeos_settings[minimum_role]">
-                            <option value="manage_options" <?php selected( $badgeos_settings['minimum_role'], 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-                            <option value="delete_others_posts" <?php selected( $badgeos_settings['minimum_role'], 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-                            <option value="publish_posts" <?php selected( $badgeos_settings['minimum_role'], 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-                            <option value="edit_posts" <?php selected( $badgeos_settings['minimum_role'], 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
-                            <option value="read" <?php selected( $badgeos_settings['minimum_role'], 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
+                            <option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+                            <option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+                            <option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+                            <option value="edit_posts" <?php selected( $minimum_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
+                            <option value="read" <?php selected( $minimum_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
                         </select>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
 					<td>
                         <select id="debug_mode" name="badgeos_settings[submission_email]">
-                            <option value="enabled" <?php selected( $badgeos_settings['submission_email'], 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                            <option value="disabled" <?php selected( $badgeos_settings['submission_email'], 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+                            <option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+                            <option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
                         </select>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Debug Mode:', 'badgeos' ); ?></label></th>
 					<td>
                         <select id="debug_mode" name="badgeos_settings[debug_mode]">
-                            <option value="disabled" <?php selected( $badgeos_settings['debug_mode'], 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                            <option value="enabled" <?php selected( $badgeos_settings['debug_mode'], 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+                            <option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+                            <option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
                         </select>
 					</td>
 				</tr>
