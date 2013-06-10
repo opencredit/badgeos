@@ -230,6 +230,9 @@ function badgeos_reformat_entries( $content ) {
 	$newcontent .= badgeos_achievement_points_markup();
 	$newcontent .= wpautop( $content );
 
+	// Check if current user has earned this achievement
+	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
+	
 	// Include output for our steps
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
 
@@ -413,4 +416,29 @@ function badgeos_add_earned_class_single( $classes ) {
 	$classes[] = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => get_the_ID() ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
 	return $classes;
+}
+
+/**
+ * Returns a message if user has earned the achievement
+ *
+ * @since  1.1.0
+ * @param  integer $achievement_id The given achievment's ID
+ * @return string                  The HTML markup for our earned message
+ */
+function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
+	
+	// Use the current user's ID
+	if ( ! $user_id )
+		$user_id = wp_get_current_user()->ID;
+	
+	// Check if the user has earned the achievement
+	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) ) {
+		
+		// Return a message stating the user has earned the achievement
+		$earned_message = '<div class="earned"><p>' .__( 'You have earned this achievement!', 'badgeos' ) .'</p></div>';
+		
+		return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
+		
+	}
+	
 }
