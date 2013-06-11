@@ -661,3 +661,97 @@ function badgeos_check_if_user_has_nomination( $user_id, $activity_id ) {
 	return false;
 
 }
+
+/**
+ * Render a given submission
+ *
+ * @since  1.1.0
+ * @param  object $submission A submission post object
+ * @return string             Concatenated output
+ */
+function badgeos_render_submission( $submission = null ) {
+
+	// If we weren't given a submission, use the current post
+	if ( empty( $submission ) ) {
+		global $post;
+		$submission = $post;
+	}
+
+	// Concatenate our output
+	$output = '<h4>' . __( 'Original Submission', 'badgeos' ) . '</h4>';
+	$output .= '<div class="badgeos-original-submission">';
+		$output .= wpautop( $submission->post_content );
+		$output .= '<p class="badgeos-comment-date-by">';
+			$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
+				'<span class="badgeos-comment-date">' . get_the_date( '', $submission->ID ) . '<span>',
+				'<cite class="badgeos-comment-author">'. get_userdata( $submission->post_author )->display_name .'</cite>'
+			);
+			$output .= '<br/>';
+			$output .= '<span class="badgeos-submission-label">' . __( 'Status:', 'badgeos' ) . '</span>&nbsp;';
+			$output .= get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+		$output .= '</p>';
+	$output .= '</div><!-- .badgeos-original-submission -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission', $output, $submission );
+}
+
+/**
+ * Get attachments connected to a specific achievement
+ *
+ * @since  1.1.0
+ * @param  integer $submission_id The submission's post ID
+ * @return string                 The concatenated attachment output
+ */
+function badgeos_get_submission_attachments( $submission_id = 0 ) {
+
+	// Get attachments
+	$attachments = get_posts( array(
+		'post_type'      => 'attachment',
+		'posts_per_page' => -1,
+		'post_parent'    => $submission_id,
+		'orderby'        => 'date',
+		'order'          => 'ASC',
+	) );
+
+	// If we have attachments
+	if ( ! empty( $attachments ) ) {
+		$output = '<h4>' . __( 'Submission Attachments', 'badgeos' ) . '</h4>';
+		$output .= '<ul class="badgeos-attachments-list">';
+		foreach ( $attachments as $attachment ) {
+			$output .= badgeos_render_submission_attachments( $attachment );
+		}
+		$output .= '</ul><!-- .badgeos-attachments-list -->';
+	}
+
+	// Return out filterable output
+	return apply_filters( 'badgeos_get_submission_attachments', $output, $submission_id, $attachments );
+}
+
+/**
+ * Renter a given submission attachment
+ *
+ * @since  1.1.0
+ * @param  object $attachment The attachment post object
+ * @return string             Concatenated markup
+ */
+function badgeos_render_submission_attachments( $attachment = null ) {
+	// If we weren't given an attachment, use the current post
+	if ( empty( $attachment ) ) {
+		global $post;
+		$attachment = $post;
+	}
+
+	// Concatenate the markup
+	$output = '<li class="badgeos-attachment">';
+	$output .= '<span class="badgeos-submission-label">' . __( 'Attachment:', 'badgeos' ) . '</span>&nbsp;';
+	$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
+		wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title ),
+		get_the_time( 'F j, Y g:i a', $attachment->post_date ),
+		get_userdata( $attachment->post_author )->display_name
+	);
+	$output .= '</li><!-- .badgeos-attachment -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission_attachments', $output, $attachment );
+}

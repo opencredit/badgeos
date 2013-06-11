@@ -434,44 +434,11 @@ function badgeos_get_feedback( $args = array() ) {
 			badgeos_save_comment_data( $submission->ID );
 
 			// Setup our output
-			$output .= '<h4>' . __( 'Original Submission', 'badgeos' ) . '</h4>';
-			$output .= '<div class="badgeos-original-submission">';
-				$output .= wpautop( $submission->post_content );
-				$output .= '<p class="badgeos-comment-date-by">';
-					$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
-						'<span class="badgeos-comment-date">' . get_the_date( '', $submission->ID ) . '<span>',
-						'<cite class="badgeos-comment-author">'. get_userdata( $submission->post_author )->display_name .'</cite>'
-					);
-					$output .= '<br/>';
-					$output .= '<span class="badgeos-submission-label">' . __( 'Status:', 'badgeos' ) . '</span>&nbsp;';
-					$output .= get_post_meta( $submission->ID, '_badgeos_submission_status', true );
-				$output .= '</p>';
-			$output .= '</div><!-- .badgeos-original-submission -->';
+			$output .= badgeos_render_submission( $submission );
 
 			// Include any attachments
 			if ( isset( $args['show_attachments'] ) && $args['show_attachments'] ) {
-				$attachments = get_posts( array(
-					'post_type'      => 'attachment',
-					'posts_per_page' => -1,
-					'post_parent'    => $submission->ID,
-					'orderby'        => 'date',
-					'order'          => 'ASC',
-				) );
-				if ( ! empty( $attachments ) ) {
-					$output .= '<h4>' . __( 'Submission Attachments', 'badgeos' ) . '</h4>';
-					$output .= '<ul class="badgeos-attachments-list">';
-					foreach ( $attachments as $attachment ) {
-						$output .= '<li class="badgeos-attachment">';
-						$output .= '<span class="badgeos-submission-label">' . __( 'Attachment:', 'badgeos' ) . '</span>&nbsp;';
-						$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
-							wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title ),
-							get_the_time( 'F j, Y g:i a', $attachment->post_date ),
-							get_userdata( $attachment->post_author )->display_name
-						);
-						$output .= '</li><!-- .badgeos-attachment -->';
-					}
-					$output .= '</ul><!-- .badgeos-attachments-list -->';
-				}
+				$output .= badgeos_get_submission_attachments( $submission->ID );
 			}
 
 			// Include comments and comment form
@@ -480,11 +447,11 @@ function badgeos_get_feedback( $args = array() ) {
 				$output .= badgeos_get_comment_form( $submission->ID );
 			}
 
-		}; // End: foreach( $submissons )
+		}; // End: foreach( $feedback )
 
 		$output .= '</div><!-- badgeos-submissions -->';
 
-	} // End: if ( $submissions )
+	} // End: if ( $feedback )
 
 	// Return our filterable output
 	return apply_filters( 'badgeos_get_submissions', $output, $args, $submissions );
