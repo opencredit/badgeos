@@ -592,27 +592,28 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 /**
  * Check if a user has an existing submission for an achievement
  *
- *
+ * @since  1.0.0
+ * @param  integer $user_id        The user's ID
+ * @param  integer $achievement_id The achievement's post ID
+ * @return bool                    True if the user has sent a submission, false otherwise
  */
-function badgeos_check_if_user_has_submission( $user_id, $activity_id ) {
+function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0 ) {
 
-	$args = array(
-		'post_type'		=>	'submission',
-		'author'		=>	absint( $user_id ),
-		'post_status'	=>	'publish',
-		'meta_key'		=>	'_badgeos_submission_achievement_id',
-		'meta_value'	=>	absint( $activity_id ),
-	);
+	$submissions = get_posts( array(
+		'post_type'   => 'submission',
+		'author'      => absint( $user_id ),
+		'post_status' => 'publish',
+		'meta_key'    => '_badgeos_submission_achievement_id',
+		'meta_value'  => absint( $achievement_id ),
+	) );
 
-	$submissions = get_posts( $args );
-
-	if ( !empty( $submissions ) ) {
-		//user has an active submission for this achievement
+	// User DOES have a submission for this achievement
+	if ( ! empty( $submissions ) )
 		return true;
-	}
 
-	//user has no active submission for this achievement
-	return false;
+	// User does NOT have a submission
+	else
+		return false;
 
 }
 
