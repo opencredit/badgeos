@@ -588,6 +588,33 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 
 }
 
+/**
+ * Check if a user has left feedback for an achievement
+ *
+ * @since  1.1.0
+ * @param  integer $user_id        The user's ID
+ * @param  integer $achievement_id The achievement's post ID
+ * @param  string  $feedback_type  The type of feedback to check for (e.g. "submission")
+ * @return bool                    True if the user has sent a submission, false otherwise
+ */
+function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 , $feedback_type = '' ) {
+
+	$feedback = get_posts( array(
+		'post_type'   => $feedback_type,
+		'author'      => absint( $user_id ),
+		'post_status' => 'publish',
+		'meta_key'    => "_badgeos_{$feedback_type}_achievement_id",
+		'meta_value'  => absint( $achievement_id ),
+	) );
+
+	// User DOES have a submission for this achievement
+	if ( ! empty( $feedback ) )
+		return true;
+
+	// User does NOT have a submission
+	else
+		return false;
+}
 
 /**
  * Check if a user has an existing submission for an achievement
@@ -598,23 +625,7 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0 ) {
-
-	$submissions = get_posts( array(
-		'post_type'   => 'submission',
-		'author'      => absint( $user_id ),
-		'post_status' => 'publish',
-		'meta_key'    => '_badgeos_submission_achievement_id',
-		'meta_value'  => absint( $achievement_id ),
-	) );
-
-	// User DOES have a submission for this achievement
-	if ( ! empty( $submissions ) )
-		return true;
-
-	// User does NOT have a submission
-	else
-		return false;
-
+	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'submission' );
 }
 
 /**
@@ -626,23 +637,7 @@ function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_nomination( $user_id = 0, $achievement_id = 0 ) {
-
-	$nomination = get_posts( array(
-		'post_type'   => 'nomination',
-		'author'      => absint( $user_id ),
-		'post_status' => 'publish',
-		'meta_key'    => '_badgeos_nomination_achievement_id',
-		'meta_value'  => absint( $activity_id ),
-	) );
-
-	// User DOES have a nomination for this achievement
-	if ( ! empty( $nomination ) )
-		return true;
-
-	// User does NOT have a nomination
-	else
-		return false;
-
+	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'nomination' );
 }
 
 function badgeos_get_nomination_form( $args = array() ) {
