@@ -734,7 +734,10 @@ function badgeos_get_feedback( $args = array() ) {
 		foreach( $feedback as $submission ) {
 
 			// Setup our output
-			$output .= badgeos_render_submission( $submission );
+			if ( 'nomination' == $args['post_type'] )
+				$output .= badgeos_render_nomination( $submission );
+			else
+				$output .= badgeos_render_submission( $submission );
 
 			// Include any attachments
 			if ( isset( $args['show_attachments'] ) && 'false' !== $args['show_attachments'] ) {
@@ -862,6 +865,51 @@ function badgeos_render_submission( $submission = null ) {
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_submission', $output, $submission );
 }
+
+/**
+ * Render a given nomination
+ *
+ * @since  1.1.0
+ * @param  object $nomination A nomination post object
+ * @return string             Concatenated output
+ */
+function badgeos_render_nomination( $nomination = null ) {
+	global $post;
+
+	// If we weren't given a nomination, use the current post
+	if ( empty( $nomination ) ) {
+		$nomination = $post;
+	}
+
+	// Grab the connected achievement
+	$achievement_id = get_post_meta( $nomination->ID, '_badgeos_nomination_achievement_id', true );
+
+	// Concatenate our output
+	$output = '<div class="badgeos-original-submission">';
+
+		// Title
+		$output .= '<h4>';
+		$output .= sprintf( __( '%1$s nominated for %2$s', 'badgeos' ),
+			get_userdata( $nomination->post_author )->display_name,
+			'<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>'
+		);
+		$output .= '</h4>';
+
+		// Content
+		$output .= wpautop( $nomination->post_content );
+
+		// Approval Status
+		$output .= '<p class="badgeos-comment-date-by">';
+			$output .= '<span class="badgeos-status-label">' . __( 'Status:', 'badgeos' ) . '</span> ';
+			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
+		$output .= '</p>';
+
+	$output .= '</div><!-- .badgeos-original-submission -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_nomination', $output, $nomination );
+}
+
 
 /**
  * Get attachments connected to a specific achievement
