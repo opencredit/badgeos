@@ -463,9 +463,9 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		return '';
 
 	$defaults = array(
-		'heading' => sprintf( '<h4>%s</h4>', __( 'Comment on Submission', 'badgeos' ) ),
+		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission #%1$d', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit' => __( 'Submit Comment', 'badgeos' )
+		'submit'     => __( 'Submit Comment', 'badgeos' )
 	);
 	// filter our text
 	$new_defaults = apply_filters( 'badgeos_comment_form_language', $defaults );
@@ -598,10 +598,12 @@ function badgeos_get_comments_for_submission( $post_id = 0 ) {
 
 	$comment_data .= '</ul><!-- .badgeos-submission-comments-list -->';
 
-	if ( $comment_data )
-		$comment_data =  sprintf( '<h4>%s</h4>', __( 'Submission Comments', 'badgeos' ) ) . $comment_data;
+	if ( $comment_data ) {
+		$output = '<h4>' . sprintf( __( 'Submission #%1$d Comments', 'badgeos' ), $post_id ) . '</h4>';
+		$output .= $comment_data;
+	}
 
-	return apply_filters( 'badgeos_get_comments_for_submission', $comment_data );
+	return apply_filters( 'badgeos_get_comments_for_submission', $output );
 
 }
 
@@ -854,7 +856,7 @@ function badgeos_render_submission( $submission = null ) {
 	}
 
 	// Concatenate our output
-	$output = '<h4>' . __( 'Original Submission', 'badgeos' ) . '</h4>';
+	$output = '<h4>' . sprintf( __( 'Submission #%1$d', 'badgeos' ), $submission->ID ) . '</h4>';
 	$output .= '<div class="badgeos-original-submission">';
 		$output .= wpautop( $submission->post_content );
 		$output .= '<p class="badgeos-comment-date-by">';
@@ -892,7 +894,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 
 	// If we have attachments
 	if ( ! empty( $attachments ) ) {
-		$output = '<h4>' . __( 'Submission Attachments', 'badgeos' ) . '</h4>';
+		$output = '<h4>' . sprintf( __( 'Submission #%1$d Attachments', 'badgeos' ), $submission_id ) . '</h4>';
 		$output .= '<ul class="badgeos-attachments-list">';
 		foreach ( $attachments as $attachment ) {
 			$output .= badgeos_render_submission_attachments( $attachment );
