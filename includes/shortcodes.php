@@ -165,23 +165,11 @@ function badgeos_submission_form() {
 		if ( badgeos_save_submission_data() )
 			printf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
 
-		// check if user already has a submission for this achievement type
-		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
-
-			// Step Description metadata
-			// TODO: Check if this meta is still in use
-			if ( $step_description = get_post_meta( $post->ID, '_badgeos_step_description', true ) )
-				printf( '<p><span class="badgeos-submission-label">%s:</span></p>%s', __( 'Step Description', 'badgeos' ), wpautop( $step_description ) );
-
-			return badgeos_get_submission_form();
-
-		}
-		// user has an active submission, so show content and comments
-		else {
-
+		// Return either the user's submission or the submission form
+		if ( badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) )
 			return badgeos_get_user_submissions();
-
-		}
+		else
+			return badgeos_get_submission_form();
 
 	}else{
 
