@@ -12,6 +12,7 @@
 // Setup our MVP AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
+	'get-feedback'
 );
 
 // Register core Ajax calls.
@@ -159,4 +160,28 @@ function badgeos_ajax_get_achievements(){
 
 	echo json_encode( $response );
 	die();
+}
+
+/**
+ * AJAX Helper for returning feedback posts
+ *
+ * @since 1.1.0
+ */
+function badgeos_ajax_get_feedback() {
+
+	// Parse our passed args
+	$args = array(
+		'post_type'        => $_REQUEST['type'],
+		'posts_per_page'   => $_REQUEST['limit'],
+		'status'           => $_REQUEST['status'],
+		'show_attachments' => $_REQUEST['show_attachments'],
+		'show_comments'    => $_REQUEST['show_comments']
+	);
+	$feedback = badgeos_get_feedback( $args );
+
+	// Send back our successful response
+	wp_send_json_success( array(
+		'message'  => 'Success!',
+		'feedback' => $feedback
+	) );
 }
