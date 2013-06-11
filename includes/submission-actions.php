@@ -830,7 +830,7 @@ function badgeos_get_user_submissions( $achievement_id = 0, $user_id = 0 ) {
 
 	// Grab our submissions for the current user
 	$submissions = badgeos_get_submissions( array(
-		'post_author'    => $user_id,
+		'author'         => $user_id,
 		'achievement_id' => $achievement_id,
 	) );
 
