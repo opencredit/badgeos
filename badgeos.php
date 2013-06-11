@@ -62,6 +62,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
+		require_once( $this->directory_path . 'includes/ajax-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );

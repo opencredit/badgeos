@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
 		$.ajax({
 			url: badgeos.ajax_url,
 			data: {
-				'action':      'achievements_list_load_more',
+				'action':      'get-achievements',
 				'type':        badgeos.type,
 				'limit':       badgeos.limit,
 				'show_parent': badgeos.show_parent,
