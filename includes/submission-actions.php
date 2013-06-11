@@ -817,24 +817,32 @@ function badgeos_get_submissions( $args = array() ) {
  * @param  integer $user_id        The user's ID
  * @return string                  Conatenated output for submission, attachments and comments
  */
-function badgeos_get_user_submissions( $achievement_id = 0, $user_id = 0 ) {
+function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0) {
 	global $user_ID, $post;
+
+	// Setup our empty args array
+	$args = array();
+
+	// Setup our author limit
+	if ( ! empty( $user_id ) ) {
+		// Use the provided user ID
+		$args['author'] = absint( $user_id );
+	} else {
+		// If we're not an admin, limit results to the current user
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+			$args['author'] = $user_ID;
+		}
+	}
 
 	// If we were not given an achievement ID,
 	// use the current post's ID
-	if ( empty( $achievement_id ) )
-		$achievement_id = $post->ID;
-
-	// If we were not passed a user ID,
-	// use the current user's ID
-	if ( empty( $user_id ) )
-		$user_id = $user_ID;
+	$args['achievement_id'] = ( absint( $achievement_id ) )
+		? absint( $achievement_id )
+		: $post->ID;
 
 	// Grab our submissions for the current user
-	$submissions = badgeos_get_submissions( array(
-		'author'         => $user_id,
-		'achievement_id' => $achievement_id,
-	) );
+	$submissions = badgeos_get_submissions( $args );
 
 	// Return filterable output
 	return apply_filters( 'badgeos_get_user_submissions', $submissions, $achievement_id, $user_id );
