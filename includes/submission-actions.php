@@ -662,6 +662,182 @@ function badgeos_check_if_user_has_nomination( $user_id, $activity_id ) {
 
 }
 
+function badgeos_get_nomination_form( $args = array() ) {
+
+	$defaults = array(
+		'heading' => sprintf( '<h4>%s</h4>', __( 'Nomination Form', 'badgeos' ) ),
+		'submit' => __( 'Submit', 'badgeos' )
+	);
+	// filter our text
+	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+	// fill in missing data
+	$language = wp_parse_args( $new_defaults, $defaults );
+
+	$sub_form = '<form class="badgeos-nomination-form" method="post" enctype="multipart/form-data">';
+		$sub_form .= wp_nonce_field( 'badgeos_nomination_form', 'submit_nomination', true, false );
+		// nomination form heading
+		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		// nomination user
+		$sub_form .= '<label>'.__( 'User to nominate', 'badgeos' ).'</label>';
+		$sub_form .= '<p>' .wp_dropdown_users( array( 'name' => 'badgeos_nomination_user_id', 'echo' => '0' ) ). '</p>';
+		// nomination content
+		$sub_form .= '<label>'.__( 'Reason for nomination', 'badgeos' ).'</label>';
+		$sub_form .= '<fieldset class="badgeos-nomination-content">';
+		$sub_form .= '<p><textarea name="badgeos_nomination_content"></textarea></p>';
+		$sub_form .= '</fieldset>';
+		// submit button
+		$sub_form .= '<p class="badgeos-nomination-submit"><input type="submit" name="badgeos_nomination_submit" value="'. esc_attr( $language['submit'] ) .'" /></p>';
+	$sub_form .= '</form>';
+
+	return apply_filters( 'badgeos_get_nomination_form', $sub_form );
+}
+
+function badgeos_get_submission_form( $args = array() ) {
+
+
+	$defaults = array(
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'attachment' => __( 'Attachment:', 'badgeos' ),
+		'submit'     => __( 'Submit', 'badgeos' )
+	);
+	// filter our text
+	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+	// fill in missing data
+	$language = wp_parse_args( $new_defaults, $defaults );
+
+	$sub_form = '<form class="badgeos-submission-form" method="post" enctype="multipart/form-data">';
+		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
+		// submission form heading
+		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		// submission file upload
+		$sub_form .= '<fieldset class="badgeos-file-submission">';
+		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+		$sub_form .= '</fieldset>';
+		// submission comment
+		$sub_form .= '<fieldset class="badgeos-submission-comment">';
+		$sub_form .= '<p><textarea name="badgeos_submission_content"></textarea></p>';
+		$sub_form .= '</fieldset>';
+		// submit button
+		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $language['submit'] .'" /></p>';
+	$sub_form .= '</form>';
+
+	return apply_filters( 'badgeos_get_submission_form', $sub_form );
+}
+
+/**
+ * Get achievement-based feedback
+ *
+ * @since  1.1.0
+ * @param  array  $args An array of arguments to limit or alter output
+ * @return string       Conatenated output for feedback
+ */
+function badgeos_get_feedback( $args = array() ) {
+
+	// Setup our default args
+	$defaults = array(
+		'post_status' => 'publish',
+		'post_type'   => 'submission'
+	);
+	$args = wp_parse_args( $args, $defaults );
+
+	// If we want feedback connected to a specific achievement
+	if ( isset( $args['achievement_id'] ) ) {
+		$args['meta_key']   = '_badgeos_submission_achievement_id';
+		$args['meta_value'] = absint( $args['achievement_id'] );
+	}
+
+	// Get our feedback
+	$feedback = get_posts( $args );
+
+	if ( ! empty( $feedback ) ) {
+
+		$output = '<div class="badgeos-submissions">';
+
+		foreach( $feedback as $submission ) {
+
+			// Save submitted comment data
+			// @TODO: Make this an AJAX process
+			badgeos_save_comment_data( $submission->ID );
+
+			// Setup our output
+			$output .= badgeos_render_submission( $submission );
+
+			// Include any attachments
+			if ( isset( $args['show_attachments'] ) && $args['show_attachments'] ) {
+				$output .= badgeos_get_submission_attachments( $submission->ID );
+			}
+
+			// Include comments and comment form
+			if ( isset( $args['show_comments'] ) && $args['show_comments'] ) {
+				$output .= badgeos_get_comments_for_submission( $submission->ID );
+				$output .= badgeos_get_comment_form( $submission->ID );
+			}
+
+		}; // End: foreach( $feedback )
+
+		$output .= '</div><!-- badgeos-submissions -->';
+
+	} // End: if ( $feedback )
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_get_submissions', $output, $args, $submissions );
+}
+
+/**
+ * Get achievement-based submission posts
+ *
+ * @since  1.1.0
+ * @param  array  $args An array of arguments to limit or alter output
+ * @return string       Conatenated output for submission, attachments and comments
+ */
+function badgeos_get_submissions( $args = array() ) {
+
+	// Setup our default args
+	$defaults = array(
+		'post_type'        => 'submission',
+		'show_attachments' => true,
+		'show_comments'    => true
+	);
+	$args = wp_parse_args( $args, $defaults );
+
+	// Grab our submissions
+	$submissions = badgeos_get_feedback( $args );
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_get_submissions', $submissions, $args );
+}
+
+/**
+ * Get submissions attached to a specific achievement by a specific user
+ *
+ * @since  1.0.0
+ * @param  integer $achievement_id The achievement's post ID
+ * @param  integer $user_id        The user's ID
+ * @return string                  Conatenated output for submission, attachments and comments
+ */
+function badgeos_get_user_submissions( $achievement_id = 0, $user_id = 0 ) {
+	global $user_ID, $post;
+
+	// If we were not given an achievement ID,
+	// use the current post's ID
+	if ( empty( $achievement_id ) )
+		$achievement_id = $post->ID;
+
+	// If we were not passed a user ID,
+	// use the current user's ID
+	if ( empty( $user_id ) )
+		$user_id = $user_ID;
+
+	// Grab our submissions for the current user
+	$submissions = badgeos_get_submissions( array(
+		'post_author'    => $user_id,
+		'achievement_id' => $achievement_id,
+	) );
+
+	// Return filterable output
+	return apply_filters( 'badgeos_get_user_submissions', $submissions, $achievement_id, $user_id );
+}
+
 /**
  * Render a given submission
  *
@@ -752,6 +928,6 @@ function badgeos_render_submission_attachments( $attachment = null ) {
 	);
 	$output .= '</li><!-- .badgeos-attachment -->';
 
-	// Return our filterable output
+// Return our filterable output
 	return apply_filters( 'badgeos_render_submission_attachments', $output, $attachment );
 }
