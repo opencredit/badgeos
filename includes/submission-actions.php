@@ -848,10 +848,10 @@ function badgeos_get_user_submissions( $achievement_id = 0, $user_id = 0 ) {
  * @return string             Concatenated output
  */
 function badgeos_render_submission( $submission = null ) {
+	global $post;
 
 	// If we weren't given a submission, use the current post
 	if ( empty( $submission ) ) {
-		global $post;
 		$submission = $post;
 	}
 
@@ -867,6 +867,15 @@ function badgeos_render_submission( $submission = null ) {
 			$output .= '<br/>';
 			$output .= '<span class="badgeos-submission-label">' . __( 'Status:', 'badgeos' ) . '</span>&nbsp;';
 			$output .= get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+
+			// If we're not on the achievement page, link to the connected achievement
+			$achievement_id = get_post_meta( $submission->ID, '_badgeos_submission_achievement_id', true );
+			if ( $achievement_id != $post->ID ) {
+				$output .= '<br/>';
+				$output .= '<span class="badgeos-connected-achievement">';
+				$output .= sprintf( __( 'Achievement: %s' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
+				$output .= '</span>';
+			}
 		$output .= '</p>';
 	$output .= '</div><!-- .badgeos-original-submission -->';
 
