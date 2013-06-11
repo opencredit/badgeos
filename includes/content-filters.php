@@ -223,15 +223,16 @@ function badgeos_reformat_entries( $content ) {
 
 	// wrap our content, add the thumbnail and title and add wpautop back
 	$newcontent = '<div class="achievement-wrap'. $class .'">';
+	
+	// Check if current user has earned this achievement
+	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
+	
 	$newcontent .= '<div class="alignleft badgeos-item-image">'. badgeos_get_achievement_post_thumbnail( $badge_id ) .'</div>';
 	// $newcontent .= $title;
 
 	// Points for badge
 	$newcontent .= badgeos_achievement_points_markup();
 	$newcontent .= wpautop( $content );
-
-	// Check if current user has earned this achievement
-	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
 
 	// Include output for our steps
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
