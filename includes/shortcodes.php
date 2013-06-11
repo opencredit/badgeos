@@ -204,3 +204,29 @@ function badgeos_display_submissions( $atts = array() ) {
 
 }
 add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
+
+/**
+ * Shortcode to display a filterable list of Nominations
+ *
+ * @since  1.1.0
+ * @param  array  $atts Attributes passed via shortcode
+ * @return string       Concatenated output
+ */
+function badgeos_display_nominations( $atts = array() ) {
+
+	// Parse our attributes
+	$atts = shortcode_atts( array(
+		'type'             => 'nomination',
+		'limit'            => '10',
+		'status'           => 'pending',
+		'show_filter'      => true,
+		'show_search'      => true,
+		'show_attachments' => 'false',
+		'show_comments'    => 'false'
+	), $atts );
+
+	// Return our rendered content
+	return badgeos_render_feedback( $atts );
+
+}
+add_shortcode( 'badgeos_nominations', 'badgeos_display_nominations' );
