@@ -203,19 +203,23 @@ function badgeos_display_feedback( $atts = array() ) {
 
 	// Parse our attributes
 	$atts = shortcode_atts( array(
-		'type'        => 'submission',
-		'limit'       => '10',
-		'status'      => 'pending',
-		'show_filter' => true,
-		'show_search' => true
+		'type'             => 'submission',
+		'limit'            => '10',
+		'status'           => 'pending',
+		'show_filter'      => true,
+		'show_search'      => true,
+		'show_attachments' => true,
+		'show_comments'    => true
 	), $atts );
 
 	// Setup our feedback args
 	$args = array(
-		'post_type'      => $atts['type'],
-		'posts_per_page' => $atts['limit'],
-		'meta_key'       => '_badgeos_submission_status',
-		'meta_value'     => $atts['status'],
+		'post_type'        => $atts['type'],
+		'posts_per_page'   => $atts['limit'],
+		'meta_key'         => '_badgeos_submission_status',
+		'meta_value'       => $atts['status'],
+		'show_attachments' => $atts['show_attachments'],
+		'show_comments'    => $atts['show_comments']
 	);
 
 	// If we're not an admin, limit results to the current user
