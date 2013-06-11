@@ -711,6 +711,10 @@ function badgeos_get_submission_form( $args = array() ) {
  */
 function badgeos_get_feedback( $args = array() ) {
 
+	// If no one is logged in, bail now
+	if ( ! is_user_logged_in() )
+		return '<p>' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
+
 	// Setup our default args
 	$defaults = array(
 		'post_status' => 'publish',
@@ -722,6 +726,15 @@ function badgeos_get_feedback( $args = array() ) {
 	if ( isset( $args['achievement_id'] ) ) {
 		$args['meta_key']   = '_badgeos_submission_achievement_id';
 		$args['meta_value'] = absint( $args['achievement_id'] );
+	}
+
+	// Setup our author limit
+	if ( empty( $args['author'] ) ) {
+		// If we're not an admin, limit results to the current user
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+			$args['author'] = $user_ID;
+		}
 	}
 
 	// Get our feedback
