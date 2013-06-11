@@ -1030,7 +1030,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	$defaults = array(
 		'type'             => 'submission',
 		'limit'            => '10',
-		'status'           => 'pending',
+		'status'           => 'all',
 		'show_filter'      => true,
 		'show_search'      => true,
 		'show_attachments' => true,
@@ -1042,11 +1042,15 @@ function badgeos_render_feedback( $atts = array() ) {
 	$args = array(
 		'post_type'        => $atts['type'],
 		'posts_per_page'   => $atts['limit'],
-		'meta_key'         => "_badgeos_{$atts['type']}_status",
-		'meta_value'       => $atts['status'],
 		'show_attachments' => $atts['show_attachments'],
 		'show_comments'    => $atts['show_comments']
 	);
+
+	// If we're looking for a specific approval status
+	if ( 'all' !== $atts['status'] ) {
+		$args['meta_key']   = "_badgeos_{$atts['type']}_status";
+		$args['meta_value'] = $atts['status'];
+	}
 
 	// If we're not an admin, limit results to the current user
 	$badgeos_settings = get_option( 'badgeos_settings' );
