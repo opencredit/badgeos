@@ -859,7 +859,7 @@ function badgeos_render_submission( $submission = null ) {
 		$output .= wpautop( $submission->post_content );
 		$output .= '<p class="badgeos-comment-date-by">';
 			$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
-				'<span class="badgeos-comment-date">' . get_the_date( '', $submission->ID ) . '<span>',
+				'<span class="badgeos-comment-date">' . get_the_time( 'F j, Y', $submission ) . '<span>',
 				'<cite class="badgeos-comment-author">'. get_userdata( $submission->post_author )->display_name .'</cite>'
 			);
 			$output .= '<br/>';
@@ -923,7 +923,7 @@ function badgeos_render_submission_attachments( $attachment = null ) {
 	$output .= '<span class="badgeos-submission-label">' . __( 'Attachment:', 'badgeos' ) . '</span>&nbsp;';
 	$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
 		wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title ),
-		get_the_time( 'F j, Y g:i a', $attachment->post_date ),
+		get_the_time( 'F j, Y g:i a', $attachment ),
 		get_userdata( $attachment->post_author )->display_name
 	);
 	$output .= '</li><!-- .badgeos-attachment -->';
