@@ -171,9 +171,9 @@ function badgeos_submission_form() {
 		else
 			return badgeos_get_submission_form();
 
-	}else{
+	} else {
 
-		return '<p><i>' .__( 'You must be logged in to post a submission.', 'badgeos' ) .'</i></p>';
+		return '<p><i>' . __( 'You must be logged in to post a submission.', 'badgeos' ) . '</i></p>';
 
 	}
 }
@@ -218,9 +218,10 @@ function badgeos_display_feedback( $atts = array() ) {
 
 	// Get our feedback
 	$feedback = badgeos_get_feedback( $args );
+	$output = '';
 
 	// Search
-	if ( 'false' !== $show_search ) {
+	if ( 'false' !== $atts['show_search'] ) {
 
 		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
 		$output .= '<div id="badgeos-feedback-search">';
@@ -233,7 +234,7 @@ function badgeos_display_feedback( $atts = array() ) {
 	}
 
 	// Filter
-	if ( 'false' !== $show_filter ) {
+	if ( 'false' !== $atts['show_filter'] ) {
 
 		$output .= '<div id="badgeos-feedback-filter">';
 			$output .= __( 'Filter:', 'badgeos' );
