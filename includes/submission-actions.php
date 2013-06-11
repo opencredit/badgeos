@@ -954,3 +954,87 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_submission_comment', $output, $comment, $odd_even );
 }
+
+/**
+ * Render a filterable list of feedback
+ *
+ * @since  1.1.0
+ * @param  array  $atts Shortcode attributes
+ * @return string       Contatenated markup
+ */
+function badgeos_render_feedback( $atts = array() ) {
+	global $current_user;
+
+	// Parse our attributes
+	$defaults = array(
+		'type'             => 'submission',
+		'limit'            => '10',
+		'status'           => 'pending',
+		'show_filter'      => true,
+		'show_search'      => true,
+		'show_attachments' => true,
+		'show_comments'    => true
+	);
+	$atts = wp_parse_args( $atts, $defaults );
+
+	// Setup our feedback args
+	$args = array(
+		'post_type'        => $atts['type'],
+		'posts_per_page'   => $atts['limit'],
+		'meta_key'         => "_badgeos_{$atts['type']}_status",
+		'meta_value'       => $atts['status'],
+		'show_attachments' => $atts['show_attachments'],
+		'show_comments'    => $atts['show_comments']
+	);
+
+	// If we're not an admin, limit results to the current user
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+		$args['author'] = $current_user->ID;
+	}
+
+	// Get our feedback
+	$feedback = badgeos_get_feedback( $args );
+	$output = '';
+
+	// Show Search
+	if ( 'false' !== $atts['show_search'] ) {
+
+		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
+		$output .= '<div id="badgeos-feedback-search">';
+			$output .= '<form id="feedback_search_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" id="feedback_search" name="feedback_search" value="'. $search .'">';
+			$output .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="' . __( 'Search', 'badgeos' ) . '">';
+			$output .= '</form>';
+		$output .= '</div><!-- .badgeos-feedback-search -->';
+
+	}
+
+	// Show Filter
+	if ( 'false' !== $atts['show_filter'] ) {
+
+		$output .= '<div id="badgeos-feedback-filter">';
+			$output .= __( 'Filter:', 'badgeos' );
+			$output .= ' <select name="status_filter" id="status_filter">';
+				$output .= '<option value="">' . __( 'All', 'badgeos' ) . '</option>';
+				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
+				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
+				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
+			$output .= '</select>';
+		$output .= '</div>';
+
+	} else {
+
+		$output .= '<input type="hidden" name="status_filter" id="status_filter" value="' . esc_attr( $atts['status'] ) . '">';
+
+	}
+
+	// Show Feedback
+	$output .= '<div class="badgeos-feedback-container">';
+	$output .= $feedback;
+	$output .= '</div>';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_feedback', $output, $atts );
+
+}
