@@ -199,8 +199,15 @@ function badgeos_display_submissions( $atts = array() ) {
 		'show_comments'    => true
 	), $atts );
 
+	$feedback = badgeos_render_feedback( $atts );
+
+	// Enqueue and localize our JS
+	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
+
 	// Return our rendered content
-	return badgeos_render_feedback( $atts );
+	return $feedback;
 
 }
 add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
@@ -225,8 +232,15 @@ function badgeos_display_nominations( $atts = array() ) {
 		'show_comments'    => 'false'
 	), $atts );
 
+	$feedback = badgeos_render_feedback( $atts );
+
+	// Enqueue and localize our JS
+	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
+
 	// Return our rendered content
-	return badgeos_render_feedback( $atts );
+	return $feedback;
 
 }
 add_shortcode( 'badgeos_nominations', 'badgeos_display_nominations' );

@@ -722,6 +722,12 @@ function badgeos_get_feedback( $args = array() ) {
 	);
 	$args = wp_parse_args( $args, $defaults );
 
+	// If we're looking for a specific approval status
+	if ( 'all' !== $args['status'] ) {
+		$args['meta_key']   = "_badgeos_{$args['post_type']}_status";
+		$args['meta_value'] = $args['status'];
+	}
+
 	// If we want feedback connected to a specific achievement
 	if ( isset( $args['achievement_id'] ) ) {
 		$args['meta_key']   = '_badgeos_submission_achievement_id';
@@ -1043,14 +1049,9 @@ function badgeos_render_feedback( $atts = array() ) {
 		'post_type'        => $atts['type'],
 		'posts_per_page'   => $atts['limit'],
 		'show_attachments' => $atts['show_attachments'],
-		'show_comments'    => $atts['show_comments']
+		'show_comments'    => $atts['show_comments'],
+		'status'           => $atts['status']
 	);
-
-	// If we're looking for a specific approval status
-	if ( 'all' !== $atts['status'] ) {
-		$args['meta_key']   = "_badgeos_{$atts['type']}_status";
-		$args['meta_value'] = $atts['status'];
-	}
 
 	// If we're not an admin, limit results to the current user
 	$badgeos_settings = get_option( 'badgeos_settings' );
@@ -1066,7 +1067,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	if ( 'false' !== $atts['show_search'] ) {
 
 		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
-		$output .= '<div id="badgeos-feedback-search">';
+		$output .= '<div class="badgeos-feedback-search">';
 			$output .= '<form id="feedback_search_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
 			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" id="feedback_search" name="feedback_search" value="'. $search .'">';
 			$output .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="' . __( 'Search', 'badgeos' ) . '">';
@@ -1078,7 +1079,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	// Show Filter
 	if ( 'false' !== $atts['show_filter'] ) {
 
-		$output .= '<div id="badgeos-feedback-filter">';
+		$output .= '<div class="badgeos-feedback-filter">';
 			$output .= __( 'Filter:', 'badgeos' );
 			$output .= ' <select name="status_filter" id="status_filter">';
 				$output .= '<option value="">' . __( 'All', 'badgeos' ) . '</option>';
@@ -1095,6 +1096,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	}
 
 	// Show Feedback
+	$output .= '<div class="badgeos-spinner"></div>';
 	$output .= '<div class="badgeos-feedback-container">';
 	$output .= $feedback;
 	$output .= '</div>';
