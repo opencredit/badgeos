@@ -398,74 +398,149 @@ function badgeos_get_submission_form( $args = array() ) {
 	return apply_filters( 'badgeos_get_submission_form', $sub_form );
 }
 
-function badgeos_get_user_submissions() {
-	global $current_user, $post;
+/**
+ * Get achievement-based feedback
+ *
+ * @since  1.1.0
+ * @param  array  $args An array of arguments to limit or alter output
+ * @return string       Conatenated output for feedback
+ */
+function badgeos_get_feedback( $args = array() ) {
 
-	$submissions = get_posts( array(
-		'post_type'   => 'submission',
-		'author'      => $current_user->ID,
+	// Setup our default args
+	$defaults = array(
 		'post_status' => 'publish',
-		'meta_key'    => '_badgeos_submission_achievement_id',
-		'meta_value'  => absint( $post->ID ),
+		'post_type'   => 'submission'
+	);
+	$args = wp_parse_args( $args, $defaults );
+
+	// If we want feedback connected to a specific achievement
+	if ( isset( $args['achievement_id'] ) ) {
+		$args['meta_key']   = '_badgeos_submission_achievement_id';
+		$args['meta_value'] = absint( $args['achievement_id'] );
+	}
+
+	// Get our feedback
+	$feedback = get_posts( $args );
+
+	if ( ! empty( $feedback ) ) {
+
+		$output = '<div class="badgeos-submissions">';
+
+		foreach( $feedback as $submission ) {
+
+			// Save submitted comment data
+			// @TODO: Make this an AJAX process
+			badgeos_save_comment_data( $submission->ID );
+
+			// Setup our output
+			$output .= '<h4>' . __( 'Original Submission', 'badgeos' ) . '</h4>';
+			$output .= '<div class="badgeos-original-submission">';
+				$output .= wpautop( $submission->post_content );
+				$output .= '<p class="badgeos-comment-date-by">';
+					$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
+						'<span class="badgeos-comment-date">' . get_the_date( '', $submission->ID ) . '<span>',
+						'<cite class="badgeos-comment-author">'. get_userdata( $submission->post_author )->display_name .'</cite>'
+					);
+					$output .= '<br/>';
+					$output .= '<span class="badgeos-submission-label">' . __( 'Status:', 'badgeos' ) . '</span>&nbsp;';
+					$output .= get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+				$output .= '</p>';
+			$output .= '</div><!-- .badgeos-original-submission -->';
+
+			// Include any attachments
+			if ( isset( $args['show_attachments'] ) && $args['show_attachments'] ) {
+				$attachments = get_posts( array(
+					'post_type'      => 'attachment',
+					'posts_per_page' => -1,
+					'post_parent'    => $submission->ID,
+					'orderby'        => 'date',
+					'order'          => 'ASC',
+				) );
+				if ( ! empty( $attachments ) ) {
+					$output .= '<h4>' . __( 'Submission Attachments', 'badgeos' ) . '</h4>';
+					$output .= '<ul class="badgeos-attachments-list">';
+					foreach ( $attachments as $attachment ) {
+						$output .= '<li class="badgeos-attachment">';
+						$output .= '<span class="badgeos-submission-label">' . __( 'Attachment:', 'badgeos' ) . '</span>&nbsp;';
+						$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
+							wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title ),
+							get_the_time( 'F j, Y g:i a', $attachment->post_date ),
+							get_userdata( $attachment->post_author )->display_name
+						);
+						$output .= '</li><!-- .badgeos-attachment -->';
+					}
+					$output .= '</ul><!-- .badgeos-attachments-list -->';
+				}
+			}
+
+			// Include comments and comment form
+			if ( isset( $args['show_comments'] ) && $args['show_comments'] ) {
+				$output .= badgeos_get_comments_for_submission( $submission->ID );
+				$output .= badgeos_get_comment_form( $submission->ID );
+			}
+
+		}; // End: foreach( $submissons )
+
+		$output .= '</div><!-- badgeos-submissions -->';
+
+	} // End: if ( $submissions )
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_get_submissions', $output, $args, $submissions );
+}
+
+/**
+ * Get achievement-based submission posts
+ *
+ * @since  1.1.0
+ * @param  array  $args An array of arguments to limit or alter output
+ * @return string       Conatenated output for submission, attachments and comments
+ */
+function badgeos_get_submissions( $args = array() ) {
+
+	// Setup our default args
+	$defaults = array(
+		'post_type'        => 'submission',
+		'show_attachments' => true,
+		'show_comments'    => true
+	);
+	$args = wp_parse_args( $args, $defaults );
+
+	// Grab our submissions
+	$submissions = badgeos_get_feedback( $args );
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_get_submissions', $submissions, $args );
+}
+
+/**
+ * Get submissions attached to a specific achievement by a specific user
+ *
+ * @since  1.0.0
+ * @param  integer $achievement_id The achievement's post ID
+ * @param  integer $user_id        The user's ID
+ * @return string                  Conatenated output for submission, attachments and comments
+ */
+function badgeos_get_user_submissions( $achievement_id = 0, $user_id = 0 ) {
+	global $user_ID, $post;
+
+	// If we were not given an achievement ID,
+	// use the current post's ID
+	if ( empty( $achievement_id ) )
+		$achievement_id = $post->ID;
+
+	// If we were not passed a user ID,
+	// use the current user's ID
+	if ( empty( $user_id ) )
+		$user_id = $user_ID;
+
+	// Grab our submissions for the current user
+	$submissions = badgeos_get_submissions( array(
+		'post_author'    => $user_id,
+		'achievement_id' => $achievement_id,
 	) );
 
-	$pattern = '<span class="badgeos-submission-label">%s:</span>&nbsp;';
-	$sub_data = '<div class="badgeos-originial-submission">';
-
-	// return '<pre>'. htmlentities( print_r( $submissions, true ) ) .'</pre>';
-
-	foreach( $submissions as $post ) :
-
-		setup_postdata( $post );
-
-		badgeos_save_comment_data( $post->ID ); // save submitted comment
-
-		$sub_data .= sprintf( '<h4>%s</h4>', __( 'Original Submission', 'badgeos' ) );
-
-		$sub_data .= '<div class="badgeos-original-submission">';
-
-		$sub_data .= wpautop( get_the_content() );
-
-		$sub_data .= '<p class="badgeos-comment-date-by">';
-			$sub_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. get_the_date() .'<span>', '<cite class="badgeos-comment-author">'. $current_user->display_name .'</cite>' );
-			$sub_data .= '<br/>';
-			$sub_data .= sprintf( $pattern, __( 'Status', 'badgeos' ) );
-			$sub_data .= get_post_meta( get_the_ID(), '_badgeos_submission_status', true );
-		$sub_data .= '</p>';
-
-		$sub_data .= '</div><!-- .badgeos-original-submission -->';
-
-		// check for attachments
-		$attachments = get_posts( array(
-			'post_type'      => 'attachment',
-			'posts_per_page' => -1,
-			'post_parent'    => $post->ID,
-			'orderby'        => 'date',
-			'order'          => 'ASC',
-		) );
-
-		if ( $attachments ) {
-			$sub_data .= sprintf( '<h4>%s</h4>', __( 'Submission Attachments', 'badgeos' ) );
-			$sub_data .= '<ul class="badgeos-attachments-list">';
-
-			foreach ( $attachments as $attachment ) {
-				$sub_data .= '<li class="badgeos-attachment">';
-				$sub_data .= sprintf( $pattern, __( 'Attachment', 'badgeos' ) );
-				$sub_data .= wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title );
-				$sub_data .= sprintf( __( ' - uploaded %1$s by %2$s', 'badgeos' ), mysql2date( 'F j, Y g:i a', $attachment->post_date ), get_userdata( $attachment->post_author )->user_nicename );
-				$sub_data .= '</li><!-- .badgeos-attachment -->';
-			}
-			$sub_data .= '</ul><!-- .badgeos-attachments-list -->';
-		}
-
-		$sub_data .= badgeos_get_comments_for_submission( $post->ID );
-
-		$sub_data .= badgeos_get_comment_form( $post->ID );
-
-	endforeach;
-	wp_reset_postdata();
-
-	$sub_data .= '</div><!-- badgeos-originial-submission -->';
-
-	return apply_filters( 'badgeos_get_user_submissions', $sub_data );
+	// Return filterable output
+	return apply_filters( 'badgeos_get_user_submissions', $submissions, $achievement_id, $user_id );
 }
