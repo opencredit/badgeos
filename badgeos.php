@@ -217,7 +217,7 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0.1', true );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 
 		$data = array(
 			'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
