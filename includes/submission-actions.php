@@ -737,12 +737,12 @@ function badgeos_get_feedback( $args = array() ) {
 			$output .= badgeos_render_submission( $submission );
 
 			// Include any attachments
-			if ( isset( $args['show_attachments'] ) && $args['show_attachments'] ) {
+			if ( isset( $args['show_attachments'] ) && 'false' !== $args['show_attachments'] ) {
 				$output .= badgeos_get_submission_attachments( $submission->ID );
 			}
 
 			// Include comments and comment form
-			if ( isset( $args['show_comments'] ) && $args['show_comments'] ) {
+			if ( isset( $args['show_comments'] ) && 'false' !== $args['show_comments'] ) {
 				$output .= badgeos_get_comments_for_submission( $submission->ID );
 				$output .= badgeos_get_comment_form( $submission->ID );
 			}
