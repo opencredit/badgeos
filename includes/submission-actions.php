@@ -457,6 +457,7 @@ To view all submissions, visit:
  *
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
+	global $current_user;
 
 	// user must be logged in to see the submission form
 	if ( !is_user_logged_in() )
@@ -473,13 +474,15 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 	$language = wp_parse_args( $new_defaults, $defaults );
 
 	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
-		$sub_form .= wp_nonce_field( 'badgeos_comment_form', 'submit_comment' );
+
 		// comment form heading
 		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-file-submission">';
 		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
 		$sub_form .= '</fieldset>';
+
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment">';
 		$sub_form .= '<p><textarea name="badgeos_comment"></textarea></p>';
@@ -487,38 +490,39 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submit button
 		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" /></p>';
+
+		// Hidden Fields
+		$sub_form .= wp_nonce_field( 'submit_comment', 'badgeos_comment_nonce', true, false );
+		$sub_form .= '<input type="hidden" name="user_id" value="' . $current_user->ID . '">';
+		$sub_form .= '<input type="hidden" name="submission_id" value="' . $post_id . '">';
+
 	$sub_form .= '</form>';
 
-	return apply_filters( 'badgeos_get_comment_form', $sub_form );
+	return apply_filters( 'badgeos_get_comment_form', $sub_form, $post_id );
 
 }
 
 /**
- * Save submission comment data
+ * Listener for saving submission comments
  *
+ * @since 1.0.0
  */
-function badgeos_save_comment_data( $post_id = 0 ) {
-	global $current_user;
+function badgeos_save_comment_data() {
 
-	if ( ! isset( $_POST['badgeos_comment_submit'] ) || ! isset( $_POST['badgeos_comment'] ) )
+	// If our submission data is empty, or we don't pass security, bail
+	if ( empty( $_POST ) || ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
 		return;
 
-	// process comment data
-
-	// nonce check for security
-	check_admin_referer( 'badgeos_comment_form', 'submit_comment' );
-
-	get_currentuserinfo();
-
+	// Process comment data
 	$comment_data = array(
-		'comment_post_ID' => absint( $post_id ),
+		'user_id'         => absint( $_POST['user_id'] ),
+		'comment_post_ID' => absint( $_POST['submission_id'] ),
 		'comment_content' => sanitize_text_field( $_POST['badgeos_comment'] ),
-		'user_id' => $current_user->ID,
 	);
 
 	if ( $comment_id = wp_insert_comment( $comment_data ) ) {
 
-		//process attachment upload if a file was submitted
+		// Process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
 
 			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
@@ -526,37 +530,34 @@ function badgeos_save_comment_data( $post_id = 0 ) {
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-			if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
+			if( ! isset( $upload['error'] ) && isset( $upload['file'] ) ) {
 
-				$filetype   = wp_check_filetype( basename( $upload['file'] ), null );
-				$title      = $file['name'];
-				$ext        = strrchr( $title, '.' );
-				$title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
+				$filetype = wp_check_filetype( basename( $upload['file'] ), null );
+				$title    = $file['name'];
+				$ext      = strrchr( $title, '.' );
+				$title    = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
 
 				$attachment = array(
 					'post_mime_type' => $filetype['type'],
-					'post_title'	  => addslashes( $title ),
-					'post_content'	  => '',
-					'post_status'	  => 'inherit',
-					'post_parent'	  => absint( $post_id ),
-					'post_author'	  => $current_user->ID
+					'post_title'     => addslashes( $title ),
+					'post_content'   => '',
+					'post_status'    => 'inherit',
+					'post_parent'    => absint( $_REQUEST['submission_id'] ),
+					'post_author'    => absint( $_REQUEST['user_id'] )
 				);
-
-				$attach_id  = wp_insert_attachment( $attachment, $upload['file'] );
-
+				wp_insert_attachment( $attachment, $upload['file'] );
 			}
 		}
-
-		echo 'Comment saved!';
-
 	}
-
 }
+add_action( 'init', 'badgeos_save_comment_data' );
 
 /**
  * Returns all comments for a Submission entry
  *
- *
+ * @since  1.0.0
+ * @param  integer $post_id The submission's post ID
+ * @return string           Concatenated markup for comments
  */
 function badgeos_get_comments_for_submission( $post_id = 0 ) {
 
@@ -757,10 +758,6 @@ function badgeos_get_feedback( $args = array() ) {
 
 		foreach( $feedback as $submission ) {
 
-			// Save submitted comment data
-			// @TODO: Make this an AJAX process
-			badgeos_save_comment_data( $submission->ID );
-
 			// Setup our output
 			$output .= badgeos_render_submission( $submission );
 
@@ -782,7 +779,7 @@ function badgeos_get_feedback( $args = array() ) {
 	} // End: if ( $feedback )
 
 	// Return our filterable output
-	return apply_filters( 'badgeos_get_submissions', $output, $args, $submissions );
+	return apply_filters( 'badgeos_get_submissions', $output, $args, $feedback );
 }
 
 /**
