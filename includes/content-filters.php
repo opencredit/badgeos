@@ -46,14 +46,14 @@ function badgeos_achievement_submissions( $content ) {
 
 		if ( ( $earned_by == 'submission' || $earned_by == 'submission_auto' ) && is_user_logged_in() ) {
 
-			$submission = do_shortcode( '[badgeos_submission]' );
+			$submission = badgeos_submission_form();
 
 			//return the content with the submission shortcode data
 			return $content . $submission;
 
-		}elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
+		} elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
 
-			$nomination = do_shortcode( '[badgeos_nomination]' );
+			$nomination = badgeos_nomination_form();
 
 			//return the content with the nomination shortcode data
 			return $content . $nomination;
@@ -232,7 +232,7 @@ function badgeos_reformat_entries( $content ) {
 
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
-	
+
 	// Include output for our steps
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
 
@@ -426,19 +426,19 @@ function badgeos_add_earned_class_single( $classes ) {
  * @return string                  The HTML markup for our earned message
  */
 function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
-	
+
 	// Use the current user's ID
 	if ( ! $user_id )
 		$user_id = wp_get_current_user()->ID;
-	
+
 	// Check if the user has earned the achievement
 	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) ) {
-		
+
 		// Return a message stating the user has earned the achievement
 		$earned_message = '<div class="earned"><p>' .__( 'You have earned this achievement!', 'badgeos' ) .'</p></div>';
-		
+
 		return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
-		
+
 	}
-	
+
 }
