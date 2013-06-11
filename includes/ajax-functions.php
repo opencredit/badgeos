@@ -22,7 +22,7 @@ foreach ( $badgeos_ajax_actions as $action ) {
 
 
 /**
- * Master Achievement List AJAX
+ * AJAX Helper for returning achievements
  *
  * @since 1.0.0
  */
