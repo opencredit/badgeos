@@ -556,55 +556,35 @@ add_action( 'init', 'badgeos_save_comment_data' );
  * Returns all comments for a Submission entry
  *
  * @since  1.0.0
- * @param  integer $post_id The submission's post ID
- * @return string           Concatenated markup for comments
+ * @param  integer $submission_id The submission's post ID
+ * @return string                 Concatenated markup for comments
  */
-function badgeos_get_comments_for_submission( $post_id = 0 ) {
+function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 
+	// Get our comments
 	$comments = get_comments( array(
-		'post_id' => absint( $post_id ),
+		'post_id' => absint( $submission_id ),
 		'orderby' => 'date',
-		'order' => 'ASC',
+		'order'   => 'ASC',
 	) );
 
-	$comment_data = '';
+	// If we have no comments, bail
+	if ( empty( $comments ) )
+		return;
 
-	if ( !$comments )
-		return $comment_data;
+	// Concatenate our output
+	$output = '<h4>' . sprintf( __( 'Submission #%1$d Comments', 'badgeos' ), $submission_id ) . '</h4>';
+	$output .= '<ul class="badgeos-submission-comments-list">';
+	foreach( $comments as $comment ) {
+		// Setup an alternating odd/even class
+		$odd_even = ( isset( $odd_even ) && 'odd' == $odd_even ) ? 'even' : 'odd';
 
-	$comment_data .= '<ul class="badgeos-submission-comments-list">';
-
-	// init our odd_even class
-	$odd_even = 'odd';
-	foreach( $comments as $comment ) :
-
-		// get comment author data
-		$user_data = get_userdata( $comment->user_id );
-
-		//display comment data
-		$comment_data .= '<li class="badgeos-submission-comment '. $odd_even .'">';
-		$comment_data .= '<div class="badgeos-comment-text">';
-		$comment_data .= wpautop( $comment->comment_content );
-		$comment_data .= '</div>';
-
-		$comment_data .= '<p class="badgeos-comment-date-by alignright">';
-		$comment_data .= sprintf( __( '%1$s by %2$s', 'badgeos' ), '<span class="badgeos-comment-date">'. mysql2date( 'F j, Y g:i a', $comment->comment_date ) .'<span>', '<cite class="badgeos-comment-author">'. $user_data->display_name ) .'</cite>';
-		$comment_data .= '</p>';
-
-		$comment_data .= '</li><!-- badgeos-submission-comment -->';
-		// toggle our odd_even class
-		$odd_even = $odd_even == 'odd' ? 'even' : 'odd';
-
-	endforeach;
-
-	$comment_data .= '</ul><!-- .badgeos-submission-comments-list -->';
-
-	if ( $comment_data ) {
-		$output = '<h4>' . sprintf( __( 'Submission #%1$d Comments', 'badgeos' ), $post_id ) . '</h4>';
-		$output .= $comment_data;
+		// Render the comment
+		$output .= badgeos_render_submission_comment( $comment, $odd_even );
 	}
+	$output .= '</ul><!-- .badgeos-submission-comments-list -->';
 
-	return apply_filters( 'badgeos_get_comments_for_submission', $output );
+	return apply_filters( 'badgeos_get_comments_for_submission', $output, $submission_id, $comments );
 
 }
 
@@ -946,4 +926,36 @@ function badgeos_render_submission_attachments( $attachment = null ) {
 
 // Return our filterable output
 	return apply_filters( 'badgeos_render_submission_attachments', $output, $attachment );
+}
+
+/**
+ * Render a given submission comment
+ *
+ * @since  1.1.0
+ * @param  object $comment  The comment object
+ * @param  string $odd_even Custom class to use for alternating comments (e.g. "odd" or "even")
+ * @return string           Concatenated markup
+ */
+function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' ) {
+
+	// Concatenate our output
+	$output = '<li class="badgeos-submission-comment ' . $odd_even . '">';
+
+		// Content
+		$output .= '<div class="badgeos-comment-text">';
+		$output .= wpautop( $comment->comment_content );
+		$output .= '</div>';
+
+		// Author and Meta info
+		$output .= '<p class="badgeos-comment-date-by alignright">';
+		$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
+			'<span class="badgeos-comment-date">' . get_comment_date( 'F j, Y g:i a', $comment->comment_ID ) . '<span>',
+			'<cite class="badgeos-comment-author">' . get_userdata( $comment->user_id )->display_name . '</cite>'
+		);
+		$output .= '</p>';
+
+	$output .= '</li><!-- badgeos-submission-comment -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission_comment', $output, $comment, $odd_even );
 }
