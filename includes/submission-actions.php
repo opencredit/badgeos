@@ -588,13 +588,30 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
  */
 function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 , $feedback_type = '' ) {
 
-	$feedback = get_posts( array(
+	// Setup our search args
+	$args = array(
 		'post_type'   => $feedback_type,
 		'author'      => absint( $user_id ),
 		'post_status' => 'publish',
-		'meta_key'    => "_badgeos_{$feedback_type}_achievement_id",
-		'meta_value'  => absint( $achievement_id ),
-	) );
+		'meta_query'  => array(
+			array(
+				'key'   => "_badgeos_{$feedback_type}_achievement_id",
+				'value' => absint( $achievement_id ),
+			)
+		)
+	);
+
+	// If nomination, modify our query to look for nominations by this user
+	if ( 'nomination' == $feedback_type ) {
+		unset( $args['author'] );
+		$args['meta_query'][] = array(
+			'key'   => '_badgeos_nominating_user_id',
+			'value' => absint( $user_id )
+		);
+	}
+
+	// Get feedback
+	$feedback = get_posts( $args );
 
 	// User DOES have a submission for this achievement
 	if ( ! empty( $feedback ) )
@@ -720,6 +737,7 @@ function badgeos_get_submission_form( $args = array() ) {
  * @return string       Conatenated output for feedback
  */
 function badgeos_get_feedback( $args = array() ) {
+	global $user_ID;
 
 	// If no one is logged in, bail now
 	if ( ! is_user_logged_in() )
@@ -733,19 +751,23 @@ function badgeos_get_feedback( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// If we're looking for a specific approval status
-	if ( 'all' !== $args['status'] ) {
-		$args['meta_key']   = "_badgeos_{$args['post_type']}_status";
-		$args['meta_value'] = $args['status'];
+	if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
+		$args['meta_query'][] = array(
+			'key'   => "_badgeos_{$args['post_type']}_status",
+			'value' => $args['status']
+		);
 	}
 
 	// If we want feedback connected to a specific achievement
 	if ( isset( $args['achievement_id'] ) ) {
-		$args['meta_key']   = '_badgeos_submission_achievement_id';
-		$args['meta_value'] = absint( $args['achievement_id'] );
+		$args['meta_query'][] = array(
+			'key'   => "_badgeos_{$args['post_type']}_achievement_id",
+			'value' => absint( $args['achievement_id'] ),
+		);
 	}
 
 	// Setup our author limit
-	if ( empty( $args['author'] ) ) {
+	if ( empty( $args['author'] ) && 'nomination' != $args['post_type'] ) {
 		// If we're not an admin, limit results to the current user
 		$badgeos_settings = get_option( 'badgeos_settings' );
 		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
@@ -755,10 +777,11 @@ function badgeos_get_feedback( $args = array() ) {
 
 	// Get our feedback
 	$feedback = get_posts( $args );
+	$output = '';
 
 	if ( ! empty( $feedback ) ) {
 
-		$output = '<div class="badgeos-submissions">';
+		$output .= '<div class="badgeos-submissions">';
 
 		foreach( $feedback as $submission ) {
 
@@ -821,7 +844,7 @@ function badgeos_get_submissions( $args = array() ) {
  * @param  integer $user_id        The user's ID
  * @return string                  Conatenated output for submission, attachments and comments
  */
-function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0) {
+function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
 	global $user_ID, $post;
 
 	// Setup our empty args array
@@ -847,6 +870,55 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0) {
 
 	// Grab our submissions for the current user
 	$submissions = badgeos_get_submissions( $args );
+
+	// Return filterable output
+	return apply_filters( 'badgeos_get_user_submissions', $submissions, $achievement_id, $user_id );
+}
+
+/**
+ * Get nominations attached to a specific achievement by a specific user
+ *
+ * @since  1.0.0
+ * @param  integer $achievement_id The achievement's post ID
+ * @param  integer $user_id        The user's ID
+ * @return string                  Conatenated output for submission, attachments and comments
+ */
+function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
+	global $user_ID, $post;
+
+	// Setup our empty args array
+	$args = array(
+		'post_type'        => 'nomination',
+		'show_attachments' => 'false',
+		'show_comments'    => 'false'
+	);
+
+	// Setup our author limit
+	if ( ! empty( $user_id ) ) {
+		// Use the provided user ID
+		$args['meta_query'][] = array(
+			'key'   => '_badgeos_nominating_user_id',
+			'value' => absint( $user_id )
+		);
+	} else {
+		// If we're not an admin, limit results to the current user
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+			$args['meta_query'][] = array(
+				'key'   => '_badgeos_nominating_user_id',
+				'value' => absint( $user_ID )
+			);
+		}
+	}
+
+	// If we were not given an achievement ID,
+	// use the current post's ID
+	$args['achievement_id'] = ( absint( $achievement_id ) )
+		? absint( $achievement_id )
+		: $post->ID;
+
+	// Grab our submissions for the current user
+	$submissions = badgeos_get_feedback( $args );
 
 	// Return filterable output
 	return apply_filters( 'badgeos_get_user_submissions', $submissions, $achievement_id, $user_id );
@@ -959,8 +1031,9 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 	) );
 
 	// If we have attachments
+	$output = '';
 	if ( ! empty( $attachments ) ) {
-		$output = '<h4>' . sprintf( __( 'Submission #%1$d Attachments', 'badgeos' ), $submission_id ) . '</h4>';
+		$output .= '<h4>' . sprintf( __( 'Submission #%1$d Attachments', 'badgeos' ), $submission_id ) . '</h4>';
 		$output .= '<ul class="badgeos-attachments-list">';
 		foreach ( $attachments as $attachment ) {
 			$output .= badgeos_render_submission_attachments( $attachment );
@@ -1092,7 +1165,7 @@ function badgeos_render_feedback( $atts = array() ) {
 		$output .= '<div class="badgeos-feedback-filter">';
 			$output .= __( 'Filter:', 'badgeos' );
 			$output .= ' <select name="status_filter" id="status_filter">';
-				$output .= '<option value="">' . __( 'All', 'badgeos' ) . '</option>';
+				$output .= '<option value="all">' . __( 'All', 'badgeos' ) . '</option>';
 				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
 				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
 				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
