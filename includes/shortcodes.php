@@ -114,7 +114,7 @@ function badgeos_achievements_list_shortcode($atts){
 }
 add_shortcode( 'badgeos_achievements_list', 'badgeos_achievements_list_shortcode' );
 
-function badgeos_nomination_form() {
+function badgeos_nomination_form( $atts = array() ) {
 	global $user_ID, $post;
 
 	// Parse our attributes
@@ -130,7 +130,7 @@ function badgeos_nomination_form() {
 
 		// Return either the user's nomination or the nomination form
 		if ( badgeos_check_if_user_has_nomination( $user_ID, $atts['achievement_id'] ) )
-			return badgeos_get_user_submissions( '', $atts['achievement_id'] );
+			return badgeos_get_user_nominations( '', $atts['achievement_id'] );
 		else
 			return badgeos_get_nomination_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
 
