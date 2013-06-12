@@ -1068,9 +1068,9 @@ function badgeos_render_feedback( $atts = array() ) {
 
 		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
 		$output .= '<div class="badgeos-feedback-search">';
-			$output .= '<form id="feedback_search_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
-			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" id="feedback_search" name="feedback_search" value="'. $search .'">';
-			$output .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="' . __( 'Search', 'badgeos' ) . '">';
+			$output .= '<form class="badgeos-feedback-search-form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" class="badgeos-feedback-search-input" name="feedback_search" value="'. $search .'">';
+			$output .= '<input type="submit" class="badgeos-feedback-search-button" name="feedback_search_button" value="' . __( 'Search', 'badgeos' ) . '">';
 			$output .= '</form>';
 		$output .= '</div><!-- .badgeos-feedback-search -->';
 

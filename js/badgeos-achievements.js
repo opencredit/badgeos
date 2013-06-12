@@ -1,8 +1,14 @@
 jQuery(document).ready(function($){
 
-	$('body').on( 'change', '.badgeos-feedback-filter select', function() {
-		var select = $(this);
+	// Retrieve feedback posts when an approriate action is taken
+	$('body').on( 'change', '.badgeos-feedback-filter select', badgeos_get_feedback );
+	$('body').on( 'submit', '.badgeos-feedback-search-form', function( event ){
+		event.preventDefault();
+		badgeos_get_feedback();
+	});
 
+	// Get feedback posts
+	function badgeos_get_feedback() {
 		$('.badgeos-spinner').show()
 		$.ajax({
 			url: badgeos_feedback.ajax_url,
@@ -10,21 +16,21 @@ jQuery(document).ready(function($){
 				'action':           'get-feedback',
 				'type':             badgeos_feedback.type,
 				'limit':            badgeos_feedback.limit,
-				'status':           select.val(),
+				'status':           $('.badgeos-feedback-filter select').val(),
 				'show_attachments': badgeos_feedback.show_attachments,
 				'show_comments':    badgeos_feedback.show_comments,
-				'user_id' :         badgeos_feedback.user_id
+				'user_id' :         badgeos_feedback.user_id,
+				'search' :          $('.badgeos-feedback-search-input').val()
 			},
 			dataType: 'json',
 			success: function( response ) {
-				console.log( select.val() );
+				console.log($('.badgeos-feedback-search-input').val());
 				console.log( response );
 				$('.badgeos-spinner').hide();
 				$('.badgeos-feedback-container').html(response.data.feedback);
 			}
 		});
-	});
-
+	}
 
 	// Our main achievement list AJAX call
 	function badgeos_ajax_achievement_list(){

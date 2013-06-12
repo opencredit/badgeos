@@ -178,6 +178,10 @@ function badgeos_ajax_get_feedback() {
 		'show_comments'    => $_REQUEST['show_comments']
 	);
 
+	// If we're searching, include the search param
+	if ( ! empty( $_REQUEST['search'] ) )
+		$args['s'] = $_REQUEST['search'];
+
 	// If user doesn't have access to settings,
 	// restrict posts to ones they've authored
 	$badgeos_settings = get_option( 'badgeos_settings' );
@@ -190,6 +194,7 @@ function badgeos_ajax_get_feedback() {
 	// Send back our successful response
 	wp_send_json_success( array(
 		'message'  => 'Success!',
-		'feedback' => $feedback
+		'feedback' => $feedback,
+		'search'   => $_REQUEST['search']
 	) );
 }
