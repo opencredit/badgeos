@@ -187,6 +187,7 @@ add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
  * @return string       Concatenated output
  */
 function badgeos_display_submissions( $atts = array() ) {
+	global $user_ID;
 
 	// Parse our attributes
 	$atts = shortcode_atts( array(
@@ -203,6 +204,7 @@ function badgeos_display_submissions( $atts = array() ) {
 
 	// Enqueue and localize our JS
 	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	$atts['user_id']  = $user_ID;
 	wp_enqueue_script( 'badgeos-achievements' );
 	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
 
@@ -220,6 +222,7 @@ add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
  * @return string       Concatenated output
  */
 function badgeos_display_nominations( $atts = array() ) {
+	global $user_ID;
 
 	// Parse our attributes
 	$atts = shortcode_atts( array(
@@ -236,6 +239,7 @@ function badgeos_display_nominations( $atts = array() ) {
 
 	// Enqueue and localize our JS
 	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	$atts['user_id']  = $user_ID;
 	wp_enqueue_script( 'badgeos-achievements' );
 	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
 

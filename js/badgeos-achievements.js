@@ -12,7 +12,8 @@ jQuery(document).ready(function($){
 				'limit':            badgeos_feedback.limit,
 				'status':           select.val(),
 				'show_attachments': badgeos_feedback.show_attachments,
-				'show_comments':    badgeos_feedback.show_comments
+				'show_comments':    badgeos_feedback.show_comments,
+				'user_id' :         badgeos_feedback.user_id
 			},
 			dataType: 'json',
 			success: function( response ) {

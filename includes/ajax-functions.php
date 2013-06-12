@@ -177,6 +177,14 @@ function badgeos_ajax_get_feedback() {
 		'show_attachments' => $_REQUEST['show_attachments'],
 		'show_comments'    => $_REQUEST['show_comments']
 	);
+
+	// If user doesn't have access to settings,
+	// restrict posts to ones they've authored
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	if ( ! user_can( absint( $_REQUEST['user_id'] ), $badgeos_settings['minimum_role'] ) ) {
+		$args['author'] = absint( $_REQUEST['user_id'] );
+	}
+
 	$feedback = badgeos_get_feedback( $args );
 
 	// Send back our successful response
