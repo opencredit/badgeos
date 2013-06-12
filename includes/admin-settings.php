@@ -293,9 +293,35 @@ function badgeos_help_support_page() { ?>
 		</div>
 		</p>
         <hr/>
-		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Add a submission box to any achievement set to require Submission by the user.  If <strong>Earned By</strong> is set to <strong>Submission</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
-		<hr/>
-        <p><strong>[badgeos_nomination]</strong> - <?php _e( 'Add a nomination box to any achievement set to require Nomination by the user.  If <strong>Earned By</strong> is set to <strong>Nomination</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
+		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Display submissions or submission form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Submission</strong>.', 'badgeos' ); ?></p>
+		<div style="padding-left:15px;">
+            <ul>
+                <li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+                <li>
+                    <div style="padding-left:15px;">
+                    <ul>
+                        <li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
+                    </ul>
+                    </div>
+                </li>
+                <li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_submission achievement_id=35]</li>
+            </ul>
+        </div>
+        <hr/>
+        <p><strong>[badgeos_nomination]</strong> - <?php _e( 'Display nominations or nomination form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Nomination</strong>.', 'badgeos' ); ?></p>
+        <div style="padding-left:15px;">
+            <ul>
+                <li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+                <li>
+                    <div style="padding-left:15px;">
+                    <ul>
+                        <li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
+                    </ul>
+                    </div>
+                </li>
+                <li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_nomination achievement_id=35]</li>
+            </ul>
+        </div>
         <hr/>
         <p><strong>[badgeos_submissions]</strong> - <?php _e( 'Generate a list of submissions on any post or page.', 'badgeos' ); ?>
         <div style="padding-left:15px;">
