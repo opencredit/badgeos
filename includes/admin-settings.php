@@ -263,17 +263,17 @@ function badgeos_help_support_page() { ?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'BadgeOS Help and Support', 'badgeos' ); ?></h2>
-		<h3><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h3>
+		<h2><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h2>
 		<p><?php printf( __( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievement, and earn badges. You define the Achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by <a href="%s" target="_blank">Credly</a>, the free web service for issuing, earning and sharing badges.', 'badgeos' ), 'https://credly.com/' ); ?></p>
 		<p><?php _e( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.", 'badgeos' ); ?></p>
 
-		<h3><?php _e( 'Help / Support', 'badgeos' ); ?>:</h3>
+		<h2><?php _e( 'Help / Support', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
 		<p><?php _e( 'Please submit bugs or issues to our Github site for the BadgeOS Project.', 'badgeos' ); ?></p>
 
-		<h3><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h3>
+		<h2><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions.', 'badgeos' ); ?></p>
-
+        <hr/>
 		<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Use this shortcode to generate a list of achievements of any type on any post or page.', 'badgeos' ); ?>
 		<div style="padding-left:15px;">
 			<ul>
@@ -292,8 +292,50 @@ function badgeos_help_support_page() { ?>
 			</ul>
 		</div>
 		</p>
-		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Use this shortcode to add a submission box to any achievement set to require Submission by the user.  If <strong>Earned By</strong> is set to <strong>Submission</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
-		<p><strong>[badgeos_nomination]</strong> - <?php _e( 'Use this shortcode to add a nomination box to any achievement set to require Nomination by the user.  If <strong>Earned By</strong> is set to <strong>Nomination</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
+        <hr/>
+		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Add a submission box to any achievement set to require Submission by the user.  If <strong>Earned By</strong> is set to <strong>Submission</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
+		<hr/>
+        <p><strong>[badgeos_nomination]</strong> - <?php _e( 'Add a nomination box to any achievement set to require Nomination by the user.  If <strong>Earned By</strong> is set to <strong>Nomination</strong> this shortcode is automatically added on the single page.', 'badgeos' ); ?></p>
+        <hr/>
+        <p><strong>[badgeos_submissions]</strong> - <?php _e( 'Generate a list of submissions on any post or page.', 'badgeos' ); ?>
+        <div style="padding-left:15px;">
+            <ul>
+                <li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+                <li>
+                    <div style="padding-left:15px;">
+                    <ul>
+                        <li>limit - <?php _e( 'Number of submissions to display per page.  Default: 10', 'badgeos' ); ?></li>
+                        <li>status - <?php _e( 'Which Approval Status type to show on initial page load.  Default: all', 'badgeos' ); ?></li>
+                        <li>show_filter - <?php _e( 'Display the filter select input.  Default: true', 'badgeos' ); ?></li>
+                        <li>show_search - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
+                        <li>show_attachments - <?php _e( 'Display attachments connected to the submission.  Default: true', 'badgeos' ); ?></li>
+                        <li>show_comments - <?php _e( 'Display comments associated with the submission.  Default: true', 'badgeos' ); ?></li>
+                    </ul>
+                    </div>
+                </li>
+                <li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_submissions status=pending limit=15]</li>
+            </ul>
+        </div>
+        </p>
+        <hr/>
+        <p><strong>[badgeos_nominations]</strong> - <?php _e( 'Generate a list of nominations on any post or page.', 'badgeos' ); ?>
+        <div style="padding-left:15px;">
+            <ul>
+                <li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+                <li>
+                    <div style="padding-left:15px;">
+                    <ul>
+                        <li>limit - <?php _e( 'Number of nominations to display per page.  Default: 10', 'badgeos' ); ?></li>
+                        <li>status - <?php _e( 'Which Approval Status type to show on initial page load.  Default: all', 'badgeos' ); ?></li>
+                        <li>show_filter - <?php _e( 'Display the filter select input.  Default: true', 'badgeos' ); ?></li>
+                        <li>show_search - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
+                    </ul>
+                    </div>
+                </li>
+                <li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_nominations show_search=false limit=20]</li>
+            </ul>
+        </div>
+        </p>
 	</div>
 	<?php
 }
