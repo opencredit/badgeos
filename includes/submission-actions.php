@@ -14,24 +14,26 @@
  * @since 1.0.0
  */
 function badgeos_save_nomination_data() {
-	global $current_user, $post;
+	global $current_user;
 
 	// If the form hasn't been submitted, bail.
-	if ( ! isset( $_POST['badgeos_nomination_submit'] ) )
+	if ( ! isset( $_POST['badgeos_nomination_submit'] ) || ! isset( $_POST['badgeos_post_id'] ) )
 		return false;
-
+				
 	//nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
 
 	get_currentuserinfo();
+	
 	$nomination_content = $_POST['badgeos_nomination_content'];
 	$nomination_user_id = $_POST['badgeos_nomination_user_id'];
-
-	$nomination_type = get_post_type( absint( $post->ID ) );
+	$post_id = $_POST['badgeos_post_id'];
+	
+	$nomination_type = get_post_type( absint( $post_id ) );
 
 	return badgeos_create_nomination(
-		$post->ID,
-		$nomination_type . ':' . get_the_title( absint( $post->ID ) ),
+		$post_id,
+		$nomination_type . ':' . get_the_title( absint( $post_id ) ),
 		sanitize_text_field( $nomination_content ),
 		absint( $nomination_user_id ),
 		absint( $current_user->ID )
@@ -327,13 +329,13 @@ function badgeos_process_submission_review( $post_id ) {
 add_action( 'save_post', 'badgeos_process_submission_review' );
 
 /**
- * Check if nomination form has been submitted and save data
+ * Check if submission form has been submitted and save data
  */
 function badgeos_save_submission_data() {
-	global $current_user, $post;
+	global $current_user;
 
 	//if form items don't exist, bail.
-	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) )
+	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) || ! isset( $_POST['badgeos_post_id'] ))
 		return;
 
 	//nonce check for security
@@ -342,11 +344,13 @@ function badgeos_save_submission_data() {
 	get_currentuserinfo();
 
 	$submission_content = $_POST['badgeos_submission_content'];
-	$submission_type = get_post_type( absint( $post->ID ) );
+	$post_id = $_POST['badgeos_post_id'];
+	
+	$submission_type = get_post_type( absint( $post_id ) );
 
 	return badgeos_create_submission(
-		$post->ID,
-		$submission_type . ':' . get_the_title( absint( $post->ID ) ),
+		$post_id,
+		$submission_type . ':' . get_the_title( absint( $post_id ) ),
 		sanitize_text_field( $submission_content ),
 		absint( $current_user->ID )
 	);
@@ -559,7 +563,6 @@ function badgeos_save_comment_data( $post_id = 0 ) {
  *
  */
 function badgeos_get_comments_for_submission( $post_id = 0 ) {
-
 	$comments = get_comments( array(
 		'post_id' => absint( $post_id ),
 		'orderby' => 'date',
