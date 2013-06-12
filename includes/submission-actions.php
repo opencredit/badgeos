@@ -14,27 +14,21 @@
  * @since 1.0.0
  */
 function badgeos_save_nomination_data() {
-	global $current_user, $post;
 
 	// If the form hasn't been submitted, bail.
 	if ( ! isset( $_POST['badgeos_nomination_submit'] ) )
 		return false;
 
-	//nonce check for security
+	// Nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
 
-	get_currentuserinfo();
-	$nomination_content = $_POST['badgeos_nomination_content'];
-	$nomination_user_id = $_POST['badgeos_nomination_user_id'];
-
-	$nomination_type = get_post_type( absint( $post->ID ) );
-
+	// Publish the nomination
 	return badgeos_create_nomination(
-		$post->ID,
-		$nomination_type . ':' . get_the_title( absint( $post->ID ) ),
-		sanitize_text_field( $nomination_content ),
-		absint( $nomination_user_id ),
-		absint( $current_user->ID )
+		absint( $_POST['achievement_id'] ),
+		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
+		sanitize_text_field( $_POST['badgeos_nomination_content'] ),
+		absint( $_POST['badgeos_nomination_user_id'] ),
+		absint( absint( $_POST['user_id'] ) )
 	);
 }
 
@@ -330,25 +324,20 @@ add_action( 'save_post', 'badgeos_process_submission_review' );
  * Check if nomination form has been submitted and save data
  */
 function badgeos_save_submission_data() {
-	global $current_user, $post;
 
-	//if form items don't exist, bail.
+	// If form items don't exist, bail.
 	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) )
 		return;
 
-	//nonce check for security
+	// Nonce check for security
 	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
 
-	get_currentuserinfo();
-
-	$submission_content = $_POST['badgeos_submission_content'];
-	$submission_type = get_post_type( absint( $post->ID ) );
-
+	// Publish the submission
 	return badgeos_create_submission(
-		$post->ID,
-		$submission_type . ':' . get_the_title( absint( $post->ID ) ),
-		sanitize_text_field( $submission_content ),
-		absint( $current_user->ID )
+		absint( $_POST['achievement_id'] ),
+		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
+		sanitize_text_field( $_POST['badgeos_submission_content'] ),
+		absint( $_POST['user_id'] )
 	);
 }
 
@@ -641,20 +630,27 @@ function badgeos_check_if_user_has_nomination( $user_id = 0, $achievement_id = 0
 }
 
 function badgeos_get_nomination_form( $args = array() ) {
+	global $post, $user_ID;
 
+	// Setup our defaults
 	$defaults = array(
 		'heading' => sprintf( '<h4>%s</h4>', __( 'Nomination Form', 'badgeos' ) ),
-		'submit' => __( 'Submit', 'badgeos' )
+		'submit'  => __( 'Submit', 'badgeos' )
 	);
-	// filter our text
-	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
-	// fill in missing data
-	$language = wp_parse_args( $new_defaults, $defaults );
+
+	// Available filter for changing the language
+	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+
+	// Patch in our achievement and user IDs
+	$defaults['achievement_id'] = $post->ID;
+	$defaults['user_id']        = $user_ID;
+
+	// Merge our defaults with the passed args
+	$args = wp_parse_args( $args, $defaults );
 
 	$sub_form = '<form class="badgeos-nomination-form" method="post" enctype="multipart/form-data">';
-		$sub_form .= wp_nonce_field( 'badgeos_nomination_form', 'submit_nomination', true, false );
 		// nomination form heading
-		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		$sub_form .= '<legend>'. $args['heading'] .'</legend>';
 		// nomination user
 		$sub_form .= '<label>'.__( 'User to nominate', 'badgeos' ).'</label>';
 		$sub_form .= '<p>' .wp_dropdown_users( array( 'name' => 'badgeos_nomination_user_id', 'echo' => '0' ) ). '</p>';
@@ -664,39 +660,53 @@ function badgeos_get_nomination_form( $args = array() ) {
 		$sub_form .= '<p><textarea name="badgeos_nomination_content"></textarea></p>';
 		$sub_form .= '</fieldset>';
 		// submit button
-		$sub_form .= '<p class="badgeos-nomination-submit"><input type="submit" name="badgeos_nomination_submit" value="'. esc_attr( $language['submit'] ) .'" /></p>';
+		$sub_form .= '<p class="badgeos-nomination-submit"><input type="submit" name="badgeos_nomination_submit" value="'. esc_attr( $args['submit'] ) .'" /></p>';
+		// hidden fields
+		$sub_form .= wp_nonce_field( 'badgeos_nomination_form', 'submit_nomination', true, false );
+		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
+		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
 	$sub_form .= '</form>';
 
 	return apply_filters( 'badgeos_get_nomination_form', $sub_form );
 }
 
 function badgeos_get_submission_form( $args = array() ) {
+	global $post, $user_ID;
 
-
+	// Setup our defaults
 	$defaults = array(
 		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit', 'badgeos' )
 	);
-	// filter our text
-	$new_defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
-	// fill in missing data
-	$language = wp_parse_args( $new_defaults, $defaults );
+
+	// Available filter for changing the language
+	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+
+	// Patch in our achievement and user IDs
+	$defaults['achievement_id'] = $post->ID;
+	$defaults['user_id']        = $user_ID;
+
+	// Merge our defaults with the passed args
+	$args = wp_parse_args( $args, $defaults );
 
 	$sub_form = '<form class="badgeos-submission-form" method="post" enctype="multipart/form-data">';
-		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
 		// submission form heading
-		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		$sub_form .= '<legend>'. $args['heading'] .'</legend>';
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-file-submission">';
-		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+		$sub_form .= '<p><label>'. $args['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
 		$sub_form .= '</fieldset>';
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment">';
 		$sub_form .= '<p><textarea name="badgeos_submission_content"></textarea></p>';
 		$sub_form .= '</fieldset>';
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $language['submit'] .'" /></p>';
+		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /></p>';
+		// hidden fields
+		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
+		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
+		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
 	$sub_form .= '</form>';
 
 	return apply_filters( 'badgeos_get_submission_form', $sub_form );

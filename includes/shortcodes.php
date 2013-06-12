@@ -115,61 +115,53 @@ function badgeos_achievements_list_shortcode($atts){
 add_shortcode( 'badgeos_achievements_list', 'badgeos_achievements_list_shortcode' );
 
 function badgeos_nomination_form() {
-	global $current_user, $post;
+	global $user_ID, $post;
 
-	//verify user is logged in to view any submission data
+	// Parse our attributes
+	$atts = shortcode_atts( array(
+		'achievement_id' => $post->ID
+	), $atts );
+
+	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
-
-		// check if step unlock option is set to submission review
-		get_currentuserinfo();
 
 		if ( badgeos_save_nomination_data() )
 			printf( '<p>%s</p>', __( 'Nomination saved successfully.', 'badgeos' ) );
 
-		// check if user already has a submission for this achievement type
-		if ( ! badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
+		// Return either the user's nomination or the nomination form
+		if ( badgeos_check_if_user_has_nomination( $user_ID, $atts['achievement_id'] ) )
+			return badgeos_get_user_submissions( '', $atts['achievement_id'] );
+		else
+			return badgeos_get_nomination_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
 
-			// Step Description metadata
-			// TODO: Check if this meta is still in use
-			if ( $step_description = get_post_meta( $post->ID, '_badgeos_step_description', true ) )
-				printf( '<p><span class="badgeos-submission-label">%s:</span></p>%s', __( 'Step Description', 'badgeos' ), wpautop( $step_description ) );
+	} else {
 
-			return badgeos_get_nomination_form();
-
-		}
-		// user has an active submission, so show content and comments
-		else {
-
-			return badgeos_get_user_submissions();
-
-		}
-
-	}else{
-
-		return '<p><i>' .__( 'You must be logged in to post a nomination.', 'badgeos' ) .'</i></p>';
+		return '<p><i>' . __( 'You must be logged in to post a nomination.', 'badgeos' ) . '</i></p>';
 
 	}
 
 }
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
-function badgeos_submission_form() {
-	global $current_user, $post;
+function badgeos_submission_form( $atts = array() ) {
+	global $user_ID, $post;
 
-	//verify user is logged in to view any submission data
+	// Parse our attributes
+	$atts = shortcode_atts( array(
+		'achievement_id' => $post->ID
+	), $atts );
+
+	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
-
-		// check if step unlock option is set to submission review
-		get_currentuserinfo();
 
 		if ( badgeos_save_submission_data() )
 			printf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
 
 		// Return either the user's submission or the submission form
-		if ( badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) )
-			return badgeos_get_user_submissions();
+		if ( badgeos_check_if_user_has_submission( $user_ID, $atts['achievement_id'] ) )
+			return badgeos_get_user_submissions( '', $atts['achievement_id'] );
 		else
-			return badgeos_get_submission_form();
+			return badgeos_get_submission_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
 
 	} else {
 
