@@ -174,12 +174,17 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
-= 1.1 =
-* Updated: Achievements widget with option to display user's total points
+= 1.1.0 =
 * Added: New widget to display the Credly Credit Issuer badge
 * Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
+* Added: [badgeos_submissions] shortcode to show a filterable/searchbale list of submissions, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_nominations] shortcode to show a filterable/searchbale list of nominations, see BadgeOS Help/Support for parameter details
+* Updated: Achievements widget with option to display user's total points
+* Updated: [badgeos_submission] shortcode to accept achievement_id parameter
+* Updated: [badgeos_nomination] shortcode to accept achievement_id parameter
 * Fixed: Nomination user select field from displaying twice on the page
 * Fixed: Nomination listing page from displaying the wrong status for the nomination
+* Fixed: Nomination form/listing now displays a user's submitted nomination and limits them to submitting a single nomination
 
 = 1.0.3 =
 * Updated: Only show "People Who Have Earned This" when there is at least one earner
@@ -206,11 +211,40 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Achievement display and awarding UI improvement.
 * Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
-= 1.0 =
+= 1.0.0 =
 * BadgeOS says "hello world", earns "Hello World" badge.
 
-
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Added: New widget to display the Credly Credit Issuer badge
+* Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
+* Added: [badgeos_submissions] shortcode to show a filterable/searchbale list of submissions, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_nominations] shortcode to show a filterable/searchbale list of nominations, see BadgeOS Help/Support for parameter details
+* Updated: Achievements widget with option to display user's total points
+* Updated: [badgeos_submission] shortcode to accept achievement_id parameter
+* Updated: [badgeos_nomination] shortcode to accept achievement_id parameter
+* Fixed: Nomination user select field from displaying twice on the page
+* Fixed: Nomination listing page from displaying the wrong status for the nomination
+* Fixed: Nomination form/listing now displays a user's submitted nomination and limits them to submitting a single nomination
+
+= 1.0.3 =
+* Updated: Only show "People Who Have Earned This" when there is at least one earner
+* Updated: Localization strings have been updated throughout for easier translating
+* Updated: Submissions and Nominations were originally publicly searchable, they are now private
+* Fixed: Prevent earning an achievement more times than "max earnings" allows
+* Fixed: Prevent earning steps with no parents
+* Fixed: Prevent earning unpublished, private or trashed achievements
+* Fixed: Inability to earn "any [achievement type]" steps
+* Fixed: Inability to earn "all [achievement type]" steps
+* Fixed: Filter for "Completed Achievements" (would sometimes show ALL achievements if user had earned none)
+* Fixed: A PHP warning that would sometimes appear when manually awarding an achievement via user profile editor
+* Fixed: A number of minor behind-the-scenes bugs that annoyed our PHP developers
+
+= 1.0.2 =
+* New: Added "Display users who have earned achievement" option to achievements
+* Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
+* Updated: [badgeos_achievements_list] shortcode now shows send to Credly link on earned achievements.
 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
@@ -219,5 +253,5 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Achievement display and awarding UI improvement.
 * Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
-= 1.0 =
-* Initial release
+= 1.0.0 =
+* BadgeOS says "hello world", earns "Hello World" badge.
