@@ -939,28 +939,27 @@ function badgeos_render_submission( $submission = null ) {
 		$submission = $post;
 	}
 
-	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Submission #%1$d', 'badgeos' ), $submission->ID ) . '</h4>';
-	$output .= '<div class="badgeos-original-submission">';
-		$output .= wpautop( $submission->post_content );
-		$output .= '<p class="badgeos-comment-date-by">';
-			$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
-				'<span class="badgeos-comment-date">' . get_the_time( 'F j, Y', $submission ) . '<span>',
-				'<cite class="badgeos-comment-author">'. get_userdata( $submission->post_author )->display_name .'</cite>'
-			);
-			$output .= '<br/>';
-			$output .= '<span class="badgeos-submission-label">' . __( 'Status:', 'badgeos' ) . '</span>&nbsp;';
-			$output .= get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+	// Get the connected achievement ID
+	$achievement_id = get_post_meta( $submission->ID, '_badgeos_submission_achievement_id', true );
+	$status = get_post_meta( $submission->ID, '_badgeos_submission_status', true );
 
-			// If we're not on the achievement page, link to the connected achievement
-			$achievement_id = get_post_meta( $submission->ID, '_badgeos_submission_achievement_id', true );
+	// Concatenate our output
+	$output = '<h4>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h4>';
+	$output .= '<div class="badgeos-submission">';
+
+		// Submission Meta
+		$output .= '<p class="badgeos-submission-meta">';
+			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Author:', 'badgeos' ), '<cite class="badgeos-comment-author">' . get_userdata( $submission->post_author )->display_name . '</cite>' );
+			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Date:', 'badgeos' ), '<span class="badgeos-comment-date">' . get_the_time( 'F j, Y h:i a', $submission ) . '<span>' );
 			if ( $achievement_id != $post->ID ) {
-				$output .= '<br/>';
-				$output .= '<span class="badgeos-connected-achievement">';
-				$output .= sprintf( __( 'Achievement: %s' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
-				$output .= '</span>';
+				$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Achievement:', 'badgeos' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
 			}
+			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Status:', 'badgeos' ), ucfirst( $status ) );
 		$output .= '</p>';
+
+		// Submission Content
+		$output .= wpautop( $submission->post_content );
+
 	$output .= '</div><!-- .badgeos-original-submission -->';
 
 	// Return our filterable output
