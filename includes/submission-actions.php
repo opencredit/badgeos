@@ -713,7 +713,7 @@ function badgeos_get_feedback( $args = array() ) {
 
 	// If no one is logged in, bail now
 	if ( ! is_user_logged_in() )
-		return '<p>' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
+		return '<p class="error must-be-logged-in">' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
 
 	// Setup our default args
 	$defaults = array(
