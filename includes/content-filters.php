@@ -223,10 +223,10 @@ function badgeos_reformat_entries( $content ) {
 
 	// wrap our content, add the thumbnail and title and add wpautop back
 	$newcontent = '<div class="achievement-wrap'. $class .'">';
-	
+
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
-	
+
 	$newcontent .= '<div class="alignleft badgeos-item-image">'. badgeos_get_achievement_post_thumbnail( $badge_id ) .'</div>';
 	// $newcontent .= $title;
 
@@ -436,7 +436,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) ) {
 
 		// Return a message stating the user has earned the achievement
-		$earned_message = '<div class="earned"><p>' .__( 'You have earned this achievement!', 'badgeos' ) .'</p></div>';
+		$earned_message = '<div class="badgeos-achievement-earned"><p>' .__( 'You have earned this achievement!', 'badgeos' ) .'</p></div>';
 
 		return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
 
