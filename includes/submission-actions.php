@@ -945,16 +945,16 @@ function badgeos_render_submission( $submission = null ) {
 
 	// Concatenate our output
 	$output = '<h4>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h4>';
-	$output .= '<div class="badgeos-submission">';
+	$output .= '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
 
 		// Submission Meta
 		$output .= '<p class="badgeos-submission-meta">';
-			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Author:', 'badgeos' ), '<cite class="badgeos-comment-author">' . get_userdata( $submission->post_author )->display_name . '</cite>' );
-			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Date:', 'badgeos' ), '<span class="badgeos-comment-date">' . get_the_time( 'F j, Y h:i a', $submission ) . '<span>' );
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-author">%2$s</span><br/>', __( 'Author:', 'badgeos' ), get_userdata( $submission->post_author )->display_name );
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-date">%2$s</span><br/>', __( 'Date:', 'badgeos' ), get_the_time( 'F j, Y h:i a', $submission ) );
 			if ( $achievement_id != $post->ID ) {
-				$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Achievement:', 'badgeos' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
+				$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-link">%2$s</span><br/>', __( 'Achievement:', 'badgeos' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
 			}
-			$output .= sprintf( '<strong class="label">%1$s</strong> %2$s<br/>', __( 'Status:', 'badgeos' ), ucfirst( $status ) );
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-status">%2$s</span><br/>', __( 'Status:', 'badgeos' ), ucfirst( $status ) );
 		$output .= '</p>';
 
 		// Submission Content
