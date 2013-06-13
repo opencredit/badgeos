@@ -12,7 +12,8 @@
 // Setup our MVP AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
-	'get-feedback'
+	'get-feedback',
+	'update-feedback'
 );
 
 // Register core Ajax calls.
@@ -197,4 +198,26 @@ function badgeos_ajax_get_feedback() {
 		'feedback' => $feedback,
 		'search'   => $_REQUEST['search']
 	) );
+}
+
+/**
+ * AJAX Helper for approving/denying feedback
+ *
+ * @since 1.1.0
+ */
+function badgeos_ajax_update_feedback() {
+
+	// Verify our nonce
+	check_ajax_referer( 'review_feedback', 'nonce' );
+
+	// Get the feedback post type
+	$feedback_type = get_post_type( absint( $_REQUEST['feedback_id'] ) );
+	$action = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
+
+	// Update our meta
+	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $action );
+
+	// Send back our successful response
+	wp_send_json_success( array( 'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>' ) );
+
 }

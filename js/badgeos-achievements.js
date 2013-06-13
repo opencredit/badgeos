@@ -9,7 +9,7 @@ jQuery(document).ready(function($){
 
 	// Get feedback posts
 	function badgeos_get_feedback() {
-		$('.badgeos-spinner').show()
+		$('.badgeos-spinner').show();
 		$.ajax({
 			url: badgeos_feedback.ajax_url,
 			data: {
@@ -31,6 +31,27 @@ jQuery(document).ready(function($){
 			}
 		});
 	}
+
+	// Approve/deny feedback
+	$('body').on( 'click', '.badgeos-feedback-buttons .button', function( event ) {
+		event.preventDefault();
+		var button = $(this);
+		$.ajax({
+			url: badgeos_feedback.ajax_url,
+			data: {
+				'action' :      'update-feedback',
+				'feedback_id' : button.attr('data-feedback-id'),
+				'status' :      button.attr('data-action'),
+				'nonce' :       button.siblings('input[name=badgeos_feedback_review]').val(),
+			},
+			dataType: 'json',
+			success: function( response ) {
+				console.log( response );
+				button.parent().children('a').hide();
+				button.parent().append( response.data.message );
+			}
+		});
+	});
 
 	// Our main achievement list AJAX call
 	function badgeos_ajax_achievement_list(){

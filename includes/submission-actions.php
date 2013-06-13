@@ -960,6 +960,12 @@ function badgeos_render_submission( $submission = null ) {
 		// Submission Content
 		$output .= wpautop( $submission->post_content );
 
+		// Approve/Deny Buttons, for admins and pending posts only
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == $status ) {
+			$output .= badgeos_render_feedback_buttons( $submission->ID );
+		}
+
 	$output .= '</div><!-- .badgeos-original-submission -->';
 
 	// Return our filterable output
@@ -1186,4 +1192,30 @@ function badgeos_render_feedback( $atts = array() ) {
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_feedback', $output, $atts );
 
+}
+
+/**
+ * Render the approve/deny buttons for a given piece of feedback
+ * @param  integer  $args The feedback's post ID
+ * @return string       [description]
+ */
+function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
+	global $post;
+
+	// Use the current post ID if no ID provided
+	$feedback_id = !empty( $feedback_id ) ? $feedback_id : $post->ID;
+
+	// Get the feedback type
+	$feedback_type = get_post_type( $feedback_id );
+
+	// Concatenate our output
+	$output = '';
+	$output .= '<div class="badgeos-feedback-buttons">';
+		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
+		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="deny">Deny</a>';
+		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
+	$output .= '</div>';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );
 }
