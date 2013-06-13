@@ -1041,7 +1041,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 		$output .= '<h4>' . sprintf( __( 'Submission #%1$d Attachments', 'badgeos' ), $submission_id ) . '</h4>';
 		$output .= '<ul class="badgeos-attachments-list">';
 		foreach ( $attachments as $attachment ) {
-			$output .= badgeos_render_submission_attachments( $attachment );
+			$output .= badgeos_render_submission_attachment( $attachment );
 		}
 		$output .= '</ul><!-- .badgeos-attachments-list -->';
 	}
@@ -1057,7 +1057,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
  * @param  object $attachment The attachment post object
  * @return string             Concatenated markup
  */
-function badgeos_render_submission_attachments( $attachment = null ) {
+function badgeos_render_submission_attachment( $attachment = null ) {
 	// If we weren't given an attachment, use the current post
 	if ( empty( $attachment ) ) {
 		global $post;
@@ -1075,7 +1075,7 @@ function badgeos_render_submission_attachments( $attachment = null ) {
 	$output .= '</li><!-- .badgeos-attachment -->';
 
 // Return our filterable output
-	return apply_filters( 'badgeos_render_submission_attachments', $output, $attachment );
+	return apply_filters( 'badgeos_render_submission_attachment', $output, $attachment );
 }
 
 /**
