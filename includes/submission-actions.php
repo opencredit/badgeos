@@ -1203,10 +1203,11 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	global $post;
 
 	// Use the current post ID if no ID provided
-	$feedback_id = !empty( $feedback_id ) ? $feedback_id : $post->ID;
-
-	// Get the feedback type
-	$feedback_type = get_post_type( $feedback_id );
+	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : $post->ID;
+	$feedback       = get_post( $feedback_id );
+	$feedback_type  = get_post_type( $feedback_id );
+	$achievement_id = get_post_meta( $feedback_id, "_badgeos_{$feedback_type}_achievement_id", true );
+	$user_id        = $feedback->post_author;
 
 	// Concatenate our output
 	$output = '';
@@ -1214,6 +1215,9 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
 		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="deny">Deny</a>';
 		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
+		$output .= '<input type="hidden" name="user_id" value="' . $user_id . '">';
+		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
+		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
 	$output .= '</div>';
 
 	// Return our filterable output

@@ -211,11 +211,16 @@ function badgeos_ajax_update_feedback() {
 	check_ajax_referer( 'review_feedback', 'nonce' );
 
 	// Get the feedback post type
-	$feedback_type = get_post_type( absint( $_REQUEST['feedback_id'] ) );
+	$feedback_type = $_REQUEST['feedback_type'];
 	$status = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
 
 	// Update our meta
 	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $status );
+
+	// If our status was just approved, award the achievement
+	if ( 'approved' == $status ) {
+		badgeos_award_achievement_to_user( absint( $_REQUEST['achievement_id'] ), absint( $_REQUEST['user_id'] ) );
+	}
 
 	// Send back our successful response
 	wp_send_json_success( array(

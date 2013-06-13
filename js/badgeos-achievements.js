@@ -39,10 +39,13 @@ jQuery(document).ready(function($){
 		$.ajax({
 			url: badgeos_feedback.ajax_url,
 			data: {
-				'action' :      'update-feedback',
-				'feedback_id' : button.attr('data-feedback-id'),
-				'status' :      button.attr('data-action'),
-				'nonce' :       button.siblings('input[name=badgeos_feedback_review]').val(),
+				'action' :         'update-feedback',
+				'status' :         button.attr('data-action'),
+				'feedback_id' :    button.attr('data-feedback-id'),
+				'feedback_type' :  button.siblings('input[name=feedback_type]').val(),
+				'achievement_id' : button.siblings('input[name=achievement_id]').val(),
+				'user_id' :        button.siblings('input[name=user_id]').val(),
+				'nonce' :          button.siblings('input[name=badgeos_feedback_review]').val(),
 			},
 			dataType: 'json',
 			success: function( response ) {
