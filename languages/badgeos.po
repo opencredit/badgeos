@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
-"POT-Creation-Date: 2013-05-08 17:22-0500\n"
-"PO-Revision-Date: 2013-05-08 17:22-0500\n"
+"POT-Creation-Date: 2013-06-13 12:56-0500\n"
+"PO-Revision-Date: 2013-06-13 12:56-0500\n"
 "Last-Translator: Brian Richards <brian@rzen.net>\n"
 "Language-Team: Credly, LLC\n"
 "Language: English\n"
@@ -14,42 +14,42 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../badgeos.php:152
+#: ../badgeos.php:153
 msgid "Badges"
 msgstr ""
 
-#: ../badgeos.php:158
+#: ../badgeos.php:159
 msgid "Badge"
 msgstr ""
 
-#: ../badgeos.php:223
+#: ../badgeos.php:224
 msgid ""
 "Would you like to display this badge on social networks and add it to your "
 "lifelong badge collection?"
 msgstr ""
 
-#: ../badgeos.php:224
+#: ../badgeos.php:225
 msgid "Yes, send to Credly"
 msgstr ""
 
-#: ../badgeos.php:225
+#: ../badgeos.php:226
 msgid "Cancel"
 msgstr ""
 
-#: ../badgeos.php:226
+#: ../badgeos.php:227
 msgid "Share on Credly!"
 msgstr ""
 
-#: ../badgeos.php:227
+#: ../badgeos.php:228
 msgid "Error:"
 msgstr ""
 
-#: ../badgeos.php:228
+#: ../badgeos.php:229
 msgid "Error: Timed out"
 msgstr ""
 
-#: ../includes/achievement-functions.php:605
-msgid "People Who Have Earned This"
+#: ../includes/achievement-functions.php:622
+msgid "People who have earned this:"
 msgstr ""
 
 #: ../includes/admin-settings.php:61
@@ -110,23 +110,23 @@ msgstr ""
 msgid "Debug Mode:"
 msgstr ""
 
-#: ../includes/admin-settings.php:205 ../includes/admin-settings.php:337
+#: ../includes/admin-settings.php:205 ../includes/admin-settings.php:422
 msgid "Save Settings"
 msgstr ""
 
-#: ../includes/admin-settings.php:223
+#: ../includes/admin-settings.php:224
 msgid "BadgeOS Add-Ons"
 msgstr ""
 
-#: ../includes/admin-settings.php:264
+#: ../includes/admin-settings.php:265
 msgid "BadgeOS Help and Support"
 msgstr ""
 
-#: ../includes/admin-settings.php:265
+#: ../includes/admin-settings.php:266
 msgid "About BadgeOS"
 msgstr ""
 
-#: ../includes/admin-settings.php:266
+#: ../includes/admin-settings.php:267
 #, php-format
 msgid ""
 "BadgeOS&trade; is plugin to WordPress that allows your site's users to "
@@ -139,7 +139,7 @@ msgid ""
 "sharing badges."
 msgstr ""
 
-#: ../includes/admin-settings.php:267
+#: ../includes/admin-settings.php:268
 msgid ""
 "BadgeOS is extremely extensible. Check out examples of what we've built with "
 "it, and stay connected to the project site for updates, add-ins and news. "
@@ -147,11 +147,11 @@ msgid ""
 "making BadgeOS better for everyone."
 msgstr ""
 
-#: ../includes/admin-settings.php:269
+#: ../includes/admin-settings.php:270
 msgid "Help / Support"
 msgstr ""
 
-#: ../includes/admin-settings.php:270
+#: ../includes/admin-settings.php:271
 msgid ""
 "For support on using BadgeOS or to suggest feature enhancements, visit the "
 "<a href=\"http://badgeos.org\" target=\"_blank\">BadgeOS site</a>.  The "
@@ -161,88 +161,137 @@ msgid ""
 "BadgeOS projects."
 msgstr ""
 
-#: ../includes/admin-settings.php:271
+#: ../includes/admin-settings.php:272
 msgid ""
 "Please submit bugs or issues to our Github site for the BadgeOS Project."
 msgstr ""
 
-#: ../includes/admin-settings.php:273
+#: ../includes/admin-settings.php:274
 msgid "Shortcodes"
 msgstr ""
 
-#: ../includes/admin-settings.php:274
+#: ../includes/admin-settings.php:275
 msgid ""
 "With BadgeOS activated, the following shortcodes can be placed on any page "
 "or post within WordPress to expose a variety of BadgeOS functions."
 msgstr ""
 
-#: ../includes/admin-settings.php:276
-msgid ""
-"Use this shortcode to generate a list of achievements of any type on any "
-"post or page."
+#: ../includes/admin-settings.php:277
+msgid "Display a single achievement on any post or page."
 msgstr ""
 
-#: ../includes/admin-settings.php:279
+#: ../includes/admin-settings.php:280 ../includes/admin-settings.php:296
+#: ../includes/admin-settings.php:315 ../includes/admin-settings.php:330
+#: ../includes/admin-settings.php:345 ../includes/admin-settings.php:366
 msgid "Parameters"
 msgstr ""
 
-#: ../includes/admin-settings.php:283
-msgid "type"
-msgstr ""
-
-#: ../includes/admin-settings.php:283
-msgid "Custom post type of achievements to list.  Default: all"
+#: ../includes/admin-settings.php:284
+msgid "id"
 msgstr ""
 
 #: ../includes/admin-settings.php:284
-msgid "limit"
+msgid "The ID of the achievement to display."
 msgstr ""
 
-#: ../includes/admin-settings.php:284
-msgid "Number of achievements to display per page.  Default: 10"
-msgstr ""
-
-#: ../includes/admin-settings.php:285
-msgid "show_filter"
-msgstr ""
-
-#: ../includes/admin-settings.php:285
-msgid "Display the filter options.  Default: true"
-msgstr ""
-
-#: ../includes/admin-settings.php:286
-msgid "show_search"
-msgstr ""
-
-#: ../includes/admin-settings.php:286
-msgid "Display the search form.  Default: true"
-msgstr ""
-
-#: ../includes/admin-settings.php:290
+#: ../includes/admin-settings.php:288 ../includes/admin-settings.php:307
+#: ../includes/admin-settings.php:323 ../includes/admin-settings.php:338
+#: ../includes/admin-settings.php:358 ../includes/admin-settings.php:377
 msgid "Example"
 msgstr ""
 
-#: ../includes/admin-settings.php:294
-msgid ""
-"Use this shortcode to add a submission box to any achievement set to require "
-"Submission by the user.  If <strong>Earned By</strong> is set to "
-"<strong>Submission</strong> this shortcode is automatically added on the "
-"single page."
+#: ../includes/admin-settings.php:293
+msgid "Output a list of achievements of any type on any post or page."
 msgstr ""
 
-#: ../includes/admin-settings.php:295
-msgid ""
-"Use this shortcode to add a nomination box to any achievement set to require "
-"Nomination by the user.  If <strong>Earned By</strong> is set to "
-"<strong>Nomination</strong> this shortcode is automatically added on the "
-"single page."
+#: ../includes/admin-settings.php:300
+msgid "type"
 msgstr ""
 
-#: ../includes/admin-settings.php:309
+#: ../includes/admin-settings.php:300
+msgid "Custom post type of achievements to list.  Default: all"
+msgstr ""
+
+#: ../includes/admin-settings.php:301
+msgid "limit"
+msgstr ""
+
+#: ../includes/admin-settings.php:301
+msgid "Number of achievements to display per page.  Default: 10"
+msgstr ""
+
+#: ../includes/admin-settings.php:302
+msgid "show_filter"
+msgstr ""
+
+#: ../includes/admin-settings.php:302
+msgid "Display the filter options.  Default: true"
+msgstr ""
+
+#: ../includes/admin-settings.php:303
+msgid "show_search"
+msgstr ""
+
+#: ../includes/admin-settings.php:303 ../includes/admin-settings.php:352
+#: ../includes/admin-settings.php:373
+msgid "Display the search form.  Default: true"
+msgstr ""
+
+#: ../includes/admin-settings.php:312
+msgid ""
+"Display submissions or submission form for a given achievement. <strong>Note:"
+"</strong> Achievements will automatically display this on their single page "
+"if <strong>Earned By</strong> is set to <strong>Submission</strong>."
+msgstr ""
+
+#: ../includes/admin-settings.php:319 ../includes/admin-settings.php:334
+msgid "The ID of the achievement to be awarded.  Default: current post ID"
+msgstr ""
+
+#: ../includes/admin-settings.php:327
+msgid ""
+"Display nominations or nomination form for a given achievement. <strong>Note:"
+"</strong> Achievements will automatically display this on their single page "
+"if <strong>Earned By</strong> is set to <strong>Nomination</strong>."
+msgstr ""
+
+#: ../includes/admin-settings.php:342
+msgid "Generate a list of submissions on any post or page."
+msgstr ""
+
+#: ../includes/admin-settings.php:349
+msgid "Number of submissions to display per page.  Default: 10"
+msgstr ""
+
+#: ../includes/admin-settings.php:350 ../includes/admin-settings.php:371
+msgid "Which Approval Status type to show on initial page load.  Default: all"
+msgstr ""
+
+#: ../includes/admin-settings.php:351 ../includes/admin-settings.php:372
+msgid "Display the filter select input.  Default: true"
+msgstr ""
+
+#: ../includes/admin-settings.php:353
+msgid "Display attachments connected to the submission.  Default: true"
+msgstr ""
+
+#: ../includes/admin-settings.php:354
+msgid "Display comments associated with the submission.  Default: true"
+msgstr ""
+
+#: ../includes/admin-settings.php:363
+msgid "Generate a list of nominations on any post or page."
+msgstr ""
+
+#: ../includes/admin-settings.php:370
+msgid "Number of nominations to display per page.  Default: 10"
+msgstr ""
+
+#: ../includes/admin-settings.php:394
 msgid "Credly Integration Settings"
 msgstr ""
 
-#: ../includes/admin-settings.php:317
+#: ../includes/admin-settings.php:402
 #, php-format
 msgid ""
 "<a href=\"%1$s\" target=\"_blank\">Credly</a> is a universal way for people "
@@ -257,75 +306,75 @@ msgid ""
 "account, <a href=\"%1$s\" target=\"_blank\">create one now</a>. It's free."
 msgstr ""
 
-#: ../includes/admin-settings.php:319
+#: ../includes/admin-settings.php:404
 msgid "Enable Badge Sharing via Credly: "
 msgstr ""
 
-#: ../includes/admin-settings.php:321 ../includes/admin-settings.php:446
+#: ../includes/admin-settings.php:406 ../includes/admin-settings.php:531
 #: ../includes/credly.php:818 ../includes/credly.php:830
 #: ../includes/credly.php:838 ../includes/credly.php:851
 msgid "No"
 msgstr ""
 
-#: ../includes/admin-settings.php:322 ../includes/admin-settings.php:445
+#: ../includes/admin-settings.php:407 ../includes/admin-settings.php:530
 #: ../includes/credly.php:817 ../includes/credly.php:829
 #: ../includes/credly.php:837 ../includes/credly.php:850
 msgid "Yes"
 msgstr ""
 
-#: ../includes/admin-settings.php:369
+#: ../includes/admin-settings.php:454
 msgid "Get Credly API Key"
 msgstr ""
 
-#: ../includes/admin-settings.php:370
+#: ../includes/admin-settings.php:455
 msgid "Enter your Credly account username and password to access your API key."
 msgstr ""
 
-#: ../includes/admin-settings.php:371
+#: ../includes/admin-settings.php:456
 #, php-format
 msgid "Enter your %s to access your API key."
 msgstr ""
 
-#: ../includes/admin-settings.php:371
+#: ../includes/admin-settings.php:456
 msgid "Credly account username and password"
 msgstr ""
 
-#: ../includes/admin-settings.php:373
+#: ../includes/admin-settings.php:458
 msgid "Username: "
 msgstr ""
 
-#: ../includes/admin-settings.php:376
+#: ../includes/admin-settings.php:461
 msgid "Password: "
 msgstr ""
 
-#: ../includes/admin-settings.php:379 ../includes/admin-settings.php:399
+#: ../includes/admin-settings.php:464 ../includes/admin-settings.php:484
 msgid "API Key: "
 msgstr ""
 
-#: ../includes/admin-settings.php:383
+#: ../includes/admin-settings.php:468
 #, php-format
 msgid "Already have your API key? %s"
 msgstr ""
 
-#: ../includes/admin-settings.php:383
+#: ../includes/admin-settings.php:468
 msgid "Click here"
 msgstr ""
 
-#: ../includes/admin-settings.php:397
+#: ../includes/admin-settings.php:482
 msgid "Credly API Key"
 msgstr ""
 
-#: ../includes/admin-settings.php:404
+#: ../includes/admin-settings.php:489
 msgid "Credly Field Mapping"
 msgstr ""
 
-#: ../includes/admin-settings.php:405
+#: ../includes/admin-settings.php:490
 msgid ""
 "Customize which Credly fields for badge creation and issuing (listed on the "
 "left) match which WordPress and BadgeOS fields (listed to the right)."
 msgstr ""
 
-#: ../includes/admin-settings.php:405
+#: ../includes/admin-settings.php:490
 msgid ""
 "When badges are created and issued, the info sent to Credly will rely on the "
 "global mapping found here. (Note: Visit the edit screen for each achievement "
@@ -333,39 +382,53 @@ msgid ""
 "for that achievement.)"
 msgstr ""
 
-#: ../includes/admin-settings.php:407
+#: ../includes/admin-settings.php:492
 msgid "Badge Title: "
 msgstr ""
 
-#: ../includes/admin-settings.php:412
+#: ../includes/admin-settings.php:497
 msgid "Short Description: "
 msgstr ""
 
-#: ../includes/admin-settings.php:417
+#: ../includes/admin-settings.php:502
 msgid "Description: "
 msgstr ""
 
-#: ../includes/admin-settings.php:422
+#: ../includes/admin-settings.php:507
 msgid "Criteria: "
 msgstr ""
 
-#: ../includes/admin-settings.php:427
+#: ../includes/admin-settings.php:512
 msgid "Image: "
 msgstr ""
 
-#: ../includes/admin-settings.php:432
+#: ../includes/admin-settings.php:517
 msgid "Testimonial: "
 msgstr ""
 
-#: ../includes/admin-settings.php:437
+#: ../includes/admin-settings.php:522
 msgid "Evidence: "
 msgstr ""
 
-#: ../includes/admin-settings.php:442
+#: ../includes/admin-settings.php:527
 msgid "Notify users of earned badge: "
 msgstr ""
 
-#: ../includes/content-filters.php:127 ../includes/shortcodes.php:419
+#: ../includes/ajax-functions.php:92
+#, php-format
+msgid "No completed %s to display at this time."
+msgstr ""
+
+#: ../includes/ajax-functions.php:94
+#, php-format
+msgid "No %s to display at this time."
+msgstr ""
+
+#: ../includes/ajax-functions.php:169
+msgid "Status Updated!"
+msgstr ""
+
+#: ../includes/content-filters.php:127
 msgid "Original Submission"
 msgstr ""
 
@@ -374,20 +437,23 @@ msgid "Date"
 msgstr ""
 
 #: ../includes/content-filters.php:133 ../includes/meta-boxes.php:148
-#: ../includes/meta-boxes.php:177 ../includes/shortcodes.php:428
-#: ../includes/submission-actions.php:158
-#: ../includes/submission-actions.php:184
+#: ../includes/meta-boxes.php:177 ../includes/submission-actions.php:152
+#: ../includes/submission-actions.php:178
 msgid "Status"
 msgstr ""
 
-#: ../includes/content-filters.php:347
+#: ../includes/content-filters.php:351
 #, php-format
 msgid "%1$d Required %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:400
+#: ../includes/content-filters.php:404
 #, php-format
 msgid "%d Points"
+msgstr ""
+
+#: ../includes/content-filters.php:439
+msgid "You have earned this achievement!"
 msgstr ""
 
 #: ../includes/credly.php:92
@@ -827,74 +893,20 @@ msgstr ""
 msgid "No %s found in Trash"
 msgstr ""
 
-#: ../includes/shortcodes.php:238
-msgid "No completed "
-msgstr ""
-
-#: ../includes/shortcodes.php:240
-msgid "There are no "
-msgstr ""
-
-#: ../includes/shortcodes.php:268
+#: ../includes/shortcodes.php:169
 msgid "Nomination saved successfully."
 msgstr ""
 
-#: ../includes/shortcodes.php:276 ../includes/shortcodes.php:346
-msgid "Step Description"
-msgstr ""
-
-#: ../includes/shortcodes.php:290
+#: ../includes/shortcodes.php:179
 msgid "You must be logged in to post a nomination."
 msgstr ""
 
-#: ../includes/shortcodes.php:299
-msgid "Nomination Form"
-msgstr ""
-
-#: ../includes/shortcodes.php:300 ../includes/shortcodes.php:371
-msgid "Submit"
-msgstr ""
-
-#: ../includes/shortcodes.php:312
-msgid "User to nominate"
-msgstr ""
-
-#: ../includes/shortcodes.php:315
-msgid "Reason for nomination"
-msgstr ""
-
-#: ../includes/shortcodes.php:338
+#: ../includes/shortcodes.php:198
 msgid "Submission saved successfully."
 msgstr ""
 
-#: ../includes/shortcodes.php:360
+#: ../includes/shortcodes.php:208
 msgid "You must be logged in to post a submission."
-msgstr ""
-
-#: ../includes/shortcodes.php:369
-msgid "Submission Form"
-msgstr ""
-
-#: ../includes/shortcodes.php:370 ../includes/submission-actions.php:467
-msgid "Attachment:"
-msgstr ""
-
-#: ../includes/shortcodes.php:426 ../includes/submission-actions.php:590
-#, php-format
-msgid "%1$s by %2$s"
-msgstr ""
-
-#: ../includes/shortcodes.php:444
-msgid "Submission Attachments"
-msgstr ""
-
-#: ../includes/shortcodes.php:449
-msgid "Attachment"
-msgstr ""
-
-#: ../includes/shortcodes.php:451
-#, php-format
-msgid " - uploaded %1$s by %2$s"
 msgstr ""
 
 #: ../includes/steps-ui.php:34
@@ -939,153 +951,256 @@ msgstr ""
 msgid "Earn %1$s %2$s."
 msgstr ""
 
-#: ../includes/submission-actions.php:156
-#: ../includes/submission-actions.php:181
+#: ../includes/submission-actions.php:150
+#: ../includes/submission-actions.php:175
 msgid "Content"
 msgstr ""
 
-#: ../includes/submission-actions.php:182
+#: ../includes/submission-actions.php:176
 #: ../includes/p2p/p2p-core/side.php:236
 msgid "User"
 msgstr ""
 
-#: ../includes/submission-actions.php:212
-#: ../includes/submission-actions.php:251
+#: ../includes/submission-actions.php:206
+#: ../includes/submission-actions.php:245
 msgid "Approve"
 msgstr ""
 
-#: ../includes/submission-actions.php:213
-#: ../includes/submission-actions.php:251
+#: ../includes/submission-actions.php:207
+#: ../includes/submission-actions.php:245
 msgid "Deny"
 msgstr ""
 
-#: ../includes/submission-actions.php:224
+#: ../includes/submission-actions.php:218
 msgid "pending"
 msgstr ""
 
-#: ../includes/submission-actions.php:251
+#: ../includes/submission-actions.php:245
+#: ../includes/submission-actions.php:1173
 msgid "Pending"
 msgstr ""
 
-#: ../includes/submission-actions.php:257
+#: ../includes/submission-actions.php:251
 msgid "Show All Statuses"
 msgstr ""
 
-#: ../includes/submission-actions.php:466
-msgid "Comment on Submission"
+#: ../includes/submission-actions.php:456
+#, php-format
+msgid "Comment on Submission (#%1$d)"
 msgstr ""
 
-#: ../includes/submission-actions.php:468
+#: ../includes/submission-actions.php:457
+#: ../includes/submission-actions.php:696
+msgid "Attachment:"
+msgstr ""
+
+#: ../includes/submission-actions.php:458
 msgid "Submit Comment"
 msgstr ""
 
-#: ../includes/submission-actions.php:602
-msgid "Submission Comments"
+#: ../includes/submission-actions.php:565
+#, php-format
+msgid "Comments for Submission (#%1$d)"
+msgstr ""
+
+#: ../includes/submission-actions.php:654
+msgid "Nomination Form"
+msgstr ""
+
+#: ../includes/submission-actions.php:655
+#: ../includes/submission-actions.php:697
+msgid "Submit"
+msgstr ""
+
+#: ../includes/submission-actions.php:672
+msgid "User to nominate"
+msgstr ""
+
+#: ../includes/submission-actions.php:675
+msgid "Reason for nomination"
+msgstr ""
+
+#: ../includes/submission-actions.php:695
+msgid "Submission Form"
+msgstr ""
+
+#: ../includes/submission-actions.php:744
+msgid "You must be logged in to see results."
+msgstr ""
+
+#: ../includes/submission-actions.php:947
+#, php-format
+msgid "Submission: \"%1$s\" (#%2$d)"
+msgstr ""
+
+#: ../includes/submission-actions.php:952
+msgid "Author:"
+msgstr ""
+
+#: ../includes/submission-actions.php:953
+msgid "Date:"
+msgstr ""
+
+#: ../includes/submission-actions.php:955
+msgid "Achievement:"
+msgstr ""
+
+#: ../includes/submission-actions.php:957
+#: ../includes/submission-actions.php:1009
+msgid "Status:"
+msgstr ""
+
+#: ../includes/submission-actions.php:998
+#, php-format
+msgid "%1$s nominated for %2$s"
+msgstr ""
+
+#: ../includes/submission-actions.php:1041
+msgid "Attachments:"
+msgstr ""
+
+#: ../includes/submission-actions.php:1069
+#, php-format
+msgid "%1$s - uploaded %2$s by %3$s"
+msgstr ""
+
+#: ../includes/submission-actions.php:1100
+#, php-format
+msgid "%1$s by %2$s"
+msgstr ""
+
+#: ../includes/submission-actions.php:1159
+msgid "Search:"
+msgstr ""
+
+#: ../includes/submission-actions.php:1160
+#: ../includes/p2p/p2p-admin/box.php:123
+msgid "Search"
+msgstr ""
+
+#: ../includes/submission-actions.php:1170
+msgid "Filter:"
+msgstr ""
+
+#: ../includes/submission-actions.php:1172
+msgid "All"
+msgstr ""
+
+#: ../includes/submission-actions.php:1174
+msgid "Approved"
+msgstr ""
+
+#: ../includes/submission-actions.php:1175
+msgid "Denied"
 msgstr ""
 
 #: ../includes/triggers.php:24
-msgid "Logged-in to Website"
+msgid "Log in to Website"
 msgstr ""
 
 #: ../includes/triggers.php:25
-msgid "Commented on a post"
+msgid "Comment on a post"
 msgstr ""
 
-#: ../includes/triggers.php:28
-msgid "Specific Achievement of Type"
+#: ../includes/triggers.php:26
+msgid "Publish a new post"
 msgstr ""
 
-#: ../includes/triggers.php:29
-msgid "Any Achievement of Type"
+#: ../includes/triggers.php:27
+msgid "Publish a new page"
 msgstr ""
 
 #: ../includes/triggers.php:30
+msgid "Specific Achievement of Type"
+msgstr ""
+
+#: ../includes/triggers.php:31
+msgid "Any Achievement of Type"
+msgstr ""
+
+#: ../includes/triggers.php:32
 msgid "All Achievements of Type"
 msgstr ""
 
-#: ../includes/triggers.php:56
+#: ../includes/triggers.php:58
 #, php-format
 msgid "Unlocked a %s"
 msgstr ""
 
-#: ../includes/triggers.php:57
+#: ../includes/triggers.php:59
 #, php-format
 msgid "Unlocked all %s"
 msgstr ""
 
-#: ../includes/triggers.php:97
+#: ../includes/triggers.php:103
 #, php-format
 msgid "%1$s triggered %2$s (%3$dx)"
 msgstr ""
 
-#: ../includes/user.php:158
+#: ../includes/user.php:159
 #, php-format
 msgid "%1$s awarded %2$s %3$s points for a new total of %4$s points"
 msgstr ""
 
-#: ../includes/user.php:160
+#: ../includes/user.php:161
 #, php-format
 msgid "%1$s earned %2$s points for a new total of %3$s points"
 msgstr ""
 
-#: ../includes/user.php:208
+#: ../includes/user.php:215
 msgid "Earned Achievements"
 msgstr ""
 
-#: ../includes/user.php:212
+#: ../includes/user.php:219
 msgid "Earned Points"
 msgstr ""
 
-#: ../includes/user.php:215
+#: ../includes/user.php:222
 msgid ""
 "The user's points total. Entering a new total will automatically log the "
 "change and difference between totals."
 msgstr ""
 
-#: ../includes/user.php:224 ../includes/user.php:330
+#: ../includes/user.php:231 ../includes/user.php:337
 msgid "Image"
 msgstr ""
 
-#: ../includes/user.php:225 ../includes/p2p/p2p-admin/tools.php:64
+#: ../includes/user.php:232 ../includes/p2p/p2p-admin/tools.php:64
 msgid "Name"
 msgstr ""
 
-#: ../includes/user.php:226 ../includes/user.php:332
+#: ../includes/user.php:233 ../includes/user.php:339
 msgid "Action"
 msgstr ""
 
-#: ../includes/user.php:243 ../includes/user.php:369
+#: ../includes/user.php:250 ../includes/user.php:376
 msgid "Revoke Award"
 msgstr ""
 
-#: ../includes/user.php:310
+#: ../includes/user.php:317
 msgid "Award an Achievement"
 msgstr ""
 
-#: ../includes/user.php:314
+#: ../includes/user.php:321
 msgid "Select an Achievement Type to Award:"
 msgstr ""
 
-#: ../includes/user.php:333
+#: ../includes/user.php:340
 msgid "Awarded"
 msgstr ""
 
-#: ../includes/user.php:371
+#: ../includes/user.php:378
 #, php-format
 msgid "Award %s"
 msgstr ""
 
-#: ../includes/user.php:380
+#: ../includes/user.php:387
 #, php-format
 msgid "No %s found."
 msgstr ""
 
 #: ../includes/p2p/p2p-admin/box.php:44
 msgid "Are you sure you want to delete all connections?"
-msgstr ""
-
-#: ../includes/p2p/p2p-admin/box.php:123
-msgid "Search"
 msgstr ""
 
 #: ../includes/p2p/p2p-admin/box.php:200
@@ -1220,6 +1335,22 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+#: ../includes/widgets/credly-credit-issuer-widget.php:9
+msgid "Display the Credly Credit Issuer badge"
+msgstr ""
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:11
+msgid "BadgeOS Credly Credit Issuer"
+msgstr ""
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:20
+msgid "Credly Profile URL"
+msgstr ""
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:43
+msgid "Credly Credit Issuer"
+msgstr ""
+
 #: ../includes/widgets/earned-user-achievements-widget.php:9
 msgid "Displays all achievements earned by the logged in user"
 msgstr ""
@@ -1228,22 +1359,35 @@ msgstr ""
 msgid "BadgeOS Earned User Achievements"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:21
+#: ../includes/widgets/earned-user-achievements-widget.php:22
 msgid "Title"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:22
+#: ../includes/widgets/earned-user-achievements-widget.php:23
 msgid "Number to Display (0 = all)"
 msgstr ""
 
+#: ../includes/widgets/earned-user-achievements-widget.php:24
+msgid "Display user's total points"
+msgstr ""
+
+#: ../includes/widgets/earned-user-achievements-widget.php:54
+#, php-format
+msgid "My Total Points: %s"
+msgstr ""
+
 #: ../includes/widgets/earned-user-achievements-widget.php:112
+msgid "You must be logged in to view your earned achievements"
+msgstr ""
+
+#: ../includes/widgets/earned-user-achievements-widget.php:129
 msgid "Error: Sorry, nothing found."
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:120
+#: ../includes/widgets/earned-user-achievements-widget.php:137
 msgid "Success: Sent to Credly!"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:125
+#: ../includes/widgets/earned-user-achievements-widget.php:142
 msgid "Error: Sorry, Send to Credly Failed."
 msgstr ""
