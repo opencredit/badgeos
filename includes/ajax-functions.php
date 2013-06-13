@@ -42,7 +42,7 @@ function badgeos_ajax_get_achievements(){
 	if( !$user_id )
 		$user_id = $user_ID;
 
-	$badges = '';
+	$achievements = '';
 
 	// Grab our hidden and earned badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
@@ -71,39 +71,38 @@ function badgeos_ajax_get_achievements(){
 		$args = array_merge( $args, array( 's' => $search ) );
 	}
 
-	$the_badges = new WP_Query( $args );
-
 	// Loop Achievements
-	while ( $the_badges->have_posts() ) : $the_badges->the_post();
-
-		$badges .= badgeos_render_achievement( get_the_ID() );
-
+	$achievement_posts = new WP_Query( $args );
+	$achievement_count = 0;
+	while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
+		$achievements .= badgeos_render_achievement( get_the_ID() );
+		$achievement_count++;
 	endwhile;
 
 	// Sanity helper: if we're filtering for complete and we have no
-	// earned achievements, $badge_id should definitely be false
+	// earned achievements, $achievement_posts should definitely be false
 	if ( 'completed' == $filter && empty( $earned_ids ) )
-		$badge_id = false;
+		$achievements = '';
 
-	//display a message for no results
-	if ( !$badge_id ) {
+	// Display a message for no results
+	if ( empty( $achievements ) ) {
 		$post_type_plural = get_post_type_object( $type )->labels->name;
-		$badges .= '<div class="badgeos-no-results">';
+		$achievements .= '<div class="badgeos-no-results">';
 		if ( 'completed' == $filter ) {
-			$badges .= sprintf( __( 'No completed %s yet.', 'badgeos' ), strtolower( $post_type_plural ) );
+			$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
 		}else{
-			$badges .= sprintf( __( 'There are no %s at this time.', 'badgeos' ), strtolower( $post_type_plural ) );
+			$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
 		}
-		$badges .= '</div><!-- .badgeos-no-results -->';
+		$achievements .= '</div><!-- .badgeos-no-results -->';
 	}
 
-	$response['message']     = $badges;
-	$response['offset']      = $offset + $limit;
-	$response['query_count'] = $the_badges->found_posts;
-	$response['badge_count'] = $count;
-
-	echo json_encode( $response );
-	die();
+	// Send back our successful response
+	wp_send_json_success( array(
+		'message'     => $achievements,
+		'offset'      => $offset + $limit,
+		'query_count' => $achievement_posts->found_posts,
+		'badge_count' => $achievement_count
+	) );
 }
 
 /**

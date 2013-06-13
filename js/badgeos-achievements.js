@@ -76,15 +76,15 @@ jQuery(document).ready(function($){
 			dataType: 'json',
 			success: function( response ) {
 				$('.badgeos-spinner').hide();
-				if ( response.message === null ) {
+				if ( response.data.message === null ) {
 					//alert("That's all folks!");
 				} else {
-					$('#badgeos-achievements-container').append( response.message );
-					$('#badgeos_achievements_offset').val( response.offset );
-					$('#badgeos_achievements_count').val( response.badge_count );
+					$('#badgeos-achievements-container').append( response.data.message );
+					$('#badgeos_achievements_offset').val( response.data.offset );
+					$('#badgeos_achievements_count').val( response.data.badge_count );
 					credlyize();
 					//hide/show load more button
-					if( response.query_count <= response.badge_count ){
+					if( response.data.query_count <= response.data.badge_count ){
 						$('#achievements_list_load_more').hide();
 					}else{
 						$('#achievements_list_load_more').show();
