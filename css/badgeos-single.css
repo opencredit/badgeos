@@ -66,3 +66,7 @@
 	font-weight: bold;
 	font-size: 85%;
 }
+.badgeos-achievement-congratulations {
+	margin:1em auto 2em;
+	border-bottom:1px dotted #aaa;
+}

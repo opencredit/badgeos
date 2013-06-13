@@ -21,7 +21,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
 			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
-			<p><?php _e( 'Display user point total?', 'badgeos' ); ?>: <input type="checkbox" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /></p>
+			<p><label for="<?php echo $this->get_field_name( 'point_total' ); ?>"><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
         <?php
 	}
 
@@ -51,7 +51,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 			//display user's points if widget option is enabled
 			if ( $instance['point_total'] == 'on' )
-				echo '<p>' .__( 'My Total Points', 'badgeos' ) .': ' .badgeos_get_users_points() .'</p>';
+				echo '<p class="badgeos-total-points">' . sprintf( __( 'My Total Points: %s', 'badgeos' ), '<strong>' . number_format( badgeos_get_users_points() ) . '</strong>' ) . '</p>';
 
 			$achievements = badgeos_get_user_achievements();
 
@@ -105,12 +105,12 @@ class earned_user_achievements_widget extends WP_Widget {
 				echo '</ul><!-- widget-achievements-listing -->';
 
 			}
-			
+
 		}else{
-			
+
 			//user is not logged in so display a message
 			_e( 'You must be logged in to view your earned achievements', 'badgeos' );
-			
+
 		}
 
 		echo $after_widget;

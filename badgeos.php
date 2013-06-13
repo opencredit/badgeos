@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.0.3
+* Version: 1.1.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -62,6 +62,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
+		require_once( $this->directory_path . 'includes/ajax-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );
@@ -216,7 +217,7 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0.1', true );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 
 		$data = array(
 			'ajax_url'        => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
