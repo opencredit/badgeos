@@ -162,23 +162,29 @@ function badgeos_nomination_form( $atts = array() ) {
 		'achievement_id' => $post->ID
 	), $atts );
 
+	$output = '';
+
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
 
+		// If we've just saved nomination data
 		if ( badgeos_save_nomination_data() )
-			printf( '<p>%s</p>', __( 'Nomination saved successfully.', 'badgeos' ) );
+			$output .= sprintf( '<p>%s</p>', __( 'Nomination saved successfully.', 'badgeos' ) );
 
-		// Return either the user's nomination or the nomination form
+		// Return the user's nominations
 		if ( badgeos_check_if_user_has_nomination( $user_ID, $atts['achievement_id'] ) )
-			return badgeos_get_user_nominations( '', $atts['achievement_id'] );
-		else
-			return badgeos_get_nomination_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
+			$output .= badgeos_get_user_nominations( '', $atts['achievement_id'] );
+
+		// Include the nomination form
+		$output .= badgeos_get_nomination_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
 
 	} else {
 
-		return '<p><i>' . __( 'You must be logged in to post a nomination.', 'badgeos' ) . '</i></p>';
+		$output = '<p><i>' . __( 'You must be logged in to post a nomination.', 'badgeos' ) . '</i></p>';
 
 	}
+
+	return $output;
 
 }
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
