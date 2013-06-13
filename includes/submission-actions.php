@@ -1038,7 +1038,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 	// If we have attachments
 	$output = '';
 	if ( ! empty( $attachments ) ) {
-		$output .= '<h4>' . sprintf( __( 'Submission #%1$d Attachments', 'badgeos' ), $submission_id ) . '</h4>';
+		$output .= '<h4>' . sprintf( __( 'Attachments:', 'badgeos' ), $submission_id ) . '</h4>';
 		$output .= '<ul class="badgeos-attachments-list">';
 		foreach ( $attachments as $attachment ) {
 			$output .= badgeos_render_submission_attachment( $attachment );
@@ -1066,9 +1066,8 @@ function badgeos_render_submission_attachment( $attachment = null ) {
 
 	// Concatenate the markup
 	$output = '<li class="badgeos-attachment">';
-	$output .= '<span class="badgeos-submission-label">' . __( 'Attachment:', 'badgeos' ) . '</span>&nbsp;';
 	$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
-		wp_get_attachment_link( $attachment->ID, 'thumbnail-size', false, null, $attachment->post_title ),
+		wp_get_attachment_link( $attachment->ID, 'full', false, null, $attachment->post_title ),
 		get_the_time( 'F j, Y g:i a', $attachment ),
 		get_userdata( $attachment->post_author )->display_name
 	);
