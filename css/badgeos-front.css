@@ -9,14 +9,15 @@
 	color: black;
 	clear: both;
 }
-#badgeos-achievements-filter, #badgeos-achievements-search {
-	max-width: 46%;
-	min-width: 250px;
+#badgeos-achievements-filter {
 	float: left;
-	padding: 0 2% 20px 0;
+	margin-bottom: 1em;
 }
-#achievements_list_search {
+#badgeos-achievements-search,
+.badgeos-feedback-search {
 	margin-right: 5px;
+	margin-bottom: 1em;
+	float: right;
 }
 #badgeos-achievements-container, #achievements_list_load_more, #badgeos-achievements-filters-wrap {
 	display: block;
