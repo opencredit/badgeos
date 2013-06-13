@@ -212,12 +212,15 @@ function badgeos_ajax_update_feedback() {
 
 	// Get the feedback post type
 	$feedback_type = get_post_type( absint( $_REQUEST['feedback_id'] ) );
-	$action = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
+	$status = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
 
 	// Update our meta
-	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $action );
+	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $status );
 
 	// Send back our successful response
-	wp_send_json_success( array( 'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>' ) );
+	wp_send_json_success( array(
+		'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>',
+		'status'  => ucfirst( $status )
+	) );
 
 }

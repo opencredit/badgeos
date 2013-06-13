@@ -46,9 +46,9 @@ jQuery(document).ready(function($){
 			},
 			dataType: 'json',
 			success: function( response ) {
-				console.log( response );
 				button.parent().children('a').hide();
 				button.parent().append( response.data.message );
+				$('.badgeos-feedback-' + button.attr('data-feedback-id') + ' .badgeos-feedback-status').html( response.data.status );
 			}
 		});
 	});
