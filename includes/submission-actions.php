@@ -498,8 +498,12 @@ function badgeos_get_comment_form( $post_id = 0 ) {
  */
 function badgeos_save_comment_data() {
 
-	// If our submission data is empty, or we don't pass security, bail
-	if ( empty( $_POST ) || ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
+	// If our nonce data is empty, bail
+	if ( ! isset( $_POST['badgeos_comment_nonce'] ) )
+		return;
+
+	// If our nonce doesn't vaildate, bail
+	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
 		return;
 
 	// Process comment data
