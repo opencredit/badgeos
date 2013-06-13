@@ -453,7 +453,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		return '';
 
 	$defaults = array(
-		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission #%1$d', 'badgeos' ), $post_id ) . '</h4>',
+		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d)', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit Comment', 'badgeos' )
 	);
@@ -562,7 +562,7 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 		return;
 
 	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Submission #%1$d Comments', 'badgeos' ), $submission_id ) . '</h4>';
+	$output = '<h4>' . sprintf( __( 'Comments for Submission (#%1$d)', 'badgeos' ), $submission_id ) . '</h4>';
 	$output .= '<ul class="badgeos-submission-comments-list">';
 	foreach( $comments as $comment ) {
 		// Setup an alternating odd/even class
