@@ -175,12 +175,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.1.0 =
-* Added: New widget to display the Credly Credit Issuer badge
 * Added: New triggers for publishing new posts and pages
 * Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
 * Added: [badgeos_submissions] shortcode to show a filterable/searchbale list of submissions, see BadgeOS Help/Support for parameter details
 * Added: [badgeos_nominations] shortcode to show a filterable/searchbale list of nominations, see BadgeOS Help/Support for parameter details
 * Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
+* Added: New widget to display the Credly Credit Issuer badge
 * Updated: Achievements widget with option to display user's total points
 * Updated: [badgeos_submission] shortcode to accept achievement_id parameter
 * Updated: [badgeos_nomination] shortcode to accept achievement_id parameter
