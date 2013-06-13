@@ -92,6 +92,10 @@ function badgeos_trigger_event( $args ) {
 		$user_id = $user_ID;
 	}
 
+	// If the user doesn't satisfy the trigger requirements, bail here
+	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger ) )
+		return $args;
+
 	// Update hook count for this user
 	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $blog_id );
 
