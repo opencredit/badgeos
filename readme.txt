@@ -24,7 +24,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Reviewed submissions
 *   Auto-approving submissions
 *   Nominations and review
-*   Site activity (triggers based on commenting and logging in to your site)
+*   Site activity (triggers based on publising posts and pages, commenting and logging in to your site)
 *   Completing specific other achievements one or a specific number of times
 *   Completing one, select or all achievements of a specific type
 *   Point thresholds
@@ -73,6 +73,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * Shows logged in users what badges they have earned.
 * Set the parameters for the widget to decide how many recent badges to display.
+* Option to show logged in users total points they have earned (if you are using BadgeOS points mechanism).
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
 
 
@@ -80,14 +81,18 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
-* Just activate BadgeOS and place the simple shortcode on any page or post
+* Turn any page or post into a way to display available achievements and for users to track their progress.
+* Multiple options and parameters for each shortcode for great flexibility.
+* Shortcodes to bring submission and nomination review to the front-end of your site.
+* Just activate BadgeOS and place the simple shortcode on any page or post.
 * And you've got an engagement management system running on your WordPress site!
 
 
 **Submission and Nomination Review**
 
 * Easily review submissions and nominations from members.
-* Approve or deny submissions with one click
+* Approve or deny submissions with one click.
+* Shortcodes with multiple options for review of submissions on any page or post on your site.
 * Add comments to engage the member and elaborate on your decisions.
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
 
