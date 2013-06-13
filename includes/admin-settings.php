@@ -274,7 +274,23 @@ function badgeos_help_support_page() { ?>
 		<h2><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions.', 'badgeos' ); ?></p>
 		<hr/>
-		<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Use this shortcode to generate a list of achievements of any type on any post or page.', 'badgeos' ); ?>
+		<p><strong>[badgeos_achievement]</strong> - <?php _e( 'Display a single achievement on any post or page.', 'badgeos' ); ?>
+		<div style="padding-left:15px;">
+			<ul>
+				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+				<li>
+					<div style="padding-left:15px;">
+					<ul>
+						<li><?php _e( 'id', 'badgeos' ); ?> - <?php _e( 'The ID of the achievement to display.', 'badgeos' ); ?></li>
+					</ul>
+					</div>
+				</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_achievement id=12]</li>
+			</ul>
+		</div>
+		</p>
+		<hr/>
+		<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Output a list of achievements of any type on any post or page.', 'badgeos' ); ?>
 		<div style="padding-left:15px;">
 			<ul>
 				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
