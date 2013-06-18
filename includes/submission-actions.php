@@ -773,6 +773,14 @@ function badgeos_get_feedback( $args = array() ) {
 	);
 	$args = wp_parse_args( $args, $defaults );
 
+	// If we're looking for auto-approved only
+	$show_auto_approved = true;
+	if ( 'auto-approved' == $args['status'] ) {
+		$args['status'] = 'approved';
+	} elseif ( 'all' !== $args['status'] ) {
+		$show_auto_approved = false;
+	}
+
 	// If we're looking for a specific approval status
 	if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
 		$args['meta_query'][] = array(
@@ -807,6 +815,10 @@ function badgeos_get_feedback( $args = array() ) {
 		$output .= '<div class="badgeos-submissions">';
 
 		foreach( $feedback as $submission ) {
+
+			// Bail if we do NOT want to show auto approved, and it is
+			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) )
+				continue;
 
 			// Setup our output
 			if ( 'nomination' == $args['post_type'] )
@@ -1194,6 +1206,8 @@ function badgeos_render_feedback( $atts = array() ) {
 				$output .= '<option value="all">' . __( 'All', 'badgeos' ) . '</option>';
 				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
 				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
+				if ( 'submission' == $atts['type'] )
+					$output .= '<option value="auto-approved">' . __( 'Auto-approved', 'badgeos' ) . '</option>';
 				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
 			$output .= '</select>';
 		$output .= '</div>';
