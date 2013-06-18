@@ -289,7 +289,7 @@ function badgeos_help_support_page() { ?>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_achievement id=12]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
 			</ul>
 		</div>
 		</p>
@@ -301,14 +301,14 @@ function badgeos_help_support_page() { ?>
 				<li>
 					<div style="padding-left:15px;">
 					<ul>
-						<li><?php _e( 'type', 'badgeos' ); ?> - <?php _e( 'Custom post type of achievements to list.  Default: all', 'badgeos' ); ?></li>
-						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php _e( 'Number of achievements to display per page.  Default: 10', 'badgeos' ); ?></li>
-						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php _e( 'Display the filter options.  Default: true', 'badgeos' ); ?></li>
-						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
+						<li><?php _e( 'type', 'badgeos' ); ?> - <?php printf( __( 'Type of achievements to list. Default: %s', 'badgeos' ), '<code>all</code>' ); ?></li>
+						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
+						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_achievements_list type=badge limit=15]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badge limit=15]</code></li>
 			</ul>
 		</div>
 		</p>
@@ -324,7 +324,7 @@ function badgeos_help_support_page() { ?>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_submission achievement_id=35]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
 			</ul>
 		</div>
 		<hr/>
@@ -339,7 +339,7 @@ function badgeos_help_support_page() { ?>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_nomination achievement_id=35]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
 			</ul>
 		</div>
 		<hr/>
@@ -350,16 +350,16 @@ function badgeos_help_support_page() { ?>
 				<li>
 					<div style="padding-left:15px;">
 					<ul>
-						<li>limit - <?php _e( 'Number of submissions to display per page.  Default: 10', 'badgeos' ); ?></li>
-						<li>status - <?php _e( 'Which Approval Status type to show on initial page load.  Default: all', 'badgeos' ); ?></li>
-						<li>show_filter - <?php _e( 'Display the filter select input.  Default: true', 'badgeos' ); ?></li>
-						<li>show_search - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
-						<li>show_attachments - <?php _e( 'Display attachments connected to the submission.  Default: true', 'badgeos' ); ?></li>
-						<li>show_comments - <?php _e( 'Display comments associated with the submission.  Default: true', 'badgeos' ); ?></li>
+						<li>limit - <?php printf( __( 'Number of submissions to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
+						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, auto-approved, approved, denied</code>', '<code>all</code>' ); ?></li>
+						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+						<li>show_attachments - <?php printf( __( 'Display attachments connected to the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+						<li>show_comments - <?php printf( __( 'Display comments associated with the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_submissions status=pending limit=15]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
 			</ul>
 		</div>
 		</p>
@@ -371,14 +371,14 @@ function badgeos_help_support_page() { ?>
 				<li>
 					<div style="padding-left:15px;">
 					<ul>
-						<li>limit - <?php _e( 'Number of nominations to display per page.  Default: 10', 'badgeos' ); ?></li>
-						<li>status - <?php _e( 'Which Approval Status type to show on initial page load.  Default: all', 'badgeos' ); ?></li>
-						<li>show_filter - <?php _e( 'Display the filter select input.  Default: true', 'badgeos' ); ?></li>
-						<li>show_search - <?php _e( 'Display the search form.  Default: true', 'badgeos' ); ?></li>
+						<li>limit - <?php printf( __( 'Number of nominations to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
+						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, approved, denied</code>', '<code>all</code>' ); ?></li>
+						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
 					</ul>
 					</div>
 				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> [badgeos_nominations show_search=false limit=20]</li>
+				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
 			</ul>
 		</div>
 		</p>
