@@ -788,7 +788,7 @@ function badgeos_get_feedback( $args = array() ) {
 	}
 
 	// If we're looking for a specific approval status
-	if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
+	if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_status",
 			'value' => $args['status']
