@@ -55,7 +55,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 			$achievements = badgeos_get_user_achievements();
 
-			if ( is_array( $achievements ) ) {
+			if ( is_array( $achievements ) && ! empty( $achievements ) ) {
 
 				$number_to_show = absint( $instance['number'] );
 				$thecount = 0;
@@ -106,10 +106,10 @@ class earned_user_achievements_widget extends WP_Widget {
 
 			}
 
-		}else{
+		} else {
 
 			//user is not logged in so display a message
-			_e( 'You must be logged in to view your earned achievements', 'badgeos' );
+			_e( 'You must be logged in to view earned achievements', 'badgeos' );
 
 		}
 
