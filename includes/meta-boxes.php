@@ -138,7 +138,7 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 	// Submissions
 	$meta_boxes[] = array(
 		'id'         => 'submission_data',
-		'title'      => __( 'Submission Data', 'badgeos' ),
+		'title'      => __( 'Submission Status', 'badgeos' ),
 		'pages'      => array( 'submission' ), // Post types
 		'context'    => 'side',
 		'priority'   => 'default',
@@ -233,7 +233,7 @@ function badgeos_submission_attachments_meta_box() {
 
 	//register the submission attachments meta box
 	add_meta_box( 'badgeos_submission_attachments_id', __( 'Submission Attachments', 'badgeos' ), 'badgeos_submission_attachments', 'submission' );
-	
+
 }
 
 /**
