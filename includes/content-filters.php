@@ -429,13 +429,9 @@ function badgeos_add_earned_class_single( $classes ) {
 function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
 
 	if ( is_user_logged_in() ) {
-		
-		// Use the current user's ID
-		if ( ! $user_id )
-			$user_id = wp_get_current_user()->ID;
 
 		// Check if the user has earned the achievement
-		if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id ) ) {
+		if ( badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
 
 			// Return a message stating the user has earned the achievement
 			$earned_message = '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
@@ -444,7 +440,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 			return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
 
 		}
-	
+
 	}
 
 }
