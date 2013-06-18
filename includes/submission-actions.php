@@ -127,10 +127,13 @@ function badgeos_hide_quick_edit( $actions ) {
 	global $post;
 
 	if ( 'submission' == get_post_type( $post ) || 'nomination' == get_post_type( $post ) ) {
-		//hide action links
+		// Hide unnecessary actions
 		unset( $actions['inline hide-if-no-js'] );
 		unset( $actions['trash'] );
 		unset( $actions['view'] );
+
+		// Rewrtie edit text
+		$actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
 	}
 
 	return $actions;
@@ -352,16 +355,16 @@ function badgeos_create_submission( $achievement_id, $title, $content, $user_id 
 	);
 
 	//insert the post into the database
-	if ( $new_post_id = wp_insert_post( $submission_data ) ) {
-
-		// Check if submission is auto approved or not
-		$submission_status = ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) == 'submission_auto' ) ? 'approved' : 'pending';
-
-		// Set the submission approval status
-		add_post_meta( $new_post_id, '_badgeos_submission_status', sanitize_text_field( $submission_status ) );
+	if ( $submission_id = wp_insert_post( $submission_data ) ) {
 
 		// save the achievement ID related to the submission
-		add_post_meta( $new_post_id, '_badgeos_submission_achievement_id', $achievement_id );
+		add_post_meta( $submission_id, '_badgeos_submission_achievement_id', $achievement_id );
+
+		// Check if submission is auto approved or not
+		$submission_status = badgeos_is_submission_auto_approved( $submission_id ) ? 'approved' : 'pending';
+
+		// Set the submission approval status
+		add_post_meta( $submission_id, '_badgeos_submission_status', sanitize_text_field( $submission_status ) );
 
 		//if submission is set to auto-approve, award the achievement to the user
 		if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) == 'submission_auto' )
@@ -387,7 +390,7 @@ function badgeos_create_submission( $achievement_id, $title, $content, $user_id 
 					'post_title'        => addslashes( $title ),
 					'post_content'      => '',
 					'post_status'       => 'inherit',
-					'post_parent'       => $new_post_id
+					'post_parent'       => $submission_id
 				);
 
 				$attach_id  = wp_insert_attachment( $attachment, $upload['file'] );
@@ -395,7 +398,7 @@ function badgeos_create_submission( $achievement_id, $title, $content, $user_id 
 			}
 		}
 
-		do_action( 'save_submission', $new_post_id );
+		do_action( 'save_submission', $submission_id );
 
 		//load BadgeOS settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
@@ -419,7 +422,7 @@ In response to: ' .get_the_title( absint( $achievement_id ) ).'
 Submitted by: '.$user_data->display_name.'
 
 Review the complete submission and approve or deny it at:
-'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $new_post_id ) ) ) ).'
+'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $submission_id ) ) ) ).'
 
 To view all submissions, visit:
 '.admin_url( 'edit.php?post_type=submission' );
@@ -498,8 +501,12 @@ function badgeos_get_comment_form( $post_id = 0 ) {
  */
 function badgeos_save_comment_data() {
 
-	// If our submission data is empty, or we don't pass security, bail
-	if ( empty( $_POST ) || ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
+	// If our nonce data is empty, bail
+	if ( ! isset( $_POST['badgeos_comment_nonce'] ) )
+		return;
+
+	// If our nonce doesn't vaildate, bail
+	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
 		return;
 
 	// Process comment data
@@ -575,6 +582,25 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 
 	return apply_filters( 'badgeos_get_comments_for_submission', $output, $submission_id, $comments );
 
+}
+
+/**
+ * Conditional to determine if a submission's achievement is set to auto-approve
+ *
+ * @since  1.1.0
+ * @param  integer $submission_id The submission's post ID
+ * @return bool                   True if connected achievement is set to auto-approve, false otherwise
+ */
+function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
+
+	// Get the submission's connected achievement
+	$achievement_id = get_post_meta( $submission_id, '_badgeos_submission_achievement_id', true );
+
+	// If the achievement is set to auto-approve, return true
+	if ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) )
+		return true;
+	else
+		return false;
 }
 
 /**
@@ -750,8 +776,19 @@ function badgeos_get_feedback( $args = array() ) {
 	);
 	$args = wp_parse_args( $args, $defaults );
 
+	// Eliminate need for case-sensitivity on status
+	$args['status'] = strtolower( $args['status'] );
+
+	// If we're looking for auto-approved only
+	$show_auto_approved = true;
+	if ( 'auto-approved' == $args['status'] ) {
+		$args['status'] = 'approved';
+	} elseif ( 'all' !== $args['status'] ) {
+		$show_auto_approved = false;
+	}
+
 	// If we're looking for a specific approval status
-	if ( isset( $args['status'] ) && 'all' !== $args['status'] ) {
+	if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_status",
 			'value' => $args['status']
@@ -784,6 +821,10 @@ function badgeos_get_feedback( $args = array() ) {
 		$output .= '<div class="badgeos-submissions">';
 
 		foreach( $feedback as $submission ) {
+
+			// Bail if we do NOT want to show auto approved, and it is
+			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) )
+				continue;
 
 			// Setup our output
 			if ( 'nomination' == $args['post_type'] )
@@ -1016,7 +1057,6 @@ function badgeos_render_nomination( $nomination = null ) {
 	return apply_filters( 'badgeos_render_nomination', $output, $nomination );
 }
 
-
 /**
  * Get attachments connected to a specific achievement
  *
@@ -1172,6 +1212,8 @@ function badgeos_render_feedback( $atts = array() ) {
 				$output .= '<option value="all">' . __( 'All', 'badgeos' ) . '</option>';
 				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
 				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
+				if ( 'submission' == $atts['type'] )
+					$output .= '<option value="auto-approved">' . __( 'Auto-approved', 'badgeos' ) . '</option>';
 				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
 			$output .= '</select>';
 		$output .= '</div>';
@@ -1183,7 +1225,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	}
 
 	// Show Feedback
-	$output .= '<div class="badgeos-spinner"></div>';
+	$output .= '<div class="badgeos-spinner" style="display:none;"></div>';
 	$output .= '<div class="badgeos-feedback-container">';
 	$output .= $feedback;
 	$output .= '</div>';
