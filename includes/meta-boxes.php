@@ -221,3 +221,33 @@ function badgeos_cmb_render_text_only( $field, $meta ) {
 	echo $field['desc'];
 }
 add_action( 'cmb_render_text_only', 'badgeos_cmb_render_text_only', 10, 2 );
+
+add_action( 'add_meta_boxes', 'badgeos_submission_attachments_meta_box' );
+
+/**
+ * Register the Submission attachments meta box
+ *
+ * @since  1.1.0
+ */
+function badgeos_submission_attachments_meta_box() {
+
+	//reigster the submission attachments meta box
+	add_meta_box( 'badgeos_submission_attachments_id', __( 'Submission Attachments', 'badgeos' ), 'badgeos_submission_attachments', 'submission' );
+	
+}
+
+/**
+ * Display all Submission attachments in a meta box
+ *
+ * @since  1.1.0
+ */
+function badgeos_submission_attachments( $post ) {
+
+	//return all submission attachments
+	if ( $submission_attachments = badgeos_get_submission_attachments( absint( $post->ID ) ) ) {
+		echo $submission_attachments;
+	}else{
+		_e( 'No attachments on this submission', 'badgeos' );
+	}
+
+}

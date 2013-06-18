@@ -180,6 +180,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
 * Added: [badgeos_submissions] shortcode to show a filterable/searchbale list of submissions, see BadgeOS Help/Support for parameter details
 * Added: [badgeos_nominations] shortcode to show a filterable/searchbale list of nominations, see BadgeOS Help/Support for parameter details
+* Added: New meta box showing attachments for a Submission in the admin dashboard
 * Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
 * Updated: Achievements widget with option to display user's total points
 * Updated: [badgeos_submission] shortcode to accept achievement_id parameter
