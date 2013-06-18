@@ -231,7 +231,7 @@ add_action( 'add_meta_boxes', 'badgeos_submission_attachments_meta_box' );
  */
 function badgeos_submission_attachments_meta_box() {
 
-	//reigster the submission attachments meta box
+	//register the submission attachments meta box
 	add_meta_box( 'badgeos_submission_attachments_id', __( 'Submission Attachments', 'badgeos' ), 'badgeos_submission_attachments', 'submission' );
 	
 }
