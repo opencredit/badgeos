@@ -1187,7 +1187,7 @@ function badgeos_render_feedback( $atts = array() ) {
 	}
 
 	// Show Feedback
-	$output .= '<div class="badgeos-spinner"></div>';
+	$output .= '<div class="badgeos-spinner" style="display:none;"></div>';
 	$output .= '<div class="badgeos-feedback-container">';
 	$output .= $feedback;
 	$output .= '</div>';
