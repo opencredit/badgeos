@@ -127,10 +127,13 @@ function badgeos_hide_quick_edit( $actions ) {
 	global $post;
 
 	if ( 'submission' == get_post_type( $post ) || 'nomination' == get_post_type( $post ) ) {
-		//hide action links
+		// Hide unnecessary actions
 		unset( $actions['inline hide-if-no-js'] );
 		unset( $actions['trash'] );
 		unset( $actions['view'] );
+
+		// Rewrtie edit text
+		$actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
 	}
 
 	return $actions;
