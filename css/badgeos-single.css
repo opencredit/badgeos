@@ -10,7 +10,7 @@
 	display: inline-block;
 	margin-top: 0;
 }
-.achievement-wrap, .badgeos-submission-form, .badgeos-attachments-list, .badgeos-submission-comments-list, .badgeos-original-submission {
+.achievement-wrap {
 	clear: both;
 	padding: 0 0 20px;
 	margin: 0 0 20px;
@@ -29,7 +29,7 @@
 .user-has-earned .achievement-wrap .badgeos-item-image {
 	opacity: 1;
 }
-.badgeos-item-points, .badgeos-submission-label {
+.badgeos-item-points {
 	font-weight: bold;
 }
 .badgeos-required-achievements {
@@ -40,29 +40,4 @@
 }
 .badgeos-required-achievements .user-has-earned:hover {
 	text-decoration: none;
-}
-.badgeos-comment-form .badgeos-submission-comment textarea {
-	width: 96%;
-	height: 100px;
-}
-.badgeos-submission-comment {
-	padding: 1em 1em 0;
-	margin-bottom: .5em;
-	overflow: hidden;
-}
-.badgeos-submission-comment:after {
-	content: '';
-	display: block;
-	clear: both;
-	margin: 0 auto;
-	border-bottom: 1px dotted #aaa;
-}
-.badgeos-submission-comment:last-child:after {
-	border: 0;
-}
-.badgeos-submission-comment.odd {
-}
-.badgeos-comment-date-by {
-	font-weight: bold;
-	font-size: 85%;
 }

@@ -242,7 +242,7 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 
 	// If we've exceeded the max earnings, we do not have acces
 	if ( badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) )
-		$return  = false;
+		$return = false;
 
 	// If the achievement has a parent...
 	if ( $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) ) {
@@ -256,7 +256,6 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 			foreach ( badgeos_get_children_of_achievement( $parent_achievement->ID ) as $sibling ) {
 				// If this is the current step, we're good to go
 				if ( $sibling->ID == $achievement_id ) {
-					$return = true;
 					break;
 				}
 				// If we haven't earned any previous step, we can't earn this one
@@ -270,6 +269,7 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 
 	// Available filter for custom overrides
 	return apply_filters( 'user_has_access_to_achievement', $return, $user_id, $achievement_id );
+
 }
 
 /**
@@ -289,7 +289,7 @@ function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 
 	// Prevent user from earning steps with no parents
 	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
-		return false;
+		$return = false;
 
 	// Prevent user from repeatedly earning the same step
 	// Note: we're adding 5 seconds to the "since" timestamp in order
@@ -300,10 +300,10 @@ function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
 			'since'          => 5 + absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		) )
 	)
-		return false;
+		$return = false;
 
-	// If we passed everything else, the user has access to this step
-	return true;
+	// Send back our eligigbility
+	return $return;
 }
 add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_step', 10, 3 );
 

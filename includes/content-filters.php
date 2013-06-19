@@ -46,14 +46,14 @@ function badgeos_achievement_submissions( $content ) {
 
 		if ( ( $earned_by == 'submission' || $earned_by == 'submission_auto' ) && is_user_logged_in() ) {
 
-			$submission = do_shortcode( '[badgeos_submission]' );
+			$submission = badgeos_submission_form();
 
 			//return the content with the submission shortcode data
 			return $content . $submission;
 
-		}elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
+		} elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
 
-			$nomination = do_shortcode( '[badgeos_nomination]' );
+			$nomination = badgeos_nomination_form();
 
 			//return the content with the nomination shortcode data
 			return $content . $nomination;
@@ -223,6 +223,10 @@ function badgeos_reformat_entries( $content ) {
 
 	// wrap our content, add the thumbnail and title and add wpautop back
 	$newcontent = '<div class="achievement-wrap'. $class .'">';
+
+	// Check if current user has earned this achievement
+	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
+
 	$newcontent .= '<div class="alignleft badgeos-item-image">'. badgeos_get_achievement_post_thumbnail( $badge_id ) .'</div>';
 	// $newcontent .= $title;
 
@@ -413,4 +417,391 @@ function badgeos_add_earned_class_single( $classes ) {
 	$classes[] = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => get_the_ID() ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
 	return $classes;
+}
+
+/**
+ * Returns a message if user has earned the achievement
+ *
+ * @since  1.1.0
+ * @param  integer $achievement_id The given achievment's ID
+ * @return string                  The HTML markup for our earned message
+ */
+function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
+
+	if ( is_user_logged_in() ) {
+
+		// Check if the user has earned the achievement
+		if ( badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
+
+			// Return a message stating the user has earned the achievement
+			$earned_message = '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
+			$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) . '</div>';
+
+			return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
+
+		}
+
+	}
+
+}
+
+/**
+ * Render an achievement
+ *
+ * @param  integer $achievement_id The achievement's post ID
+ * @return string                  Concatenated markup
+ */
+function badgeos_render_achievement( $achievement = 0 ) {
+	global $user_ID;
+
+	// If we were given an ID, get the post
+	if ( is_int( $achievement ) )
+		$achievement = get_post( $achievement );
+
+	// make sure our JS and CSS is enqueued
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_enqueue_style( 'badgeos-widget' );
+
+	// check if user has earned this Achievement, and add an 'earned' class
+	$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+
+	// Setup our credly classes
+	$credly_class = '';
+	$credly_ID = '';
+
+	// If the achievement is earned and givable, override our credly classes
+	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID ) ) {
+		$credly_class = ' share-credly addCredly';
+		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
+	}
+
+	// Each Achievement
+	$output = '';
+	$output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+
+		// Achievement Image
+		$output .= '<div class="badgeos-item-image">';
+		$output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+		$output .= '</div><!-- .badgeos-item-image -->';
+
+		// Achievement Content
+		$output .= '<div class="badgeos-item-description">';
+
+			// Achievement Title
+			$output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
+
+			// Achievement Short Description
+			$output .= '<div class="badgeos-item-excerpt">';
+			$output .= badgeos_achievement_points_markup( $achievement->ID );
+			$excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
+			$output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+			$output .= '</div><!-- .badgeos-item-excerpt -->';
+
+			// Render our Steps
+			if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
+				$output.='<div class="badgeos-item-attached">';
+					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">Show Details</a></div>';
+					$output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
+				$output.= '</div><!-- .badgeos-item-attached -->';
+			}
+
+		$output .= '</div><!-- .badgeos-item-description -->';
+
+	$output .= '</div><!-- .badgeos-achievements-list-item -->';
+
+	// Return our filterable markup
+	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
+
+}
+
+
+/**
+ * Render a filterable list of feedback
+ *
+ * @since  1.1.0
+ * @param  array  $atts Shortcode attributes
+ * @return string       Contatenated markup
+ */
+function badgeos_render_feedback( $atts = array() ) {
+	global $current_user;
+
+	// Parse our attributes
+	$defaults = array(
+		'type'             => 'submission',
+		'limit'            => '10',
+		'status'           => 'all',
+		'show_filter'      => true,
+		'show_search'      => true,
+		'show_attachments' => true,
+		'show_comments'    => true
+	);
+	$atts = wp_parse_args( $atts, $defaults );
+
+	// Setup our feedback args
+	$args = array(
+		'post_type'        => $atts['type'],
+		'posts_per_page'   => $atts['limit'],
+		'show_attachments' => $atts['show_attachments'],
+		'show_comments'    => $atts['show_comments'],
+		'status'           => $atts['status']
+	);
+
+	// If we're not an admin, limit results to the current user
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+		$args['author'] = $current_user->ID;
+	}
+
+	// Get our feedback
+	$feedback = badgeos_get_feedback( $args );
+	$output = '';
+
+	// Show Search
+	if ( 'false' !== $atts['show_search'] ) {
+
+		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
+		$output .= '<div class="badgeos-feedback-search">';
+			$output .= '<form class="badgeos-feedback-search-form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" class="badgeos-feedback-search-input" name="feedback_search" value="'. $search .'">';
+			$output .= '<input type="submit" class="badgeos-feedback-search-button" name="feedback_search_button" value="' . __( 'Search', 'badgeos' ) . '">';
+			$output .= '</form>';
+		$output .= '</div><!-- .badgeos-feedback-search -->';
+
+	}
+
+	// Show Filter
+	if ( 'false' !== $atts['show_filter'] ) {
+
+		$output .= '<div class="badgeos-feedback-filter">';
+			$output .= __( 'Filter:', 'badgeos' );
+			$output .= ' <select name="status_filter" id="status_filter">';
+				$output .= '<option value="all">' . __( 'All', 'badgeos' ) . '</option>';
+				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
+				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
+				if ( 'submission' == $atts['type'] )
+					$output .= '<option value="auto-approved">' . __( 'Auto-approved', 'badgeos' ) . '</option>';
+				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
+			$output .= '</select>';
+		$output .= '</div>';
+
+	} else {
+
+		$output .= '<input type="hidden" name="status_filter" id="status_filter" value="' . esc_attr( $atts['status'] ) . '">';
+
+	}
+
+	// Show Feedback
+	$output .= '<div class="badgeos-spinner" style="display:none;"></div>';
+	$output .= '<div class="badgeos-feedback-container">';
+	$output .= $feedback;
+	$output .= '</div>';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_feedback', $output, $atts );
+
+}
+
+/**
+ * Render a given nomination
+ *
+ * @since  1.1.0
+ * @param  object $nomination A nomination post object
+ * @param  array  $args       Additional args for content options
+ * @return string             Concatenated output
+ */
+function badgeos_render_nomination( $nomination = null, $args = array() ) {
+	global $post;
+
+	// If we weren't given a nomination, use the current post
+	if ( empty( $nomination ) ) {
+		$nomination = $post;
+	}
+
+	// Grab the connected achievement
+	$achievement_id = get_post_meta( $nomination->ID, '_badgeos_nomination_achievement_id', true );
+
+	// Concatenate our output
+	$output = '<div class="badgeos-nomination badgeos-feedback badgeos-feedback-' . $nomination->ID . '">';
+
+		// Title
+		$output .= '<h4>';
+		$output .= sprintf( __( '%1$s nominated for %2$s', 'badgeos' ),
+			get_userdata( $nomination->post_author )->display_name,
+			'<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>'
+		);
+		$output .= '</h4>';
+
+		// Content
+		$output .= wpautop( $nomination->post_content );
+
+		// Approval Status
+		$output .= '<p class="badgeos-comment-date-by">';
+			$output .= '<span class="badgeos-status-label">' . __( 'Status:', 'badgeos' ) . '</span> ';
+			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
+		$output .= '</p>';
+
+		// Approve/Deny Buttons, for admins and pending posts only
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == get_post_meta( $nomination->ID, '_badgeos_nomination_status', true ) ) {
+			$output .= badgeos_render_feedback_buttons( $nomination->ID );
+		}
+
+	$output .= '</div><!-- .badgeos-original-submission -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_nomination', $output, $nomination );
+}
+
+/**
+ * Render a given submission
+ *
+ * @since  1.1.0
+ * @param  object $submission A submission post object
+ * @param  array  $args       Additional args for content options
+ * @return string             Concatenated output
+ */
+function badgeos_render_submission( $submission = null, $args = array() ) {
+	global $post;
+
+	// If we weren't given a submission, use the current post
+	if ( empty( $submission ) ) {
+		$submission = $post;
+	}
+
+	// Get the connected achievement ID
+	$achievement_id = get_post_meta( $submission->ID, '_badgeos_submission_achievement_id', true );
+	$status = get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+
+	// Concatenate our output
+	$output = '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
+
+		// Submission Title
+		$output .= '<h2>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h2>';
+
+		// Submission Meta
+		$output .= '<p class="badgeos-submission-meta">';
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-author">%2$s</span><br/>', __( 'Author:', 'badgeos' ), get_userdata( $submission->post_author )->display_name );
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-date">%2$s</span><br/>', __( 'Date:', 'badgeos' ), get_the_time( 'F j, Y h:i a', $submission ) );
+			if ( $achievement_id != $post->ID ) {
+				$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-link">%2$s</span><br/>', __( 'Achievement:', 'badgeos' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
+			}
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-status">%2$s</span><br/>', __( 'Status:', 'badgeos' ), ucfirst( $status ) );
+		$output .= '</p>';
+
+		// Submission Content
+		$output .= '<div class="badgeos-submission-content">';
+		$output .= wpautop( $submission->post_content );
+		$output .= '</div>';
+
+		// Include any attachments
+		if ( isset( $args['show_attachments'] ) && 'false' !== $args['show_attachments'] ) {
+			$output .= badgeos_get_submission_attachments( $submission->ID );
+		}
+
+		// Approve/Deny Buttons, for admins and pending posts only
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == $status ) {
+			$output .= badgeos_render_feedback_buttons( $submission->ID );
+		}
+
+		// Include comments and comment form
+		if ( isset( $args['show_comments'] ) && 'false' !== $args['show_comments'] ) {
+			$output .= badgeos_get_comments_for_submission( $submission->ID );
+			$output .= badgeos_get_comment_form( $submission->ID );
+		}
+
+	$output .= '</div><!-- .badgeos-submission -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission', $output, $submission );
+}
+
+
+/**
+ * Renter a given submission attachment
+ *
+ * @since  1.1.0
+ * @param  object $attachment The attachment post object
+ * @return string             Concatenated markup
+ */
+function badgeos_render_submission_attachment( $attachment = null ) {
+	// If we weren't given an attachment, use the current post
+	if ( empty( $attachment ) ) {
+		global $post;
+		$attachment = $post;
+	}
+
+	// Concatenate the markup
+	$output = '<li class="badgeos-attachment">';
+	$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
+		wp_get_attachment_link( $attachment->ID, 'full', false, null, $attachment->post_title ),
+		get_the_time( 'F j, Y g:i a', $attachment ),
+		get_userdata( $attachment->post_author )->display_name
+	);
+	$output .= '</li><!-- .badgeos-attachment -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission_attachment', $output, $attachment );
+}
+
+/**
+ * Render a given submission comment
+ *
+ * @since  1.1.0
+ * @param  object $comment  The comment object
+ * @param  string $odd_even Custom class to use for alternating comments (e.g. "odd" or "even")
+ * @return string           Concatenated markup
+ */
+function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' ) {
+
+	// Concatenate our output
+	$output = '<li class="badgeos-submission-comment ' . $odd_even . '">';
+
+		// Author and Meta info
+		$output .= '<p class="badgeos-comment-date-by">';
+		$output .= sprintf( __( '%1$s on %2$s', 'badgeos' ),
+			'<cite class="badgeos-comment-author">' . get_userdata( $comment->user_id )->display_name . '</cite>',
+			'<span class="badgeos-comment-date">' . get_comment_date( 'F j, Y g:i a', $comment->comment_ID ) . '<span>'
+		);
+		$output .= '</p>';
+
+		// Content
+		$output .= '<div class="badgeos-comment-text">';
+		$output .= wpautop( $comment->comment_content );
+		$output .= '</div>';
+
+	$output .= '</li><!-- badgeos-submission-comment -->';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_submission_comment', $output, $comment, $odd_even );
+}
+
+/**
+ * Render the approve/deny buttons for a given piece of feedback
+ * @param  integer  $args The feedback's post ID
+ * @return string       [description]
+ */
+function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
+	global $post;
+
+	// Use the current post ID if no ID provided
+	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : $post->ID;
+	$feedback       = get_post( $feedback_id );
+	$feedback_type  = get_post_type( $feedback_id );
+	$achievement_id = get_post_meta( $feedback_id, "_badgeos_{$feedback_type}_achievement_id", true );
+	$user_id        = $feedback->post_author;
+
+	// Concatenate our output
+	$output = '';
+	$output .= '<div class="badgeos-feedback-buttons">';
+		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
+		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="deny">Deny</a>';
+		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
+		$output .= '<input type="hidden" name="user_id" value="' . $user_id . '">';
+		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
+		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
+	$output .= '</div>';
+
+	// Return our filterable output
+	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );
 }

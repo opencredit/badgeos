@@ -21,8 +21,10 @@ function badgeos_get_activity_triggers() {
 	$badgeos->activity_triggers = apply_filters( 'badgeos_activity_triggers',
 		array(
 			// WordPress-specific
-			'wp_login'             => __( 'Logged-in to Website', 'badgeos' ),
-			'comment_post'         => __( 'Commented on a post', 'badgeos' ),
+			'wp_login'             => __( 'Log in to Website', 'badgeos' ),
+			'comment_post'         => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
+			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
 
 			// BadgeOS-specific
 			'specific-achievement' => __( 'Specific Achievement of Type', 'badgeos' ),
@@ -89,6 +91,10 @@ function badgeos_trigger_event( $args ) {
 		$user_data = get_user_by( 'id', $user_ID );
 		$user_id = $user_ID;
 	}
+
+	// If the user doesn't satisfy the trigger requirements, bail here
+	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger ) )
+		return $args;
 
 	// Update hook count for this user
 	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $blog_id );
@@ -213,3 +219,32 @@ function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
 	update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
 }
+
+/**
+ * Listener function for post/page publishing
+ *
+ * This triggers a separate hook, badgeos_new_{$post_type},
+ * only if the published content is brand new
+ *
+ * @since 1.1.0
+ * @param integer $post_id The post ID
+ */
+function badgeos_publish_listener( $post_id ) {
+
+	// Bail if we're not intentionally saving a post
+	if (
+		defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE // If we're autosaving,
+		|| wp_is_post_revision( $post_id )            // or this is a revision
+	)
+		return;
+
+	// Bail if we have more than the single, ititial revision
+	$revisions = wp_get_post_revisions( $post_id );
+	if ( count( $revisions ) > 1 )
+		return;
+
+	// Trigger a badgeos_new_{$post_type} action
+	do_action( 'badgeos_new_' . get_post_type( $post_id ), $post_id );
+}
+add_action( 'publish_post', 'badgeos_publish_listener', 0 );
+add_action( 'publish_page', 'badgeos_publish_listener', 0 );

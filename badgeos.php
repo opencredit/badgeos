@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.0.3
+* Version: 1.1.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -62,6 +62,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
+		require_once( $this->directory_path . 'includes/ajax-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );
@@ -159,21 +160,24 @@ class BadgeOS {
 			update_post_meta( $badge_post_id, '_badgeos_show_in_menu', true );
 		}
 
-		// Setup our option defaults
-		$options = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		update_option( 'badgeos_settings', $options );
+		// Setup default BadgeOS options
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+		$badgeos_settings['minimum_role']     = 'administrator';
+		$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+		$badgeos_settings['debug_mode']       = 'disabled';
+		update_option( 'badgeos_settings', $badgeos_settings );
 
 		// Setup default Credly options
-		$credly_settings = array();
-		$credly_settings['credly_enable'] = 'true';
-		$credly_settings['credly_badge_title'] = 'post_title';
-		$credly_settings['credly_badge_description'] = 'post_body';
+		$credly_settings = ( $exists = get_option( 'credly_settings' ) ) ? $exists : array();
+		$credly_settings['credly_enable']                  = 'true';
+		$credly_settings['credly_badge_title']             = 'post_title';
+		$credly_settings['credly_badge_description']       = 'post_body';
 		$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-		$credly_settings['credly_badge_image'] = 'featured_image';
-		$credly_settings['credly_badge_testimonial'] = '_badgeos_congratulations_text';
-		$credly_settings['credly_badge_evidence'] = 'permalink';
-		$credly_settings['credly_badge_sendemail'] = 'true';
-		$credly_settings['credly_badge_criteria'] = '';
+		$credly_settings['credly_badge_image']             = 'featured_image';
+		$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
+		$credly_settings['credly_badge_evidence']          = 'permalink';
+		$credly_settings['credly_badge_sendemail']         = 'true';
+		$credly_settings['credly_badge_criteria']          = '';
 		update_option( 'credly_settings', $credly_settings );
 
 		// Register our post types and flush rewrite rules
@@ -186,9 +190,19 @@ class BadgeOS {
 	 */
 	function plugin_menu() {
 
-		// Get minimum role setting for menus
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		$minimum_role = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+
+		// If minimum role empty, set default to administrator
+		// Note: this was added in 1.1.0, and can certainly be
+		// deleted in 1.2.0, because we now set defaults on activation.
+		if ( empty( $badgeos_settings['minimum_role'] ) ) {
+			$badgeos_settings['minimum_role'] = 'administrator';
+			update_option( 'badgeos_settings', $badgeos_settings );
+		}
+
+		// Set minimum role setting for menus
+		$minimum_role = $badgeos_settings['minimum_role'];
 
 		// Create main menu
 		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png' );
@@ -216,16 +230,16 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.0.1', true );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 
 		$data = array(
-			'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-			'message' => __( 'Would you like to display this badge on social networks and add it to your lifelong badge collection?', 'badgeos' ),
-			'confirm' => __( 'Yes, send to Credly', 'badgeos' ),
-			'cancel' => __( 'Cancel', 'badgeos' ),
-			'share' => __( 'Share on Credly!', 'badgeos' ),
+			'ajax_url'        => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
+			'message'         => __( 'Would you like to display this badge on social networks and add it to your lifelong badge collection?', 'badgeos' ),
+			'confirm'         => __( 'Yes, send to Credly', 'badgeos' ),
+			'cancel'          => __( 'Cancel', 'badgeos' ),
+			'share'           => __( 'Share on Credly!', 'badgeos' ),
 			'localized_error' => __( 'Error:', 'badgeos' ),
-			'errormessage' => __( 'Error: Timed out', 'badgeos' )
+			'errormessage'    => __( 'Error: Timed out', 'badgeos' )
 		);
 		wp_localize_script( 'badgeos-achievements', 'BadgeosCredlyData', $data );
 

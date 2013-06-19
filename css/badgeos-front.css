@@ -9,14 +9,15 @@
 	color: black;
 	clear: both;
 }
-#badgeos-achievements-filter, #badgeos-achievements-search {
-	max-width: 46%;
-	min-width: 250px;
+#badgeos-achievements-filter {
 	float: left;
-	padding: 0 2% 20px 0;
+	margin-bottom: 1em;
 }
-#achievements_list_search {
+#badgeos-achievements-search,
+.badgeos-feedback-search {
 	margin-right: 5px;
+	margin-bottom: 1em;
+	float: right;
 }
 #badgeos-achievements-container, #achievements_list_load_more, #badgeos-achievements-filters-wrap {
 	display: block;
@@ -105,4 +106,124 @@ ul.badgeos-achievement-earners-list li {
 	float: left;
 	margin:5px;
 	padding:0;
+}
+.badgeos-feedback-buttons .button {
+	display: inline-block;
+	text-decoration: none;
+	font-size: 12px;
+	line-height: 28px;
+	height: 30px;
+	margin: 0;
+	padding: 0 12px 2px;
+	cursor: pointer;
+	border-width: 1px;
+	border-style: solid;
+	-webkit-border-radius: 3px;
+	-webkit-appearance: none;
+	border-radius: 3px;
+	white-space: nowrap;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing:    border-box;
+	box-sizing:         border-box;
+	background: #f3f3f3;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fefefe), to(#f4f4f4));
+	background-image: -webkit-linear-gradient(top, #fefefe, #f4f4f4);
+	background-image:    -moz-linear-gradient(top, #fefefe, #f4f4f4);
+	background-image:      -o-linear-gradient(top, #fefefe, #f4f4f4);
+	background-image:   linear-gradient(to bottom, #fefefe, #f4f4f4);
+	border-color: #bbb;
+	color: #333;
+	text-shadow: 0 1px 0 #fff;
+}
+.badgeos-feedback-buttons .button:hover,
+.badgeos-feedback-buttons .button:focus {
+	background: #f3f3f3;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f3f3f3));
+	background-image: -webkit-linear-gradient(top, #fff, #f3f3f3);
+	background-image:    -moz-linear-gradient(top, #fff, #f3f3f3);
+	background-image:     -ms-linear-gradient(top, #fff, #f3f3f3);
+	background-image:      -o-linear-gradient(top, #fff, #f3f3f3);
+	background-image:   linear-gradient(to bottom, #fff, #f3f3f3);
+	border-color: #999;
+	color: #222;
+}
+.badgeos-feedback-buttons .button:active {
+	background: #eee;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#fefefe));
+	background-image: -webkit-linear-gradient(top, #f4f4f4, #fefefe);
+	background-image:    -moz-linear-gradient(top, #f4f4f4, #fefefe);
+	background-image:     -ms-linear-gradient(top, #f4f4f4, #fefefe);
+	background-image:      -o-linear-gradient(top, #f4f4f4, #fefefe);
+	background-image:   linear-gradient(to bottom, #f4f4f4, #fefefe);
+	border-color: #999;
+	color: #333;
+	text-shadow: 0 -1px 0 #fff;
+	-webkit-box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
+	box-shadow: inset 0 2px 5px -3px rgba( 0, 0, 0, 0.5 );
+}
+
+.badgeos-feedback-response.success,
+.badgeos-achievement-earned p {
+	background: #75C93D;
+	color: #FFF;
+	border-radius: 5px;
+	padding: 3px 10px;
+	text-align: center;
+}
+.badgeos-achievement-congratulations {
+	background: #F0F0F0;
+	padding: 10px;
+	margin:1em auto 2em;
+	border-radius: 5px;
+}
+
+/* =Submissions
+-------------------------------------------------------------- */
+.badgeos-feedback {
+	padding: 1em auto;
+	margin: 1em auto;
+	border-top: 1px dotted #aaa;
+	position: relative;
+	clear: both;
+}
+.badgeos-submission-label {
+	font-weight: bold;
+}
+.badgeos-submission-content {
+	background: #F0F0F0;
+	padding: 15px 15px 1px;
+	border-radius: 5px;
+	margin-bottom:15px;
+}
+.badgeos-submission-comment {
+	padding: 1em 1em 0;
+	margin-bottom: .5em;
+	overflow: hidden;
+	border-bottom: 1px dotted #aaa;
+}
+.badgeos-submission-comment:last-child {
+	border-bottom:0;
+}
+.badgeos-submission-comment.odd {
+}
+.badgeos-submission-comments-list .badgeos-comment-date-by {
+	font-weight: bold;
+	font-size: 85%;
+	margin-bottom: 0;
+}
+.badgeos-comment-author {
+	font-style: normal;
+}
+.badgeos-submission-comment-entry textarea {
+	width: 96%;
+	height: 100px;
+}
+.badgeos-submission-comment-entry:after {
+	content: '';
+	display: block;
+	clear: both;
+	margin: 0 auto;
+}
+.badgeos-submission-comment-entry:last-child:after {
+	border: 0;
 }

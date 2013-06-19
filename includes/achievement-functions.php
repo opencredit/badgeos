@@ -224,20 +224,22 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
  */
 function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievement_id = 0 ) {
 
-	// Grab our max allowed times to earn, and if set, see how many times we've earned the badge
-	if ( $max_times_allowed_to_earn = get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) ) {
-		$user_has_badge = badgeos_get_user_achievements( array( 'achievement_id' => absint( $achievement_id ) ) );
-		if ( ! empty( $user_has_badge ) ) {
-			// If we've earned it as many (or more) times than allowed, return true
-			if ( count( $user_has_badge ) >= $max_times_allowed_to_earn ) {
-				return true;
-			}
+	// If the badge has an earning limit, and we've earned it bdfore...
+	if (
+		$max_earnings = absint( get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) )
+		&& $user_has_badge = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) )
+	) {
+		// If we've earned it as many (or more) times than allowed,
+		// then we have exceeded maximum earnings, thus true
+		if ( count( $user_has_badge ) >= $max_earnings ) {
+			return true;
 		}
 	}
 
-	// If we make it here, the post has no max earning limit, or we're under it
+	// The post has no limit, or we're under it
 	return false;
 }
+
 
 /**
  * Get the UNIX timestamp for the last activity on an achievement for a given user

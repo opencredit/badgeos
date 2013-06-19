@@ -1,10 +1,10 @@
 === BadgeOS ===
-Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson
+Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -24,7 +24,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Reviewed submissions
 *   Auto-approving submissions
 *   Nominations and review
-*   Site activity (triggers based on commenting and logging in to your site)
+*   Site activity (triggers based on publising posts and pages, commenting and logging in to your site)
 *   Completing specific other achievements one or a specific number of times
 *   Completing one, select or all achievements of a specific type
 *   Point thresholds
@@ -58,7 +58,8 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 **Reward User Progress**
 
 *   Issue badges for any combination of achievements
-*   Award points for commenting, logging in, making submissions, completing tasks
+*   Award points for commenting, logging in, making submissions, completing any combination of tasks
+*   Display a congratulatory message, customizable per Achievement, on each achievement page.
 
 
 **View and Issue your BadgeOS badges via iOS Mobile App**
@@ -73,6 +74,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * Shows logged in users what badges they have earned.
 * Set the parameters for the widget to decide how many recent badges to display.
+* Option to show logged in users total points they have earned (if you are using BadgeOS points mechanism).
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
 
 
@@ -80,14 +82,20 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
-* Just activate BadgeOS and place the simple shortcode on any page or post
-* And you've got an engagement management system running on your WordPress site!
+* Turn any page or post into a way to display available achievements and for users to track their progress.
+* Multiple options and parameters for each  for great flexibility.
+* Shortcodes to bring submission and nomination review to the front-end of your site.
+* Shortcode to integrate specific available achievements into any post or page of your site.
+* [Shortcode documentation](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") in the plugin menu and on BadgeOS.org.
+* Just activate BadgeOS and place simple shortcodes on any page or post, and you've got an engagement management system running on your WordPress site!
 
 
 **Submission and Nomination Review**
 
 * Easily review submissions and nominations from members.
-* Approve or deny submissions with one click
+* Approve or deny submissions with one click.
+* Shortcodes with multiple options for review of submissions on any page or post on your site.
+* Powerful shortcodes to add an achievement submission or nominiation form to any post or page.
 * Add comments to engage the member and elaborate on your decisions.
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
 
@@ -108,8 +116,8 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
 * [Credly.com](https://credly.com/ "Credly web site") - Recognize, manage and share lifelong achievement
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
-* [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
-* [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
+* [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - BadgeOS and Credly on Facebook
+* [Twitter](https://twitter.com/credly "Credly on Facebook") - BadgeOS and Credly Tweets
 * [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
 * [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
 
@@ -174,6 +182,22 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.1.0 =
+* Added: New triggers for publishing new posts and pages
+* Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_submissions] shortcode to show a filterable/searchable list of submissions, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_nominations] shortcode to show a filterable/searchable list of nominations, see BadgeOS Help/Support for parameter details
+* Added: New meta box showing attachments for a Submission in the admin dashboard
+* Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
+* Added: New widget to display the Credly Credit Issuer badge
+* Updated: Achievements widget with option to display user's total points
+* Updated: [badgeos_submission] shortcode to accept achievement_id parameter
+* Updated: [badgeos_nomination] shortcode to accept achievement_id parameter
+* Updated: New filter for controlling whether or not a user is allowed to spring a trigger
+* Fixed: Nomination user select field from displaying twice on the page
+* Fixed: Nomination listing page from displaying the wrong status for the nomination
+* Fixed: Nomination form/listing now displays a user's submitted nomination and limits them to submitting a single nomination
+
 = 1.0.3 =
 * Updated: Only show "People Who Have Earned This" when there is at least one earner
 * Updated: Localization strings have been updated throughout for easier translating
@@ -199,11 +223,43 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Achievement display and awarding UI improvement.
 * Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
-= 1.0 =
+= 1.0.0 =
 * BadgeOS says "hello world", earns "Hello World" badge.
 
-
 == Upgrade Notice ==
+
+= 1.1.0 =
+* Added: New widget to display the Credly Credit Issuer badge
+* Added: New triggers for publishing new posts and pages
+* Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_submissions] shortcode to show a filterable/searchable list of submissions, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_nominations] shortcode to show a filterable/searchable list of nominations, see BadgeOS Help/Support for parameter details
+* Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
+* Updated: Achievements widget with option to display user's total points
+* Updated: [badgeos_submission] shortcode to accept achievement_id parameter
+* Updated: [badgeos_nomination] shortcode to accept achievement_id parameter
+* Updated: New filter for controlling whether or not a user is allowed to spring a trigger
+* Fixed: Nomination user select field from displaying twice on the page
+* Fixed: Nomination listing page from displaying the wrong status for the nomination
+* Fixed: Nomination form/listing now displays a user's submitted nomination and limits them to submitting a single nomination
+
+= 1.0.3 =
+* Updated: Only show "People Who Have Earned This" when there is at least one earner
+* Updated: Localization strings have been updated throughout for easier translating
+* Updated: Submissions and Nominations were originally publicly searchable, they are now private
+* Fixed: Prevent earning an achievement more times than "max earnings" allows
+* Fixed: Prevent earning steps with no parents
+* Fixed: Prevent earning unpublished, private or trashed achievements
+* Fixed: Inability to earn "any [achievement type]" steps
+* Fixed: Inability to earn "all [achievement type]" steps
+* Fixed: Filter for "Completed Achievements" (would sometimes show ALL achievements if user had earned none)
+* Fixed: A PHP warning that would sometimes appear when manually awarding an achievement via user profile editor
+* Fixed: A number of minor behind-the-scenes bugs that annoyed our PHP developers
+
+= 1.0.2 =
+* New: Added "Display users who have earned achievement" option to achievements
+* Updated: BadgeOS Add-Ons admin page now shows current BadgeOS add-ons
+* Updated: [badgeos_achievements_list] shortcode now shows send to Credly link on earned achievements.
 
 = 1.0.1 =
 * Fix: The "Award an Achievement" section on the User Profile page now grabs the appropriate custom post type slugs.
@@ -212,5 +268,5 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Achievement display and awarding UI improvement.
 * Updated: [badgeos_achievements_list] shortcode now supports show_filter and show_search attributes
 
-= 1.0 =
-* Initial release
+= 1.0.0 =
+* BadgeOS says "hello world", earns "Hello World" badge.
