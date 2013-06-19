@@ -170,3 +170,60 @@ ul.badgeos-achievement-earners-list li {
 	padding: 3px 10px;
 	text-align: center;
 }
+.badgeos-achievement-congratulations {
+	background: #F0F0F0;
+	padding: 10px;
+	margin:1em auto 2em;
+	border-radius: 5px;
+}
+
+/* =Submissions
+-------------------------------------------------------------- */
+.badgeos-feedback {
+	padding: 1em auto;
+	margin: 1em auto;
+	border-top: 1px dotted #aaa;
+	position: relative;
+	clear: both;
+}
+.badgeos-submission-label {
+	font-weight: bold;
+}
+.badgeos-submission-content {
+	background: #F0F0F0;
+	padding: 15px 15px 1px;
+	border-radius: 5px;
+	margin-bottom:15px;
+}
+.badgeos-submission-comment {
+	padding: 1em 1em 0;
+	margin-bottom: .5em;
+	overflow: hidden;
+	border-bottom: 1px dotted #aaa;
+}
+.badgeos-submission-comment:last-child {
+	border-bottom:0;
+}
+.badgeos-submission-comment.odd {
+}
+.badgeos-submission-comments-list .badgeos-comment-date-by {
+	font-weight: bold;
+	font-size: 85%;
+	margin-bottom: 0;
+}
+.badgeos-comment-author {
+	font-style: normal;
+}
+.badgeos-submission-comment-entry textarea {
+	width: 96%;
+	height: 100px;
+}
+.badgeos-submission-comment-entry:after {
+	content: '';
+	display: block;
+	clear: both;
+	margin: 0 auto;
+}
+.badgeos-submission-comment-entry:last-child:after {
+	border: 0;
+}
