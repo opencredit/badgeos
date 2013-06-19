@@ -58,7 +58,8 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 **Reward User Progress**
 
 *   Issue badges for any combination of achievements
-*   Award points for commenting, logging in, making submissions, completing tasks
+*   Award points for commenting, logging in, making submissions, completing any combination of tasks
+*   Display a congratulatory message, customizable per Achievement, on each achievement page.
 
 
 **View and Issue your BadgeOS badges via iOS Mobile App**
