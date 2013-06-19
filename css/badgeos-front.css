@@ -170,3 +170,9 @@ ul.badgeos-achievement-earners-list li {
 	padding: 3px 10px;
 	text-align: center;
 }
+.badgeos-achievement-congratulations {
+	background: #ECECEC;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom:15px;
+}
