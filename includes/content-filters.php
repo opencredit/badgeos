@@ -757,18 +757,18 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
 	// Concatenate our output
 	$output = '<li class="badgeos-submission-comment ' . $odd_even . '">';
 
+		// Author and Meta info
+		$output .= '<p class="badgeos-comment-date-by">';
+		$output .= sprintf( __( '%1$s on %2$s', 'badgeos' ),
+			'<cite class="badgeos-comment-author">' . get_userdata( $comment->user_id )->display_name . '</cite>',
+			'<span class="badgeos-comment-date">' . get_comment_date( 'F j, Y g:i a', $comment->comment_ID ) . '<span>'
+		);
+		$output .= '</p>';
+
 		// Content
 		$output .= '<div class="badgeos-comment-text">';
 		$output .= wpautop( $comment->comment_content );
 		$output .= '</div>';
-
-		// Author and Meta info
-		$output .= '<p class="badgeos-comment-date-by alignright">';
-		$output .= sprintf( __( '%1$s by %2$s', 'badgeos' ),
-			'<span class="badgeos-comment-date">' . get_comment_date( 'F j, Y g:i a', $comment->comment_ID ) . '<span>',
-			'<cite class="badgeos-comment-author">' . get_userdata( $comment->user_id )->display_name . '</cite>'
-		);
-		$output .= '</p>';
 
 	$output .= '</li><!-- badgeos-submission-comment -->';
 

@@ -206,9 +206,13 @@ ul.badgeos-achievement-earners-list li {
 }
 .badgeos-submission-comment.odd {
 }
-.badgeos-comment-date-by {
+.badgeos-submission-comments-list .badgeos-comment-date-by {
 	font-weight: bold;
 	font-size: 85%;
+	margin-bottom: 0;
+}
+.badgeos-comment-author {
+	font-style: normal;
 }
 .badgeos-submission-comment-entry textarea {
 	width: 96%;
