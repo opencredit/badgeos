@@ -606,6 +606,7 @@ function badgeos_render_feedback( $atts = array() ) {
  *
  * @since  1.1.0
  * @param  object $nomination A nomination post object
+ * @param  array  $args       Additional args for content options
  * @return string             Concatenated output
  */
 function badgeos_render_nomination( $nomination = null, $args = array() ) {
@@ -656,6 +657,7 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
  *
  * @since  1.1.0
  * @param  object $submission A submission post object
+ * @param  array  $args       Additional args for content options
  * @return string             Concatenated output
  */
 function badgeos_render_submission( $submission = null, $args = array() ) {
