@@ -82,11 +82,11 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
 * Turn any page or post into a way to display available achievements and for users to track their progress.
-* Multiple options and parameters for each [shortcode](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") for great flexibility.
+* Multiple options and parameters for each  for great flexibility.
 * Shortcodes to bring submission and nomination review to the front-end of your site.
 * Shortcode to integrate specific available achievements into any post or page of your site.
-* Just activate BadgeOS and place the simple shortcode on any page or post.
-* And you've got an engagement management system running on your WordPress site!
+* [Shortcode documentation](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") in the plugin menu and on BadgeOS.org.
+* Just activate BadgeOS and place simple shortcodes on any page or post, and you've got an engagement management system running on your WordPress site!
 
 
 **Submission and Nomination Review**
@@ -115,8 +115,8 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
 * [Credly.com](https://credly.com/ "Credly web site") - Recognize, manage and share lifelong achievement
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
-* [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
-* [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
+* [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - BadgeOS and Credly on Facebook
+* [Twitter](https://twitter.com/credly "Credly on Facebook") - BadgeOS and Credly Tweets
 * [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
 * [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
 
