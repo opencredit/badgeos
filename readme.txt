@@ -82,8 +82,9 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
 * Turn any page or post into a way to display available achievements and for users to track their progress.
-* Multiple options and parameters for each shortcode for great flexibility.
+* Multiple options and parameters for each [shortcode](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") for great flexibility.
 * Shortcodes to bring submission and nomination review to the front-end of your site.
+* Shortcode to integrate specific available achievements into any post or page of your site.
 * Just activate BadgeOS and place the simple shortcode on any page or post.
 * And you've got an engagement management system running on your WordPress site!
 
@@ -93,6 +94,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Easily review submissions and nominations from members.
 * Approve or deny submissions with one click.
 * Shortcodes with multiple options for review of submissions on any page or post on your site.
+* Powerful shortcodes to add an achievement submission or nominiation form to any post or page.
 * Add comments to engage the member and elaborate on your decisions.
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
 
@@ -182,8 +184,8 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.1.0 =
 * Added: New triggers for publishing new posts and pages
 * Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
-* Added: [badgeos_submissions] shortcode to show a filterable/searchbale list of submissions, see BadgeOS Help/Support for parameter details
-* Added: [badgeos_nominations] shortcode to show a filterable/searchbale list of nominations, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_submissions] shortcode to show a filterable/searchable list of submissions, see BadgeOS Help/Support for parameter details
+* Added: [badgeos_nominations] shortcode to show a filterable/searchable list of nominations, see BadgeOS Help/Support for parameter details
 * Added: New meta box showing attachments for a Submission in the admin dashboard
 * Added: Earned achievement message on an achievement single page which shows if a user has earned the achievement
 * Added: New widget to display the Credly Credit Issuer badge
