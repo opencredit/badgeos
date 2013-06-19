@@ -160,9 +160,12 @@ class BadgeOS {
 			update_post_meta( $badge_post_id, '_badgeos_show_in_menu', true );
 		}
 
-		// Setup our option defaults
-		$options = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		update_option( 'badgeos_settings', $options );
+		// Setup default BadgeOS options
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+		$badgeos_settings['minimum_role']     = 'administrator';
+		$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+		$badgeos_settings['debug_mode']       = 'disabled'
+		update_option( 'badgeos_settings', $badgeos_settings );
 
 		// Setup default Credly options
 		$credly_settings = array();
@@ -187,9 +190,19 @@ class BadgeOS {
 	 */
 	function plugin_menu() {
 
-		// Get minimum role setting for menus
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		$minimum_role = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+
+		// If minimum role empty, set default to administrator
+		// Note: this was added in 1.1.0, and can certainly be
+		// deleted in 1.2.0, because we now set defaults on activation.
+		if ( empty( $badgeos_settings['minimum_role'] ) ) {
+			$badgeos_settings['minimum_role'] = 'administrator'
+			update_option( 'badgeos_settings', $badgeos_settings );
+		}
+
+		// Set minimum role setting for menus
+		$minimum_role = $badgeos_settings['minimum_role'];
 
 		// Create main menu
 		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png' );
