@@ -621,7 +621,7 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 	$achievement_id = get_post_meta( $nomination->ID, '_badgeos_nomination_achievement_id', true );
 
 	// Concatenate our output
-	$output = '<div class="badgeos-original-submission">';
+	$output = '<div class="badgeos-nomination badgeos-feedback badgeos-feedback-' . $nomination->ID . '">';
 
 		// Title
 		$output .= '<h4>';
