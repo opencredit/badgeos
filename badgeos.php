@@ -168,16 +168,16 @@ class BadgeOS {
 		update_option( 'badgeos_settings', $badgeos_settings );
 
 		// Setup default Credly options
-		$credly_settings = array();
-		$credly_settings['credly_enable'] = 'true';
-		$credly_settings['credly_badge_title'] = 'post_title';
-		$credly_settings['credly_badge_description'] = 'post_body';
+		$credly_settings = ( $exists = get_option( 'credly_settings' ) ) ? $exists : array();
+		$credly_settings['credly_enable']                  = 'true';
+		$credly_settings['credly_badge_title']             = 'post_title';
+		$credly_settings['credly_badge_description']       = 'post_body';
 		$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-		$credly_settings['credly_badge_image'] = 'featured_image';
-		$credly_settings['credly_badge_testimonial'] = '_badgeos_congratulations_text';
-		$credly_settings['credly_badge_evidence'] = 'permalink';
-		$credly_settings['credly_badge_sendemail'] = 'true';
-		$credly_settings['credly_badge_criteria'] = '';
+		$credly_settings['credly_badge_image']             = 'featured_image';
+		$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
+		$credly_settings['credly_badge_evidence']          = 'permalink';
+		$credly_settings['credly_badge_sendemail']         = 'true';
+		$credly_settings['credly_badge_criteria']          = '';
 		update_option( 'credly_settings', $credly_settings );
 
 		// Register our post types and flush rewrite rules
