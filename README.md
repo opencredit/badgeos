@@ -136,8 +136,10 @@ So, you want to contribute? That's great! Patches are always welcome. Open an Is
 
 1. [Open an Issue](https://github.com/opencredit/badgeos/issues) (or claim an open Issue).
 2. [Fork BadgeOS.](https://github.com/opencredit/badgeos/fork)
-3. Create a branch (`git checkout -b MyBadgeos`).
+3. Create a new branch based on "alpha" (`git checkout -b MyFeature alpha`).
 4. Commit your changes (`git commit -am "Added the best feature ever!"`).
-5. Push to the branch (`git push origin MyBadgeos`).
+5. Push to the branch back to GitHub (`git push origin MyFeature`).
 6. Open a [Pull Request](https://github.com/opencredit/badgeos/pulls).
-7. Enjoy a refreshing beverage and wait.
+7. Select "alpha" as the base branch for your contribution.
+8. Describe and submit your pull request.
+9. Enjoy a refreshing beverage and wait.
