@@ -608,7 +608,7 @@ function badgeos_render_feedback( $atts = array() ) {
  * @param  object $nomination A nomination post object
  * @return string             Concatenated output
  */
-function badgeos_render_nomination( $nomination = null ) {
+function badgeos_render_nomination( $nomination = null, $args = array() ) {
 	global $post;
 
 	// If we weren't given a nomination, use the current post
@@ -638,6 +638,12 @@ function badgeos_render_nomination( $nomination = null ) {
 			$output .= '<span class="badgeos-status-label">' . __( 'Status:', 'badgeos' ) . '</span> ';
 			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
 		$output .= '</p>';
+
+		// Approve/Deny Buttons, for admins and pending posts only
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == get_post_meta( $nomination->ID, '_badgeos_nomination_status', true ) ) {
+			$output .= badgeos_render_feedback_buttons( $nomination->ID );
+		}
 
 	$output .= '</div><!-- .badgeos-original-submission -->';
 
