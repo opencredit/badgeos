@@ -164,7 +164,7 @@ class BadgeOS {
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$badgeos_settings['minimum_role']     = 'administrator';
 		$badgeos_settings['submission_email'] = get_option( 'admin_email' );
-		$badgeos_settings['debug_mode']       = 'disabled'
+		$badgeos_settings['debug_mode']       = 'disabled';
 		update_option( 'badgeos_settings', $badgeos_settings );
 
 		// Setup default Credly options
@@ -197,7 +197,7 @@ class BadgeOS {
 		// Note: this was added in 1.1.0, and can certainly be
 		// deleted in 1.2.0, because we now set defaults on activation.
 		if ( empty( $badgeos_settings['minimum_role'] ) ) {
-			$badgeos_settings['minimum_role'] = 'administrator'
+			$badgeos_settings['minimum_role'] = 'administrator';
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
