@@ -456,7 +456,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		return '';
 
 	$defaults = array(
-		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d)', 'badgeos' ), $post_id ) . '</h4>',
+		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit Comment', 'badgeos' )
 	);
@@ -470,14 +470,14 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		// comment form heading
 		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
 
-		// submission file upload
-		$sub_form .= '<fieldset class="badgeos-file-submission">';
-		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+		// submission comment
+		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
+		$sub_form .= '<p><textarea name="badgeos_comment"></textarea></p>';
 		$sub_form .= '</fieldset>';
 
-		// submission comment
-		$sub_form .= '<fieldset class="badgeos-submission-comment">';
-		$sub_form .= '<p><textarea name="badgeos_comment"></textarea></p>';
+		// submission file upload
+		$sub_form .= '<fieldset class="badgeos-submission-file">';
+		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
 		$sub_form .= '</fieldset>';
 
 		// submit button
@@ -569,7 +569,7 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 		return;
 
 	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Comments for Submission (#%1$d)', 'badgeos' ), $submission_id ) . '</h4>';
+	$output = '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
 	$output .= '<ul class="badgeos-submission-comments-list">';
 	foreach( $comments as $comment ) {
 		// Setup an alternating odd/even class
@@ -828,22 +828,11 @@ function badgeos_get_feedback( $args = array() ) {
 
 			// Setup our output
 			if ( 'nomination' == $args['post_type'] )
-				$output .= badgeos_render_nomination( $submission );
+				$output .= badgeos_render_nomination( $submission, $args );
 			else
-				$output .= badgeos_render_submission( $submission );
+				$output .= badgeos_render_submission( $submission, $args );
 
-			// Include any attachments
-			if ( isset( $args['show_attachments'] ) && 'false' !== $args['show_attachments'] ) {
-				$output .= badgeos_get_submission_attachments( $submission->ID );
-			}
-
-			// Include comments and comment form
-			if ( isset( $args['show_comments'] ) && 'false' !== $args['show_comments'] ) {
-				$output .= badgeos_get_comments_for_submission( $submission->ID );
-				$output .= badgeos_get_comment_form( $submission->ID );
-			}
-
-		}; // End: foreach( $feedback )
+		} // End: foreach( $feedback )
 
 		$output .= '</div><!-- badgeos-submissions -->';
 
@@ -988,7 +977,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 	// If we have attachments
 	$output = '';
 	if ( ! empty( $attachments ) ) {
-		$output .= '<h4>' . sprintf( __( 'Attachments:', 'badgeos' ), $submission_id ) . '</h4>';
+		$output .= '<h4>' . sprintf( __( 'Submitted Attachments:', 'badgeos' ), $submission_id ) . '</h4>';
 		$output .= '<ul class="badgeos-attachments-list">';
 		foreach ( $attachments as $attachment ) {
 			$output .= badgeos_render_submission_attachment( $attachment );

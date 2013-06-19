@@ -652,7 +652,7 @@ function badgeos_render_nomination( $nomination = null ) {
  * @param  object $submission A submission post object
  * @return string             Concatenated output
  */
-function badgeos_render_submission( $submission = null ) {
+function badgeos_render_submission( $submission = null, $args = array() ) {
 	global $post;
 
 	// If we weren't given a submission, use the current post
@@ -665,8 +665,10 @@ function badgeos_render_submission( $submission = null ) {
 	$status = get_post_meta( $submission->ID, '_badgeos_submission_status', true );
 
 	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h4>';
-	$output .= '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
+	$output = '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
+
+		// Submission Title
+		$output .= '<h2>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h2>';
 
 		// Submission Meta
 		$output .= '<p class="badgeos-submission-meta">';
@@ -679,7 +681,14 @@ function badgeos_render_submission( $submission = null ) {
 		$output .= '</p>';
 
 		// Submission Content
+		$output .= '<div class="badgeos-submission-content">';
 		$output .= wpautop( $submission->post_content );
+		$output .= '</div>';
+
+		// Include any attachments
+		if ( isset( $args['show_attachments'] ) && 'false' !== $args['show_attachments'] ) {
+			$output .= badgeos_get_submission_attachments( $submission->ID );
+		}
 
 		// Approve/Deny Buttons, for admins and pending posts only
 		$badgeos_settings = get_option( 'badgeos_settings' );
@@ -687,7 +696,13 @@ function badgeos_render_submission( $submission = null ) {
 			$output .= badgeos_render_feedback_buttons( $submission->ID );
 		}
 
-	$output .= '</div><!-- .badgeos-original-submission -->';
+		// Include comments and comment form
+		if ( isset( $args['show_comments'] ) && 'false' !== $args['show_comments'] ) {
+			$output .= badgeos_get_comments_for_submission( $submission->ID );
+			$output .= badgeos_get_comment_form( $submission->ID );
+		}
+
+	$output .= '</div><!-- .badgeos-submission -->';
 
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_submission', $output, $submission );
