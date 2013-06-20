@@ -356,6 +356,7 @@ function badgeos_post_log_entry( $post_id, $user_id = 0, $action = 'unlocked', $
 	if ( $log_post_id = wp_insert_post( $args ) )
 		add_post_meta( $log_post_id, '_badgeos_log_achievement_id', $post_id );
 
+	// Available action for other processes
 	do_action( 'badgeos_create_log_entry', $log_post_id, $post_id, $user_id, $action );
 
 	return $log_post_id;
