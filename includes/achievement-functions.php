@@ -484,7 +484,7 @@ function badgeos_get_points_based_achievements() {
 		set_transient( 'badgeos_points_based_achievements', $achievements, 0 );
 	}
 
-	return $achievements;
+	return maybe_unserialize( $achievements );
 }
 
 /**
