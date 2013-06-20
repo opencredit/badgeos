@@ -398,7 +398,8 @@ function badgeos_create_submission( $achievement_id, $title, $content, $user_id 
 			}
 		}
 
-		do_action( 'save_submission', $submission_id );
+		// Available action for other processes
+		do_action( 'badgeos_save_submission', $submission_id );
 
 		//load BadgeOS settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
