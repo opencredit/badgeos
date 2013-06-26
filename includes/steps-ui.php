@@ -164,7 +164,7 @@ function badgeos_get_step_requirements( $step_id ) {
 
 	// If the step requires a specific achievement
 	if ( !empty( $requirements['achievement_type'] ) ) {
-		$connected_activities = get_posts( array(
+		$connected_activities = @get_posts( array(
 			'post_type'        => $requirements['achievement_type'],
 			'posts_per_page'   => 1,
 			'suppress_filters' => false,
