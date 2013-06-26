@@ -480,11 +480,11 @@ function badgeos_get_points_based_achievements() {
 			"
 		);
 
-		// Store these posts to a transient
-		set_transient( 'badgeos_points_based_achievements', $achievements, 0 );
+		// Store these posts to a transient for 7 days
+		set_transient( 'badgeos_points_based_achievements', $achievements, 60*60*24*7 );
 	}
 
-	return maybe_unserialize( $achievements );
+	return (array) maybe_unserialize( $achievements );
 }
 
 /**
