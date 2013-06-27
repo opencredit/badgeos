@@ -326,7 +326,7 @@ function badgeos_is_debug_mode() {
 /**
  * Posts a log entry when a user unlocks any achievement post
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  integer $post_id    The post id of the activity we're logging
  * @param  integer $user_id    The user ID
  * @param  string  $action     The action word to be used for the generated title
