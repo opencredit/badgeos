@@ -71,8 +71,8 @@ function badgeos_get_user_achievements( $args = array() ) {
  * We can either replace the achievement's array, or append new achievements to it.
  *
  * @since  1.0.0
- * @param  array        $earned_achievements An array containing all our relevant arguments
- * @return integer|bool                      The updated umeta ID on success, false on failure
+ * @param  array        $args An array containing all our relevant arguments
+ * @return integer|bool       The updated umeta ID on success, false on failure
  */
 function badgeos_update_user_achievements( $args = array() ) {
 
@@ -110,7 +110,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 /**
  * Return a user's points
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  string   $user_id      The given user's ID
  * @return integer  $user_points  The user's current points
  */
@@ -127,7 +127,7 @@ function badgeos_get_users_points( $user_id = 0 ) {
 /**
  * Posts a log entry when a user earns points
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $new_points     The new points the user is being awarded
  * @param  integer $admin_id       If being awarded by an admin, the admin's user ID
@@ -179,12 +179,12 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 /**
  * Award new points to a user based on logged activites and earned badges
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
  * @return integer                 The user's updated points total
  */
-function badgeos_award_user_points( $user_id, $achievement_id ) {
+function badgeos_award_user_points( $user_id = 0, $achievement_id = 0 ) {
 
 	// Grab our points from the provided post
 	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
@@ -200,7 +200,7 @@ add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
  * @since 1.0.0
  * @param object $user The current user's $user object
  */
-function badgeos_user_profile_data( $user ) {
+function badgeos_user_profile_data( $user = null ) {
 
 
 	// Get minimum role setting for menus
@@ -284,11 +284,11 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
 /**
  * Save extra user meta fields to the Edit Profile screen
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  string  $user_id      User ID being saved
  * @return nothing
  */
-function badgeos_save_user_profile_fields( $user_id ) {
+function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
 	if ( !current_user_can( 'edit_user', $user_id ) )
 		return FALSE;
@@ -308,7 +308,7 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
  * @param object $user         The current user's $user object
  * @param array  $achievements array of user-earned achievement IDs
  */
-function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) {
+function badgeos_profile_award_achievement( $user = null, $achievement_ids = array() ) {
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
@@ -458,14 +458,13 @@ function badgeos_process_user_data() {
 }
 add_action( 'init', 'badgeos_process_user_data' );
 
-
-
-
 /**
  * Returns array of user log ids (log/journey cpt) from post ids array and a user id.
  *
- *
- *
+ * @since  unknown
+ * @param  array   $post_ids An array of post IDs
+ * @param  integer $user_id  The user's ID
+ * @return array             An array of connected log IDs
  */
 function badgeos_get_userlog_ids( $post_ids, $user_id ){
 	global $wpdb;
