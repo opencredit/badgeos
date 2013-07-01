@@ -25,7 +25,7 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  * @param  string $input The input we want to validate
  * @return string        Our sanitized input
  */
-function badgeos_settings_validate( $input ) {
+function badgeos_settings_validate( $input = '' ) {
 
 	//sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
@@ -41,7 +41,7 @@ function badgeos_settings_validate( $input ) {
  * @param  array $options Form inputs data
  * @return array          Sanitized form input data
  */
-function badgeos_credly_settings_validate( $options ) {
+function badgeos_credly_settings_validate( $options = array() ) {
 
 	// If attempting to retrieve an api key from credly
 	if (
@@ -101,7 +101,7 @@ function badgeos_credly_settings_validate( $options ) {
  * @param  string $password Credly user passowrd
  * @return string           API key on success, false otherwise
  */
-function badgeos_credly_get_api_key( $username = '', $password = '' ) {
+function badgeos_credly_get_api_key( $username = '' , $password = '' ) {
 
 	$url = BADGEOS_CREDLY_API_URL . 'authenticate/';
 
@@ -127,7 +127,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
  * @since  1.0.0
  * @param  string $error Error message
  */
-function badgeos_credly_get_api_key_error( $error ) {
+function badgeos_credly_get_api_key_error( $error = '' ) {
 
 	// Temporarily store our error message.
 	update_option( 'credly_api_key_error', $error );
@@ -436,7 +436,7 @@ function badgeos_credly_options_page() {
  * @param  array $credly_settings saved settings
  * @return null
  */
-function badgeos_credly_options_no_api( $credly_settings ) {
+function badgeos_credly_options_no_api( $credly_settings = array() ) {
 	wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
 
 	if ( is_array( $credly_settings ) ) {
@@ -480,7 +480,7 @@ function badgeos_credly_options_no_api( $credly_settings ) {
  * @param  array $credly_settings saved settings
  * @return null
  */
-function badgeos_credly_options_yes_api( $credly_settings ) {
+function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 	?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Credly API Key', 'badgeos' ); ?></h3>
