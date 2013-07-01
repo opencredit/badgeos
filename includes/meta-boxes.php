@@ -16,7 +16,7 @@
  * @param  array  $meta_boxes The existing metabox array we're filtering
  * @return array              An updated array containing our new metaboxes
  */
-function badgeos_custom_metaboxes( array $meta_boxes ) {
+function badgeos_custom_metaboxes( $meta_boxes = array() ) {
 
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_badgeos_';
@@ -217,7 +217,7 @@ add_filter( 'cmb_meta_boxes', 'badgeos_custom_metaboxes' );
  * @param  string $meta The stored meta for this field (which will always be blank)
  * @return string       HTML markup for our field
  */
-function badgeos_cmb_render_text_only( $field, $meta ) {
+function badgeos_cmb_render_text_only( $field = array() , $meta = '' ) {
 	echo $field['desc'];
 }
 add_action( 'cmb_render_text_only', 'badgeos_cmb_render_text_only', 10, 2 );
@@ -228,6 +228,7 @@ add_action( 'add_meta_boxes', 'badgeos_submission_attachments_meta_box' );
  * Register the Submission attachments meta box
  *
  * @since  1.1.0
+ * @return void
  */
 function badgeos_submission_attachments_meta_box() {
 
@@ -240,8 +241,10 @@ function badgeos_submission_attachments_meta_box() {
  * Display all Submission attachments in a meta box
  *
  * @since  1.1.0
+ * @param  string $post The post content
+ * @return string 		The modified post content
  */
-function badgeos_submission_attachments( $post ) {
+function badgeos_submission_attachments( $post = '' ) {
 
 	//return all submission attachments
 	if ( $submission_attachments = badgeos_get_submission_attachments( absint( $post->ID ) ) ) {
