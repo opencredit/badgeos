@@ -11,7 +11,7 @@
 
 /**
  * Register BadgeOS Settings with Settings API.
- * @return null
+ * @return void
  */
 function badgeos_register_settings() {
 	register_setting( 'badgeos_settings_group', 'badgeos_settings', 'badgeos_settings_validate' );
@@ -138,7 +138,7 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
 /**
  * Displays error messages from Credly API key retrieval
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_api_key_errors() {
 
@@ -154,7 +154,7 @@ function badgeos_credly_api_key_errors() {
 /**
  * BadgeOS main settings page output
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_settings_page() {
 	flush_rewrite_rules();
@@ -218,7 +218,7 @@ function badgeos_settings_page() {
 /**
  * Add-ons settings page
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
@@ -261,7 +261,7 @@ function badgeos_add_ons_page() {
 /**
  * Help and Support settings page
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_help_support_page() { ?>
 	<div class="wrap" >
@@ -389,7 +389,7 @@ function badgeos_help_support_page() { ?>
 /**
  * BadgeOS Credly Integration settings page.
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_options_page() {
 	?>
@@ -434,7 +434,7 @@ function badgeos_credly_options_page() {
  * BadgeOS Credly API key retrieval form.
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
 function badgeos_credly_options_no_api( $credly_settings = array() ) {
 	wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
@@ -478,7 +478,7 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
  * BadgeOS Credly Settings form (when API key has been saved).
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
 function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 	?>
