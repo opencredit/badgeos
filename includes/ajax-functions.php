@@ -27,7 +27,7 @@ foreach ( $badgeos_ajax_actions as $action ) {
  * AJAX Helper for returning achievements
  *
  * @since 1.0.0
- * @return null
+ * @return void
  */
 function badgeos_ajax_get_achievements(){
 	global $user_ID;
@@ -110,7 +110,7 @@ function badgeos_ajax_get_achievements(){
  * AJAX Helper for returning feedback posts
  *
  * @since 1.1.0
- * @return null
+ * @return void
  */
 function badgeos_ajax_get_feedback() {
 
@@ -148,7 +148,7 @@ function badgeos_ajax_get_feedback() {
  * AJAX Helper for approving/denying feedback
  *
  * @since 1.1.0
- * @return null
+ * @return void
  */
 function badgeos_ajax_update_feedback() {
 
