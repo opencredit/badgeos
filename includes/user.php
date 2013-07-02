@@ -134,7 +134,7 @@ function badgeos_get_users_points( $user_id = 0 ) {
  * @param  integer $achievement_id The achievement that generated the points, if applicable
  * @return integer                 The user's updated point total
  */
-function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id = 0, $achievement_id = null ) {
+function badgeos_update_users_points( $user_id = 0 , $new_points = 0 , $admin_id = 0 , $achievement_id = null ) {
 
 	// Use current user's ID if none specified
 	if ( ! $user_id )
@@ -184,7 +184,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
  * @param  integer $achievement_id The given achievement's post ID
  * @return integer                 The user's updated points total
  */
-function badgeos_award_user_points( $user_id = 0, $achievement_id = 0 ) {
+function badgeos_award_user_points( $user_id = 0 , $achievement_id = 0 ) {
 
 	// Grab our points from the provided post
 	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
@@ -197,8 +197,9 @@ add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
 /**
  * Display achievements for a user on their profile screen
  *
- * @since 1.0.0
- * @param object $user The current user's $user object
+ * @since  1.0.0
+ * @param  object $user The current user's $user object
+ * @return void
  */
 function badgeos_user_profile_data( $user = null ) {
 
@@ -303,12 +304,13 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
 
 /**
  * Generate markup for awarding an achievement to a user
- *
- * @since 1.0.0
- * @param object $user         The current user's $user object
- * @param array  $achievements array of user-earned achievement IDs
+ * 
+ * @since  1.0.0
+ * @param  object $user         The current user's $user object
+ * @param  array  $achievements array of user-earned achievement IDs
+ * @return void
  */
-function badgeos_profile_award_achievement( $user = null, $achievement_ids = array() ) {
+function badgeos_profile_award_achievement( $user = null , $achievement_ids = array() ) {
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
@@ -413,7 +415,8 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 /**
  * Process the adding/revoking of achievements on the user profile page
  *
- * @since 1.0.0
+ * @since  1.0.0
+ * @return void
  */
 function badgeos_process_user_data() {
 
@@ -466,7 +469,7 @@ add_action( 'init', 'badgeos_process_user_data' );
  * @param  integer $user_id  The user's ID
  * @return array             An array of connected log IDs
  */
-function badgeos_get_userlog_ids( $post_ids, $user_id ){
+function badgeos_get_userlog_ids( $post_ids = array() , $user_id = 0 ){
 	global $wpdb;
 	if ( is_array( $post_ids ) ) {
 		$post_ids = implode( ',', $post_ids );
