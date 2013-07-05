@@ -201,7 +201,7 @@ class BadgeOS {
 		$minimum_role = $badgeos_settings['minimum_role'];
 
 		// Create main menu
-		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png' );
+		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', 'BadgeOS Settings', 'Settings', $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
