@@ -162,23 +162,27 @@ class BadgeOS {
 
 		// Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		$badgeos_settings['minimum_role']     = 'administrator';
-		$badgeos_settings['submission_email'] = get_option( 'admin_email' );
-		$badgeos_settings['debug_mode']       = 'disabled';
-		update_option( 'badgeos_settings', $badgeos_settings );
+		if ( empty( $badgeos_settings ) ) {
+			$badgeos_settings['minimum_role']     = 'manage_options';
+			$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+			$badgeos_settings['debug_mode']       = 'disabled';
+			update_option( 'badgeos_settings', $badgeos_settings );
+		}
 
 		// Setup default Credly options
 		$credly_settings = ( $exists = get_option( 'credly_settings' ) ) ? $exists : array();
-		$credly_settings['credly_enable']                  = 'true';
-		$credly_settings['credly_badge_title']             = 'post_title';
-		$credly_settings['credly_badge_description']       = 'post_body';
-		$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-		$credly_settings['credly_badge_image']             = 'featured_image';
-		$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
-		$credly_settings['credly_badge_evidence']          = 'permalink';
-		$credly_settings['credly_badge_sendemail']         = 'true';
-		$credly_settings['credly_badge_criteria']          = '';
-		update_option( 'credly_settings', $credly_settings );
+		if ( empty( $credly_settings ) ) {
+			$credly_settings['credly_enable']                  = 'true';
+			$credly_settings['credly_badge_title']             = 'post_title';
+			$credly_settings['credly_badge_description']       = 'post_body';
+			$credly_settings['credly_badge_short_description'] = 'post_excerpt';
+			$credly_settings['credly_badge_image']             = 'featured_image';
+			$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
+			$credly_settings['credly_badge_evidence']          = 'permalink';
+			$credly_settings['credly_badge_sendemail']         = 'true';
+			$credly_settings['credly_badge_criteria']          = '';
+			update_option( 'credly_settings', $credly_settings );
+		}
 
 		// Register our post types and flush rewrite rules
 		badgeos_register_post_types();
@@ -192,14 +196,6 @@ class BadgeOS {
 
 		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		// If minimum role empty, set default to administrator
-		// Note: this was added in 1.1.0, and can certainly be
-		// deleted in 1.2.0, because we now set defaults on activation.
-		if ( empty( $badgeos_settings['minimum_role'] ) ) {
-			$badgeos_settings['minimum_role'] = 'administrator';
-			update_option( 'badgeos_settings', $badgeos_settings );
-		}
 
 		// Set minimum role setting for menus
 		$minimum_role = $badgeos_settings['minimum_role'];
