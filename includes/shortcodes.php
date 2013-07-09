@@ -12,9 +12,11 @@
 /**
  * Master Achievement List Short Code
  *
- * @since 1.0.0
+ * @since  1.0.0
+ * @param  array $atts Shortcode attributes
+ * @return string 	   The concatinated markup 
  */
-function badgeos_achievements_list_shortcode($atts){
+function badgeos_achievements_list_shortcode( $atts = array () ){
 
 	// check if shortcode has already been run
 	if ( isset( $GLOBALS['badgeos_achievements_list'] ) )
@@ -154,6 +156,13 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 }
 add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
 
+
+/**
+ * Display nomination form for awarding an achievemen
+ * @since 1.0.0
+ * @param  array  $atts The attributions for the meta box
+ * @return string       The concatinated markup
+ */
 function badgeos_nomination_form( $atts = array() ) {
 	global $user_ID, $post;
 
@@ -189,6 +198,12 @@ function badgeos_nomination_form( $atts = array() ) {
 }
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
+/**
+ * Submission Form
+ * @since 1.0.0
+ * @param  array  $atts The attributes
+ * @return string       The concatinated submission form markup
+ */
 function badgeos_submission_form( $atts = array() ) {
 	global $user_ID, $post;
 

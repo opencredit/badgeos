@@ -12,9 +12,10 @@
 /**
  * Check if user should earn an achievement, and award it if so.
  *
- * @since 1.0.0
- * @param integer $achievement_id The given achievement ID to possibly award
- * @param integer $user_id        The given user's ID
+ * @since  1.0.0
+ * @param  integer $achievement_id The given achievement ID to possibly award
+ * @param  integer $user_id        The given user's ID
+ * @return void
  */
 function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0 ) {
 
@@ -67,12 +68,12 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
  * Check if user meets the points requirement for a given achievement
  *
  * @since  1.0.0
- * @param  bool $return            The current status of whether or not the user deserves this achievement
+ * @param  bool    $return         The current status of whether or not the user deserves this achievement
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    Our possibly updated earning status
  */
-function badgeos_user_meets_points_requirement( $return, $user_id, $achievement_id ) {
+function badgeos_user_meets_points_requirement( $return = false , $user_id = 0, $achievement_id = 0 ) {
 
 	// First, see if the achievement requires a minimum amount of points
 	if ( 'points' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
@@ -104,6 +105,7 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to award
  * @param  integer $user_id        The given user's ID
+ * @return void
  */
 function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0 ) {
 
@@ -131,10 +133,10 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0 ) 
 /**
  * Revoke an achievement from a user
  *
- * @since 1.0.0
- * @param integer $achievement_id The given achievement's post ID
- * @param integer $user_id        The given user's ID
- *
+ * @since  1.0.0
+ * @param  integer $achievement_id The given achievement's post ID
+ * @param  integer $user_id        The given user's ID
+ * @return void
  */
 function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0 ) {
 
@@ -174,6 +176,7 @@ function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0
  * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
+ * @return void
  */
 function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $achievement_id = 0 ) {
 
@@ -281,7 +284,7 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
  * @param  integer $step_id  The given step's post ID
  * @return bool              True if user has access to step, false otherwise
  */
-function badgeos_user_has_access_to_step( $return, $user_id, $step_id ) {
+function badgeos_user_has_access_to_step( $return = false , $user_id = 0 , $step_id = 0 ) {
 
 	// If we're not working with a step, bail here
 	if ( 'step' != get_post_type( $step_id ) )
@@ -316,7 +319,7 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_step',
  * @param  integer $step_id  The post ID for our step
  * @return bool              True if user deserves step, false otherwise
  */
-function badgeos_user_deserves_step( $return, $user_id, $step_id ) {
+function badgeos_user_deserves_step( $return = false , $user_id = 0 , $step_id = 0 ) {
 
 	// Only override the $return data if we're working on a step
 	if ( 'step' == get_post_type( $step_id ) ) {
@@ -346,7 +349,7 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 3 );
  * @param  integer $step_id The given step's ID
  * @return integer          The total activity count
  */
-function badgeos_get_step_activity_count( $user_id, $step_id ) {
+function badgeos_get_step_activity_count( $user_id = 0 , $step_id = 0 ) {
 
 	// Assume the user has no relevant activities
 	$activities = array();
