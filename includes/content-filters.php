@@ -198,7 +198,7 @@ function badgeos_do_single_filters() {
  * @param  integer $id   The page id
  * @return string        The page content after being filtered
  */
-function badgeos_remove_to_reformat_entries_title( $html = '' , $id = null ) {
+function badgeos_remove_to_reformat_entries_title( $html = '', $id = 0 ) {
 
     // remove, but only on the main loop!
     if ( badgeos_is_main_loop( $id ) )
@@ -211,6 +211,10 @@ function badgeos_remove_to_reformat_entries_title( $html = '' , $id = null ) {
 add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
 /**
  * Filter badge content to add our removed content back
+ *
+ * @since  1.0.0
+ * @param  string $content The page content
+ * @return string          The page content after reformat
  */
 function badgeos_reformat_entries( $content ) {
 
@@ -320,7 +324,7 @@ function badgeos_get_required_achievements_for_achievement_list( $achievement_id
  * @param  integer $user_id         The given user's ID
  * @return string                   The markup for our list
  */
-function badgeos_get_required_achievements_for_achievement_list_markup( $steps = array() , $achievement_id = 0, $user_id = 0 ) {
+function badgeos_get_required_achievements_for_achievement_list_markup( $steps = array(), $achievement_id = 0, $user_id = 0 ) {
 
     // If we don't have any steps, or our steps aren't an array, return nothing
     if ( ! $steps || ! is_array( $steps ) )
