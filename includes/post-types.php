@@ -13,6 +13,7 @@
  * Register all of our BadgeOS CPTs
  *
  * @since  1.0.0
+ * @return void
  */
 function badgeos_register_post_types() {
 	global $badgeos;
@@ -182,8 +183,9 @@ add_action( 'init', 'badgeos_register_post_types' );
  * @since  1.0.0
  * @param  string $achievement_name_singular The singular name
  * @param  string $achievement_name_plural  The plural name
+ * @return void
  */
-function badgeos_register_achievement_type( $achievement_name_singular, $achievement_name_plural ) {
+function badgeos_register_achievement_type( $achievement_name_singular = '' , $achievement_name_plural = '' ) {
 	global $badgeos;
 	$badgeos->achievement_types[sanitize_title( $achievement_name_singular )] = array(
 		'single_name' => strtolower( $achievement_name_singular ),
@@ -195,6 +197,7 @@ function badgeos_register_achievement_type( $achievement_name_singular, $achieve
  * Register each of our Achivement Types as CPTs
  *
  * @since  1.0.0
+ * @return void
  */
 function badgeos_register_achievement_type_cpt() {
 

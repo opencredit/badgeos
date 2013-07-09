@@ -11,7 +11,7 @@
 
 /**
  * Register BadgeOS Settings with Settings API.
- * @return null
+ * @return void
  */
 function badgeos_register_settings() {
 	register_setting( 'badgeos_settings_group', 'badgeos_settings', 'badgeos_settings_validate' );
@@ -25,7 +25,7 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  * @param  string $input The input we want to validate
  * @return string        Our sanitized input
  */
-function badgeos_settings_validate( $input ) {
+function badgeos_settings_validate( $input = '' ) {
 
 	//sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
@@ -41,7 +41,7 @@ function badgeos_settings_validate( $input ) {
  * @param  array $options Form inputs data
  * @return array          Sanitized form input data
  */
-function badgeos_credly_settings_validate( $options ) {
+function badgeos_credly_settings_validate( $options = array() ) {
 
 	// If attempting to retrieve an api key from credly
 	if (
@@ -127,7 +127,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
  * @since  1.0.0
  * @param  string $error Error message
  */
-function badgeos_credly_get_api_key_error( $error ) {
+function badgeos_credly_get_api_key_error( $error = '' ) {
 
 	// Temporarily store our error message.
 	update_option( 'credly_api_key_error', $error );
@@ -138,7 +138,7 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
 /**
  * Displays error messages from Credly API key retrieval
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_api_key_errors() {
 
@@ -154,7 +154,7 @@ function badgeos_credly_api_key_errors() {
 /**
  * BadgeOS main settings page output
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_settings_page() {
 	flush_rewrite_rules();
@@ -218,7 +218,7 @@ function badgeos_settings_page() {
 /**
  * Add-ons settings page
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
@@ -261,7 +261,7 @@ function badgeos_add_ons_page() {
 /**
  * Help and Support settings page
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_help_support_page() { ?>
 	<div class="wrap" >
@@ -389,7 +389,7 @@ function badgeos_help_support_page() { ?>
 /**
  * BadgeOS Credly Integration settings page.
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_options_page() {
 	?>
@@ -434,9 +434,9 @@ function badgeos_credly_options_page() {
  * BadgeOS Credly API key retrieval form.
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
-function badgeos_credly_options_no_api( $credly_settings ) {
+function badgeos_credly_options_no_api( $credly_settings = array() ) {
 	wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
 
 	if ( is_array( $credly_settings ) ) {
@@ -478,9 +478,9 @@ function badgeos_credly_options_no_api( $credly_settings ) {
  * BadgeOS Credly Settings form (when API key has been saved).
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
-function badgeos_credly_options_yes_api( $credly_settings ) {
+function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 	?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Credly API Key', 'badgeos' ); ?></h3>
