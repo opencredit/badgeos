@@ -9,13 +9,12 @@
  * @link https://credly.com
  */
 
-add_filter( 'the_content', 'badgeos_achievement_submissions' );
-
 /**
- *Displays the submission form on achievement type single pages if the meta option is enabled
- *@since  1.0.0
- *@param  string $content The page content before meta box insertion
- *@return string          The page content after meta box insertion
+ * Displays the submission form on achievement type single pages if the meta option is enabled
+ *
+ * @since  1.0.0
+ * @param  string $content The page content before meta box insertion
+ * @return string          The page content after meta box insertion
  */
 function badgeos_achievement_submissions( $content = '' ) {
 	global $post;
@@ -65,13 +64,14 @@ function badgeos_achievement_submissions( $content = '' ) {
 	return $content;
 
 }
+add_filter( 'the_content', 'badgeos_achievement_submissions' );
 
-// add_filter( 'the_content', 'badgeos_steps_single' );
 /**
- *Display the Step Single page after Filtering
- *@since  1.0.0
- *@param  string $content The page content before meta box insertion
- *@return string          The page content after meta box insertion
+ * Display the Step Single page after Filtering
+ *
+ * @since  1.0.0
+ * @param  string $content The page content before meta box insertion
+ * @return string          The page content after meta box insertion
  */
 function badgeos_steps_single( $content = '' ) {
 	global $post, $current_user;
@@ -171,10 +171,11 @@ function badgeos_steps_single( $content = '' ) {
 	return $content;
 
 }
+// add_filter( 'the_content', 'badgeos_steps_single' );
 
-add_action( 'wp_enqueue_scripts', 'badgeos_do_single_filters' );
 /**
  * Add filters to remove stuff from our singular pages and add back in how we want it
+ *
  * @since 1.0.0
  * @return null
  */
@@ -190,9 +191,11 @@ function badgeos_do_single_filters() {
 	// and filter out the post image
 	add_filter( 'post_thumbnail_html', 'badgeos_remove_to_reformat_entries_title', 10, 2 );
 }
+add_action( 'wp_enqueue_scripts', 'badgeos_do_single_filters' );
 
 /**
  * Filter out the post title/post image and add back (later) how we want it
+ *
  * @since 1.0.0
  * @param  string  $html The page content prior to filtering
  * @param  integer $id   The page id
@@ -208,7 +211,6 @@ function badgeos_remove_to_reformat_entries_title( $html = '', $id = 0 ) {
 	return $html;
 }
 
-add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
 /**
  * Filter badge content to add our removed content back
  *
@@ -262,9 +264,11 @@ function badgeos_reformat_entries( $content ) {
 
 	return $newcontent;
 }
+add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
 
 /**
- * helper function tests that we're in the main loop
+ * Helper function tests that we're in the main loop
+ *
  * @since  1.0.0
  * @param  integer $id The page id
  * @return boolean     A boolean determining if the function is in the main loop
@@ -282,7 +286,6 @@ function badgeos_is_main_loop( $id = false ) {
 	// Checks several variables to be sure we're in the main loop (and won't effect things like post pagination titles)
 	return ( ( $GLOBALS['post']->ID == $id ) && in_the_loop() && empty( $GLOBALS['badgeos_reformat_content'] ) );
 }
-
 
 /**
  * Gets achivement's required steps and returns HTML markup for these steps
@@ -422,9 +425,9 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 	return ( $points = get_post_meta( $achievement_id, '_badgeos_points', true ) ) ? '<div class="badgeos-item-points">' . sprintf( __( '%d Points', 'badgeos' ), $points ) . '</div>' : '';
 }
 
-add_filter( 'post_class', 'badgeos_add_earned_class_single' );
 /**
  * Adds "earned"/"not earned" post_class based on viewer's status
+ *
  * @param  array $classes Post classes
  * @return array          Updated post classes
  */
@@ -436,6 +439,7 @@ function badgeos_add_earned_class_single( $classes = array() ) {
 
 	return $classes;
 }
+add_filter( 'post_class', 'badgeos_add_earned_class_single' );
 
 /**
  * Returns a message if user has earned the achievement
@@ -466,6 +470,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 
 /**
  * Render an achievement
+ *
  * @since  1.0.0
  * @param  integer $achievement The achievement's post ID
  * @return string               Concatenated markup
@@ -532,7 +537,6 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 
 }
-
 
 /**
  * Render a filterable list of feedback
@@ -735,7 +739,6 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 	return apply_filters( 'badgeos_render_submission', $output, $submission );
 }
 
-
 /**
  * Renter a given submission attachment
  *
@@ -797,9 +800,10 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
 
 /**
  * Render the approve/deny buttons for a given piece of feedback
- * @since 1.0.0
+ *
+ * @since  1.0.0
  * @param  integer $feedback_id The feedback's post ID
- * @return string        The concatinated markup
+ * @return string               The concatinated markup
  */
 function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	global $post;
