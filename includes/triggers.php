@@ -40,6 +40,7 @@ function badgeos_get_activity_triggers() {
  * Load up our activity triggers so we can add actions to them
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_load_activity_triggers() {
 
@@ -72,6 +73,7 @@ add_action( 'init', 'badgeos_load_activity_triggers' );
  *
  * @since 1.0.0
  * @param mixed $args Args that are passed through from the hook (only relevant for the wp_login hook presently)
+ * @return void
  */
 function badgeos_trigger_event( $args ) {
 
@@ -226,10 +228,11 @@ function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
  * This triggers a separate hook, badgeos_new_{$post_type},
  * only if the published content is brand new
  *
- * @since 1.1.0
- * @param integer $post_id The post ID
+ * @since  1.1.0
+ * @param  integer $post_id The post ID
+ * @return void
  */
-function badgeos_publish_listener( $post_id ) {
+function badgeos_publish_listener( $post_id = 0 ) {
 
 	// Bail if we're not intentionally saving a post
 	if (
