@@ -51,7 +51,7 @@ class BadgeOS_Credly {
      * Add any hooks into WordPress here
      *
      * @since 1.0.0
-     * @return null
+     * @return void
      */
     public function hooks() {
 
@@ -114,10 +114,10 @@ class BadgeOS_Credly {
      * Generate our base url for badge create/update
      *
      * @since  1.0.0
-     * @param  string $badge_id The ID of our existing Credly badge if it exists
-     * @return string           Our url including base and badge slug
+     * @param  integer $badge_id The ID of our existing Credly badge if it exists
+     * @return string            Our url including base and badge slug
      */
-    private function api_url_badge( $badge_id = '' ) {
+    private function api_url_badge( $badge_id = 0 ) {
 
         if ( ! empty( $badge_id ) ) {
 
@@ -183,7 +183,7 @@ class BadgeOS_Credly {
      * @param  array  $body An array of data we're passing in the post body
      * @return array        Array of results
      */
-    private function credly_api_post( $url = array() , $body = array() ) {
+    private function credly_api_post( $url = array(), $body = array() ) {
 
         $response = wp_remote_post( $url, array(
             'method'      => 'POST',
@@ -220,11 +220,11 @@ class BadgeOS_Credly {
      * Create or update a badge on Credly
      *
      * @since  1.0.0
-     * @param  string  $badge_id The post ID of our badge
-     * @param  array   $fields   An array of meta fields from our badge post
-     * @return mixed             False on error. The Credly ID for our badge on success
+     * @param  integer  $badge_id The post ID of our badge
+     * @param  array    $fields   An array of meta fields from our badge post
+     * @return mixed              False on error. The Credly ID for our badge on success
      */
-    function post_credly_badge( $badge_id = '', $fields = array() ){
+    function post_credly_badge( $badge_id = 0, $fields = array() ){
 
         // Set array of parameters for API call
         $body = $this->post_credly_badge_args( $badge_id, $fields );
@@ -246,11 +246,11 @@ class BadgeOS_Credly {
      * Generate the array for the Credly badge API call
      *
      * @since  1.0.0
-     * @param  string  $badge_id The post of our badge
-     * @param  array   $fields   Our array of fields
-     * @return array             An array of args for our API call
+     * @param  integer  $badge_id The post of our badge
+     * @param  array    $fields   Our array of fields
+     * @return array              An array of args for our API call
      */
-    function post_credly_badge_args( $badge_id = '', $fields = array() ) {
+    function post_credly_badge_args( $badge_id = 0, $fields = array() ) {
 
         $attachment        = $this->encoded_image( credly_fieldmap_get_field_value( $badge_id, $this->field_image ) );
 
@@ -649,7 +649,7 @@ class BadgeOS_Credly {
             $username = $user->user_login;
             $badge_name = get_the_title( $badge_id );
 
-            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
+            badgeos_post_log_entry( $badge_id, $user_id, void, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
 
         }
 
@@ -666,7 +666,7 @@ class BadgeOS_Credly {
      * @param  int  $badge_id The badge ID the user is earning
      * @return array          An array of args
      */
-    private function post_user_badge_args( $user_id = 0 , $badge_id = 0 ) {
+    private function post_user_badge_args( $user_id = 0, $badge_id = 0 ) {
 
         $args = '';
 
@@ -751,13 +751,13 @@ class BadgeOS_Credly {
 
         // If we don't have a valid image ID, bail here
         if ( ! is_numeric( $image_id ) )
-            return null;
+            return void;
 
         $image_file = get_attached_file( $image_id );
 
         // If we don't have a valid file, bail here
         if ( ! file_exists( $image_file ) )
-            return null;
+            return void;
 
         // Open and encode our image file
         $handle        = fopen( $image_file, 'r' );
@@ -780,7 +780,7 @@ class BadgeOS_Credly {
 
         foreach ( badgeos_get_achievement_types_slugs() as $achievement_type ) {
 
-            add_meta_box( 'badgeos_credly_details_meta_box', __( 'Badge Sharing Options' , 'badgeos' ), array( $this, 'badge_metabox_show' ), $achievement_type, 'advanced', 'default' );
+            add_meta_box( 'badgeos_credly_details_meta_box', __( 'Badge Sharing Options', 'badgeos' ), array( $this, 'badge_metabox_show' ), $achievement_type, 'advanced', 'default' );
 
         }
     }
@@ -953,7 +953,7 @@ class BadgeOS_Credly {
      * @param  array  $fields  An array of fields in the metabox
      * @return bool            Return true
      */
-    private function badge_metabox_save_meta( $post_id = 0 , $fields = array() ) {
+    private function badge_metabox_save_meta( $post_id = 0, $fields = array() ) {
 
         update_post_meta( $post_id, '_badgeos_send_to_credly', $fields['send_to_credly'] );
         update_post_meta( $post_id, '_badgeos_credly_include_evidence', $fields['credly_include_evidence'] );

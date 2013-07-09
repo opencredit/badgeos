@@ -101,7 +101,7 @@ function badgeos_credly_settings_validate( $options = array() ) {
  * @param  string $password Credly user passowrd
  * @return string           API key on success, false otherwise
  */
-function badgeos_credly_get_api_key( $username = '' , $password = '' ) {
+function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 
 	$url = BADGEOS_CREDLY_API_URL . 'authenticate/';
 
