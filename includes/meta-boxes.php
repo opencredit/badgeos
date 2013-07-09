@@ -16,7 +16,7 @@
  * @param  array  $meta_boxes The existing metabox array we're filtering
  * @return array              An updated array containing our new metaboxes
  */
-function badgeos_custom_metaboxes( array $meta_boxes ) {
+function badgeos_custom_metaboxes( $meta_boxes = array() ) {
 
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_badgeos_';
@@ -241,10 +241,10 @@ function badgeos_submission_attachments_meta_box() {
  * Display all Submission attachments in a meta box
  *
  * @since  1.1.0
- * @param  object $post The post content
- * @return object 		The modified post content
+ * @param  string $post The post content
+ * @return string 		The modified post content
  */
-function badgeos_submission_attachments( $post = null) {
+function badgeos_submission_attachments( $post = '' ) {
 
 	//return all submission attachments
 	if ( $submission_attachments = badgeos_get_submission_attachments( absint( $post->ID ) ) ) {

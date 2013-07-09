@@ -473,6 +473,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
+ * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
 function badgeos_get_points_based_achievements() {
