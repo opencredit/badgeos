@@ -73,7 +73,7 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    Our possibly updated earning status
  */
-function badgeos_user_meets_points_requirement( $return = fasle , $user_id = 0, $achievement_id = 0 ) {
+function badgeos_user_meets_points_requirement( $return = false , $user_id = 0, $achievement_id = 0 ) {
 
 	// First, see if the achievement requires a minimum amount of points
 	if ( 'points' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
