@@ -56,8 +56,11 @@ function badgeos_get_achievements( $args = array() ) {
  * Modify the WP_Query Join filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $join          The query "join" string
+ * @param  object $query_object  The complete query object
+ * @return string 				 The updated "join" string 
  */
-function badgeos_get_achievements_children_join( $join, $query_object ) {
+function badgeos_get_achievements_children_join( $join = '' , $query_object = null ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_from = $wpdb->posts.ID";
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' )
@@ -70,8 +73,11 @@ function badgeos_get_achievements_children_join( $join, $query_object ) {
  * Modify the WP_Query Where filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $where         The query "where" string
+ * @param  object $query_object  The complete query object
+ * @return string 				 The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where, $query_object ) {
+function badgeos_get_achievements_children_where( $where = '' , $query_object = '' ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
@@ -88,8 +94,10 @@ function badgeos_get_achievements_children_where( $where, $query_object ) {
  * Modify the WP_Query OrderBy filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $orderby The query "orderby" string
+ * @return string 		   The updated "orderby" string
  */
-function badgeos_get_achievements_children_orderby( $orderby ) {
+function badgeos_get_achievements_children_orderby( $orderby = '' ) {
 	return $orderby = 'p2pm2.meta_value ASC';
 }
 
@@ -97,8 +105,10 @@ function badgeos_get_achievements_children_orderby( $orderby ) {
  * Modify the WP_Query Join filter for achievement parents
  *
  * @since  1.0.0
+ * @param  string $join The query "join" string
+ * @return string 	    The updated "join" string
  */
-function badgeos_get_achievements_parents_join( $join ) {
+function badgeos_get_achievements_parents_join( $join = '' ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_to = $wpdb->posts.ID";
 	return $join;
@@ -108,8 +118,11 @@ function badgeos_get_achievements_parents_join( $join ) {
  * Modify the WP_Query Where filter for achievement parents
  *
  * @since  1.0.0
+ * @param  string $where The query "where" string
+ * @param  object $query_object The complete query object
+ * @return 
  */
-function badgeos_get_achievements_parents_where( $where, $query_object ) {
+function badgeos_get_achievements_parents_where( $where = '' , $query_object = null ) {
 	global $wpdb;
 	$where .= $wpdb->prepare( ' AND p2p.p2p_from = %d', $query_object->query_vars['parent_of'] );
 	return $where;
@@ -217,7 +230,7 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
 /**
  * Check if user has already earned an achievement the maximum number of times
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    True if we've exceed the max possible earnings, false if we're still eligable
@@ -244,10 +257,10 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 /**
  * Get the UNIX timestamp for the last activity on an achievement for a given user
  *
- * @since  1.0
- * @param  integer $badge_id The given achievement's post ID
- * @param  integer $user_id  The given user's ID
- * @return integer           The UNIX timestamp for the last reported badge activity
+ * @since  1.0.0
+ * @param  integer $achievement_ id The given achievement's post ID
+ * @param  integer $user_id  		The given user's ID
+ * @return integer           		The UNIX timestamp for the last reported badge activity
  */
 function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id = 0 ) {
 
@@ -357,8 +370,9 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
  * @since  1.0.1
  *
  * @param  int  $user_id The ID of the user earning the achievement
+ * @return array 		 The array of achievements the user has earned
  */
-function badgeos_get_user_earned_achievement_types($user_id){
+function badgeos_get_user_earned_achievement_types( $user_id = 0 ){
 
 	$achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
 
@@ -459,7 +473,6 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
- * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
 function badgeos_get_points_based_achievements() {

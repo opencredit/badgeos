@@ -1,0 +1,901 @@
+<b>actions</b><b></b>
+<ul>
+	<li>badgeos_create_log_entry</li>
+</ul>
+<ul>
+<ul>
+  
+  <li><b>Purpose:</b> Fires whenever a log entry is created</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$log_post_id</li>
+	<li>$post_id</li>
+	<li>$user_id</li>
+	<li>$action</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_settings</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Enable BadgeOS settings options</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$badgeos_settings</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>credly_settings</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Enable Credly settings options</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$credly_settings</li>
+</ul>
+</li>
+</ul>
+	<li>badgeos_new_{$post_type}
+<ul>
+	<li><b>Purpose: </b>Triggers when a new $post_type is created</li>
+	<li><b>Parameters: </b>
+<ul>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>badgeos_save_nomination</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Save the nomination entry</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$new_post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_save_submission</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Fires when a submission is saved</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$submission_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_after_require_text</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Generate HTML after getting the required text</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$stpe_id</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_after_trigger_type</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Generate HTML after getting the trigger type</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$step_id</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_after_achievement_type</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Generate HTML after getting the achievement type</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$step_id</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_after_achievement_post</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Generate HTML after getting the achievement post</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$step_id</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_after_count_text</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Generate HTML after getting the count of texts</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$step_id</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_unlock_{$post_type}</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Unlock an achievement of $post_type</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$achievement_object</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_award_achievement</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Fires when a user is awarded an achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$user_id</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_revoke_achievement</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b> Fires when a user has an achievement revoked</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$user_id</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_unlock_all_{$post_type}</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b> Fires when all achievements of $post_type have been earned</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$post_type</li>
+</ul>
+</li>
+</ul>
+</ul>
+&nbsp;
+
+<b>filters</b><b></b>
+<ul>
+	<li>badgeos_user_deserves_trigger
+<ul>
+	<li><b>Purpose:</b> To determine if user should have access to a trigger</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$user_id</li>
+	<li>$this_trigger</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>badgeos_activity_triggers
+<ul>
+	<li><b>Purpose:</b> Override or extend the core activity triggers</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$triggers</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>badgeos_nomination_notify_email</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose:</b> Set the admin email address for nomination</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$adminI_email</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_nomination_notify_subject</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set the subject of the email for nomination</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$subject</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_nomination_notify_message</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set the content of the message for nomination</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$message</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_submission_notify_email</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set the admin email address for submission</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$admin_email</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_submission_notify_subject</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set the subject of the email for submission</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$subject</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_submission_notify_message</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose:</b> Set the content of the message for submission</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$message</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_submission_form_language</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter the submission form texts</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$defaults</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_comment_form_language</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter the comment form texts</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$defaults</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_comment_form</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set the id for the comment form</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$sub_form</li>
+	<li>$post_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_comments_for_submission</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Get the comments for a submission</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$submission_id</li>
+	<li>$comments</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_nomination_form</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Display nomination form</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$sub_form</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_submission_form</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Display the submission form</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$sub_form</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_submissions</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Get the submissions for the current user</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$submissions</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_user_submissions</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Override submissions from a specific user for a specific achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$submissions</li>
+	<li>$achievement_id</li>
+	<li>$user_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_submission_attachments</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Get achievement specific attachments</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$submission_id</li>
+	<li>$attachments</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_title</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Get the title for the steps ui meta box</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$title</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_add_new</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Add new step to the meta box</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$step</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_save_all</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose:</b> Save all of the steps in the meta box</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$steps</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_require_text</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter requirement text for steps UI</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_ui_html_count_text</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter the the html count for steps UI</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_step_requirements</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Get the requirements of a given step</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$requirements</li>
+	<li>$step_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_save_step</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Save given step</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$custom_title</li>
+	<li>$step_id</li>
+	<li>$step</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>user_has_access_to_achievement</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Checks if the current user can access a specific achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$return</li>
+	<li>$user_id</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_step_activity</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose:  </b>Gets the current step activity toward an achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$activities</li>
+	<li>$user_id</li>
+	<li>$step_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>user_deserves_achievement</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Checks to see if user fulfils the requirements for a given achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$return</li>
+	<li>$user_id</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_public_steps</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set steps posts to public (expects bool)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$public</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_public_submissions</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set submissions posts to public (expects bool)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$public</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_public_nominations</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Set nominations posts to public (expects bool)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$public</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_achievement_data_meta_box</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filters the achievement data (expects array)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$achievement_data</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_achievement_data_meta_box_fields</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Sets the metadata for the fields type (expects array)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$fields</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_achievement_earned_by</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Sets the metadata for the options field (expects array)</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$options</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_step_class</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Overrides the CSS class specific to the step</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$earned_status</li>
+	<li>$step</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_step_title_display</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter the output of the title specific to achievements</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$display</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_steps_heading</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Filter the heading for each step specific to achievements</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$count</li>
+	<li>$post_type_object</li>
+	<li>$steps</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_earned_achievement_message</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns message for earning achievements</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$earned_message</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_achievement'</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return rendered filterable achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$achievement</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_feedback</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns rendered filterable feedback</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$atts</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_nomination</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns rendered nomination information</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$nomination</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_submission</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns rendered submission information</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$submission</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_submission_attachment</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return rendered submission attachment</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$attachment</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_submission_comment</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return rendered comment submission</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$comment</li>
+	<li>$odd_even</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_render_feedback_buttons</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return rendered approve or deny button for given feedback</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$feedback_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>achievement_object</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return the achievement object, for extension elsewhere</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$achievement_object</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_dependent_achievements</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose:</b> Returns earnable achievements once an achievement is earned</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$achievements</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_default_achievement_post_thumbnail</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns a proper image thumbnail source</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$thumbnail</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_earners_heading</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Returns a filtered heading for people who have earned a specific achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$achievement_earners</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_achievement_earners_list_user</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return the information of each user who earned a specific achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$user_content</li>
+	<li>$user</li>
+</ul>
+</li>
+</ul>
+</ul>
+<ul>
+	<li>badgeos_get_achievement_earners_list</li>
+</ul>
+<ul>
+<ul>
+	<li><b>Purpose: </b>Return a list of all users who earned a specific achievement</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$output</li>
+	<li>$achievement_id</li>
+</ul>
+</li>
+</ul>
+	<li>badgeos_log_entry_title
+<ul>
+	<li><b>Purpose:</b> Override the post title for a log entry</li>
+	<li><b>Parameters:</b>
+<ul>
+	<li>$default_title</li>
+	<li>$post_id</li>
+	<li>$user_id</li>
+	<li>$action</li>
+	<li>$achievement</li>
+	<li>$achievement_types</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
