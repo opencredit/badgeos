@@ -649,7 +649,7 @@ class BadgeOS_Credly {
             $username = $user->user_login;
             $badge_name = get_the_title( $badge_id );
 
-            badgeos_post_log_entry( $badge_id, $user_id, void, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
+            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
 
         }
 
@@ -751,13 +751,13 @@ class BadgeOS_Credly {
 
         // If we don't have a valid image ID, bail here
         if ( ! is_numeric( $image_id ) )
-            return void;
+            return null;
 
         $image_file = get_attached_file( $image_id );
 
         // If we don't have a valid file, bail here
         if ( ! file_exists( $image_file ) )
-            return void;
+            return null;
 
         // Open and encode our image file
         $handle        = fopen( $image_file, 'r' );
