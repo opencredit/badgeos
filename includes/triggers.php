@@ -94,6 +94,10 @@ function badgeos_trigger_event( $args ) {
 		$user_id = $user_ID;
 	}
 
+	// Sanity check, if we don't have a user object, bail here
+	if ( ! is_object( $user_data ) )
+		return $args;
+
 	// If the user doesn't satisfy the trigger requirements, bail here
 	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger ) )
 		return $args;
