@@ -18,7 +18,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		$title = $instance['title'];
 		$number = $instance['number'];
 		$point_total = $instance['point_total'];
-		$set_achievements = $instance['set_achievements'];
+		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
 			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
