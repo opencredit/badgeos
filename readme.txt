@@ -182,6 +182,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.1.1 =
+* Updated: Earned User Achievements widget to selectively set what achievement types are displayed
+
 = 1.1.0 =
 * Added: New triggers for publishing new posts and pages
 * Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
