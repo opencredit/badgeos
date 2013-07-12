@@ -22,27 +22,27 @@ class earned_user_achievements_widget extends WP_Widget {
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
 			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
-			<p><?php _e( 'Achievement Types to Display', 'badgeos' ); ?><br />
+			<p><label for="<?php echo $this->get_field_name( 'point_total' ); ?>"><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
+			<p><?php _e( 'Display Only the Following Achievement Types', 'badgeos' ); ?><br />
 				<?php 
 				//get all registered achievements
-				$achievements = badgeos_get_achievement_types_slugs(); 
+				$achievements = badgeos_get_achievement_types(); 
 				
 				//loop through all registered achievements
 				foreach ( $achievements as $achievement ) {
 					
 					//hide the step CPT
-					if ( $achievement == 'step' )
+					if ( $achievement['single_name'] == 'step' )
 						continue;
 					
 					//if achievement displaying exists in the saved array it is enabled for display
-					$checked = ( is_array( $set_achievements ) && in_array( $achievement, $set_achievements ) ) ? 'checked="checked"' : '';
+					$checked = ( is_array( $set_achievements ) && in_array( $achievement['single_name'], $set_achievements ) ) ? 'checked="checked"' : '';
 					
-					echo '<input type="checkbox" name="'.$this->get_field_name( 'set_achievements' ).'[]" value="' .esc_attr( $achievement ).'" '.$checked.'> ' .esc_html( $achievement ) .'<br />';
+					echo '<input type="checkbox" name="'.$this->get_field_name( 'set_achievements' ).'[]" value="' .esc_attr( $achievement['single_name'] ).'" '.$checked.'> ' .esc_html( ucfirst( $achievement['plural_name'] ) ) .'<br />';
 					
 				}
 				?>
 			</p>
-			<p><label for="<?php echo $this->get_field_name( 'point_total' ); ?>"><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
         <?php
 	}
 
