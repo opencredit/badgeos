@@ -13,7 +13,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//build the widget settings form
 	function form( $instance ) {
-		$defaults = array( 'title' => 'My Badges', 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
+		$defaults = array( 'title' => 'My Achievements', 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$number = $instance['number'];
@@ -21,9 +21,9 @@ class earned_user_achievements_widget extends WP_Widget {
 		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
-			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
+			<p><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
 			<p><label for="<?php echo $this->get_field_name( 'point_total' ); ?>"><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
-			<p><?php _e( 'Display Only the Following Achievement Types', 'badgeos' ); ?><br />
+			<p><?php _e( 'Display only the following Achievement Types:', 'badgeos' ); ?><br />
 				<?php 
 				//get all registered achievements
 				$achievements = badgeos_get_achievement_types(); 
