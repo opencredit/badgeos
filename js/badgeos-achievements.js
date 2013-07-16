@@ -71,7 +71,9 @@ jQuery(document).ready(function($){
 				'offset':      $('#badgeos_achievements_offset').val(),
 				'count':       $('#badgeos_achievements_count').val(),
 				'filter':      $('#achievements_list_filter').val(),
-				'search':      $('#achievements_list_search').val()
+				'search':      $('#achievements_list_search').val(),
+				'orderby':     badgeos.orderby,
+				'order':       badgeos.order
 			},
 			dataType: 'json',
 			success: function( response ) {
