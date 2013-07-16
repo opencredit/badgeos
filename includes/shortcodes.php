@@ -30,6 +30,8 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'show_search' => 'true',
 		'group_id'    => '0',
 		'user_id'     => '0',
+		'orderby'     => 'menu_order',
+		'order'       => 'ASC'
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -43,6 +45,8 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'show_search' => $show_search,
 		'group_id'    => $group_id,
 		'user_id'     => $user_id,
+		'orderby'     => $orderby,
+		'order'       => $order
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 

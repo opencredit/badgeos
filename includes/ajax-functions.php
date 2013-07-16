@@ -40,6 +40,8 @@ function badgeos_ajax_get_achievements(){
 	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
 	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
+	$orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : false;
+	$order   = isset( $_REQUEST['order'] )   ? $_REQUEST['order']   : false;
 	if( !$user_id )
 		$user_id = $user_ID;
 
@@ -52,8 +54,8 @@ function badgeos_ajax_get_achievements(){
 	// Query Achievements
 	$args = array(
 		'post_type'      =>	$type,
-		'orderby'        =>	'menu_order',
-		'order'          =>	'ASC',
+		'orderby'        =>	$orderby,
+		'order'          =>	$order,
 		'posts_per_page' =>	$limit,
 		'offset'         => $offset,
 		'post_status'    => 'publish',
