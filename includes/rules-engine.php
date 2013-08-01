@@ -123,7 +123,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0 ) 
 	badgeos_post_log_entry( $achievement_id, $user_id );
 
 	// Available hook for unlocking any achievement of this achievement type
-	do_action( 'badgeos_unlock_' . $achievement_object->post_type );
+	do_action( 'badgeos_unlock_' . $achievement_object->post_type, $user_id, $achievement_id );
 
 	// Available hook to do other things with each awarded achievement
 	do_action( 'badgeos_award_achievement', $user_id, $achievement_id );
@@ -220,7 +220,7 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 
 		// If we've earned all achievements of this type, trigger our hook
 		if ( $all_per_type ) {
-			do_action( 'badgeos_unlock_all_' . $post_type );
+			do_action( 'badgeos_unlock_all_' . $post_type, $user_id, $achievement_id );
 		}
 	}
 }
