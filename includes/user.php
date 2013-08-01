@@ -21,7 +21,7 @@ function badgeos_get_user_achievements( $args = array() ) {
 	// Setup our default args
 	$defaults = array(
 		'user_id'          => 0,     // The given user's ID
-		'site_id'          => 1,     // The given site's ID
+		'site_id'          => get_current_blog_id(), // The given site's ID
 		'achievement_id'   => false, // A specific achievement's post ID
 		'achievement_type' => false, // A specific achievement type
 		'since'            => 0,     // A specific timestamp to use in place of $limit_in_days
@@ -79,7 +79,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 	// Setup our default args
 	$defaults = array(
 		'user_id'          => 0,     // The given user's ID
-		'site_id'          => 1,     // The given site's ID
+		'site_id'          => get_current_blog_id(), // The given site's ID
 		'all_achievements' => false, // An array of ALL achievements earned by the user
 		'new_achievements' => false, // An array of NEW achievements earned by the user
 	);
@@ -304,7 +304,7 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
 
 /**
  * Generate markup for awarding an achievement to a user
- * 
+ *
  * @since  1.0.0
  * @param  object $user         The current user's $user object
  * @param  array  $achievements array of user-earned achievement IDs
