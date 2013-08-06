@@ -29,7 +29,7 @@ foreach ( $badgeos_ajax_actions as $action ) {
  * @since 1.0.0
  */
 function badgeos_ajax_get_achievements(){
-	global $user_ID;
+	global $user_ID, $badgeos, $wpdb;
 
 	// Setup our AJAX query vars
 	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
@@ -41,8 +41,6 @@ function badgeos_ajax_get_achievements(){
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
 	if( !$user_id )
 		$user_id = $user_ID;
-
-	$achievements = '';
 
 	// Grab our hidden and earned badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
@@ -71,36 +69,63 @@ function badgeos_ajax_get_achievements(){
 		$args = array_merge( $args, array( 's' => $search ) );
 	}
 
-	// Loop Achievements
-	$achievement_posts = new WP_Query( $args );
+	// check if admin settings are set to show all achievements across a multisite network
+	$plugins = get_site_option( 'active_sitewide_plugins' );
+    if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+    	$badgeos_settings = get_option( 'badgeos_settings' );
+    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';   
+    }
+
+    // create array of blog ids in the network 
+    if( 'enabled' == $ms_show_all_achievements ) {
+    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) ); 
+		foreach ($blog_ids as $key => $value ) {
+            $sites[] = $value->blog_id;
+        }
+    } else {
+    	$sites[] = 0;
+    }
+    
+    $achievements = '';
+	    
+	// loop sites in the network (default is 1 time)
 	$achievement_count = 0;
-	while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-		$achievements .= badgeos_render_achievement( get_the_ID() );
-		$achievement_count++;
-	endwhile;
+	$query_count = 0;
+	foreach( $sites as $blog_id){
+		if( $blog_id > 0 )
+			switch_to_blog( $blog_id );
 
-	// Sanity helper: if we're filtering for complete and we have no
-	// earned achievements, $achievement_posts should definitely be false
-	if ( 'completed' == $filter && empty( $earned_ids ) )
-		$achievements = '';
+		// Loop Achievements
+		$achievement_posts = new WP_Query( $args );
+		$query_count += $achievement_posts->found_posts;
+		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
+			$achievements .= badgeos_render_achievement( get_the_ID() );
+			$achievement_count++;
+		endwhile;
 
-	// Display a message for no results
-	if ( empty( $achievements ) ) {
-		$post_type_plural = get_post_type_object( $type )->labels->name;
-		$achievements .= '<div class="badgeos-no-results">';
-		if ( 'completed' == $filter ) {
-			$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-		}else{
-			$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+		// Sanity helper: if we're filtering for complete and we have no
+		// earned achievements, $achievement_posts should definitely be false
+		if ( 'completed' == $filter && empty( $earned_ids ) )
+			$achievements = '';
+
+		// Display a message for no results
+		if ( empty( $achievements ) ) {
+			$post_type_plural = get_post_type_object( $type )->labels->name;
+			$achievements .= '<div class="badgeos-no-results">';
+			if ( 'completed' == $filter ) {
+				$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+			}else{
+				$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+			}
+			$achievements .= '</div><!-- .badgeos-no-results -->';
 		}
-		$achievements .= '</div><!-- .badgeos-no-results -->';
 	}
-
+		
 	// Send back our successful response
 	wp_send_json_success( array(
 		'message'     => $achievements,
 		'offset'      => $offset + $limit,
-		'query_count' => $achievement_posts->found_posts,
+		'query_count' => $query_count,
 		'badge_count' => $achievement_count
 	) );
 }

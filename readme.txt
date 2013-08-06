@@ -179,6 +179,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.1.1 =
+* Added: Setting if BadgeOS is network activated on Multisite for displaying all network wide achievements of the same type on a single site in the network. 
+
 = 1.1.0 =
 * Added: New triggers for publishing new posts and pages
 * Added: [badgeos_achievement] shortcode to display a single achievement on any post/page, see BadgeOS Help/Support for parameter details
