@@ -30,7 +30,6 @@ function badgeos_settings_validate( $input ) {
 	//sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
 	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
-	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
 
 	return $input;
 
@@ -175,7 +174,6 @@ function badgeos_settings_page() {
 			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
-			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
 			?>
 			<table class="form-table">
 				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
@@ -205,23 +203,7 @@ function badgeos_settings_page() {
                         </select>
 					</td>
 				</tr>
-				<?php
-                // check if multisite is enabled & if plugin is network activated
-                global $badgeos;
-                $plugins = get_site_option( 'active_sitewide_plugins' );
-                if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
-                    ?>
-                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-                        <td>
-                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                            </select>
-                        </td>
-                    </tr>
-				    <?php 
-                }
-				do_action( 'badgeos_settings', $badgeos_settings ); ?>
+				<?php do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
