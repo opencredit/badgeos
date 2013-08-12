@@ -52,11 +52,15 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 		$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
 
 		// If we have requirements, loop through each and make sure they've been completed
-		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) )
-			foreach ( $required_achievements as $requirement )
+		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) ) {
+			foreach ( $required_achievements as $requirement ) {
 				// If the user has not completed a requirement, they cannot complete the achievement
-				if ( ! badgeos_check_achievement_completion_for_user( $requirement->ID, $user_id ) )
+				if ( ! badgeos_check_achievement_completion_for_user( $requirement->ID, $user_id ) ) {
 					$return = false;
+					break;
+				}
+			}
+		}
 	}
 
 	// Available filter to support custom earning rules
@@ -187,8 +191,28 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 	foreach ( $dependent_achievements as $achievement )
 		badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
 
+	// See if a user has unlocked all achievements of a given type
+	badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
+
+}
+add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
+
+/**
+ * Check if a user has unlocked all achievements of a given type
+ *
+ * Triggers hook badgeos_unlock_all_{$post_type}
+ *
+ * @since  1.1.1
+ * @param  integer $user_id        The given user's ID
+ * @param  integer $achievement_id The given achievement's post ID
+ * @return void
+ */
+function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
+
 	// Grab our user's (presumably updated) earned achievements
 	$earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
+
+	// Get the post type of the earned achievement
 	$post_type = get_post_type( $achievement_id );
 
 	// Hook for unlocking all achievements of this achievement type
@@ -224,7 +248,6 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 		}
 	}
 }
-add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
 /**
  * Check if user may access/earn achievement.
