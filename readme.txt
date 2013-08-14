@@ -183,8 +183,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.1.1 =
-* Added: Setting if BadgeOS is network activated on Multisite for displaying all network wide achievements of the same type on a single site in the network. Site setting is only available to super admins. 
-* Added: A "wpms" attribute to the [badgeos_achievements_list] shortcode, this has to be manually set to true for network wide achievements of the same type to show up in the achievements list.
+* Added: Setting if BadgeOS is network activated on Multisite for displaying all network wide achievements of the same type on a single site in the network.
 * Updated: Earned User Achievements widget to selectively set what achievement types are displayed.
 
 = 1.1.0 =

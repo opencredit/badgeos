@@ -207,22 +207,20 @@ function badgeos_settings_page() {
 				</tr>
 				<?php
                 // check if multisite is enabled & if plugin is network activated
-                if ( is_super_admin() ){
-	                global $badgeos;
-	                $plugins = get_site_option( 'active_sitewide_plugins' );
-	                if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
-	                ?>
-	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-	                        <td>
-	                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-	                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-	                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	            	<?php 
-	                }
-            	}
+                global $badgeos;
+                $plugins = get_site_option( 'active_sitewide_plugins' );
+                if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+                ?>
+                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+                        <td>
+                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
+                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+                            </select>
+                        </td>
+                    </tr>
+            	<?php 
+                }
         		do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
@@ -325,7 +323,6 @@ function badgeos_help_support_page() { ?>
 						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
 						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
 						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li><?php _e( 'wpms', 'badgeos' ); ?> - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
 					</ul>
 					</div>
 				</li>
