@@ -183,7 +183,7 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
  * @param  integer $user_id The given user's ID
  * @param  string  $trigger The trigger we're updating
  * @param  integer $site_id The desired Site ID to update
- * @param  integer $args        The triggered args
+ * @param  array $args        The triggered args
  * @return integer          The updated trigger count
  */
 function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {

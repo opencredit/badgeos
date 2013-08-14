@@ -15,9 +15,9 @@
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to possibly award
  * @param  integer $user_id        The given user's ID
- * @param  integer $trigger        The trigger
+ * @param  string $trigger        The trigger
  * @param  integer $site_id        The triggered site id
- * @param  integer $args        The triggered args
+ * @param  array $args        The triggered args
  * @return void
  */
 function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
@@ -41,9 +41,9 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to verify
  * @param  integer $user_id        The given user's ID
- * @param  integer $trigger        The trigger
+ * @param  string $trigger        The trigger
  * @param  integer $site_id        The triggered site id
- * @param  integer $args        The triggered args
+ * @param  array $args        The triggered args
  * @return bool                    True if user has completed achievement, false otherwise
  */
 function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
@@ -115,9 +115,9 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to award
  * @param  integer $user_id        The given user's ID
- * @param  integer $trigger        The trigger
+ * @param  string $trigger        The trigger
  * @param  integer $site_id        The triggered site id
- * @param  integer $args        The triggered args
+ * @param  array $args        The triggered args
  * @return void
  */
 function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
@@ -264,9 +264,9 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
  * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
- * @param  integer $trigger        The trigger
+ * @param  string $trigger        The trigger
  * @param  integer $site_id        The triggered site id
- * @param  integer $args        The triggered args
+ * @param  array $args        The triggered args
  * @return bool                    True if user has access, false otherwise
  */
 function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
