@@ -646,3 +646,41 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	// Return our concatenated output
 	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $users );
 }
+
+/**
+ * Check if admin settings are set to show all achievements across a multisite network
+ *
+ * @since  1.1.1
+ * @return boolean 
+ */
+function badgeos_ms_show_all_achievements(){
+	global $badgeos;
+	$ms_show_all_achievements = NULL;
+	$plugins = get_site_option( 'active_sitewide_plugins' );
+    if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+    	$badgeos_settings = get_option( 'badgeos_settings' );
+    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';   
+    	if( 'enabled' == $ms_show_all_achievements )
+    		return true;
+    }
+    return false;
+}
+
+/**
+ * Create array of blog ids in the network if multisite setting is on 
+ *
+ * @since  1.1.1
+ * @return array                   Array of blog_ids
+ */
+function badgeos_get_network_site_ids(){
+	global $wpdb;
+    if( badgeos_ms_show_all_achievements() ) {
+    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) ); 
+		foreach ($blog_ids as $key => $value ) {
+            $sites[] = $value->blog_id;
+        }
+    } else {
+    	$sites[] = get_current_blog_id();
+    }
+    return $sites;
+}

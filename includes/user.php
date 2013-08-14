@@ -481,3 +481,28 @@ function badgeos_get_userlog_ids( $post_ids = array(), $user_id = 0 ){
 		return $log_ids;
 	}
 }
+
+/**
+ * Returns array of achievement types a user has earned across a multisite network
+ *
+ * @since  1.1.1
+ * @param  integer $user_id  The user's ID
+ * @return array             An array of post types
+ */
+function badgeos_get_network_achievement_types_for_user( $user_id ){
+	global $blog_id;
+	$sites = badgeos_get_network_site_ids();
+	$all_achievement_types = array();
+	foreach( $sites as $site_blog_id ){		
+		if( $blog_id != $site_blog_id )
+			switch_to_blog( $site_blog_id );
+		
+		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
+		if( is_array($achievement_types) )
+			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
+		$x += 1;
+	}
+	restore_current_blog();
+	$achievement_types = array_unique($all_achievement_types);
+	return $achievement_types;
+}
