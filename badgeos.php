@@ -27,6 +27,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>;.
 
 class BadgeOS {
 
+	/**
+	 * BadgeOS Version
+	 *
+	 * @var string
+	 */
+	public static $version = '1.1.0';
+
 	function __construct() {
 		// Define plugin constants
 		$this->basename       = plugin_basename( __FILE__ );
