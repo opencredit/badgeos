@@ -63,7 +63,7 @@ function badgeos_load_activity_triggers() {
 
 	// Loop through each trigger and add our trigger event to the hook
 	foreach ( $activity_triggers as $trigger => $label )
-		add_action( $trigger, 'badgeos_trigger_event', 10, 10 );
+		add_action( $trigger, 'badgeos_trigger_event', 10, 20 );
 
 }
 add_action( 'init', 'badgeos_load_activity_triggers' );
@@ -73,12 +73,16 @@ add_action( 'init', 'badgeos_load_activity_triggers' );
  *
  * @since 1.0.0
  * @param mixed $args Args that are passed through from the hook (only relevant for the wp_login hook presently)
- * @return void
+ * @return mixed
  */
-function badgeos_trigger_event( $args ) {
+function badgeos_trigger_event() {
 
 	// Setup all our globals
 	global $user_ID, $blog_id, $wpdb;
+
+	$site_id = $blog_id;
+
+	$args = func_get_args();
 
 	// Grab our current trigger
 	$this_trigger = current_filter();
@@ -87,7 +91,7 @@ function badgeos_trigger_event( $args ) {
 	// global $user_ID is not yet available so it must be gotten from the
 	// user login name that IS passed to this function.
 	if ( 'wp_login' == $this_trigger ) {
-		$user_data = get_user_by( 'login', $args );
+		$user_data = get_user_by( 'login', $args[ 0 ] );
 		$user_id = $user_data->ID;
 	} else {
 		$user_data = get_user_by( 'id', $user_ID );
@@ -96,14 +100,14 @@ function badgeos_trigger_event( $args ) {
 
 	// Sanity check, if we don't have a user object, bail here
 	if ( ! is_object( $user_data ) )
-		return $args;
+		return $args[ 0 ];
 
 	// If the user doesn't satisfy the trigger requirements, bail here
-	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger ) )
-		return $args;
+	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
+		return $args[ 0 ];
 
 	// Update hook count for this user
-	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $blog_id );
+	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
 
 	// Mark the count in the log entry
 	badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
@@ -118,9 +122,12 @@ function badgeos_trigger_event( $args ) {
 		",
 		$this_trigger
 	) );
+
 	foreach ( $triggered_achievements as $achievement ) {
-		badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id );
+		badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
 	}
+
+	return $args[ 0 ];
 
 }
 
@@ -176,13 +183,14 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
  * @param  integer $user_id The given user's ID
  * @param  string  $trigger The trigger we're updating
  * @param  integer $site_id The desired Site ID to update
+ * @param  array $args        The triggered args
  * @return integer          The updated trigger count
  */
-function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
+function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {
 
 	// Grab the current count and increase it by 1
 	$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id ) );
-	$trigger_count++;
+	$trigger_count += (int) apply_filters( 'badgeos_update_user_trigger_count', 1, $user_id, $trigger, $site_id, $args );
 
 	// Update the triggers arary with the new count
 	$user_triggers = badgeos_get_user_triggers( $user_id );
