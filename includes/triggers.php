@@ -159,12 +159,16 @@ function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
  * @since  1.0.0
  * @param  integer $user_id The given user's ID
  * @param  string  $trigger The given trigger we're checking
+ * @param  integer $site_id The desired Site ID to check
+ * @param  array $args        The triggered args
  * @return integer          The total number of times a user has triggered the trigger
  */
-function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
+function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {
 
 	// Grab the user's logged triggers
 	$user_triggers = badgeos_get_user_triggers( $user_id, $site_id );
+
+	$trigger = apply_filters( 'badgeos_get_user_trigger_name', $trigger, $user_id, $site_id, $args );
 
 	// If we have any triggers, return the current count for the given trigger
 	if ( ! empty( $user_triggers ) && isset( $user_triggers[$trigger] ) )
@@ -189,7 +193,7 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
 function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {
 
 	// Grab the current count and increase it by 1
-	$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id ) );
+	$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
 	$trigger_count += (int) apply_filters( 'badgeos_update_user_trigger_count', 1, $user_id, $trigger, $site_id, $args );
 
 	// Update the triggers arary with the new count
