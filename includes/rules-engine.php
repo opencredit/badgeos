@@ -20,7 +20,11 @@
  * @param  array $args        The triggered args
  * @return void
  */
-function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
 
 	// Grab current user ID if one isn't specified
 	if ( ! $user_id )
@@ -46,10 +50,14 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
  * @param  array $args        The triggered args
  * @return bool                    True if user has completed achievement, false otherwise
  */
-function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
 	// Assume the user has completed the achievement
 	$return = true;
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
 
 	// If the user has not already earned the achievement...
 	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
@@ -120,7 +128,11 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  * @param  array $args        The triggered args
  * @return void
  */
-function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
 
 	// Use the current user ID if none specified
 	if ( $user_id == 0 )
@@ -269,8 +281,12 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
  * @param  array $args        The triggered args
  * @return bool                    True if user has access, false otherwise
  */
-function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
+	
 	// Assume we have access
 	$return = true;
 
