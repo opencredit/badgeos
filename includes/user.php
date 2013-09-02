@@ -30,13 +30,13 @@ function badgeos_get_user_achievements( $args = array() ) {
 
 	// Use current user's ID if none specified
 	if ( ! $args['user_id'] )
-		$args['user_id'] = wp_get_current_user()->ID;
+		$args['user_id'] = get_current_user_id();
 
 	// Grab the user's current achievements
-	$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? $earned_items : array( $args['site_id'] => array() );
+	$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? $earned_items : array();
 
 	// If we want all sites (or no specific site), return the full array
-	if ( empty( $args['site_id']) || 'all' == $args['site_id'] )
+	if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] )
 		return $achievements;
 
 	// Otherwise, we only want the specific site's achievements
