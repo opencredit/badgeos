@@ -484,9 +484,9 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgestack_settings = get_option( 'badgestack_settings' );
-	$minimum_role        = ( !empty( $badgestack_settings['minimum_role'] ) ) ? $badgestack_settings['minimum_role'] : 'administrator';
-	$post                = get_post($post_id);
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$post             = get_post($post_id);
 
 	// If the user has the authority to do what they're doing,
 	// and the post is one of our achievement types,
