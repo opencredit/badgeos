@@ -375,25 +375,27 @@ function badgeos_get_step_activity_count( $user_id = 0 , $step_id = 0 ) {
 	// Assume the user has no relevant activities
 	$activities = array();
 
-	// If the step has no parent, bail here
-	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
-		return false;
-
-	// If the user has any interaction with this achievement, only get activity since that date
-	if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
-		$since = gmdate( 'Y-m-d H:i:s', ( $date + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-	else
-		$since = 0;
-
 	// Grab the requirements for this step
 	$step_requirements = badgeos_get_step_requirements( $step_id );
 
 	// Determine which type of trigger we're using and return the corresponding activities
 	switch( $step_requirements['trigger_type'] ) {
 		case 'specific-achievement' :
+
+			// Get our parent achievement
+			$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
+
+			// If the user has any interaction with this achievement, only get activity since that date
+			if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+				$since = $date;
+			else
+				$since = 0;
+
+			// Get our achievement activity
 			$achievements = badgeos_get_user_achievements( array(
 				'user_id'        => absint( $user_id ),
-				'achievement_id' => absint( $step_requirements['achievement_post'] )
+				'achievement_id' => absint( $step_requirements['achievement_post'] ),
+				'since'          => $since
 			) );
 			$activities = count( $achievements );
 			break;
