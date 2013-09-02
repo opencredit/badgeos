@@ -318,12 +318,10 @@ function badgeos_user_has_access_to_step( $return = false , $user_id = 0 , $step
 		$return = false;
 
 	// Prevent user from repeatedly earning the same step
-	// Note: we're adding 5 seconds to the "since" timestamp in order
-	// to prevent any weird cross-achievement awarding timing issues.
-	if ( badgeos_get_user_achievements( array(
+	if ( $return && badgeos_get_user_achievements( array(
 			'user_id'        => absint( $user_id ),
 			'achievement_id' => absint( $step_id ),
-			'since'          => 5 + absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		) )
 	)
 		$return = false;
