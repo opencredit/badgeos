@@ -290,9 +290,10 @@ function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id =
  *
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement's post ID
+ * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0 ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -300,13 +301,20 @@ function badgeos_build_achievement_object( $achievement_id = 0 ) {
 		return false;
 
 	// Setup a new object for the achievement
-	$achievement_object              = new stdClass;
-	$achievement_object->ID          = $achievement_id;
-	$achievement_object->post_type   = $achievement->post_type;
-	$achievement_object->date_earned = time();
+	$achievement_object            = new stdClass;
+	$achievement_object->ID        = $achievement_id;
+	$achievement_object->post_type = $achievement->post_type;
+	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
+
+	// Store the current timestamp differently based on context
+	if ( 'earned' == $context ) {
+		$achievement_object->date_earned = time();
+	} elseif ( 'started' == $context ) {
+		$achievement_object->date_started = $achievement_object->last_activity_date = time();
+	}
 
 	// Return our achievement object, available filter so we can extend it elsewhere
-	return apply_filters( 'achievement_object', $achievement_object );
+	return apply_filters( 'achievement_object', $achievement_object, $achievement_id, $context );
 
 }
 
