@@ -46,7 +46,7 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 	$return = true;
 
 	// If the user has not already earned the achievement...
-	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
+	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => 1 + badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
 
 		// Grab our required achievements for this achievement
 		$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
