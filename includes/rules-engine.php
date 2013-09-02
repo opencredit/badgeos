@@ -54,8 +54,8 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 		// If we have requirements, loop through each and make sure they've been completed
 		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) ) {
 			foreach ( $required_achievements as $requirement ) {
-				// If the user has not completed a requirement, they cannot complete the achievement
-				if ( ! badgeos_check_achievement_completion_for_user( $requirement->ID, $user_id ) ) {
+				// Has the user already earned the requirement?
+				if ( ! badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $requirement->ID, 'since' => badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
 					$return = false;
 					break;
 				}
