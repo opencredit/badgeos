@@ -253,38 +253,6 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 	return false;
 }
 
-
-/**
- * Get the UNIX timestamp for the last activity on an achievement for a given user
- *
- * @since  1.0.0
- * @param  integer $achievement_ id The given achievement's post ID
- * @param  integer $user_id  		The given user's ID
- * @return integer           		The UNIX timestamp for the last reported badge activity
- */
-function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id = 0 ) {
-
-	// Assume the user has no history with this badge
-	$date = 0;
-
-	// See if the user has ever earned or failed the badge
-	$user_badge_history = get_posts( array(
-		'author'         => $user_id,
-		'post_type'      => 'badgeos-log-entry',
-		'meta_key'       => '_badgeos_log_achievement_id',
-		'meta_value'     => $achievement_id,
-		'posts_per_page' => 1
-	) );
-
-	// If the user DOES have some history with this badge, grab the last interaction time
-	if ( ! empty( $user_badge_history ) )
-		$date = strtotime( $user_badge_history[0]->post_date_gmt );
-
-	// Finally, return our time
-	return $date;
-
-}
-
 /**
  * Helper function for building an object for our achievement
  *
