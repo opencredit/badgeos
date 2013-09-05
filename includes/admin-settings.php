@@ -209,8 +209,7 @@ function badgeos_settings_page() {
                 // check if multisite is enabled & if plugin is network activated
                 if ( is_super_admin() ){
 	                global $badgeos;
-	                $plugins = get_site_option( 'active_sitewide_plugins' );
-	                if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+	                if ( is_multisite() ) {
 	                ?>
 	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
 	                        <td>

@@ -40,7 +40,7 @@ function badgeos_ajax_get_achievements(){
 	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
 	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
-	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms'] : false;
+	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms']    : false;
 	if( !$user_id )
 		$user_id = $user_ID;
     
@@ -49,13 +49,11 @@ function badgeos_ajax_get_achievements(){
     // Grab our hidden badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
 	
-
 	// check if $wpms is true, default is false
-	if( 'true' == $wpms )
+	if( $wpms && $wpms != 'false' )
 		$sites = badgeos_get_network_site_ids();
 	else
 		$sites = array($blog_id);
-
 	// loop sites in the network (default is one time on curent site)
 	$achievement_count = 0;
 	$query_count = 0;
