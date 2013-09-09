@@ -69,8 +69,11 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
+		require_once( $this->directory_path . 'includes/activity-functions.php' );
 		require_once( $this->directory_path . 'includes/ajax-functions.php' );
+		require_once( $this->directory_path . 'includes/logging-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
+		require_once( $this->directory_path . 'includes/points-functions.php' );
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );
 		require_once( $this->directory_path . 'includes/shortcodes.php' );
@@ -324,43 +327,4 @@ function badgeos_is_debug_mode() {
 
 	return false;
 
-}
-
-/**
- * Posts a log entry when a user unlocks any achievement post
- *
- * @since  1.0.0
- * @param  integer $post_id    The post id of the activity we're logging
- * @param  integer $user_id    The user ID
- * @param  string  $action     The action word to be used for the generated title
- * @param  string  $title      An optional default title for the log post
- * @return integer             The post ID of the newly created log entry
- */
-function badgeos_post_log_entry( $post_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
-	global $user_ID;
-	if ( $user_id == 0 ) {
-		$user_id = $user_ID;
-	}
-
-	$user              = get_userdata( $user_id );
-	$achievement       = get_post( $post_id );
-	$achievement_types = badgeos_get_achievement_types();
-	$achievement_type  = ( $achievement && isset( $achievement_types[$achievement->post_type]['single_name'] ) ) ? $achievement_types[$achievement->post_type]['single_name'] : '';
-	$default_title     = ( !empty( $title ) ? $title : "{$user->user_login} {$action} the \"{$achievement->post_title}\" {$achievement_type}" );
-	$title             = apply_filters( 'badgeos_log_entry_title', $default_title, $post_id, $user_id, $action, $achievement, $achievement_types );
-
-	$args = array(
-		'post_title'  => $title,
-		'post_status' => 'publish',
-		'post_author' => absint( $user_id ),
-		'post_type'   => 'badgeos-log-entry',
-	);
-
-	if ( $log_post_id = wp_insert_post( $args ) )
-		add_post_meta( $log_post_id, '_badgeos_log_achievement_id', $post_id );
-
-	// Available action for other processes
-	do_action( 'badgeos_create_log_entry', $log_post_id, $post_id, $user_id, $action );
-
-	return $log_post_id;
 }
