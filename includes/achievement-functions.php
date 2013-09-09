@@ -253,46 +253,15 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 	return false;
 }
 
-
-/**
- * Get the UNIX timestamp for the last activity on an achievement for a given user
- *
- * @since  1.0.0
- * @param  integer $achievement_ id The given achievement's post ID
- * @param  integer $user_id  		The given user's ID
- * @return integer           		The UNIX timestamp for the last reported badge activity
- */
-function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id = 0 ) {
-
-	// Assume the user has no history with this badge
-	$date = 0;
-
-	// See if the user has ever earned or failed the badge
-	$user_badge_history = get_posts( array(
-		'author'         => $user_id,
-		'post_type'      => 'badgeos-log-entry',
-		'meta_key'       => '_badgeos_log_achievement_id',
-		'meta_value'     => $achievement_id,
-		'posts_per_page' => 1
-	) );
-
-	// If the user DOES have some history with this badge, grab the last interaction time
-	if ( ! empty( $user_badge_history ) )
-		$date = strtotime( $user_badge_history[0]->post_date_gmt );
-
-	// Finally, return our time
-	return $date;
-
-}
-
 /**
  * Helper function for building an object for our achievement
  *
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement's post ID
+ * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0 ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -300,13 +269,20 @@ function badgeos_build_achievement_object( $achievement_id = 0 ) {
 		return false;
 
 	// Setup a new object for the achievement
-	$achievement_object              = new stdClass;
-	$achievement_object->ID          = $achievement_id;
-	$achievement_object->post_type   = $achievement->post_type;
-	$achievement_object->date_earned = time();
+	$achievement_object            = new stdClass;
+	$achievement_object->ID        = $achievement_id;
+	$achievement_object->post_type = $achievement->post_type;
+	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
+
+	// Store the current timestamp differently based on context
+	if ( 'earned' == $context ) {
+		$achievement_object->date_earned = time();
+	} elseif ( 'started' == $context ) {
+		$achievement_object->date_started = $achievement_object->last_activity_date = time();
+	}
 
 	// Return our achievement object, available filter so we can extend it elsewhere
-	return apply_filters( 'achievement_object', $achievement_object );
+	return apply_filters( 'achievement_object', $achievement_object, $achievement_id, $context );
 
 }
 
@@ -508,9 +484,9 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgestack_settings = get_option( 'badgestack_settings' );
-	$minimum_role        = ( !empty( $badgestack_settings['minimum_role'] ) ) ? $badgestack_settings['minimum_role'] : 'administrator';
-	$post                = get_post($post_id);
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$post             = get_post($post_id);
 
 	// If the user has the authority to do what they're doing,
 	// and the post is one of our achievement types,
@@ -656,8 +632,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 function badgeos_ms_show_all_achievements(){
 	global $badgeos;
 	$ms_show_all_achievements = NULL;
-	$plugins = get_site_option( 'active_sitewide_plugins' );
-    if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+	if ( is_multisite() ) {
     	$badgeos_settings = get_option( 'badgeos_settings' );
     	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';   
     	if( 'enabled' == $ms_show_all_achievements )

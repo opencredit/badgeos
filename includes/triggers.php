@@ -139,10 +139,14 @@ function badgeos_trigger_event() {
  * @param  integer $site_id The desired Site ID to check
  * @return array            An array of the triggers a user has triggered
  */
-function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
+function badgeos_get_user_triggers( $user_id = 0, $site_id = '' ) {
 
 	// Grab all of the user's triggers
 	$user_triggers = ( $array_exists = get_user_meta( $user_id, '_badgeos_triggered_triggers', true ) ) ? $array_exists : array( $site_id => array() );
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();
 
 	// Return only the triggers that are relevant to the provided $site_id
 	if ( $site_id )
@@ -163,7 +167,11 @@ function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
  * @param  array $args        The triggered args
  * @return integer          The total number of times a user has triggered the trigger
  */
-function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {
+function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 0, $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();
 
 	// Grab the user's logged triggers
 	$user_triggers = badgeos_get_user_triggers( $user_id, $site_id );
@@ -190,7 +198,11 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 1, $args
  * @param  array $args        The triggered args
  * @return integer          The updated trigger count
  */
-function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1, $args = array() ) {
+function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = '', $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();
 
 	// Grab the current count and increase it by 1
 	$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
@@ -215,7 +227,11 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 1, $a
  * @param  integer $site_id The desired Site ID to update (or "all" to dump across all sites)
  * @return integer          The updated trigger count
  */
-function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 1 ) {
+function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = '' ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();
 
 	// Grab the user's current triggers
 	$user_triggers = badgeos_get_user_triggers( $user_id );

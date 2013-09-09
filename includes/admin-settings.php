@@ -209,8 +209,7 @@ function badgeos_settings_page() {
                 // check if multisite is enabled & if plugin is network activated
                 if ( is_super_admin() ){
 	                global $badgeos;
-	                $plugins = get_site_option( 'active_sitewide_plugins' );
-	                if ( is_multisite() && is_array( $plugins ) && isset( $plugins[ $badgeos->basename ] ) ) {
+	                if ( is_multisite() ) {
 	                ?>
 	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
 	                        <td>
@@ -220,7 +219,7 @@ function badgeos_settings_page() {
 	                            </select>
 	                        </td>
 	                    </tr>
-	            	<?php 
+	            	<?php
 	                }
             	}
         		do_action( 'badgeos_settings', $badgeos_settings ); ?>
@@ -290,119 +289,16 @@ function badgeos_help_support_page() { ?>
 		<h2><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h2>
 		<p><?php printf( __( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievement, and earn badges. You define the Achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by <a href="%s" target="_blank">Credly</a>, the free web service for issuing, earning and sharing badges.', 'badgeos' ), 'https://credly.com/' ); ?></p>
 		<p><?php _e( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.", 'badgeos' ); ?></p>
+		<?php do_action( 'badgeos_help_support_page_about' ); ?>
 
 		<h2><?php _e( 'Help / Support', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
 		<p><?php _e( 'Please submit bugs or issues to our Github site for the BadgeOS Project.', 'badgeos' ); ?></p>
+		<?php do_action( 'badgeos_help_support_page_help' ); ?>
 
 		<h2><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions.  Visit <a href="http://badgeos.org/support/shortcodes/" target="_blank">BadgeOS.org</a> for additional information on shortcodes.', 'badgeos' ); ?></p>
-		<hr/>
-		<p><strong>[badgeos_achievement]</strong> - <?php _e( 'Display a single achievement on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li><?php _e( 'id', 'badgeos' ); ?> - <?php _e( 'The ID of the achievement to display.', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Output a list of achievements of any type on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li><?php _e( 'type', 'badgeos' ); ?> - <?php printf( __( 'Type of achievements to list. Default: %s', 'badgeos' ), '<code>all</code>' ); ?></li>
-						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li><?php _e( 'wpms', 'badgeos' ); ?> - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badge limit=15]</code></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Display submissions or submission form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Submission</strong>.', 'badgeos' ); ?></p>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
-			</ul>
-		</div>
-		<hr/>
-		<p><strong>[badgeos_nomination]</strong> - <?php _e( 'Display nominations or nomination form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Nomination</strong>.', 'badgeos' ); ?></p>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
-			</ul>
-		</div>
-		<hr/>
-		<p><strong>[badgeos_submissions]</strong> - <?php _e( 'Generate a list of submissions on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>limit - <?php printf( __( 'Number of submissions to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, auto-approved, approved, denied</code>', '<code>all</code>' ); ?></li>
-						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_attachments - <?php printf( __( 'Display attachments connected to the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_comments - <?php printf( __( 'Display comments associated with the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_nominations]</strong> - <?php _e( 'Generate a list of nominations on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>limit - <?php printf( __( 'Number of nominations to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, approved, denied</code>', '<code>all</code>' ); ?></li>
-						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
-			</ul>
-		</div>
-		</p>
+		<?php do_action( 'badgeos_help_support_page_shortcodes' ); ?>
 	</div>
 	<?php
 }

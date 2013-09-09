@@ -20,7 +20,11 @@
  * @param  array $args        The triggered args
  * @return void
  */
-function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
 
 	// Grab current user ID if one isn't specified
 	if ( ! $user_id )
@@ -46,13 +50,17 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
  * @param  array $args        The triggered args
  * @return bool                    True if user has completed achievement, false otherwise
  */
-function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
 	// Assume the user has completed the achievement
 	$return = true;
 
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
+
 	// If the user has not already earned the achievement...
-	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
+	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => 1 + badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
 
 		// Grab our required achievements for this achievement
 		$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
@@ -60,8 +68,8 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 		// If we have requirements, loop through each and make sure they've been completed
 		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) ) {
 			foreach ( $required_achievements as $requirement ) {
-				// If the user has not completed a requirement, they cannot complete the achievement
-				if ( ! badgeos_check_achievement_completion_for_user( $requirement->ID, $user_id ) ) {
+				// Has the user already earned the requirement?
+				if ( ! badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $requirement->ID, 'since' => badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
 					$return = false;
 					break;
 				}
@@ -120,7 +128,11 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  * @param  array $args        The triggered args
  * @return void
  */
-function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
+
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
 
 	// Use the current user ID if none specified
 	if ( $user_id == 0 )
@@ -269,8 +281,12 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
  * @param  array $args        The triggered args
  * @return bool                    True if user has access, false otherwise
  */
-function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = 1, $args = array() ) {
+function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
+	// Set to current site id
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();	
+	
 	// Assume we have access
 	$return = true;
 
@@ -330,12 +346,10 @@ function badgeos_user_has_access_to_step( $return = false , $user_id = 0 , $step
 		$return = false;
 
 	// Prevent user from repeatedly earning the same step
-	// Note: we're adding 5 seconds to the "since" timestamp in order
-	// to prevent any weird cross-achievement awarding timing issues.
-	if ( badgeos_get_user_achievements( array(
+	if ( $return && badgeos_get_user_achievements( array(
 			'user_id'        => absint( $user_id ),
 			'achievement_id' => absint( $step_id ),
-			'since'          => 5 + absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		) )
 	)
 		$return = false;
@@ -389,25 +403,27 @@ function badgeos_get_step_activity_count( $user_id = 0 , $step_id = 0 ) {
 	// Assume the user has no relevant activities
 	$activities = array();
 
-	// If the step has no parent, bail here
-	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
-		return false;
-
-	// If the user has any interaction with this achievement, only get activity since that date
-	if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
-		$since = gmdate( 'Y-m-d H:i:s', ( $date + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-	else
-		$since = 0;
-
 	// Grab the requirements for this step
 	$step_requirements = badgeos_get_step_requirements( $step_id );
 
 	// Determine which type of trigger we're using and return the corresponding activities
 	switch( $step_requirements['trigger_type'] ) {
 		case 'specific-achievement' :
+
+			// Get our parent achievement
+			$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
+
+			// If the user has any interaction with this achievement, only get activity since that date
+			if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+				$since = $date;
+			else
+				$since = 0;
+
+			// Get our achievement activity
 			$achievements = badgeos_get_user_achievements( array(
 				'user_id'        => absint( $user_id ),
-				'achievement_id' => absint( $step_requirements['achievement_post'] )
+				'achievement_id' => absint( $step_requirements['achievement_post'] ),
+				'since'          => $since
 			) );
 			$activities = count( $achievements );
 			break;
