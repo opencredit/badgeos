@@ -14,7 +14,7 @@
  *
  * @since  1.0.0
  * @param  array $atts Shortcode attributes
- * @return string 	   The concatinated markup 
+ * @return string 	   The concatinated markup
  */
 function badgeos_achievements_list_shortcode( $atts = array () ){
 
@@ -117,6 +117,33 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 
 }
 add_shortcode( 'badgeos_achievements_list', 'badgeos_achievements_list_shortcode' );
+/**
+ * Add help content for [badgeos_achievements_list] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_achievements_list_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Output a list of achievements of any type on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li><?php _e( 'type', 'badgeos' ); ?> - <?php printf( __( 'Type of achievements to list. Default: %s', 'badgeos' ), '<code>all</code>' ); ?></li>
+					<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
+					<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li><?php _e( 'wpms', 'badgeos' ); ?> - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badge limit=15]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_achievements_list_shortcode_help' );
 
 /**
  * Render a single achievement
@@ -157,6 +184,30 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 	return $output;
 }
 add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
+
+/**
+ * Add help content for [badgeos_achievement] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_achievement_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_achievement]</strong> - <?php _e( 'Display a single achievement on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li><?php _e( 'id', 'badgeos' ); ?> - <?php _e( 'The ID of the achievement to display.', 'badgeos' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_achievement_shortcode_help' );
 
 
 /**
@@ -201,6 +252,31 @@ function badgeos_nomination_form( $atts = array() ) {
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
 /**
+ * Add help content for [badgeos_nomination] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_nomination_form_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_nomination]</strong> - <?php _e( 'Display nominations or nomination form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Nomination</strong>.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nomination_form_shortcode_help' );
+
+
+/**
  * Submission Form
  * @since 1.0.0
  * @param  array  $atts The attributes
@@ -233,6 +309,31 @@ function badgeos_submission_form( $atts = array() ) {
 	}
 }
 add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
+
+/**
+ * Add help content for [badgeos_submission] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_submission_form_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_submission]</strong> - <?php _e( 'Display submissions or submission form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Submission</strong>.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_submission_form_shortcode_help' );
+
 
 /**
  * Shortcode to display a filterable list of Submissions
@@ -270,6 +371,36 @@ function badgeos_display_submissions( $atts = array() ) {
 add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
 
 /**
+ * Add help content for [badgeos_submissions] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_submissions_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_submissions]</strong> - <?php _e( 'Generate a list of submissions on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li>limit - <?php printf( __( 'Number of submissions to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
+					<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, auto-approved, approved, denied</code>', '<code>all</code>' ); ?></li>
+					<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>show_attachments - <?php printf( __( 'Display attachments connected to the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>show_comments - <?php printf( __( 'Display comments associated with the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_submissions_shortcode_help' );
+
+
+/**
  * Shortcode to display a filterable list of Nominations
  *
  * @since  1.1.0
@@ -303,3 +434,30 @@ function badgeos_display_nominations( $atts = array() ) {
 
 }
 add_shortcode( 'badgeos_nominations', 'badgeos_display_nominations' );
+
+/**
+ * Add help content for [badgeos_nominations] to BadgeOs Help page
+ *
+ * @since  1.2.0
+ */
+function badgeos_nominations_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_nominations]</strong> - <?php _e( 'Generate a list of nominations on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+				<ul>
+					<li>limit - <?php printf( __( 'Number of nominations to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
+					<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, approved, denied</code>', '<code>all</code>' ); ?></li>
+					<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+				</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortcode_help' );
