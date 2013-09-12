@@ -27,11 +27,15 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  */
 function badgeos_settings_validate( $input = '' ) {
 
-	//sanitize the settings data submitted
+	// Sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
 	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
 	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
 
+	// Allow add-on settings to be sanitized
+	do_action( 'badgeos_settings_validate', $input );
+
+	// Return sanitized inputs
 	return $input;
 
 }
@@ -176,6 +180,8 @@ function badgeos_settings_page() {
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
 			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+
+			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
 				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
@@ -233,6 +239,43 @@ function badgeos_settings_page() {
 	</div>
 	<?php
 }
+
+
+/**
+ * Adds additional options to the BadgeOS Settings page
+ *
+ * @since 1.0.0
+ */
+function badgeos_license_settings() {
+
+	// Get our licensed add-ons
+	$licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
+
+	// If we have any licensed add-ons
+	if ( ! empty( $licensed_addons ) ) {
+
+		// Output the header for licenses
+		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Licenses', 'badgeos' ) . '</h2></td></tr>';
+
+		// Sort our licenses alphabetially
+		ksort( $licensed_addons );
+
+		// Output each individual licensed product
+		foreach ( $licensed_addons as $slug => $addon ) {
+			$status = ! empty( $addon['license_status'] ) ? $addon['license_status'] : 'inactive';
+			echo '<tr valign="top">';
+			echo '<th scope="row">';
+			echo '<label for="badgeos_settings[licenses][' . $slug . ']">' . urldecode( $addon['item_name'] ) . ': </label></th>';
+			echo '<td>';
+			echo '<input type="text" size="30" name="badgeos_settings[licenses][' . $slug . ']" id="badgeos_settings[licenses][' . $slug . ']" value="' . $addon['license'] . '" />';
+			echo ' <span class="badgeos-license-status ' . $status . '">' . sprintf( __( 'License Status: %s' ), '<strong>' . ucfirst( $status ) . '</strong>' ) . '</span>';
+			echo '</td>';
+			echo '</tr>';
+		}
+	}
+
+}
+add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
 
 /**
  * Add-ons settings page
