@@ -88,6 +88,9 @@ class earned_user_achievements_widget extends WP_Widget {
 				//load widget setting for achievement types to display
 				$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
 				
+				//show most recently earned achievement first
+				$achievements = array_reverse( $achievements );
+				
 				echo '<ul class="widget-achievements-listing">';
 				foreach ( $achievements as $achievement ) {
 
