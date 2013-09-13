@@ -159,7 +159,7 @@ function badgeos_user_profile_data( $user = null ) {
 				) );
 
 				echo '<tr>';
-					echo '<td>'. get_the_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
+					echo '<td>'. badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
 					echo '<td>', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
 					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Award', 'badgeos' ) . '</a></span></td>';
 				echo '</tr>';
@@ -406,10 +406,10 @@ function badgeos_get_network_achievement_types_for_user( $user_id ){
 	global $blog_id;
 	$sites = badgeos_get_network_site_ids();
 	$all_achievement_types = array();
-	foreach( $sites as $site_blog_id ){		
+	foreach( $sites as $site_blog_id ){
 		if( $blog_id != $site_blog_id )
 			switch_to_blog( $site_blog_id );
-		
+
 		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
 		if( is_array($achievement_types) )
 			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
