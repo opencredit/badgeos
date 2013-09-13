@@ -255,7 +255,7 @@ function badgeos_license_settings() {
 	if ( ! empty( $licensed_addons ) ) {
 
 		// Output the header for licenses
-		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Licenses', 'badgeos' ) . '</h2></td></tr>';
+		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
 
 		// Sort our licenses alphabetially
 		ksort( $licensed_addons );
