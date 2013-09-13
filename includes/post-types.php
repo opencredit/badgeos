@@ -225,7 +225,7 @@ function badgeos_register_achievement_type_cpt() {
 		$show_in_menu = get_post_meta( $achievement_type->ID, '_badgeos_show_in_menu', true ) ? 'badgeos_badgeos' : false;
 
 		// Register the post type
-		register_post_type( sanitize_title( strtolower( $achievement_name_singular ) ), array(
+		register_post_type( sanitize_title( substr( strtolower( $achievement_name_singular ), 0, 20 ) ), array(
 			'labels'             => array(
 				'name'               => $achievement_name_plural,
 				'singular_name'      => $achievement_name_singular,
