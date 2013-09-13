@@ -58,7 +58,7 @@ function badgeos_get_achievements( $args = array() ) {
  * @since  1.0.0
  * @param  string $join          The query "join" string
  * @param  object $query_object  The complete query object
- * @return string 				 The updated "join" string 
+ * @return string 				 The updated "join" string
  */
 function badgeos_get_achievements_children_join( $join = '' , $query_object = null ) {
 	global $wpdb;
@@ -120,7 +120,7 @@ function badgeos_get_achievements_parents_join( $join = '' ) {
  * @since  1.0.0
  * @param  string $where The query "where" string
  * @param  object $query_object The complete query object
- * @return 
+ * @return
  */
 function badgeos_get_achievements_parents_where( $where = '' , $query_object = null ) {
 	global $wpdb;
@@ -524,26 +524,35 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 	$image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
 
 	// If we don't have an image...
-	if ( !$image ) {
+	if ( ! $image ) {
 
 		// Grab our achievement type's post thumbnail
 		$achievement = get_page_by_path( get_post_type(), OBJECT, 'achievement-type' );
 		$image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
-		if ( !$image ) {
+		if ( ! $image ) {
 
-			// Attempt to grab the width/height from our specified image size
-			global $_wp_additional_image_sizes;
-			if ( isset( $_wp_additional_image_sizes[$image_size] ) )
-				$image_sizes = $_wp_additional_image_sizes[$image_size];
+			// If we already have an array for image size
+			if ( is_array( $image_size ) ) {
+				// Write our sizes to an associative array
+				$image_sizes['width'] = $image_size[0];
+				$image_sizes['height'] = $image_size[1];
+
+			// Otherwise, attempt to grab the width/height from our specified image size
+			} else {
+				global $_wp_additional_image_sizes;
+				if ( isset( $_wp_additional_image_sizes[$image_size] ) )
+					$image_sizes = $_wp_additional_image_sizes[$image_size];
+			}
 
 			// If we can't get the defined width/height, set our own
-			if ( empty( $image_sizes ) )
+			if ( empty( $image_sizes ) ) {
 				$image_sizes = array(
 					'width'  => 100,
 					'height' => 100
 				);
+			}
 
 			// Available filter: 'badgeos_default_achievement_post_thumbnail'
 			$image = '<img src="' . apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' ) . '" width="' . $image_sizes['width'] . '" height="' . $image_sizes['height'] . '" class="' . $class .'">';
@@ -627,14 +636,14 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
  * Check if admin settings are set to show all achievements across a multisite network
  *
  * @since  1.1.1
- * @return boolean 
+ * @return boolean
  */
 function badgeos_ms_show_all_achievements(){
 	global $badgeos;
 	$ms_show_all_achievements = NULL;
 	if ( is_multisite() ) {
     	$badgeos_settings = get_option( 'badgeos_settings' );
-    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';   
+    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
     	if( 'enabled' == $ms_show_all_achievements )
     		return true;
     }
@@ -642,7 +651,7 @@ function badgeos_ms_show_all_achievements(){
 }
 
 /**
- * Create array of blog ids in the network if multisite setting is on 
+ * Create array of blog ids in the network if multisite setting is on
  *
  * @since  1.1.1
  * @return array                   Array of blog_ids
@@ -650,7 +659,7 @@ function badgeos_ms_show_all_achievements(){
 function badgeos_get_network_site_ids(){
 	global $wpdb;
     if( badgeos_ms_show_all_achievements() ) {
-    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) ); 
+    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) );
 		foreach ($blog_ids as $key => $value ) {
             $sites[] = $value->blog_id;
         }
