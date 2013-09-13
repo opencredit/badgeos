@@ -139,7 +139,7 @@ function badgeos_achievements_list_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badge limit=15]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badges limit=15]</code></li>
 		</ul>
 	</div>
 <?php }
