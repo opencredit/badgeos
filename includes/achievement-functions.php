@@ -668,3 +668,72 @@ function badgeos_get_network_site_ids(){
     }
     return $sites;
 }
+
+/**
+ * Set default achievement image on achievement post save
+ *
+ * @since  1.2.0
+ * @param  object $post The post object of the post being saved
+ */
+function badgeos_achievement_set_default_thumbnail( $post_id ) {
+	global $pagenow;
+
+	// Bail early if:
+	// this IS NOT an achievement or achievement-type post
+	// OR this IS an autosave
+	// OR current user CAN NOT edit this post
+	// OR the post already has a thumbnail
+	// OR we've just loaded the new post page
+	if (
+		! (
+			in_array( get_post_type( $post_id ), badgeos_get_achievement_types_slugs() )
+			|| 'achievement-type' == get_post_type( $post_id )
+		)
+		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		|| ! current_user_can( 'edit_post', $post_id )
+		|| has_post_thumbnail( $post_id )
+		|| 'post-new.php' == $pagenow
+	) {
+		return $post_id;
+	}
+
+	// Get the thumbnail of our parent achievement
+	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
+		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
+		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+	}
+
+	// If there is no thumbnail set, load in our default image
+	if ( empty( $thumbnail_id ) ) {
+
+		// Grab the default image
+		$file = apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' );
+
+		// Download file to temp location
+		$tmp = download_url( $file );
+
+		// Set variables for storage
+		// fix file filename for query strings
+		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
+		$file_array['name'] = basename( $matches[0] );
+		$file_array['tmp_name'] = $tmp;
+
+		// If error storing temporarily, unlink
+		if ( is_wp_error( $tmp ) ) {
+			@unlink( $file_array['tmp_name'] );
+			$file_array['tmp_name'] = '';
+		}
+
+		// Upload the image (and unlink if errored)
+		$thumbnail_id = media_handle_sideload( $file_array, $post_id );
+		if ( is_wp_error( $thumbnail_id ) ) {
+			@unlink( $file_array['tmp_name'] );
+		}
+	}
+
+	// Finally, if we have a thumbnail, set the thumbnail for our achievement
+	if ( $thumbnail_id )
+		set_post_thumbnail( $post_id, $thumbnail_id );
+
+}
+add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
