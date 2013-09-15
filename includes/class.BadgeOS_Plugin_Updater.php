@@ -1,13 +1,21 @@
 <?php
+/**
+ * Add-on Updater Class
+ *
+ * @package BadgeOS
+ * @subpackage Classes
+ * @author Credly, LLC
+ * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
+ * @link https://credly.com
+ */
 
-// uncomment this line for testing
+// Uncomment this line for testing
 //set_site_transient( 'update_plugins', null );
 
 /**
- * Allows plugins to use their own update API.
+ * Our add-on updater class.
  *
- * @author Pippin Williamson
- * @version 1.1
+ * Original codebase by Pippin Williamson
  */
 class BadgeOS_Plugin_Updater {
 
@@ -21,8 +29,7 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Class constructor.
 	 *
-	 * @uses plugin_basename()
-	 * @uses hook()
+	 * @since 1.2.0
 	 *
 	 * @param string $_api_url The URL pointing to the custom API endpoint.
 	 * @param string $_plugin_file Path to the plugin file.
@@ -50,9 +57,7 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Set up Wordpress filters to hook into WP's update process.
 	 *
-	 * @uses add_filter()
-	 *
-	 * @return void
+	 * @since 1.2.0
 	 */
 	private function hook() {
 		add_filter( 'badgeos_licensed_addons', array( $this, 'register_licensed_addon' ) );
@@ -61,6 +66,13 @@ class BadgeOS_Plugin_Updater {
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'pre_set_site_transient_update_plugins_filter' ) );
 	}
 
+	/**
+	 * Activate a new license or deactivate a deleted license
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $input Input data sent via $POST
+	 */
 	public function validate_license( $input ) {
 
 		// Activate our license if we have license data
@@ -76,7 +88,7 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Add this add-on to the list of registered licesned add-ons
 	 *
-	 * @since  1.0.0
+	 * @since  1.2.0
 	 *
 	 * @param  array $licensed_addons The current licensed addons
 	 * @return array                  The updated list of licensed add-ons
@@ -98,10 +110,10 @@ class BadgeOS_Plugin_Updater {
 	 * It is reassembled from parts of the native Wordpress plugin update code.
 	 * See wp-includes/update.php line 121 for the original wp_update_plugins() function.
 	 *
-	 * @uses api_request()
+	 * @since 1.2.0
 	 *
-	 * @param array $_transient_data Update array build by Wordpress.
-	 * @return array Modified update array with custom plugin data.
+	 * @param  array $_transient_data Update array build by Wordpress.
+	 * @return array                  Modified update array with custom plugin data.
 	 */
 	function pre_set_site_transient_update_plugins_filter( $_transient_data ) {
 
@@ -123,11 +135,11 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Updates information on the "View version x.x details" page with custom data.
 	 *
-	 * @uses api_request()
+	 * @since 1.2.0
 	 *
-	 * @param mixed $_data
-	 * @param string $_action
-	 * @param object $_args
+	 * @param  mixed  $_data
+	 * @param  string $_action
+	 * @param  object $_args
 	 * @return object $_data
 	 */
 	function plugins_api_filter( $_data, $_action = '', $_args = null ) {
@@ -144,13 +156,11 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Calls the API and, if successfull, returns the object delivered by the API.
 	 *
-	 * @uses get_bloginfo()
-	 * @uses wp_remote_post()
-	 * @uses is_wp_error()
+	 * @since 1.2.0
 	 *
-	 * @param string $_action The requested action.
-	 * @param array $_data Parameters for the API action.
-	 * @return false||object
+	 * @param  string       $_action The requested action.
+	 * @param  array        $_data   Parameters for the API action.
+	 * @return false|object
 	 */
 	private function api_request( $_action, $_data ) {
 
@@ -186,7 +196,14 @@ class BadgeOS_Plugin_Updater {
 	/**
 	 * Handle license key activation
 	 *
-	 * @since  1.0.0
+	 * This returns true on a successful server response,
+	 * even if the server responds with 'invalid' for the
+	 * license status.
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  string $license The license key to activate
+	 * @return bool            False on failure, true on success
 	 */
 	public function activate_license( $license = '' ) {
 
@@ -196,7 +213,7 @@ class BadgeOS_Plugin_Updater {
 
 		// If the license hasn't changed, bail here
 		if ( $license == $this->api_data['license'] && 'valid' == $this->api_data['license_status'] )
-			return;
+			return false;
 
 		// Setup our API Request data
 		$api_params = array(
@@ -220,25 +237,27 @@ class BadgeOS_Plugin_Updater {
 		update_option( $this->slug . '-license_key', $license );
 		update_option( $this->slug . '-license_status', $license_data->license );
 
+		return true;
+
 	}
 
 	/**
 	 * Handle license key deactivation
 	 *
-	 * @since  1.0.0
+	 * @since  1.2.0
 	 */
 	public function deactivate_license() {
 
 		// Run a quick security check
 		if ( ! check_admin_referer( 'badgeos_settings_nonce', 'badgeos_settings_nonce' ) )
-			return; // get out if we didn't click the Activate button
+			return false; // get out if we didn't click the Activate button
 
 		// Retrieve the license from the database
 		$license = trim( get_option( $this->slug . '-license_key' ) );
 
 		// If there isn't one, bail here
 		if ( empty( $license ) )
-			return;
+			return false;
 
 		// Setup our API Request data
 		$api_params = array(
@@ -261,12 +280,14 @@ class BadgeOS_Plugin_Updater {
 		// Clear our stored license options
 		delete_option( $this->slug . '-license_key' );
 		update_option( $this->slug . '-license_status', 'inactive' );
+
+		return true;
 	}
 
 	/**
 	 * Check a license for validity
 	 *
-	 * @since  1.0.0
+	 * @since  1.2.0
 	 *
 	 * @return string 'valid' if license is valid, 'invalid' otherwise
 	 */
