@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.5.1
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -182,10 +182,21 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
-= 1.1.1 =
-* Added: Setting if BadgeOS is network activated on Multisite for displaying all network wide achievements of the same type on a single site in the network. Site setting is only available to super admins. 
-* Added: A "wpms" attribute to the [badgeos_achievements_list] shortcode, this has to be manually set to true for network wide achievements of the same type to show up in the achievements list.
-* Updated: Earned User Achievements widget to selectively set what achievement types are displayed.
+= 1.2.0 =
+* Added: Introduced a suite of "user activity" functions for tracking a user's active achievements.
+* Updated: Improved support for WP Multisite installations
+* Updated: Earned Achievements widget now sorts achievements with newest-earned first.
+* Updated: Earned Achievements widget now supports displaying specific achievement types.
+* Updated: [badgeos_achievements_list] shortcode now suports multiple achievement types, using either type="all" or type="badge,quest,level".
+* Updated: BadgeOS Log Entry functions are now filterable and can be overridden (more on this in 1.3).
+* Updated: Added hooks to Help/Support page so add-ons can include their own content.
+* Updated: We now set a default thumbnail for new achievements and achievement types.
+* Updated: We now display a warning on the Achievement Type editor if a title exceeds 20 characters.
+* Updated: Removed some redundant checks in the rules-engine to make process more performant.
+* Updated: Relocated a few functions to make codebase easier to navigate.
+* Fixed: We now hide the container for an earned achievement's congratulations text if there is no congratulations text.
+* Fixed: The Earned Achievements widget and the Send to Credly functionality sanely fall-back to the parent achievement's thumbnail if the given achievement doesn't have one set.
+* Fixed: Eliminated a bug with the "Add Media" functionality due to a conflict with the Canvas theme by WooThemes.
 
 = 1.1.0 =
 * Added: New triggers for publishing new posts and pages
