@@ -78,7 +78,7 @@ jQuery(document).ready(function($){
 			},
 			dataType: 'json',
 			success: function( response ) {
-
+				console.log(response);
 				$('.badgeos-spinner').hide();
 				if ( response.data.message === null ) {
 					//alert("That's all folks!");

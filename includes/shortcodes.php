@@ -48,7 +48,13 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
-	$post_type_plural = get_post_type_object( $type )->labels->name;
+	// If we're dealing with multiple achievement types
+	if ( 'all' == $type ) {
+		$post_type_plural = 'achievements';
+	} else {
+		$types = explode( ',', $type );
+		$post_type_plural = ( 1 == count( $types ) ) ? get_post_type_object( $type )->labels->name : 'achievements';
+	}
 
 	$badges = null;
 
