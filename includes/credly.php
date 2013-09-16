@@ -913,7 +913,7 @@ class BadgeOS_Credly {
         $meta = $this->badge_metabox_save_meta( $post_id, $fields );
 
         // Update our meta value with our returned Credly badge ID
-        if ( $credly_badge )
+        if ( isset( $credly_badge ) )
             update_post_meta( $post_id, '_badgeos_credly_badge_id', $credly_badge );
 
         return $post_id;
