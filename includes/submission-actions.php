@@ -808,7 +808,8 @@ function badgeos_get_feedback( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Eliminate need for case-sensitivity on status
-	$args['status'] = strtolower( $args['status'] );
+	if ( ! empty( $args['status'] ) )
+		$args['status'] = strtolower( $args['status'] );
 
 	// If we're looking for auto-approved only
 	$show_auto_approved = true;
