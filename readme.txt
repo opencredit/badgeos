@@ -195,6 +195,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Earned Achievements widget now sorts achievements with newest-earned first.
 * Updated: Earned Achievements widget now supports displaying specific achievement types.
 * Updated: [badgeos_achievements_list] shortcode now suports multiple achievement types, using either type="all" or type="badge,quest,level".
+* Updated: [badgeos_achievements_list] shortcode now suports "orderby" and "order" parameters so you can control how achievements are sorted.
 * Updated: BadgeOS Log Entry functions are now filterable and can be overridden (more on this in 1.3).
 * Updated: Added hooks to Help/Support page so add-ons can include their own content.
 * Updated: We now set a default thumbnail for new achievements and achievement types.
