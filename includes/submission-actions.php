@@ -246,7 +246,7 @@ add_action( 'manage_posts_custom_column', 'badgeos_submission_column_action', 10
  * @return void
  */
 function badgeos_add_submission_dropdown_filters() {
-    global $typenow, $wpdb;
+    global $typenow;
 
 	if ( $typenow == 'submission' ) {
         //array of current status values available
