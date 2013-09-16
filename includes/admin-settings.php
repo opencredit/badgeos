@@ -53,6 +53,7 @@ function badgeos_credly_settings_validate( $options = array() ) {
 		empty( $options['api_key'] )
 		&& isset( $_POST['badgeos_credly_api_key_nonce'] )
 		&& wp_verify_nonce( $_POST['badgeos_credly_api_key_nonce'], 'badgeos_credly_api_key_nonce' )
+		&& 'false' !== $options['credly_enable'] // Only continue if credly is enabled
 	) {
 		// sanitize
 		$username = ( !empty( $options['credly_user'] ) ? sanitize_text_field( $options['credly_user'] ) : '' );
