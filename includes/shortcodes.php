@@ -141,11 +141,13 @@ function badgeos_achievements_list_shortcode_help() { ?>
 			<li>
 				<div style="padding-left:15px;">
 				<ul>
-					<li><?php _e( 'type', 'badgeos' ); ?> - <?php printf( __( 'Type of achievements to list. Default: %s', 'badgeos' ), '<code>all</code>' ); ?></li>
-					<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
-					<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					<li><?php _e( 'wpms', 'badgeos' ); ?> - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
+					<li>type - <?php printf( __( 'Type of achievements to list. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>"all", comma-separated list of achievement types (e.g. "badge,level,trophy"), individual achievement type (e.g. "badge")</code>', '<code>all</code>' ); ?></li>
+					<li>limit - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
+					<li>show_filter - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
+					<li>wpms - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
+					<li>orderby - <?php printf( __( 'Specify how to order achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank">See WP_Query orderby parameters</a>', '<code>menu_order</code>' ); ?></li>
+					<li>order - <?php printf( __( 'Specify the direction to order achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>ASC, DESC</code>', '<code>ASC</code>' ); ?></li>
 				</ul>
 				</div>
 			</li>
