@@ -205,6 +205,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Fixed: We now hide the container for an earned achievement's congratulations text if there is no congratulations text.
 * Fixed: The Earned Achievements widget and the Send to Credly functionality sanely fall-back to the parent achievement's thumbnail if the given achievement doesn't have one set.
 * Fixed: Eliminated a bug with the "Add Media" functionality due to a conflict with the Canvas theme by WooThemes.
+* Fixed: Cleared out many minor, but annoying, PHP warnings
 
 = 1.1.0 =
 * Added: New triggers for publishing new posts and pages
