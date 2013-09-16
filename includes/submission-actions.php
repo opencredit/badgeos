@@ -810,6 +810,8 @@ function badgeos_get_feedback( $args = array() ) {
 	// Eliminate need for case-sensitivity on status
 	if ( ! empty( $args['status'] ) )
 		$args['status'] = strtolower( $args['status'] );
+	else
+		$args['status'] = '';
 
 	// If we're looking for auto-approved only
 	$show_auto_approved = true;

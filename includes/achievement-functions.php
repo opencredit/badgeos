@@ -656,7 +656,7 @@ function badgeos_ms_show_all_achievements(){
  * @since  1.1.1
  * @return array                   Array of blog_ids
  */
-function badgeos_get_network_site_ids(){
+function badgeos_get_network_site_ids() {
 	global $wpdb;
     if( badgeos_ms_show_all_achievements() ) {
     	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) );
