@@ -114,8 +114,15 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 			'headers' => array( 'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password ) )
 	) ) ;
 
+	// If the response is a WP error
+	if ( is_wp_error( $response ) ) {
+		$error = '<p>'. sprintf( __( 'There was an error getting a Credly API Key: %s', 'badgeos' ), $response->get_error_message() ) . '</p>';
+		return badgeos_credly_get_api_key_error( $error );
+	}
+
+	// If the response resulted from potentially bad credentials
 	if ( '401' == wp_remote_retrieve_response_code( $response ) ) {
-		$error = '<p>'. __( 'There was an error getting a Credly API Key. Please check your username and password.', 'badgeos' ). '</p>';
+		$error = '<p>'. __( 'There was an error getting a Credly API Key: Please check your username and password.', 'badgeos' ) . '</p>';
 		// Save our error message.
 		return badgeos_credly_get_api_key_error( $error );
 	}
