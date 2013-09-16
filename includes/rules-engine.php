@@ -24,7 +24,7 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
 
 	// Set to current site id
 	if ( ! $site_id )
-		$site_id = get_current_blog_id();	
+		$site_id = get_current_blog_id();
 
 	// Grab current user ID if one isn't specified
 	if ( ! $user_id )
@@ -45,9 +45,9 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to verify
  * @param  integer $user_id        The given user's ID
- * @param  string $trigger        The trigger
+ * @param  string  $trigger        The trigger
  * @param  integer $site_id        The triggered site id
- * @param  array $args        The triggered args
+ * @param  array   $args           The triggered args
  * @return bool                    True if user has completed achievement, false otherwise
  */
 function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
@@ -57,7 +57,7 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 
 	// Set to current site id
 	if ( ! $site_id )
-		$site_id = get_current_blog_id();	
+		$site_id = get_current_blog_id();
 
 	// If the user has not already earned the achievement...
 	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => 1 + badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
@@ -91,7 +91,7 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    Our possibly updated earning status
  */
-function badgeos_user_meets_points_requirement( $return = false , $user_id = 0, $achievement_id = 0 ) {
+function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $achievement_id = 0 ) {
 
 	// First, see if the achievement requires a minimum amount of points
 	if ( 'points' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
@@ -132,7 +132,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 
 	// Set to current site id
 	if ( ! $site_id )
-		$site_id = get_current_blog_id();	
+		$site_id = get_current_blog_id();
 
 	// Use the current user ID if none specified
 	if ( $user_id == 0 )
@@ -285,8 +285,8 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 
 	// Set to current site id
 	if ( ! $site_id )
-		$site_id = get_current_blog_id();	
-	
+		$site_id = get_current_blog_id();
+
 	// Assume we have access
 	$return = true;
 
@@ -335,7 +335,7 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
  * @param  integer $step_id  The given step's post ID
  * @return bool              True if user has access to step, false otherwise
  */
-function badgeos_user_has_access_to_step( $return = false , $user_id = 0 , $step_id = 0 ) {
+function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_id = 0 ) {
 
 	// If we're not working with a step, bail here
 	if ( 'step' != get_post_type( $step_id ) )
@@ -368,7 +368,7 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_step',
  * @param  integer $step_id  The post ID for our step
  * @return bool              True if user deserves step, false otherwise
  */
-function badgeos_user_deserves_step( $return = false , $user_id = 0 , $step_id = 0 ) {
+function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0 ) {
 
 	// Only override the $return data if we're working on a step
 	if ( 'step' == get_post_type( $step_id ) ) {
@@ -398,7 +398,7 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 3 );
  * @param  integer $step_id The given step's ID
  * @return integer          The total activity count
  */
-function badgeos_get_step_activity_count( $user_id = 0 , $step_id = 0 ) {
+function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 
 	// Assume the user has no relevant activities
 	$activities = array();

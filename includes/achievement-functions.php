@@ -60,7 +60,7 @@ function badgeos_get_achievements( $args = array() ) {
  * @param  object $query_object  The complete query object
  * @return string 				 The updated "join" string
  */
-function badgeos_get_achievements_children_join( $join = '' , $query_object = null ) {
+function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_from = $wpdb->posts.ID";
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' )
@@ -77,7 +77,7 @@ function badgeos_get_achievements_children_join( $join = '' , $query_object = nu
  * @param  object $query_object  The complete query object
  * @return string 				 The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where = '' , $query_object = '' ) {
+function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
@@ -122,7 +122,7 @@ function badgeos_get_achievements_parents_join( $join = '' ) {
  * @param  object $query_object The complete query object
  * @return
  */
-function badgeos_get_achievements_parents_where( $where = '' , $query_object = null ) {
+function badgeos_get_achievements_parents_where( $where = '', $query_object = null ) {
 	global $wpdb;
 	$where .= $wpdb->prepare( ' AND p2p.p2p_from = %d', $query_object->query_vars['parent_of'] );
 	return $where;

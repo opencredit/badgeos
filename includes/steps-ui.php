@@ -92,7 +92,7 @@ function badgeos_steps_ui_meta_box( $post  = null) {
  * @param  integer $post_id The given step's parent $post ID
  * @return string           The concatenated HTML input for the step
  */
-function badgeos_steps_ui_html( $step_id = 0 , $post_id = 0 ) {
+function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 	// Grab our step's requirements and measurement
 	$requirements      = badgeos_get_step_requirements( $step_id );
@@ -406,7 +406,7 @@ function get_step_menu_order( $step_id = 0 ) {
  * @param  integer $step2 The order number of the step we're comparing against
  * @return integer        0 if the order matches, -1 if it's lower, 1 if it's higher
  */
-function badgeos_compare_step_order( $step1 = 0 , $step2 = 0 ) {
+function badgeos_compare_step_order( $step1 = 0, $step2 = 0 ) {
 	if ( $step1->order == $step2->order ) return 0;
 	return ( $step1->order < $step2->order ) ? -1 : 1;
 }

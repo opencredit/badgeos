@@ -44,7 +44,7 @@ function badgeos_save_nomination_data() {
  * @param  integer $user_nominating The user ID of the person who did the nominating
  * @return bool                     True on succesful post creation, false otherwise
  */
-function badgeos_create_nomination( $achievement_id  = 0, $title = '' , $content = '' , $user_nominated  = 0, $user_nominating = 0 ) {
+function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content = '', $user_nominated  = 0, $user_nominating = 0 ) {
 
 	if ( ! badgeos_check_if_user_has_nomination( absint( $user_nominated ), absint( $achievement_id ) ) ) {
 
@@ -279,8 +279,8 @@ function badgeos_submission_status_filter( $query = null ) {
 		$metavalue = ( isset($_GET['badgeos_submission_status']) && $_GET['badgeos_submission_status'] != '' ) ? $_GET['badgeos_submission_status'] : '';
 
 		if ( '' != $metavalue ) {
-			$query->set( 'orderby' , 'meta_value' );
-			$query->set( 'meta_key' , '_badgeos_submission_status' );
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', '_badgeos_submission_status' );
 			$query->set( 'meta_value', esc_html( $metavalue ) );
 		}
 	}
@@ -362,7 +362,7 @@ function badgeos_save_submission_data() {
  * @param  integer $user_id        The user ID
  * @return boolean                 Returns true if able to create form
  */
-function badgeos_create_submission( $achievement_id  = 0 , $title = '' , $content = '' , $user_id = 0  ) {
+function badgeos_create_submission( $achievement_id  = 0, $title = '', $content = '', $user_id = 0  ) {
 
 	$submission_data = array(
 		'post_title'	=>	$title,
@@ -633,7 +633,7 @@ function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
  * @param  string  $feedback_type  The type of feedback to check for (e.g. "submission")
  * @return bool                    True if the user has sent a submission, false otherwise
  */
-function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 , $feedback_type = '' ) {
+function badgeos_check_if_user_has_feedback( $user_id = 0, $achievement_id = 0, $feedback_type = '' ) {
 
 	// Setup our search args
 	$args = array(
@@ -678,7 +678,7 @@ function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0 ) {
-	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'submission' );
+	return badgeos_check_if_user_has_feedback( $user_id, $achievement_id, 'submission' );
 }
 
 /**
@@ -690,12 +690,12 @@ function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_nomination( $user_id = 0, $achievement_id = 0 ) {
-	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'nomination' );
+	return badgeos_check_if_user_has_feedback( $user_id, $achievement_id, 'nomination' );
 }
 
 /**
  * Get the nomination form
- * @param  array  $args The meta box arguemnts 
+ * @param  array  $args The meta box arguemnts
  * @return void
  */
 function badgeos_get_nomination_form( $args = array() ) {
@@ -741,7 +741,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 
 /**
  * Get the submission form
- * @param  array  $args The meta box arguemnts 
+ * @param  array  $args The meta box arguemnts
  * @return void
  */
 function badgeos_get_submission_form( $args = array() ) {

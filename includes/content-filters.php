@@ -187,7 +187,7 @@ function badgeos_do_single_filters() {
 	// no worries.. we'll add back later
 	remove_filter( 'the_content', 'wpautop' );
 	// filter out the post title
-	// add_filter( 'the_title', 'badgeos_remove_to_reformat_entries_title', 10 ,2 );
+	// add_filter( 'the_title', 'badgeos_remove_to_reformat_entries_title', 10, 2 );
 	// and filter out the post image
 	add_filter( 'post_thumbnail_html', 'badgeos_remove_to_reformat_entries_title', 10, 2 );
 }

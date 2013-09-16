@@ -217,7 +217,7 @@ add_filter( 'cmb_meta_boxes', 'badgeos_custom_metaboxes' );
  * @param  string $meta The stored meta for this field (which will always be blank)
  * @return string       HTML markup for our field
  */
-function badgeos_cmb_render_text_only( $field = array() , $meta = '' ) {
+function badgeos_cmb_render_text_only( $field = array(), $meta = '' ) {
 	echo $field['desc'];
 }
 add_action( 'cmb_render_text_only', 'badgeos_cmb_render_text_only', 10, 2 );

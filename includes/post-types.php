@@ -185,7 +185,7 @@ add_action( 'init', 'badgeos_register_post_types' );
  * @param  string $achievement_name_plural  The plural name
  * @return void
  */
-function badgeos_register_achievement_type( $achievement_name_singular = '' , $achievement_name_plural = '' ) {
+function badgeos_register_achievement_type( $achievement_name_singular = '', $achievement_name_plural = '' ) {
 	global $badgeos;
 	$badgeos->achievement_types[sanitize_title( $achievement_name_singular )] = array(
 		'single_name' => strtolower( $achievement_name_singular ),
