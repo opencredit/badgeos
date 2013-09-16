@@ -121,6 +121,12 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 * [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
 * [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
 
+= Developer Documentation: =
+
+BadgeOS is built with expandability in mind to allow virtually anything to trigger and recognize achievement. The [Developer Resources](http://badgeos.org/developers/ "BadgeOS Developers") area of the BadgeOS site provides links to documentation, APIs and guides to extending BadgeOS and integrating it with other plugins and systems.  [Share](http://badgeos.org/developers/share/ "Share Yoru Plugins and Add-Ons") your BadgeOS Add-Ons and BadgeOS-compatible plugins.
+
+Want to contribute to BadgeOS core? That's great! Visit our [GitHub site for the project at](https://github.com/opencredit/badgeos/tree/master#contributing "BadgeOS on GitHub").
+
 = License Info =
 
 Credly, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
