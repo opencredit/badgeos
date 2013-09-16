@@ -29,7 +29,7 @@ foreach ( $badgeos_ajax_actions as $action ) {
  * @since 1.0.0
  * @return void
  */
-function badgeos_ajax_get_achievements(){
+function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
 	// Setup our AJAX query vars
