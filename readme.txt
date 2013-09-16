@@ -73,6 +73,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 **Earned Badges Widget**
 
 * Shows logged in users what badges they have earned.
+* Option to choose which specific achievement types to display in the widget.
 * Set the parameters for the widget to decide how many recent badges to display.
 * Option to show logged in users total points they have earned (if you are using BadgeOS points mechanism).
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
@@ -120,6 +121,12 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - BadgeOS and Credly Tweets
 * [E-Mailing List](http://badgeos.org/join-list/ "BadgeOS Occasional Mailing List - No spam!") - Occasional updates via e-mail
 * [GitHub](https://github.com/opencredit/badgeos "BadgeOS on GitHub") - Report issues, contribute code
+
+= Developer Documentation: =
+
+BadgeOS is built with expandability in mind to allow virtually anything to trigger and recognize achievement. The [Developer Resources](http://badgeos.org/developers/ "BadgeOS Developers") area of the BadgeOS site provides links to documentation, APIs and guides to extending BadgeOS and integrating it with other plugins and systems.  [Share](http://badgeos.org/developers/share/ "Share Yoru Plugins and Add-Ons") your BadgeOS Add-Ons and BadgeOS-compatible plugins.
+
+Want to contribute to BadgeOS core? That's great! Visit our [GitHub site for the project at](https://github.com/opencredit/badgeos/tree/master#contributing "BadgeOS on GitHub").
 
 = License Info =
 
