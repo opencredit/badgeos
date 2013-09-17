@@ -375,34 +375,13 @@ function badgeos_process_user_data() {
 add_action( 'init', 'badgeos_process_user_data' );
 
 /**
- * Returns array of user log ids (log/journey cpt) from post ids array and a user id.
- *
- * @since  unknown
- * @param  array   $post_ids An array of post IDs
- * @param  integer $user_id  The user's ID
- * @return array             An array of connected log IDs
- */
-function badgeos_get_userlog_ids( $post_ids = array(), $user_id = 0 ){
-	global $wpdb;
-	if ( is_array( $post_ids ) ) {
-		$post_ids = implode( ',', $post_ids );
-		$sql = "SELECT a.ID FROM $wpdb->posts a, $wpdb->postmeta b WHERE a.ID = b.post_id AND a.post_author = ".$user_id." AND a.post_status = 'publish' AND b.meta_key = '_badgeos_log_achievement_id' and b.meta_value in ( ".$post_ids." )";
-		$rs = $wpdb->get_results( $sql );
-		foreach ( $rs as $post ) {
-			$log_ids[] = $post->ID;
-		}
-		return $log_ids;
-	}
-}
-
-/**
  * Returns array of achievement types a user has earned across a multisite network
  *
- * @since  1.1.1
+ * @since  1.2.0
  * @param  integer $user_id  The user's ID
  * @return array             An array of post types
  */
-function badgeos_get_network_achievement_types_for_user( $user_id ){
+function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	global $blog_id;
 
 	// Assume we have no achievement types
