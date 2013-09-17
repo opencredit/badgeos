@@ -115,7 +115,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"). Here are some ways to stay connected and to see what else we are up to:
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
-* [Credly.com](https://credly.com/ "Credly web site") - Recognize, manage and share lifelong achievement
+* [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - BadgeOS and Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - BadgeOS and Credly Tweets
