@@ -635,7 +635,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 /**
  * Check if admin settings are set to show all achievements across a multisite network
  *
- * @since  1.1.1
+ * @since  1.2.0
  * @return boolean
  */
 function badgeos_ms_show_all_achievements(){
@@ -653,7 +653,7 @@ function badgeos_ms_show_all_achievements(){
 /**
  * Create array of blog ids in the network if multisite setting is on
  *
- * @since  1.1.1
+ * @since  1.2.0
  * @return array                   Array of blog_ids
  */
 function badgeos_get_network_site_ids() {

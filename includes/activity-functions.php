@@ -42,7 +42,7 @@ function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id =
 /**
  * Get a user's active achievements
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id User ID
  * @return array            An array of the user's active achievements
@@ -63,7 +63,7 @@ function badgeos_user_get_active_achievements( $user_id ) {
 /**
  * Update a user's active achievements
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id      User ID
  * @param  array   $achievements An array of achievements to pass to meta
@@ -88,7 +88,7 @@ function badgeos_user_update_active_achievements( $user_id = 0, $achievements = 
 /**
  * Get a user's active achievement details
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id        User ID
  * @param  integer $achievement_id Achievement post ID
@@ -106,7 +106,7 @@ function badgeos_user_get_active_achievement( $user_id = 0, $achievement_id = 0 
 /**
  * Add an achievement to a user's active achievements
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id        User ID
  * @param  integer $achievement_id Achievement post ID
@@ -134,7 +134,7 @@ function badgeos_user_add_active_achievement( $user_id = 0, $achievement_id = 0 
 /**
  * Update the stored data for an active achievement
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id        User ID
  * @param  integer $achievement_id Achievement post ID
@@ -171,7 +171,7 @@ function badgeos_user_update_active_achievement( $user_id = 0, $achievement_id =
 /**
  * Remove an achievement from a user's list of active achievements
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id        User ID
  * @param  integer $achievement_id Achievement post ID
@@ -193,7 +193,7 @@ function badgeos_user_delete_active_achievement( $user_id = 0, $achievement_id =
 /**
  * Update the user's active achievement meta with each earned achievement
  *
- * @since  1.1.1
+ * @since  1.2.0
  *
  * @param  integer $user_id         The given user's ID
  * @param  integer $achievement_id  The given achievement's post ID

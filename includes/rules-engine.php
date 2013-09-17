@@ -223,7 +223,7 @@ add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achieve
  *
  * Triggers hook badgeos_unlock_all_{$post_type}
  *
- * @since  1.1.1
+ * @since  1.2.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
  * @return void

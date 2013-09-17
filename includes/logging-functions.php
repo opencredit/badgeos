@@ -45,7 +45,7 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
 /**
  * Filter to create a badgeos-log-entry post
  *
- * @since  1.1.1
+ * @since  1.2.0
  * @param  integer $log_post_id The ID of the log entry (default: 0)
  * @param  array   $args        Available args to use for writing our new post
  * @return ingeter              The updated log entry ID
@@ -77,7 +77,7 @@ add_filter( 'badgeos_post_log_entry', 'badgeos_log_entry', 10, 2 );
 /**
  * Hook to log the connected achievement ID
  *
- * @since 1.1.1
+ * @since 1.2.0
  * @param integer $log_post_id The log post ID
  * @param integer $object_id   The connected objet ID
  */

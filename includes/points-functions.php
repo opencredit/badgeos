@@ -65,7 +65,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 /**
  * Log a user's updated points
  *
- * @since 1.1.1
+ * @since 1.2.0
  * @param integer $user_id        The user ID
  * @param integer $new_points     Points added to the user's total
  * @param integer $total_points   The user's updated total points
