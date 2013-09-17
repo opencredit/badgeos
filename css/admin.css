@@ -1,3 +1,4 @@
+/* For the settings icon */
 #icon-badgeos_badgeos {
 	background-image: url('../images/badgeos_screen_icon.png');
 }
@@ -62,4 +63,30 @@ li.step-row .delete-step {
 	background: #ac7;
 	border-color:#7a5;
 	color:#250;
+}
+
+/* Add-ons page */
+.addon {
+	display: block;
+	background: #fafafa;
+	border: 1px solid #eee;
+	padding: 1em;
+	margin: 0 1em 1em 0;
+	min-width: 200px;
+	max-width: 25%;
+	position: relative;
+	float: left;
+}
+.addon:nth-child(3n+4) {
+	clear: both;
+}
+.addon .thumbnail-link {
+	display: block;
+	margin:0 auto;
+	width: 200px;
+	height: 200px;
+	text-align: center;
+}
+.addon img {
+	max-width: 100%;
 }

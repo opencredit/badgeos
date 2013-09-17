@@ -191,6 +191,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.2.0 =
 * Added: Introduced a suite of "user activity" functions for tracking a user's active achievements.
+* Updated: Add-Ons admin page now dynamically pulls all available add-ons directly from BadgeOS.org
 * Updated: Improved support for WP Multisite installations
 * Updated: Earned Achievements widget now sorts achievements with newest-earned first.
 * Updated: Earned Achievements widget now supports displaying specific achievement types.

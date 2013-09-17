@@ -287,45 +287,50 @@ add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
 
 /**
  * Add-ons settings page
+ *
  * @since  1.0.0
- * @return void
  */
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
-		<h2><?php _e( 'BadgeOS Add-Ons', 'badgeos' ); ?></h2>
-
-		<table>
-			<tr>
-				<td valign="top">
-					<a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">
-						<img width="150" height="150" src="<?php echo $image_url;?>add-on-community.png">
-					</a>
-				</td>
-				<td valign="top">
-					<h3>Community Add-on</h3>
-					<p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">http://wordpress.org/extend/plugins/badgeos-community-add-on/</a></p>
-					The "BadgeOS Community Add-on" integrates BadgeOS features into BuddyPress and bbPress. Site members complete achievements and earn badges based on a range of community activity and triggers. This add-on to BadgeOS also includes the ability to display badges and achievements on user profiles and activity feeds.
-				</td>
-			</tr>
-			<tr>
-				<td valign="top">
-					<a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/">
-						<img width="150" height="150" src="<?php echo $image_url;?>add-on-badgestack.png">
-					</a>
-				</td>
-				<td valign="top">
-					<h3>BadgeStack Add-on</h3>
-					<p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/">http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/</a></p>
-					The BadgeStack add-on to BadgeOS automatically creates all the achievement types and pages needed to quickly set up your very own badging system. Levels, Quest Badges, Quests and Community Badges are all ready upon activating the plugin, as are pages with shortcodes for each achievement type. BadgeStack also includes a set of sample achievements and badges. A great way to bring some instant organization to your site and to get started with badging. This add-on is made possible in part due to the generous support of HASTAC, through the DML Badging Competition.
-				</td>
-			</tr>
-		</table>
-
+		<h2><?php printf( __( 'BadgeOS Add-Ons &nbsp;&mdash;&nbsp; %s', 'badgeos' ), '<a href="http://badgeos.org/add-ons/?ref=badgeos" class="button-primary" target="_blank">' . __( 'Browse All Add-Ons', 'badgeos' ) . '</a>' ); ?></h2>
+		<p><?php _e( 'These add-ons extend the functionality of BadgeOS.', 'badgeos' ); ?></p>
+		<?php echo badgeos_add_ons_get_feed(); ?>
 	</div>
 	<?php
+}
+
+/**
+ * Get all add-ons from the BadgeOS catalog feed.
+ *
+ * @since  1.2.0
+ * @return string Concatenated markup from feed, or error message
+*/
+function badgeos_add_ons_get_feed() {
+
+	// Attempt to pull back our cached feed
+	$feed = get_transient( 'badgeos_add_ons_feed' );
+
+	// If we don't have a cached feed, pull back fresh data
+	if ( empty( $feed ) ) {
+
+		// Retrieve and parse our feed
+		$feed = wp_remote_get( 'http://badgeos.org/?feed=addons', array( 'sslverify' => false ) );
+		if ( ! is_wp_error( $feed ) ) {
+			if ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
+				$feed = wp_remote_retrieve_body( $feed );
+				// Cache our feed for 1 hour
+				set_transient( 'badgeos_add_ons_feed', $feed, HOUR_IN_SECONDS );
+			}
+		} else {
+			$feed = '<div class="error"><p>' . __( 'There was an error retrieving the add-ons list from the server. Please try again later.', 'badgeos' ) . '</div>';
+		}
+	}
+
+	// Return our feed, or error message
+	return $feed;
 }
 
 /**
