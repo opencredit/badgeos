@@ -55,6 +55,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 *   Issue badges for any combination of achievements
 *   Award points for commenting, logging in, making submissions, completing tasks
+*   Display a congratulatory message, customizable per Achievement, on each achievement page.
 
 
 **View and Issue your BadgeOS badges via iOS Mobile App**
@@ -67,9 +68,10 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 **Earned Achievements Widget**
 
-* Shows logged in users what badges and achievements they have earned.
-* Choose which achievement types to show in each instance of the widget
+* Shows logged in users what badges they have earned.
+* Option to choose which specific achievement types to display in the widget.
 * Set the parameters for the widget to decide how many recent badges to display.
+* Option to show logged in users total points they have earned (if you are using BadgeOS points mechanism).
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
 
 
