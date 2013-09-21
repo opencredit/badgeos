@@ -8,7 +8,7 @@ Description
 
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
-Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for recognizing and displaying lifelong achievement.
+Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
 
 BadgeOS is extremely powerful and infinitely extensible. Check out some of the out-of-the-box features:
 
@@ -24,6 +24,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Point thresholds
 *   Admin Given Badges
 *   Community Activity (with the powerful [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
+*   Activity from other popular WordPress plugins (see growing catalog of [BadgeOS Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons"))
 
 **Define an Unlimited Number of Achievement Types**
 
@@ -47,6 +48,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
 *   Easily link together one or more triggers, steps or actions into the conditions needed to earn a badge or mark an achievement.
 *   Extend the Required Steps options using the free [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on")
+*   Also extend Required Steps with other [BadgeOS Add-ons](http://badgeos.org/add-ons "BadgeOS Add-ons")
 
 
 **Reward User Progress**
@@ -63,9 +65,10 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Credly app's "ID Card" view essentially turns a BadgeOS badge into an "access pass" for face-to-face activities.
 
 
-**Earned Badges Widget**
+**Earned Achievements Widget**
 
-* Shows logged in users what badges they have earned.
+* Shows logged in users what badges and achievements they have earned.
+* Choose which achievement types to show in each instance of the widget
 * Set the parameters for the widget to decide how many recent badges to display.
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
 
@@ -74,7 +77,8 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
-* Just activate BadgeOS and place the simple shortcode on any page or post
+* Just activate BadgeOS and place the simple shortcode on any page or post.
+* Choose from multiple shortcode parameters to dynamically customize how your achievements are displayed.
 * And you've got an engagement management system running on your WordPress site!
 
 
@@ -84,15 +88,16 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Approve or deny submissions with one click
 * Add comments to engage the member and elaborate on your decisions.
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
+* Shortcodes for easily creating front-end pages for displaying submissions and nominations.
 
 
 Extensibility and BadgeOS Add-ons
 ------------
 * BadgeOS is designed to be a true operating system for turning any WordPress site into an engagement management application.
+* BadgeOS offers a growing catalog of [Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
 * Built with expandability in mind to allow virtually anything to trigger and recognize achievement.
-* BadgeOS plans to continue to release a range of [Add-ons](http://badgeos.org/download/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
-* Check out some of the [BadgeOS customizations](http://badgeos.org/services/badgeos-customization/ "We'll help you customize your BadgeOS site") we've already implemented to get a sense for what you might expect.
-
+* Check out some of the [BadgeOS customizations](http://badgeos.org/services/badgeos-customization/ "We'll help you customize your BadgeOS site") we've already implemented to get a sense for what is possible with BadgeOS.
+* [Developer Documentation and APIs](http://badgeos.org/developers/ "BadgeOS Developer Resources") are freely available.  [Share your own BadgeOS add-ons](http://badgeos.org/developers/share "Share Your BadgeOS Add-Ons") with the community today.
 
 Stay Connected / Helpful Links
 ------------
@@ -100,6 +105,7 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
 * [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
+* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers. 
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
