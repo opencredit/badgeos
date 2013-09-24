@@ -33,7 +33,7 @@ Author URI: http://webdevstudios.com/
 *************************************************************************/
 
 $meta_boxes = array();
-$meta_boxes = apply_filters ( 'cmb_meta_boxes' , $meta_boxes );
+$meta_boxes = apply_filters ( 'cmb_meta_boxes', $meta_boxes );
 foreach ( $meta_boxes as $meta_box ) {
 	$my_box = new cmb_Meta_Box( $meta_box );
 }
@@ -303,7 +303,7 @@ class cmb_Meta_Box {
 						if (!is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) ) {
 							echo '<option value="' . $term->slug . '" selected>' . $term->name . '</option>';
 						} else {
-							echo '<option value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name . '</option>';
+							echo '<option value="' . $term->slug . '  ', $meta == $term->slug ? $meta : ' ', '  ">' . $term->name . '</option>';
 						}
 					}
 					echo '</select>';
@@ -317,7 +317,7 @@ class cmb_Meta_Box {
 						if ( !is_wp_error( $names ) && !empty( $names ) && !strcmp( $term->slug, $names[0]->slug ) ) {
 							echo '<li><input type="radio" name="', $field['id'], '" value="'. $term->slug . '" checked>' . $term->name . '</li>';
 						} else {
-							echo '<li><input type="radio" name="', $field['id'], '" value="' . $term->slug . '  ' , $meta == $term->slug ? $meta : ' ' ,'  ">' . $term->name .'</li>';
+							echo '<li><input type="radio" name="', $field['id'], '" value="' . $term->slug . '  ', $meta == $term->slug ? $meta : ' ', '  ">' . $term->name .'</li>';
 						}
 					}
 					echo '</ul>';
@@ -328,11 +328,11 @@ class cmb_Meta_Box {
 					$names = wp_get_object_terms( $post->ID, $field['taxonomy'] );
 					$terms = get_terms( $field['taxonomy'], 'hide_empty=0' );
 					foreach ($terms as $term) {
-						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name , '"';
+						echo '<li><input type="checkbox" name="', $field['id'], '[]" id="', $field['id'], '" value="', $term->name, '"';
 						foreach ($names as $name) {
 							if ( $term->slug == $name->slug ){ echo ' checked="checked" ';};
 						}
-						echo' /><label>', $term->name , '</label></li>';
+						echo' /><label>', $term->name, '</label></li>';
 					}
 					echo '</ul>';
 					echo '<span class="cmb_metabox_description">', $field['desc'], '</span>';
@@ -386,7 +386,7 @@ class cmb_Meta_Box {
 					echo '</div>';
 				break;
 				default:
-					do_action('cmb_render_' . $field['type'] , $field, $meta);
+					do_action('cmb_render_' . $field['type'], $field, $meta);
 			}
 
 			echo '</td>','</tr>';

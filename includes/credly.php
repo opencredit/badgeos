@@ -51,6 +51,7 @@ class BadgeOS_Credly {
      * Add any hooks into WordPress here
      *
      * @since 1.0.0
+     * @return void
      */
     public function hooks() {
 
@@ -113,10 +114,10 @@ class BadgeOS_Credly {
      * Generate our base url for badge create/update
      *
      * @since  1.0.0
-     * @param  string $badge_id The ID of our existing Credly badge if it exists
-     * @return string           Our url including base and badge slug
+     * @param  integer $badge_id The ID of our existing Credly badge if it exists
+     * @return string            Our url including base and badge slug
      */
-    private function api_url_badge( $badge_id ) {
+    private function api_url_badge( $badge_id = 0 ) {
 
         if ( ! empty( $badge_id ) ) {
 
@@ -182,7 +183,7 @@ class BadgeOS_Credly {
      * @param  array  $body An array of data we're passing in the post body
      * @return array        Array of results
      */
-    private function credly_api_post( $url, $body ) {
+    private function credly_api_post( $url = array(), $body = array() ) {
 
         $response = wp_remote_post( $url, array(
             'method'      => 'POST',
@@ -207,7 +208,7 @@ class BadgeOS_Credly {
      * @param  string $url The URL we're getting from
      * @return array       Array of results
      */
-    private function credly_api_get( $url ) {
+    private function credly_api_get( $url = '' ) {
 
         $response = wp_remote_get( $url );
 
@@ -219,11 +220,11 @@ class BadgeOS_Credly {
      * Create or update a badge on Credly
      *
      * @since  1.0.0
-     * @param  string  $badge_id The post ID of our badge
-     * @param  array   $fields   An array of meta fields from our badge post
-     * @return mixed             False on error. The Credly ID for our badge on success
+     * @param  integer  $badge_id The post ID of our badge
+     * @param  array    $fields   An array of meta fields from our badge post
+     * @return mixed              False on error. The Credly ID for our badge on success
      */
-    function post_credly_badge( $badge_id = '', $fields ){
+    function post_credly_badge( $badge_id = 0, $fields = array() ){
 
         // Set array of parameters for API call
         $body = $this->post_credly_badge_args( $badge_id, $fields );
@@ -244,14 +245,12 @@ class BadgeOS_Credly {
     /**
      * Generate the array for the Credly badge API call
      *
-     * @since  1.0
-     *
-     * @param  string  $badge_id The post of our badge
-     * @param  array   $fields   Our array of fields
-     *
-     * @return array             An array of args for our API call
+     * @since  1.0.0
+     * @param  integer  $badge_id The post of our badge
+     * @param  array    $fields   Our array of fields
+     * @return array              An array of args for our API call
      */
-    function post_credly_badge_args( $badge_id = '', $fields ) {
+    function post_credly_badge_args( $badge_id = 0, $fields = array() ) {
 
         $attachment        = $this->encoded_image( credly_fieldmap_get_field_value( $badge_id, $this->field_image ) );
 
@@ -406,7 +405,7 @@ class BadgeOS_Credly {
      * @param  array  $categories An array of category names and ids
      * @return string             A concatenated string of html markup
      */
-    private function credly_existing_category_output( $categories ) {
+    private function credly_existing_category_output( $categories = array() ) {
 
         // Return if we don't have any categories saved in post meta
         if ( ! is_array( $categories ) )
@@ -450,7 +449,7 @@ class BadgeOS_Credly {
      * @param  int  $user_id The user ID of the user being edited
      * @return void
      */
-    public function credly_profile_setting_save( $user_id ) {
+    public function credly_profile_setting_save( $user_id = 0 ) {
 
         $credly_enable = ( ! empty( $_POST['credly_user_enable'] ) && $_POST['credly_user_enable'] == 'true' ? 'true' : 'false' );
 
@@ -533,7 +532,7 @@ class BadgeOS_Credly {
      * @param  string  $email Email address for the current user
      * @return mixed          Numeric user ID on success, false on failure
      */
-    private function credly_user_email_search( $email ) {
+    private function credly_user_email_search( $email = '' ) {
 
         // Generate a url for our request
         $url  = $this->api_url_with_token( $this->api_url_check_email() );
@@ -618,10 +617,11 @@ class BadgeOS_Credly {
      * Post a users earned badge to Credly
      *
      * @since  1.0.0
+     * @param  int  $user_id  The given users ID
      * @param  int  $badge_id The badge ID the user is earning
      * @return string         Results of the API call
      */
-    public function post_credly_user_badge( $user_id = 0, $badge_id ) {
+    public function post_credly_user_badge( $user_id = 0, $badge_id = 0 ) {
 
         // Bail if the badge isn't in Credly
         if ( ! credly_is_achievement_giveable( $badge_id ) )
@@ -666,7 +666,7 @@ class BadgeOS_Credly {
      * @param  int  $badge_id The badge ID the user is earning
      * @return array          An array of args
      */
-    private function post_user_badge_args( $user_id, $badge_id ) {
+    private function post_user_badge_args( $user_id = 0, $badge_id = 0 ) {
 
         $args = '';
 
@@ -747,7 +747,7 @@ class BadgeOS_Credly {
      * @param  string  $image_id The ID of our image attachment
      * @return string            base64 encoded image file
      */
-    private function encoded_image( $image_id ) {
+    private function encoded_image( $image_id = '' ) {
 
         // If we don't have a valid image ID, bail here
         if ( ! is_numeric( $image_id ) )
@@ -780,7 +780,7 @@ class BadgeOS_Credly {
 
         foreach ( badgeos_get_achievement_types_slugs() as $achievement_type ) {
 
-            add_meta_box( 'badgeos_credly_details_meta_box', __( 'Badge Sharing Options' , 'badgeos' ), array( $this, 'badge_metabox_show' ), $achievement_type, 'advanced', 'default' );
+            add_meta_box( 'badgeos_credly_details_meta_box', __( 'Badge Sharing Options', 'badgeos' ), array( $this, 'badge_metabox_show' ), $achievement_type, 'advanced', 'default' );
 
         }
     }
@@ -881,9 +881,10 @@ class BadgeOS_Credly {
      * Save our Credly Badge Settings metabox
      *
      * @since  1.0.0
+     * @param  int     The ID of the given post
      * @return int     Return the post ID of the post we're running on
      */
-    public function badge_metabox_save( $post_id ) {
+    public function badge_metabox_save( $post_id = 0 ) {
 
         // Verify nonce
         if ( ! isset( $_POST['credly_details_nonce'] ) || ! wp_verify_nonce( $_POST['credly_details_nonce'], 'credly_details' ) )
@@ -912,7 +913,7 @@ class BadgeOS_Credly {
         $meta = $this->badge_metabox_save_meta( $post_id, $fields );
 
         // Update our meta value with our returned Credly badge ID
-        if ( $credly_badge )
+        if ( isset( $credly_badge ) )
             update_post_meta( $post_id, '_badgeos_credly_badge_id', $credly_badge );
 
         return $post_id;
@@ -952,7 +953,7 @@ class BadgeOS_Credly {
      * @param  array  $fields  An array of fields in the metabox
      * @return bool            Return true
      */
-    private function badge_metabox_save_meta( $post_id, $fields ) {
+    private function badge_metabox_save_meta( $post_id = 0, $fields = array() ) {
 
         update_post_meta( $post_id, '_badgeos_send_to_credly', $fields['send_to_credly'] );
         update_post_meta( $post_id, '_badgeos_credly_include_evidence', $fields['credly_include_evidence'] );
@@ -971,7 +972,6 @@ class BadgeOS_Credly {
  * Generate the available fields to map to
  *
  * @since  1.0.0
- * @param  string $value Our current saved value if it exists
  * @return string        A concatenated string of <option> values
  */
 function credly_fieldmap_get_fields() {
@@ -1079,6 +1079,10 @@ function credly_fieldmap_get_field_value( $post_id = '', $field = '' ) {
             break;
         case 'featured_image':
             $value = get_post_thumbnail_id( $post_id );
+            if ( ! $value ) {
+                $parent_achievement = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
+                $value = get_post_thumbnail_id( $parent_achievement->ID );
+            }
             break;
         case 'permalink':
             $value = get_permalink( $post_id );
@@ -1099,9 +1103,7 @@ function credly_fieldmap_get_field_value( $post_id = '', $field = '' ) {
  * Check if an achievement is giveable in Credly
  *
  * @since  1.0.0
- *
  * @param  integer $achievement_id The achievement ID we're checking
- *
  * @return bool                    True if giveable, false if not
  */
 function credly_is_achievement_giveable( $achievement_id = 0 ) {

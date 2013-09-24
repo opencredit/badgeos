@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.1.0
+* Version: 1.2.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -26,6 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>;.
 */
 
 class BadgeOS {
+
+	/**
+	 * BadgeOS Version
+	 *
+	 * @var string
+	 */
+	public static $version = '1.2.0';
 
 	function __construct() {
 		// Define plugin constants
@@ -59,11 +66,15 @@ class BadgeOS {
 	 * Include all our important files.
 	 */
 	function includes() {
+		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
+		require_once( $this->directory_path . 'includes/activity-functions.php' );
 		require_once( $this->directory_path . 'includes/ajax-functions.php' );
+		require_once( $this->directory_path . 'includes/logging-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
+		require_once( $this->directory_path . 'includes/points-functions.php' );
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );
 		require_once( $this->directory_path . 'includes/shortcodes.php' );
@@ -162,23 +173,27 @@ class BadgeOS {
 
 		// Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		$badgeos_settings['minimum_role']     = 'administrator';
-		$badgeos_settings['submission_email'] = get_option( 'admin_email' );
-		$badgeos_settings['debug_mode']       = 'disabled';
-		update_option( 'badgeos_settings', $badgeos_settings );
+		if ( empty( $badgeos_settings ) ) {
+			$badgeos_settings['minimum_role']     = 'manage_options';
+			$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+			$badgeos_settings['debug_mode']       = 'disabled';
+			update_option( 'badgeos_settings', $badgeos_settings );
+		}
 
 		// Setup default Credly options
 		$credly_settings = ( $exists = get_option( 'credly_settings' ) ) ? $exists : array();
-		$credly_settings['credly_enable']                  = 'true';
-		$credly_settings['credly_badge_title']             = 'post_title';
-		$credly_settings['credly_badge_description']       = 'post_body';
-		$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-		$credly_settings['credly_badge_image']             = 'featured_image';
-		$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
-		$credly_settings['credly_badge_evidence']          = 'permalink';
-		$credly_settings['credly_badge_sendemail']         = 'true';
-		$credly_settings['credly_badge_criteria']          = '';
-		update_option( 'credly_settings', $credly_settings );
+		if ( empty( $credly_settings ) ) {
+			$credly_settings['credly_enable']                  = 'true';
+			$credly_settings['credly_badge_title']             = 'post_title';
+			$credly_settings['credly_badge_description']       = 'post_body';
+			$credly_settings['credly_badge_short_description'] = 'post_excerpt';
+			$credly_settings['credly_badge_image']             = 'featured_image';
+			$credly_settings['credly_badge_testimonial']       = '_badgeos_congratulations_text';
+			$credly_settings['credly_badge_evidence']          = 'permalink';
+			$credly_settings['credly_badge_sendemail']         = 'true';
+			$credly_settings['credly_badge_criteria']          = '';
+			update_option( 'credly_settings', $credly_settings );
+		}
 
 		// Register our post types and flush rewrite rules
 		badgeos_register_post_types();
@@ -193,19 +208,11 @@ class BadgeOS {
 		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
 
-		// If minimum role empty, set default to administrator
-		// Note: this was added in 1.1.0, and can certainly be
-		// deleted in 1.2.0, because we now set defaults on activation.
-		if ( empty( $badgeos_settings['minimum_role'] ) ) {
-			$badgeos_settings['minimum_role'] = 'administrator';
-			update_option( 'badgeos_settings', $badgeos_settings );
-		}
-
 		// Set minimum role setting for menus
 		$minimum_role = $badgeos_settings['minimum_role'];
 
 		// Create main menu
-		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png' );
+		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', 'BadgeOS Settings', 'Settings', $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
@@ -321,42 +328,4 @@ function badgeos_is_debug_mode() {
 
 	return false;
 
-}
-
-/**
- * Posts a log entry when a user unlocks any achievement post
- *
- * @since  1.0
- * @param  integer $post_id    The post id of the activity we're logging
- * @param  integer $user_id    The user ID
- * @param  string  $action     The action word to be used for the generated title
- * @param  string  $title      An optional default title for the log post
- * @return integer             The post ID of the newly created log entry
- */
-function badgeos_post_log_entry( $post_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
-	global $user_ID;
-	if ( $user_id == 0 ) {
-		$user_id = $user_ID;
-	}
-
-	$user              = get_userdata( $user_id );
-	$achievement       = get_post( $post_id );
-	$achievement_types = badgeos_get_achievement_types();
-	$achievement_type  = ( $achievement && isset( $achievement_types[$achievement->post_type]['single_name'] ) ) ? $achievement_types[$achievement->post_type]['single_name'] : '';
-	$default_title     = ( !empty( $title ) ? $title : "{$user->user_login} {$action} the \"{$achievement->post_title}\" {$achievement_type}" );
-	$title             = apply_filters( 'badgeos_log_entry_title', $default_title, $post_id, $user_id, $action, $achievement, $achievement_types );
-
-	$args = array(
-		'post_title'  => $title,
-		'post_status' => 'publish',
-		'post_author' => absint( $user_id ),
-		'post_type'   => 'badgeos-log-entry',
-	);
-
-	if ( $log_post_id = wp_insert_post( $args ) )
-		add_post_meta( $log_post_id, '_badgeos_log_achievement_id', $post_id );
-
-	do_action( 'badgeos_create_log_entry', $log_post_id, $post_id, $user_id, $action );
-
-	return $log_post_id;
 }

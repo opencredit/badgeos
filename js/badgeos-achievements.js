@@ -20,6 +20,7 @@ jQuery(document).ready(function($){
 				'show_attachments': badgeos_feedback.show_attachments,
 				'show_comments':    badgeos_feedback.show_comments,
 				'user_id' :         badgeos_feedback.user_id,
+				'wpms' :            badgeos_feedback.wpms,
 				'search' :          $('.badgeos-feedback-search-input').val()
 			},
 			dataType: 'json',
@@ -45,6 +46,7 @@ jQuery(document).ready(function($){
 				'feedback_type' :  button.siblings('input[name=feedback_type]').val(),
 				'achievement_id' : button.siblings('input[name=achievement_id]').val(),
 				'user_id' :        button.siblings('input[name=user_id]').val(),
+				'wpms' :           button.siblings('input[name=wpms]').val(),
 				'nonce' :          button.siblings('input[name=badgeos_feedback_review]').val(),
 			},
 			dataType: 'json',
@@ -68,13 +70,17 @@ jQuery(document).ready(function($){
 				'show_child':  badgeos.show_child,
 				'group_id':    badgeos.group_id,
 				'user_id':     badgeos.user_id,
+				'wpms':        badgeos.wpms,
 				'offset':      $('#badgeos_achievements_offset').val(),
 				'count':       $('#badgeos_achievements_count').val(),
 				'filter':      $('#achievements_list_filter').val(),
-				'search':      $('#achievements_list_search').val()
+				'search':      $('#achievements_list_search').val(),
+				'orderby':     badgeos.orderby,
+				'order':       badgeos.order
 			},
 			dataType: 'json',
 			success: function( response ) {
+				console.log(response);
 				$('.badgeos-spinner').hide();
 				if ( response.data.message === null ) {
 					//alert("That's all folks!");

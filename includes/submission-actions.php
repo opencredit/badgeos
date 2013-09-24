@@ -12,6 +12,7 @@
  * Check if nomination form was submitted
  *
  * @since 1.0.0
+ * @return array The content from the submission
  */
 function badgeos_save_nomination_data() {
 
@@ -43,7 +44,7 @@ function badgeos_save_nomination_data() {
  * @param  integer $user_nominating The user ID of the person who did the nominating
  * @return bool                     True on succesful post creation, false otherwise
  */
-function badgeos_create_nomination( $achievement_id, $title, $content, $user_nominated, $user_nominating ) {
+function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content = '', $user_nominated  = 0, $user_nominating = 0 ) {
 
 	if ( ! badgeos_check_if_user_has_nomination( absint( $user_nominated ), absint( $achievement_id ) ) ) {
 
@@ -121,9 +122,11 @@ function badgeos_create_nomination( $achievement_id, $title, $content, $user_nom
 /**
  * Hide action links on the submissions edit listing screen
  *
- * @since 1.0.0
+ * @since  1.0.0
+ * @param  array @actions The array of action links
+ * @return array 		  The updated array of action links
  */
-function badgeos_hide_quick_edit( $actions ) {
+function badgeos_hide_quick_edit( $actions = array() ) {
 	global $post;
 
 	if ( 'submission' == get_post_type( $post ) || 'nomination' == get_post_type( $post ) ) {
@@ -148,7 +151,7 @@ add_filter( 'post_row_actions', 'badgeos_hide_quick_edit' );
  * @param  array $columns The array of columns on the edit screen
  * @return array          Our updated array of columns
  */
-function badgeos_add_submission_columns( $columns ) {
+function badgeos_add_submission_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
  	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
@@ -173,7 +176,7 @@ add_filter( 'manage_edit-nomination_columns', 'badgeos_add_nomination_columns', 
  * @param  array $columns The array of columns on the edit screen
  * @return array          Our updated array of columns
  */
-function badgeos_add_nomination_columns( $columns ) {
+function badgeos_add_nomination_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
 	$column_userid = array( 'user' => __( 'User', 'badgeos' ) );
@@ -196,8 +199,9 @@ function badgeos_add_nomination_columns( $columns ) {
  *
  * @since  1.0.0
  * @param  string $column The column name
+ * @return void
  */
-function badgeos_submission_column_action( $column ) {
+function badgeos_submission_column_action( $column = '' ) {
 	global $post, $badgeos;
 
 	switch ( $column ) {
@@ -239,9 +243,10 @@ add_action( 'manage_posts_custom_column', 'badgeos_submission_column_action', 10
  * Add filter select to Submissions edit screen
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_add_submission_dropdown_filters() {
-    global $typenow, $wpdb;
+    global $typenow;
 
 	if ( $typenow == 'submission' ) {
         //array of current status values available
@@ -264,16 +269,18 @@ add_action( 'restrict_manage_posts', 'badgeos_add_submission_dropdown_filters' )
  * Filter the query to show submission statuses
  *
  * @since 1.0.0
+ * @param object $query The Query to be filtered
+ * @param object 	   The Query after filtering
  */
-function badgeos_submission_status_filter( $query ) {
+function badgeos_submission_status_filter( $query = null ) {
 	global $pagenow;
 
 	if ( $query->is_admin && ( 'edit.php' == $pagenow ) ) {
 		$metavalue = ( isset($_GET['badgeos_submission_status']) && $_GET['badgeos_submission_status'] != '' ) ? $_GET['badgeos_submission_status'] : '';
 
 		if ( '' != $metavalue ) {
-			$query->set( 'orderby' , 'meta_value' );
-			$query->set( 'meta_key' , '_badgeos_submission_status' );
+			$query->set( 'orderby', 'meta_value' );
+			$query->set( 'meta_key', '_badgeos_submission_status' );
 			$query->set( 'meta_value', esc_html( $metavalue ) );
 		}
 	}
@@ -288,8 +295,9 @@ add_filter( 'pre_get_posts', 'badgeos_submission_status_filter' );
  *
  * @since 1.0.0
  * @param integer $post_id The given post's ID
+ * @return void
  */
-function badgeos_process_submission_review( $post_id ) {
+function badgeos_process_submission_review( $post_id = 0 ) {
 
 	// Confirm we're deailing with either a submission or nomination post type,
 	// and our nonce is valid
@@ -325,6 +333,8 @@ add_action( 'save_post', 'badgeos_process_submission_review' );
 
 /**
  * Check if nomination form has been submitted and save data
+ * @since 1.0.0
+ * @return string  The submitted form or the submission box.
  */
 function badgeos_save_submission_data() {
 
@@ -343,8 +353,16 @@ function badgeos_save_submission_data() {
 		absint( $_POST['user_id'] )
 	);
 }
-
-function badgeos_create_submission( $achievement_id, $title, $content, $user_id ) {
+/**
+ * Create Submission form
+ * @since  1.0.0
+ * @param  integer $achievement_id The achievement ID intended for submission
+ * @param  string  $title          The title of the post
+ * @param  string  $content        The post content
+ * @param  integer $user_id        The user ID
+ * @return boolean                 Returns true if able to create form
+ */
+function badgeos_create_submission( $achievement_id  = 0, $title = '', $content = '', $user_id = 0  ) {
 
 	$submission_data = array(
 		'post_title'	=>	$title,
@@ -398,7 +416,8 @@ function badgeos_create_submission( $achievement_id, $title, $content, $user_id 
 			}
 		}
 
-		do_action( 'save_submission', $submission_id );
+		// Available action for other processes
+		do_action( 'badgeos_save_submission', $submission_id );
 
 		//load BadgeOS settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
@@ -445,8 +464,9 @@ To view all submissions, visit:
 
 /**
  * Returns the comment form for Submissions
- *
- *
+ * @since 1.0.0
+ * @param integer $post_id The post_id for the current page
+ * @return string 		   The submission markup
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
 	global $current_user;
@@ -498,6 +518,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
  * Listener for saving submission comments
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_save_comment_data() {
 
@@ -612,7 +633,7 @@ function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
  * @param  string  $feedback_type  The type of feedback to check for (e.g. "submission")
  * @return bool                    True if the user has sent a submission, false otherwise
  */
-function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 , $feedback_type = '' ) {
+function badgeos_check_if_user_has_feedback( $user_id = 0, $achievement_id = 0, $feedback_type = '' ) {
 
 	// Setup our search args
 	$args = array(
@@ -657,7 +678,7 @@ function badgeos_check_if_user_has_feedback( $user_id = 0 , $achievement_id = 0 
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0 ) {
-	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'submission' );
+	return badgeos_check_if_user_has_feedback( $user_id, $achievement_id, 'submission' );
 }
 
 /**
@@ -669,9 +690,14 @@ function badgeos_check_if_user_has_submission( $user_id = 0, $achievement_id = 0
  * @return bool                    True if the user has sent a submission, false otherwise
  */
 function badgeos_check_if_user_has_nomination( $user_id = 0, $achievement_id = 0 ) {
-	return badgeos_check_if_user_has_feedback( $user_id , $achievement_id , 'nomination' );
+	return badgeos_check_if_user_has_feedback( $user_id, $achievement_id, 'nomination' );
 }
 
+/**
+ * Get the nomination form
+ * @param  array  $args The meta box arguemnts
+ * @return void
+ */
 function badgeos_get_nomination_form( $args = array() ) {
 	global $post, $user_ID;
 
@@ -713,6 +739,11 @@ function badgeos_get_nomination_form( $args = array() ) {
 	return apply_filters( 'badgeos_get_nomination_form', $sub_form );
 }
 
+/**
+ * Get the submission form
+ * @param  array  $args The meta box arguemnts
+ * @return void
+ */
 function badgeos_get_submission_form( $args = array() ) {
 	global $post, $user_ID;
 
@@ -777,7 +808,10 @@ function badgeos_get_feedback( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Eliminate need for case-sensitivity on status
-	$args['status'] = strtolower( $args['status'] );
+	if ( ! empty( $args['status'] ) )
+		$args['status'] = strtolower( $args['status'] );
+	else
+		$args['status'] = '';
 
 	// If we're looking for auto-approved only
 	$show_auto_approved = true;
