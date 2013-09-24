@@ -119,7 +119,7 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
 * [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
-* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers. 
+* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers.
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - BadgeOS and Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - BadgeOS and Credly Tweets
@@ -258,6 +258,26 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* Added: "Add-ons" menu now has a catalog of new plugins to extend BadgeOS in exciting ways.
+* Added: Introduced a suite of "user activity" functions for tracking a user's active achievements.
+* Updated: Add-Ons admin page now dynamically pulls all available add-ons directly from BadgeOS.org
+* Updated: Improved support for WP Multisite installations
+* Updated: Earned Achievements widget now sorts achievements with newest-earned first.
+* Updated: Earned Achievements widget now supports displaying all OR specific achievement types.
+* Updated: [badgeos_achievements_list] shortcode now supports multiple achievement types, using either type="all" or by separating the achievement names with a comma, like: type="badge,quest,level".
+* Updated: [badgeos_achievements_list] shortcode now supports "orderby" and "order" parameters so you can control how achievements are sorted.
+* Updated: BadgeOS Log Entry functions are now filterable and can be overridden (more on this in 1.3).
+* Updated: Added hooks to Help/Support page so add-ons can include their own content.
+* Updated: We now set a default thumbnail for new achievements and achievement types.
+* Updated: We now display a warning on the Achievement Type editor if a title exceeds 20 characters.
+* Updated: Removed some redundant checks in the rules-engine to make process more performant.
+* Updated: Relocated a few functions to make codebase easier to navigate.
+* Fixed: We now hide the container for an earned achievement's congratulations text if there is no congratulations text.
+* Fixed: The Earned Achievements widget and the Send to Credly functionality sanely fall-back to the parent achievement's thumbnail if the given achievement doesn't have one set.
+* Fixed: Eliminated a bug with the "Add Media" functionality due to a conflict with the Canvas theme by WooThemes.
+* Fixed: Cleared out many minor, but annoying, PHP warnings
 
 = 1.1.0 =
 * Added: New widget to display the Credly Credit Issuer badge
