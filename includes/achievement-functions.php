@@ -56,8 +56,11 @@ function badgeos_get_achievements( $args = array() ) {
  * Modify the WP_Query Join filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $join          The query "join" string
+ * @param  object $query_object  The complete query object
+ * @return string 				 The updated "join" string
  */
-function badgeos_get_achievements_children_join( $join, $query_object ) {
+function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_from = $wpdb->posts.ID";
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' )
@@ -70,8 +73,11 @@ function badgeos_get_achievements_children_join( $join, $query_object ) {
  * Modify the WP_Query Where filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $where         The query "where" string
+ * @param  object $query_object  The complete query object
+ * @return string 				 The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where, $query_object ) {
+function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
@@ -88,8 +94,10 @@ function badgeos_get_achievements_children_where( $where, $query_object ) {
  * Modify the WP_Query OrderBy filter for achievement children
  *
  * @since  1.0.0
+ * @param  string $orderby The query "orderby" string
+ * @return string 		   The updated "orderby" string
  */
-function badgeos_get_achievements_children_orderby( $orderby ) {
+function badgeos_get_achievements_children_orderby( $orderby = '' ) {
 	return $orderby = 'p2pm2.meta_value ASC';
 }
 
@@ -97,8 +105,10 @@ function badgeos_get_achievements_children_orderby( $orderby ) {
  * Modify the WP_Query Join filter for achievement parents
  *
  * @since  1.0.0
+ * @param  string $join The query "join" string
+ * @return string 	    The updated "join" string
  */
-function badgeos_get_achievements_parents_join( $join ) {
+function badgeos_get_achievements_parents_join( $join = '' ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_to = $wpdb->posts.ID";
 	return $join;
@@ -108,8 +118,11 @@ function badgeos_get_achievements_parents_join( $join ) {
  * Modify the WP_Query Where filter for achievement parents
  *
  * @since  1.0.0
+ * @param  string $where The query "where" string
+ * @param  object $query_object The complete query object
+ * @return
  */
-function badgeos_get_achievements_parents_where( $where, $query_object ) {
+function badgeos_get_achievements_parents_where( $where = '', $query_object = null ) {
 	global $wpdb;
 	$where .= $wpdb->prepare( ' AND p2p.p2p_from = %d', $query_object->query_vars['parent_of'] );
 	return $where;
@@ -217,7 +230,7 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
 /**
  * Check if user has already earned an achievement the maximum number of times
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  integer $user_id        The given user's ID
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    True if we've exceed the max possible earnings, false if we're still eligable
@@ -240,46 +253,15 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
 	return false;
 }
 
-
-/**
- * Get the UNIX timestamp for the last activity on an achievement for a given user
- *
- * @since  1.0
- * @param  integer $badge_id The given achievement's post ID
- * @param  integer $user_id  The given user's ID
- * @return integer           The UNIX timestamp for the last reported badge activity
- */
-function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id = 0 ) {
-
-	// Assume the user has no history with this badge
-	$date = 0;
-
-	// See if the user has ever earned or failed the badge
-	$user_badge_history = get_posts( array(
-		'author'         => $user_id,
-		'post_type'      => 'badgeos-log-entry',
-		'meta_key'       => '_badgeos_log_achievement_id',
-		'meta_value'     => $achievement_id,
-		'posts_per_page' => 1
-	) );
-
-	// If the user DOES have some history with this badge, grab the last interaction time
-	if ( ! empty( $user_badge_history ) )
-		$date = strtotime( $user_badge_history[0]->post_date_gmt );
-
-	// Finally, return our time
-	return $date;
-
-}
-
 /**
  * Helper function for building an object for our achievement
  *
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement's post ID
+ * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0 ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -287,13 +269,20 @@ function badgeos_build_achievement_object( $achievement_id = 0 ) {
 		return false;
 
 	// Setup a new object for the achievement
-	$achievement_object              = new stdClass;
-	$achievement_object->ID          = $achievement_id;
-	$achievement_object->post_type   = $achievement->post_type;
-	$achievement_object->date_earned = time();
+	$achievement_object            = new stdClass;
+	$achievement_object->ID        = $achievement_id;
+	$achievement_object->post_type = $achievement->post_type;
+	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
+
+	// Store the current timestamp differently based on context
+	if ( 'earned' == $context ) {
+		$achievement_object->date_earned = time();
+	} elseif ( 'started' == $context ) {
+		$achievement_object->date_started = $achievement_object->last_activity_date = time();
+	}
 
 	// Return our achievement object, available filter so we can extend it elsewhere
-	return apply_filters( 'achievement_object', $achievement_object );
+	return apply_filters( 'achievement_object', $achievement_object, $achievement_id, $context );
 
 }
 
@@ -357,8 +346,9 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
  * @since  1.0.1
  *
  * @param  int  $user_id The ID of the user earning the achievement
+ * @return array 		 The array of achievements the user has earned
  */
-function badgeos_get_user_earned_achievement_types($user_id){
+function badgeos_get_user_earned_achievement_types( $user_id = 0 ){
 
 	$achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
 
@@ -459,7 +449,6 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
- * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
 function badgeos_get_points_based_achievements() {
@@ -480,11 +469,11 @@ function badgeos_get_points_based_achievements() {
 			"
 		);
 
-		// Store these posts to a transient
-		set_transient( 'badgeos_points_based_achievements', $achievements, 0 );
+		// Store these posts to a transient for 7 days
+		set_transient( 'badgeos_points_based_achievements', $achievements, 60*60*24*7 );
 	}
 
-	return $achievements;
+	return (array) maybe_unserialize( $achievements );
 }
 
 /**
@@ -495,9 +484,9 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgestack_settings = get_option( 'badgestack_settings' );
-	$minimum_role        = ( !empty( $badgestack_settings['minimum_role'] ) ) ? $badgestack_settings['minimum_role'] : 'administrator';
-	$post                = get_post($post_id);
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$post             = get_post($post_id);
 
 	// If the user has the authority to do what they're doing,
 	// and the post is one of our achievement types,
@@ -535,26 +524,35 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 	$image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
 
 	// If we don't have an image...
-	if ( !$image ) {
+	if ( ! $image ) {
 
 		// Grab our achievement type's post thumbnail
 		$achievement = get_page_by_path( get_post_type(), OBJECT, 'achievement-type' );
 		$image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
-		if ( !$image ) {
+		if ( ! $image ) {
 
-			// Attempt to grab the width/height from our specified image size
-			global $_wp_additional_image_sizes;
-			if ( isset( $_wp_additional_image_sizes[$image_size] ) )
-				$image_sizes = $_wp_additional_image_sizes[$image_size];
+			// If we already have an array for image size
+			if ( is_array( $image_size ) ) {
+				// Write our sizes to an associative array
+				$image_sizes['width'] = $image_size[0];
+				$image_sizes['height'] = $image_size[1];
+
+			// Otherwise, attempt to grab the width/height from our specified image size
+			} else {
+				global $_wp_additional_image_sizes;
+				if ( isset( $_wp_additional_image_sizes[$image_size] ) )
+					$image_sizes = $_wp_additional_image_sizes[$image_size];
+			}
 
 			// If we can't get the defined width/height, set our own
-			if ( empty( $image_sizes ) )
+			if ( empty( $image_sizes ) ) {
 				$image_sizes = array(
 					'width'  => 100,
 					'height' => 100
 				);
+			}
 
 			// Available filter: 'badgeos_default_achievement_post_thumbnail'
 			$image = '<img src="' . apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' ) . '" width="' . $image_sizes['width'] . '" height="' . $image_sizes['height'] . '" class="' . $class .'">';
@@ -633,3 +631,109 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	// Return our concatenated output
 	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $users );
 }
+
+/**
+ * Check if admin settings are set to show all achievements across a multisite network
+ *
+ * @since  1.2.0
+ * @return boolean
+ */
+function badgeos_ms_show_all_achievements(){
+	global $badgeos;
+	$ms_show_all_achievements = NULL;
+	if ( is_multisite() ) {
+    	$badgeos_settings = get_option( 'badgeos_settings' );
+    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+    	if( 'enabled' == $ms_show_all_achievements )
+    		return true;
+    }
+    return false;
+}
+
+/**
+ * Create array of blog ids in the network if multisite setting is on
+ *
+ * @since  1.2.0
+ * @return array                   Array of blog_ids
+ */
+function badgeos_get_network_site_ids() {
+	global $wpdb;
+    if( badgeos_ms_show_all_achievements() ) {
+    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) );
+		foreach ($blog_ids as $key => $value ) {
+            $sites[] = $value->blog_id;
+        }
+    } else {
+    	$sites[] = get_current_blog_id();
+    }
+    return $sites;
+}
+
+/**
+ * Set default achievement image on achievement post save
+ *
+ * @since  1.2.0
+ * @param  object $post The post object of the post being saved
+ */
+function badgeos_achievement_set_default_thumbnail( $post_id ) {
+	global $pagenow;
+
+	// Bail early if:
+	// this IS NOT an achievement or achievement-type post
+	// OR this IS an autosave
+	// OR current user CAN NOT edit this post
+	// OR the post already has a thumbnail
+	// OR we've just loaded the new post page
+	if (
+		! (
+			in_array( get_post_type( $post_id ), badgeos_get_achievement_types_slugs() )
+			|| 'achievement-type' == get_post_type( $post_id )
+		)
+		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		|| ! current_user_can( 'edit_post', $post_id )
+		|| has_post_thumbnail( $post_id )
+		|| 'post-new.php' == $pagenow
+	) {
+		return $post_id;
+	}
+
+	// Get the thumbnail of our parent achievement
+	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
+		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
+		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+	}
+
+	// If there is no thumbnail set, load in our default image
+	if ( empty( $thumbnail_id ) ) {
+
+		// Grab the default image
+		$file = apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' );
+
+		// Download file to temp location
+		$tmp = download_url( $file );
+
+		// Set variables for storage
+		// fix file filename for query strings
+		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
+		$file_array['name'] = basename( $matches[0] );
+		$file_array['tmp_name'] = $tmp;
+
+		// If error storing temporarily, unlink
+		if ( is_wp_error( $tmp ) ) {
+			@unlink( $file_array['tmp_name'] );
+			$file_array['tmp_name'] = '';
+		}
+
+		// Upload the image (and unlink if errored)
+		$thumbnail_id = media_handle_sideload( $file_array, $post_id );
+		if ( is_wp_error( $thumbnail_id ) ) {
+			@unlink( $file_array['tmp_name'] );
+		}
+	}
+
+	// Finally, if we have a thumbnail, set the thumbnail for our achievement
+	if ( $thumbnail_id )
+		set_post_thumbnail( $post_id, $thumbnail_id );
+
+}
+add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );

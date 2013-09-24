@@ -21,7 +21,7 @@ function badgeos_get_user_achievements( $args = array() ) {
 	// Setup our default args
 	$defaults = array(
 		'user_id'          => 0,     // The given user's ID
-		'site_id'          => 1,     // The given site's ID
+		'site_id'          => get_current_blog_id(), // The given site's ID
 		'achievement_id'   => false, // A specific achievement's post ID
 		'achievement_type' => false, // A specific achievement type
 		'since'            => 0,     // A specific timestamp to use in place of $limit_in_days
@@ -30,13 +30,13 @@ function badgeos_get_user_achievements( $args = array() ) {
 
 	// Use current user's ID if none specified
 	if ( ! $args['user_id'] )
-		$args['user_id'] = wp_get_current_user()->ID;
+		$args['user_id'] = get_current_user_id();
 
 	// Grab the user's current achievements
-	$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? $earned_items : array( $args['site_id'] => array() );
+	$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? $earned_items : array();
 
 	// If we want all sites (or no specific site), return the full array
-	if ( empty( $args['site_id']) || 'all' == $args['site_id'] )
+	if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] )
 		return $achievements;
 
 	// Otherwise, we only want the specific site's achievements
@@ -71,15 +71,15 @@ function badgeos_get_user_achievements( $args = array() ) {
  * We can either replace the achievement's array, or append new achievements to it.
  *
  * @since  1.0.0
- * @param  array        $earned_achievements An array containing all our relevant arguments
- * @return integer|bool                      The updated umeta ID on success, false on failure
+ * @param  array        $args An array containing all our relevant arguments
+ * @return integer|bool       The updated umeta ID on success, false on failure
  */
 function badgeos_update_user_achievements( $args = array() ) {
 
 	// Setup our default args
 	$defaults = array(
 		'user_id'          => 0,     // The given user's ID
-		'site_id'          => 1,     // The given site's ID
+		'site_id'          => get_current_blog_id(), // The given site's ID
 		'all_achievements' => false, // An array of ALL achievements earned by the user
 		'new_achievements' => false, // An array of NEW achievements earned by the user
 	);
@@ -108,99 +108,13 @@ function badgeos_update_user_achievements( $args = array() ) {
 }
 
 /**
- * Return a user's points
- *
- * @since  1.0
- * @param  string   $user_id      The given user's ID
- * @return integer  $user_points  The user's current points
- */
-function badgeos_get_users_points( $user_id = 0 ) {
-
-	// Use current user's ID if none specified
-	if ( ! $user_id )
-		$user_id = wp_get_current_user()->ID;
-
-	// Return our user's points as an integer (sanely falls back to 0 if empty)
-	return absint( get_user_meta( $user_id, '_badgeos_points', true ) );
-}
-
-/**
- * Posts a log entry when a user earns points
- *
- * @since  1.0
- * @param  integer $user_id        The given user's ID
- * @param  integer $new_points     The new points the user is being awarded
- * @param  integer $admin_id       If being awarded by an admin, the admin's user ID
- * @param  integer $achievement_id The achievement that generated the points, if applicable
- * @return integer                 The user's updated point total
- */
-function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id = 0, $achievement_id = null ) {
-
-	// Use current user's ID if none specified
-	if ( ! $user_id )
-		$user_id = wp_get_current_user()->ID;
-
-	// Setup our user objects
-	$user  = get_userdata( $user_id );
-	$admin = get_userdata( $admin_id );
-
-	// Grab the user's current points
-	$current_points = badgeos_get_users_points( $user_id );
-
-	// If we're getting an admin ID, $new_points is actually the final total, so subtract the current points
-	if ( $admin_id ) $new_points = $new_points - $current_points;
-
-	// Update our user's total
-	$updated_points_total = absint( $current_points + $new_points );
-	update_user_meta( $user_id, '_badgeos_points', $updated_points_total );
-
-	// Alter our log message if this was an admin action
-	if ( $admin_id )
-		$log_message = sprintf( __( '%1$s awarded %2$s %3$s points for a new total of %4$s points', 'badgeos' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
-	else
-		$log_message = sprintf( __( '%1$s earned %2$s points for a new total of %3$s points', 'badgeos' ), $user->user_login, number_format( $new_points ), number_format( $updated_points_total ) );
-
-	// Create a log entry
-	$log_entry_id = badgeos_post_log_entry( $achievement_id, $user_id, 'points', $log_message );
-
-	// Add relevant meta to our log entry
-	update_post_meta( $log_entry_id, '_badgeos_awarded_points', $new_points );
-	update_post_meta( $log_entry_id, '_badgeos_total_user_points', $updated_points_total );
-	if ( $admin_id )
-		update_post_meta( $log_entry_id, '_badgeos_admin_awarded', $admin_id );
-
-	// Maybe award some points-based badges
-	foreach ( badgeos_get_points_based_achievements() as $achievement )
-		badgeos_maybe_award_achievement_to_user( $achievement->ID );
-
-	return $updated_points_total;
-}
-
-/**
- * Award new points to a user based on logged activites and earned badges
- *
- * @since  1.0
- * @param  integer $user_id        The given user's ID
- * @param  integer $achievement_id The given achievement's post ID
- * @return integer                 The user's updated points total
- */
-function badgeos_award_user_points( $user_id, $achievement_id ) {
-
-	// Grab our points from the provided post
-	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
-
-	if ( ! empty( $points ) )
-		return badgeos_update_users_points( $user_id, $points, false, $achievement_id );
-}
-add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
-
-/**
  * Display achievements for a user on their profile screen
  *
- * @since 1.0.0
- * @param object $user The current user's $user object
+ * @since  1.0.0
+ * @param  object $user The current user's $user object
+ * @return void
  */
-function badgeos_user_profile_data( $user ) {
+function badgeos_user_profile_data( $user = null ) {
 
 
 	// Get minimum role setting for menus
@@ -245,7 +159,7 @@ function badgeos_user_profile_data( $user ) {
 				) );
 
 				echo '<tr>';
-					echo '<td>'. get_the_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
+					echo '<td>'. badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
 					echo '<td>', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
 					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Award', 'badgeos' ) . '</a></span></td>';
 				echo '</tr>';
@@ -284,11 +198,11 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
 /**
  * Save extra user meta fields to the Edit Profile screen
  *
- * @since  1.0
+ * @since  1.0.0
  * @param  string  $user_id      User ID being saved
  * @return nothing
  */
-function badgeos_save_user_profile_fields( $user_id ) {
+function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
 	if ( !current_user_can( 'edit_user', $user_id ) )
 		return FALSE;
@@ -304,11 +218,12 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
 /**
  * Generate markup for awarding an achievement to a user
  *
- * @since 1.0.0
- * @param object $user         The current user's $user object
- * @param array  $achievements array of user-earned achievement IDs
+ * @since  1.0.0
+ * @param  object $user         The current user's $user object
+ * @param  array  $achievements array of user-earned achievement IDs
+ * @return void
  */
-function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) {
+function badgeos_profile_award_achievement( $user = null, $achievement_ids = array() ) {
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
@@ -413,7 +328,8 @@ function badgeos_profile_award_achievement( $user, $achievement_ids = array() ) 
 /**
  * Process the adding/revoking of achievements on the user profile page
  *
- * @since 1.0.0
+ * @since  1.0.0
+ * @return void
  */
 function badgeos_process_user_data() {
 
@@ -458,24 +374,39 @@ function badgeos_process_user_data() {
 }
 add_action( 'init', 'badgeos_process_user_data' );
 
-
-
-
 /**
- * Returns array of user log ids (log/journey cpt) from post ids array and a user id.
+ * Returns array of achievement types a user has earned across a multisite network
  *
- *
- *
+ * @since  1.2.0
+ * @param  integer $user_id  The user's ID
+ * @return array             An array of post types
  */
-function badgeos_get_userlog_ids( $post_ids, $user_id ){
-	global $wpdb;
-	if ( is_array( $post_ids ) ) {
-		$post_ids = implode( ',', $post_ids );
-		$sql = "SELECT a.ID FROM $wpdb->posts a, $wpdb->postmeta b WHERE a.ID = b.post_id AND a.post_author = ".$user_id." AND a.post_status = 'publish' AND b.meta_key = '_badgeos_log_achievement_id' and b.meta_value in ( ".$post_ids." )";
-		$rs = $wpdb->get_results( $sql );
-		foreach ( $rs as $post ) {
-			$log_ids[] = $post->ID;
-		}
-		return $log_ids;
+function badgeos_get_network_achievement_types_for_user( $user_id ) {
+	global $blog_id;
+
+	// Assume we have no achievement types
+	$all_achievement_types = array();
+
+	// Loop through all active sites
+	$sites = badgeos_get_network_site_ids();
+	foreach( $sites as $site_blog_id ){
+
+		// If we're polling a different blog, switch to it
+		if ( $blog_id != $site_blog_id )
+			switch_to_blog( $site_blog_id );
+
+		// Merge earned achievements to our achievement type array
+		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
+		if ( is_array($achievement_types) )
+			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
 	}
+
+	// Restore the original blog so the sky doesn't fall
+	restore_current_blog();
+
+	// Pare down achievement type list so we return no duplicates
+	$achievement_types = array_unique( $all_achievement_types );
+
+	// Return all found achievements
+	return $achievement_types;
 }

@@ -13,15 +13,36 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//build the widget settings form
 	function form( $instance ) {
-		$defaults = array( 'title' => 'My Badges', 'number' => '10', 'point_total' => '' );
+		$defaults = array( 'title' => 'My Achievements', 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$number = $instance['number'];
 		$point_total = $instance['point_total'];
+		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
-			<p><?php _e( 'Number to Display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
+			<p><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
 			<p><label for="<?php echo $this->get_field_name( 'point_total' ); ?>"><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
+			<p><?php _e( 'Display only the following Achievement Types:', 'badgeos' ); ?><br />
+				<?php
+				//get all registered achievements
+				$achievements = badgeos_get_achievement_types();
+
+				//loop through all registered achievements
+				foreach ( $achievements as $achievement ) {
+
+					//hide the step CPT
+					if ( $achievement['single_name'] == 'step' )
+						continue;
+
+					//if achievement displaying exists in the saved array it is enabled for display
+					$checked = ( is_array( $set_achievements ) && in_array( $achievement['single_name'], $set_achievements ) ) ? 'checked="checked"' : '';
+
+					echo '<input type="checkbox" name="'.$this->get_field_name( 'set_achievements' ).'[]" value="' .esc_attr( $achievement['single_name'] ).'" '.$checked.'> ' .esc_html( ucfirst( $achievement['plural_name'] ) ) .'<br />';
+
+				}
+				?>
+			</p>
         <?php
 	}
 
@@ -32,6 +53,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
 		$instance['number'] = absint( $new_instance['number'] );
 		$instance['point_total'] = ( ! empty( $new_instance['point_total'] ) ) ? sanitize_text_field( $new_instance['point_total'] ) : '';
+		$instance['set_achievements'] = array_map( 'sanitize_text_field', $new_instance['set_achievements'] );
 
 		return $instance;
 	}
@@ -63,41 +85,45 @@ class earned_user_achievements_widget extends WP_Widget {
 				wp_enqueue_script( 'badgeos-achievements' );
 				wp_enqueue_style( 'badgeos-widget' );
 
+				//load widget setting for achievement types to display
+				$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
+
+				//show most recently earned achievement first
+				$achievements = array_reverse( $achievements );
+
 				echo '<ul class="widget-achievements-listing">';
 				foreach ( $achievements as $achievement ) {
 
-					//exclude step CPT entries from displaying in the widget
-					if ( get_post_type( $achievement->ID ) != 'step' ) {
+					//verify achievement type is set to display in the widget settings
+					//if $set_achievements is not an array it means nothing is set so show all achievements
+					if ( ! is_array( $set_achievements ) || in_array( $achievement->post_type, $set_achievements ) ) {
 
-						$permalink = get_permalink( $achievement->ID );
-						$title = get_the_title( $achievement->ID );
+						//exclude step CPT entries from displaying in the widget
+						if ( get_post_type( $achievement->ID ) != 'step' ) {
 
-						$thumb = '';
-						$image_attr = wp_get_attachment_image_src( get_post_thumbnail_id( $achievement->ID ), array( 50, 50 ) );
+							$permalink  = get_permalink( $achievement->ID );
+							$title      = get_the_title( $achievement->ID );
+							$img        = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
+							$thumb      = $img ? '<a style="margin-top: -25px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>' : '';
+							$class      = 'widget-badgeos-item-title';
+							$item_class = $thumb ? ' has-thumb' : '';
 
-						if ( $image_attr ) {
+							// Setup credly data if giveable
+							$giveable   = credly_is_achievement_giveable( $achievement->ID );
+							$item_class .= $giveable ? ' share-credly addCredly' : '';
+							$credly_ID  = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
 
-							$img = '<img class="wp-post-image" width="'. absint( $image_attr[1] ) .'" height="'. absint( $image_attr[2] ) .'" src="'. esc_url( $image_attr[0] ) .'">';
-							$thumb = '<a style="margin-top: -'. floor( absint( $image_attr[2] ) / 2 ) .'px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>';
+							echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
+							echo $thumb;
+							echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
+							echo '</li>';
+
+							$thecount++;
+
+							if ( $thecount == $number_to_show && $number_to_show != 0 )
+								break;
+
 						}
-
-						// is this achievement Credly giveable?
-						$giveable = credly_is_achievement_giveable( $achievement->ID );
-						$class = 'widget-badgeos-item-title';
-						$item_class = $image_attr ? ' has-thumb' : '';
-						$item_class .= $giveable ? ' share-credly addCredly' : '';
-						$credly_ID = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
-
-						echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
-
-						echo $thumb;
-						echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $title ) .'</a>';
-						echo '</li>';
-
-						$thecount++;
-
-						if ( $thecount == $number_to_show && $number_to_show != 0 )
-							break;
 
 					}
 				}

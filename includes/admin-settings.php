@@ -11,7 +11,7 @@
 
 /**
  * Register BadgeOS Settings with Settings API.
- * @return null
+ * @return void
  */
 function badgeos_register_settings() {
 	register_setting( 'badgeos_settings_group', 'badgeos_settings', 'badgeos_settings_validate' );
@@ -25,12 +25,17 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  * @param  string $input The input we want to validate
  * @return string        Our sanitized input
  */
-function badgeos_settings_validate( $input ) {
+function badgeos_settings_validate( $input = '' ) {
 
-	//sanitize the settings data submitted
+	// Sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
 	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
+	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
 
+	// Allow add-on settings to be sanitized
+	do_action( 'badgeos_settings_validate', $input );
+
+	// Return sanitized inputs
 	return $input;
 
 }
@@ -41,13 +46,14 @@ function badgeos_settings_validate( $input ) {
  * @param  array $options Form inputs data
  * @return array          Sanitized form input data
  */
-function badgeos_credly_settings_validate( $options ) {
+function badgeos_credly_settings_validate( $options = array() ) {
 
 	// If attempting to retrieve an api key from credly
 	if (
 		empty( $options['api_key'] )
 		&& isset( $_POST['badgeos_credly_api_key_nonce'] )
 		&& wp_verify_nonce( $_POST['badgeos_credly_api_key_nonce'], 'badgeos_credly_api_key_nonce' )
+		&& 'false' !== $options['credly_enable'] // Only continue if credly is enabled
 	) {
 		// sanitize
 		$username = ( !empty( $options['credly_user'] ) ? sanitize_text_field( $options['credly_user'] ) : '' );
@@ -109,8 +115,15 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 			'headers' => array( 'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password ) )
 	) ) ;
 
+	// If the response is a WP error
+	if ( is_wp_error( $response ) ) {
+		$error = '<p>'. sprintf( __( 'There was an error getting a Credly API Key: %s', 'badgeos' ), $response->get_error_message() ) . '</p>';
+		return badgeos_credly_get_api_key_error( $error );
+	}
+
+	// If the response resulted from potentially bad credentials
 	if ( '401' == wp_remote_retrieve_response_code( $response ) ) {
-		$error = '<p>'. __( 'There was an error getting a Credly API Key. Please check your username and password.', 'badgeos' ). '</p>';
+		$error = '<p>'. __( 'There was an error getting a Credly API Key: Please check your username and password.', 'badgeos' ) . '</p>';
 		// Save our error message.
 		return badgeos_credly_get_api_key_error( $error );
 	}
@@ -127,7 +140,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
  * @since  1.0.0
  * @param  string $error Error message
  */
-function badgeos_credly_get_api_key_error( $error ) {
+function badgeos_credly_get_api_key_error( $error = '' ) {
 
 	// Temporarily store our error message.
 	update_option( 'credly_api_key_error', $error );
@@ -138,7 +151,7 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
 /**
  * Displays error messages from Credly API key retrieval
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_api_key_errors() {
 
@@ -154,7 +167,7 @@ function badgeos_credly_api_key_errors() {
 /**
  * BadgeOS main settings page output
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_settings_page() {
 	flush_rewrite_rules();
@@ -174,6 +187,9 @@ function badgeos_settings_page() {
 			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
+			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+
+			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
 				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
@@ -203,7 +219,24 @@ function badgeos_settings_page() {
                         </select>
 					</td>
 				</tr>
-				<?php do_action( 'badgeos_settings', $badgeos_settings ); ?>
+				<?php
+                // check if multisite is enabled & if plugin is network activated
+                if ( is_super_admin() ){
+	                global $badgeos;
+	                if ( is_multisite() ) {
+	                ?>
+	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+	                        <td>
+	                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
+	                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+	                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+	                            </select>
+	                        </td>
+	                    </tr>
+	            	<?php
+	                }
+            	}
+        		do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
@@ -215,53 +248,95 @@ function badgeos_settings_page() {
 	<?php
 }
 
+
+/**
+ * Adds additional options to the BadgeOS Settings page
+ *
+ * @since 1.0.0
+ */
+function badgeos_license_settings() {
+
+	// Get our licensed add-ons
+	$licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
+
+	// If we have any licensed add-ons
+	if ( ! empty( $licensed_addons ) ) {
+
+		// Output the header for licenses
+		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
+
+		// Sort our licenses alphabetially
+		ksort( $licensed_addons );
+
+		// Output each individual licensed product
+		foreach ( $licensed_addons as $slug => $addon ) {
+			$status = ! empty( $addon['license_status'] ) ? $addon['license_status'] : 'inactive';
+			echo '<tr valign="top">';
+			echo '<th scope="row">';
+			echo '<label for="badgeos_settings[licenses][' . $slug . ']">' . urldecode( $addon['item_name'] ) . ': </label></th>';
+			echo '<td>';
+			echo '<input type="text" size="30" name="badgeos_settings[licenses][' . $slug . ']" id="badgeos_settings[licenses][' . $slug . ']" value="' . $addon['license'] . '" />';
+			echo ' <span class="badgeos-license-status ' . $status . '">' . sprintf( __( 'License Status: %s' ), '<strong>' . ucfirst( $status ) . '</strong>' ) . '</span>';
+			echo '</td>';
+			echo '</tr>';
+		}
+	}
+
+}
+add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
+
 /**
  * Add-ons settings page
+ *
  * @since  1.0.0
- * @return null
  */
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
-		<h2><?php _e( 'BadgeOS Add-Ons', 'badgeos' ); ?></h2>
-
-		<table>
-			<tr>
-				<td valign="top">
-					<a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">
-						<img width="150" height="150" src="<?php echo $image_url;?>add-on-community.png">
-					</a>
-				</td>
-				<td valign="top">
-					<h3>Community Add-on</h3>
-					<p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-community-add-on/">http://wordpress.org/extend/plugins/badgeos-community-add-on/</a></p>
-					The "BadgeOS Community Add-on" integrates BadgeOS features into BuddyPress and bbPress. Site members complete achievements and earn badges based on a range of community activity and triggers. This add-on to BadgeOS also includes the ability to display badges and achievements on user profiles and activity feeds.
-				</td>
-			</tr>
-			<tr>
-				<td valign="top">
-					<a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/">
-						<img width="150" height="150" src="<?php echo $image_url;?>add-on-badgestack.png">
-					</a>
-				</td>
-				<td valign="top">
-					<h3>BadgeStack Add-on</h3>
-					<p><a target="_blank" href="http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/">http://wordpress.org/extend/plugins/badgeos-badgestack-add-on/</a></p>
-					The BadgeStack add-on to BadgeOS automatically creates all the achievement types and pages needed to quickly set up your very own badging system. Levels, Quest Badges, Quests and Community Badges are all ready upon activating the plugin, as are pages with shortcodes for each achievement type. BadgeStack also includes a set of sample achievements and badges. A great way to bring some instant organization to your site and to get started with badging. This add-on is made possible in part due to the generous support of HASTAC, through the DML Badging Competition.
-				</td>
-			</tr>
-		</table>
-
+		<h2><?php printf( __( 'BadgeOS Add-Ons &nbsp;&mdash;&nbsp; %s', 'badgeos' ), '<a href="http://badgeos.org/add-ons/?ref=badgeos" class="button-primary" target="_blank">' . __( 'Browse All Add-Ons', 'badgeos' ) . '</a>' ); ?></h2>
+		<p><?php _e( 'These add-ons extend the functionality of BadgeOS.', 'badgeos' ); ?></p>
+		<?php echo badgeos_add_ons_get_feed(); ?>
 	</div>
 	<?php
 }
 
 /**
+ * Get all add-ons from the BadgeOS catalog feed.
+ *
+ * @since  1.2.0
+ * @return string Concatenated markup from feed, or error message
+*/
+function badgeos_add_ons_get_feed() {
+
+	// Attempt to pull back our cached feed
+	$feed = get_transient( 'badgeos_add_ons_feed' );
+
+	// If we don't have a cached feed, pull back fresh data
+	if ( empty( $feed ) ) {
+
+		// Retrieve and parse our feed
+		$feed = wp_remote_get( 'http://badgeos.org/?feed=addons', array( 'sslverify' => false ) );
+		if ( ! is_wp_error( $feed ) ) {
+			if ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
+				$feed = wp_remote_retrieve_body( $feed );
+				// Cache our feed for 1 hour
+				set_transient( 'badgeos_add_ons_feed', $feed, HOUR_IN_SECONDS );
+			}
+		} else {
+			$feed = '<div class="error"><p>' . __( 'There was an error retrieving the add-ons list from the server. Please try again later.', 'badgeos' ) . '</div>';
+		}
+	}
+
+	// Return our feed, or error message
+	return $feed;
+}
+
+/**
  * Help and Support settings page
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_help_support_page() { ?>
 	<div class="wrap" >
@@ -270,118 +345,16 @@ function badgeos_help_support_page() { ?>
 		<h2><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h2>
 		<p><?php printf( __( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievement, and earn badges. You define the Achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by <a href="%s" target="_blank">Credly</a>, the free web service for issuing, earning and sharing badges.', 'badgeos' ), 'https://credly.com/' ); ?></p>
 		<p><?php _e( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on our github site so we can keep making BadgeOS better for everyone.", 'badgeos' ); ?></p>
+		<?php do_action( 'badgeos_help_support_page_about' ); ?>
 
 		<h2><?php _e( 'Help / Support', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
 		<p><?php _e( 'Please submit bugs or issues to our Github site for the BadgeOS Project.', 'badgeos' ); ?></p>
+		<?php do_action( 'badgeos_help_support_page_help' ); ?>
 
 		<h2><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h2>
 		<p><?php _e( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions.  Visit <a href="http://badgeos.org/support/shortcodes/" target="_blank">BadgeOS.org</a> for additional information on shortcodes.', 'badgeos' ); ?></p>
-		<hr/>
-		<p><strong>[badgeos_achievement]</strong> - <?php _e( 'Display a single achievement on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li><?php _e( 'id', 'badgeos' ); ?> - <?php _e( 'The ID of the achievement to display.', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_achievements_list]</strong> - <?php _e( 'Output a list of achievements of any type on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li><?php _e( 'type', 'badgeos' ); ?> - <?php printf( __( 'Type of achievements to list. Default: %s', 'badgeos' ), '<code>all</code>' ); ?></li>
-						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php printf( __( 'Number of achievements to display per page. Default: %s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li><?php _e( 'show_filter', 'badgeos' ); ?> - <?php printf( __( 'Display the filter options. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li><?php _e( 'show_search', 'badgeos' ); ?> - <?php printf( __( 'Display the search form. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badge limit=15]</code></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_submission]</strong> - <?php _e( 'Display submissions or submission form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Submission</strong>.', 'badgeos' ); ?></p>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
-			</ul>
-		</div>
-		<hr/>
-		<p><strong>[badgeos_nomination]</strong> - <?php _e( 'Display nominations or nomination form for a given achievement. <strong>Note:</strong> Achievements will automatically display this on their single page if <strong>Earned By</strong> is set to <strong>Nomination</strong>.', 'badgeos' ); ?></p>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>achievement_id - <?php _e( 'The ID of the achievement to be awarded.  Default: current post ID', 'badgeos' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
-			</ul>
-		</div>
-		<hr/>
-		<p><strong>[badgeos_submissions]</strong> - <?php _e( 'Generate a list of submissions on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>limit - <?php printf( __( 'Number of submissions to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, auto-approved, approved, denied</code>', '<code>all</code>' ); ?></li>
-						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_attachments - <?php printf( __( 'Display attachments connected to the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_comments - <?php printf( __( 'Display comments associated with the submission. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
-			</ul>
-		</div>
-		</p>
-		<hr/>
-		<p><strong>[badgeos_nominations]</strong> - <?php _e( 'Generate a list of nominations on any post or page.', 'badgeos' ); ?>
-		<div style="padding-left:15px;">
-			<ul>
-				<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
-				<li>
-					<div style="padding-left:15px;">
-					<ul>
-						<li>limit - <?php printf( __( 'Number of nominations to display per page. Default: %1$s', 'badgeos' ), '<code>10</code>' ); ?></li>
-						<li>status - <?php printf( __( 'Which Approval Status type to show on initial page load. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>all, pending, approved, denied</code>', '<code>all</code>' ); ?></li>
-						<li>show_filter - <?php printf( __( 'Display the filter select input. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-						<li>show_search - <?php printf( __( 'Display the search form. Accepts: %1$s  Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>true</code>' ); ?></li>
-					</ul>
-					</div>
-				</li>
-				<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
-			</ul>
-		</div>
-		</p>
+		<?php do_action( 'badgeos_help_support_page_shortcodes' ); ?>
 	</div>
 	<?php
 }
@@ -389,7 +362,7 @@ function badgeos_help_support_page() { ?>
 /**
  * BadgeOS Credly Integration settings page.
  * @since  1.0.0
- * @return null
+ * @return void
  */
 function badgeos_credly_options_page() {
 	?>
@@ -434,9 +407,9 @@ function badgeos_credly_options_page() {
  * BadgeOS Credly API key retrieval form.
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
-function badgeos_credly_options_no_api( $credly_settings ) {
+function badgeos_credly_options_no_api( $credly_settings = array() ) {
 	wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
 
 	if ( is_array( $credly_settings ) ) {
@@ -478,9 +451,9 @@ function badgeos_credly_options_no_api( $credly_settings ) {
  * BadgeOS Credly Settings form (when API key has been saved).
  * @since  1.0.0
  * @param  array $credly_settings saved settings
- * @return null
+ * @return void
  */
-function badgeos_credly_options_yes_api( $credly_settings ) {
+function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 	?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Credly API Key', 'badgeos' ); ?></h3>

@@ -9,15 +9,14 @@
  * @link https://credly.com
  */
 
-add_filter( 'the_content', 'badgeos_achievement_submissions' );
-
 /**
  * Displays the submission form on achievement type single pages if the meta option is enabled
  *
- *
- *
+ * @since  1.0.0
+ * @param  string $content The page content before meta box insertion
+ * @return string          The page content after meta box insertion
  */
-function badgeos_achievement_submissions( $content ) {
+function badgeos_achievement_submissions( $content = '' ) {
 	global $post;
 
 	if ( is_single() ) {
@@ -65,11 +64,16 @@ function badgeos_achievement_submissions( $content ) {
 	return $content;
 
 }
+add_filter( 'the_content', 'badgeos_achievement_submissions' );
 
-// add_filter( 'the_content', 'badgeos_steps_single' );
-
-// Step single page filter
-function badgeos_steps_single( $content ) {
+/**
+ * Display the Step Single page after Filtering
+ *
+ * @since  1.0.0
+ * @param  string $content The page content before meta box insertion
+ * @return string          The page content after meta box insertion
+ */
+function badgeos_steps_single( $content = '' ) {
 	global $post, $current_user;
 
 	if ( get_post_type( $post ) == 'step' && is_single() ) {
@@ -111,16 +115,16 @@ function badgeos_steps_single( $content ) {
 				//user has an active submission, so show content and comments
 
 				$args = array(
-					'post_type'			=>	'submission',
-					'author'			=>	$current_user->ID,
-					'post_status'	=>	'publish',
-					'meta_key'		=>	'_badgeos_submission_achievement_id',
-					'meta_value'	=>	absint( $post->ID ),
+					'post_type'         =>  'submission',
+					'author'            =>  $current_user->ID,
+					'post_status'   =>  'publish',
+					'meta_key'      =>  '_badgeos_submission_achievement_id',
+					'meta_value'    =>  absint( $post->ID ),
 				);
 
 				$submissions = get_posts( $args );
 
-				foreach( $submissions as $post ) :	setup_postdata( $post );
+				foreach( $submissions as $post ) :  setup_postdata( $post );
 
 					echo '<p>';
 
@@ -167,10 +171,13 @@ function badgeos_steps_single( $content ) {
 	return $content;
 
 }
+// add_filter( 'the_content', 'badgeos_steps_single' );
 
-add_action( 'wp_enqueue_scripts', 'badgeos_do_single_filters' );
 /**
  * Add filters to remove stuff from our singular pages and add back in how we want it
+ *
+ * @since 1.0.0
+ * @return null
  */
 function badgeos_do_single_filters() {
 	// check we're in the right place
@@ -180,15 +187,21 @@ function badgeos_do_single_filters() {
 	// no worries.. we'll add back later
 	remove_filter( 'the_content', 'wpautop' );
 	// filter out the post title
-	// add_filter( 'the_title', 'badgeos_remove_to_reformat_entries_title', 10 ,2 );
+	// add_filter( 'the_title', 'badgeos_remove_to_reformat_entries_title', 10, 2 );
 	// and filter out the post image
 	add_filter( 'post_thumbnail_html', 'badgeos_remove_to_reformat_entries_title', 10, 2 );
 }
+add_action( 'wp_enqueue_scripts', 'badgeos_do_single_filters' );
 
 /**
  * Filter out the post title/post image and add back (later) how we want it
+ *
+ * @since 1.0.0
+ * @param  string  $html The page content prior to filtering
+ * @param  integer $id   The page id
+ * @return string        The page content after being filtered
  */
-function badgeos_remove_to_reformat_entries_title( $html, $id ) {
+function badgeos_remove_to_reformat_entries_title( $html = '', $id = 0 ) {
 
 	// remove, but only on the main loop!
 	if ( badgeos_is_main_loop( $id ) )
@@ -198,9 +211,12 @@ function badgeos_remove_to_reformat_entries_title( $html, $id ) {
 	return $html;
 }
 
-add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
 /**
  * Filter badge content to add our removed content back
+ *
+ * @since  1.0.0
+ * @param  string $content The page content
+ * @return string          The page content after reformat
  */
 function badgeos_reformat_entries( $content ) {
 
@@ -248,9 +264,14 @@ function badgeos_reformat_entries( $content ) {
 
 	return $newcontent;
 }
+add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
 
 /**
- * helper function tests that we're in the main loop
+ * Helper function tests that we're in the main loop
+ *
+ * @since  1.0.0
+ * @param  integer $id The page id
+ * @return boolean     A boolean determining if the function is in the main loop
  */
 function badgeos_is_main_loop( $id = false ) {
 
@@ -265,7 +286,6 @@ function badgeos_is_main_loop( $id = false ) {
 	// Checks several variables to be sure we're in the main loop (and won't effect things like post pagination titles)
 	return ( ( $GLOBALS['post']->ID == $id ) && in_the_loop() && empty( $GLOBALS['badgeos_reformat_content'] ) );
 }
-
 
 /**
  * Gets achivement's required steps and returns HTML markup for these steps
@@ -302,11 +322,12 @@ function badgeos_get_required_achievements_for_achievement_list( $achievement_id
  * and an ordered list (<ol>) if steps require sequentiality.
  *
  * @since  1.0.0
- * @param  array   $steps 	 An achievement's required steps
- * @param  integer $user_id A given user's ID
- * @return string           The markup for our list
+ * @param  array   $steps           An achievement's required steps
+ * @param  integer $achievement_id  The given achievement's ID
+ * @param  integer $user_id         The given user's ID
+ * @return string                   The markup for our list
  */
-function badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement_id = 0, $user_id = 0 ) {
+function badgeos_get_required_achievements_for_achievement_list_markup( $steps = array(), $achievement_id = 0, $user_id = 0 ) {
 
 	// If we don't have any steps, or our steps aren't an array, return nothing
 	if ( ! $steps || ! is_array( $steps ) )
@@ -366,7 +387,7 @@ function badgeos_get_required_achievements_for_achievement_list_markup( $steps, 
  * @param  object $step  Our step's post object
  * @return string        Our potentially udated title
  */
-function badgeos_step_link_title_to_achievement( $title, $step ) {
+function badgeos_step_link_title_to_achievement( $title = '', $step = null ) {
 
 	// Grab our step requirements
 	$step_requirements = badgeos_get_step_requirements( $step->ID );
@@ -375,7 +396,7 @@ function badgeos_step_link_title_to_achievement( $title, $step ) {
 	if ( ! empty( $step_requirements['achievement_post'] ) )
 		$url = get_permalink( $step_requirements['achievement_post'] );
 	// elseif ( ! empty( $step_requirements['achievement_type'] ) )
-	// 	$url = get_post_type_archive_link( $step_requirements['achievement_type'] );
+	//  $url = get_post_type_archive_link( $step_requirements['achievement_type'] );
 
 	// If we have a URL, update the title to link to it
 	if ( isset( $url ) && ! empty( $url ) )
@@ -404,13 +425,13 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 	return ( $points = get_post_meta( $achievement_id, '_badgeos_points', true ) ) ? '<div class="badgeos-item-points">' . sprintf( __( '%d Points', 'badgeos' ), $points ) . '</div>' : '';
 }
 
-add_filter( 'post_class', 'badgeos_add_earned_class_single' );
 /**
  * Adds "earned"/"not earned" post_class based on viewer's status
+ *
  * @param  array $classes Post classes
  * @return array          Updated post classes
  */
-function badgeos_add_earned_class_single( $classes ) {
+function badgeos_add_earned_class_single( $classes = array() ) {
 	global $user_ID;
 
 	// check if current user has earned the achievement they're viewing
@@ -418,12 +439,14 @@ function badgeos_add_earned_class_single( $classes ) {
 
 	return $classes;
 }
+add_filter( 'post_class', 'badgeos_add_earned_class_single' );
 
 /**
  * Returns a message if user has earned the achievement
  *
  * @since  1.1.0
  * @param  integer $achievement_id The given achievment's ID
+ * @param  integer $user_id        The given user's ID
  * @return string                  The HTML markup for our earned message
  */
 function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
@@ -435,9 +458,12 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 
 			// Return a message stating the user has earned the achievement
 			$earned_message = '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
-			$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) . '</div>';
 
-			return apply_filters( 'badgeos_earned_achievement_message', $earned_message );
+			// If the achievement has congrats text, output that, too.
+			if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) )
+				$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( $congrats_text ) . '</div>';
+
+			return apply_filters( 'badgeos_earned_achievement_message', $earned_message, $achievement_id, $user_id );
 
 		}
 
@@ -448,8 +474,9 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 /**
  * Render an achievement
  *
- * @param  integer $achievement_id The achievement's post ID
- * @return string                  Concatenated markup
+ * @since  1.0.0
+ * @param  integer $achievement The achievement's post ID
+ * @return string               Concatenated markup
  */
 function badgeos_render_achievement( $achievement = 0 ) {
 	global $user_ID;
@@ -513,7 +540,6 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 
 }
-
 
 /**
  * Render a filterable list of feedback
@@ -716,7 +742,6 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 	return apply_filters( 'badgeos_render_submission', $output, $submission );
 }
 
-
 /**
  * Renter a given submission attachment
  *
@@ -750,7 +775,7 @@ function badgeos_render_submission_attachment( $attachment = null ) {
  * @since  1.1.0
  * @param  object $comment  The comment object
  * @param  string $odd_even Custom class to use for alternating comments (e.g. "odd" or "even")
- * @return string           Concatenated markup
+ * @return string           The concatenated markup
  */
 function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' ) {
 
@@ -778,8 +803,10 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
 
 /**
  * Render the approve/deny buttons for a given piece of feedback
- * @param  integer  $args The feedback's post ID
- * @return string       [description]
+ *
+ * @since  1.0.0
+ * @param  integer $feedback_id The feedback's post ID
+ * @return string               The concatinated markup
  */
 function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	global $post;

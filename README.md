@@ -99,7 +99,7 @@ Stay Connected / Helpful Links
 BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"). Here are some ways to stay connected and to see what else we are up to:
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
-* [Credly.com](https://credly.com/ "Credly web site") - Recognize, manage and share lifelong achievement
+* [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
@@ -132,7 +132,9 @@ Contributing
 ------------
 The BadgeOS team welcomes donations in the form of code contributions, add-ons, and shared love for what we’re doing. So spread the word and share back your innovations with the BadgeOS community.
 
-So, you want to contribute? That's great! Patches are always welcome. Open an Issue and make a Pull Request. Note, too, that we do all of our active development in branches separate from "master". If you're looking for the latest – potentially unstable – changesets, you'll find them in the [alpha](https://github.com/opencredit/badgeos/tree/alpha) branch.
+Developer Documentation:  Check out a complete set of Developer Documentation, APIs and guides at [badgeos.org/developers/](http://badgeos.org/developers/). And share your BadgeOS Add-Ons and BadgeOS-compatible plugins at [badgeos.org/developers/share](http://badgeos.org/developers/share).
+
+Want to contribute to BadgeOS core? That's great! Patches are always welcome. Open an Issue and make a Pull Request. Note, too, that we do all of our active development in branches separate from "master". If you're looking for the latest – potentially unstable – changesets, you'll find them in the [alpha](https://github.com/opencredit/badgeos/tree/alpha) branch.
 
 1. [Open an Issue](https://github.com/opencredit/badgeos/issues) (or claim an open Issue).
 2. [Fork BadgeOS.](https://github.com/opencredit/badgeos/fork)

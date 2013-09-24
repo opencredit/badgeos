@@ -27,9 +27,10 @@ foreach ( $badgeos_ajax_actions as $action ) {
  * AJAX Helper for returning achievements
  *
  * @since 1.0.0
+ * @return void
  */
-function badgeos_ajax_get_achievements(){
-	global $user_ID;
+function badgeos_ajax_get_achievements() {
+	global $user_ID, $blog_id;
 
 	// Setup our AJAX query vars
 	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
@@ -39,69 +40,109 @@ function badgeos_ajax_get_achievements(){
 	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
 	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
 	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
-	if( !$user_id )
+	$orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : false;
+	$order   = isset( $_REQUEST['order'] )   ? $_REQUEST['order']   : false;
+	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms']    : false;
+
+	// Convert $type to properly support multiple achievement types
+	if ( 'all' == $type ) {
+		$type = badgeos_get_achievement_types_slugs();
+		// Drop steps from our list of "all" achievements
+		$step_key = array_search( 'step', $type );
+		if ( $step_key )
+			unset( $type[$step_key] );
+	} else {
+		$type = explode( ',', $type );
+	}
+
+	// Get the current user if one wasn't specified
+	if( ! $user_id )
 		$user_id = $user_ID;
 
-	$achievements = '';
+    // Initialize our output and counters
+    $achievements = '';
+    $achievement_count = 0;
+    $query_count = 0;
 
-	// Grab our hidden and earned badges (used to filter the query)
+    // Grab our hidden badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
-	$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
 
-	// Query Achievements
-	$args = array(
-		'post_type'      =>	$type,
-		'orderby'        =>	'menu_order',
-		'order'          =>	'ASC',
-		'posts_per_page' =>	$limit,
-		'offset'         => $offset,
-		'post_status'    => 'publish',
-		'post__not_in'   => array_diff( $hidden, $earned_ids )
-	);
+	// If we're polling all sites, grab an array of site IDs
+	if( $wpms && $wpms != 'false' )
+		$sites = badgeos_get_network_site_ids();
+	// Otherwise, use only the current site
+	else
+		$sites = array( $blog_id );
 
-	// Filter - query completed or non completed achievements
-	if ( $filter == 'completed' ) {
-		$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
-	}elseif( $filter == 'not-completed' ) {
-		$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
-	}
+	// Loop through each site (default is current site only)
+	foreach( $sites as $site_blog_id ) {
 
-	// Search
-	if ( $search ) {
-		$args = array_merge( $args, array( 's' => $search ) );
-	}
+		// If we're not polling the current site, switch to the site we're polling
+		if( $blog_id != $site_blog_id )
+			switch_to_blog( $site_blog_id );
 
-	// Loop Achievements
-	$achievement_posts = new WP_Query( $args );
-	$achievement_count = 0;
-	while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-		$achievements .= badgeos_render_achievement( get_the_ID() );
-		$achievement_count++;
-	endwhile;
+		// Grab our earned badges (used to filter the query)
+		$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
 
-	// Sanity helper: if we're filtering for complete and we have no
-	// earned achievements, $achievement_posts should definitely be false
-	if ( 'completed' == $filter && empty( $earned_ids ) )
-		$achievements = '';
+		// Query Achievements
+		$args = array(
+			'post_type'      =>	$type,
+			'orderby'        =>	$orderby,
+			'order'          =>	$order,
+			'posts_per_page' =>	$limit,
+			'offset'         => $offset,
+			'post_status'    => 'publish',
+			'post__not_in'   => array_diff( $hidden, $earned_ids )
+		);
 
-	// Display a message for no results
-	if ( empty( $achievements ) ) {
-		$post_type_plural = get_post_type_object( $type )->labels->name;
-		$achievements .= '<div class="badgeos-no-results">';
-		if ( 'completed' == $filter ) {
-			$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-		}else{
-			$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+		// Filter - query completed or non completed achievements
+		if ( $filter == 'completed' ) {
+			$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
+		}elseif( $filter == 'not-completed' ) {
+			$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
 		}
-		$achievements .= '</div><!-- .badgeos-no-results -->';
+
+		// Search
+		if ( $search ) {
+			$args = array_merge( $args, array( 's' => $search ) );
+		}
+
+		// Loop Achievements
+		$achievement_posts = new WP_Query( $args );
+		$query_count += $achievement_posts->found_posts;
+		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
+			$achievements .= badgeos_render_achievement( get_the_ID() );
+			$achievement_count++;
+		endwhile;
+
+		// Sanity helper: if we're filtering for complete and we have no
+		// earned achievements, $achievement_posts should definitely be false
+		/*if ( 'completed' == $filter && empty( $earned_ids ) )
+			$achievements = '';*/
+
+		// Display a message for no results
+		if ( empty( $achievements ) ) {
+			// If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+			$post_type_plural = ( 1 == count( $type ) ) ? get_post_type_object( $type )->labels->name : 'achievements';
+
+			// Setup our completion message
+			$achievements .= '<div class="badgeos-no-results">';
+			if ( 'completed' == $filter ) {
+				$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+			}else{
+				$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+			}
+			$achievements .= '</div><!-- .badgeos-no-results -->';
+		}
 	}
 
 	// Send back our successful response
 	wp_send_json_success( array(
 		'message'     => $achievements,
 		'offset'      => $offset + $limit,
-		'query_count' => $achievement_posts->found_posts,
-		'badge_count' => $achievement_count
+		'query_count' => $query_count,
+		'badge_count' => $achievement_count,
+		'type'        => $type,
 	) );
 }
 
@@ -109,6 +150,7 @@ function badgeos_ajax_get_achievements(){
  * AJAX Helper for returning feedback posts
  *
  * @since 1.1.0
+ * @return void
  */
 function badgeos_ajax_get_feedback() {
 
@@ -146,6 +188,7 @@ function badgeos_ajax_get_feedback() {
  * AJAX Helper for approving/denying feedback
  *
  * @since 1.1.0
+ * @return void
  */
 function badgeos_ajax_update_feedback() {
 

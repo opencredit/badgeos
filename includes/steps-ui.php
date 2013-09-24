@@ -13,6 +13,7 @@
  * Add our Steps JS to the Badge post editor
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_steps_ui_admin_scripts() {
     global $post_type;
@@ -27,6 +28,7 @@ add_action( 'admin_print_scripts-post.php', 'badgeos_steps_ui_admin_scripts', 11
  * Adds our Steps metabox to the Badge post editor
  *
  * @since  1.0.0
+ * @return void
  */
 function badgeos_add_steps_ui_meta_box() {
 	$achievement_types = badgeos_get_achievement_types_slugs();
@@ -41,8 +43,9 @@ add_action( 'admin_menu', 'badgeos_add_steps_ui_meta_box', 99 );
  *
  * @since  1.0.0
  * @param  object $post The current post object
+ * @return void
  */
-function badgeos_steps_ui_meta_box( $post ) {
+function badgeos_steps_ui_meta_box( $post  = null) {
 
 	// Grab our $wpdb global
 	global $wpdb;
@@ -89,7 +92,7 @@ function badgeos_steps_ui_meta_box( $post ) {
  * @param  integer $post_id The given step's parent $post ID
  * @return string           The concatenated HTML input for the step
  */
-function badgeos_steps_ui_html( $step_id, $post_id ) {
+function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 	// Grab our step's requirements and measurement
 	$requirements      = badgeos_get_step_requirements( $step_id );
@@ -152,7 +155,7 @@ function badgeos_steps_ui_html( $step_id, $post_id ) {
  * @param  integer $step_id The given step's post ID
  * @return array|bool       An array of all the step requirements if it has any, false if not
  */
-function badgeos_get_step_requirements( $step_id ) {
+function badgeos_get_step_requirements( $step_id = 0 ) {
 
 	// Setup our default requirements array, assume we require nothing
 	$requirements = array(
@@ -164,7 +167,7 @@ function badgeos_get_step_requirements( $step_id ) {
 
 	// If the step requires a specific achievement
 	if ( !empty( $requirements['achievement_type'] ) ) {
-		$connected_activities = get_posts( array(
+		$connected_activities = @get_posts( array(
 			'post_type'        => $requirements['achievement_type'],
 			'posts_per_page'   => 1,
 			'suppress_filters' => false,
@@ -183,6 +186,7 @@ function badgeos_get_step_requirements( $step_id ) {
  * AJAX Handler for adding a new step
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_add_step_ajax_handler() {
 
@@ -222,6 +226,7 @@ add_action( 'wp_ajax_add_step', 'badgeos_add_step_ajax_handler' );
  * AJAX Handler for deleting a step
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_delete_step_ajax_handler() {
 	wp_delete_post( $_POST['step_id'] );
@@ -233,6 +238,7 @@ add_action( 'wp_ajax_delete_step', 'badgeos_delete_step_ajax_handler' );
  * AJAX Handler for saving all steps
  *
  * @since 1.0.0
+ * @return void
  */
 function badgeos_update_steps_ajax_handler() {
 
@@ -330,6 +336,7 @@ add_action( 'wp_ajax_update_steps', 'badgeos_update_steps_ajax_handler' );
  * AJAX helper for getting our posts and returning select options
  *
  * @since  1.0.0
+ * @return void
  */
 function badgeos_activity_trigger_post_select_ajax_handler() {
 
@@ -370,7 +377,7 @@ add_action( 'wp_ajax_post_select_ajax', 'badgeos_activity_trigger_post_select_aj
  * @param  integer $child_id The given child's post ID
  * @return integer           The resulting connected post ID
  */
-function badgeos_get_p2p_id_from_child_id( $child_id ) {
+function badgeos_get_p2p_id_from_child_id( $child_id = 0 ) {
 	global $wpdb;
 	$p2p_id = $wpdb->get_var( $wpdb->prepare( "SELECT p2p_id FROM $wpdb->p2p WHERE p2p_from = %d ", $child_id ) );
 	return $p2p_id;
@@ -383,7 +390,7 @@ function badgeos_get_p2p_id_from_child_id( $child_id ) {
  * @param  integer $step_id The given step's post ID
  * @return integer          The step's sort order
  */
-function get_step_menu_order( $step_id ) {
+function get_step_menu_order( $step_id = 0 ) {
 	global $wpdb;
 	$p2p_id = $wpdb->get_var( $wpdb->prepare( "SELECT p2p_id FROM $wpdb->p2p WHERE p2p_from = %d", $step_id ) );
 	$menu_order = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->p2pmeta WHERE p2p_id=%d AND meta_key='order'", $p2p_id ) );
@@ -399,7 +406,7 @@ function get_step_menu_order( $step_id ) {
  * @param  integer $step2 The order number of the step we're comparing against
  * @return integer        0 if the order matches, -1 if it's lower, 1 if it's higher
  */
-function badgeos_compare_step_order( $step1, $step2 ) {
+function badgeos_compare_step_order( $step1 = 0, $step2 = 0 ) {
 	if ( $step1->order == $step2->order ) return 0;
 	return ( $step1->order < $step2->order ) ? -1 : 1;
 }
