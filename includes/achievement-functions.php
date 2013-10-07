@@ -522,7 +522,7 @@ function badgeos_bust_points_based_achievements_cache( $post_id ) {
 	// and the achievement is awarded by minimum points
 	if (
 		current_user_can( $minimum_role )
-		&& in_array( $post->post_type, badgeos_get_achievement_types_slugs() )
+		&& badgeos_is_achievement( $post )
 		&& (
 			'points' == get_post_meta( $post_id, '_badgeos_earned_by', true )
 			|| ( isset( $_POST['_badgeos_earned_by'] ) && 'points' == $_POST['_badgeos_earned_by'] )
@@ -715,7 +715,7 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	// OR we've just loaded the new post page
 	if (
 		! (
-			in_array( get_post_type( $post_id ), badgeos_get_achievement_types_slugs() )
+			badgeos_is_achievement( $post_id )
 			|| 'achievement-type' == get_post_type( $post_id )
 		)
 		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
