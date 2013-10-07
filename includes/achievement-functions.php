@@ -10,6 +10,35 @@
  */
 
 /**
+ * Check if post is a registered BadgeOS achievement.
+ *
+ * @since  1.3.0
+ *
+ * @param  object|int $post Post object or ID.
+ * @return bool             True if post is an achievement, otherwise false.
+ */
+function badgeos_is_achievement( $post = null ) {
+
+	// Assume we are working with an achievment object
+	$return = true;
+
+	// If passed an ID, get the post object
+	if ( is_int( $post ) )
+		$post = get_post( $post );
+
+	// If $post is NOT an object it cannot be an achievement
+	if ( ! is_object( $post ) )
+		$return = false;
+
+	// If post type is NOT a registered achievement type, it cannot be an achievement
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+		$return = false;
+
+	// If we pass both previous tests, this is a valid achievement (with filter to override)
+	return apply_filters( 'badgeos_is_achievement', $return, $post );
+}
+
+/**
  * Get an array of achievements
  *
  * @since  1.0.0
