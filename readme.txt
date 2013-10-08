@@ -193,6 +193,13 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.0 =
+* Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
+* Updated: badgeos_award_achievement_to_user() now checks that the passed $acheivement_id is a real achievement.
+* Updated: New achievements now have a default max earning of 1 (blank for infinite).
+* Updated: BadgeOS Help page now links to Github, instead of just mentioning it.
+* Fixed: Added variable type check to badgeos_get_user_achievements() to prevent PHP warning.
+
 = 1.2.0 =
 * Added: "Add-ons" menu now has a catalog of new plugins to extend BadgeOS in exciting ways.
 * Added: Introduced a suite of "user activity" functions for tracking a user's active achievements.
@@ -258,6 +265,13 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+* Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
+* Updated: badgeos_award_achievement_to_user() now checks that the passed $acheivement_id is a real achievement.
+* Updated: New achievements now have a default max earning of 1 (blank for infinite).
+* Updated: BadgeOS Help page now links to Github, instead of just mentioning it.
+* Fixed: Added variable type check to badgeos_get_user_achievements() to prevent PHP warning.
 
 = 1.2.0 =
 * Added: "Add-ons" menu now has a catalog of new plugins to extend BadgeOS in exciting ways.
