@@ -83,6 +83,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/rules-engine.php' );
 		require_once( $this->directory_path . 'includes/user.php' );
 		require_once( $this->directory_path . 'includes/credly.php' );
+		require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
 	}
 
