@@ -43,6 +43,8 @@ function badgeos_ajax_get_achievements() {
 	$orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : false;
 	$order   = isset( $_REQUEST['order'] )   ? $_REQUEST['order']   : false;
 	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms']    : false;
+	$include = isset( $_REQUEST['include'] ) ? $_REQUEST['include'] : array();
+	$exclude = isset( $_REQUEST['exclude'] ) ? $_REQUEST['exclude'] : array();
 
 	// Convert $type to properly support multiple achievement types
 	if ( 'all' == $type ) {
@@ -58,6 +60,16 @@ function badgeos_ajax_get_achievements() {
 	// Get the current user if one wasn't specified
 	if( ! $user_id )
 		$user_id = $user_ID;
+
+	// Build $include array
+	if ( !is_array( $include ) ) {
+		$include = explode( ',', $include );
+	}
+
+	// Build $exclude array
+	if ( !is_array( $exclude ) ) {
+		$exclude = explode( ',', $exclude );
+	}
 
     // Initialize our output and counters
     $achievements = '';
@@ -97,14 +109,24 @@ function badgeos_ajax_get_achievements() {
 
 		// Filter - query completed or non completed achievements
 		if ( $filter == 'completed' ) {
-			$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
+			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
 		}elseif( $filter == 'not-completed' ) {
-			$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
+			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
+		}
+
+		// Include certain achievements
+		if ( !empty( $include ) ) {
+			$args[ 'post__not_in' ] = array_diff( $args[ 'post__not_in' ], $include );
+		}
+
+		// Exclude certain achievements
+		if ( !empty( $exclude ) ) {
+			$args[ 'post__not_in' ] = array_merge( $args[ 'post__not_in' ], $exclude );
 		}
 
 		// Search
 		if ( $search ) {
-			$args = array_merge( $args, array( 's' => $search ) );
+			$args[ 's' ] = $search;
 		}
 
 		// Loop Achievements
