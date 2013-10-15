@@ -33,18 +33,20 @@ function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
 	// Setup our AJAX query vars
-	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
-	$limit   = isset( $_REQUEST['limit'] )   ? $_REQUEST['limit']   : false;
-	$offset  = isset( $_REQUEST['offset'] )  ? $_REQUEST['offset']  : false;
-	$count   = isset( $_REQUEST['count'] )   ? $_REQUEST['count']   : false;
-	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
-	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
-	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
-	$orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : false;
-	$order   = isset( $_REQUEST['order'] )   ? $_REQUEST['order']   : false;
-	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms']    : false;
-	$include = isset( $_REQUEST['include'] ) ? $_REQUEST['include'] : array();
-	$exclude = isset( $_REQUEST['exclude'] ) ? $_REQUEST['exclude'] : array();
+	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
+	$limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
+	$offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
+	$count      = isset( $_REQUEST['count'] )      ? $_REQUEST['count']      : false;
+	$filter     = isset( $_REQUEST['filter'] )     ? $_REQUEST['filter']     : false;
+	$search     = isset( $_REQUEST['search'] )     ? $_REQUEST['search']     : false;
+	$user_id    = isset( $_REQUEST['user_id'] )    ? $_REQUEST['user_id']    : false;
+	$orderby    = isset( $_REQUEST['orderby'] )    ? $_REQUEST['orderby']    : false;
+	$order      = isset( $_REQUEST['order'] )      ? $_REQUEST['order']      : false;
+	$wpms       = isset( $_REQUEST['wpms'] )       ? $_REQUEST['wpms']       : false;
+	$include    = isset( $_REQUEST['include'] )    ? $_REQUEST['include']    : array();
+	$exclude    = isset( $_REQUEST['exclude'] )    ? $_REQUEST['exclude']    : array();
+	$meta_key   = isset( $_REQUEST['meta_key'] )   ? $_REQUEST['meta_key']   : '';
+	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
 
 	// Convert $type to properly support multiple achievement types
 	if ( 'all' == $type ) {
@@ -114,9 +116,15 @@ function badgeos_ajax_get_achievements() {
 			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
 		}
 
+		if ( '' !== $meta_key && '' !== $meta_value ) {
+			$args[ 'meta_key' ] = $meta_key;
+			$args[ 'meta_value' ] = $meta_value;
+		}
+
 		// Include certain achievements
 		if ( !empty( $include ) ) {
 			$args[ 'post__not_in' ] = array_diff( $args[ 'post__not_in' ], $include );
+			$args[ 'post__in' ] = array_merge( array( 0 ), array_diff( $include, $args[ 'post__in' ] ) );
 		}
 
 		// Exclude certain achievements

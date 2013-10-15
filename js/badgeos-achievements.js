@@ -76,7 +76,11 @@ jQuery(document).ready(function($){
 				'filter':      $('#achievements_list_filter').val(),
 				'search':      $('#achievements_list_search').val(),
 				'orderby':     badgeos.orderby,
-				'order':       badgeos.order
+				'order':       badgeos.order,
+				'include':     badgeos.include,
+				'exclude':     badgeos.exclude,
+				'meta_key':    badgeos.meta_key,
+				'meta_value':  badgeos.meta_value
 			},
 			dataType: 'json',
 			success: function( response ) {
