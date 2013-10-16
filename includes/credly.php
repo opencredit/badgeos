@@ -85,7 +85,7 @@ class BadgeOS_Credly {
 
         $credly_settings = get_option( 'credly_settings' );
 
-        //check if Credly is enabled and if an API key exists
+        // Check if Credly is enabled and if an API key exists
         if ( empty( $credly_settings ) || 'false' === $credly_settings['credly_enable'] || ! empty( $credly_settings['api_key'] ) )
             return;
 
@@ -1112,5 +1112,27 @@ function credly_is_achievement_giveable( $achievement_id = 0 ) {
     $credly_badge_id = ( ( ! empty( $achievement_id ) ) ? get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true ) : '' );
 
     return ( ( ! empty( $credly_badge_id ) ) ? true : false );
+
+}
+
+/**
+ * Get the stored Credly API key
+ *
+ * @since  1.3.0
+ *
+ * @return string|bool Stored API key on success, otherwise false.
+ */
+function credly_get_api_key() {
+
+    // Get stored Credly settings
+    $credly_settings = get_option( 'credly_settings' );
+
+    // If we have no settings, no key, or credly is not enabled, return false
+    if ( empty( $credly_settings ) || empty( $credly_settings['api_key'] ) || 'false' === $credly_settings['credly_enable'] )
+        return false;
+
+    // Otherwise, return our stored key
+    else
+        return $credly_settings['api_key'];
 
 }
