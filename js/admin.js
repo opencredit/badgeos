@@ -46,4 +46,54 @@ jQuery(document).ready(function($) {
 		}
 	} );
 
+	// Listen for Credly Badge Builder events
+	window.addEventListener( 'message', function(e) {
+		// Only continue if data is from credly.com
+		if ( "https://credly.com" === e.origin && "object" === typeof( data = e.data ) ) {
+			var win = window.dialogArguments || opener || parent || top;
+
+			// Remove the badge builder thickbox
+			tb_remove();
+
+			win.WPSetThumbnailHTML('<p>Updating featured image, please wait...</p>');
+
+			// Send the badge data along for uploading
+			$.ajax({
+				url: ajaxurl,
+				data: {
+					'action':     'credly-save-badge',
+					'post_id':    $('#post_ID').val(),
+					'image':      e.data.image,
+					'icon_meta':  e.data.iconMetadata,
+					'badge_meta': e.data.packagedData,
+					'all_data':   e.data
+				},
+				dataType: 'json',
+				success: function( response ) {
+					console.log( response );
+
+					// Update the featured image metabox
+					win.WPSetThumbnailHTML(response.data.metabox_html);
+
+				}
+			});
+		}
+	});
+
+	// Force ThickBox to be our specified width/height
+	$('.badge-builder-link').on( 'click', function() {
+		var $link = $(this);
+		setTimeout( function() {
+
+			var width  = $link.attr('data-width');
+			var height = $link.attr('data-height');
+
+			console.log( 'width: ' + width + ' height: ' + height );
+
+			$('#TB_window').css({ 'marginLeft': -(width / 2) });
+			$('#TB_window, #TB_iframeContent').width(width).height(height);
+
+		}, 0 );
+	});
+
 });
