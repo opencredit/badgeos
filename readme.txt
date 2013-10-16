@@ -194,6 +194,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.3.0 =
+* Added: Credly Badge Builder – Build your own unique badges directly from the post editor (requires Credly account).
 * Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
 * Updated: badgeos_award_achievement_to_user() now checks that the passed $acheivement_id is a real achievement.
 * Updated: New achievements now have a default max earning of 1 (blank for infinite).
