@@ -18,6 +18,12 @@ class Credly_Badge_Builder {
 	public $sdk_url = 'https://credly.com/badge-builder/';
 
 	/**
+	 * The site's Credly API key.
+	 * @var string
+	 */
+	public $credly_api_key = '';
+
+	/**
 	 * Temp token used for running badge builder.
 	 * @var string
 	 */
@@ -41,7 +47,8 @@ class Credly_Badge_Builder {
 		$this->attachment_id = isset( $args['attachment_id'] ) ? $args['attachment_id'] : null;
 
 		// Fetch our temp token
-		$this->temp_token    = $this->fetch_temp_token();
+		$this->credly_api_key = credly_get_api_key();
+		$this->temp_token     = $this->fetch_temp_token();
 
 		add_action( 'wp_ajax_credly-save-badge', array( $this, 'ajax_save_badge' ) );
 
@@ -55,14 +62,14 @@ class Credly_Badge_Builder {
 	public function fetch_temp_token() {
 
 		// If we have a valid Credly API key
-		if ( $credly_api_key = credly_get_api_key() ) {
+		if ( $this->credly_api_key ) {
 
 			// Trade the key for a temp token
 			$response = wp_remote_post(
 				trailingslashit( $this->sdk_url ) . 'code',
 				array(
 					'body' => array(
-						'access_token' => $credly_api_key
+						'access_token' => $this->credly_api_key
 					)
 				)
 			);
@@ -93,9 +100,6 @@ class Credly_Badge_Builder {
 	 */
 	public function render_badge_builder_link( $args = array() ) {
 
-		if ( empty( $this->temp_token ) )
-			return false;
-
 		// Setup and parse our default args
 		$defaults = array(
 			'width'     => '960',
@@ -105,16 +109,21 @@ class Credly_Badge_Builder {
 		);
 		$args = wp_parse_args( $args, $defaults );
 
+		// Alter what we're linking if we couldn't get a token
+		if ( ! $this->credly_api_key )
+			$embed_url = '#';
+
 		// Build our embed url
-		$embed_url = add_query_arg(
-			array(
-				'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
-				'TB_iframe' => 'true',
-				'width'     => $args['width'],
-				'height'    => $args['height'],
-			),
-			trailingslashit( $this->sdk_url ) . 'embed/' . $this->temp_token
-		);
+		else
+			$embed_url = add_query_arg(
+				array(
+					'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
+					'TB_iframe' => 'true',
+					'width'     => $args['width'],
+					'height'    => $args['height'],
+				),
+				trailingslashit( $this->sdk_url ) . 'embed/' . $this->temp_token
+			);
 
 		$output = '<a href="' . esc_url( $embed_url ) . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
 		add_thickbox();
