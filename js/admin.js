@@ -80,9 +80,13 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	// Resize ThickBox when a badge builder link is clicked
+	$('.postbox').on( 'click', '.badge-builder-link', function(e) { badge_builder_resize_tb(e); });
+	$('.cmb_metabox').on( 'click', '.badge-builder-link', function(e) { badge_builder_resize_tb(e); });
+
 	// Force ThickBox to be our specified width/height
-	$('.badge-builder-link').on( 'click', function() {
-		var $link = $(this);
+	function badge_builder_resize_tb(e) {
+		var $link = $(e.currentTarget);
 		setTimeout( function() {
 
 			var width  = $link.attr('data-width');
@@ -94,6 +98,6 @@ jQuery(document).ready(function($) {
 			$('#TB_window, #TB_iframeContent').width(width).height(height);
 
 		}, 0 );
-	});
+	}
 
 });
