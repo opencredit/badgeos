@@ -126,6 +126,7 @@ class Credly_Badge_Builder {
 		}
 
 		add_thickbox();
+		wp_enqueue_script( 'credly-badge-builder' );
 		return apply_filters( 'credly_render_badge_builder', $output, $embed_url, $args['width'], $args['height'] );
 	}
 

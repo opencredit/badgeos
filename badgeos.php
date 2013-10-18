@@ -99,6 +99,7 @@ class BadgeOS {
 		wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ) );
 		wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
 		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
+		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), '1.3.0', true );
 
 		// Register styles
 		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
