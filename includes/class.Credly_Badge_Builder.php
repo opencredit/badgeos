@@ -18,22 +18,10 @@ class Credly_Badge_Builder {
 	public $sdk_url = 'https://credly.com/badge-builder/';
 
 	/**
-	 * The site's Credly API key.
-	 * @var string
-	 */
-	public $credly_api_key = '';
-
-	/**
 	 * Temp token used for running badge builder.
 	 * @var string
 	 */
 	public $temp_token = '';
-
-	/**
-	 * Badge Attacment ID.
-	 * @var integer
-	 */
-	public $attachment_id = 0;
 
 	/**
 	 * Instantiate the badge builder.
@@ -41,35 +29,29 @@ class Credly_Badge_Builder {
 	 * @since 1.3.0
 	 *
 	 */
-	public function __construct( $args = array() ) {
+	public function __construct() {
 
-		// Setup any passed args
-		$this->attachment_id = isset( $args['attachment_id'] ) ? $args['attachment_id'] : null;
-
-		// Fetch our temp token
-		$this->credly_api_key = credly_get_api_key();
-		$this->temp_token     = $this->fetch_temp_token();
-
-		add_action( 'wp_ajax_credly-save-badge', array( $this, 'ajax_save_badge' ) );
+		add_action( 'wp_ajax_badge-builder-save-badge', array( $this, 'ajax_save_badge' ) );
+		add_action( 'wp_ajax_badge-builder-generate-link', array( $this, 'ajax_generate_link' ) );
 
 	}
 
 	/**
 	 * Fetch the temp badge builder token.
 	 *
-	 * @since  1.3.0
+	 * @since 1.3.0
 	 */
 	public function fetch_temp_token() {
 
 		// If we have a valid Credly API key
-		if ( $this->credly_api_key ) {
+		if ( $credly_api_key = credly_get_api_key() ) {
 
 			// Trade the key for a temp token
 			$response = wp_remote_post(
 				trailingslashit( $this->sdk_url ) . 'code',
 				array(
 					'body' => array(
-						'access_token' => $this->credly_api_key
+						'access_token' => $credly_api_key
 					)
 				)
 			);
@@ -90,50 +72,76 @@ class Credly_Badge_Builder {
 	}
 
 	/**
-	 * Render the badge builder.
+	 * Generate the badge builder link URI.
 	 *
 	 * @since  1.3.0
 	 *
-	 * @param  integer $width  Output width.
-	 * @param  integer $height Output height.
-	 * @return string          Concatenated markup for badge builder.
+	 * @param  array  $args Args for building the link.
+	 * @return string       URL for loading a badge builder.
 	 */
-	public function render_badge_builder_link( $args = array() ) {
+	public function generate_link( $args = array() ) {
 
 		// Setup and parse our default args
-		$defaults = array(
+		$defaults = apply_filters( 'credly_badge_builder_generate_link_defaults', array(
+			'continue'  => null,
+		) );
+		$args = wp_parse_args( $args, $defaults );
+
+		// Return our generated link
+		return add_query_arg(
+			array(
+				'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
+				'TB_iframe' => 'true',
+			),
+			trailingslashit( $this->sdk_url ) . 'embed/' . $this->fetch_temp_token()
+		);
+	}
+
+	/**
+	 * Render the badge builder link.
+	 *
+	 * @since  1.3.0
+	 *
+	 * @param  array  $args Args for setting link attributes.
+	 * @return string       HTML markup for anchor tag.
+	 */
+	public function render_link( $args = array() ) {
+
+		// Setup and parse our default args
+		$defaults = apply_filters( 'credly_badge_builder_render_link_defaults', array(
 			'width'     => '960',
 			'height'    => '540',
 			'continue'  => null,
 			'link_text' => __( 'Use Credly Badge Builder', 'badgeos' ),
-		);
+		) );
 		$args = wp_parse_args( $args, $defaults );
 
 		// Alter what we're linking if we couldn't get a token
-		if ( ! $this->credly_api_key )
-			$embed_url = '#';
+		if ( credly_get_api_key() ) {
+			$embed_url = $this->generate_link( $args );
+			$output = '<a href="' . esc_url( $embed_url ) . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
+		} else {
+			$output = '<a href="#teaser" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
+			$output .= '<div id="teaser"></div>';
+		}
 
-		// Build our embed url
-		else
-			$embed_url = add_query_arg(
-				array(
-					'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
-					'TB_iframe' => 'true',
-					'width'     => $args['width'],
-					'height'    => $args['height'],
-				),
-				trailingslashit( $this->sdk_url ) . 'embed/' . $this->temp_token
-			);
-
-		$output = '<a href="' . esc_url( $embed_url ) . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
 		add_thickbox();
 		return apply_filters( 'credly_render_badge_builder', $output, $embed_url, $args['width'], $args['height'] );
 	}
 
 	/**
+	 * Generate a badge builder link via AJAX.
+	 *
+	 * @since 1.3.0
+	 */
+	public function ajax_generate_link() {
+		wp_send_json_success( array( 'link' => $this->generate_link() ) );
+	}
+
+	/**
 	 * Save badge builder data via AJAX.
 	 *
-	 * @since  1.3.0
+	 * @since 1.3.0
 	 */
 	public function ajax_save_badge() {
 
@@ -148,19 +156,19 @@ class Credly_Badge_Builder {
 		$badge_meta = $_REQUEST['all_data'];
 
 		// Upload the image
-		$this->attachment_id = $this->media_sideload_image( $image, $post_id );
+		$attachment_id = $this->media_sideload_image( $image, $post_id );
 
 		// Set as featured image
-		set_post_thumbnail( $post_id, $this->attachment_id, __( 'Badge created with Credly Badge Builder', 'badgeos' ) );
+		set_post_thumbnail( $post_id, $attachment_id, __( 'Badge created with Credly Badge Builder', 'badgeos' ) );
 
 		// Store badge builder meta
-		$this->update_badge_meta( $this->attachment_id, $badge_meta, $icon_meta );
+		$this->update_badge_meta( $attachment_id, $badge_meta, $icon_meta );
 
 		// Build new markup for the featured image metabox
-		$metabox_html = _wp_post_thumbnail_html( $this->attachment_id, $post_id );
+		$metabox_html = _wp_post_thumbnail_html( $attachment_id, $post_id );
 
 		// Return our success response
-		wp_send_json_success( array( 'attachment_id' => $this->attachment_id, 'metabox_html' => $metabox_html ) );
+		wp_send_json_success( array( 'attachment_id' => $attachment_id, 'metabox_html' => $metabox_html ) );
 
 	}
 

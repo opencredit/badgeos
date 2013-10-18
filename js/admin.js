@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
 			$.ajax({
 				url: ajaxurl,
 				data: {
-					'action':     'credly-save-badge',
+					'action':     'badge-builder-save-badge',
 					'post_id':    $('#post_ID').val(),
 					'image':      e.data.image,
 					'icon_meta':  e.data.iconMetadata,
@@ -70,11 +70,8 @@ jQuery(document).ready(function($) {
 				},
 				dataType: 'json',
 				success: function( response ) {
-					console.log( response );
-
 					// Update the featured image metabox
 					win.WPSetThumbnailHTML(response.data.metabox_html);
-
 				}
 			});
 		}
@@ -108,5 +105,20 @@ jQuery(document).ready(function($) {
 
 		}, 0 );
 	}
+
+	// Regenerate our badge builder link on TB close
+	$('body').on( 'tb_unload', function() {
+		$.ajax({
+			url: ajaxurl,
+			data: {
+				'action': 'badge-builder-generate-link',
+			},
+			dataType: 'json',
+			success: function( response ) {
+				// Update all builder links on page
+				$('.badge-builder-link').attr( 'href', response.data.link );
+			}
+		});
+	});
 
 });

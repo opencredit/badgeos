@@ -19,7 +19,7 @@
  */
 function badgeos_get_badge_builder_link( $args ) {
 	$builder = new Credly_Badge_Builder();
-	return $builder->render_badge_builder_link( $args );
+	return $builder->render_link( $args );
 }
 
 /**
