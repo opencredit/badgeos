@@ -32,7 +32,11 @@ jQuery(document).ready(function($) {
 	});
 
 	// Resize ThickBox when a badge builder link is clicked
-	$('body').on( 'click', '.badge-builder-link', function(e) { e.preventDefault(); badge_builder_setup_thickbox( $(this) ); });
+	$('body').on( 'click', '.badge-builder-link', function(e) {
+		e.preventDefault();
+		badge_builder_setup_thickbox( $(this) );
+		badge_builder_regenerate_link();
+	});
 
 	// Resize badge builder thickbox on window resize
 	$(window).resize(function() {
@@ -61,7 +65,7 @@ jQuery(document).ready(function($) {
 	}
 
 	// Regenerate our badge builder link on TB close
-	$('body').on( 'tb_unload', function() {
+	function badge_builder_regenerate_link() {
 		$.ajax({
 			url: ajaxurl,
 			data: {
@@ -73,6 +77,6 @@ jQuery(document).ready(function($) {
 				$('.badge-builder-link').attr( 'href', response.data.link );
 			}
 		});
-	});
+	}
 
 });
