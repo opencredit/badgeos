@@ -81,21 +81,30 @@ jQuery(document).ready(function($) {
 	});
 
 	// Resize ThickBox when a badge builder link is clicked
-	$('.postbox').on( 'click', '.badge-builder-link', function(e) { badge_builder_resize_tb(e); });
-	$('.cmb_metabox').on( 'click', '.badge-builder-link', function(e) { badge_builder_resize_tb(e); });
+	$('body').on( 'click', '.badge-builder-link', function(e) { e.preventDefault(); badge_builder_setup_thickbox( $(this) ); });
 
-	// Force ThickBox to be our specified width/height
-	function badge_builder_resize_tb(e) {
-		var $link = $(e.currentTarget);
+	// Resize badge builder thickbox on window resize
+	$(window).resize(function() {
+		badge_builder_resize_tb( $('.badge-builder-link') );
+	});
+
+	// Add a custom class to our badge builder thickbox, then resize
+	function badge_builder_setup_thickbox( link ) {
+		setTimeout( function() {
+			$('#TB_window').addClass('badge-builder-thickbox');
+			badge_builder_resize_tb( link );
+		}, 0 );
+	}
+
+	// Force badge builder thickboxes to our specified width/height
+	function badge_builder_resize_tb( link ) {
 		setTimeout( function() {
 
-			var width  = $link.attr('data-width');
-			var height = $link.attr('data-height');
+			var width  = link.attr('data-width');
+			var height = link.attr('data-height');
 
-			console.log( 'width: ' + width + ' height: ' + height );
-
-			$('#TB_window').css({ 'marginLeft': -(width / 2) });
-			$('#TB_window, #TB_iframeContent').width(width).height(height);
+			$('.badge-builder-thickbox').css({ 'marginLeft': -(width / 2) });
+			$('.badge-builder-thickbox, .badge-builder-thickbox #TB_iframeContent').width(width).height(height);
 
 		}, 0 );
 	}
