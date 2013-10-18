@@ -87,14 +87,20 @@ class Credly_Badge_Builder {
 		) );
 		$args = wp_parse_args( $args, $defaults );
 
+		if ( credly_get_api_key() ) {
+			$link = add_query_arg(
+				array(
+					'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
+					'TB_iframe' => 'true',
+				),
+				esc_url( trailingslashit( $this->sdk_url ) . 'embed/' . $this->fetch_temp_token() )
+			);
+		} else {
+			$link = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
+		}
+
 		// Return our generated link
-		return add_query_arg(
-			array(
-				'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
-				'TB_iframe' => 'true',
-			),
-			trailingslashit( $this->sdk_url ) . 'embed/' . $this->fetch_temp_token()
-		);
+		return $link;
 	}
 
 	/**
@@ -116,18 +122,19 @@ class Credly_Badge_Builder {
 		) );
 		$args = wp_parse_args( $args, $defaults );
 
-		// Alter what we're linking if we couldn't get a token
-		if ( credly_get_api_key() ) {
-			$embed_url = $this->generate_link( $args );
-			$output = '<a href="' . esc_url( $embed_url ) . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
-		} else {
-			$embed_url = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
-			$output = '<a href="' . $embed_url . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
-			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="Enable Credly Integration to use the Badge Builder"></a></div>';
-		}
+		// Build our link tag
+		$embed_url = $this->generate_link( $args );
+		$output = '<a href="' . $embed_url . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
 
+		// Include teaser output if we have no API key
+		if ( ! credly_get_api_key() )
+			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="Enable Credly Integration to use the Badge Builder"></a></div>';
+
+		// Include our proper scripts
 		add_thickbox();
 		wp_enqueue_script( 'credly-badge-builder' );
+
+		// Return our markup
 		return apply_filters( 'credly_render_badge_builder', $output, $embed_url, $args['width'], $args['height'] );
 	}
 
