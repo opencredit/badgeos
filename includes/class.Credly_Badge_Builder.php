@@ -121,8 +121,9 @@ class Credly_Badge_Builder {
 			$embed_url = $this->generate_link( $args );
 			$output = '<a href="' . esc_url( $embed_url ) . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
 		} else {
-			$output = '<a href="#teaser" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
-			$output .= '<div id="teaser"></div>';
+			$embed_url = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
+			$output = '<a href="' . $embed_url . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
+			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="Enable Credly Integration to use the Badge Builder"></a></div>';
 		}
 
 		add_thickbox();

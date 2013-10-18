@@ -60,6 +60,7 @@ jQuery(document).ready(function($) {
 
 			$('.badge-builder-thickbox').css({ 'marginLeft': -(width / 2) });
 			$('.badge-builder-thickbox, .badge-builder-thickbox #TB_iframeContent').width(width).height(height);
+			$('.badge-builder-thickbox, .badge-builder-thickbox #TB_ajaxContent').width(width).height(height).css({'padding':'0px'});
 
 		}, 0 );
 	}
