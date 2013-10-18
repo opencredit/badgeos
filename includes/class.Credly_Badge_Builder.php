@@ -18,6 +18,12 @@ class Credly_Badge_Builder {
 	public $sdk_url = 'https://credly.com/badge-builder/';
 
 	/**
+	 * The site's Credly API key (false if none).
+	 * @var string|bool
+	 */
+	public $credly_api_key = '';
+
+	/**
 	 * Temp token used for running badge builder.
 	 * @var string
 	 */
@@ -30,6 +36,9 @@ class Credly_Badge_Builder {
 	 *
 	 */
 	public function __construct() {
+
+		// Fetch the credly API key
+		$this->credly_api_key = credly_get_api_key();
 
 		add_action( 'wp_ajax_badge-builder-save-badge', array( $this, 'ajax_save_badge' ) );
 		add_action( 'wp_ajax_badge-builder-generate-link', array( $this, 'ajax_generate_link' ) );
@@ -44,14 +53,14 @@ class Credly_Badge_Builder {
 	public function fetch_temp_token() {
 
 		// If we have a valid Credly API key
-		if ( $credly_api_key = credly_get_api_key() ) {
+		if ( $this->credly_api_key ) {
 
 			// Trade the key for a temp token
 			$response = wp_remote_post(
 				trailingslashit( $this->sdk_url ) . 'code',
 				array(
 					'body' => array(
-						'access_token' => $credly_api_key
+						'access_token' => $this->credly_api_key
 					)
 				)
 			);
@@ -87,7 +96,7 @@ class Credly_Badge_Builder {
 		) );
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( credly_get_api_key() ) {
+		if ( $this->credly_api_key ) {
 			$link = add_query_arg(
 				array(
 					'continue'  => rawurlencode( json_encode( $args['continue'] ) ),
@@ -127,7 +136,7 @@ class Credly_Badge_Builder {
 		$output = '<a href="' . $embed_url . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '">' . $args['link_text'] . '</a>';
 
 		// Include teaser output if we have no API key
-		if ( ! credly_get_api_key() )
+		if ( ! $this->credly_api_key )
 			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="Enable Credly Integration to use the Badge Builder"></a></div>';
 
 		// Include our proper scripts
