@@ -52,6 +52,7 @@ class BadgeOS {
 
 		// Hook in all our important pieces
 		add_action( 'plugins_loaded', array( &$this, 'includes' ) );
+		add_action( 'init', array( &$this, 'register_scripts_and_styles' ) );
 		add_action( 'init', array( &$this, 'include_cmb' ), 999 );
 		add_action( 'init', array( &$this, 'register_achievement_relationships' ) );
 		add_action( 'init', array( &$this, 'register_image_sizes' ) );
@@ -86,6 +87,36 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/credly.php' );
 		require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
+	}
+
+	/**
+	 * Register all core scripts and styles
+	 *
+	 * @since  1.3.0
+	 */
+	function register_scripts_and_styles() {
+		// Register scripts
+		wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ) );
+		wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
+
+		// Register styles
+		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
+
+		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
+			? get_stylesheet_directory_uri() .'/badgeos.css'
+			: $this->directory_url . 'css/badgeos-front.css';
+		wp_register_style( 'badgeos-front', $badgeos_front, null, '1.0.1' );
+
+		$badgeos_single = file_exists( get_stylesheet_directory() .'/badgeos-single.css' )
+			? get_stylesheet_directory_uri() .'/badgeos-single.css'
+			: $this->directory_url . 'css/badgeos-single.css';
+		wp_register_style( 'badgeos-single', $badgeos_single, null, '1.0.1' );
+
+		$badgeos_widget = file_exists( get_stylesheet_directory() .'/badgeos-widgets.css' )
+			? get_stylesheet_directory_uri() .'/badgeos-widgets.css'
+			: $this->directory_url . 'css/badgeos-widgets.css';
+		wp_register_style( 'badgeos-widget', $badgeos_widget, null, '1.0.1' );
 	}
 
 	/**
@@ -229,9 +260,12 @@ class BadgeOS {
 	 */
 	function admin_scripts() {
 
-		wp_enqueue_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ) );
-		wp_enqueue_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
-		wp_enqueue_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
+		// Load scripts
+		wp_enqueue_script( 'badgeos-admin-js' );
+		wp_enqueue_script( 'badgeos-credly' );
+
+		// Load styles
+		wp_enqueue_style( 'badgeos-admin-styles' );
 
 	}
 
@@ -239,7 +273,6 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 
 		$data = array(
 			'ajax_url'        => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
@@ -252,23 +285,6 @@ class BadgeOS {
 		);
 		wp_localize_script( 'badgeos-achievements', 'BadgeosCredlyData', $data );
 
-		$css_file = file_exists( get_stylesheet_directory() .'/badgeos.css' )
-			? get_stylesheet_directory_uri() .'/badgeos.css' :
-			$this->directory_url . 'css/badgeos-front.css';
-
-		wp_register_style( 'badgeos-front', $css_file, null, '1.0.1' );
-
-		$css_single_file = file_exists( get_stylesheet_directory() .'/badgeos-single.css' )
-			? get_stylesheet_directory_uri() .'/badgeos-single.css'
-			: $this->directory_url . 'css/badgeos-single.css';
-
-		wp_register_style( 'badgeos-single', $css_single_file, null, '1.0.1' );
-
-		$css_widget_file = file_exists( get_stylesheet_directory() .'/badgeos-widgets.css' )
-			? get_stylesheet_directory_uri() .'/badgeos-widgets.css'
-			: $this->directory_url . 'css/badgeos-widgets.css';
-
-		wp_register_style( 'badgeos-widget', $css_widget_file, null, '1.0.1' );
 	}
 
 	/**
