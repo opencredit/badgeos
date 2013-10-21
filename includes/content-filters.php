@@ -482,7 +482,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	global $user_ID;
 
 	// If we were given an ID, get the post
-	if ( is_int( $achievement ) )
+	if ( is_numeric( $achievement ) )
 		$achievement = get_post( $achievement );
 
 	// make sure our JS and CSS is enqueued

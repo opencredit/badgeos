@@ -23,7 +23,7 @@ function badgeos_is_achievement( $post = null ) {
 	$return = true;
 
 	// If passed an ID, get the post object
-	if ( is_int( $post ) )
+	if ( is_numeric( $post ) )
 		$post = get_post( $post );
 
 	// If $post is NOT an object it cannot be an achievement
