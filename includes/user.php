@@ -61,7 +61,7 @@ function badgeos_get_user_achievements( $args = array() ) {
 	}
 
 	// Return our $achievements array_values (so our array keys start back at 0), or an empty array
-	return is_array( $achievements ) ? array_values( $achievements ) : array();
+	return ( is_array( $achievements ) ? array_values( $achievements ) : array());
 
 }
 
