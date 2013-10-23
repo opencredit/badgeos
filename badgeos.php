@@ -222,10 +222,10 @@ class BadgeOS {
 			$credly_settings['credly_badge_title']             = 'post_title';
 			$credly_settings['credly_badge_description']       = 'post_body';
 			$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-			$credly_settings['credly_badge_image']             = 'featured_image';
-			$credly_settings['credly_badge_testimonial']       = '';
-			$credly_settings['credly_badge_evidence']          = 'permalink';
 			$credly_settings['credly_badge_criteria']          = '';
+			$credly_settings['credly_badge_image']             = 'featured_image';
+			$credly_settings['credly_badge_testimonial']       = 'congratulations_text';
+			$credly_settings['credly_badge_evidence']          = 'permalink';
 			$credly_settings['credly_badge_sendemail']         = 'true';
 			update_option( 'credly_settings', $credly_settings );
 		}

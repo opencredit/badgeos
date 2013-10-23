@@ -29,10 +29,9 @@ class BadgeOS_Credly {
 	public $field_short_description = 'post_excerpt';
 	public $field_description = 'post_body';
 	public $field_criteria = '';
-	public $field_category = '';
 	public $field_image = 'featured_image';
-	public $field_testimonial = '';
-	public $field_evidence = '';
+	public $field_testimonial = 'congratulations_text';
+	public $field_evidence = 'permalink';
 	public $send_email = true;
 
 	public $user_id = 0;
@@ -41,7 +40,7 @@ class BadgeOS_Credly {
     function __construct() {
 
         // Set our options based on our Credly settings
-        $this->credly_settings         = (array) get_option( 'credly_settings', array() );
+        $this->credly_settings = (array) get_option( 'credly_settings', array() );
 
 		$default_settings = array(
 			'api_key' => '',
@@ -50,23 +49,22 @@ class BadgeOS_Credly {
 			'credly_badge_short_description' => 'post_excerpt',
 			'credly_badge_description' => 'post_body',
 			'credly_badge_criteria' => '',
-			'credly_badge_category' => '',
 			'credly_badge_image' => 'featured_image',
-			'credly_badge_testimonial' => '',
+			'credly_badge_testimonial' => 'congratulations_text',
 			'credly_badge_evidence' => 'permalink',
-			'credly_badge_sendemail' => true
+			'credly_badge_sendemail' => 'true'
 		);
 
-		// Setup default settings and override with default value if empty (backwards compatibility)
-		foreach ( $default_settings as $setting => $default ) {
-			if ( !isset( $this->credly_settings[ $setting ] ) || empty( $this->credly_settings[ $setting ] ) ) {
-				if ( is_bool( $default ) ) {
-					$this->credly_settings[ $setting ] = false;
-				}
-				else {
-					$this->credly_settings[ $setting ] = $default;
-				}
-			}
+		$this->credly_settings = array_merge( $default_settings, $this->credly_settings );
+
+		// Title required
+		if ( empty( $this->credly_settings[ 'credly_badge_title' ] ) ) {
+			$this->credly_settings[ 'credly_badge_title' ] = $default_settings[ 'credly_badge_title' ];
+		}
+
+		// Attachment required
+		if ( empty( $this->credly_settings[ 'credly_badge_image' ] ) ) {
+			$this->credly_settings[ 'credly_badge_image' ] = $default_settings[ 'credly_badge_image' ];
 		}
 
         $this->api_key                 = $this->credly_settings['api_key'];
@@ -74,16 +72,15 @@ class BadgeOS_Credly {
         $this->field_short_description = $this->credly_settings['credly_badge_short_description'];
         $this->field_description       = $this->credly_settings['credly_badge_description'];
         $this->field_criteria          = $this->credly_settings['credly_badge_criteria'];
-        $this->field_category          = $this->credly_settings['credly_badge_category'];
         $this->field_image             = $this->credly_settings['credly_badge_image'];
         $this->field_testimonial       = $this->credly_settings['credly_badge_testimonial'];
         $this->field_evidence          = $this->credly_settings['credly_badge_evidence'];
-        $this->send_email              = !empty( $this->credly_settings['credly_badge_sendemail'] );
+        $this->send_email              = ( !empty( $this->credly_settings['credly_badge_sendemail'] ) && 'false' != $this->credly_settings['credly_badge_sendemail'] );
 
         // Set our user settings
 		if ( is_user_logged_in() ) {
-			$this->user_id                 = get_current_user_id();
-			$this->user_enabled            = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
+			$this->user_id             = get_current_user_id();
+			$this->user_enabled        = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
 
 			// Hook in to WordPress
 			$this->hooks();
@@ -323,7 +320,7 @@ class BadgeOS_Credly {
             'is_giveable'       => $is_giveable, // boolean
             'expires_in'        => $expires_in, // int; in seconds
             'categories'        => $categories, // comma separated string of ids
-            );
+		);
 
         // Remove array keys with an empty value
         $args = array_diff( $args, array( '' ) );
@@ -1026,6 +1023,7 @@ function credly_fieldmap_get_fields() {
     $fields[] = 'post_excerpt';
     $fields[] = 'featured_image';
     $fields[] = 'permalink';
+	$fields[] = 'congratulations_text';
 
 	$achievement_types = badgeos_get_achievement_types_slugs();
 
@@ -1128,6 +1126,11 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
 
         case 'permalink':
             $value = get_permalink( $post_id );
+
+            break;
+
+		case 'congratulations_text':
+            $value = get_post_meta( $post_id, '_badgeos_congratulations_text', true );
 
             break;
 
