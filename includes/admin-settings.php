@@ -365,7 +365,14 @@ function badgeos_help_support_page() { ?>
  * @return void
  */
 function badgeos_credly_options_page() {
-	?>
+
+	/**
+	 * @var $badgeos_credly BadgeOS_Credly
+	 */
+	global $badgeos_credly;
+
+	$credly_settings = $badgeos_credly->credly_settings;
+?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'Credly Integration Settings', 'badgeos' ); ?></h2>
@@ -373,34 +380,40 @@ function badgeos_credly_options_page() {
 
 		<form method="post" action="options.php">
 			<?php
-			$credly_settings = get_option( 'credly_settings' );
-			settings_fields( 'credly_settings_group' );
+				settings_fields( 'credly_settings_group' );
 			?>
 			<p><?php printf( __( '<a href="%1$s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%1$s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%1$s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com' ); ?></p>
+
 			<table class="form-table">
-				<tr valign="top"><th scope="row"><label for="credly_enable"><?php _e( 'Enable Badge Sharing via Credly: ', 'badgeos' ); ?></label></th>
-					<td><select id="credly_enable" name="credly_settings[credly_enable]">
-						<option value="false" <?php selected( isset( $credly_settings['credly_enable'] ) && $credly_settings['credly_enable'] == 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-						<option value="true" <?php selected( isset( $credly_settings['credly_enable'] ) && $credly_settings['credly_enable'] == 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-					</select></td>
+				<tr valign="top">
+					<th scope="row">
+						<label for="credly_enable"><?php _e( 'Enable Badge Sharing via Credly: ', 'badgeos' ); ?></label>
+					</th>
+					<td>
+						<select id="credly_enable" name="credly_settings[credly_enable]">
+							<option value="false" <?php selected( $credly_settings['credly_enable'], 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+							<option value="true" <?php selected( $credly_settings['credly_enable'], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+						</select>
+					</td>
 				</tr>
 			</table>
+
 			<?php
+				// We need to get our api key
+				if ( empty( $credly_settings['api_key'] ) ) {
+					badgeos_credly_options_no_api( $credly_settings );
+				}
+				// We already have our api key
+				else {
+					badgeos_credly_options_yes_api( $credly_settings );
+				}
 
-			// We need to get our api key
-			if ( !isset( $credly_settings['api_key'] ) || empty( $credly_settings['api_key'] ) )
-				badgeos_credly_options_no_api( $credly_settings );
-
-			else // We already have our api key
-				badgeos_credly_options_yes_api( $credly_settings );
-
+				submit_button( __( 'Save Settings', 'badgeos' ) );
 			?>
-			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
-			</p>
 		</form>
 	</div>
-	<?php
+<?php
+
 }
 
 /**
@@ -410,41 +423,58 @@ function badgeos_credly_options_page() {
  * @return void
  */
 function badgeos_credly_options_no_api( $credly_settings = array() ) {
+
 	wp_nonce_field( 'badgeos_credly_api_key_nonce', 'badgeos_credly_api_key_nonce' );
 
 	if ( is_array( $credly_settings ) ) {
 		foreach ( $credly_settings as $key => $opt ) {
-			if (
-				$key == 'credly_user'
-				|| $key == 'credly_password'
-				|| $key == 'api_key'
-				|| $key == 'credly_enable'
-			)
+			if ( in_array( $key, array( 'credly_user', 'credly_password', 'api_key', 'credly_enable' ) ) ) {
 				continue;
+			}
 
 			// Save our hidden form values
-			echo '<input type="hidden" name="credly_settings['. $key .']" value="'. $opt .'" />';
+			echo '<input type="hidden" name="credly_settings['. esc_attr( $key ) .']" value="'. esc_attr( $opt ) .'" />';
 		}
 	}
-	?>
+?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Get Credly API Key', 'badgeos' ); ?></h3>
+
 		<p class="toggle"><?php _e( 'Enter your Credly account username and password to access your API key.', 'badgeos' ); ?></p>
+
 		<p class="toggle hidden"><?php printf( __( 'Enter your %s to access your API key.', 'badgeos' ), '<a href="#show-api-key">'. __( 'Credly account username and password', 'badgeos' ) .'</a>' ); ?></p>
+
 		<table class="form-table">
-			<tr valign="top"><th scope="row"><label for="credly_user"><?php _e( 'Username: ', 'badgeos' ); ?></label></th>
-				<td><input id="credly_user" type="text" name="credly_settings[credly_user]" class="widefat" value="<?php echo isset( $credly_settings['credly_user'] ) ? esc_attr( $credly_settings['credly_user'] ) : ''; ?>" style="max-width: 400px;" /></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_user"><?php _e( 'Username: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<input id="credly_user" type="text" name="credly_settings[credly_user]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'credly_user' ] ); ?>" style="max-width: 400px;" />
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_password"><?php _e( 'Password: ', 'badgeos' ); ?></label></th>
-				<td><input id="credly_password" type="password" name="credly_settings[credly_password]" class="widefat" value="<?php echo isset( $credly_settings['credly_password'] ) ? esc_attr( $credly_settings['credly_password'] ) : ''; ?>" style="max-width: 400px;" /></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_password"><?php _e( 'Password: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<input id="credly_password" type="password" name="credly_settings[credly_password]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'credly_password' ] ); ?>" style="max-width: 400px;" />
+				</td>
 			</tr>
-			<tr valign="top" class="hidden"><th scope="row"><label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label></th>
-				<td><input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo isset( $credly_settings['api_key'] ) ? esc_attr( $credly_settings['api_key'] ) : ''; ?>" style="max-width: 1000px;" /></td>
+			<tr valign="top" class="hidden">
+				<th scope="row">
+					<label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" style="max-width: 1000px;" />
+				</td>
 			</tr>
 		</table>
+
 		<p class="toggle"><?php printf( __( 'Already have your API key? %s', 'badgeos' ), '<a href="#show-api-key">'. __( 'Click here', 'badgeos' ) .'</a>' ); ?></p>
 	</div>
-	<?php
+<?php
+
 }
 
 /**
@@ -454,62 +484,103 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
  * @return void
  */
 function badgeos_credly_options_yes_api( $credly_settings = array() ) {
-	?>
+
+?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Credly API Key', 'badgeos' ); ?></h3>
 		<table class="form-table">
-			<tr valign="top"><th scope="row"><label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label></th>
-				<td><input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo isset( $credly_settings['api_key'] ) ? esc_attr( $credly_settings['api_key'] ) : ''; ?>" /></td>
+			<tr valign="top">
+				<th scope="row"><label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label></th>
+				<td>
+					<input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" />
+				</td>
 			</tr>
 		</table>
 
 		<h3><?php _e( 'Credly Field Mapping', 'badgeos' ); ?></h3>
-		<p><?php _e( 'Customize which Credly fields for badge creation and issuing (listed on the left) match which WordPress and BadgeOS fields (listed to the right).', 'badgeos' ); ?><br/><?php _e( 'When badges are created and issued, the info sent to Credly will rely on the global mapping found here. (Note: Visit the edit screen for each achievement you create in BadgeOS to further configure the sharing and Credly settings for that achievement.)', 'badgeos' ); ?></p>
+
+		<p><?php _e( 'Customize which Credly fields for badge creation and issuing (listed on the left) match which WordPress and BadgeOS fields (listed to the right).', 'badgeos' ); ?>
+			<br /><?php _e( 'When badges are created and issued, the info sent to Credly will rely on the global mapping found here. (Note: Visit the edit screen for each achievement you create in BadgeOS to further configure the sharing and Credly settings for that achievement.)', 'badgeos' ); ?>
+		</p>
 		<table class="form-table">
-			<tr valign="top"><th scope="row"><label for="credly_badge_title"><?php _e( 'Badge Title: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_title" name="credly_settings[credly_badge_title]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_title'] ); ?>
-				</select></td>
+			<tr valign="top">
+				<th scope="row"><label for="credly_badge_title"><?php _e( 'Badge Title: ', 'badgeos' ); ?></label></th>
+				<td>
+					<select id="credly_badge_title" name="credly_settings[credly_badge_title]">
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_title' ] ); ?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_short_description"><?php _e( 'Short Description: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_short_description" name="credly_settings[credly_badge_short_description]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_short_description'] ); ?>
-				</select></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_short_description"><?php _e( 'Short Description: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<select id="credly_badge_short_description" name="credly_settings[credly_badge_short_description]">
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_short_description' ] ); ?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_description"><?php _e( 'Description: ', 'badgeos' ); ?></label></th>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_description"><?php _e( 'Description: ', 'badgeos' ); ?></label>
+				</th>
 				<td><select id="credly_badge_description" name="credly_settings[credly_badge_description]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_description'] ); ?>
-				</select></td>
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_description' ] ); ?>
+					</select></td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_criteria"><?php _e( 'Criteria: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_criteria" name="credly_settings[credly_badge_criteria]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_criteria'] ); ?>
-				</select></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_criteria"><?php _e( 'Criteria: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<select id="credly_badge_criteria" name="credly_settings[credly_badge_criteria]">
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_criteria' ] ); ?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_image"><?php _e( 'Image: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_image" name="credly_settings[credly_badge_image]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_image'] ); ?>
-				</select></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_image"><?php _e( 'Image: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<select id="credly_badge_image" name="credly_settings[credly_badge_image]">
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_image' ] ); ?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_testimonial"><?php _e( 'Testimonial: ', 'badgeos' ); ?></label></th>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_testimonial"><?php _e( 'Testimonial: ', 'badgeos' ); ?></label>
+				</th>
 				<td><select id="credly_badge_testimonial" name="credly_settings[credly_badge_testimonial]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_testimonial'] ); ?>
-				</select></td>
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_testimonial' ] ); ?>
+					</select></td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_evidence"><?php _e( 'Evidence: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_evidence" name="credly_settings[credly_badge_evidence]">
-					<?php echo credly_fieldmap_list_options( $credly_settings['credly_badge_evidence'] ); ?>
-				</select></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_evidence"><?php _e( 'Evidence: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<select id="credly_badge_evidence" name="credly_settings[credly_badge_evidence]">
+						<?php echo credly_fieldmap_list_options( $credly_settings[ 'credly_badge_evidence' ] ); ?>
+					</select>
+				</td>
 			</tr>
-			<tr valign="top"><th scope="row"><label for="credly_badge_sendemail"><?php _e( 'Notify users of earned badge: ', 'badgeos' ); ?></label></th>
-				<td><select id="credly_badge_sendemail" name="credly_settings[credly_badge_sendemail]">
-					<option></option>
-					<option value="true" <?php selected( $credly_settings['credly_badge_sendemail'], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-					<option value="false" <?php selected( $credly_settings['credly_badge_sendemail'], 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-				</select></td>
+			<tr valign="top">
+				<th scope="row">
+					<label for="credly_badge_sendemail"><?php _e( 'Notify users of earned badge: ', 'badgeos' ); ?></label>
+				</th>
+				<td>
+					<select id="credly_badge_sendemail" name="credly_settings[credly_badge_sendemail]">
+						<option value="true"<?php selected( $credly_settings[ 'credly_badge_sendemail' ], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+						<option value="false"<?php selected( $credly_settings[ 'credly_badge_sendemail' ], 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+					</select>
+				</td>
 			</tr>
 		</table>
 		<?php do_action( 'credly_settings', $credly_settings ); ?>
 	</div>
-	<?php
+<?php
+
 }

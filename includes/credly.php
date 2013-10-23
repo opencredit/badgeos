@@ -20,30 +20,74 @@ if ( !defined( 'BADGEOS_CREDLY_API_URL' ) )
  */
 class BadgeOS_Credly {
 
+	public $api_url = BADGEOS_CREDLY_API_URL;
+	public $api_key;
+
+	public $credly_settings = array();
+
+	public $field_title = 'post_title';
+	public $field_short_description = 'post_excerpt';
+	public $field_description = 'post_body';
+	public $field_criteria = '';
+	public $field_category = '';
+	public $field_image = 'featured_image';
+	public $field_testimonial = '';
+	public $field_evidence = '';
+	public $send_email = true;
+
+	public $user_id = 0;
+	public $user_enabled = 'true';
+
     function __construct() {
 
-        // Credly API
-        $this->api_url                 = BADGEOS_CREDLY_API_URL;
-
         // Set our options based on our Credly settings
-        $this->credly_settings         = get_option( 'credly_settings' );
-        $this->api_key                 = ( isset( $this->credly_settings['api_key'] ) ) ? $this->credly_settings['api_key'] : '';
-        $this->field_title             = ( isset( $this->credly_settings['credly_badge_title'] ) ? $this->credly_settings['credly_badge_title'] : 'post_title' ) ;
-        $this->field_short_description = ( isset( $this->credly_settings['credly_badge_short_description'] ) ? $this->credly_settings['credly_badge_short_description'] : 'post_excerpt' );
-        $this->field_description       = ( isset( $this->credly_settings['credly_badge_description'] ) ? $this->credly_settings['credly_badge_description'] : 'post_body' );
-        $this->field_criteria          = ( isset( $this->credly_settings['credly_badge_criteria'] ) ? $this->credly_settings['credly_badge_criteria'] : '' );
-        $this->field_category          = ( isset( $this->credly_settings['credly_badge_category'] ) ? $this->credly_settings['credly_badge_category'] : '' );
-        $this->field_image             = ( isset( $this->credly_settings['credly_badge_image'] ) ? $this->credly_settings['credly_badge_image'] : 'featured_image' );
-        $this->field_testimonial       = ( isset( $this->credly_settings['credly_badge_testimonial'] ) ? $this->credly_settings['credly_badge_testimonial'] : '' );
-        $this->field_evidence          = ( isset( $this->credly_settings['credly_badge_evidence'] ) ? $this->credly_settings['credly_badge_evidence'] : '' );
-        $this->send_email              = ( isset( $this->credly_settings['credly_badge_sendemail'] ) ? $this->credly_settings['credly_badge_sendemail'] : true );
+        $this->credly_settings         = (array) get_option( 'credly_settings', array() );
+
+		$default_settings = array(
+			'api_key' => '',
+			'credly_enable' => empty( $this->credly_settings ) ? 'false' : 'true',
+			'credly_badge_title' => 'post_title',
+			'credly_badge_short_description' => 'post_excerpt',
+			'credly_badge_description' => 'post_body',
+			'credly_badge_criteria' => '',
+			'credly_badge_category' => '',
+			'credly_badge_image' => 'featured_image',
+			'credly_badge_testimonial' => '',
+			'credly_badge_evidence' => 'permalink',
+			'credly_badge_sendemail' => true
+		);
+
+		// Setup default settings and override with default value if empty (backwards compatibility)
+		foreach ( $default_settings as $setting => $default ) {
+			if ( !isset( $this->credly_settings[ $setting ] ) || empty( $this->credly_settings[ $setting ] ) ) {
+				if ( is_bool( $default ) ) {
+					$this->credly_settings[ $setting ] = false;
+				}
+				else {
+					$this->credly_settings[ $setting ] = $default;
+				}
+			}
+		}
+
+        $this->api_key                 = $this->credly_settings['api_key'];
+        $this->field_title             = $this->credly_settings['credly_badge_title'];
+        $this->field_short_description = $this->credly_settings['credly_badge_short_description'];
+        $this->field_description       = $this->credly_settings['credly_badge_description'];
+        $this->field_criteria          = $this->credly_settings['credly_badge_criteria'];
+        $this->field_category          = $this->credly_settings['credly_badge_category'];
+        $this->field_image             = $this->credly_settings['credly_badge_image'];
+        $this->field_testimonial       = $this->credly_settings['credly_badge_testimonial'];
+        $this->field_evidence          = $this->credly_settings['credly_badge_evidence'];
+        $this->send_email              = !empty( $this->credly_settings['credly_badge_sendemail'] );
 
         // Set our user settings
-        $this->user_id                 = get_current_user_id();
-        $this->user_enabled            = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
+		if ( is_user_logged_in() ) {
+			$this->user_id                 = get_current_user_id();
+			$this->user_enabled            = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
 
-        // Hook in to WordPress
-        $this->hooks();
+			// Hook in to WordPress
+			$this->hooks();
+		}
 
     }
 
@@ -83,10 +127,8 @@ class BadgeOS_Credly {
      */
     public function credly_admin_notice() {
 
-        $credly_settings = get_option( 'credly_settings' );
-
         // Check if Credly is enabled and if an API key exists
-        if ( empty( $credly_settings ) || 'false' === $credly_settings['credly_enable'] || ! empty( $credly_settings['api_key'] ) )
+        if ( 'false' === $this->credly_settings['credly_enable'] || !empty( $this->credly_settings['api_key'] ) )
             return;
 
         //display the admin notice
@@ -881,7 +923,7 @@ class BadgeOS_Credly {
      * Save our Credly Badge Settings metabox
      *
      * @since  1.0.0
-     * @param  int     The ID of the given post
+     * @param  int     $post_id The ID of the given post
      * @return int     Return the post ID of the post we're running on
      */
     public function badge_metabox_save( $post_id = 0 ) {
@@ -972,57 +1014,50 @@ class BadgeOS_Credly {
  * Generate the available fields to map to
  *
  * @since  1.0.0
- * @return string        A concatenated string of <option> values
+ * @return array        An array of fields available for achievement types
  */
 function credly_fieldmap_get_fields() {
 
-    $default_fields = array();
+    $fields = array();
 
     // Set our default fields
-    $default_fields[] = 'post_title';
-    $default_fields[] = 'post_body';
-    $default_fields[] = 'post_excerpt';
-    $default_fields[] = 'featured_image';
-    $default_fields[] = 'permalink';
+    $fields[] = 'post_title';
+    $fields[] = 'post_body';
+    $fields[] = 'post_excerpt';
+    $fields[] = 'featured_image';
+    $fields[] = 'permalink';
 
-    // Get all unique meta keys from the postmeta table
-    global $wpdb;
-    $meta_keys = $wpdb->get_col(
-        "
-        SELECT DISTINCT meta_key
-        FROM $wpdb->postmeta
-        "
-    );
+	$achievement_types = badgeos_get_achievement_types_slugs();
 
-    // Excluded keys
-    $exclude = array(
-        '_badgestack_badge_unlock_options',
-        '_badgestack_credly_badge_id',
-        '_badgestack_credly_categories',
-        '_badgestack_credly_expiration',
-        '_badgestack_credly_include_evidence',
-        '_badgestack_credly_include_testimonial',
-        '_badgestack_credly_is_giveable',
-        '_badgestack_dummy_data',
-        '_badgestack_log_achievement_id',
-        '_badgestack_point_value',
-        '_badgestack_send_to_credly',
-        '_edit_last',
-        '_edit_lock',
-        '_thumbnail_id',
-        '_wp_attached_file',
-        '_wp_attachment_metadata',
-        '_wp_old_slug',
-        '_wp_page_template',
-        '_wp_trash_meta_status',
-        '_wp_trash_meta_time',
-    );
+	if ( !empty( $achievement_types ) ) {
+		$achievement_types_format = implode( ', ', array_fill( 0, count( $achievement_types ), '%s' ) );
 
-    // Get rid of our excluded meta keys
-    $meta_keys = array_diff( $meta_keys, $exclude );
+		// Get all unique meta keys from the postmeta table
+		global $wpdb;
 
-    // Merge our default fields with unique meta keys
-    $fields = array_merge( $default_fields, $meta_keys );
+		$meta_keys = $wpdb->get_col(
+			$wpdb->prepare(
+				"
+					SELECT DISTINCT `pm`.`meta_key`
+					FROM `{$wpdb->postmeta}` AS `pm`
+					LEFT JOIN `{$wpdb->posts}` AS `p` ON `p`.`ID` = `pm`.`post_id`
+					WHERE
+						`p`.`post_type` IN ( {$achievement_types_format} )
+						AND `pm`.`meta_key` NOT LIKE '_%'
+						AND `pm`.`meta_key` != ''
+				",
+				$achievement_types
+			)
+		);
+
+		// Merge our default fields with unique meta keys
+		$fields = array_merge( $fields, $meta_keys );
+
+		// Avoid possible duplicates from meta_keys that match our default $fields
+		$fields = array_unique( $fields );
+	}
+
+	$fields = apply_filters( 'badgeos_credly_field_map', $fields );
 
     return $fields;
 
@@ -1032,7 +1067,6 @@ function credly_fieldmap_get_fields() {
  * Generate a string of html option values based on our fields
  *
  * @since  1.0.0
- * @param  string $value The current value of the field to compare for selected()
  * @return string        A string of <options>
  */
 function credly_fieldmap_list_options( $value = '' ) {
@@ -1040,12 +1074,12 @@ function credly_fieldmap_list_options( $value = '' ) {
     $fields = credly_fieldmap_get_fields();
 
     // Start off our <option>s with a default blank
-    $options = '<option value>' . __( '&mdash; Select Field &mdash;' ) . '</option>';
+    $options = '<option value="">' . __( '&mdash; Select Field &mdash;', 'badgeos' ) . '</option>';
 
     // Create the correct <option> markup for our fields
     foreach ( $fields as $field ) {
 
-        $options .= '<option value="' . $field . '" ' . selected( $field, $value ) . '>' . $field . '</option>';
+        $options .= '<option value="' . esc_attr( $field ) . '" ' . selected( $field, $value ) . '>' . esc_html( $field ) . '</option>';
 
     }
 
@@ -1061,37 +1095,50 @@ function credly_fieldmap_list_options( $value = '' ) {
  * matching field name.
  *
  * @since  1.0.0
- * @param  string $post_id The ID of the badge post we're mapping fields for
+ * @param  int|string $post_id The ID of the badge post we're mapping fields for
  * @param  string $field   The field name we're attempting to map
  * @return mixed           string for most values. int for featured_image
  */
-function credly_fieldmap_get_field_value( $post_id = '', $field = '' ) {
+function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
 
     switch ( $field ) {
         case 'post_title':
             $value = get_the_title( $post_id );
+
             break;
+
         case 'post_body':
             $value = get_post_field( 'post_content', $post_id );
+
             break;
+
         case 'post_excerpt':
             $value = get_post_field( 'post_excerpt', $post_id );
+
             break;
+
         case 'featured_image':
             $value = get_post_thumbnail_id( $post_id );
             if ( ! $value ) {
                 $parent_achievement = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
                 $value = get_post_thumbnail_id( $parent_achievement->ID );
             }
+
             break;
+
         case 'permalink':
             $value = get_permalink( $post_id );
+
             break;
+
         case '':
             $value = '';
+
             break;
+
         default:
             $value = get_post_meta( $post_id, $field, true );
+
             break;
     }
 
@@ -1124,15 +1171,18 @@ function credly_is_achievement_giveable( $achievement_id = 0 ) {
  */
 function credly_get_api_key() {
 
-    // Get stored Credly settings
-    $credly_settings = get_option( 'credly_settings' );
+	/**
+	 * @var $badgeos_credly BadgeOS_Credly
+	 */
+	global $badgeos_credly;
+
+	$credly_settings = $badgeos_credly->credly_settings;
 
     // If we have no settings, no key, or credly is not enabled, return false
-    if ( empty( $credly_settings ) || empty( $credly_settings['api_key'] ) || 'false' === $credly_settings['credly_enable'] )
+    if ( empty( $credly_settings['api_key'] ) || 'false' === $credly_settings['credly_enable'] )
         return false;
 
     // Otherwise, return our stored key
-    else
-        return $credly_settings['api_key'];
+	return $credly_settings['api_key'];
 
 }
