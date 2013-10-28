@@ -15,9 +15,9 @@
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to possibly award
  * @param  integer $user_id        The given user's ID
- * @param  string $trigger        The trigger
+ * @param  string $trigger         The trigger
  * @param  integer $site_id        The triggered site id
- * @param  array $args        The triggered args
+ * @param  array $args             The triggered args
  * @return void
  */
 function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
