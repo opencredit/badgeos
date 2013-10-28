@@ -584,3 +584,79 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 <?php
 
 }
+
+/**
+ * Globally replace "Featured Image" text with "Achievement Image".
+ *
+ * @since  1.3.0
+ *
+ * @param  string $string Original output string.
+ * @return string         Potentially modified output string.
+ */
+function badgeos_featured_image_metabox_title( $string ) {
+
+	// If this is a new achievement type post
+	// OR this is an existing achievement type post
+	// AND the text is "Featured Image"
+	// ...replace the string
+	if (
+		(
+			( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], badgeos_get_achievement_types_slugs() ) )
+			|| ( isset( $_GET['post'] ) && badgeos_is_achievement( $_GET['post'] ) )
+		) && 'Featured Image' == $string
+
+	)
+		$string = __( 'Achievement Image', 'badgeos' );
+	elseif (
+		(
+			( isset( $_GET['post_type'] ) && 'achievement-type' == $_GET['post_type'] )
+			|| ( isset( $_GET['post'] ) && 'achievement-type' == get_post_type( $_GET['post'] ) )
+		) && 'Featured Image' == $string
+	)
+		$string = __( 'Default Achievement Image', 'badgeos' );
+
+	return $string;
+}
+add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
+
+/**
+ * Change "Featured Image" to "Achievement Image" in post editor metabox.
+ *
+ * @since  1.3.0
+ *
+ * @param  string  $content HTML output.
+ * @param  integer $ID      Post ID.
+ * @return string           Potentially modified output.
+ */
+function badgeos_featured_image_metabox_text( $content, $ID ) {
+	if ( badgeos_is_achievement( $ID ) )
+		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
+	elseif ( 'achievement-type' == get_post_type( $ID ) )
+		$content = str_replace( 'featured image', __( 'default achievement image', 'badgeos' ), $content );
+
+	return $content;
+}
+add_filter( 'admin_post_thumbnail_html', 'badgeos_featured_image_metabox_text', 10, 2 );
+
+/**
+ * Change "Featured Image" to "Achievement Image" throughout media modal.
+ *
+ * @since  1.3.0
+ *
+ * @param  array  $strings All strings passed to media modal.
+ * @param  object $post    Post object.
+ * @return array           Potentially modified strings.
+ */
+function badgeos_media_modal_featured_image_text( $strings, $post ) {
+
+	if ( badgeos_is_achievement( $post->ID ) ) {
+		$strings['setFeaturedImageTitle'] = __( 'Set Achievement Image', 'badgeos' );
+		$strings['setFeaturedImage'] = __( 'Set achievement image', 'badgeos' );
+	} elseif ( 'achievement-type' == $post->post_type ) {
+		$strings['setFeaturedImageTitle'] = __( 'Set Default Achievement Image', 'badgeos' );
+		$strings['setFeaturedImage'] = __( 'Set default achievement image', 'badgeos' );
+	}
+
+	return $strings;
+}
+add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text' );

@@ -51,7 +51,7 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			array(
 				'name' => __( 'Default Badge Image', 'badgeos' ),
 				'desc' => sprintf(
-					__( 'To set a default image, use the <strong>Featured Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
+					__( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
 					badgeos_get_badge_builder_link( __( 'Credly Badge Builder', 'badgeos' ) )
 					),
 				'id'   => $prefix . 'upload_badge_image_achievement',
@@ -72,7 +72,7 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			array(
 				'name' => __( 'Upload Badge Image', 'badgeos' ),
 				'desc' => sprintf(
-					__( '<p>To set an image use the <strong>Featured Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
+					__( '<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
 					badgeos_get_badge_builder_link( __( 'Credly Badge Builder', 'badgeos' ) ),
 					'<a href="' . admin_url('edit.php?post_type=achievement-type') . '">' . __( 'Achievement Type\'s', 'badgeos' ) . '</a>'
 					),
