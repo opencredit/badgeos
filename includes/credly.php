@@ -1158,10 +1158,20 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
  */
 function credly_is_achievement_giveable( $achievement_id = 0 ) {
 
-    // Get our Credly badge ID
-    $credly_badge_id = ( ( ! empty( $achievement_id ) ) ? get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true ) : '' );
+    // Check if "send to credly" is enabled
+    $is_sendable = get_post_meta( $achievement_id, '_badgeos_send_to_credly', true );
 
-    return ( ( ! empty( $credly_badge_id ) ) ? true : false );
+    // Get Credly badge ID
+    $credly_badge_id = get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
+
+    // If send to credly is ON, and badge ID is set, badge is givable
+    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) )
+        $is_giveable = true;
+    else
+        $is_giveable = false;
+
+    // Return givable status
+    return $is_giveable;
 
 }
 
