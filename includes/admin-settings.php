@@ -601,7 +601,7 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 					<label for="credly_badge_sendemail"><?php _e( 'Custom notification message: ', 'badgeos' ); ?></label>
 				</th>
 				<td>
-					<textarea id="credly_badge_sendemail_message" name="credly_settings[credly_badge_sendemail_message]"><?php echo esc_textarea( $credly_settings[ 'credly_badge_sendemail_message' ] ); ?></textarea>
+					<textarea id="credly_badge_sendemail_message" name="credly_settings[credly_badge_sendemail_message]" cols="80" rows="10"><?php echo esc_textarea( $credly_settings[ 'credly_badge_sendemail_message' ] ); ?></textarea>
 				</td>
 			</tr>
 		</table>
