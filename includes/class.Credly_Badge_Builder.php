@@ -253,8 +253,10 @@ class Credly_Badge_Builder {
 		if ( ! empty( $badge_meta ) )
 			update_post_meta( $attachment_id, '_credly_badge_meta', $badge_meta );
 
-		if ( ! empty( $icon_meta ) )
+		if ( ! empty( $icon_meta ) ) {
 			update_post_meta( $attachment_id, '_credly_icon_meta', $icon_meta );
+			update_post_meta( $attachment_id, '_wp_attachment_image_alt', badgeos_badge_builder_get_icon_credit( $attachment_id ) );
+		}
 	}
 
 }
