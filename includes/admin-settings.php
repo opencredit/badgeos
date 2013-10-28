@@ -593,7 +593,7 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
  * @param  string $string Original output string.
  * @return string         Potentially modified output string.
  */
-function badgeos_featured_image_metabox_title( $string ) {
+function badgeos_featured_image_metabox_title( $string = '' ) {
 
 	// If this is a new achievement type post
 	// OR this is an existing achievement type post
@@ -628,7 +628,7 @@ add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
  * @param  integer $ID      Post ID.
  * @return string           Potentially modified output.
  */
-function badgeos_featured_image_metabox_text( $content, $ID ) {
+function badgeos_featured_image_metabox_text( $content = '', $ID = 0 ) {
 	if ( badgeos_is_achievement( $ID ) )
 		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
 	elseif ( 'achievement-type' == get_post_type( $ID ) )
@@ -647,16 +647,18 @@ add_filter( 'admin_post_thumbnail_html', 'badgeos_featured_image_metabox_text', 
  * @param  object $post    Post object.
  * @return array           Potentially modified strings.
  */
-function badgeos_media_modal_featured_image_text( $strings, $post ) {
+function badgeos_media_modal_featured_image_text( $strings = array(), $post = null ) {
 
-	if ( badgeos_is_achievement( $post->ID ) ) {
-		$strings['setFeaturedImageTitle'] = __( 'Set Achievement Image', 'badgeos' );
-		$strings['setFeaturedImage'] = __( 'Set achievement image', 'badgeos' );
-	} elseif ( 'achievement-type' == $post->post_type ) {
-		$strings['setFeaturedImageTitle'] = __( 'Set Default Achievement Image', 'badgeos' );
-		$strings['setFeaturedImage'] = __( 'Set default achievement image', 'badgeos' );
+	if ( is_object( $post ) ) {
+		if ( badgeos_is_achievement( $post->ID ) ) {
+			$strings['setFeaturedImageTitle'] = __( 'Set Achievement Image', 'badgeos' );
+			$strings['setFeaturedImage'] = __( 'Set achievement image', 'badgeos' );
+		} elseif ( 'achievement-type' == $post->post_type ) {
+			$strings['setFeaturedImageTitle'] = __( 'Set Default Achievement Image', 'badgeos' );
+			$strings['setFeaturedImage'] = __( 'Set default achievement image', 'badgeos' );
+		}
 	}
 
 	return $strings;
 }
-add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text' );
+add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10, 2 );
