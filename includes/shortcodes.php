@@ -485,3 +485,37 @@ function badgeos_nominations_shortcode_help() { ?>
 	</div>
 <?php }
 add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortcode_help' );
+
+/**
+ * Shortcode for rendering Credly Assertion page content.
+ *
+ * @since  1.3.0
+ *
+ * @return string iframe displaying Credly data, or nothing.
+ */
+function badgeos_credly_assertion_page() {
+	global $content_width;
+
+	// Setup variables
+	$ID    = isset( $_GET['ID'] ) ? absint( $_GET['ID'] ) : 0;
+	$width = isset( $content_width ) ? $content_width : 560;
+
+	// If passed an ID, render the iframe, otherwise render nothing
+	if ( $ID )
+		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $ID . '/embed" align="top" marginwidth="0" width="' . $width . 'px" height="1000px" scrolling="no" frameborder="no"></iframe>';
+	else
+		return '';
+
+}
+add_shortcode( 'credly_assertion_page', 'badgeos_credly_assertion_page' );
+
+/**
+ * Add help content for [credly_assertion_page] to BadgeOs Help page
+ *
+ * @since  1.3.0
+ */
+function badgeos_credly_assertion_page_help() { ?>
+	<hr/>
+	<p><strong>[credly_assertion_page]</strong> - <?php _e( 'Credly Pro Users: Display custom assertion page output.', 'badgeos' ); ?></p>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_credly_assertion_page_help' );
