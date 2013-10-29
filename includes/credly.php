@@ -315,6 +315,8 @@ class BadgeOS_Credly {
 
         $categories        = ( $fields['credly_categories'] ? implode( ',',  $fields['credly_categories'] ) : '' );
 
+        $badge_builder_meta = get_post_meta( $badge_id, '_credly_badge_meta', true );
+
         $args = array(
             'attachment'        => $attachment, // base64 encoded string
             'title'             => $title, // string; limit 128
@@ -324,6 +326,7 @@ class BadgeOS_Credly {
             'is_giveable'       => $is_giveable, // boolean
             'expires_in'        => $expires_in, // int; in seconds
             'categories'        => $categories, // comma separated string of ids
+            'packagedData'      => $badge_builder_meta, // JSON object
 		);
 
         // Remove array keys with an empty value
