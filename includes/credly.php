@@ -33,6 +33,7 @@ class BadgeOS_Credly {
 	public $field_testimonial = 'congratulations_text';
 	public $field_evidence = 'permalink';
 	public $send_email = true;
+    public $custom_message = '';
 
 	public $user_id = 0;
 	public $user_enabled = 'true';
@@ -53,7 +54,7 @@ class BadgeOS_Credly {
 			'credly_badge_testimonial' => 'congratulations_text',
 			'credly_badge_evidence' => 'permalink',
 			'credly_badge_sendemail' => 'true',
-            'credly_badge_sendemail_add_message' => 'true',
+            'credly_badge_sendemail_add_message' => 'false',
             'credly_badge_sendemail_message' => __( 'NOTE: To claim this badge and -- share it on social networks or display it publicly -- click the "Save & Share" button above. If you already have a Credly account, sign in and then "Accept" the badge in the "My Credit" section of the site. If you are not yet a Credly member, click "Create an Account" (it\'s free), confirm your email address, and then return to the "My Credit" section to "Accept" the badge. From there, you can mouse over the badge image to share it on social networks and spread the news about your achievement.', 'badgeos' ),
 		);
 
@@ -77,7 +78,8 @@ class BadgeOS_Credly {
         $this->field_image             = $this->credly_settings['credly_badge_image'];
         $this->field_testimonial       = $this->credly_settings['credly_badge_testimonial'];
         $this->field_evidence          = $this->credly_settings['credly_badge_evidence'];
-        $this->send_email              = ( !empty( $this->credly_settings['credly_badge_sendemail'] ) && 'false' != $this->credly_settings['credly_badge_sendemail'] );
+        $this->send_email              = ( ! empty( $this->credly_settings['credly_badge_sendemail'] ) && 'false' != $this->credly_settings['credly_badge_sendemail'] );
+        $this->custom_message          = ( $this->send_email && 'true' == $this->credly_settings['credly_badge_sendemail_add_message'] ) ? $this->credly_settings['credly_badge_sendemail_message'] : '';
 
         // Set our user settings
 		if ( is_user_logged_in() ) {
@@ -728,6 +730,7 @@ class BadgeOS_Credly {
                 'evidence_file' => credly_fieldmap_get_field_value( $badge_id, $this->field_evidence ),
                 'testimonial'   => $testimonial,
                 'notify'        => (bool) $this->send_email,
+                'custom_message' => $this->custom_message,
             );
 
         } elseif ( is_email( $credly_user_id ) ) {
@@ -743,6 +746,7 @@ class BadgeOS_Credly {
                 'evidence_file' => credly_fieldmap_get_field_value( $badge_id, $this->field_evidence ),
                 'testimonial'   => $testimonial,
                 'notify'        => (bool) $this->send_email,
+                'custom_message' => $this->custom_message,
             );
 
         }

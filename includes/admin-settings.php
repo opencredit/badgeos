@@ -590,8 +590,8 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 				</th>
 				<td>
 					<select id="credly_badge_sendemail_add_message" name="credly_settings[credly_badge_sendemail_add_message]">
-						<option value="true"<?php selected( $credly_settings[ 'credly_badge_sendemail_add_message' ], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
 						<option value="false"<?php selected( $credly_settings[ 'credly_badge_sendemail_add_message' ], 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+						<option value="true"<?php selected( $credly_settings[ 'credly_badge_sendemail_add_message' ], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
 					</select>
 				</td>
 			</tr>
