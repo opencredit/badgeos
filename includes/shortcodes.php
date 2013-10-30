@@ -493,16 +493,22 @@ add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortco
  *
  * @return string iframe displaying Credly data, or nothing.
  */
-function badgeos_credly_assertion_page() {
+function badgeos_credly_assertion_page( $atts = array() ) {
 	global $content_width;
 
-	// Setup variables
-	$ID    = isset( $_GET['ID'] ) ? absint( $_GET['ID'] ) : 0;
-	$width = isset( $content_width ) ? $content_width : 560;
+	// Setup defaults
+	$defaults = array(
+		'ID'     => isset( $_GET['ID'] ) ? absint( $_GET['ID'] ) : 0,
+		'width'  => isset( $content_width ) ? $content_width : 560,
+		'height' => 1000,
+	);
+
+	// Parse attributes against the defaults
+	$atts = shortcode_atts( $defaults, $atts );
 
 	// If passed an ID, render the iframe, otherwise render nothing
-	if ( $ID )
-		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $ID . '/embed" align="top" marginwidth="0" width="' . $width . 'px" height="1000px" scrolling="no" frameborder="no"></iframe>';
+	if ( $atts['ID'] )
+		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $atts['ID'] . '/embed" align="top" marginwidth="0" width="' . $atts['width'] . 'px" height="' . $atts['height'] . 'px" scrolling="no" frameborder="no"></iframe>';
 	else
 		return '';
 
