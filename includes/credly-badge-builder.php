@@ -37,14 +37,14 @@ function badgeos_badge_builder_filter_thumbnail_metabox( $content, $post_id ) {
 	if ( badgeos_is_achievement( $post_id ) || 'achievement-type' == get_post_type( $post_id ) ) {
 		// If no thumbnail, output standard badge builder link
 		if ( ! has_post_thumbnail( $post_id ) ) {
-			$content .= '<p>' . badgeos_get_badge_builder_link( array( 'link_text' => __( 'Use Credly Badge Builder', 'badgeos' ) ) ) . '</p>';
+			$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'link_text' => __( 'Use Credly Badge Builder', 'badgeos' ) ) ) . '</p>';
 		// Otherwise, if thumbnail is a badge builder badge,`
 		// output a "continue editing" link
 		} else {
 			$attachment_id = get_post_thumbnail_id( $post_id );
 			$continue = get_post_meta( $attachment_id, '_credly_badge_meta', true );
 			if ( $continue )
-				$content .= '<p>' . badgeos_get_badge_builder_link( array( 'link_text' => __( 'Edit in Credly Badge Builder', 'badgeos' ), 'continue' => $continue ) ) . '</p>';
+				$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'attachment_id' => $attachment_id, 'link_text' => __( 'Edit in Credly Badge Builder', 'badgeos' ), 'continue' => $continue ) ) . '</p>';
 		}
 
 	}

@@ -65,12 +65,13 @@ jQuery(document).ready(function($) {
 		}, 0 );
 	}
 
-	// Regenerate our badge builder link on TB close
+	// Fetch a new badge builder link
 	function badge_builder_regenerate_link() {
 		$.ajax({
 			url: ajaxurl,
 			data: {
 				'action': 'badge-builder-generate-link',
+				'attachment_id': $('.badge-builder-link').attr( 'data-attachment_id' )
 			},
 			dataType: 'json',
 			success: function( response ) {
