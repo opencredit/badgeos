@@ -288,14 +288,14 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Upgrade Notice ==
 
 = 1.3.0 =
-* Added: Credly Badge Builder – Build your own unique badges directly from the post editor (requires Credly account).
+* Added: Credly Badge Builder – Build your own unique badges directly from the achievement post editor in WordPress (requires free Credly account).
 * Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
 * Added: New [credly_assertion_page] shortcode for Credly Pro users.
 * Added: Specify a custom message to include with Credly notification emails
 * Updated: badgeos_award_achievement_to_user() now checks that the passed $acheivement_id is a real achievement.
 * Updated: New achievements now have a default max earning of 1 (blank for infinite).
 * Updated: BadgeOS Help page now links to Github, instead of just mentioning it.
-* Updated: Detailed "Credly Sharing" options are only visible on the achievement editor when achievement is set to "send to credly".
+* Updated: Detailed "Credly Sharing" options are only visible on the achievement editor when achievement is set to "send to Credly".
 * Updated: "Featured Image" text now says "Achievement Image" when working with an achievement post.
 * Fixed: Added variable type check to badgeos_get_user_achievements() to prevent PHP warning.
 * Fixed: Earned achievements will no longer show "Send to Credly" when setting is disabled.
