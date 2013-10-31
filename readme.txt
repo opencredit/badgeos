@@ -40,6 +40,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Easily define how they relate to one another using the 'Required Steps' tool
 *   Set default images for each achievement type or select unique images for every achievement item
 
+
 **Design Beautiful Badge and Achievement Images from within WordPress**
 
 *   Use the integrated Credly "[Badge Builder](https://credly.com/badge-builder-home "Credly tool for designing badge images")" to create professional looking badge images right from within WordPress
@@ -158,7 +159,7 @@ There is NO WARRANTY for this software, express or implied, including the implie
 1. Upload 'badgeos' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the BadgeOS menu to add Badges and set up new Achievement Types.
-4. Enter Credly credentials for the badge Issuer in the Credly Integration settings to enable badge sharing. (First get free account at Credly.com if you do not have one.)
+4. Enter Credly credentials for the badge Issuer in the Credly Integration settings to enable the free Credly Badge Builder and badge sharing. (First get a [free account](https://credly.com/#!/create-account "Create a free Credly account") at Credly.com if you do not have one.)
 5. Visit the Help/Support section of the BadgeOS menu for shortcodes to turn any page or post on your site into a BadgeOS list of available achievements and badges.
 
 
@@ -167,7 +168,7 @@ There is NO WARRANTY for this software, express or implied, including the implie
 
 = Any ideas for making badge images? =
 
-Yes! You can start at [Credly.com](https://credly.com/ "Badge Builder Tool") and use the badge builder there to create beautiful looking badges.
+Yes! After installing BadgeOS, enable Credly Integration in the BadgeOS menu. That will seamlessly integrate the Credly "[Badge Builder](https://credly.com/badge-builder-home "Credly tool for designing badge images")" into your WordPress site so you can design your own professional-looking badge images.  (First get a [free account](https://credly.com/#!/create-account "Create a free Credly account") at Credly.com if you do not have one.)
 
 = Can you help us design custom badge images? =
 
