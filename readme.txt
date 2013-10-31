@@ -30,14 +30,27 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 *   Point thresholds
 *   Admin Given Badges
 *   Community Activity (with the powerful [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
-*   Activity from other popular WordPress plugins (see growing catalog of [BadgeOS Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons"))
+*   Activity from other popular WordPress plugins. See growing catalog of [BadgeOS Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons").
+
 
 **Define an Unlimited Number of Achievement Types**
 
 *   Create as many types of achievement as you like
 *   Name achievement types whatever you wish
 *   Easily define how they relate to one another using the 'Required Steps' tool
-*   Set default images for each achievement type or select unique images for every achievement item.
+*   Set default images for each achievement type or select unique images for every achievement item
+
+**Design Beautiful Badge and Achievement Images from within WordPress**
+
+*   Use the integrated Credly "[Badge Builder](https://credly.com/badge-builder-home "Credly tool for designing badge images")" to create professional looking badge images right from within WordPress
+*   Launch the Badge Builder from any achievement or achievement type editing screen in WordPress admin
+*   Choose from a variety of badge shapes and border styles
+*   Select from a library of thousands of Noun Project icons, or upload your own to the center of any badge
+*   Add or remove a banner with text to your badge
+*   Full color palette selection for border, fill, icon and banner
+*   Saves automatically to your WordPress Media Library for easy re-use for other achievements or anywhere else on your site
+*   Edit previously created badge and achievement images and save new versions to your Media Library
+*   Simply enter your Credly credentials in the "Credly Integration" settings menu in BadgeOS to enable the Badge Builder. If you don't have a [Credly](https://credly.com/ "Credly lets you create and manage lifelong achievements") account, [create](https://credly.com/#!/create-account "Create a free Credly account") one for free.
 
 
 **Sharable Badges with Credly Integration**
@@ -89,6 +102,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Multiple options and parameters for each for great flexibility.
 * Shortcodes to bring submission and nomination review to the front-end of your site.
 * Shortcode to integrate specific available achievements into any post or page of your site.
+* Shortcode for Credly "[Custom Assertion Location](http://blog.credly.com/custom-assertion-location/ "Credly Custom Redirection")" for displaying badges issued by Credly Pro users on your site
 * [Shortcode documentation](http://badgeos.org/support/shortcodes/ "BadgeOS Shortcodes") in the plugin menu and on BadgeOS.org.
 * Just activate BadgeOS and place simple shortcodes on any page or post, and you've got an engagement management system running on your WordPress site!
 
