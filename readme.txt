@@ -201,9 +201,15 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 3. Earned badges on your BadgeOS site are "Open Badges" that are sharable via Credly to virtually any social network, site, blog or the Mozilla Backpack.
 
-4. BadgeOS gives you a simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
+4. Use the integrated Credly Badge Builder to easily create beautiful badge images right from within WordPress. Launch the Badge Builder from any achievement or achievement type editing screen.
 
-5. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
+5. Choose from a variety of badge shapes and border styles, and adjust the colors of each element.
+
+6. Select from a library of thousands of Noun Project icons, or upload your own to the center of any badge.
+
+7. BadgeOS gives you a simple yet powerful admin interface for defining the "Required Steps" for any badge or achievement.
+
+8. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
 
 
 == Changelog ==
