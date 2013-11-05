@@ -54,7 +54,7 @@ class BadgeOS_Credly {
 			'credly_badge_testimonial' => 'congratulations_text',
 			'credly_badge_evidence' => 'permalink',
 			'credly_badge_sendemail_add_message' => 'false',
-            'credly_badge_sendemail_message' => __( 'NOTE: To claim this badge and -- share it on social networks or display it publicly -- click the "Save & Share" button above. If you already have a Credly account, sign in and then "Accept" the badge in the "My Credit" section of the site. If you are not yet a Credly member, click "Create an Account" (it\'s free), confirm your email address, and then return to the "My Credit" section to "Accept" the badge. From there, you can mouse over the badge image to share it on social networks and spread the news about your achievement.', 'badgeos' ),
+            'credly_badge_sendemail_message' => __( 'NOTE: To claim this official badge and share it on social networks click on the "Save & Share" button above. If you already have a Credly account, simply sign in and then "Accept" the badge. If you are not a member, Create an Account (it\'s free), confirm your email address, and then "Accept" your badge.', 'badgeos' ),
 		);
 
 		$this->credly_settings = array_merge( $default_settings, $this->credly_settings );
