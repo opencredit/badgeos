@@ -498,7 +498,7 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 
 	// Setup defaults
 	$defaults = array(
-		'ID'     => isset( $_GET['ID'] ) ? absint( $_GET['ID'] ) : 0,
+		'CID'     => isset( $_GET['CID'] ) ? absint( $_GET['CID'] ) : 0,
 		'width'  => isset( $content_width ) ? $content_width : 560,
 		'height' => 1000,
 	);
@@ -507,8 +507,8 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 	$atts = shortcode_atts( $defaults, $atts );
 
 	// If passed an ID, render the iframe, otherwise render nothing
-	if ( $atts['ID'] )
-		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $atts['ID'] . '/embed" align="top" marginwidth="0" width="' . $atts['width'] . 'px" height="' . $atts['height'] . 'px" scrolling="no" frameborder="no"></iframe>';
+	if ( $atts['CID'] )
+		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $atts['CID'] . '/embed" align="top" marginwidth="0" width="' . $atts['width'] . 'px" height="' . $atts['height'] . 'px" scrolling="no" frameborder="no"></iframe>';
 	else
 		return '';
 
@@ -522,6 +522,7 @@ add_shortcode( 'credly_assertion_page', 'badgeos_credly_assertion_page' );
  */
 function badgeos_credly_assertion_page_help() { ?>
 	<hr/>
-	<p><strong>[credly_assertion_page]</strong> - <?php _e( 'Credly Pro Users: Display custom assertion page output.', 'badgeos' ); ?></p>
+	<p><strong>[credly_assertion_page]</strong> - <?php _e( 'Adds WordPress support for the Credly "Custom Assertion Location" feature – a setting available to Credly Pro members – to dynamically display official Credly badge information directly within your site.', 'badgeos' ); ?></p>
+	<p><?php printf( __( 'Once you\'ve placed this shortcode on a page, copy that page\'s URL and append "?CID={id}" to the end (e.g. %1$s). Paste this full URL in the "Custom Assertion Location" field in your Credly Account Settings. All of your Credly badges will be linked back to this site where the official badge information is displayed automatically.', 'badgeos' ), site_url( '/assertion/?CID={id}' ) ); ?></p>
 <?php }
 add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_credly_assertion_page_help' );
