@@ -3,8 +3,8 @@ Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, M
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
-Tested up to: 3.5.1
-Stable tag: 1.2.0
+Tested up to: 3.7.1
+Stable tag: 1.3.0
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
