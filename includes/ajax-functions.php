@@ -33,16 +33,20 @@ function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
 	// Setup our AJAX query vars
-	$type    = isset( $_REQUEST['type'] )    ? $_REQUEST['type']    : false;
-	$limit   = isset( $_REQUEST['limit'] )   ? $_REQUEST['limit']   : false;
-	$offset  = isset( $_REQUEST['offset'] )  ? $_REQUEST['offset']  : false;
-	$count   = isset( $_REQUEST['count'] )   ? $_REQUEST['count']   : false;
-	$filter  = isset( $_REQUEST['filter'] )  ? $_REQUEST['filter']  : false;
-	$search  = isset( $_REQUEST['search'] )  ? $_REQUEST['search']  : false;
-	$user_id = isset( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : false;
-	$orderby = isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : false;
-	$order   = isset( $_REQUEST['order'] )   ? $_REQUEST['order']   : false;
-	$wpms    = isset( $_REQUEST['wpms'] )    ? $_REQUEST['wpms']    : false;
+	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
+	$limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
+	$offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
+	$count      = isset( $_REQUEST['count'] )      ? $_REQUEST['count']      : false;
+	$filter     = isset( $_REQUEST['filter'] )     ? $_REQUEST['filter']     : false;
+	$search     = isset( $_REQUEST['search'] )     ? $_REQUEST['search']     : false;
+	$user_id    = isset( $_REQUEST['user_id'] )    ? $_REQUEST['user_id']    : false;
+	$orderby    = isset( $_REQUEST['orderby'] )    ? $_REQUEST['orderby']    : false;
+	$order      = isset( $_REQUEST['order'] )      ? $_REQUEST['order']      : false;
+	$wpms       = isset( $_REQUEST['wpms'] )       ? $_REQUEST['wpms']       : false;
+	$include    = isset( $_REQUEST['include'] )    ? $_REQUEST['include']    : array();
+	$exclude    = isset( $_REQUEST['exclude'] )    ? $_REQUEST['exclude']    : array();
+	$meta_key   = isset( $_REQUEST['meta_key'] )   ? $_REQUEST['meta_key']   : '';
+	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
 
 	// Convert $type to properly support multiple achievement types
 	if ( 'all' == $type ) {
@@ -58,6 +62,16 @@ function badgeos_ajax_get_achievements() {
 	// Get the current user if one wasn't specified
 	if( ! $user_id )
 		$user_id = $user_ID;
+
+	// Build $include array
+	if ( !is_array( $include ) ) {
+		$include = explode( ',', $include );
+	}
+
+	// Build $exclude array
+	if ( !is_array( $exclude ) ) {
+		$exclude = explode( ',', $exclude );
+	}
 
     // Initialize our output and counters
     $achievements = '';
@@ -97,14 +111,30 @@ function badgeos_ajax_get_achievements() {
 
 		// Filter - query completed or non completed achievements
 		if ( $filter == 'completed' ) {
-			$args = array_merge( $args, array( 'post__in' => array_merge( array(0), $earned_ids ) ) );
+			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
 		}elseif( $filter == 'not-completed' ) {
-			$args = array_merge( $args, array( 'post__not_in' => array_merge( $hidden, $earned_ids ) ) );
+			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
+		}
+
+		if ( '' !== $meta_key && '' !== $meta_value ) {
+			$args[ 'meta_key' ] = $meta_key;
+			$args[ 'meta_value' ] = $meta_value;
+		}
+
+		// Include certain achievements
+		if ( !empty( $include ) ) {
+			$args[ 'post__not_in' ] = array_diff( $args[ 'post__not_in' ], $include );
+			$args[ 'post__in' ] = array_merge( array( 0 ), array_diff( $include, $args[ 'post__in' ] ) );
+		}
+
+		// Exclude certain achievements
+		if ( !empty( $exclude ) ) {
+			$args[ 'post__not_in' ] = array_merge( $args[ 'post__not_in' ], $exclude );
 		}
 
 		// Search
 		if ( $search ) {
-			$args = array_merge( $args, array( 's' => $search ) );
+			$args[ 's' ] = $search;
 		}
 
 		// Loop Achievements
@@ -123,7 +153,7 @@ function badgeos_ajax_get_achievements() {
 		// Display a message for no results
 		if ( empty( $achievements ) ) {
 			// If we have exactly one achivement type, get its plural name, otherwise use "achievements"
-			$post_type_plural = ( 1 == count( $type ) ) ? get_post_type_object( $type )->labels->name : 'achievements';
+			$post_type_plural = ( 1 == count( $type ) ) ? get_post_type_object( current( $type ) )->labels->name : 'achievements';
 
 			// Setup our completion message
 			$achievements .= '<div class="badgeos-no-results">';

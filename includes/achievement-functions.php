@@ -10,6 +10,35 @@
  */
 
 /**
+ * Check if post is a registered BadgeOS achievement.
+ *
+ * @since  1.3.0
+ *
+ * @param  object|int $post Post object or ID.
+ * @return bool             True if post is an achievement, otherwise false.
+ */
+function badgeos_is_achievement( $post = null ) {
+
+	// Assume we are working with an achievment object
+	$return = true;
+
+	// If passed an ID, get the post object
+	if ( is_numeric( $post ) )
+		$post = get_post( $post );
+
+	// If $post is NOT an object it cannot be an achievement
+	if ( ! is_object( $post ) )
+		$return = false;
+
+	// If post type is NOT a registered achievement type, it cannot be an achievement
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+		$return = false;
+
+	// If we pass both previous tests, this is a valid achievement (with filter to override)
+	return apply_filters( 'badgeos_is_achievement', $return, $post );
+}
+
+/**
  * Get an array of achievements
  *
  * @since  1.0.0
@@ -56,9 +85,9 @@ function badgeos_get_achievements( $args = array() ) {
  * Modify the WP_Query Join filter for achievement children
  *
  * @since  1.0.0
- * @param  string $join          The query "join" string
- * @param  object $query_object  The complete query object
- * @return string 				 The updated "join" string
+ * @param  string $join         The query "join" string
+ * @param  object $query_object The complete query object
+ * @return string 				The updated "join" string
  */
 function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
@@ -73,9 +102,9 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  * Modify the WP_Query Where filter for achievement children
  *
  * @since  1.0.0
- * @param  string $where         The query "where" string
- * @param  object $query_object  The complete query object
- * @return string 				 The updated query "where" string
+ * @param  string $where        The query "where" string
+ * @param  object $query_object The complete query object
+ * @return string 				The updated query "where" string
  */
 function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
 	global $wpdb;
@@ -127,6 +156,7 @@ function badgeos_get_achievements_parents_where( $where = '', $query_object = nu
 	$where .= $wpdb->prepare( ' AND p2p.p2p_from = %d', $query_object->query_vars['parent_of'] );
 	return $where;
 }
+
 /**
  * Get BadgeOS Achievement Types
  *
@@ -290,8 +320,8 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
  * Get an array of post IDs for achievements that are marked as "hidden"
  *
  * @since  1.0.0
- * @param  string  $achievement_type Limit the array to a specific type of achievement
- * @return array                     An array of hidden achivement post IDs
+ * @param  string $achievement_type Limit the array to a specific type of achievement
+ * @return array                    An array of hidden achivement post IDs
  */
 function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 
@@ -449,7 +479,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
  * Returns achievements that may be earned when the given achievement is earned.
  *
  * @since  1.0.0
- * @return array                   An array of achievements that are dependent on the given achievement
+ * @return array An array of achievements that are dependent on the given achievement
  */
 function badgeos_get_points_based_achievements() {
 	global $wpdb;
@@ -479,8 +509,8 @@ function badgeos_get_points_based_achievements() {
 /**
  * Destroy the points-based achievements transient if we edit a points-based achievement
  *
- * @since  1.0.0
- * @param  integer $post_id The given post's ID
+ * @since 1.0.0
+ * @param integer $post_id The given post's ID
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
@@ -493,7 +523,7 @@ function badgeos_bust_points_based_achievements_cache( $post_id ) {
 	// and the achievement is awarded by minimum points
 	if (
 		current_user_can( $minimum_role )
-		&& in_array( $post->post_type, badgeos_get_achievement_types_slugs() )
+		&& badgeos_is_achievement( $post )
 		&& (
 			'points' == get_post_meta( $post_id, '_badgeos_earned_by', true )
 			|| ( isset( $_POST['_badgeos_earned_by'] ) && 'points' == $_POST['_badgeos_earned_by'] )
@@ -567,10 +597,10 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 /**
  * Attempt to send an achievement to Credly if the user has send enabled
  *
- * @since  1.0.0
+ * @since 1.0.0
  *
- * @param  int  $user_id        The ID of the user earning the achievement
- * @param  int  $achievement_id The ID of the achievement being earned
+ * @param int $user_id        The ID of the user earning the achievement
+ * @param int $achievement_id The ID of the achievement being earned
  */
 function credly_issue_badge( $user_id, $achievement_id ) {
 
@@ -654,7 +684,7 @@ function badgeos_ms_show_all_achievements(){
  * Create array of blog ids in the network if multisite setting is on
  *
  * @since  1.2.0
- * @return array                   Array of blog_ids
+ * @return array Array of blog_ids
  */
 function badgeos_get_network_site_ids() {
 	global $wpdb;
@@ -672,8 +702,8 @@ function badgeos_get_network_site_ids() {
 /**
  * Set default achievement image on achievement post save
  *
- * @since  1.2.0
- * @param  object $post The post object of the post being saved
+ * @since 1.2.0
+ * @param object $post The post object of the post being saved
  */
 function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	global $pagenow;
@@ -686,7 +716,7 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	// OR we've just loaded the new post page
 	if (
 		! (
-			in_array( get_post_type( $post_id ), badgeos_get_achievement_types_slugs() )
+			badgeos_is_achievement( $post_id )
 			|| 'achievement-type' == get_post_type( $post_id )
 		)
 		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )

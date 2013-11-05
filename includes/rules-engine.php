@@ -15,9 +15,9 @@
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to possibly award
  * @param  integer $user_id        The given user's ID
- * @param  string $trigger        The trigger
+ * @param  string $trigger         The trigger
  * @param  integer $site_id        The triggered site id
- * @param  array $args        The triggered args
+ * @param  array $args             The triggered args
  * @return void
  */
 function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
@@ -123,20 +123,24 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement ID to award
  * @param  integer $user_id        The given user's ID
- * @param  string $trigger        The trigger
+ * @param  string $trigger         The trigger
  * @param  integer $site_id        The triggered site id
- * @param  array $args        The triggered args
+ * @param  array $args             The triggered args
  * @return void
  */
 function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
-	// Set to current site id
-	if ( ! $site_id )
-		$site_id = get_current_blog_id();
+	// Sanity Check: ensure we're working with an achievement post
+	if ( ! badgeos_is_achievement( $achievement_id ) )
+		return false;
 
 	// Use the current user ID if none specified
 	if ( $user_id == 0 )
 		$user_id = wp_get_current_user()->ID;
+
+	// Get the current site ID none specified
+	if ( ! $site_id )
+		$site_id = get_current_blog_id();
 
 	// Setup our achievement object
 	$achievement_object = badgeos_build_achievement_object( $achievement_id );

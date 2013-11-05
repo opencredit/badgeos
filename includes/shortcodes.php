@@ -32,7 +32,11 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'user_id'     => '0',
 		'wpms'        => 'false',
 		'orderby'     => 'menu_order',
-		'order'       => 'ASC'
+		'order'       => 'ASC',
+		'include'     => array(),
+		'exclude'     => array(),
+		'meta_key'    => '',
+		'meta_value'  => ''
 	), $atts ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -48,7 +52,11 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'user_id'     => $user_id,
 		'wpms'        => $wpms,
 		'orderby'     => $orderby,
-		'order'       => $order
+		'order'       => $order,
+		'include'     => $include,
+		'exclude'     => $exclude,
+		'meta_key'    => $meta_key,
+		'meta_value'  => $meta_value
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -148,6 +156,10 @@ function badgeos_achievements_list_shortcode_help() { ?>
 					<li>wpms - <?php printf( __( 'Displays achievements of the same type from across a multisite network if multisite is enabled and a super admin enables network achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>true, false</code>', '<code>false</code>' ); ?></li>
 					<li>orderby - <?php printf( __( 'Specify how to order achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<a href="http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters" target="_blank">See WP_Query orderby parameters</a>', '<code>menu_order</code>' ); ?></li>
 					<li>order - <?php printf( __( 'Specify the direction to order achievements. Accepts: %1$s Default: %2$s', 'badgeos' ), '<code>ASC, DESC</code>', '<code>ASC</code>' ); ?></li>
+					<li>include - <?php __( 'Specify a comma-separated list of achievement IDs to include.', 'badgeos' ); ?></li>
+					<li>exclude - <?php __( 'Specify a comma-separated list of achievement IDs to exclude.', 'badgeos' ); ?></li>
+					<li>meta_key - <?php __( 'Specify a Custom Field meta_key to filter by. Requires a meta_value to be set.', 'badgeos' ); ?></li>
+					<li>meta_value - <?php __( 'Specify a Custom Field meta_value to filter by. Requires a meta_key to be set.', 'badgeos' ); ?></li>
 				</ul>
 				</div>
 			</li>
@@ -473,3 +485,44 @@ function badgeos_nominations_shortcode_help() { ?>
 	</div>
 <?php }
 add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortcode_help' );
+
+/**
+ * Shortcode for rendering Credly Assertion page content.
+ *
+ * @since  1.3.0
+ *
+ * @return` string iframe displaying Credly data, or nothing.
+ */
+function badgeos_credly_assertion_page( $atts = array() ) {
+	global $content_width;
+
+	// Setup defaults
+	$defaults = array(
+		'CID'     => isset( $_GET['CID'] ) ? absint( $_GET['CID'] ) : 0,
+		'width'  => isset( $content_width ) ? $content_width : 560,
+		'height' => 1000,
+	);
+
+	// Parse attributes against the defaults
+	$atts = shortcode_atts( $defaults, $atts );
+
+	// If passed an ID, render the iframe, otherwise render nothing
+	if ( $atts['CID'] )
+		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $atts['CID'] . '/embed" align="top" marginwidth="0" width="' . $atts['width'] . 'px" height="' . $atts['height'] . 'px" scrolling="no" frameborder="no"></iframe>';
+	else
+		return '';
+
+}
+add_shortcode( 'credly_assertion_page', 'badgeos_credly_assertion_page' );
+
+/**
+ * Add help content for [credly_assertion_page] to BadgeOs Help page
+ *
+ * @since  1.3.0
+ */
+function badgeos_credly_assertion_page_help() { ?>
+	<hr/>
+	<p><strong>[credly_assertion_page]</strong> - <?php _e( 'Adds WordPress support for the Credly "Custom Assertion Location" feature – a setting available to Credly Pro members – to dynamically display official Credly badge information directly within your site.', 'badgeos' ); ?></p>
+	<p><?php printf( __( 'Once you\'ve placed this shortcode on a page, copy that page\'s URL and append "?CID={id}" to the end (e.g. %1$s). Paste this full URL in the "Custom Assertion Location" field in your Credly Account Settings. All of your Credly badges will be linked back to this site where the official badge information is displayed automatically.', 'badgeos' ), site_url( '/assertion/?CID={id}' ) ); ?></p>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_credly_assertion_page_help' );

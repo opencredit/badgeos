@@ -50,7 +50,10 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => __( 'Default Badge Image', 'badgeos' ),
-				'desc' => __( 'To set a default image, use the <strong>Featured Image</strong> metabox to the right.  For best results, use a square .png file with a transparent background, at least 200x200 pixels.', 'badgeos' ),
+				'desc' => sprintf(
+					__( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
+					badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) )
+					),
 				'id'   => $prefix . 'upload_badge_image_achievement',
 				'type' => 'text_only',
 			),
@@ -68,13 +71,17 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 		'fields'     => apply_filters( 'badgeos_achievement_data_meta_box_fields', array(
 			array(
 				'name' => __( 'Upload Badge Image', 'badgeos' ),
-				'desc' => sprintf( __( '<p>To set an image use the <strong>Featured Image</strong> metabox to the right.  For best results, use a square .png file with a transparent background, at least 200x200 pixels.</p><p>If no image is specified, this achievement will default to the <a href="%s">Achievement Type\'s</a> featured image.</p>', 'badgeos' ), admin_url('edit.php?post_type=achievement-type') ),
+				'desc' => sprintf(
+					__( '<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
+					badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) ),
+					'<a href="' . admin_url('edit.php?post_type=achievement-type') . '">' . __( 'Achievement Type\'s', 'badgeos' ) . '</a>'
+					),
 				'id'   => $prefix . 'upload_badge_image_achievement',
 				'type' => 'text_only',
 			),
 			array(
 				'name' => __( 'Points Awarded', 'badgeos' ),
-				'desc' => ' '.__( 'Points awarded for earning this achievement (optional).  Leave empty if no points are awarded.', 'badgeos' ),
+				'desc' => ' '.__( 'Points awarded for earning this achievement (optional). Leave empty if no points are awarded.', 'badgeos' ),
 				'id'   => $prefix . 'points',
 				'type' => 'text_small',
 			),
@@ -118,9 +125,10 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => __( 'Maximum Earnings', 'badgeos' ),
-				'desc' => ' '.__( 'Number of times a user can earn this badge (default, if blank: infinite)', 'badgeos' ),
+				'desc' => ' '.__( 'Number of times a user can earn this badge (leave blank to earn infinitely).', 'badgeos' ),
 				'id'   => $prefix . 'maximum_earnings',
 				'type' => 'text_small',
+				'std' => '1',
 			),
 			array(
 				'name'    => __( 'Hidden?', 'badgeos' ),

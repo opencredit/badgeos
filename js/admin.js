@@ -46,4 +46,12 @@ jQuery(document).ready(function($) {
 		}
 	} );
 
+	// Show notification custom message input if setting is enabled
+	$('#credly_badge_sendemail_add_message').change( function() {
+		if ( 'true' == $(this).val() )
+			$('.credly-notifications-message').show();
+		else
+			$('.credly-notifications-message').hide();
+	}).change();
+
 });
