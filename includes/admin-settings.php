@@ -573,17 +573,6 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 		<p><?php _e( 'Send custom notifications to users when they earn a Credly-enabled achievement.', 'badgeos' ); ?></p>
 
 		<table class="form-table credly-notifications">
-			<tr valign="top" class="credly-notifications-enable-notification">
-				<th scope="row">
-					<label for="credly_badge_sendemail"><?php _e( 'Notify users of earned badge: ', 'badgeos' ); ?></label>
-				</th>
-				<td>
-					<select id="credly_badge_sendemail" name="credly_settings[credly_badge_sendemail]">
-						<option value="true"<?php selected( $credly_settings[ 'credly_badge_sendemail' ], 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-						<option value="false"<?php selected( $credly_settings[ 'credly_badge_sendemail' ], 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-					</select>
-				</td>
-			</tr>
 			<tr valign="top" class="credly-notifications-enable-message">
 				<th scope="row">
 					<label for="credly_badge_sendemail_add_message"><?php _e( 'Add a global custom message to each notification: ', 'badgeos' ); ?></label>

@@ -491,7 +491,7 @@ add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortco
  *
  * @since  1.3.0
  *
- * @return string iframe displaying Credly data, or nothing.
+ * @return` string iframe displaying Credly data, or nothing.
  */
 function badgeos_credly_assertion_page( $atts = array() ) {
 	global $content_width;

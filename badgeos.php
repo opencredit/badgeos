@@ -218,15 +218,15 @@ class BadgeOS {
 		$credly_settings = (array) get_option( 'credly_settings', array() );
 
 		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credyl_enable' ] ) ) {
-			$credly_settings['credly_enable']                  = 'true';
-			$credly_settings['credly_badge_title']             = 'post_title';
-			$credly_settings['credly_badge_description']       = 'post_body';
-			$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-			$credly_settings['credly_badge_criteria']          = '';
-			$credly_settings['credly_badge_image']             = 'featured_image';
-			$credly_settings['credly_badge_testimonial']       = 'congratulations_text';
-			$credly_settings['credly_badge_evidence']          = 'permalink';
-			$credly_settings['credly_badge_sendemail']         = 'true';
+			$credly_settings['credly_enable']                      = 'true';
+			$credly_settings['credly_badge_title']                 = 'post_title';
+			$credly_settings['credly_badge_description']           = 'post_body';
+			$credly_settings['credly_badge_short_description']     = 'post_excerpt';
+			$credly_settings['credly_badge_criteria']              = '';
+			$credly_settings['credly_badge_image']                 = 'featured_image';
+			$credly_settings['credly_badge_testimonial']           = 'congratulations_text';
+			$credly_settings['credly_badge_evidence']              = 'permalink';
+			$credly_settings['credly_badge_sendemail_add_message'] = 'false';
 			update_option( 'credly_settings', $credly_settings );
 		}
 

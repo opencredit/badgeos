@@ -46,23 +46,12 @@ jQuery(document).ready(function($) {
 		}
 	} );
 
-	// Show credly notification settings if notifications are enabled
-	$('#credly_badge_sendemail').change( function() {
-		if ( 'true' == $(this).val() )
-			$('.credly-notifications-enable-message').show();
-		else
-			$('.credly-notifications-enable-message').hide();
-
-		$('#credly_badge_sendemail_add_message').change();
-	}).change();
-
 	// Show notification custom message input if setting is enabled
 	$('#credly_badge_sendemail_add_message').change( function() {
-		if ( 'true' == $(this).val() && 'true' == $('#credly_badge_sendemail').val() )
+		if ( 'true' == $(this).val() )
 			$('.credly-notifications-message').show();
 		else
 			$('.credly-notifications-message').hide();
-
 	}).change();
 
 });
