@@ -1,4 +1,14 @@
 jQuery(document).ready(function($) {
+
+	// Show badge sharing options only if "send to credly" is enabled
+	$('#_badgeos_send_to_credly').change( function(){
+		if ( '0' == $(this).val() )
+			$('#credly-badge-settings').hide();
+		else
+			$('#credly-badge-settings').show();
+	}).change();
+
+	// Retrieve credly category results via AJAX
 	$('#credly_category_search_submit').click( function( event ) {
 
 		// Stop the default submission from happening
