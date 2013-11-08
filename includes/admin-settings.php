@@ -144,15 +144,8 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 		foreach ( $badges as $badge ) {
 			$send_to_credly = get_post_meta( $badge->ID, '_badgeos_send_to_credly', true );
 
-			// Check if it's Credly eligible
-			if ( $send_to_credly ) {
-				update_post_meta( $badge->ID, '_badgeos_send_to_credly', 'false' );
-				delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
-			}
 			// Delete Badge info
-			else {
-				delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
-			}
+			delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
 		}
 
 		$message = 'reset';
@@ -165,6 +158,9 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 		// Clear Badge connections and resubmit
 		foreach ( $badges as $badge ) {
 			$send_to_credly = get_post_meta( $badge->ID, '_badgeos_send_to_credly', true );
+
+			// Delete Badge info
+			delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
 
 			// Check if it's Credly eligible
 			if ( $send_to_credly ) {
@@ -192,10 +188,6 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 					//update_post_meta( $badge->ID, '_badgeos_send_to_credly', 'true' );
 					update_post_meta( $badge->ID, '_badgeos_credly_badge_id', $credly_badge );
 				}
-			}
-			// Delete Badge info
-			else {
-				delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
 			}
 		}
 
@@ -270,7 +262,7 @@ function badgeos_credly_settings_validate( $options = array() ) {
 				$error .= '<p>'. __( 'Please enter a password.', 'badgeos' ). '</p>';
 
 			// Save our error message.
-			badgeos_credly_get_api_key_error( $error );
+			badgeos_credly_settings_error( $error );
 
 			// Keep the user/pass
 			$clean_options['credly_user'] = $username;
@@ -332,14 +324,14 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 	// If the response is a WP error
 	if ( is_wp_error( $response ) ) {
 		$error = '<p>'. sprintf( __( 'There was an error getting a Credly API Key: %s', 'badgeos' ), $response->get_error_message() ) . '</p>';
-		return badgeos_credly_get_api_key_error( $error );
+		return badgeos_credly_settings_error( $error );
 	}
 
 	// If the response resulted from potentially bad credentials
 	if ( '401' == wp_remote_retrieve_response_code( $response ) ) {
 		$error = '<p>'. __( 'There was an error getting a Credly API Key: Please check your username and password.', 'badgeos' ) . '</p>';
 		// Save our error message.
-		return badgeos_credly_get_api_key_error( $error );
+		return badgeos_credly_settings_error( $error );
 	}
 
 	$api_key = json_decode( $response['body'] );
