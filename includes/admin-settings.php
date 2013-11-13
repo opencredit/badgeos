@@ -17,7 +17,7 @@ function badgeos_register_settings() {
 	register_setting( 'badgeos_settings_group', 'badgeos_settings', 'badgeos_settings_validate' );
 	register_setting( 'credly_settings_group', 'credly_settings', 'badgeos_credly_settings_validate' );
 
-	if ( isset( $_GET[ '_nonce_credly_settings' ] ) ) {
+	if ( isset( $_GET[ '_badgeos_credly_settings_nonce' ] ) ) {
 		badgeos_credly_settings_handler();
 	}
 }
@@ -98,12 +98,24 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 	 */
 	global $badgeos_credly;
 
+	if ( isset( $GLOBALS[ 'badgeos_credly_settings_handling' ] ) ) {
+		return;
+	}
+
+	$GLOBALS[ 'badgeos_credly_settings_handling' ] = true;
+
 	$credly_settings = $badgeos_credly->credly_settings;
 
 	$actions = array(
 		'credly_disconnect',
 		'credly_reconnect'
 	);
+
+	$nonce = '';
+
+	if ( isset( $_GET[ '_badgeos_credly_settings_nonce' ] ) ) {
+		$nonce = $_GET[ '_badgeos_credly_settings_nonce' ];
+	}
 
 	if ( empty( $action ) ) {
 		foreach ( $actions as $action_check ) {
@@ -114,13 +126,7 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 			}
 		}
 
-		$nonce = '';
-
-		if ( isset( $_GET[ '_nonce_credly_settings' ] ) ) {
-			$nonce = $_GET[ '_nonce_credly_settings' ];
-		}
-
-		if ( !wp_verify_nonce( $nonce, 'credly_disconnect' ) ) {
+		if ( !wp_verify_nonce( $nonce, $action ) ) {
 			return;
 		}
 	}
@@ -194,9 +200,11 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 		$message = 'reconnected';
 	}
 
-	// Redirect
-	wp_redirect( add_query_arg( array( '_nonce_credly_settings' => false, $action => false, 'credly_message' => $message ) ) );
-	die();
+	if ( !empty( $nonce ) ) {
+		// Redirect
+		wp_redirect( admin_url( 'admin.php?page=badgeos_sub_credly_integration&credly_message=' . urlencode( $message ) ) );
+		die();
+	}
 
 }
 
@@ -702,7 +710,7 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 
 					<p>
 						<?php _e( 'Need to connect a different Credly account?', 'badgeos' ); ?><br />
-						<a href="<?php echo add_query_arg( array( 'credly_disconnect' => 1, '_nonce_credly_settings' => wp_create_nonce( 'credly_disconnect' ) ) ); ?>"><?php _e( 'Disconnect key and re-connect to another account', 'badgeos' ); ?></a>
+						<a href="<?php echo add_query_arg( array( 'credly_disconnect' => 1, '_badgeos_credly_settings_nonce' => wp_create_nonce( 'credly_disconnect' ) ) ); ?>"><?php _e( 'Disconnect key and re-connect to another account', 'badgeos' ); ?></a>
 					</p>
 				</td>
 			</tr>
