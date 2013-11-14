@@ -278,6 +278,14 @@ class BadgeOS_Credly {
         // POST our data to the CredlyAPI
         $response = $this->credly_api_post( $url, $body );
 
+		// Debugging code for testing the Credly API responses and data sent
+		/*echo '<pre>';
+		var_dump( $url );
+		var_dump( $body );
+		var_dump( $response );
+		echo '</pre>';
+		die();*/
+
         // Process our response
         $results = $this->process_api_response_badge( $response );
 
@@ -311,7 +319,7 @@ class BadgeOS_Credly {
 
         $is_giveable       = ( 'true' == $fields['credly_is_giveable'] ? true : false );
 
-        $expires_in        = ( is_numeric( $fields['credly_expiration'] ) ? (int) $fields['credly_expiration'] * 86400 : 0 );
+        $expires_in        = ( is_numeric( $fields['credly_expiration'] ) ? (int) $fields['credly_expiration'] * 86400 : '' );
 
         $categories        = ( $fields['credly_categories'] ? implode( ',',  $fields['credly_categories'] ) : '' );
 
@@ -842,7 +850,10 @@ class BadgeOS_Credly {
      */
     public function badge_metabox_show() {
 
-        global $post;
+		/**
+		 * @var BadgeOS_Credly $badgeos_credly
+		 */
+		global $post, $badgeos_credly;
 
         //Check existing post meta
         $send_to_credly             = ( get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) ? get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) : 'false' );
@@ -853,6 +864,11 @@ class BadgeOS_Credly {
         $credly_categories          = maybe_unserialize( get_post_meta( $post->ID, '_badgeos_credly_categories', true ) );
         $credly_badge_id            = get_post_meta( $post->ID, '_badgeos_credly_badge_id', true );
 
+		$has_credly_api_key = false;
+
+		if ( !empty( $badgeos_credly->credly_settings ) && isset( $badgeos_credly->credly_settings[ 'api_key' ] ) && !empty( $badgeos_credly->credly_settings[ 'api_key' ] ) ) {
+			$has_credly_api_key = true;
+		}
     ?>
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
         <table class="form-table">
@@ -870,55 +886,66 @@ class BadgeOS_Credly {
         </table>
 
         <div id="credly-badge-settings">
-            <table class="form-table">
-                <tr valign="top"><th scope="row"><label for="_badgeos_credly_include_evidence"><?php _e( 'Include Evidence', 'badgeos' ); ?></label></th>
-                <td>
-                    <select id="_badgeos_credly_include_evidence" name="_badgeos_credly_include_evidence">
-                        <option value="1" <?php selected( $credly_include_evidence, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-                        <option value="0" <?php selected( $credly_include_evidence, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-                    </select>
-                </td>
-            </tr>
-            <tr valign="top"><th scope="row"><label for="_badgeos_credly_include_testimonial"><?php _e( 'Include Testimonial', 'badgeos' ); ?></label></th>
-                <td>
-                    <select id="_badgeos_credly_include_testimonial" name="_badgeos_credly_include_testimonial">
-                        <option value="1" <?php selected( $credly_include_testimonial, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-                        <option value="0" <?php selected( $credly_include_testimonial, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-                    </select>
-                </td>
-            </tr>
-            <tr valign="top"><th scope="row"><label for="_badgeos_credly_expiration"><?php _e( 'Expiration ( In days; 0 = never )', 'badgeos' ); ?></label></th>
-                <td>
-                    <input type="text" id="_badgeos_credly_expiration" name="_badgeos_credly_expiration" value="<?php echo $credly_expiration; ?>" class="widefat" />
-                </td>
-            </tr>
-            <tr valign="top"><th scope="row"><label for="_badgeos_credly_is_giveable"><?php _e( 'Allow Badge to be Given by Others', 'badgeos' ); ?></label></th>
-                <td>
-                    <select id="_badgeos_credly_is_giveable" name="_badgeos_credly_is_giveable">
-                        <option value="1" <?php selected( $credly_is_giveable, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-                        <option value="0" <?php selected( $credly_is_giveable, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
-                    </select>
-                </td>
-            </tr>
-            <tr valign="top" class="credly_category_search"><th scope="row"><label for="credly_category_search"><?php _e( 'Credly Category Search', 'badgeos' ); ?></label></th>
-                <td>
-                    <input type="text" id="credly_category_search" name="credly_category_search" value="" size="50" />
-                    <a id="credly_category_search_submit" class="button" />Search Categories</a>
-                </td>
-            </tr>
-            <tr valign="top" id="credly_search_results" <?php if ( ! is_array( $credly_categories ) ) { ?>style="display:none"<?php } ?>><th scope="row"><label><?php _e( 'Credly Badge Category', 'badgeos' ); ?></label></th>
-                <td>
-                    <fieldset>
-                        <?php echo $this->credly_existing_category_output( $credly_categories ); ?>
-                    </fieldset>
-                </td>
-            </tr>
-            <tr valign="top"><th scope="row"><label for="_badgeos_credly_badge_id"><?php _e( 'Credly Badge ID', 'badgeos' ); ?></label></th>
-                <td>
-                    <input type="text" id="_badgeos_credly_badge_id" name="_badgeos_credly_badge_id" value="<?php echo $credly_badge_id; ?>" class="widefat" readonly="readonly" />
-                </td>
-            </tr>
-            </table>
+			<?php
+				if ( !$has_credly_api_key ) {
+			?>
+					<p><?php echo sprintf( __( 'To activate badge sharing, enter your Credly credentials in the BadgeOS <a href="%s">Credly Integration menu.</a>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?></p>
+			<?php
+				}
+				else {
+			?>
+				<table class="form-table">
+					<tr valign="top"><th scope="row"><label for="_badgeos_credly_include_evidence"><?php _e( 'Include Evidence', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="_badgeos_credly_include_evidence" name="_badgeos_credly_include_evidence">
+								<option value="1" <?php selected( $credly_include_evidence, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+								<option value="0" <?php selected( $credly_include_evidence, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="_badgeos_credly_include_testimonial"><?php _e( 'Include Testimonial', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="_badgeos_credly_include_testimonial" name="_badgeos_credly_include_testimonial">
+								<option value="1" <?php selected( $credly_include_testimonial, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+								<option value="0" <?php selected( $credly_include_testimonial, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="_badgeos_credly_expiration"><?php _e( 'Expiration ( In days; 0 = never )', 'badgeos' ); ?></label></th>
+						<td>
+							<input type="text" id="_badgeos_credly_expiration" name="_badgeos_credly_expiration" value="<?php echo $credly_expiration; ?>" class="widefat" />
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="_badgeos_credly_is_giveable"><?php _e( 'Allow Badge to be Given by Others', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="_badgeos_credly_is_giveable" name="_badgeos_credly_is_giveable">
+								<option value="1" <?php selected( $credly_is_giveable, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+								<option value="0" <?php selected( $credly_is_giveable, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top" class="credly_category_search"><th scope="row"><label for="credly_category_search"><?php _e( 'Credly Category Search', 'badgeos' ); ?></label></th>
+						<td>
+							<input type="text" id="credly_category_search" name="credly_category_search" value="" size="50" />
+							<a id="credly_category_search_submit" class="button" />Search Categories</a>
+						</td>
+					</tr>
+					<tr valign="top" id="credly_search_results" <?php if ( ! is_array( $credly_categories ) ) { ?>style="display:none"<?php } ?>><th scope="row"><label><?php _e( 'Credly Badge Category', 'badgeos' ); ?></label></th>
+						<td>
+							<fieldset>
+								<?php echo $this->credly_existing_category_output( $credly_categories ); ?>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="_badgeos_credly_badge_id"><?php _e( 'Credly Badge ID', 'badgeos' ); ?></label></th>
+						<td>
+							<input type="text" id="_badgeos_credly_badge_id" name="_badgeos_credly_badge_id" value="<?php echo $credly_badge_id; ?>" class="widefat" readonly="readonly" />
+						</td>
+					</tr>
+				</table>
+			<?php
+				}
+			?>
         </div>
 
     <?php
