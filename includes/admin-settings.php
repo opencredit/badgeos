@@ -108,7 +108,8 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 
 	$actions = array(
 		'credly_disconnect',
-		'credly_reconnect'
+		'credly_reconnect',
+		'credly_check'
 	);
 
 	$nonce = '';
@@ -135,6 +136,10 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 
 	// Clear Badge connections
 	if ( 'credly_disconnect' == $action ) {
+		$credly_settings[ 'old_credly_user' ] = $credly_settings[ 'credly_user' ];
+		$credly_settings[ 'old_credly_password' ] = $credly_settings[ 'credly_password' ];
+		$credly_settings[ 'old_api_key' ] = $credly_settings[ 'api_key' ];
+
 		// Reset Credly settings
 		$credly_settings[ 'credly_user' ] = '';
 		$credly_settings[ 'credly_password' ] = '';
@@ -149,9 +154,15 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 		// Clear Badge connections
 		foreach ( $badges as $badge ) {
 			$send_to_credly = get_post_meta( $badge->ID, '_badgeos_send_to_credly', true );
+			$credly_badge_id = get_post_meta( $badge->ID, '_badgeos_credly_badge_id', true );
 
 			// Delete Badge info
 			delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
+
+			// Store old Badge info
+			if ( !empty( $credly_badge_id ) ) {
+				update_post_meta( $badge->ID, '_badgeos_credly_old_badge_id', $credly_badge_id );
+			}
 		}
 
 		$message = 'reset';
@@ -164,14 +175,24 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 		// Clear Badge connections and resubmit
 		foreach ( $badges as $badge ) {
 			$send_to_credly = get_post_meta( $badge->ID, '_badgeos_send_to_credly', true );
+			$credly_badge_id = get_post_meta( $badge->ID, '_badgeos_credly_badge_id', true );
 
 			// Delete Badge info
 			delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
 
+			// Store old Badge info
+			if ( !empty( $credly_badge_id ) ) {
+				update_post_meta( $badge->ID, '_badgeos_credly_old_badge_id', $credly_badge_id );
+			}
+			else {
+				$credly_badge_id = get_post_meta( $badge->ID, '_badgeos_credly_old_badge_id', true );
+			}
+
 			// Check if it's Credly eligible
 			if ( $send_to_credly ) {
-				//update_post_meta( $badge->ID, '_badgeos_send_to_credly', 'false' );
-				delete_post_meta( $badge->ID, '_badgeos_credly_badge_id' );
+				// Check if $credly_badge_id is set
+				// Check if $credly_badge_id belongs to account
+				// Use $credly_badge_id if badge belongs to account
 
 				// Resubmit Badges to Credly
 				$expiration = get_post_meta( $badge->ID, '_badgeos_credly_expiration', true );
@@ -199,6 +220,25 @@ function badgeos_credly_settings_handler( $action = '', $badge_id = null ) {
 
 		$message = 'reconnected';
 	}
+	elseif ( 'credly_check' == $action ) {
+		// Get Badges
+		$badges = badgeos_credly_settings_badges( $badge_id );
+
+		$credly_badges = array();
+
+		// Clear Badge connections
+		foreach ( $badges as $badge ) {
+			$send_to_credly = get_post_meta( $badge->ID, '_badgeos_send_to_credly', true );
+
+			if ( $send_to_credly ) {
+				$credly_badges[ $badge->ID ] = $badge;
+			}
+		}
+
+		return $credly_badges;
+	}
+
+	unset( $GLOBALS[ 'badgeos_credly_settings_handling' ] );
 
 	if ( !empty( $nonce ) ) {
 		// Redirect
@@ -294,6 +334,20 @@ function badgeos_credly_settings_validate( $options = array() ) {
 	// sanitize all our options
 	foreach ( $options as $key => $opt ) {
 		$clean_options[$key] = sanitize_text_field( $opt );
+	}
+
+	// Store API key
+	if ( !empty( $clean_options[ 'api_key' ] ) ) {
+		$status = $badgeos_credly->credly_check_api_key( $clean_options[ 'api_key' ] );
+
+		if ( is_wp_error( $status ) ) {
+			// Save our error message.
+			badgeos_credly_settings_error( sprintf( __( 'Credly API error: %s', 'badgeos' ), $status->get_error_message() ) );
+		}
+		else {
+			// Save new Account ID
+			update_option( 'badgeos_credly_account_id', (int) $status->id );
+		}
 	}
 
 	if ( !empty( $old_api_key ) ) {
@@ -650,6 +704,13 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
 			echo '<input type="hidden" name="credly_settings['. esc_attr( $key ) .']" value="'. esc_attr( $opt ) .'" />';
 		}
 	}
+
+	/**
+	 * @var $badgeos_credly BadgeOS_Credly
+	 */
+	global $badgeos_credly;
+
+	$status = $badgeos_credly->credly_check_api_key( $credly_settings[ 'api_key' ] );
 ?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Get Credly API Key', 'badgeos' ); ?></h3>
@@ -680,7 +741,10 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
 					<label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label>
 				</th>
 				<td>
-					<input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" style="max-width: 1000px;" />
+					<input id="api_key" type="text" name="credly_settings[api_key]" size="30" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" />
+					<span id="api_key_response" class="badgeos-license-status hidden" data-msg-valid="<?php esc_attr_e( 'Valid', 'badgeos' ); ?>" data-msg-validating="<?php esc_attr_e( 'Validating...', 'badgeos' ); ?>">
+						<strong></strong>
+					</span>
 				</td>
 			</tr>
 		</table>
@@ -699,6 +763,12 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
  */
 function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 
+	/**
+	 * @var $badgeos_credly BadgeOS_Credly
+	 */
+	global $badgeos_credly;
+
+	$status = $badgeos_credly->credly_check_api_key( $credly_settings[ 'api_key' ] );
 ?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Credly API Key', 'badgeos' ); ?></h3>
@@ -706,7 +776,10 @@ function badgeos_credly_options_yes_api( $credly_settings = array() ) {
 			<tr valign="top">
 				<th scope="row"><label for="api_key"><?php _e( 'API Key: ', 'badgeos' ); ?></label></th>
 				<td>
-					<input id="api_key" type="text" name="credly_settings[api_key]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" />
+					<input id="api_key" type="text" name="credly_settings[api_key]" size="30" value="<?php echo esc_attr( $credly_settings[ 'api_key' ] ); ?>" />
+					<span id="api_key_response" class="badgeos-license-status <?php echo ( !is_wp_error( $status ) ? 'valid' : 'invalid' ); ?>" data-msg-valid="<?php esc_attr_e( 'Valid', 'badgeos' ); ?>" data-msg-validating="<?php esc_attr_e( 'Validating...', 'badgeos' ); ?>">
+						<?php echo '<strong>' . ( !is_wp_error( $status ) ? __( 'Valid', 'badgeos' ) : $status->get_error_message() ) . '</strong>'; ?>
+					</span>
 
 					<p>
 						<?php _e( 'Need to connect a different Credly account?', 'badgeos' ); ?><br />

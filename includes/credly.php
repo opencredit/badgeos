@@ -109,6 +109,7 @@ class BadgeOS_Credly {
 
         // Category search AJAX
         add_action( 'wp_ajax_search_credly_categories', array( $this, 'credly_category_search' ) );
+        add_action( 'wp_ajax_credly_check_api_key', array( $this, 'ajax_credly_check_api_key' ) );
 
         // Credly enable user meta setting
         add_action( 'personal_options', array( $this, 'credly_profile_setting' ), 99 );
@@ -395,6 +396,64 @@ class BadgeOS_Credly {
         die();
 
     }
+
+	public function credly_check_api_key( $api_key ) {
+
+		include_once 'credly.api.php';
+
+		$credly_api = new BadgeOS_Credly_API( $api_key );
+
+		$response = $credly_api->me();
+
+		if ( is_wp_error( $response ) ) {
+			/**
+			 * @var $response WP_Error
+			 */
+			$status = $response;
+
+			if ( 'badgeos_credly_unauthorized' == $response->get_error_code() ) {
+				$status = new WP_Error( 'badgeos_credly_invalid_api_key', __( 'Invalid API Key', 'badgeos' ) );
+			}
+		}
+		else {
+			$status = $response;
+		}
+
+		return $status;
+
+	}
+
+	public function ajax_credly_check_api_key() {
+
+		$old_id = (int) get_option( 'badgeos_credly_account_id', 0 );
+
+		if ( !isset( $_POST[ 'api_key' ] ) || empty( $_POST[ 'api_key' ] ) ) {
+			echo json_encode( array( 'success' => false, 'message' => __( 'Invalid API Key', 'badgeos' ) ) );
+
+			die();
+		}
+
+		$status = $this->credly_check_api_key( $_POST[ 'api_key' ] );
+
+		if ( is_wp_error( $status ) ) {
+			echo json_encode( array( 'success' => false, 'message' => $status->get_error_message() ) );
+		}
+		else {
+			$new_id = (int) $status->id;
+
+			$connected_badges = badgeos_credly_settings_handler( 'credly_check' );
+
+			if ( !empty( $connected_badges ) && !empty( $old_id ) && $old_id != $new_id ) {
+				echo json_encode( array( 'success' => true, 'message' => __( 'Some achievements were previously linked to Credly using a different Credly account. When you link your new account, those achievements will automatically be created and available for earning from your newly added Credly account.', 'badgeos' ) ) );
+			}
+			else {
+				echo json_encode( array( 'success' => true, 'message' => '' ) );
+			}
+		}
+
+		die();
+
+	}
 
     /**
      * Generate a url encoded string for our category api call

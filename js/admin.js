@@ -19,10 +19,74 @@ jQuery(document).ready(function($) {
 
 	}).change();
 
-	$('[href="#show-api-key"]').click( function(event) {
-		event.preventDefault();
-		$('#credly-settings tr, #credly-settings .toggle').toggle();
-	});
+	// Credly Settings page
+	var $show_api_key = $( '[href="#show-api-key"]' ),
+		$api_key = $( '#api_key' );
+
+	if ( $show_api_key[ 0 ] || $api_key[ 0 ] ) {
+		$show_api_key.on( 'click', function( e ) {
+			e.preventDefault();
+
+			$( '#credly-settings tr, #credly-settings .toggle' ).toggle();
+		} );
+
+		var old_api_key = $api_key.val();
+
+		$api_key.on( 'change', function() {
+			var $api_key_response = $( '#api_key_response' ),
+				$api_key_response_message = $api_key_response.find( 'strong' );
+
+			$api_key_response.removeClass( 'valid' ).removeClass( 'invalid' );
+
+			if ( '' != $api_key.val() ) {
+				$api_key_response.show();
+				$api_key_response_message.text( $api_key_response.data( 'msg-validating' ) );
+
+				$.ajax( ajaxurl, {
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						action: 'credly_check_api_key',
+						api_key: $api_key.val()
+					},
+					success: function( response ) {
+						if ( response.success ) {
+							$api_key_response.addClass( 'valid' );
+							$api_key_response_message.text( $api_key_response.data( 'msg-valid' ) );
+
+							if ( 0 < response.message.length ) {
+								if ( confirm( response.message ) ) {
+									// OK
+								}
+								else {
+									$api_key.val( old_api_key );
+									console.log( old_api_key );
+									console.log( typeof old_api_key );
+									$api_key.trigger( 'change' );
+
+									return true;
+								}
+							}
+							else {
+								// OK
+							}
+						}
+						else {
+							$api_key_response.addClass( 'invalid' );
+							$api_key_response_message.text( response.message );
+						}
+
+						return true;
+					}
+				} );
+			}
+			else {
+				$api_key_response.hide();
+			}
+
+
+		} );
+	}
 
 	// Throw a warning on Achievement Type editor if title is > 20 characters
 	$('#titlewrap').on( 'keyup', 'input[name=post_title]', function() {
