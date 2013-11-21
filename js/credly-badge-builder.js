@@ -35,7 +35,6 @@ jQuery(document).ready(function($) {
 	$('body').on( 'click', '.badge-builder-link', function(e) {
 		e.preventDefault();
 		badge_builder_setup_thickbox( $(this) );
-		badge_builder_generate_link();
 	});
 
 	// Resize badge builder thickbox on window resize
@@ -63,22 +62,6 @@ jQuery(document).ready(function($) {
 			$('.badge-builder-thickbox, .badge-builder-thickbox #TB_ajaxContent').width(width).height(height).css({'padding':'0px'});
 
 		}, 0 );
-	}
-
-	// Fetch a new badge builder link
-	function badge_builder_generate_link() {
-		$.ajax({
-			url: ajaxurl,
-			data: {
-				'action': 'badge-builder-generate-link',
-				'attachment_id': $('.badge-builder-link').attr( 'data-attachment_id' )
-			},
-			dataType: 'json',
-			success: function( response ) {
-				// Update all builder links on page
-				$('.badge-builder-thickbox iframe').attr( 'src', response.data.link );
-			}
-		});
 	}
 
 });
