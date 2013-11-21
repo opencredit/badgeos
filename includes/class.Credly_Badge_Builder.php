@@ -137,7 +137,11 @@ class Credly_Badge_Builder {
 		$args = wp_parse_args( $args, $defaults );
 
 		// Build our link tag
-		$output = '<a href="' . '#nogo?TB_iframe=true' . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '" data-attachment_id="' . $args['attachment_id'] . '">' . $args['link_text'] . '</a>';
+		if ( $this->credly_api_key )
+			$link = '#nogo?TB_iframe=true';
+		else
+			$link = $link = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
+		$output = '<a href="' . $link . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '" data-attachment_id="' . $args['attachment_id'] . '">' . $args['link_text'] . '</a>';
 
 		// Include teaser output if we have no API key
 		if ( ! $this->credly_api_key )
