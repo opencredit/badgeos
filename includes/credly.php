@@ -132,7 +132,7 @@ class BadgeOS_Credly {
             return;
 
         //display the admin notice
-        printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared and by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
+        printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
 
     }
 

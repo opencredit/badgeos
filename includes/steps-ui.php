@@ -252,12 +252,13 @@ function badgeos_update_steps_ajax_handler() {
 		// This lets us dynamically update the Label field when steps are saved
 		$new_titles = array();
 
+		$order = 0;
+
 		// Loop through each of the created steps
 		foreach ( $_POST['steps'] as $step ) {
 
 			// Grab all of the relevant values of that step
 			$step_id          = $step['step_id'];
-			$order            = $step['order'];
 			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
 			$trigger_type     = $step['trigger_type'];
 			$achievement_type = $step['achievement_type'];
@@ -318,6 +319,8 @@ function badgeos_update_steps_ajax_handler() {
 
 			// Add the title to our AJAX return
 			$new_titles[$step_id] = stripslashes( $post_title );
+
+			$order++;
 
 		}
 

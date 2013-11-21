@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.7.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -214,6 +214,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.1 =
+* Fixed: Achievement step ordering
+* Fixed: Prevent duplicate stock achievement thumbnails per achievement type
+* Fixed: Bug with Credly Badge Builder API connection
+
 = 1.3.0 =
 * Added: Credly Badge Builder – Build your own unique badges directly from the post editor (requires Credly account).
 * Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
@@ -292,6 +297,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+* Fixed: Achievement step ordering
+* Fixed: Prevent duplicate stock achievement thumbnails per achievement type
+* Fixed: Bug with Credly Badge Builder API connection
 
 = 1.3.0 =
 * Added: Credly Badge Builder – Build your own unique badges directly from the achievement post editor in WordPress (requires free Credly account).
