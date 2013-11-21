@@ -55,15 +55,12 @@ class Credly_Badge_Builder {
 
 		// If we have a valid Credly API key
 		if ( $this->credly_api_key ) {
-
 			// Trade the key for a temp token
 			$response = wp_remote_post(
 				trailingslashit( $this->sdk_url ) . 'code',
 				array(
+					'user-agent' => 'WordPress/' . $wp_version . '; BadgeOS/' . BadgeOS::$version . '; ' . get_bloginfo( 'url' ),
 					'body' => array(
-						'headers' => array(
-							'user-agent' => 'WordPress/' . $wp_version . '; BadgeOS/' . BadgeOS::$version . '; ' . get_bloginfo( 'url' )
-						),
 						'access_token' => $this->credly_api_key
 					)
 				)
