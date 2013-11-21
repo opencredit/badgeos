@@ -76,7 +76,7 @@ jQuery(document).ready(function($) {
 			dataType: 'json',
 			success: function( response ) {
 				// Update all builder links on page
-				$('.badge-builder-link').attr( 'href', response.data.link );
+				$('.badge-builder-thickbox iframe').attr( 'src', response.data.link );
 			}
 		});
 	}
