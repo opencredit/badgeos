@@ -214,6 +214,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.1 =
+* Fixed: Achievement step ordering
+* Fixed: Prevent duplicate stock achievement thumbnails per achievement type
+* Fixed: Bug with Credly Badge Builder API connection
+
 = 1.3.0 =
 * Added: Credly Badge Builder – Build your own unique badges directly from the post editor (requires Credly account).
 * Added: badgeos_is_achievement() to check if a given $post or $post_id is a BadgeOS achievement.
@@ -292,6 +297,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+* Fixed: Achievement step ordering
+* Fixed: Prevent duplicate stock achievement thumbnails per achievement type
+* Fixed: Bug with Credly Badge Builder API connection
 
 = 1.3.0 =
 * Added: Credly Badge Builder – Build your own unique badges directly from the achievement post editor in WordPress (requires free Credly account).
