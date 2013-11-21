@@ -754,15 +754,28 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 			$file_array['tmp_name'] = '';
 		}
 
-		// Upload the image (and unlink if errored)
+		// Upload the image
 		$thumbnail_id = media_handle_sideload( $file_array, $post_id );
+
+		// If upload errored, unlink the image file
 		if ( is_wp_error( $thumbnail_id ) ) {
 			@unlink( $file_array['tmp_name'] );
+
+		// Otherwise, if the achievement type truly doesn't have
+		// a thumbnail already, set this as its thumbnail, too.
+		// We do this so that WP won't upload a duplicate version
+		// of this image for every single achievement of this type.
+		} elseif (
+			badgeos_is_achievement( $post_id )
+			&& is_object( $achievement_type )
+			&& ! get_post_thumbnail_id( $achievement_type->ID )
+		) {
+			set_post_thumbnail( $achievement_type->ID, $thumbnail_id );
 		}
 	}
 
-	// Finally, if we have a thumbnail, set the thumbnail for our achievement
-	if ( $thumbnail_id )
+	// Finally, if we have an image, set the thumbnail for our achievement
+	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) )
 		set_post_thumbnail( $post_id, $thumbnail_id );
 
 }
