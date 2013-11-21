@@ -51,6 +51,7 @@ class Credly_Badge_Builder {
 	 * @since 1.3.0
 	 */
 	public function fetch_temp_token() {
+		global $wp_version;
 
 		// If we have a valid Credly API key
 		if ( $this->credly_api_key ) {
@@ -60,6 +61,9 @@ class Credly_Badge_Builder {
 				trailingslashit( $this->sdk_url ) . 'code',
 				array(
 					'body' => array(
+						'headers' => array(
+							'user-agent' => 'WordPress/' . $wp_version . '; BadgeOS/' . BadgeOS::$version . '; ' . get_bloginfo( 'url' )
+						),
 						'access_token' => $this->credly_api_key
 					)
 				)
