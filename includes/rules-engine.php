@@ -130,6 +130,8 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
  */
 function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
+	global $wp_filters, $wp_version;
+
 	// Sanity Check: ensure we're working with an achievement post
 	if ( ! badgeos_is_achievement( $achievement_id ) )
 		return false;
@@ -154,8 +156,26 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 	// Available hook for unlocking any achievement of this achievement type
 	do_action( 'badgeos_unlock_' . $achievement_object->post_type, $user_id, $achievement_id, $this_trigger, $site_id, $args );
 
+	// Patch for WordPress to support recursive actions, specifically for badgeos_award_achievement
+	// Because global iteration is fun, assuming we can get this fixed for WordPress 3.9
+	$is_recursed_filter = ( 'badgeos_award_achievement' == current_filter() && version_compare( $wp_version, '3.9', '<' ) );
+	$current_key = null;
+
+	// Get current position
+	if ( $is_recursed_filter ) {
+		$current_key = key( $wp_filters[ 'badgeos_award_achievement' ] );
+	}
+
 	// Available hook to do other things with each awarded achievement
 	do_action( 'badgeos_award_achievement', $user_id, $achievement_id, $this_trigger, $site_id, $args );
+
+	if ( $is_recursed_filter ) {
+		reset( $wp_filters[ 'badgeos_award_achievement' ] );
+
+		while ( key( $wp_filters[ 'badgeos_award_achievement' ] ) !== $current_key ) {
+			next( $wp_filters[ 'badgeos_award_achievement' ] );
+		}
+	}
 
 }
 
