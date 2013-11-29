@@ -214,6 +214,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= alpha =
+* Added: Spanish language translation
+* Fixed: Corrected a recursion issue with the badgeos_award_achievement action hook
+* Fixed: Corrected an issue that prevented users from sending new submissions if previous submission was denied.
+* Fixed: Corrected an issue that prevented users from sending new submissions if they had earned the achievement (but not yet the maximum number of times).
+
 = 1.3.1 =
 * Fixed: Achievement step ordering
 * Fixed: Prevent duplicate stock achievement thumbnails per achievement type
@@ -297,6 +303,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= alpha =
+* Added: Spanish language translation
+* Fixed: Corrected a recursion issue with the badgeos_award_achievement action hook
+* Fixed: Corrected an issue that prevented users from sending new submissions if previous submission was denied.
+* Fixed: Corrected an issue that prevented users from sending new submissions if they had earned the achievement (but not yet the maximum number of times).
 
 = 1.3.1 =
 * Fixed: Achievement step ordering
