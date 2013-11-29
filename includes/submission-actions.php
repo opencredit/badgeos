@@ -694,6 +694,58 @@ function badgeos_check_if_user_has_nomination( $user_id = 0, $achievement_id = 0
 }
 
 /**
+ * Check if a user has access to the submission form for an achievement.
+ *
+ * @since  1.3.2
+ *
+ * @param  integer $user_id        User ID.
+ * @param  integer $achievement_id Achievement post ID.
+ * @return bool                    True if user has access, otherwise false.
+ */
+function badgeos_user_has_access_to_submission_form( $user_id = 0, $achievement_id = 0 ) {
+
+	// Assume the user has access
+	$has_access = true;
+
+	// If user is not logged in, they have no access
+	if ( ! absint( $user_id ) ) {
+		$has_access = false;
+	}
+
+	// If user cannot access achievement, they cannot submit anything
+	if ( $has_access && ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id ) ) {
+		$has_access = false;
+	}
+
+	// If the user has access, look for pending submissions
+	if ( $has_access ) {
+		$pending_submissions = get_posts( array(
+			'post_type'   => 'submission',
+			'author'      => absint( $user_id ),
+			'post_status' => 'publish',
+			'meta_query'  => array(
+				'relation' => 'AND',
+				array(
+					'key'   => '_badgeos_submission_achievement_id',
+					'value' => absint( $achievement_id ),
+					),
+				array(
+					'key'   => '_badgeos_submission_status',
+					'value' => 'pending',
+					),
+				),
+		) );
+
+		// If user has any pending submissions, they do not have access
+		if ( ! empty( $pending_submissions ) ) {
+			$has_access = false;
+		}
+	}
+
+	return apply_filters( 'badgeos_user_has_access_to_submission_form', $has_access, $user_id, $achievement_id );
+}
+
+/**
  * Get the nomination form
  * @param  array  $args The meta box arguemnts
  * @return void
