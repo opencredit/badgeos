@@ -308,26 +308,30 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
 function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = '', $args = array() ) {
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Assume we have access
 	$return = true;
 
 	// If the achievement is not published, we do not have access
-	if ( 'publish' != get_post_status( $achievement_id ) )
+	if ( 'publish' != get_post_status( $achievement_id ) ) {
 		$return = false;
+	}
 
 	// If we've exceeded the max earnings, we do not have acces
-	if ( $return && badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) )
+	if ( $return && badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) ) {
 		$return = false;
+	}
 
 	// If we have access, and the achievement has a parent...
 	if ( $return && $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) ) {
 
 		// If we don't have access to the parent, we do not have access to this
-		if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID, $this_trigger, $site_id, $args ) )
+		if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID, $this_trigger, $site_id, $args ) ) {
 			$return = false;
+		}
 
 		// If the parent requires sequential steps, confirm we've earned all previous steps
 		if ( $return && badgeos_is_achievement_sequential( $parent_achievement->ID ) ) {
