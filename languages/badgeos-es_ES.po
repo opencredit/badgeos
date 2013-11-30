@@ -1,0 +1,1485 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BadgeOS\n"
+"POT-Creation-Date: 2013-06-13 12:56-0500\n"
+"PO-Revision-Date: 2013-11-28 12:55+0100\n"
+"Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
+"Language-Team: Credly, LLC\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __;_e;_x\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../badgeos.php:153
+msgid "Badges"
+msgstr "Emblemas"
+
+#: ../badgeos.php:159
+msgid "Badge"
+msgstr "Emblema"
+
+#: ../badgeos.php:224
+msgid ""
+"Would you like to display this badge on social networks and add it to your "
+"lifelong badge collection?"
+msgstr ""
+"¿Le gustaría mostrar esta placa en las redes sociales y añadirla a su "
+"colección de insignias de toda la vida?"
+
+#: ../badgeos.php:225
+msgid "Yes, send to Credly"
+msgstr "Sí, enviar a Credly"
+
+#: ../badgeos.php:226
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../badgeos.php:227
+msgid "Share on Credly!"
+msgstr "¡Compartir en Credly! "
+
+#: ../badgeos.php:228
+msgid "Error:"
+msgstr "Error:"
+
+#: ../badgeos.php:229
+msgid "Error: Timed out"
+msgstr "Error: Tiempo agotado"
+
+#: ../includes/achievement-functions.php:622
+msgid "People who have earned this:"
+msgstr "Las personas que han obtenido este:"
+
+#: ../includes/admin-settings.php:61
+msgid "Please enter a valid email address in the username field."
+msgstr ""
+"Por favor entra una dirección de email válida en el campo nombre de usuario."
+
+#: ../includes/admin-settings.php:64
+msgid "Please enter a password."
+msgstr "Por favor introduzca la contraseña."
+
+#: ../includes/admin-settings.php:113
+msgid ""
+"There was an error getting a Credly API Key. Please check your username and "
+"password."
+msgstr ""
+"Hubo un error al obtener una clave de API Credly. Por favor verifique su "
+"nombre de usuario y contraseña."
+
+#: ../includes/admin-settings.php:169
+msgid "BadgeOS Settings"
+msgstr "Configuración de BadgeOS "
+
+#: ../includes/admin-settings.php:175
+msgid "Minimum Role to Administer BadgeOS plugin: "
+msgstr "Rol mínima para Administrar el plugin BadgeOS:"
+
+#: ../includes/admin-settings.php:178
+msgid "Administrator"
+msgstr "Administrador"
+
+#: ../includes/admin-settings.php:179
+msgid "Editor"
+msgstr "Editor"
+
+#: ../includes/admin-settings.php:180
+msgid "Author"
+msgstr "Autor"
+
+#: ../includes/admin-settings.php:181
+msgid "Contributor"
+msgstr "Contribuidor"
+
+#: ../includes/admin-settings.php:182
+msgid "Subscriber"
+msgstr "Subscriptor"
+
+#: ../includes/admin-settings.php:186
+msgid "Send email when submissions/nominations are received:"
+msgstr "Enviar email cuando se reciban comunicaciones/nominaciones:"
+
+#: ../includes/admin-settings.php:189 ../includes/admin-settings.php:198
+msgid "Enabled"
+msgstr "Habilitados"
+
+#: ../includes/admin-settings.php:190 ../includes/admin-settings.php:197
+msgid "Disabled"
+msgstr "Desabilitados"
+
+#: ../includes/admin-settings.php:194
+msgid "Debug Mode:"
+msgstr "Modo de depuración:"
+
+#: ../includes/admin-settings.php:205 ../includes/admin-settings.php:422
+msgid "Save Settings"
+msgstr "Salvar configuración"
+
+#: ../includes/admin-settings.php:224
+msgid "BadgeOS Add-Ons"
+msgstr "BadgeOS Add-Ons"
+
+#: ../includes/admin-settings.php:265
+msgid "BadgeOS Help and Support"
+msgstr "BadgeOS Ayuda y Soporte"
+
+#: ../includes/admin-settings.php:266
+msgid "About BadgeOS"
+msgstr "Sobre BadgeOS"
+
+#: ../includes/admin-settings.php:267
+#, php-format
+msgid ""
+"BadgeOS&trade; is plugin to WordPress that allows your site's users to "
+"complete tasks, demonstrate achievement, and earn badges. You define the "
+"Achievement types, organize your requirements any way you like, and choose "
+"from a range of options to determine whether each task or requirement has "
+"been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through "
+"out-of-the-box integration of the \"Open Credit\" API by <a href=\"%s\" "
+"target=\"_blank\">Credly</a>, the free web service for issuing, earning and "
+"sharing badges."
+msgstr ""
+"BadgeOS&trade; es un plugin para WordPress que permite a los usuarios de su "
+"sitio web completar las tareas, demostrar logros y ganar insignias. Usted "
+"define los tipos de logros, organizar sus requisitos y elegir entre una gama "
+"de opciones para determinar si se ha logrado cada tarea o requisito. Logros "
+"conseguidos en BadgeOS son Mozilla OBI compatible a través de la integración "
+"out-of-the-box de la API \"Open Credit\" de <a href=\"%s\" target=\"_blank"
+"\">Credly</a>, el servicio web gratuito para la emisión, ganado y "
+"compartición de insignias."
+
+#: ../includes/admin-settings.php:268
+msgid ""
+"BadgeOS is extremely extensible. Check out examples of what we've built with "
+"it, and stay connected to the project site for updates, add-ins and news. "
+"Share your ideas and code improvements on our github site so we can keep "
+"making BadgeOS better for everyone."
+msgstr ""
+"BadgeOS es altamente extensible. Echa un vistazo a los ejemplos que hemos "
+"construido con ella  y manténgase en contacto con el sitio del proyecto para "
+"las actualizaciones, complementos y noticias. Comparta sus ideas y mejoras "
+"de código en nuestro sitio github para que podamos seguir haciendo BadgeOS "
+"mejor para todos."
+
+#: ../includes/admin-settings.php:270
+msgid "Help / Support"
+msgstr "Ayuda/Soporte"
+
+#: ../includes/admin-settings.php:271
+msgid ""
+"For support on using BadgeOS or to suggest feature enhancements, visit the "
+"<a href=\"http://badgeos.org\" target=\"_blank\">BadgeOS site</a>.  The "
+"BadgeOS team does perform custom development that extends the BadgeOS "
+"platform in some incredibly powerful ways. <a href=\"http://badgeos.org/\" "
+"target=\"_blank\">Contact us</a> with inquiries. See examples of enhanced "
+"BadgeOS projects."
+msgstr ""
+"Para obtener asistencia sobre el uso BadgeOS o sugerir mejoras de "
+"características, visite el <a href=\"http://badgeos.org\" target=\"_blank"
+"\">BadgeOS site</a>. El equipo BadgeOS realiza desarrollos a medida que se "
+"extiende a la plataforma BadgeOS de alguna manera increíblemente poderosa. "
+"<a href=\"http://badgeos.org/\" target=\"_blank\">Contáctenos</a> con "
+"preguntas. Ver ejemplos de proyectos BadgeOS mejorados."
+
+#: ../includes/admin-settings.php:272
+msgid ""
+"Please submit bugs or issues to our Github site for the BadgeOS Project."
+msgstr ""
+"Por favor, informar sobre fallos o problemas con nuestro sitio Github para "
+"el Proyecto BadgeOS."
+
+#: ../includes/admin-settings.php:274
+msgid "Shortcodes"
+msgstr "Accesos directos"
+
+#: ../includes/admin-settings.php:275
+msgid ""
+"With BadgeOS activated, the following shortcodes can be placed on any page "
+"or post within WordPress to expose a variety of BadgeOS functions."
+msgstr ""
+"Con BadgeOS activado, los siguientes códigos cortos se pueden colocar en "
+"cualquier página o post en WordPress para exponer una variedad de funciones "
+"BadgeOS."
+
+#: ../includes/admin-settings.php:277
+msgid "Display a single achievement on any post or page."
+msgstr "Mostrar un solo logro en cada archivo o página"
+
+#: ../includes/admin-settings.php:280 ../includes/admin-settings.php:296
+#: ../includes/admin-settings.php:315 ../includes/admin-settings.php:330
+#: ../includes/admin-settings.php:345 ../includes/admin-settings.php:366
+msgid "Parameters"
+msgstr "Parámetros"
+
+#: ../includes/admin-settings.php:284
+msgid "id"
+msgstr "id"
+
+#: ../includes/admin-settings.php:284
+msgid "The ID of the achievement to display."
+msgstr "El ID del logro para mostrar."
+
+#: ../includes/admin-settings.php:288 ../includes/admin-settings.php:307
+#: ../includes/admin-settings.php:323 ../includes/admin-settings.php:338
+#: ../includes/admin-settings.php:358 ../includes/admin-settings.php:377
+msgid "Example"
+msgstr "Ejemplo"
+
+#: ../includes/admin-settings.php:293
+msgid "Output a list of achievements of any type on any post or page."
+msgstr ""
+"Salida de una lista de logros de cualquier tipo en cualquier puesto de la "
+"página."
+
+#: ../includes/admin-settings.php:300
+msgid "type"
+msgstr "tipo"
+
+#: ../includes/admin-settings.php:300
+msgid "Custom post type of achievements to list.  Default: all"
+msgstr ""
+"Tipo de mensaje personalizado de logros para mostrar. Por defecto: todas"
+
+#: ../includes/admin-settings.php:301
+msgid "limit"
+msgstr "limite"
+
+#: ../includes/admin-settings.php:301
+msgid "Number of achievements to display per page.  Default: 10"
+msgstr "Número de logros a mostrar por página. Por defecto: 10"
+
+#: ../includes/admin-settings.php:302
+msgid "show_filter"
+msgstr "show_filter"
+
+#: ../includes/admin-settings.php:302
+msgid "Display the filter options.  Default: true"
+msgstr "Mostrar las opciones de filtrado. Por defecto: activado"
+
+#: ../includes/admin-settings.php:303
+msgid "show_search"
+msgstr "show_search"
+
+#: ../includes/admin-settings.php:303 ../includes/admin-settings.php:352
+#: ../includes/admin-settings.php:373
+msgid "Display the search form.  Default: true"
+msgstr "Mostrar el formulario de búsqueda. Valor predeterminado: true"
+
+#: ../includes/admin-settings.php:312
+msgid ""
+"Display submissions or submission form for a given achievement. <strong>Note:"
+"</strong> Achievements will automatically display this on their single page "
+"if <strong>Earned By</strong> is set to <strong>Submission</strong>."
+msgstr ""
+"Visualizar presentaciones o formulario de presentación para un rendimiento "
+"dado. <strong>Nota:</strong> Los logros se mostrarán automáticamente en su "
+"página solo si <strong>Ganados Por</strong>está ajustado a<strong>Enviar</"
+"strong>."
+
+#: ../includes/admin-settings.php:319 ../includes/admin-settings.php:334
+msgid "The ID of the achievement to be awarded.  Default: current post ID"
+msgstr ""
+"El ID del logro que deberá adjudicarse. Por defecto: ID del post actual"
+
+#: ../includes/admin-settings.php:327
+msgid ""
+"Display nominations or nomination form for a given achievement. <strong>Note:"
+"</strong> Achievements will automatically display this on their single page "
+"if <strong>Earned By</strong> is set to <strong>Nomination</strong>."
+msgstr ""
+"Visualizar nominaciones o formulario de nominación para un rendimiento dado. "
+"<strong> Nota: </ strong>Los logros se mostrarán automáticamente en su "
+"página solo si <strong> Ganados Por </ strong> está ajustado a <strong> "
+"Enviar</ strong>."
+
+#: ../includes/admin-settings.php:342
+msgid "Generate a list of submissions on any post or page."
+msgstr "Genere una lista de peticiones sobre cualquier mensaje o página."
+
+#: ../includes/admin-settings.php:349
+msgid "Number of submissions to display per page.  Default: 10"
+msgstr "Número de peticiones mostradas por página. Valor por defecto: 10"
+
+#: ../includes/admin-settings.php:350 ../includes/admin-settings.php:371
+msgid "Which Approval Status type to show on initial page load.  Default: all"
+msgstr ""
+"Cuál Tipo de Aprobación mostrar en la carga de la primera página. Valor por "
+"defecto: todas"
+
+#: ../includes/admin-settings.php:351 ../includes/admin-settings.php:372
+msgid "Display the filter select input.  Default: true"
+msgstr "Mostrar el filtro de selección de entrada. Valor por Defecto: true"
+
+#: ../includes/admin-settings.php:353
+msgid "Display attachments connected to the submission.  Default: true"
+msgstr "Ver archivos adjuntos conectados con el envio. Valor por defecto: true"
+
+#: ../includes/admin-settings.php:354
+msgid "Display comments associated with the submission.  Default: true"
+msgstr "Mostrar comentarios asociados con el envio. Por Defecto: true"
+
+#: ../includes/admin-settings.php:363
+msgid "Generate a list of nominations on any post or page."
+msgstr "Genere una lista de nominaciones en cualquier post o página."
+
+#: ../includes/admin-settings.php:370
+msgid "Number of nominations to display per page.  Default: 10"
+msgstr "Número de nominaciones a mostrar por página. Por Defecto: 10"
+
+#: ../includes/admin-settings.php:394
+msgid "Credly Integration Settings"
+msgstr "Ajustes de Integración Credly"
+
+#: ../includes/admin-settings.php:402
+#, php-format
+msgid ""
+"<a href=\"%1$s\" target=\"_blank\">Credly</a> is a universal way for people "
+"to earn and showcase their achievements and badges. With Credly Integration "
+"enabled here, badges or achievements you create on this BadgeOS site can "
+"automatically be created on your Credly account. As select badges are earned "
+"using BadgeOS, the badge will automatically be issued via Credly to the "
+"earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla "
+"Backpack, their web site, blog, Credly profile or other location. Credly "
+"makes badge issuing and sharing fun and easy! <a href=\"%1$s\" target="
+"\"_blank\">Learn more</a>.  <br /><br />If you do not yet have a Credly "
+"account, <a href=\"%1$s\" target=\"_blank\">create one now</a>. It's free."
+msgstr ""
+".<a href=\"%1$s\" target=\"_blank\">Credly</a> es una manera universal para "
+"las personas de ganar y mostrar sus logros e insignias. Con la Integración "
+"de Credly habilitada aquí, las insignias o los logros que usted crea en este "
+"sitio BadgeOS puede ser creada automáticamente en su cuenta Credly. Mientras "
+"las insignias seleccionadas se ganan usando BadgeOS, la insignia será usada "
+"automáticamente vía Credly al ganador por lo que puede ser fácilmente "
+"compartida en Facebook, LinkedIn, Twitter, Mozilla Backpack, su sitio web, "
+"blog, perfil de Credly u otra posición.¡Credly hace el tema de las insignias "
+"divertido y fácil!<a href=\"%1$s\" target=\"_blank\">Ver más</a>. <br /><br /"
+"> Si usted no tiene una cuenta Credly aún, <a href=\"%1$s\" target=\"_blank"
+"\">créese una nueva</a>. Es gratis."
+
+#: ../includes/admin-settings.php:404
+msgid "Enable Badge Sharing via Credly: "
+msgstr "Habilitar compartir insignias vía Credly:"
+
+#: ../includes/admin-settings.php:406 ../includes/admin-settings.php:531
+#: ../includes/credly.php:818 ../includes/credly.php:830
+#: ../includes/credly.php:838 ../includes/credly.php:851
+msgid "No"
+msgstr "No"
+
+#: ../includes/admin-settings.php:407 ../includes/admin-settings.php:530
+#: ../includes/credly.php:817 ../includes/credly.php:829
+#: ../includes/credly.php:837 ../includes/credly.php:850
+msgid "Yes"
+msgstr "Si"
+
+#: ../includes/admin-settings.php:454
+msgid "Get Credly API Key"
+msgstr "Obtenga una Llave de API de Credly "
+
+#: ../includes/admin-settings.php:455
+msgid "Enter your Credly account username and password to access your API key."
+msgstr ""
+"Introduzca su nombre de usuario y contraseña para acceder a su llave de API "
+"de Credly."
+
+#: ../includes/admin-settings.php:456
+#, php-format
+msgid "Enter your %s to access your API key."
+msgstr "Ingrese su %s para acceder a su llave de API."
+
+#: ../includes/admin-settings.php:456
+msgid "Credly account username and password"
+msgstr "Nombre de usuario, y contraseña de la cuenta de Credly"
+
+#: ../includes/admin-settings.php:458
+msgid "Username: "
+msgstr "Nombre de Usuario:"
+
+#: ../includes/admin-settings.php:461
+msgid "Password: "
+msgstr "Contraseña:"
+
+#: ../includes/admin-settings.php:464 ../includes/admin-settings.php:484
+msgid "API Key: "
+msgstr "Llave del API"
+
+#: ../includes/admin-settings.php:468
+#, php-format
+msgid "Already have your API key? %s"
+msgstr "¿Ya tiene su llave de API? %s"
+
+#: ../includes/admin-settings.php:468
+msgid "Click here"
+msgstr "Clic aquí"
+
+#: ../includes/admin-settings.php:482
+msgid "Credly API Key"
+msgstr "Llave de API de Credly"
+
+#: ../includes/admin-settings.php:489
+msgid "Credly Field Mapping"
+msgstr "Asignación de Campos Credly"
+
+#: ../includes/admin-settings.php:490
+msgid ""
+"Customize which Credly fields for badge creation and issuing (listed on the "
+"left) match which WordPress and BadgeOS fields (listed to the right)."
+msgstr ""
+"Personalizar cuáles campos de Credly para la creación y emisión de insignias "
+"(listadas en la derecha) machean cuales campos de WordPress y BadgeOS "
+"(listados en la derecha)."
+
+#: ../includes/admin-settings.php:490
+msgid ""
+"When badges are created and issued, the info sent to Credly will rely on the "
+"global mapping found here. (Note: Visit the edit screen for each achievement "
+"you create in BadgeOS to further configure the sharing and Credly settings "
+"for that achievement.)"
+msgstr ""
+"Cuando se crean y emiten insignias, la información enviada a Credly "
+"dependerá del mapeo global que se encuentre aquí. (Nota: Visite la pantalla "
+"de edición de cada logro que se crea en BadgeOS para poder configurar aún "
+"más el intercambio y la configuración Credly por ese logro.)"
+
+#: ../includes/admin-settings.php:492
+msgid "Badge Title: "
+msgstr "Título de la Insignia:"
+
+#: ../includes/admin-settings.php:497
+msgid "Short Description: "
+msgstr "Pequeña Descripción:"
+
+#: ../includes/admin-settings.php:502
+msgid "Description: "
+msgstr "Descripción:"
+
+#: ../includes/admin-settings.php:507
+msgid "Criteria: "
+msgstr "Criterio:"
+
+#: ../includes/admin-settings.php:512
+msgid "Image: "
+msgstr "Imágen:"
+
+#: ../includes/admin-settings.php:517
+msgid "Testimonial: "
+msgstr "Testimonio:"
+
+#: ../includes/admin-settings.php:522
+msgid "Evidence: "
+msgstr "Evidencia:"
+
+#: ../includes/admin-settings.php:527
+msgid "Notify users of earned badge: "
+msgstr "Notificar a los usuarios que han ganado una insignia:"
+
+#: ../includes/ajax-functions.php:92
+#, php-format
+msgid "No completed %s to display at this time."
+msgstr "No completado %s para mostrar en este momento."
+
+#: ../includes/ajax-functions.php:94
+#, php-format
+msgid "No %s to display at this time."
+msgstr "No %s para mostrar en este momento."
+
+#: ../includes/ajax-functions.php:169
+msgid "Status Updated!"
+msgstr "¡Estado Actualizado!"
+
+#: ../includes/content-filters.php:127
+msgid "Original Submission"
+msgstr "Envio Original"
+
+#: ../includes/content-filters.php:130
+msgid "Date"
+msgstr "Fecha"
+
+#: ../includes/content-filters.php:133 ../includes/meta-boxes.php:148
+#: ../includes/meta-boxes.php:177 ../includes/submission-actions.php:152
+#: ../includes/submission-actions.php:178
+msgid "Status"
+msgstr "estado"
+
+#: ../includes/content-filters.php:351
+#, php-format
+msgid "%1$d Required %2$s"
+msgstr "%1$d Requerido%2$s"
+
+#: ../includes/content-filters.php:404
+#, php-format
+msgid "%d Points"
+msgstr "%d Puntos"
+
+#: ../includes/content-filters.php:439
+msgid "You have earned this achievement!"
+msgstr "¡Usted ya ha ganado este logro!"
+
+#: ../includes/credly.php:92
+#, php-format
+msgid ""
+"<div class=\"updated\"><p>Note: Credly Integration is turned on, but you "
+"must first <a href=\"%s\">enter your Credly credentials</a> to allow earned "
+"badges to be shared and by recipients (or Disable Credly Integration to hide "
+"this notice).</p></div>"
+msgstr ""
+"<div class=\"updated\"><p>Nota: Credly está activado, pero usted debe "
+"primero <a href=\"%s\">entrar sus credenciales Credly</a> para permitir a "
+"las insignias ganadas ser compartido y por recipientes (o Deshabilite la "
+"Integración de Credly para ocultar este mensaje).</p></div>"
+
+#: ../includes/credly.php:438
+msgid "Badge Sharing"
+msgstr "Insignias Compartidas"
+
+#: ../includes/credly.php:439
+msgid "Send eligible earned badges to Credly"
+msgstr "Enviar insignias ganadas elegibles para Credly"
+
+#: ../includes/credly.php:783
+msgid "Badge Sharing Options"
+msgstr "Opciones para compartir Insignias"
+
+#: ../includes/credly.php:812
+msgid ""
+"This setting makes the earned badge for this achievement sharable via Credly "
+"on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, "
+"or the badge earner's own blog or site."
+msgstr ""
+"Esta configuración hace que la insignia ganada por este logro compartida a "
+"través Credly en las redes sociales, como Facebook, Twitter, LinkedIn, "
+"Mozilla Mochila o su propio blog o sitio de del ganador de la insignia."
+
+#: ../includes/credly.php:812
+#, php-format
+msgid "<a href=\"%s\">Configure global settings</a> for Credly integration."
+msgstr ""
+"<a href=\"%s\">Ajustes de la configuración global</a> para la integración "
+"con Credly."
+
+#: ../includes/credly.php:814
+msgid "Send to Credly when earned"
+msgstr "Enviar a Credly cuando se ha ganado"
+
+#: ../includes/credly.php:826
+msgid "Include Evidence"
+msgstr "Incluye Evidencias"
+
+#: ../includes/credly.php:834
+msgid "Include Testimonial"
+msgstr "Incluye Testimonios"
+
+#: ../includes/credly.php:842
+msgid "Expiration ( In days; 0 = never )"
+msgstr "Expira (en días; 0=nunca)"
+
+#: ../includes/credly.php:847
+msgid "Allow Badge to be Given by Others"
+msgstr "Permitir compartir insignias dadas por otros"
+
+#: ../includes/credly.php:855
+msgid "Credly Category Search"
+msgstr "Búsqueda de Categoría de Credly "
+
+#: ../includes/credly.php:861
+msgid "Credly Badge Category"
+msgstr "Categoría de Insignia de Credly "
+
+#: ../includes/credly.php:868
+msgid "Credly Badge ID"
+msgstr "ID de Insignia de Credly "
+
+#: ../includes/credly.php:1043
+msgid "&mdash; Select Field &mdash;"
+msgstr "&mdash; Seleccionar campo &mdash;"
+
+#: ../includes/meta-boxes.php:33
+msgid "Achievement Type Data"
+msgstr "Tipo de Datos del logro"
+
+#: ../includes/meta-boxes.php:40
+msgid "Plural Name"
+msgstr "Nombre Plural"
+
+#: ../includes/meta-boxes.php:41
+msgid "The plural name for this achievement (Title is singular name)."
+msgstr "El nombre plural para este logro (título es el nombre singular)."
+
+#: ../includes/meta-boxes.php:46
+msgid "Show in Menu?"
+msgstr "¿Mostrar en el Menú?"
+
+#: ../includes/meta-boxes.php:47
+msgid "Yes, show this achievement in the BadgeOS menu."
+msgstr "Sí, mostrar este logro en el menú BadgeOS."
+
+#: ../includes/meta-boxes.php:52
+msgid "Default Badge Image"
+msgstr "Imagen Por defecto de Insignia"
+
+#: ../includes/meta-boxes.php:53
+msgid ""
+"To set a default image, use the <strong>Featured Image</strong> metabox to "
+"the right.  For best results, use a square .png file with a transparent "
+"background, at least 200x200 pixels."
+msgstr ""
+"Para establecer una imagen predeterminada, utilice la meta caja  <strong> "
+"Foto principal </ strong> a la derecha. Para obtener mejores resultados, "
+"utilice un archivo png cuadrado. Con un fondo transparente, por lo menos "
+"200x200 píxeles."
+
+#: ../includes/meta-boxes.php:63
+msgid "Achievement Data"
+msgstr "Datos del Logro"
+
+#: ../includes/meta-boxes.php:70
+msgid "Upload Badge Image"
+msgstr "Subir Imagen de Insignia"
+
+#: ../includes/meta-boxes.php:71
+#, php-format
+msgid ""
+"<p>To set an image use the <strong>Featured Image</strong> metabox to the "
+"right.  For best results, use a square .png file with a transparent "
+"background, at least 200x200 pixels.</p><p>If no image is specified, this "
+"achievement will default to the <a href=\"%s\">Achievement Type's</a> "
+"featured image.</p>"
+msgstr ""
+"<p>Para establecer una imagen utilice la meta caja <strong>Foto Principal</"
+"strong> a la derecha. Para obtener los mejores resultados, utilice un "
+"cuadrado. Png con un fondo transparente, por lo menos 200x200 pixeles.</"
+"p><p>Si no se especifica una imagen, este logro será por defecto la imagen "
+"destacada <a href=\"%s\">Tipos de Logros</a></p>"
+
+#: ../includes/meta-boxes.php:76
+msgid "Points Awarded"
+msgstr "Puntos Otorgados"
+
+#: ../includes/meta-boxes.php:77
+msgid ""
+"Points awarded for earning this achievement (optional).  Leave empty if no "
+"points are awarded."
+msgstr ""
+"Puntos concedidos para ganar este logro (opcional). Dejar en blanco si no se "
+"otorgan puntos."
+
+#: ../includes/meta-boxes.php:82
+msgid "Earned By:"
+msgstr "Ganado por:"
+
+#: ../includes/meta-boxes.php:83
+msgid "How this achievement can be earned."
+msgstr "¿Cómo este logro se puede conseguir?"
+
+#: ../includes/meta-boxes.php:96
+msgid "Minimum Points Requried"
+msgstr "Mínimo de Puntos Requeridos"
+
+#: ../includes/meta-boxes.php:97
+msgid "Fewest number of points required for earning this achievement."
+msgstr "Menor cantidad de número de puntos necesarios para ganar este logro."
+
+#: ../includes/meta-boxes.php:102
+msgid "Sequential Steps"
+msgstr "Pasos secuenciales"
+
+#: ../includes/meta-boxes.php:103
+msgid "Yes, steps must be completed in order."
+msgstr "Si, los pasos deben ser completados en orden"
+
+#: ../includes/meta-boxes.php:108
+msgid "Show Earners"
+msgstr "Mostrar ganador"
+
+#: ../includes/meta-boxes.php:109
+msgid "Yes, display a list of users who have earned this achievement."
+msgstr "Si, mostrar la lista de usuarios que han ganado este logro"
+
+#: ../includes/meta-boxes.php:114
+msgid "Congratulations Text"
+msgstr "Texto de Felicitación"
+
+#: ../includes/meta-boxes.php:115
+msgid ""
+"Displayed after achievement is earned. If sending to Credly, a great place "
+"for a testimonial for those who complete this achievement."
+msgstr ""
+"Mostrado luego de que el logro es ganado. So se envía a Credly, un buen "
+"lugar para un testimonio para aquellos que completen este logro."
+
+#: ../includes/meta-boxes.php:120
+msgid "Maximum Earnings"
+msgstr "Ganancias Máximas"
+
+#: ../includes/meta-boxes.php:121
+msgid ""
+"Number of times a user can earn this badge (default, if blank: infinite)"
+msgstr ""
+"Número de veces que un usuario puede ganar esta insignia (por defecto, si "
+"está en blanco: infinito)"
+
+#: ../includes/meta-boxes.php:126
+msgid "Hidden?"
+msgstr "¿Oculto?"
+
+#: ../includes/meta-boxes.php:141
+msgid "Submission Data"
+msgstr "Enviar Datos"
+
+#: ../includes/meta-boxes.php:149 ../includes/meta-boxes.php:178
+msgid "Approve or Deny this entry."
+msgstr "Aprobar o Denegar esta entrada."
+
+#: ../includes/meta-boxes.php:159 ../includes/meta-boxes.php:200
+msgid "Achievement ID to Award"
+msgstr "ID del Logro a Otorgar"
+
+#: ../includes/meta-boxes.php:160 ../includes/meta-boxes.php:201
+msgid "View Achievement"
+msgstr "Ver Logro"
+
+#: ../includes/meta-boxes.php:170
+msgid "Nomination Data"
+msgstr "Fecha de Nominación"
+
+#: ../includes/meta-boxes.php:188
+msgid "Nominee"
+msgstr "Nominación"
+
+#: ../includes/meta-boxes.php:194
+msgid "Nominated By"
+msgstr "Nominado Por"
+
+#: ../includes/post-types.php:23 ../includes/post-types.php:29
+#: ../includes/post-types.php:35
+msgid "Achievement Types"
+msgstr "Tipos de Logro"
+
+#: ../includes/post-types.php:24
+msgid "Achievement Type"
+msgstr "Tipo de Logro"
+
+#: ../includes/post-types.php:25 ../includes/post-types.php:56
+#: ../includes/post-types.php:88 ../includes/post-types.php:120
+#: ../includes/post-types.php:151 ../includes/post-types.php:229
+msgid "Add New"
+msgstr "Adicionar Nuevo"
+
+#: ../includes/post-types.php:26
+msgid "Add New Achievement Type"
+msgstr "Adicionar Nuevo Tipo de Logro"
+
+#: ../includes/post-types.php:27
+msgid "Edit Achievement Type"
+msgstr "Modificar Tipo de Logro"
+
+#: ../includes/post-types.php:28
+msgid "New Achievement Type"
+msgstr "Nuevo Tipo de Logro"
+
+#: ../includes/post-types.php:30
+msgid "View Achievement Type"
+msgstr "Mostrar Tipos de Logros"
+
+#: ../includes/post-types.php:31
+msgid "Search Achievement Types"
+msgstr "Buscar Tipos de Logros"
+
+#: ../includes/post-types.php:32
+msgid "No achievement types found"
+msgstr "No se han encontrado tipos de logros"
+
+#: ../includes/post-types.php:33
+msgid "No achievement types found in Trash"
+msgstr "No se han encontrado tipos de logros en la papelera de reciclaje"
+
+#: ../includes/post-types.php:54 ../includes/post-types.php:60
+#: ../includes/post-types.php:66
+msgid "Steps"
+msgstr "Pasos"
+
+#: ../includes/post-types.php:55
+msgid "Step"
+msgstr "Paso"
+
+#: ../includes/post-types.php:57 ../includes/steps-ui.php:78
+msgid "Add New Step"
+msgstr "Adicionar Nuevo Paso"
+
+#: ../includes/post-types.php:58
+msgid "Edit Step"
+msgstr "Editar Paso"
+
+#: ../includes/post-types.php:59
+msgid "New Step"
+msgstr "Nuevo Paso"
+
+#: ../includes/post-types.php:61
+msgid "View Step"
+msgstr "Mostrar Paso"
+
+#: ../includes/post-types.php:62
+msgid "Search Steps"
+msgstr "Buscar Pasos"
+
+#: ../includes/post-types.php:63
+msgid "No steps found"
+msgstr "No se han encontrado pasos"
+
+#: ../includes/post-types.php:64
+msgid "No steps found in Trash"
+msgstr "No se han encontrado pasos en la papelera"
+
+#: ../includes/post-types.php:86 ../includes/post-types.php:92
+#: ../includes/post-types.php:98
+msgid "Submissions"
+msgstr "Envios"
+
+#: ../includes/post-types.php:87
+msgid "Submission"
+msgstr "Envio"
+
+#: ../includes/post-types.php:89
+msgid "Add New Submission"
+msgstr "Adicionar Nuevo Envio"
+
+#: ../includes/post-types.php:90
+msgid "Edit Submission"
+msgstr "Editar Envio"
+
+#: ../includes/post-types.php:91
+msgid "New Submission"
+msgstr "Nuevo Envio"
+
+#: ../includes/post-types.php:93
+msgid "View Submission"
+msgstr "Mostrar Envio"
+
+#: ../includes/post-types.php:94
+msgid "Search Submissions"
+msgstr "Buscar Envio"
+
+#: ../includes/post-types.php:95
+msgid "No submissions found"
+msgstr "No se han encontrado envios"
+
+#: ../includes/post-types.php:96
+msgid "No submissions found in Trash"
+msgstr "No se han encontrado envíos en la papelera de reciclaje"
+
+#: ../includes/post-types.php:118 ../includes/post-types.php:124
+#: ../includes/post-types.php:130
+msgid "Nominations"
+msgstr "Nominaciones"
+
+#: ../includes/post-types.php:119
+msgid "Nomination"
+msgstr "Nominación"
+
+#: ../includes/post-types.php:121
+msgid "Add New Nomination"
+msgstr "Adicionar Nueva Nominación"
+
+#: ../includes/post-types.php:122
+msgid "Edit Nomination"
+msgstr "Modificar Nominación"
+
+#: ../includes/post-types.php:123
+msgid "New Nomination"
+msgstr "Nueva Nominación"
+
+#: ../includes/post-types.php:125
+msgid "View Nomination"
+msgstr "Mostrar Nominación"
+
+#: ../includes/post-types.php:126
+msgid "Search Nominations"
+msgstr "Buscando Nominaciones"
+
+#: ../includes/post-types.php:127
+msgid "No nominations found"
+msgstr "No se encontraron nominaciones"
+
+#: ../includes/post-types.php:128
+msgid "No nominations found in Trash"
+msgstr "No se encontraron nominaciones en la papelera de reciclaje"
+
+#: ../includes/post-types.php:149 ../includes/post-types.php:155
+#: ../includes/post-types.php:161
+msgid "Log Entries"
+msgstr "Entradas en el Log"
+
+#: ../includes/post-types.php:150
+msgid "Log Entry"
+msgstr "Entrada de Log"
+
+#: ../includes/post-types.php:152
+msgid "Add New Log Entry"
+msgstr "Adicionar nueva Entrada en el Log"
+
+#: ../includes/post-types.php:153
+msgid "Edit Log Entry"
+msgstr "Editar Entrada del Log"
+
+#: ../includes/post-types.php:154
+msgid "New Log Entry"
+msgstr "Nueva Entrada en el Log"
+
+#: ../includes/post-types.php:156
+msgid "View Log Entries"
+msgstr "Mostrar las Entradas en el Log"
+
+#: ../includes/post-types.php:157
+msgid "Search Log Entries"
+msgstr "Buscar Entradas en el Log"
+
+#: ../includes/post-types.php:158
+msgid "No Log Entries found"
+msgstr "No se han encontrado Entradas en el Log"
+
+#: ../includes/post-types.php:159
+msgid "No Log Entries found in Trash"
+msgstr "No se han encontrado Entradas en el Log en la papelera de reciclaje"
+
+#: ../includes/post-types.php:230
+#, php-format
+msgid "Add New %s"
+msgstr "Adicionar Nuevo %s"
+
+#: ../includes/post-types.php:231
+#, php-format
+msgid "Edit %s"
+msgstr "Modificar %s"
+
+#: ../includes/post-types.php:232
+#, php-format
+msgid "New %s"
+msgstr "Nuevo %s"
+
+#: ../includes/post-types.php:234
+#, php-format
+msgid "View %s"
+msgstr "Mostrar %s"
+
+#: ../includes/post-types.php:235
+#, php-format
+msgid "Search %s"
+msgstr "Buscar %s"
+
+#: ../includes/post-types.php:236
+#, php-format
+msgid "No %s found"
+msgstr "No se encontró %s "
+
+#: ../includes/post-types.php:237
+#, php-format
+msgid "No %s found in Trash"
+msgstr "No se encontró %s en la papelera de reciclaje"
+
+#: ../includes/shortcodes.php:169
+msgid "Nomination saved successfully."
+msgstr "Nominación guardada satisfactoriamente."
+
+#: ../includes/shortcodes.php:179
+msgid "You must be logged in to post a nomination."
+msgstr "Usted debe estar logueado para escribir una nominación."
+
+#: ../includes/shortcodes.php:198
+msgid "Submission saved successfully."
+msgstr "Presentación guardada correctamente"
+
+#: ../includes/shortcodes.php:208
+msgid "You must be logged in to post a submission."
+msgstr "Usted debe estar logueado para enviar un post."
+
+#: ../includes/steps-ui.php:34
+msgid "Required Steps"
+msgstr "Pasos requeridos"
+
+#: ../includes/steps-ui.php:68
+msgid ""
+"Define the required \"steps\" for this achievement to be considered "
+"complete. Use the \"Label\" field to optionally customize the titles of each "
+"step."
+msgstr ""
+"Definir el \"paso\" requerido para que este logro se considere completado. "
+"Utilice la \"Etiqueta\" campo de personalizar para personalizar los títulos "
+"de cada paso."
+
+#: ../includes/steps-ui.php:79
+msgid "Save All Steps"
+msgstr "Salvar Todos los Pasos"
+
+#: ../includes/steps-ui.php:102
+msgid "Delete"
+msgstr "Eliminar"
+
+#: ../includes/steps-ui.php:106
+msgid "Require"
+msgstr "Requiere"
+
+#: ../includes/steps-ui.php:138
+msgid "time(s)."
+msgstr "tiempo(s)."
+
+#: ../includes/steps-ui.php:267
+#, php-format
+msgid "any %s"
+msgstr "cualquier %s"
+
+#: ../includes/steps-ui.php:272
+#, php-format
+msgid "all %s"
+msgstr "todos %s"
+
+#: ../includes/steps-ui.php:306
+#, php-format
+msgid "Earn %1$s %2$s."
+msgstr "Gane %1$s %2$s."
+
+#: ../includes/submission-actions.php:150
+#: ../includes/submission-actions.php:175
+msgid "Content"
+msgstr "Contenido"
+
+#: ../includes/submission-actions.php:176
+#: ../includes/p2p/p2p-core/side.php:236
+msgid "User"
+msgstr "Usuario"
+
+#: ../includes/submission-actions.php:206
+#: ../includes/submission-actions.php:245
+msgid "Approve"
+msgstr "Aprobar"
+
+#: ../includes/submission-actions.php:207
+#: ../includes/submission-actions.php:245
+msgid "Deny"
+msgstr "Denegar"
+
+#: ../includes/submission-actions.php:218
+msgid "pending"
+msgstr "pendientes"
+
+#: ../includes/submission-actions.php:245
+#: ../includes/submission-actions.php:1173
+msgid "Pending"
+msgstr "Pendientes"
+
+#: ../includes/submission-actions.php:251
+msgid "Show All Statuses"
+msgstr "Mostrar Todos los Estados"
+
+#: ../includes/submission-actions.php:456
+#, php-format
+msgid "Comment on Submission (#%1$d)"
+msgstr "Comentar en envío (#%1$d)"
+
+#: ../includes/submission-actions.php:457
+#: ../includes/submission-actions.php:696
+msgid "Attachment:"
+msgstr "Adjuntos:"
+
+#: ../includes/submission-actions.php:458
+msgid "Submit Comment"
+msgstr "Enviar Comentarios"
+
+#: ../includes/submission-actions.php:565
+#, php-format
+msgid "Comments for Submission (#%1$d)"
+msgstr "Comentarios para la Presentación  (#%1$d)"
+
+#: ../includes/submission-actions.php:654
+msgid "Nomination Form"
+msgstr "Formulario de Nominación"
+
+#: ../includes/submission-actions.php:655
+#: ../includes/submission-actions.php:697
+msgid "Submit"
+msgstr "Presentar"
+
+#: ../includes/submission-actions.php:672
+msgid "User to nominate"
+msgstr "Usuario a nombrar"
+
+#: ../includes/submission-actions.php:675
+msgid "Reason for nomination"
+msgstr "Razones para nombrar"
+
+#: ../includes/submission-actions.php:695
+msgid "Submission Form"
+msgstr "Formulario de Presentación"
+
+#: ../includes/submission-actions.php:744
+msgid "You must be logged in to see results."
+msgstr "Debe estar registrado para ver los resultados."
+
+#: ../includes/submission-actions.php:947
+#, php-format
+msgid "Submission: \"%1$s\" (#%2$d)"
+msgstr "Presentación: \"%1$s\" (#%2$d)"
+
+#: ../includes/submission-actions.php:952
+msgid "Author:"
+msgstr "Autor:"
+
+#: ../includes/submission-actions.php:953
+msgid "Date:"
+msgstr "Fecha:"
+
+#: ../includes/submission-actions.php:955
+msgid "Achievement:"
+msgstr "Logro:"
+
+#: ../includes/submission-actions.php:957
+#: ../includes/submission-actions.php:1009
+msgid "Status:"
+msgstr "Estado:"
+
+#: ../includes/submission-actions.php:998
+#, php-format
+msgid "%1$s nominated for %2$s"
+msgstr "%1$s nominados para %2$s"
+
+#: ../includes/submission-actions.php:1041
+msgid "Attachments:"
+msgstr "Adjuntos:"
+
+#: ../includes/submission-actions.php:1069
+#, php-format
+msgid "%1$s - uploaded %2$s by %3$s"
+msgstr "%1$s - subido %2$s por %3$s"
+
+#: ../includes/submission-actions.php:1100
+#, php-format
+msgid "%1$s by %2$s"
+msgstr "%1$s por %2$s"
+
+#: ../includes/submission-actions.php:1159
+msgid "Search:"
+msgstr "Buscar:"
+
+#: ../includes/submission-actions.php:1160
+#: ../includes/p2p/p2p-admin/box.php:123
+msgid "Search"
+msgstr "Buscar"
+
+#: ../includes/submission-actions.php:1170
+msgid "Filter:"
+msgstr "Filtro:"
+
+#: ../includes/submission-actions.php:1172
+msgid "All"
+msgstr "Todos"
+
+#: ../includes/submission-actions.php:1174
+msgid "Approved"
+msgstr "Aprobado"
+
+#: ../includes/submission-actions.php:1175
+msgid "Denied"
+msgstr "Denegado"
+
+#: ../includes/triggers.php:24
+msgid "Log in to Website"
+msgstr "Loguearse en el sitio web"
+
+#: ../includes/triggers.php:25
+msgid "Comment on a post"
+msgstr "Comentar un post"
+
+#: ../includes/triggers.php:26
+msgid "Publish a new post"
+msgstr "Publicar un nuevo post"
+
+#: ../includes/triggers.php:27
+msgid "Publish a new page"
+msgstr "Publicar una nueva página"
+
+#: ../includes/triggers.php:30
+msgid "Specific Achievement of Type"
+msgstr "Tipo de Logro Específico"
+
+#: ../includes/triggers.php:31
+msgid "Any Achievement of Type"
+msgstr "Cualquier Tipo de Logro"
+
+#: ../includes/triggers.php:32
+msgid "All Achievements of Type"
+msgstr "Todos los Tipos de Logros"
+
+#: ../includes/triggers.php:58
+#, php-format
+msgid "Unlocked a %s"
+msgstr "Desbloquear un %s"
+
+#: ../includes/triggers.php:59
+#, php-format
+msgid "Unlocked all %s"
+msgstr "Desbloquear todos %s"
+
+#: ../includes/triggers.php:103
+#, php-format
+msgid "%1$s triggered %2$s (%3$dx)"
+msgstr "%1$s desencadenado %2$s (%3$dx)"
+
+#: ../includes/user.php:159
+#, php-format
+msgid "%1$s awarded %2$s %3$s points for a new total of %4$s points"
+msgstr "%1$s concedidos %2$s %3$s puntos para un total de %4$s puntos"
+
+#: ../includes/user.php:161
+#, php-format
+msgid "%1$s earned %2$s points for a new total of %3$s points"
+msgstr "%1$s ganado %2$s puntos para un total de %3$s puntos"
+
+#: ../includes/user.php:215
+msgid "Earned Achievements"
+msgstr "Logros conseguidos"
+
+#: ../includes/user.php:219
+msgid "Earned Points"
+msgstr "Puntos conseguidos:"
+
+#: ../includes/user.php:222
+msgid ""
+"The user's points total. Entering a new total will automatically log the "
+"change and difference between totals."
+msgstr ""
+"El total de puntos del usuario.Entrando un nuevo total automáticamente "
+"logueará el cambio y la diferencia entre totales."
+
+#: ../includes/user.php:231 ../includes/user.php:337
+msgid "Image"
+msgstr "Imagen"
+
+#: ../includes/user.php:232 ../includes/p2p/p2p-admin/tools.php:64
+msgid "Name"
+msgstr "Nombre"
+
+#: ../includes/user.php:233 ../includes/user.php:339
+msgid "Action"
+msgstr "Acción"
+
+#: ../includes/user.php:250 ../includes/user.php:376
+msgid "Revoke Award"
+msgstr "Revocar Logro"
+
+#: ../includes/user.php:317
+msgid "Award an Achievement"
+msgstr "Adjudicar un logro"
+
+#: ../includes/user.php:321
+msgid "Select an Achievement Type to Award:"
+msgstr "Seleccione un tipo de Logro de adjudicación:"
+
+#: ../includes/user.php:340
+msgid "Awarded"
+msgstr "Premiado"
+
+#: ../includes/user.php:378
+#, php-format
+msgid "Award %s"
+msgstr "Premio %s"
+
+#: ../includes/user.php:387
+#, php-format
+msgid "No %s found."
+msgstr "%s no encontrado."
+
+#: ../includes/p2p/p2p-admin/box.php:44
+msgid "Are you sure you want to delete all connections?"
+msgstr "¿Está seguro que desea eliminar todas las conexiones?"
+
+#: ../includes/p2p/p2p-admin/box.php:200
+msgid "previous"
+msgstr "anterior"
+
+#: ../includes/p2p/p2p-admin/box.php:201
+msgid "next"
+msgstr "próximo"
+
+#: ../includes/p2p/p2p-admin/box.php:202
+msgid "of"
+msgstr "de"
+
+#: ../includes/p2p/p2p-admin/dropdown.php:108
+msgid "Filter"
+msgstr "Filtro"
+
+#: ../includes/p2p/p2p-admin/factory.php:88
+msgid " (from)"
+msgstr "(desde)"
+
+#: ../includes/p2p/p2p-admin/factory.php:89
+msgid " (to)"
+msgstr "(hasta)"
+
+#: ../includes/p2p/p2p-admin/fields.php:7
+msgid "Delete all connections"
+msgstr "Eliminar todas las conexiones"
+
+#: ../includes/p2p/p2p-admin/fields.php:16
+msgid "Delete connection"
+msgstr "Eliminar conexión"
+
+#: ../includes/p2p/p2p-admin/tools.php:7
+msgid "Connection Types"
+msgstr "Tipos de conexión"
+
+#: ../includes/p2p/p2p-admin/tools.php:41
+#, php-format
+msgid "<em>%s</em> is not a registered connection type."
+msgstr "<em>%s</em> no es un tipo de conexión registrado."
+
+#: ../includes/p2p/p2p-admin/tools.php:50
+#, php-format
+msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
+msgstr "Convertidas %1$s conexiones desde <em>%2$s</em> a <em>%3$s</em>."
+
+#: ../includes/p2p/p2p-admin/tools.php:65
+msgid "Information"
+msgstr "Información"
+
+#: ../includes/p2p/p2p-admin/tools.php:66
+msgid "Connections"
+msgstr "Conexiones"
+
+#: ../includes/p2p/p2p-admin/tools.php:74
+msgid "No connection types registered."
+msgstr "No hay conexiones "
+
+#: ../includes/p2p/p2p-admin/tools.php:76
+#, php-format
+msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
+msgstr "Para registrar un tipo de conexión, vea <a href=\"%s\">la wiki</a>."
+
+#: ../includes/p2p/p2p-admin/tools.php:93
+msgid "Convert to registered connection type:"
+msgstr "Convertir al tipo de conexión registrada:"
+
+#: ../includes/p2p/p2p-admin/tools.php:129
+msgid "Go"
+msgstr "Ir"
+
+#: ../includes/p2p/p2p-core/extra.php:16
+msgid "Posts 2 Posts"
+msgstr "Posts 2 Posts"
+
+#: ../includes/p2p/p2p-core/extra.php:17
+msgid "A list of posts connected to the current post"
+msgstr "Una lista de mensajes relacionados con el puesto actual"
+
+#: ../includes/p2p/p2p-core/extra.php:34
+msgid "Title:"
+msgstr "Título:"
+
+#: ../includes/p2p/p2p-core/extra.php:41
+msgid "Connection type:"
+msgstr "Tipo de conexión:"
+
+#: ../includes/p2p/p2p-core/extra.php:46
+msgid "Connection listing:"
+msgstr "Lista de conexión:"
+
+#: ../includes/p2p/p2p-core/extra.php:52
+msgid "connected"
+msgstr "Conectados"
+
+#: ../includes/p2p/p2p-core/extra.php:53
+msgid "related"
+msgstr "relacionados"
+
+#: ../includes/p2p/p2p-core/side.php:227
+msgid "Users"
+msgstr "Usuarios"
+
+#: ../includes/p2p/p2p-core/side.php:237
+msgid "Search Users"
+msgstr "Buscar Usuarios"
+
+#: ../includes/p2p/p2p-core/side.php:238
+msgid "No users found."
+msgstr "No se han encontrado usuarios."
+
+#: ../includes/p2p/p2p-core/type.php:102
+msgid "Create connections"
+msgstr "Crear Conexiones"
+
+#: ../includes/p2p/p2p-core/type.php:120
+#, php-format
+msgid "Connected %s"
+msgstr "Conectado %s"
+
+#: ../includes/p2p/scb/AdminPage.php:172
+msgid "Settings <strong>saved</strong>."
+msgstr "Ajustes <strong>salvados</strong>."
+
+#: ../includes/p2p/scb/AdminPage.php:185 ../includes/p2p/scb/AdminPage.php:196
+msgid "Save Changes"
+msgstr "Salvar Cambios"
+
+#: ../includes/p2p/scb/AdminPage.php:346
+msgid "Settings"
+msgstr "Ajustes"
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:9
+msgid "Display the Credly Credit Issuer badge"
+msgstr "Mostrar la insignia Credly Credit Issuer"
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:11
+msgid "BadgeOS Credly Credit Issuer"
+msgstr "Credly Credit Issuer de BadgeOS "
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:20
+msgid "Credly Profile URL"
+msgstr "URL del perfil Credly"
+
+#: ../includes/widgets/credly-credit-issuer-widget.php:43
+msgid "Credly Credit Issuer"
+msgstr "Credly Credit Issuer"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:9
+msgid "Displays all achievements earned by the logged in user"
+msgstr "Muestra todos los logros conseguidos por el usuario conectado"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:11
+msgid "BadgeOS Earned User Achievements"
+msgstr "Logros del Usuario ganados de BadgeOS "
+
+#: ../includes/widgets/earned-user-achievements-widget.php:22
+msgid "Title"
+msgstr "Título"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:23
+msgid "Number to Display (0 = all)"
+msgstr "Número a mostrar (0=all)"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:24
+msgid "Display user's total points"
+msgstr "Mostrar la cantidad de puntos total del usuario"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:54
+#, php-format
+msgid "My Total Points: %s"
+msgstr "Mis puntos totales: %s"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:112
+msgid "You must be logged in to view your earned achievements"
+msgstr "Debe estar registrado para ver los logros que han sido obtenidos"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:129
+msgid "Error: Sorry, nothing found."
+msgstr "Error: Lo siento, no he encontrado nada."
+
+#: ../includes/widgets/earned-user-achievements-widget.php:137
+msgid "Success: Sent to Credly!"
+msgstr "Éxito: ¡Enviado a Credly!"
+
+#: ../includes/widgets/earned-user-achievements-widget.php:142
+msgid "Error: Sorry, Send to Credly Failed."
+msgstr "Error: Lo siento, el envio a Credly ha fallado."
