@@ -477,7 +477,6 @@ class BadgeOS_Credly {
 		elseif ( '' != $password && $password_check ) {
 			$response = $credly_api->authenticate( $username, $password );
 
-			var_dump( $response );
 			if ( is_wp_error( $response ) ) {
 				$status = $response;
 
