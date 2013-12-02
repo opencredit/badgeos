@@ -710,7 +710,19 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
 	 */
 	global $badgeos_credly;
 
-	$status = $badgeos_credly->credly_check_api_key( $credly_settings[ 'api_key' ] );
+	$username_status = false;
+	$username_status_class = 'hidden';
+
+	if ( !empty( $credly_settings[ 'credly_user' ] ) ) {
+		$username_status = $badgeos_credly->credly_check_user( $credly_settings[ 'credly_user' ], '' );
+
+		if ( !is_wp_error( $username_status ) ) {
+			$username_status_class = 'valid';
+		}
+		else {
+			$username_status_class = 'invalid';
+		}
+	}
 ?>
 	<div id="credly-settings">
 		<h3><?php _e( 'Get Credly API Key', 'badgeos' ); ?></h3>
@@ -725,7 +737,10 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
 					<label for="credly_user"><?php _e( 'Username: ', 'badgeos' ); ?></label>
 				</th>
 				<td>
-					<input id="credly_user" type="text" name="credly_settings[credly_user]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'credly_user' ] ); ?>" style="max-width: 400px;" />
+					<input id="credly_user" type="text" name="credly_settings[credly_user]" size="30" value="<?php echo esc_attr( $credly_settings[ 'credly_user' ] ); ?>" autocomplete="off" />
+					<span id="credly_user_response" class="badgeos-license-status <?php echo $username_status_class; ?>" data-msg-valid="<?php esc_attr_e( 'Valid', 'badgeos' ); ?>" data-msg-validating="<?php esc_attr_e( 'Validating...', 'badgeos' ); ?>">
+						<?php echo '<strong>' . ( !is_wp_error( $username_status ) ? __( 'Valid', 'badgeos' ) : $username_status->get_error_message() ) . '</strong>'; ?>
+					</span>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -733,7 +748,10 @@ function badgeos_credly_options_no_api( $credly_settings = array() ) {
 					<label for="credly_password"><?php _e( 'Password: ', 'badgeos' ); ?></label>
 				</th>
 				<td>
-					<input id="credly_password" type="password" name="credly_settings[credly_password]" class="widefat" value="<?php echo esc_attr( $credly_settings[ 'credly_password' ] ); ?>" style="max-width: 400px;" />
+					<input id="credly_password" type="password" name="credly_settings[credly_password]" size="30" value="<?php echo esc_attr( $credly_settings[ 'credly_password' ] ); ?>" autocomplete="off" />
+					<span id="credly_password_response" class="badgeos-license-status hidden" data-msg-valid="<?php esc_attr_e( 'Valid', 'badgeos' ); ?>" data-msg-validating="<?php esc_attr_e( 'Validating...', 'badgeos' ); ?>">
+						<strong></strong>
+					</span>
 				</td>
 			</tr>
 			<tr valign="top" class="hidden">

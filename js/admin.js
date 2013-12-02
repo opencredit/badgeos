@@ -30,39 +30,47 @@ jQuery(document).ready(function($) {
 			$( '#credly-settings tr, #credly-settings .toggle' ).toggle();
 		} );
 
-		var old_api_key = $api_key.val();
+		var old_api_key = $api_key.val(),
+			$credly_user = $( '#credly_user' ),
+			$credly_password = $( '#credly_password' ),
+			$submit = $( '#submit' );
 
-		$api_key.on( 'change', function() {
-			var $api_key_response = $( '#api_key_response' ),
-				$api_key_response_message = $api_key_response.find( 'strong' );
+		function credly_user_check( $this, credly_action, is_username ) {
 
-			$api_key_response.removeClass( 'valid' ).removeClass( 'invalid' );
+			var $credly_user_response = $( '#' + $this.attr( 'id' ) + '_response' ),
+				$credly_user_response_message = $credly_user_response.find( 'strong' ),
+				credly_user = $credly_user.val(),
+				credly_password = $credly_password.val();
 
-			if ( '' != $api_key.val() ) {
-				$api_key_response.show();
-				$api_key_response_message.text( $api_key_response.data( 'msg-validating' ) );
+			$credly_user_response.removeClass( 'valid' ).removeClass( 'invalid' );
+
+			if ( 'api_key' == $this.attr( 'id' ) || ( '' != credly_user && ( is_username || '' != credly_password ) ) ) {
+				$credly_user_response.show();
+				$credly_user_response_message.text( $credly_user_response.data( 'msg-validating' ) );
+				$submit.prop( 'disabled', false );
 
 				$.ajax( ajaxurl, {
 					type: 'POST',
 					dataType: 'json',
 					data: {
-						action: 'credly_check_api_key',
-						api_key: $api_key.val()
+						action: credly_action,
+						api_key: $api_key.val(),
+						credly_is_username: is_username,
+						credly_user: credly_user,
+						credly_password: credly_password
 					},
 					success: function( response ) {
 						if ( response.success ) {
-							$api_key_response.addClass( 'valid' );
-							$api_key_response_message.text( $api_key_response.data( 'msg-valid' ) );
+							$credly_user_response.addClass( 'valid' );
+							$credly_user_response_message.text( $credly_user_response.data( 'msg-valid' ) );
 
-							if ( 0 < response.message.length ) {
+							if ( 'api_key' == $this.attr( 'id' ) && 0 < response.message.length ) {
 								if ( confirm( response.message ) ) {
 									// OK
 								}
 								else {
-									$api_key.val( old_api_key );
-									console.log( old_api_key );
-									console.log( typeof old_api_key );
-									$api_key.trigger( 'change' );
+									$credly_user.val( old_api_key );
+									$credly_user.trigger( 'change' );
 
 									return true;
 								}
@@ -72,8 +80,10 @@ jQuery(document).ready(function($) {
 							}
 						}
 						else {
-							$api_key_response.addClass( 'invalid' );
-							$api_key_response_message.text( response.message );
+							$credly_user_response.addClass( 'invalid' );
+							$credly_user_response_message.text( response.message );
+
+							$submit.prop( 'disabled', true );
 						}
 
 						return true;
@@ -81,11 +91,41 @@ jQuery(document).ready(function($) {
 				} );
 			}
 			else {
-				$api_key_response.hide();
+				$credly_user_response.hide();
+
+				$submit.removeClass( 'button-disabled' );
 			}
 
+		}
+
+		$api_key.on( 'change', function() {
+
+			// Clear user / pass
+			$credly_user.val( '' );
+			$credly_password.val( '' );
+
+			// Clear message
+			$credly_user.trigger( 'change' );
+
+			credly_user_check( $( this ), 'credly_check_api_key', false );
 
 		} );
+
+		$credly_user.on( 'change', function() {
+
+			// Clear password
+			$credly_password.val( '' );
+
+			credly_user_check( $( this ), 'credly_check_credly_user', true );
+
+		} );
+
+		// @todo Check password via AJAX in a way that doesn't generate two tokens (AJAX and saving of form)
+		/*$credly_password.on( 'change', function() {
+
+			credly_user_check( $( this ), 'credly_check_credly_user', false );
+
+		} );*/
 	}
 
 	// Throw a warning on Achievement Type editor if title is > 20 characters

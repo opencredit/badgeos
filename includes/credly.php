@@ -107,9 +107,10 @@ class BadgeOS_Credly {
         add_action( 'add_meta_boxes', array( $this, 'badge_metabox_add' ) );
         add_action( 'save_post', array( $this, 'badge_metabox_save' ) );
 
-        // Category search AJAX
+        // AJAX
         add_action( 'wp_ajax_search_credly_categories', array( $this, 'credly_category_search' ) );
         add_action( 'wp_ajax_credly_check_api_key', array( $this, 'ajax_credly_check_api_key' ) );
+        add_action( 'wp_ajax_credly_check_credly_user', array( $this, 'ajax_credly_check_credly_user' ) );
 
         // Credly enable user meta setting
         add_action( 'personal_options', array( $this, 'credly_profile_setting' ), 99 );
@@ -449,6 +450,71 @@ class BadgeOS_Credly {
 			else {
 				echo json_encode( array( 'success' => true, 'message' => '' ) );
 			}
+		}
+
+		die();
+
+	}
+
+	public function credly_check_user( $username, $password, $password_check = false ) {
+
+		include_once 'credly.api.php';
+
+		$credly_api = new BadgeOS_Credly_API();
+
+		$response = $credly_api->members( array( 'email' => $username, 'query' => '', 'page' => 1, 'per_page' => 1 ) );
+
+		if ( is_wp_error( $response ) ) {
+			$status = $response;
+
+			/**
+			 * @var $response WP_Error
+			 */
+			if ( 'badgeos_credly_not_found' == $response->get_error_code() ) {
+				$status = new WP_Error( 'badgeos_credly_invalid_username', __( 'Invalid Username', 'badgeos' ) );
+			}
+		}
+		elseif ( '' != $password && $password_check ) {
+			$response = $credly_api->authenticate( $username, $password );
+
+			var_dump( $response );
+			if ( is_wp_error( $response ) ) {
+				$status = $response;
+
+				/**
+				 * @var $response WP_Error
+				 */
+				if ( 'badgeos_credly_unauthorized' == $response->get_error_code() ) {
+					$status = new WP_Error( 'badgeos_credly_invalid_username', __( 'Invalid Username / Password', 'badgeos' ) );
+				}
+			}
+			else {
+				$status = $response;
+			}
+		}
+		else {
+			$status = $response;
+		}
+
+		return $status;
+
+	}
+
+	public function ajax_credly_check_credly_user() {
+
+		if ( !isset( $_POST[ 'credly_user' ] ) || empty( $_POST[ 'credly_user' ] ) ) {
+			echo json_encode( array( 'success' => false, 'message' => __( 'Invalid Username', 'badgeos' ) ) );
+
+			die();
+		}
+
+		$status = $this->credly_check_user( $_POST[ 'credly_user' ], $_POST[ 'credly_password' ], (boolean) $_POST[ 'credly_is_username' ] );
+
+		if ( is_wp_error( $status ) ) {
+			echo json_encode( array( 'success' => false, 'message' => $status->get_error_message() ) );
+		}
+		else {
+			echo json_encode( array( 'success' => true, 'message' => '' ) );
 		}
 
 		die();

@@ -69,7 +69,7 @@ class BadgeOS_Credly_API {
 	 *
 	 * @return object|WP_Error JSON object response from API, or WP_Error if error
 	 */
-	private function request( $api_method, $data, $request_method = 'GET' ) {
+	private function request( $api_method, $data, $request_method = 'GET', $addtl_args = array() ) {
 
 		$url = BADGEOS_CREDLY_API_URL;
 
@@ -99,6 +99,16 @@ class BadgeOS_Credly_API {
 			'cookies'     => array()
 		);
 
+		$args = array_merge( $args, $addtl_args );
+
+		if ( 'GET' == $request_method ) {
+			foreach ( $data as $field => $value ) {
+				$url .= '&' . urlencode( $field ) . '=' . urlencode( $value );
+			}
+
+			unset( $args[ 'body' ] );
+		}
+
 		$args = apply_filters( 'badgeos_credly_api_request_args', $args, $api_method, $data, $request_method );
 
 		$response = wp_remote_request( $url, $args );
@@ -127,6 +137,35 @@ class BadgeOS_Credly_API {
 
 	}
 
+	/**
+	 * Authenticate a user account and get API Key
+	 *
+	 * @param array $args An array with the e-mail address as 'username' and 'password'
+	 *
+	 * @return object|WP_Error
+	 */
+	public function authenticate( $username, $password ) {
+
+		if ( empty( $username ) ) {
+			return new WP_Error( 'badgeos_credly_invalid_user', __( 'Invalid Username', 'badgeos' ) );
+		}
+		elseif ( empty( $password ) ) {
+			return new WP_Error( 'badgeos_credly_invalid_password', __( 'Invalid Password', 'badgeos' ) );
+		}
+
+		$method = __FUNCTION__;
+		$data = array();
+		$request_method = 'POST';
+		$addtl_args = array(
+			'headers' => array(
+				'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password )
+			)
+		);
+
+		return $this->request( $method, $data, $request_method, $addtl_args );
+
+	}
+
     /**
      * Dynamically handle API methods
      *
@@ -139,8 +178,8 @@ class BadgeOS_Credly_API {
 
         $method = (string) $method;
 
-        if ( method_exists( $this, '_' . $method ) ) {
-            return call_user_func_array( array( $this, '_' . $method ), $args );
+        if ( method_exists( $this, $method ) ) {
+            return call_user_func_array( array( $this, $method ), $args );
 		}
 
 		$data = array();
