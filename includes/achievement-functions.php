@@ -267,11 +267,10 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
  */
 function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievement_id = 0 ) {
 
+	$max_earnings = absint( get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) );
+
 	// If the badge has an earning limit, and we've earned it bdfore...
-	if (
-		$max_earnings = absint( get_post_meta( $achievement_id, '_badgeos_maximum_earnings', true ) )
-		&& $user_has_badge = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) )
-	) {
+	if ( $max_earnings && $user_has_badge = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
 		// If we've earned it as many (or more) times than allowed,
 		// then we have exceeded maximum earnings, thus true
 		if ( count( $user_has_badge ) >= $max_earnings ) {
@@ -466,7 +465,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		                   ON p2p.p2p_id = p2pmeta.p2p_id
 		WHERE    p2p.p2p_to = %d
 		         AND p2pmeta.meta_key = %s
-		ORDER BY p2pmeta.meta_value
+		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
 		",
 		$achievement_id,
 		'order'

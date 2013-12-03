@@ -314,23 +314,33 @@ function badgeos_submission_form( $atts = array() ) {
 		'achievement_id' => $post->ID
 	), $atts );
 
+	// Initialize output
+	$output = '';
+
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
 
-		if ( badgeos_save_submission_data() )
-			printf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+		// If submission data was saved, output success message
+		if ( badgeos_save_submission_data() ) {
+			$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+		}
+
+		// If user has already submitted something, show their submissions
+		if ( badgeos_check_if_user_has_submission( $user_ID, $atts['achievement_id'] ) ) {
+			$output .= badgeos_get_user_submissions( '', $atts['achievement_id'] );
+		}
 
 		// Return either the user's submission or the submission form
-		if ( badgeos_check_if_user_has_submission( $user_ID, $atts['achievement_id'] ) )
-			return badgeos_get_user_submissions( '', $atts['achievement_id'] );
-		else
-			return badgeos_get_submission_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
+		if ( badgeos_user_has_access_to_submission_form( $user_ID, $atts['achievement_id'] ) ) {
+			$output .= badgeos_get_submission_form( array( 'user_id' => $user_ID, 'achievement_id' => $atts['achievement_id'] ) );
+		}
 
+	// Logged-out users have no access
 	} else {
-
-		return '<p><i>' . __( 'You must be logged in to post a submission.', 'badgeos' ) . '</i></p>';
-
+		$output .= sprintf( '<p><i>%s</i></p>', __( 'You must be logged in to post a submission.', 'badgeos' ) );
 	}
+
+	return $output;
 }
 add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
 
@@ -498,7 +508,7 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 
 	// Setup defaults
 	$defaults = array(
-		'CID'     => isset( $_GET['CID'] ) ? absint( $_GET['CID'] ) : 0,
+		'CID'    => isset( $_GET['CID'] ) ? absint( $_GET['CID'] ) : 0,
 		'width'  => isset( $content_width ) ? $content_width : 560,
 		'height' => 1000,
 	);
@@ -507,8 +517,8 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 	$atts = shortcode_atts( $defaults, $atts );
 
 	// If passed an ID, render the iframe, otherwise render nothing
-	if ( $atts['CID'] )
-		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . $atts['CID'] . '/embed" align="top" marginwidth="0" width="' . $atts['width'] . 'px" height="' . $atts['height'] . 'px" scrolling="no" frameborder="no"></iframe>';
+	if ( absint( $atts['CID'] ) )
+		return '<iframe class="credly-assertion" src="http://credly.com/credit/' . absint( $atts['CID'] ) . '/embed" align="top" marginwidth="0" width="' . absint( $atts['width'] ) . 'px" height="' . absint( $atts['height'] ) . 'px" scrolling="no" frameborder="no"></iframe>';
 	else
 		return '';
 
