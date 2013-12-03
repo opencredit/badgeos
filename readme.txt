@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.7.1
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -214,13 +214,20 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.3 =
+* Added: Spanish language translation.
+* Fixed: Eliminated a recursion issue with the badgeos_award_achievement action hook.
+* Fixed: Users can send new submissions if previous submisson was denied or approved (until they've reached the maximum earnings for the achievement).
+* Fixed: Corrected sort order on front-end step output.
+* Fixed: Updated Earned Achievements Widget handling for achievements with spaces and special characters.
+
 = 1.3.2 =
-* Fixed: Bug with Credly Badge Builder API headers
+* Fixed: Small issue with Credly Badge Builder API headers.
 
 = 1.3.1 =
-* Fixed: Achievement step ordering
-* Fixed: Prevent duplicate stock achievement thumbnails per achievement type
-* Fixed: Bug with Credly Badge Builder API connection
+* Fixed: Achievement step stort order (in admin).
+* Fixed: Prevent duplicate stock achievement thumbnails per achievement type.
+* Fixed: Bug with Credly Badge Builder API connection.
 
 = 1.3.0 =
 * Added: Credly Badge Builder – Build your own unique badges directly from the post editor (requires Credly account).
@@ -301,8 +308,15 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Upgrade Notice ==
 
+= 1.3.3 =
+* Added: Spanish language translation.
+* Fixed: Eliminated a recursion issue with the badgeos_award_achievement action hook.
+* Fixed: Users can send new submissions if previous submisson was denied or approved (until they've reached the maximum earnings for the achievement).
+* Fixed: Corrected sort order on front-end step output.
+* Fixed: Updated Earned Achievements Widget handling for achievements with spaces and special characters.
+
 = 1.3.2 =
-* Fixed: Bug with Credly Badge Builder API headers
+* Fixed: Small issue with Credly Badge Builder API headers.
 
 = 1.3.1 =
 * Fixed: Achievement step ordering

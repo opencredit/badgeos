@@ -18,7 +18,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		$title = $instance['title'];
 		$number = $instance['number'];
 		$point_total = $instance['point_total'];
-		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? $instance['set_achievements'] : '';
+		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? (array) $instance['set_achievements'] : array();
 		?>
             <p><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></p>
 			<p><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></p>
@@ -29,16 +29,19 @@ class earned_user_achievements_widget extends WP_Widget {
 				$achievements = badgeos_get_achievement_types();
 
 				//loop through all registered achievements
-				foreach ( $achievements as $achievement ) {
+				foreach ( $achievements as $achievement_slug => $achievement ) {
 
 					//hide the step CPT
 					if ( $achievement['single_name'] == 'step' )
 						continue;
 
 					//if achievement displaying exists in the saved array it is enabled for display
-					$checked = ( is_array( $set_achievements ) && in_array( $achievement['single_name'], $set_achievements ) ) ? 'checked="checked"' : '';
+					$checked = checked( in_array( $achievement_slug, $set_achievements ), true, false );
 
-					echo '<input type="checkbox" name="'.$this->get_field_name( 'set_achievements' ).'[]" value="' .esc_attr( $achievement['single_name'] ).'" '.$checked.'> ' .esc_html( ucfirst( $achievement['plural_name'] ) ) .'<br />';
+					echo '<label for="' . $this->get_field_name( 'set_achievements' ) . '_' . esc_attr( $achievement_slug ) . '">'
+						 . '<input type="checkbox" name="' . $this->get_field_name( 'set_achievements' ) . '[]" id="' . $this->get_field_name( 'set_achievements' ) . '_' . esc_attr( $achievement_slug ) . '" value="' . esc_attr( $achievement_slug ) . '" ' . $checked . ' />'
+						 . ' ' . esc_html( ucfirst( $achievement[ 'plural_name' ] ) )
+						 . '</label><br />';
 
 				}
 				?>
