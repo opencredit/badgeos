@@ -465,7 +465,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		                   ON p2p.p2p_id = p2pmeta.p2p_id
 		WHERE    p2p.p2p_to = %d
 		         AND p2pmeta.meta_key = %s
-		ORDER BY p2pmeta.meta_value
+		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
 		",
 		$achievement_id,
 		'order'
