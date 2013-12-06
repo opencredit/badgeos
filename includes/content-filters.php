@@ -497,7 +497,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	$credly_ID = '';
 
 	// If the achievement is earned and givable, override our credly classes
-	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID ) ) {
+	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
 		$credly_class = ' share-credly addCredly';
 		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
 	}
