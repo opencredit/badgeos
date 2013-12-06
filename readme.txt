@@ -214,6 +214,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= alpha =
+* Fixed: Corrected an issue with logging a user's triggered triggers.
+* Fixed: Corrected an issue that allowed users to potentially resubmit earned achievements to Credly.
+
 = 1.3.3 =
 * Added: Spanish language translation.
 * Fixed: Eliminated a recursion issue with the badgeos_award_achievement action hook.
@@ -307,6 +311,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= alpha =
+* Fixed: Corrected an issue with logging a user's triggered triggers.
+* Fixed: Corrected an issue that allowed users to potentially resubmit earned achievements to Credly.
 
 = 1.3.3 =
 * Added: Spanish language translation.
