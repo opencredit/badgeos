@@ -1179,7 +1179,7 @@ function credly_is_achievement_giveable( $achievement_id = 0 ) {
         $is_giveable = false;
 
     // Return givable status
-    return $is_giveable;
+    return apply_filters( 'credly_is_achievement_giveable', $is_giveable, $achievement_id, $credly_badge_id );
 
 }
 
