@@ -1274,12 +1274,17 @@ function badgeos_can_user_send_achievement_to_credly( $user_id = 0, $achievement
  */
 function badgeos_user_sent_achievement_to_credly( $user_id, $achievement_id ) {
 
-    // Get all earned instances of this achievement
-    $earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) );
+    // Get all earned achievements
+    $earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
 
-    // Loop through each earned instance
+    // Loop through each achievement
     if ( ! empty( $earned_achievements ) ) {
         foreach ( $earned_achievements as $key => $achievement ) {
+
+            // If acheivement doesn't match our ID, skip it
+            if ( $achievement_id !== $achievement->ID )
+                continue;
+
             // If this instance has not been sent to credly, mark it as sent and exit
             if ( ! badgeos_achievement_has_been_sent_to_credly( $achievement ) ) {
                 $earned_achievements[ $key ]->sent_to_credly = true;
