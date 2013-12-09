@@ -135,7 +135,7 @@ class BadgeOS_Credly {
             return;
 
         //display the admin notice
-        printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared and by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
+        printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
 
     }
 
@@ -1316,7 +1316,7 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
  * @param  integer $achievement_id The achievement ID we're checking
  * @return bool                    True if giveable, false if not
  */
-function credly_is_achievement_giveable( $achievement_id = 0 ) {
+function credly_is_achievement_giveable( $achievement_id = 0, $user_id = 0 ) {
 
     // Check if "send to credly" is enabled
     $is_sendable = get_post_meta( $achievement_id, '_badgeos_send_to_credly', true );
@@ -1325,13 +1325,20 @@ function credly_is_achievement_giveable( $achievement_id = 0 ) {
     $credly_badge_id = get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
 
     // If send to credly is ON, and badge ID is set, badge is givable
-    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) )
+    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) ){
         $is_giveable = true;
-    else
+    }
+	else {
         $is_giveable = false;
+    }
+
+    // If achievement is giveable, check if user is allowed to send to credly
+    if ( $is_giveable ) {
+        $is_giveable = badgeos_can_user_send_achievement_to_credly( $user_id, $achievement_id );
+    }
 
     // Return givable status
-    return $is_giveable;
+    return apply_filters( 'credly_is_achievement_giveable', $is_giveable, $achievement_id, $user_id );
 
 }
 

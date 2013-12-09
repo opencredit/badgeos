@@ -63,6 +63,8 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//display the widget
 	function widget( $args, $instance ) {
+		global $user_ID;
+
 		extract( $args );
 
 		echo $before_widget;
@@ -112,7 +114,7 @@ class earned_user_achievements_widget extends WP_Widget {
 							$item_class = $thumb ? ' has-thumb' : '';
 
 							// Setup credly data if giveable
-							$giveable   = credly_is_achievement_giveable( $achievement->ID );
+							$giveable   = credly_is_achievement_giveable( $achievement->ID, $user_ID );
 							$item_class .= $giveable ? ' share-credly addCredly' : '';
 							$credly_ID  = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
 
