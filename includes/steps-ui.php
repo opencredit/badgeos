@@ -253,11 +253,10 @@ function badgeos_update_steps_ajax_handler() {
 		$new_titles = array();
 
 		// Loop through each of the created steps
-		foreach ( $_POST['steps'] as $step ) {
+		foreach ( $_POST['steps'] as $key => $step ) {
 
 			// Grab all of the relevant values of that step
 			$step_id          = $step['step_id'];
-			$order            = $step['order'];
 			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
 			$trigger_type     = $step['trigger_type'];
 			$achievement_type = $step['achievement_type'];
@@ -301,7 +300,7 @@ function badgeos_update_steps_ajax_handler() {
 			}
 
 			// Update the step order
-			p2p_update_meta( badgeos_get_p2p_id_from_child_id( $step_id ), 'order', $order );
+			p2p_update_meta( badgeos_get_p2p_id_from_child_id( $step_id ), 'order', $key );
 
 			// Update our relevant meta
 			update_post_meta( $step_id, '_badgeos_count', $required_count );

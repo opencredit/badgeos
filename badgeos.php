@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.2.0
+* Version: 1.3.3
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -32,7 +32,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '1.2.0';
+	public static $version = '1.3.3';
 
 	function __construct() {
 		// Define plugin constants
@@ -218,15 +218,15 @@ class BadgeOS {
 		$credly_settings = (array) get_option( 'credly_settings', array() );
 
 		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credyl_enable' ] ) ) {
-			$credly_settings['credly_enable']                  = 'true';
-			$credly_settings['credly_badge_title']             = 'post_title';
-			$credly_settings['credly_badge_description']       = 'post_body';
-			$credly_settings['credly_badge_short_description'] = 'post_excerpt';
-			$credly_settings['credly_badge_criteria']          = '';
-			$credly_settings['credly_badge_image']             = 'featured_image';
-			$credly_settings['credly_badge_testimonial']       = 'congratulations_text';
-			$credly_settings['credly_badge_evidence']          = 'permalink';
-			$credly_settings['credly_badge_sendemail']         = 'true';
+			$credly_settings['credly_enable']                      = 'true';
+			$credly_settings['credly_badge_title']                 = 'post_title';
+			$credly_settings['credly_badge_description']           = 'post_body';
+			$credly_settings['credly_badge_short_description']     = 'post_excerpt';
+			$credly_settings['credly_badge_criteria']              = '';
+			$credly_settings['credly_badge_image']                 = 'featured_image';
+			$credly_settings['credly_badge_testimonial']           = 'congratulations_text';
+			$credly_settings['credly_badge_evidence']              = 'permalink';
+			$credly_settings['credly_badge_sendemail_add_message'] = 'false';
 			update_option( 'credly_settings', $credly_settings );
 		}
 

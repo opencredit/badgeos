@@ -125,7 +125,7 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => __( 'Maximum Earnings', 'badgeos' ),
-				'desc' => ' '.__( 'Number of times a user can earn this badge (leave blank to earn infinitely).', 'badgeos' ),
+				'desc' => ' '.__( 'Number of times a user can earn this badge (set to 0 for no maximum).', 'badgeos' ),
 				'id'   => $prefix . 'maximum_earnings',
 				'type' => 'text_small',
 				'std' => '1',
