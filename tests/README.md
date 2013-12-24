@@ -1,4 +1,4 @@
-# BadgeOS Test Suite [![Build Status](https://secure.travis-ci.org/opencredit/badgeos.png?branch=master)](http://travis-ci.org/opencredit/badgeos) [![Coverage Status](https://coveralls.io/repos/opencredit/badgeos/badge.png)](https://coveralls.io/r/opencredit/badgeos) #
+# BadgeOS Test Suite [![Build Status](https://travis-ci.org/opencredit/badgeos.png?branch=master)](https://travis-ci.org/opencredit/badgeos) #
 
 -------------------------
 
@@ -46,7 +46,7 @@ Please note: MySQL will need to be running otherwise the unit tests will fail an
 
 # External Testing URLs #
 * Travis-CI (automated unit testing): https://travis-ci.org/opencredit/badgeos/
-* Coveralls.io (automated code coverage): https://coveralls.io/r/opencredit/badgeos/
+* Coveralls.io (automated code coverage reports): https://coveralls.io/r/opencredit/badgeos/
 
 Other Supported (manually run):
 * PHPUnit: http://phpunit.de/manual/current/en/index.html
