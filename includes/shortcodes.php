@@ -163,7 +163,7 @@ function badgeos_achievements_list_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badges limit=15]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type="badges" limit="15"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -227,7 +227,7 @@ function badgeos_achievement_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id="12"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -293,7 +293,7 @@ function badgeos_nomination_form_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id="35"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -362,7 +362,7 @@ function badgeos_submission_form_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id="35"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -427,7 +427,7 @@ function badgeos_submissions_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status="pending" limit="15"]</code>' ); ?></li>
 		</ul>
 	</div>
 <?php }
@@ -490,7 +490,7 @@ function badgeos_nominations_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search="false" limit="20"]</code>' ); ?></li>
 		</ul>
 	</div>
 <?php }
