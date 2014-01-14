@@ -748,7 +748,7 @@ function badgeos_user_has_access_to_submission_form( $user_id = 0, $achievement_
 /**
  * Get the nomination form
  * @param  array  $args The meta box arguemnts
- * @return void
+ * @return string       The concatenated markup
  */
 function badgeos_get_nomination_form( $args = array() ) {
 	global $post, $user_ID;
@@ -794,7 +794,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 /**
  * Get the submission form
  * @param  array  $args The meta box arguemnts
- * @return void
+ * @return string       The concatenated markup
  */
 function badgeos_get_submission_form( $args = array() ) {
 	global $post, $user_ID;
