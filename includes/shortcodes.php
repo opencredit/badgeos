@@ -210,6 +210,77 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
 
 /**
+ * Display earned badges for a given user
+ *
+ * @param  array  $atts Our attributes array
+ * @return string       Concatenated markup
+ */
+function badgeos_user_achievements_shortcode( $atts = array() ) {
+
+	// Parse our attributes
+	$atts = shortcode_atts( array(
+		'user' => get_current_user_id(),
+		'type'    => '',
+		'limit'   => 5
+	), $atts );
+
+	$output = '';
+
+	// Grab the user's current achievements, without duplicates
+	$achievements = array_unique( badgeos_get_user_earned_achievement_ids( $atts['user'], $atts['type'] ) );
+
+	// Setup a counter
+	$count = 0;
+
+	$output .= '<div class="badgeos-user-badges-wrap">';
+
+	// Loop through the achievements
+	if ( ! empty( $achievements ) ) {
+		foreach( $achievements as $achievement_id ) {
+
+			// If we've hit our limit, quit
+			if ( $count >= $atts['limit'] ) {
+				break;
+			}
+
+			// Output our achievement image and title
+			$output .= '<div class="badgeos-badge-wrap">';
+			$output .= badgeos_get_achievement_post_thumbnail( $achievement_id );
+			$output .= '<span class="badgeos-title-wrap">' . get_the_title( $achievement_id ) . '</span>';
+			$output .= '</div>';
+
+			// Increase our counter
+			$count++;
+		}
+	}
+	$output .= '</div>';
+
+	return $output;
+}
+add_shortcode( 'badgeos_user_achievements', 'badgeos_user_achievements_shortcode' );
+
+function badgeos_user_achievements_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_user_achievements]</strong> - <?php _e( 'Display a list of achievements by any user on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+					<ul>
+						<li><?php _e( 'user', 'badgeos' ); ?> - <?php _e( 'The ID of the user to display.', 'badgeos' ); ?></li>
+						<li><?php _e( 'type', 'badgeos' ); ?> - <?php _e( 'The achievement type to display from the user.', 'badgeos' ); ?></li>
+						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php _e( 'The maximum amount of achievements to display.', 'badgeos' ); ?></li>
+					</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_user_achievements user="1" type="badge" limit="5"]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_user_achievements_shortcode_help' );
+
+/**
  * Add help content for [badgeos_achievement] to BadgeOs Help page
  *
  * @since  1.2.0
