@@ -139,6 +139,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
  * Saves an error string for display on Credly settings page
  * @since  1.0.0
  * @param  string $error Error message
+ * @return bool          False after updating option
  */
 function badgeos_credly_get_api_key_error( $error = '' ) {
 
