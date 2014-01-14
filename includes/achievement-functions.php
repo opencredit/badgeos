@@ -668,7 +668,6 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
  * @return boolean
  */
 function badgeos_ms_show_all_achievements(){
-	global $badgeos;
 	$ms_show_all_achievements = NULL;
 	if ( is_multisite() ) {
     	$badgeos_settings = get_option( 'badgeos_settings' );
