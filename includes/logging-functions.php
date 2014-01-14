@@ -48,7 +48,7 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
  * @since  1.2.0
  * @param  integer $log_post_id The ID of the log entry (default: 0)
  * @param  array   $args        Available args to use for writing our new post
- * @return ingeter              The updated log entry ID
+ * @return integer              The updated log entry ID
  */
 function badgeos_log_entry( $log_post_id, $args ) {
 
