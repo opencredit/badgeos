@@ -199,8 +199,8 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  * Save extra user meta fields to the Edit Profile screen
  *
  * @since  1.0.0
- * @param  string  $user_id      User ID being saved
- * @return nothing
+ * @param  int  $user_id      User ID being saved
+ * @return mixed			  false if current user can not edit users, void if can
  */
 function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
@@ -221,7 +221,7 @@ add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
  * @since  1.0.0
  * @param  object $user         The current user's $user object
  * @param  array  $achievements array of user-earned achievement IDs
- * @return void
+ * @return string               concatenated markup
  */
 function badgeos_profile_award_achievement( $user = null, $achievement_ids = array() ) {
 
