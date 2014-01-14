@@ -149,7 +149,7 @@ function badgeos_get_achievements_parents_join( $join = '' ) {
  * @since  1.0.0
  * @param  string $where The query "where" string
  * @param  object $query_object The complete query object
- * @return
+ * @return string        appended sql where statement
  */
 function badgeos_get_achievements_parents_where( $where = '', $query_object = null ) {
 	global $wpdb;
@@ -702,7 +702,8 @@ function badgeos_get_network_site_ids() {
  * Set default achievement image on achievement post save
  *
  * @since 1.2.0
- * @param object $post The post object of the post being saved
+ * @param integer $post_id The post ID of the post being saved
+ * @return mixed    post ID if nothing to do, void otherwise.
  */
 function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	global $pagenow;
