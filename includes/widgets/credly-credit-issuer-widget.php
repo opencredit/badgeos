@@ -17,7 +17,7 @@ class credly_credit_issuer_widget extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$credly_profile_url = $instance['credly_profile_url'];
 		?>
-            <p><?php _e( 'Credly Profile URL', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'credly_profile_url' ); ?>"  type="text" value="<?php echo esc_url( $credly_profile_url ); ?>" /></p>
+            <p><label><?php _e( 'Credly Profile URL', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'credly_profile_url' ); ?>"  type="text" value="<?php echo esc_url( $credly_profile_url ); ?>" /></label></p>
         <?php
 	}
 
@@ -38,7 +38,7 @@ class credly_credit_issuer_widget extends WP_Widget {
 
 		//generate the URL
 		$url = ( ! empty( $instance['credly_profile_url'] ) ? esc_url( $instance['credly_profile_url'] ) : 'https://credly.com' );
-		
+
 		//display the badge
 		echo '<p><a href="'. esc_url( $url ) .'" target="_blank"><img src="' .esc_url( $GLOBALS['badgeos']->directory_url .'images/credly-credit-issuer.png' ). '" alt="'.__( 'Credly Credit Issuer', 'badgeos' ) .'" /></a></p>';
 
