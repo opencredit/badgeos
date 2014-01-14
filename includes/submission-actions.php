@@ -202,7 +202,7 @@ function badgeos_add_nomination_columns( $columns = array() ) {
  * @return string         The concatenated markup
  */
 function badgeos_submission_column_action( $column = '' ) {
-	global $post, $badgeos;
+	global $post;
 
 	switch ( $column ) {
 		case 'action':
