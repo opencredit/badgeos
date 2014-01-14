@@ -72,7 +72,6 @@ add_action( 'init', 'badgeos_load_activity_triggers' );
  * Handle each of our activity triggers
  *
  * @since 1.0.0
- * @param mixed $args Args that are passed through from the hook (only relevant for the wp_login hook presently)
  * @return mixed
  */
 function badgeos_trigger_event() {
