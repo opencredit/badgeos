@@ -13,7 +13,7 @@
  * Posts a log entry when a user unlocks any achievement post
  *
  * @since  1.0.0
- * @param  integer $post_id    The post id of the activity we're logging
+ * @param  integer $object_id    The post id of the activity we're logging
  * @param  integer $user_id    The user ID
  * @param  string  $action     The action word to be used for the generated title
  * @param  string  $title      An optional default title for the log post
