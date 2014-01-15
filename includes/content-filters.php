@@ -86,16 +86,14 @@ function badgeos_steps_single( $content = '' ) {
 
 			//check if user already has a submission for this achievement type
 			if ( !badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
-				//load step metadata for single step pages
-				$badgeos_step_description = get_post_meta( $post->ID, '_badgeos_step_description', true );
-				$badgeos_completing_step_means  = get_post_meta( $post->ID, '_badgeos_completing_step_means', true );
-				$badgeos_submission_instructions = get_post_meta( $post->ID, '_badgeos_submission_instructions', true );
-				$badgeos_discuss_after = get_post_meta( $post->ID, '_badgeos_discuss_after', true );
-				$badgeos_discussforum_prompt     = get_post_meta( $post->ID, '_badgeos_discussforum_prompt', true );
-				$badgeos_learn_even_more = get_post_meta( $post->ID, '_badgeos_learn_even_more', true );
 
-				$badgeos_step_color = get_post_meta( $post->ID, '_badgeos_step_color', true );
-				$badgeos_step_color = ( $badgeos_step_color ) ? $badgeos_step_color : '#';
+				// Load step metadata for single step pages
+				$badgeos_step_description        = get_post_meta( $post->ID, '_badgeos_step_description', true );
+				$badgeos_completing_step_means   = get_post_meta( $post->ID, '_badgeos_completing_step_means', true );
+				$badgeos_submission_instructions = get_post_meta( $post->ID, '_badgeos_submission_instructions', true );
+				$badgeos_discuss_after           = get_post_meta( $post->ID, '_badgeos_discuss_after', true );
+				$badgeos_discussforum_prompt     = get_post_meta( $post->ID, '_badgeos_discussforum_prompt', true );
+				$badgeos_learn_even_more         = get_post_meta( $post->ID, '_badgeos_learn_even_more', true );
 
 				$new_content = null;
 
@@ -106,20 +104,19 @@ function badgeos_steps_single( $content = '' ) {
 					$new_content .= '</p>';
 				}
 
-				//load submission form
+				// Load submission form
 				$submission_form = badgeos_get_submission_form( $post->ID );
 				$new_content    .= $new_content .$submission_form;
 
 				$content = $content . $new_content;
 			} else {
 				//user has an active submission, so show content and comments
-
 				$args = array(
-					'post_type'         =>  'submission',
-					'author'            =>  $current_user->ID,
-					'post_status'   =>  'publish',
-					'meta_key'      =>  '_badgeos_submission_achievement_id',
-					'meta_value'    =>  absint( $post->ID ),
+					'post_type'   => 'submission',
+					'author'      => $current_user->ID,
+					'post_status' => 'publish',
+					'meta_key'    => '_badgeos_submission_achievement_id',
+					'meta_value'  => absint( $post->ID ),
 				);
 
 				$submissions = get_posts( $args );
@@ -142,10 +139,10 @@ function badgeos_steps_single( $content = '' ) {
 					echo '<p>';
 					echo '<strong>Submission Comments</strong>';
 
-					//display any comments that exist
+					// Display any comments that exist
 					badgeos_get_comments_for_submission( $post->ID );
 
-					//display a form to add new comments
+					// Display a form to add new comments
 					echo badgeos_get_comment_form( $post->ID );
 
 					echo '</p>';
