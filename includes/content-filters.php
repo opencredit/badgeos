@@ -143,7 +143,7 @@ function badgeos_steps_single( $content = '' ) {
 					echo '<strong>Submission Comments</strong>';
 
 					//display any comments that exist
-					badgeos_get_comments( $post->ID );
+					badgeos_get_comments_for_submission( $post->ID );
 
 					//display a form to add new comments
 					echo badgeos_get_comment_form( $post->ID );
