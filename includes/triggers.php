@@ -86,16 +86,9 @@ function badgeos_trigger_event() {
 	// Grab our current trigger
 	$this_trigger = current_filter();
 
-	// Special case: when logging in (which is an activity trigger event),
-	// global $user_ID is not yet available so it must be gotten from the
-	// user login name that IS passed to this function.
-	if ( 'wp_login' == $this_trigger ) {
-		$user_data = get_user_by( 'login', $args[ 0 ] );
-		$user_id = $user_data->ID;
-	} else {
-		$user_data = get_user_by( 'id', $user_ID );
-		$user_id = $user_ID;
-	}
+	// Grab the user ID
+	$user_id = badgeos_trigger_get_user_id( $this_trigger, $args );
+	$user_data = get_user_by( 'id', $user_id );
 
 	// Sanity check, if we don't have a user object, bail here
 	if ( ! is_object( $user_data ) )
@@ -128,6 +121,37 @@ function badgeos_trigger_event() {
 
 	return $args[ 0 ];
 
+}
+
+/**
+ * Get user for a given trigger action.
+ *
+ * @since  alpha
+ *
+ * @param  string  $trigger Trigger name.
+ * @param  array   $args    Passed trigger args.
+ * @return integer          User ID.
+ */
+function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
+
+	switch ( $trigger ) {
+		case 'wp_login' :
+			$user_data = get_user_by( 'login', $args[ 0 ] );
+			$user_id = $user_data->ID;
+			break;
+		case 'badgeos_unlock_' == substr( $trigger, 0, 15 ) :
+			$user_id = $args[0];
+			break;
+		case 'badgeos_new_post' :
+		case 'badgeos_new_page' :
+			$user_id = $args[1];
+			break;
+		default :
+			$user_id = get_current_user_id();
+			break;
+	}
+
+	return apply_filters( 'badgeos_trigger_get_user_id', $user_id, $trigger, $args );
 }
 
 /**
@@ -278,7 +302,8 @@ function badgeos_publish_listener( $post_id = 0 ) {
 		return;
 
 	// Trigger a badgeos_new_{$post_type} action
-	do_action( 'badgeos_new_' . get_post_type( $post_id ), $post_id );
+	$post = get_post( $post_id );
+	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author );
 }
 add_action( 'publish_post', 'badgeos_publish_listener', 0 );
 add_action( 'publish_page', 'badgeos_publish_listener', 0 );
