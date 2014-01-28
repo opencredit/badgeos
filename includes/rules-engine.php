@@ -459,7 +459,7 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_' . $step_requirements['achievement_type'] );
 			break;
 		case 'all-achievements' :
-			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_all' . $step_requirements['achievement_type'] );
+			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_all_' . $step_requirements['achievement_type'] );
 			break;
 		default :
 			$activities = badgeos_get_user_trigger_count( $user_id, $step_requirements['trigger_type'] );
