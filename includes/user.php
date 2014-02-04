@@ -384,6 +384,9 @@ add_action( 'init', 'badgeos_process_user_data' );
 function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	global $blog_id;
 
+	// Store a copy of the original ID for later
+	$cached_id = $blog_id;
+
 	// Assume we have no achievement types
 	$all_achievement_types = array();
 
@@ -402,7 +405,7 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	}
 
 	// Restore the original blog so the sky doesn't fall
-	restore_current_blog();
+	switch_to_blog( $cached_id );
 
 	// Pare down achievement type list so we return no duplicates
 	$achievement_types = array_unique( $all_achievement_types );
