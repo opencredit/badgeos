@@ -136,7 +136,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 }
 add_shortcode( 'badgeos_achievements_list', 'badgeos_achievements_list_shortcode' );
 /**
- * Add help content for [badgeos_achievements_list] to BadgeOs Help page
+ * Add help content for [badgeos_achievements_list] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -281,7 +281,7 @@ function badgeos_user_achievements_shortcode_help() { ?>
 add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_user_achievements_shortcode_help' );
 
 /**
- * Add help content for [badgeos_achievement] to BadgeOs Help page
+ * Add help content for [badgeos_achievement] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -347,7 +347,7 @@ function badgeos_nomination_form( $atts = array() ) {
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
 /**
- * Add help content for [badgeos_nomination] to BadgeOs Help page
+ * Add help content for [badgeos_nomination] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -416,7 +416,7 @@ function badgeos_submission_form( $atts = array() ) {
 add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
 
 /**
- * Add help content for [badgeos_submission] to BadgeOs Help page
+ * Add help content for [badgeos_submission] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -476,7 +476,7 @@ function badgeos_display_submissions( $atts = array() ) {
 add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
 
 /**
- * Add help content for [badgeos_submissions] to BadgeOs Help page
+ * Add help content for [badgeos_submissions] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -541,7 +541,7 @@ function badgeos_display_nominations( $atts = array() ) {
 add_shortcode( 'badgeos_nominations', 'badgeos_display_nominations' );
 
 /**
- * Add help content for [badgeos_nominations] to BadgeOs Help page
+ * Add help content for [badgeos_nominations] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -598,7 +598,7 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 add_shortcode( 'credly_assertion_page', 'badgeos_credly_assertion_page' );
 
 /**
- * Add help content for [credly_assertion_page] to BadgeOs Help page
+ * Add help content for [credly_assertion_page] to BadgeOS Help page
  *
  * @since  1.3.0
  */
