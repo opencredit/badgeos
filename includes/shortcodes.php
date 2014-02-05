@@ -276,7 +276,7 @@ function badgeos_nomination_form( $atts = array() ) {
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
 /**
- * Add help content for [badgeos_nomination] to BadgeOs Help page
+ * Add help content for [badgeos_nomination] to BadgeOS Help page
  *
  * @since  1.2.0
  */
