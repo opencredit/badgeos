@@ -666,7 +666,7 @@ class BadgeOS_Credly {
      * @param  int  $badge_id The badge ID the user is earning
      * @return string         Results of the API call
      */
-    public function post_credly_user_badge( $user_id = 0, $badge_id = 0 ) {
+    public function post_credly_user_badge( $badge_id = 0, $user_id = 0 ) {
 
         // Bail if the badge isn't in Credly
         if ( ! credly_is_achievement_giveable( $badge_id, $user_id ) )
