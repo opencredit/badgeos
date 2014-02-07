@@ -210,7 +210,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
 
 /**
- * Display earned badges for a given user
+ * Display earned achievements for a given user
  *
  * @param  array  $atts Our attributes array
  * @return string       Concatenated markup
