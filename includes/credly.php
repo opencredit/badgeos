@@ -662,8 +662,8 @@ class BadgeOS_Credly {
      * Post a users earned badge to Credly
      *
      * @since  1.0.0
-     * @param  int  $user_id  The given users ID
      * @param  int  $badge_id The badge ID the user is earning
+     * @param  int  $user_id  The given users ID
      * @return string         Results of the API call
      */
     public function post_credly_user_badge( $user_id = 0, $badge_id = 0 ) {
