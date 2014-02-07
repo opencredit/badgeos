@@ -161,7 +161,7 @@ function badgeos_send_to_credly_handler() {
 		die();
 	}
 
-	$send_to_credly = $GLOBALS['badgeos_credly']->post_credly_user_badge( $_REQUEST['ID'] );
+	$send_to_credly = $GLOBALS['badgeos_credly']->post_credly_user_badge( get_current_user_id(), $_REQUEST['ID'] );
 
 	if ( $send_to_credly ) {
 
