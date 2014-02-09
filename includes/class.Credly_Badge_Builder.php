@@ -121,10 +121,11 @@ class Credly_Badge_Builder {
 	 * @return string       HTML markup for anchor tag.
 	 */
 	public function render_link( $args = array() ) {
+		global $post;
 
 		// Setup and parse our default args
 		$defaults = apply_filters( 'credly_badge_builder_render_link_defaults', array(
-			'attachment_id' => get_post_thumbnail_id(),
+			'attachment_id' => $post ? get_post_thumbnail_id() : 0,
 			'width'         => '960',
 			'height'        => '540',
 			'continue'      => null,
