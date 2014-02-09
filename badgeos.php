@@ -51,14 +51,14 @@ class BadgeOS {
 		require( $this->directory_path . 'includes/p2p/load.php' );
 
 		// Hook in all our important pieces
-		add_action( 'plugins_loaded', array( &$this, 'includes' ) );
-		add_action( 'init', array( &$this, 'register_scripts_and_styles' ) );
-		add_action( 'init', array( &$this, 'include_cmb' ), 999 );
-		add_action( 'init', array( &$this, 'register_achievement_relationships' ) );
-		add_action( 'init', array( &$this, 'register_image_sizes' ) );
-		add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( &$this, 'frontend_scripts' ) );
+		add_action( 'plugins_loaded', array( $this, 'includes' ) );
+		add_action( 'init', array( $this, 'register_scripts_and_styles' ) );
+		add_action( 'init', array( $this, 'include_cmb' ), 999 );
+		add_action( 'init', array( $this, 'register_achievement_relationships' ) );
+		add_action( 'init', array( $this, 'register_image_sizes' ) );
+		add_action( 'admin_menu', array( $this, 'plugin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'init', array( $this, 'credly_init' ) );
 
 	}
