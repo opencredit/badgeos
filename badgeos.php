@@ -119,13 +119,10 @@ class BadgeOS {
 	}
 
 	/**
-	 * Initialize the custom metabox class.
+	 * Initialize CMB.
 	 */
 	function include_cmb() {
-
-		if ( ! class_exists( 'cmb_Meta_Box' ) )
-			require_once( $this->directory_path . 'includes/cmb/init.php' );
-
+		require_once( $this->directory_path . 'includes/cmb/load.php' );
 	}
 
 	/**
