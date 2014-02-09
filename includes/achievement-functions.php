@@ -658,7 +658,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	}
 
 	// Return our concatenated output
-	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $users );
+	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $earners );
 }
 
 /**
