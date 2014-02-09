@@ -47,9 +47,6 @@ class BadgeOS {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		//include Posts to Posts core
-		require( $this->directory_path . 'includes/p2p/load.php' );
-
 		// Hook in all our important pieces
 		add_action( 'plugins_loaded', array( $this, 'includes' ) );
 		add_action( 'init', array( $this, 'register_scripts_and_styles' ) );
@@ -67,6 +64,7 @@ class BadgeOS {
 	 * Include all our important files.
 	 */
 	function includes() {
+		require_once( $this->directory_path . 'includes/p2p/load.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
