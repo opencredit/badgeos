@@ -1211,7 +1211,7 @@ function credly_get_api_key() {
 /**
  * Check if an earned acheivement instance has been sent to credly
  *
- * @since  1.3.4
+ * @since  alpha
  *
  * @param  object $earned_achievement_instance BadgeOS Achievement object.
  * @return bool                                True if achievement has been sent to Credly, otherwise false.
@@ -1230,7 +1230,7 @@ function badgeos_achievement_has_been_sent_to_credly( $earned_achievement_instan
 /**
  * Check if user is elligble to send an achievement to Credly.
  *
- * @since  1.3.4
+ * @since  alpha
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.
@@ -1266,7 +1266,7 @@ function badgeos_can_user_send_achievement_to_credly( $user_id = 0, $achievement
 /**
  * Update user's earned achievements to reflect a specific acheivement has been sent to Credly.
  *
- * @since  1.3.4
+ * @since  alpha
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.=
@@ -1300,7 +1300,7 @@ add_action( 'post_credly_user_badge', 'badgeos_user_sent_achievement_to_credly',
 /**
  * Create a log entry for an achievement being sent to Credly.
  *
- * @since  1.3.4
+ * @since  alpha
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.

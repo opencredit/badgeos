@@ -215,8 +215,16 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = alpha =
-* Fixed: Corrected an issue with logging a user's triggered triggers.
-* Fixed: Corrected an issue that allowed users to potentially resubmit earned achievements to Credly.
+* Updated: Upgraded bundled CMB library to 1.0.8.
+* Updated: Upgraded bundled posts-to-posts library to 1.6.3-alpha.
+* Updated: Corrected several outdated PHPDoc comments.
+* Updated: Added quotes to all shortcode examples for clarity.
+* Fixed: Properly award "all achievements of type" step trigger when triggered.
+* Fixed: Prevent awarding a user's triggered triggers to current admin.
+* Fixed: Prevent awarding a user's triggered triggers on the incorrect site (in multisite).
+* Fixed: Prevent users from incorrectly resubmitting earned achievements to Credly.
+* Fixed: Pass explicit user ID on "send to credly" AJAX calls.
+* Fixed: Minor CSS tweaks to BadgeOS user profile fields.
 
 = 1.3.3 =
 * Added: Spanish language translation.
@@ -313,8 +321,16 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Upgrade Notice ==
 
 = alpha =
-* Fixed: Corrected an issue with logging a user's triggered triggers.
-* Fixed: Corrected an issue that allowed users to potentially resubmit earned achievements to Credly.
+* Updated: Upgraded bundled CMB library to 1.0.8.
+* Updated: Upgraded bundled posts-to-posts library to 1.6.3-alpha.
+* Updated: Corrected several outdated PHPDoc comments.
+* Updated: Added quotes to all shortcode examples for clarity.
+* Fixed: Properly award "all achievements of type" step trigger when triggered.
+* Fixed: Prevent awarding a user's triggered triggers to current admin.
+* Fixed: Prevent awarding a user's triggered triggers on the incorrect site (in multisite).
+* Fixed: Prevent users from incorrectly resubmitting earned achievements to Credly.
+* Fixed: Pass explicit user ID on "send to credly" AJAX calls.
+* Fixed: Minor CSS tweaks to BadgeOS user profile fields.
 
 = 1.3.3 =
 * Added: Spanish language translation.
