@@ -13,7 +13,7 @@
  * Return a user's points
  *
  * @since  1.0.0
- * @param  string   $user_id      The given user's ID
+ * @param  int   $user_id      The given user's ID
  * @return integer  $user_points  The user's current points
  */
 function badgeos_get_users_points( $user_id = 0 ) {

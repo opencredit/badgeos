@@ -139,6 +139,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
  * Saves an error string for display on Credly settings page
  * @since  1.0.0
  * @param  string $error Error message
+ * @return bool          False after updating option
  */
 function badgeos_credly_get_api_key_error( $error = '' ) {
 
@@ -222,7 +223,6 @@ function badgeos_settings_page() {
 				<?php
                 // check if multisite is enabled & if plugin is network activated
                 if ( is_super_admin() ){
-	                global $badgeos;
 	                if ( is_multisite() ) {
 	                ?>
 	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>

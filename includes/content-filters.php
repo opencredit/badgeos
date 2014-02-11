@@ -67,113 +67,6 @@ function badgeos_achievement_submissions( $content = '' ) {
 add_filter( 'the_content', 'badgeos_achievement_submissions' );
 
 /**
- * Display the Step Single page after Filtering
- *
- * @since  1.0.0
- * @param  string $content The page content before meta box insertion
- * @return string          The page content after meta box insertion
- */
-function badgeos_steps_single( $content = '' ) {
-	global $post, $current_user;
-
-	if ( get_post_type( $post ) == 'step' && is_single() ) {
-		//load badge unlock options
-		$badgeos_unlock_options = get_post_meta( absint( $post->ID ), '_badgeos_step_unlock_options', true );
-
-		//check if step unlock option is set to submission review
-		if ( $badgeos_unlock_options == 'submission-review' ) {
-			get_currentuserinfo();
-
-			//check if user already has a submission for this achievement type
-			if ( !badgeos_check_if_user_has_submission( $current_user->ID, $post->ID ) ) {
-				//load step metadata for single step pages
-				$badgeos_step_description = get_post_meta( $post->ID, '_badgeos_step_description', true );
-				$badgeos_completing_step_means  = get_post_meta( $post->ID, '_badgeos_completing_step_means', true );
-				$badgeos_submission_instructions = get_post_meta( $post->ID, '_badgeos_submission_instructions', true );
-				$badgeos_discuss_after = get_post_meta( $post->ID, '_badgeos_discuss_after', true );
-				$badgeos_discussforum_prompt     = get_post_meta( $post->ID, '_badgeos_discussforum_prompt', true );
-				$badgeos_learn_even_more = get_post_meta( $post->ID, '_badgeos_learn_even_more', true );
-
-				$badgeos_step_color = get_post_meta( $post->ID, '_badgeos_step_color', true );
-				$badgeos_step_color = ( $badgeos_step_color ) ? $badgeos_step_color : '#';
-
-				$new_content = null;
-
-				// Step Description metadata
-				if ( $badgeos_step_description ) {
-					$new_content .= '<p><strong>Step Description</strong><br />';
-					$new_content .= $badgeos_step_description;
-					$new_content .= '</p>';
-				}
-
-				//load submission form
-				$submission_form = badgeos_get_submission_form( $post->ID );
-				$new_content    .= $new_content .$submission_form;
-
-				$content = $content . $new_content;
-			} else {
-				//user has an active submission, so show content and comments
-
-				$args = array(
-					'post_type'         =>  'submission',
-					'author'            =>  $current_user->ID,
-					'post_status'   =>  'publish',
-					'meta_key'      =>  '_badgeos_submission_achievement_id',
-					'meta_value'    =>  absint( $post->ID ),
-				);
-
-				$submissions = get_posts( $args );
-
-				foreach( $submissions as $post ) :  setup_postdata( $post );
-
-					echo '<p>';
-
-					echo '<strong>' .__( 'Original Submission', 'badgeos' ). ':</strong><br />';
-					echo get_the_content() .'<br />';
-
-					echo '<strong>' .__( 'Date', 'badgeos' ). ':</strong>&nbsp;&nbsp;';
-					echo get_the_date() .'<br />';
-
-					echo '<strong>' .__( 'Status', 'badgeos' ). ':</strong>&nbsp;&nbsp;';
-					echo get_post_meta( get_the_ID(), '_badgeos_submission_status', true );
-
-					echo '</p>';
-
-					echo '<p>';
-					echo '<strong>Submission Comments</strong>';
-
-					//display any comments that exist
-					badgeos_get_comments( $post->ID );
-
-					//display a form to add new comments
-					echo badgeos_get_comment_form( $post->ID );
-
-					echo '</p>';
-
-				endforeach;
-			}
-		}
-	} elseif ( get_post_type( $post ) == 'badge' && is_single() ) {
-		$new_content = null;
-
-		//load badge unlock options
-		$badgeos_unlock_options = get_post_meta( absint( $post->ID ), '_badgeos_badge_unlock_options', true );
-
-		//check if badge unlock option is set to reward/nomination
-		if ( $badgeos_unlock_options == 'giving' ) {
-			//load nomination form
-			$submission_form = badgeos_get_submission_form( $post->ID, 'nomination' );
-			$new_content .= $new_content . $submission_form;
-			$content     = $content . $new_content;
-		}
-	}
-
-	return $content;
-
-}
-// add_filter( 'the_content', 'badgeos_steps_single' );
-
-/**
  * Add filters to remove stuff from our singular pages and add back in how we want it
  *
  * @since 1.0.0
@@ -497,7 +390,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	$credly_ID = '';
 
 	// If the achievement is earned and givable, override our credly classes
-	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID ) ) {
+	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
 		$credly_class = ' share-credly addCredly';
 		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
 	}

@@ -164,8 +164,6 @@ class BadgeOS_Plugin_Updater {
 	 */
 	private function api_request( $_action, $_data ) {
 
-		global $wp_version;
-
 		$data = array_merge( $this->api_data, $_data );
 
 		if ( $data['slug'] != $this->slug )
@@ -292,7 +290,6 @@ class BadgeOS_Plugin_Updater {
 	 * @return string 'valid' if license is valid, 'invalid' otherwise
 	 */
 	public function check_license() {
-		global $wp_version;
 
 		$license = trim( get_option( $this->slug . '-license_key' ) );
 

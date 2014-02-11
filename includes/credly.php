@@ -669,7 +669,7 @@ class BadgeOS_Credly {
     public function post_credly_user_badge( $user_id = 0, $badge_id = 0 ) {
 
         // Bail if the badge isn't in Credly
-        if ( ! credly_is_achievement_giveable( $badge_id ) )
+        if ( ! credly_is_achievement_giveable( $badge_id, $user_id ) )
             return false;
 
         if ( empty( $user_id ) )
@@ -687,15 +687,9 @@ class BadgeOS_Credly {
         // Process our response
         $results = $this->process_api_response_user_badge( $response );
 
-
+        // If post was successful, trigger other actions
         if ( $results ) {
-
-            $user = get_userdata( $user_id );
-            $username = $user->user_login;
-            $badge_name = get_the_title( $badge_id );
-
-            badgeos_post_log_entry( $badge_id, $user_id, null, sprintf( "%1$s sent %2$s badge to Credly", $username, $badge_name ) );
-
+            do_action( 'post_credly_user_badge', $user_id, $badge_id, $results );
         }
 
         return $results;
@@ -1164,7 +1158,7 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
  * @param  integer $achievement_id The achievement ID we're checking
  * @return bool                    True if giveable, false if not
  */
-function credly_is_achievement_giveable( $achievement_id = 0 ) {
+function credly_is_achievement_giveable( $achievement_id = 0, $user_id = 0 ) {
 
     // Check if "send to credly" is enabled
     $is_sendable = get_post_meta( $achievement_id, '_badgeos_send_to_credly', true );
@@ -1173,13 +1167,19 @@ function credly_is_achievement_giveable( $achievement_id = 0 ) {
     $credly_badge_id = get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
 
     // If send to credly is ON, and badge ID is set, badge is givable
-    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) )
+    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) ){
         $is_giveable = true;
-    else
+    } else {
         $is_giveable = false;
+    }
+
+    // If achievement is giveable, check if user is allowed to send to credly
+    if ( $is_giveable ) {
+        $is_giveable = badgeos_can_user_send_achievement_to_credly( $user_id, $achievement_id );
+    }
 
     // Return givable status
-    return $is_giveable;
+    return apply_filters( 'credly_is_achievement_giveable', $is_giveable, $achievement_id, $user_id );
 
 }
 
@@ -1207,3 +1207,119 @@ function credly_get_api_key() {
 	return $credly_settings['api_key'];
 
 }
+
+/**
+ * Check if an earned acheivement instance has been sent to credly
+ *
+ * @since  alpha
+ *
+ * @param  object $earned_achievement_instance BadgeOS Achievement object.
+ * @return bool                                True if achievement has been sent to Credly, otherwise false.
+ */
+function badgeos_achievement_has_been_sent_to_credly( $earned_achievement_instance = null ) {
+
+    // If instance has been sent to credly, return true
+    if ( isset( $earned_achievement_instance->sent_to_credly ) ) {
+        return true;
+    }
+
+    // Otherwise, return false
+    return false;
+}
+
+/**
+ * Check if user is elligble to send an achievement to Credly.
+ *
+ * @since  alpha
+ *
+ * @param  integer $user_id        User ID.
+ * @param  integer $achievement_id Achievement post ID.
+ * @return bool                    True if achievement can be sent, otherwise false.
+ */
+function badgeos_can_user_send_achievement_to_credly( $user_id = 0, $achievement_id = 0 ) {
+
+    // If passed ID is not an achievement, bail here
+    if ( ! badgeos_is_achievement( $achievement_id ) )
+        return false;
+
+    // If no user was specified, get the current user
+    if ( ! $user_id )
+        $user_id = get_current_user_id();
+
+    // Get all earned instances of this achievement
+    $earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) );
+
+    // Loop through each earned instance
+    if ( ! empty( $earned_achievements ) ) {
+        foreach ( $earned_achievements as $key => $achievement ) {
+            // If this instance has not been sent to credly, it may be sent
+            if ( ! badgeos_achievement_has_been_sent_to_credly( $achievement ) ) {
+                return true;
+            }
+        }
+    }
+
+    // No earned instances were eligable
+    return false;
+}
+
+/**
+ * Update user's earned achievements to reflect a specific acheivement has been sent to Credly.
+ *
+ * @since  alpha
+ *
+ * @param  integer $user_id        User ID.
+ * @param  integer $achievement_id Achievement post ID.=
+ * @return mixed                   Updated user meta ID on success, otherwise false.
+ */
+function badgeos_user_sent_achievement_to_credly( $user_id, $achievement_id ) {
+
+    // Get all earned achievements
+    $earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
+
+    // Loop through each achievement
+    if ( ! empty( $earned_achievements ) ) {
+        foreach ( $earned_achievements as $key => $achievement ) {
+
+            // If acheivement doesn't match our ID, skip it
+            if ( $achievement_id !== $achievement->ID )
+                continue;
+
+            // If this instance has not been sent to credly, mark it as sent and exit
+            if ( ! badgeos_achievement_has_been_sent_to_credly( $achievement ) ) {
+                $earned_achievements[ $key ]->sent_to_credly = true;
+                return badgeos_update_user_achievements( array( 'user_id' => $user_id, 'all_achievements' => $earned_achievements ) );
+            }
+        }
+    }
+
+    return false;
+}
+add_action( 'post_credly_user_badge', 'badgeos_user_sent_achievement_to_credly', 10, 2 );
+
+/**
+ * Create a log entry for an achievement being sent to Credly.
+ *
+ * @since  alpha
+ *
+ * @param  integer $user_id        User ID.
+ * @param  integer $achievement_id Achievement post ID.
+ */
+function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id ) {
+
+    // Get user data from ID
+    $user = get_userdata( $user_id );
+
+    // Sanity check, if user doesnt exist, bail
+    if ( ! is_object( $user ) || is_wp_error( $user ) )
+        return;
+
+    // Log the action
+    $title = sprintf(
+            '%1$s sent %2$s to Credly',
+            $user->user_login,
+            get_the_title( $achievement_id )
+            );
+    badgeos_post_log_entry( $achievement_id, $user_id, null, $title );
+}
+add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_credly', 10, 2 );

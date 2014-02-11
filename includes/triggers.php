@@ -72,7 +72,6 @@ add_action( 'init', 'badgeos_load_activity_triggers' );
  * Handle each of our activity triggers
  *
  * @since 1.0.0
- * @param mixed $args Args that are passed through from the hook (only relevant for the wp_login hook presently)
  * @return mixed
  */
 function badgeos_trigger_event() {
@@ -87,16 +86,9 @@ function badgeos_trigger_event() {
 	// Grab our current trigger
 	$this_trigger = current_filter();
 
-	// Special case: when logging in (which is an activity trigger event),
-	// global $user_ID is not yet available so it must be gotten from the
-	// user login name that IS passed to this function.
-	if ( 'wp_login' == $this_trigger ) {
-		$user_data = get_user_by( 'login', $args[ 0 ] );
-		$user_id = $user_data->ID;
-	} else {
-		$user_data = get_user_by( 'id', $user_ID );
-		$user_id = $user_ID;
-	}
+	// Grab the user ID
+	$user_id = badgeos_trigger_get_user_id( $this_trigger, $args );
+	$user_data = get_user_by( 'id', $user_id );
 
 	// Sanity check, if we don't have a user object, bail here
 	if ( ! is_object( $user_data ) )
@@ -132,6 +124,37 @@ function badgeos_trigger_event() {
 }
 
 /**
+ * Get user for a given trigger action.
+ *
+ * @since  1.3.4
+ *
+ * @param  string  $trigger Trigger name.
+ * @param  array   $args    Passed trigger args.
+ * @return integer          User ID.
+ */
+function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
+
+	switch ( $trigger ) {
+		case 'wp_login' :
+			$user_data = get_user_by( 'login', $args[ 0 ] );
+			$user_id = $user_data->ID;
+			break;
+		case 'badgeos_unlock_' == substr( $trigger, 0, 15 ) :
+			$user_id = $args[0];
+			break;
+		case 'badgeos_new_post' :
+		case 'badgeos_new_page' :
+			$user_id = $args[1];
+			break;
+		default :
+			$user_id = get_current_user_id();
+			break;
+	}
+
+	return apply_filters( 'badgeos_trigger_get_user_id', $user_id, $trigger, $args );
+}
+
+/**
  * Wrapper function for returning a user's array of sprung triggers
  *
  * @since  1.0.0
@@ -139,13 +162,13 @@ function badgeos_trigger_event() {
  * @param  integer $site_id The desired Site ID to check
  * @return array            An array of the triggers a user has triggered
  */
-function badgeos_get_user_triggers( $user_id = 0, $site_id = '' ) {
+function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
 
 	// Grab all of the user's triggers
 	$user_triggers = ( $array_exists = get_user_meta( $user_id, '_badgeos_triggered_triggers', true ) ) ? $array_exists : array( $site_id => array() );
 
-	// Set to current site id
-	if ( ! $site_id )
+	// Use current site ID if site ID is not set, AND not explicitly set to false
+	if ( ! $site_id && false !== $site_id )
 		$site_id = get_current_blog_id();
 
 	// Return only the triggers that are relevant to the provided $site_id
@@ -198,7 +221,7 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 0, $args
  * @param  array $args        The triggered args
  * @return integer          The updated trigger count
  */
-function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = '', $args = array() ) {
+function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $args = array() ) {
 
 	// Set to current site id
 	if ( ! $site_id )
@@ -209,7 +232,7 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = '', $
 	$trigger_count += (int) apply_filters( 'badgeos_update_user_trigger_count', 1, $user_id, $trigger, $site_id, $args );
 
 	// Update the triggers arary with the new count
-	$user_triggers = badgeos_get_user_triggers( $user_id );
+	$user_triggers = badgeos_get_user_triggers( $user_id, false );
 	$user_triggers[$site_id][$trigger] = $trigger_count;
 	update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
@@ -227,14 +250,14 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = '', $
  * @param  integer $site_id The desired Site ID to update (or "all" to dump across all sites)
  * @return integer          The updated trigger count
  */
-function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = '' ) {
+function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 0 ) {
 
 	// Set to current site id
 	if ( ! $site_id )
 		$site_id = get_current_blog_id();
 
 	// Grab the user's current triggers
-	$user_triggers = badgeos_get_user_triggers( $user_id );
+	$user_triggers = badgeos_get_user_triggers( $user_id, false );
 
 	// If we're deleteing all triggers...
 	if ( 'all' == $trigger ) {
@@ -279,7 +302,8 @@ function badgeos_publish_listener( $post_id = 0 ) {
 		return;
 
 	// Trigger a badgeos_new_{$post_type} action
-	do_action( 'badgeos_new_' . get_post_type( $post_id ), $post_id );
+	$post = get_post( $post_id );
+	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author );
 }
 add_action( 'publish_post', 'badgeos_publish_listener', 0 );
 add_action( 'publish_page', 'badgeos_publish_listener', 0 );
