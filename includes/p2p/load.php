@@ -10,7 +10,7 @@ require_once dirname( __FILE__ ) . '/scb/load.php';
 /**
  * Load P2P.
  *
- * @since alpha
+ * @since 1.3.4
  */
 function _badgeos_p2p_load() {
 	if ( function_exists( 'p2p_register_connection_type' ) )
@@ -33,7 +33,7 @@ scb_init( '_badgeos_p2p_load' );
 /**
  * Load P2P admin functionality.
  *
- * @since alpha
+ * @since 1.3.4
  */
 function _badgeos_p2p_load_admin() {
 	P2P_Autoload::register( 'P2P_', dirname( __FILE__ ) . '/p2p-admin' );

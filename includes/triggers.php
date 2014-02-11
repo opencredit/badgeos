@@ -126,7 +126,7 @@ function badgeos_trigger_event() {
 /**
  * Get user for a given trigger action.
  *
- * @since  alpha
+ * @since  1.3.4
  *
  * @param  string  $trigger Trigger name.
  * @param  array   $args    Passed trigger args.
