@@ -14,7 +14,7 @@
  *
  * @since  1.0.0
  *
- * @param  integer $achievement_ id The given achievements post ID
+ * @param  integer $achievement_id  The given achievements post ID
  * @param  integer $user_id  		The given user's ID
  * @return integer           		The UNIX timestamp for the last reported badge activity
  */

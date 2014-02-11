@@ -1,0 +1,34 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+
+env:
+    - WP_VERSION=master WP_MULTISITE=0
+    - WP_VERSION=master WP_MULTISITE=1
+
+before_script:
+    - svn export http://develop.svn.wordpress.org/trunk/ /tmp/wordpress-tests
+    - cp /tmp/wordpress-tests/wp-tests-config-sample.php /tmp/wordpress-tests/wp-tests-config.php
+    - sed -i "s/youremptytestdbnamehere/wordpress_test/" /tmp/wordpress-tests/wp-tests-config.php
+    - sed -i "s/yourusernamehere/root/" /tmp/wordpress-tests/wp-tests-config.php
+    - sed -i "s/yourpasswordhere//" /tmp/wordpress-tests/wp-tests-config.php
+    - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+
+script:
+    - phpunit -c phpunit.xml
+
+branches:
+    only:
+        - master
+        - alpha
+
+notifications:
+    notifications:
+        hipchat:
+            rooms:
+                - secure: "P7ChqZStvixQt6nZBV4H2k1QyC/WFz4lh/fp6Fjb8TtgiDHVGP7B0+srh1tSReCrswrR9dELmCk83HOieEp+6y1Kf1VhJ5SxivTHdcGcWsatLDIP0/HfjrzsRTIaX1Yxk7oXNvkwdJx74AJrv7bWdY6IYjysHBMWEqhDnjeq7o8="
+            template:
+                - "Build %{build_number} (%{branch} - %{commit}): %{message} %{build_url}"

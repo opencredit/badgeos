@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A dropdown above a list table in wp-admin
+ */
 abstract class P2P_Dropdown {
 
 	protected $ctype;
@@ -17,11 +20,20 @@ abstract class P2P_Dropdown {
 	protected function render_dropdown() {
 		$direction = $this->ctype->flip_direction()->get_direction();
 
+		$labels = $this->ctype->get( 'current', 'labels' );
+
+		if ( isset( $labels->dropdown_title ) )
+			$title = $labels->dropdown_title;
+		elseif ( isset( $labels->column_title ) )
+			$title = $labels->column_title;
+		else
+			$title = $this->title;
+
 		return scbForms::input( array(
 			'type' => 'select',
 			'name' => array( 'p2p', $this->ctype->name, $direction ),
 			'choices' => self::get_choices( $this->ctype ),
-			'text' => $this->title,
+			'text' => $title,
 		), $_GET );
 	}
 
@@ -56,58 +68,6 @@ abstract class P2P_Dropdown {
 			$options[ $item->get_id() ] = $item->get_title();
 
 		return $options;
-	}
-}
-
-
-class P2P_Dropdown_Post extends P2P_Dropdown {
-
-	function __construct( $directed, $title ) {
-		parent::__construct( $directed, $title );
-
-		add_filter( 'request', array( __CLASS__, 'massage_query' ) );
-
-		add_action( 'restrict_manage_posts', array( $this, 'show_dropdown' ) );
-	}
-
-	static function massage_query( $request ) {
-		return array_merge( $request, self::get_qv() );
-	}
-}
-
-
-class P2P_Dropdown_User extends P2P_Dropdown_Post {
-
-	function __construct( $directed, $title ) {
-		parent::__construct( $directed, $title );
-
-		add_action( 'pre_user_query', array( __CLASS__, 'massage_query' ), 9 );
-
-		add_action( 'restrict_manage_users', array( $this, 'show_dropdown' ) );
-	}
-
-	static function massage_query( $query ) {
-		if ( isset( $query->_p2p_capture ) )
-			return;
-
-		// Don't overwrite existing P2P query
-		if ( isset( $query->query_vars['connected_type'] ) )
-			return;
-
-		_p2p_append( $query->query_vars, self::get_qv() );
-	}
-
-	protected function render_dropdown() {
-		return html( 'div', array(
-			'style' => 'float: right; margin-left: 16px'
-		),
-			parent::render_dropdown(),
-			html( 'input', array(
-				'type' => 'submit',
-				'class' => 'button',
-				'value' => __( 'Filter', P2P_TEXTDOMAIN )
-			) )
-		);
 	}
 }
 

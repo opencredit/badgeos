@@ -106,7 +106,7 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  * @param  object $query_object The complete query object
  * @return string 				The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
+function badgeos_get_achievements_children_where( $where = '', $query_object ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
@@ -149,7 +149,7 @@ function badgeos_get_achievements_parents_join( $join = '' ) {
  * @since  1.0.0
  * @param  string $where The query "where" string
  * @param  object $query_object The complete query object
- * @return
+ * @return string        appended sql where statement
  */
 function badgeos_get_achievements_parents_where( $where = '', $query_object = null ) {
 	global $wpdb;
@@ -658,7 +658,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 	}
 
 	// Return our concatenated output
-	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $users );
+	return apply_filters( 'badgeos_get_achievement_earners_list', $output, $achievement_id, $earners );
 }
 
 /**
@@ -668,7 +668,6 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
  * @return boolean
  */
 function badgeos_ms_show_all_achievements(){
-	global $badgeos;
 	$ms_show_all_achievements = NULL;
 	if ( is_multisite() ) {
     	$badgeos_settings = get_option( 'badgeos_settings' );
@@ -702,7 +701,8 @@ function badgeos_get_network_site_ids() {
  * Set default achievement image on achievement post save
  *
  * @since 1.2.0
- * @param object $post The post object of the post being saved
+ * @param integer $post_id The post ID of the post being saved
+ * @return mixed    post ID if nothing to do, void otherwise.
  */
 function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	global $pagenow;

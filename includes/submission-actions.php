@@ -199,10 +199,10 @@ function badgeos_add_nomination_columns( $columns = array() ) {
  *
  * @since  1.0.0
  * @param  string $column The column name
- * @return void
+ * @return string         The concatenated markup
  */
 function badgeos_submission_column_action( $column = '' ) {
-	global $post, $badgeos;
+	global $post;
 
 	switch ( $column ) {
 		case 'action':
@@ -270,7 +270,7 @@ add_action( 'restrict_manage_posts', 'badgeos_add_submission_dropdown_filters' )
  *
  * @since 1.0.0
  * @param object $query The Query to be filtered
- * @param object 	   The Query after filtering
+ * @return object 	    The Query after filtering
  */
 function badgeos_submission_status_filter( $query = null ) {
 	global $pagenow;
@@ -748,7 +748,7 @@ function badgeos_user_has_access_to_submission_form( $user_id = 0, $achievement_
 /**
  * Get the nomination form
  * @param  array  $args The meta box arguemnts
- * @return void
+ * @return string       The concatenated markup
  */
 function badgeos_get_nomination_form( $args = array() ) {
 	global $post, $user_ID;
@@ -794,7 +794,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 /**
  * Get the submission form
  * @param  array  $args The meta box arguemnts
- * @return void
+ * @return string       The concatenated markup
  */
 function badgeos_get_submission_form( $args = array() ) {
 	global $post, $user_ID;

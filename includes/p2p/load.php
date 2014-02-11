@@ -4,40 +4,42 @@ Plugin Name: P2P Bundle Example
 Author: scribu
 */
 
-require dirname( __FILE__ ) . '/scb/load.php';
+// Include SCB library
+require_once dirname( __FILE__ ) . '/scb/load.php';
 
-scb_init( '_badgeos_p2p_load' );
-
+/**
+ * Load P2P.
+ *
+ * @since 1.3.4
+ */
 function _badgeos_p2p_load() {
-	add_action( 'plugins_loaded', '_badgeos_load_p2p_core', 20 );
-}
-
-function _badgeos_load_p2p_core() {
 	if ( function_exists( 'p2p_register_connection_type' ) )
 		return;
 
-	define( 'P2P_PLUGIN_VERSION', '1.4-beta' );
-
+	define( 'P2P_PLUGIN_VERSION', '1.6.3-alpha' );
 	define( 'P2P_TEXTDOMAIN', 'badgeos' );
 
-	foreach ( array(
-		'storage', 'query', 'query-post', 'query-user', 'url-query',
-		'util', 'side', 'type-factory', 'type', 'directed-type', 'indeterminate-type',
-		'api', 'list', 'extra', 'item',
-	) as $file ) {
-		require dirname( __FILE__ ) . "/p2p-core/$file.php";
-	}
+	require_once dirname( __FILE__ ) . '/p2p-core/init.php';
+
+	register_uninstall_hook( __FILE__, array( 'P2P_Storage', 'uninstall' ) );
 
 	if ( is_admin() ) {
-		foreach ( array( 'mustache', 'factory',
-			'box-factory', 'box', 'fields',
-			'column-factory', 'column',
-			'tools'
-		) as $file ) {
-			require dirname( __FILE__ ) . "/p2p-admin/$file.php";
-		}
+		_badgeos_p2p_load_admin();
 	}
 
-	// TODO: can't use activation hook
-	add_action( 'admin_init', array( 'P2P_Storage', 'install' ) );
+}
+scb_init( '_badgeos_p2p_load' );
+
+/**
+ * Load P2P admin functionality.
+ *
+ * @since 1.3.4
+ */
+function _badgeos_p2p_load_admin() {
+	P2P_Autoload::register( 'P2P_', dirname( __FILE__ ) . '/p2p-admin' );
+
+	new P2P_Box_Factory;
+	new P2P_Column_Factory;
+	new P2P_Dropdown_Factory;
+	new P2P_Tools_Page;
 }

@@ -39,8 +39,9 @@ li.step-row .delete-step {
 .badgeos-table tr {
 	/*padding: 5px 10px;*/
 }
-.badgeos-table .th {
+.badgeos-table th {
 	font-weight: bold;
+	padding: 8px 10px;
 	text-transform: uppercase;
 }
 

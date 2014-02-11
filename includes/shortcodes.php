@@ -136,7 +136,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 }
 add_shortcode( 'badgeos_achievements_list', 'badgeos_achievements_list_shortcode' );
 /**
- * Add help content for [badgeos_achievements_list] to BadgeOs Help page
+ * Add help content for [badgeos_achievements_list] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -163,7 +163,7 @@ function badgeos_achievements_list_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type=badges limit=15]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievements_list type="badges" limit="15"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -210,7 +210,78 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 add_shortcode( 'badgeos_achievement', 'badgeos_achievement_shortcode' );
 
 /**
- * Add help content for [badgeos_achievement] to BadgeOs Help page
+ * Display earned achievements for a given user
+ *
+ * @param  array  $atts Our attributes array
+ * @return string       Concatenated markup
+ */
+function badgeos_user_achievements_shortcode( $atts = array() ) {
+
+	// Parse our attributes
+	$atts = shortcode_atts( array(
+		'user' => get_current_user_id(),
+		'type'    => '',
+		'limit'   => 5
+	), $atts );
+
+	$output = '';
+
+	// Grab the user's current achievements, without duplicates
+	$achievements = array_unique( badgeos_get_user_earned_achievement_ids( $atts['user'], $atts['type'] ) );
+
+	// Setup a counter
+	$count = 0;
+
+	$output .= '<div class="badgeos-user-badges-wrap">';
+
+	// Loop through the achievements
+	if ( ! empty( $achievements ) ) {
+		foreach( $achievements as $achievement_id ) {
+
+			// If we've hit our limit, quit
+			if ( $count >= $atts['limit'] ) {
+				break;
+			}
+
+			// Output our achievement image and title
+			$output .= '<div class="badgeos-badge-wrap">';
+			$output .= badgeos_get_achievement_post_thumbnail( $achievement_id );
+			$output .= '<span class="badgeos-title-wrap">' . get_the_title( $achievement_id ) . '</span>';
+			$output .= '</div>';
+
+			// Increase our counter
+			$count++;
+		}
+	}
+	$output .= '</div>';
+
+	return $output;
+}
+add_shortcode( 'badgeos_user_achievements', 'badgeos_user_achievements_shortcode' );
+
+function badgeos_user_achievements_shortcode_help() { ?>
+	<hr/>
+	<p><strong>[badgeos_user_achievements]</strong> - <?php _e( 'Display a list of achievements by any user on any post or page.', 'badgeos' ); ?></p>
+	<div style="padding-left:15px;">
+		<ul>
+			<li><strong><?php _e( 'Parameters', 'badgeos' ); ?></strong></li>
+			<li>
+				<div style="padding-left:15px;">
+					<ul>
+						<li><?php _e( 'user', 'badgeos' ); ?> - <?php _e( 'The ID of the user to display.', 'badgeos' ); ?></li>
+						<li><?php _e( 'type', 'badgeos' ); ?> - <?php _e( 'The achievement type to display from the user.', 'badgeos' ); ?></li>
+						<li><?php _e( 'limit', 'badgeos' ); ?> - <?php _e( 'The maximum amount of achievements to display.', 'badgeos' ); ?></li>
+					</ul>
+				</div>
+			</li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_user_achievements user="1" type="badge" limit="5"]</code></li>
+		</ul>
+	</div>
+<?php }
+add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_user_achievements_shortcode_help' );
+
+/**
+ * Add help content for [badgeos_achievement] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -227,7 +298,7 @@ function badgeos_achievement_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id=12]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_achievement id="12"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -276,7 +347,7 @@ function badgeos_nomination_form( $atts = array() ) {
 add_shortcode( 'badgeos_nomination', 'badgeos_nomination_form' );
 
 /**
- * Add help content for [badgeos_nomination] to BadgeOs Help page
+ * Add help content for [badgeos_nomination] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -293,7 +364,7 @@ function badgeos_nomination_form_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id=35]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_nomination achievement_id="35"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -345,7 +416,7 @@ function badgeos_submission_form( $atts = array() ) {
 add_shortcode( 'badgeos_submission', 'badgeos_submission_form' );
 
 /**
- * Add help content for [badgeos_submission] to BadgeOs Help page
+ * Add help content for [badgeos_submission] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -362,7 +433,7 @@ function badgeos_submission_form_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id=35]</code></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <code>[badgeos_submission achievement_id="35"]</code></li>
 		</ul>
 	</div>
 <?php }
@@ -405,7 +476,7 @@ function badgeos_display_submissions( $atts = array() ) {
 add_shortcode( 'badgeos_submissions', 'badgeos_display_submissions' );
 
 /**
- * Add help content for [badgeos_submissions] to BadgeOs Help page
+ * Add help content for [badgeos_submissions] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -427,7 +498,7 @@ function badgeos_submissions_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status=pending limit=15]</code>' ); ?></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To show 15 pending submissions, %s', 'badgeos' ), '<code>[badgeos_submissions status="pending" limit="15"]</code>' ); ?></li>
 		</ul>
 	</div>
 <?php }
@@ -470,7 +541,7 @@ function badgeos_display_nominations( $atts = array() ) {
 add_shortcode( 'badgeos_nominations', 'badgeos_display_nominations' );
 
 /**
- * Add help content for [badgeos_nominations] to BadgeOs Help page
+ * Add help content for [badgeos_nominations] to BadgeOS Help page
  *
  * @since  1.2.0
  */
@@ -490,7 +561,7 @@ function badgeos_nominations_shortcode_help() { ?>
 				</ul>
 				</div>
 			</li>
-			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search=false limit=20]</code>' ); ?></li>
+			<li><strong><?php _e( 'Example', 'badgeos' ); ?>:</strong> <?php printf( __( 'To display 20 nominations and no search form, %s', 'badgeos' ), '<code>[badgeos_nominations show_search="false" limit="20"]</code>' ); ?></li>
 		</ul>
 	</div>
 <?php }
@@ -501,7 +572,8 @@ add_action( 'badgeos_help_support_page_shortcodes', 'badgeos_nominations_shortco
  *
  * @since  1.3.0
  *
- * @return` string iframe displaying Credly data, or nothing.
+ * @param  array $atts Attributes passed via shortcode
+ * @return string      iframe displaying Credly data, or nothing.
  */
 function badgeos_credly_assertion_page( $atts = array() ) {
 	global $content_width;
@@ -526,7 +598,7 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 add_shortcode( 'credly_assertion_page', 'badgeos_credly_assertion_page' );
 
 /**
- * Add help content for [credly_assertion_page] to BadgeOs Help page
+ * Add help content for [credly_assertion_page] to BadgeOS Help page
  *
  * @since  1.3.0
  */

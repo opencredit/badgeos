@@ -47,9 +47,6 @@ add_action( 'admin_menu', 'badgeos_add_steps_ui_meta_box', 99 );
  */
 function badgeos_steps_ui_meta_box( $post  = null) {
 
-	// Grab our $wpdb global
-	global $wpdb;
-
 	// Grab our Badge's required steps
 	$required_steps = get_posts( array(
 		'post_type'           => 'step',

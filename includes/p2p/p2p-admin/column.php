@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * A column in a list table in wp-admin
+ */
 abstract class P2P_Column {
 
 	protected $ctype;
@@ -13,10 +16,6 @@ abstract class P2P_Column {
 			$this->ctype->get_direction(),
 			$this->ctype->name
 		);
-
-		$screen = get_current_screen();
-
-		add_filter( "manage_{$screen->id}_columns", array( $this, 'add_column' ) );
 	}
 
 	function add_column( $columns ) {
@@ -26,11 +25,9 @@ abstract class P2P_Column {
 
 		$title = isset( $labels->column_title )
 			? $labels->column_title
-			: $labels->title;
+			: $this->ctype->get( 'current', 'title' );
 
-		$columns[ $this->column_id ] = $title;
-
-		return $columns;
+		return array_splice( $columns, 0, -1 ) + array( $this->column_id => $title ) + $columns;
 	}
 
 	protected abstract function get_items();
@@ -45,7 +42,7 @@ abstract class P2P_Column {
 
 		$connected = $this->ctype->get_connected( $items, $extra_qv, 'abstract' );
 
-		$this->connected = p2p_list_cluster( $connected->items, '_p2p_get_other_id' );
+		$this->connected = scb_list_group_by( $connected->items, '_p2p_get_other_id' );
 	}
 
 	function styles() {
@@ -75,84 +72,6 @@ abstract class P2P_Column {
 		$out .= '</ul>';
 
 		return $out;
-	}
-}
-
-
-class P2P_Column_Post extends P2P_Column {
-
-	function __construct( $directed ) {
-		parent::__construct( $directed );
-
-		$screen = get_current_screen();
-
-		add_action( "manage_{$screen->post_type}_posts_custom_column", array( $this, 'display_column' ), 10, 2 );
-	}
-
-	protected function get_items() {
-		global $wp_query;
-
-		return $wp_query->posts;
-	}
-
-	function get_admin_link( $item ) {
-		$args = array(
-			'connected_type' => $this->ctype->name,
-			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
-			'connected_items' => $item->get_id(),
-			'post_type' => get_current_screen()->post_type
-		);
-
-		return add_query_arg( $args, admin_url( 'edit.php' ) );
-	}
-
-	function display_column( $column, $item_id ) {
-		echo parent::render_column( $column, $item_id );
-	}
-}
-
-
-class P2P_Column_User extends P2P_Column {
-
-	function __construct( $directed ) {
-		parent::__construct( $directed );
-
-		add_action( 'pre_user_query', array( __CLASS__, 'user_query' ), 9 );
-
-		add_filter( 'manage_users_custom_column', array( $this, 'display_column' ), 10, 3 );
-	}
-
-	protected function get_items() {
-		global $wp_list_table;
-
-		return $wp_list_table->items;
-	}
-
-	// Add the query vars to the global user query (on the user admin screen)
-	static function user_query( $query ) {
-		if ( isset( $query->_p2p_capture ) )
-			return;
-
-		// Don't overwrite existing P2P query
-		if ( isset( $query->query_vars['connected_type'] ) )
-			return;
-
-		_p2p_append( $query->query_vars, wp_array_slice_assoc( $_GET,
-			P2P_URL_Query::get_custom_qv() ) );
-	}
-
-	function get_admin_link( $item ) {
-		$args = array(
-			'connected_type' => $this->ctype->name,
-			'connected_direction' => $this->ctype->flip_direction()->get_direction(),
-			'connected_items' => $item->get_id(),
-		);
-
-		return add_query_arg( $args, admin_url( 'users.php' ) );
-	}
-
-	function display_column( $content, $column, $item_id ) {
-		return parent::render_column( $column, $item_id );
 	}
 }
 

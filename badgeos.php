@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: Credly
-* Version: 1.3.3
+* Version: 1.3.4
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -32,7 +32,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '1.3.3';
+	public static $version = '1.3.4';
 
 	function __construct() {
 		// Define plugin constants
@@ -47,18 +47,15 @@ class BadgeOS {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		//include Posts to Posts core
-		require( $this->directory_path . 'includes/p2p/load.php' );
-
 		// Hook in all our important pieces
-		add_action( 'plugins_loaded', array( &$this, 'includes' ) );
-		add_action( 'init', array( &$this, 'register_scripts_and_styles' ) );
-		add_action( 'init', array( &$this, 'include_cmb' ), 999 );
-		add_action( 'init', array( &$this, 'register_achievement_relationships' ) );
-		add_action( 'init', array( &$this, 'register_image_sizes' ) );
-		add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
-		add_action( 'wp_enqueue_scripts', array( &$this, 'frontend_scripts' ) );
+		add_action( 'plugins_loaded', array( $this, 'includes' ) );
+		add_action( 'init', array( $this, 'register_scripts_and_styles' ) );
+		add_action( 'init', array( $this, 'include_cmb' ), 999 );
+		add_action( 'init', array( $this, 'register_achievement_relationships' ) );
+		add_action( 'init', array( $this, 'register_image_sizes' ) );
+		add_action( 'admin_menu', array( $this, 'plugin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'init', array( $this, 'credly_init' ) );
 
 	}
@@ -67,6 +64,7 @@ class BadgeOS {
 	 * Include all our important files.
 	 */
 	function includes() {
+		require_once( $this->directory_path . 'includes/p2p/load.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
@@ -121,13 +119,10 @@ class BadgeOS {
 	}
 
 	/**
-	 * Initialize the custom metabox class.
+	 * Initialize CMB.
 	 */
 	function include_cmb() {
-
-		if ( ! class_exists( 'cmb_Meta_Box' ) )
-			require_once( $this->directory_path . 'includes/cmb/init.php' );
-
+		require_once( $this->directory_path . 'includes/cmb/load.php' );
 	}
 
 	/**

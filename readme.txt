@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.7.1
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -214,6 +214,18 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.4 =
+* Updated: Upgraded bundled CMB library to 1.0.8.
+* Updated: Upgraded bundled posts-to-posts library to 1.6.3-alpha.
+* Updated: Corrected several outdated PHPDoc comments.
+* Updated: Added quotes to all shortcode examples for clarity.
+* Fixed: Properly award "all achievements of type" step trigger when triggered.
+* Fixed: Prevent awarding a user's triggered triggers to current admin.
+* Fixed: Prevent awarding a user's triggered triggers on the incorrect site (in multisite).
+* Fixed: Prevent users from incorrectly resubmitting earned achievements to Credly.
+* Fixed: Pass explicit user ID on "send to credly" AJAX calls.
+* Fixed: Minor CSS tweaks to BadgeOS user profile fields.
+
 = 1.3.3 =
 * Added: Spanish language translation.
 * Fixed: Eliminated a recursion issue with the badgeos_award_achievement action hook.
@@ -307,6 +319,18 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+* Updated: Upgraded bundled CMB library to 1.0.8.
+* Updated: Upgraded bundled posts-to-posts library to 1.6.3-alpha.
+* Updated: Corrected several outdated PHPDoc comments.
+* Updated: Added quotes to all shortcode examples for clarity.
+* Fixed: Properly award "all achievements of type" step trigger when triggered.
+* Fixed: Prevent awarding a user's triggered triggers to current admin.
+* Fixed: Prevent awarding a user's triggered triggers on the incorrect site (in multisite).
+* Fixed: Prevent users from incorrectly resubmitting earned achievements to Credly.
+* Fixed: Pass explicit user ID on "send to credly" AJAX calls.
+* Fixed: Minor CSS tweaks to BadgeOS user profile fields.
 
 = 1.3.3 =
 * Added: Spanish language translation.

@@ -1,4 +1,4 @@
-About BadgeOS
+About BadgeOS [![Build Status](https://travis-ci.org/opencredit/badgeos.png?branch=master)](https://travis-ci.org/opencredit/badgeos)
 ============
 Easily create badges and set up the steps and achievements users complete to earn them. Badges are Mozilla OBI compatible and sharable via Credly. Official website: [BadgeOS.org](http://badgeos.org).
 
@@ -123,7 +123,7 @@ BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
 * [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
-* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers. 
+* [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers.
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
 * [Facebook](https://www.facebook.com/Credly "Credly on Facebook") - Credly on Facebook
 * [Twitter](https://twitter.com/credly "Credly on Facebook") - Credly Tweets
