@@ -17,84 +17,125 @@ class WP_Editor_Shortcodes {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_action( 'admin_init', array( $this, 'add_shortcode_button' ) );
-		add_filter( 'tiny_mce_version', array( $this, 'refresh_mce' ) );
-		add_filter( 'mce_external_languages', array( $this, 'add_tinymce_lang' ), 10, 1 );
+		$this->directory_path = plugin_dir_path( dirname( __FILE__ ) );
+		$this->directory_url  = plugin_dir_url( dirname( __FILE__ ) );
+
+		add_action( 'admin_footer',  array( $this, 'add_shortcode_popup' ) );
+		add_action( 'media_buttons', array( $this, 'add_shortcode_button'), 20 );
+		add_action( 'admin_head', array( $this, 'add_shortcode_css' ) );
 	}
 
-	/**
-	 * Add a button for shortcodes to the WP editor.
-	 */
+	public function add_shortcode_popup() { ?>
+		<script>
+			//return our end result and send to the post editor.
+			function badgeos_insert_shortcode(){
+				var shortcode, attributes;
+
+				shortcode = jQuery('#select_shortcode option:selected').val();
+				attributes = badgeos_get_attributes( shortcode );
+
+				window.send_to_editor( badgeos_create_shortcode(attributes) );
+			}
+
+			//Grab our values from the inputs and add to our attributes object.
+			function badgeos_get_attributes(shortcode) {
+				var attributes = {};
+
+				switch( shortcode ) {
+
+				}
+
+				attributes.shortcodename = shortcode;
+
+				return attributes;
+			}
+
+			//Concatenate all of our attributes into one string.
+			function badgeos_create_shortcode(attributes) {
+				var shortcode = '[';
+				shortcode += attributes.shortcodename;
+
+				shortcode += ']';
+
+				return shortcode;
+			}
+
+			jQuery(document).ready(function($){
+				//Handle changing the html used for the selected shortcode.
+				$('#select_shortcode').on('change',function(){
+					var selected = $('#select_shortcode option:selected').val();
+
+					switch( selected ) {
+						case "credly_assertion_page":
+
+							break;
+
+						default:
+
+							break;
+					}
+				});
+			});
+
+		</script>
+		<?php
+
+		$this->add_shortcode_popup_html();
+	}
+
+	public function add_shortcode_popup_html() { ?>
+		<div id="select_badgeos_shortcode" style="display:none;">
+			<div class="wrap">
+				<div>
+					<h3><?php _e( 'Insert a shortcode', 'badgeos' ); ?></h3>
+
+					<p><?php _e( 'Select a shortcode below to add it to your post or page.', 'badgeos' ); ?></p>
+
+					<select id="select_shortcode">
+						<option value=""><?php _e( 'Select a shortcode', 'badgeos' ); ?></option>
+						<?php
+							foreach( badgeos_get_shortcodes() as $name => $shortcode ) { ?>
+								<option value="<?php echo $shortcode ?>"><?php echo $name; ?></option>
+								<?php
+							}
+						?>
+					</select>
+					<div id="shortcode_options"></div>
+					<div>
+						<input id="badgeos_insert" type="button" class="button-primary" value="<?php esc_attr_e( 'Insert Shortcode', 'badgeos' ); ?>" onclick="badgeos_insert_shortcode();"/>
+						<a id="badgeos_cancel" class="button" href="#" onclick="tb_remove(); return false;"><?php _e( 'Cancel', 'badgeos' ); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<?php
+	}
+
+	//Action target that adds the "Insert Form" button to the post/page edit screen
 	public function add_shortcode_button() {
-		if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) return;
-		if ( get_user_option('rich_editing') == 'true') :
-			add_filter( 'mce_external_plugins', array( $this, 'add_shortcode_tinymce_plugin' ) );
-			add_filter( 'mce_buttons', array( $this, 'register_shortcode_button' ) );
-		endif;
+		// do a version check for the new 3.5 UI
+			// display button matching new UI
+		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS Shortcode', 'badgeos' ) . '">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
 	}
 
-	/**
-	 *  function.
-	 *
-	 * @param array $arr
-	 * @return array
-	 */
-	public function add_tinymce_lang( $arr ) {
-		$strings = 'tinyMCE.addI18n({' . _WP_Editors::$mce_locale . ':{
-    woocommerce:{
-        insert: "' . esc_js( __( 'Insert Shortcode', 'woocommerce' ) ) . '",
-        price_button: "' . esc_js( __( 'Product price/cart button', 'woocommerce' ) ) . '",
-        product_by_sku: "' . esc_js( __( 'Product by SKU/ID', 'woocommerce' ) ) . '",
-        products_by_sku: "' . esc_js( __( 'Products by SKU/ID', 'woocommerce' ) ) . '",
-        product_categories: "' . esc_js( __( 'Product categories', 'woocommerce' ) ) . '",
-        products_by_cat_slug: "' . esc_js( __( 'Products by category slug', 'woocommerce' ) ) . '",
-        recent_products: "' . esc_js( __( 'Recent products', 'woocommerce' ) ) . '",
-        featured_products: "' . esc_js( __( 'Featured products', 'woocommerce' ) ) . '",
-        shop_messages: "' . esc_js( __( 'Shop Messages', 'woocommerce' ) ) . '",
-        order_tracking: "' . esc_js( __( 'Order tracking', 'woocommerce' ) ) . '",
-        my_account: "' . esc_js( __( 'My Account', 'woocommerce' ) ) . '",
-        shop_messages_shortcode: "' . esc_js( apply_filters( "shop_messages_shortcode_tag", 'woocommerce_shop_messages' ) ) . '",
-        order_tracking_shortcode: "' . esc_js( apply_filters( "woocommerce_order_tracking_shortcode_tag", 'woocommerce_order_tracking' ) ) . '"
-    }
-}})';
-
-	    $arr['WooCommerceShortcodes'] = WC()->plugin_path() . '/assets/js/admin/editor_plugin_lang.php';
-	    return $arr;
-	}
-
-	/**
-	 * Register the shortcode button.
-	 *
-	 * @param array $buttons
-	 * @return array
-	 */
-	public function register_shortcode_button( $buttons ) {
-		array_push( $buttons, "|", "woocommerce_shortcodes_button" );
-		return $buttons;
-	}
-
-	/**
-	 * Add the shortcode button to TinyMCE
-	 *
-	 * @param array $plugin_array
-	 * @return array
-	 */
-	public function add_shortcode_tinymce_plugin( $plugin_array ) {
-		$plugin_array['WooCommerceShortcodes'] = WC()->plugin_url() . '/assets/js/admin/editor_plugin.js';
-		return $plugin_array;
-	}
-
-	/**
-	 * Force TinyMCE to refresh.
-	 *
-	 * @param int $ver
-	 * @return int
-	 */
-	public function refresh_mce( $ver ) {
-		$ver += 3;
-		return $ver;
+	public function add_shortcode_css() {
+		echo '<style>.wp-core-ui a.badgeos_media_link{ padding-left: 0.4em; } </style>';
 	}
 
 }
 
-new WC_Admin_Editor();
+new WP_Editor_Shortcodes();
+
+function badgeos_get_shortcodes() {
+	return array(
+		__( 'Achievements List', 'badgeos' )        => 'badgeos_achievements_list',
+		__( 'User Achievements List', 'badgeos' )   => 'badgeos_user_achievements',
+		__( 'Single Achievement', 'badgeos' )       => 'badgeos_achievement',
+		__( 'Nomination Form', 'badgeos' )          => 'badgeos_nomination',
+		__( 'Submission Form', 'badgeos' )          => 'badgeos_submission',
+		__( 'Nominations List', 'badgeos' )         => 'badgeos_nominations',
+		__( 'Submissions List', 'badgeos' )         => 'badgeos_submissions',
+		__( 'Credly Assertion Page', 'badgeos' )    => 'credly_assertion_page'
+	);
+}
