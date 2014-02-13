@@ -45,8 +45,8 @@ class WP_Editor_Shortcodes {
 					</select>
 					<div id="shortcode_options"></div>
 					<div>
-						<input id="badgeos_insert" type="button" class="button-primary" value="<?php esc_attr_e( 'Insert Shortcode', 'badgeos' ); ?>" onclick="badgeos_insert_shortcode();"/>
-						<a id="badgeos_cancel" class="button" href="#" onclick="tb_remove(); return false;"><?php _e( 'Cancel', 'badgeos' ); ?></a>
+						<input id="badgeos_insert" type="button" class="button-primary" value="<?php esc_attr_e( 'Insert Shortcode', 'badgeos' ); ?>" />
+						<a id="badgeos_cancel" class="button" href="#"><?php _e( 'Cancel', 'badgeos' ); ?></a>
 					</div>
 				</div>
 			</div>
