@@ -22,68 +22,11 @@ class WP_Editor_Shortcodes {
 
 		add_action( 'admin_footer',  array( $this, 'add_shortcode_popup' ) );
 		add_action( 'media_buttons', array( $this, 'add_shortcode_button'), 20 );
-		add_action( 'admin_head', array( $this, 'add_shortcode_css' ) );
+		add_action( 'admin_head', array( $this, 'styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 99 );
 	}
 
 	public function add_shortcode_popup() { ?>
-		<script>
-			//return our end result and send to the post editor.
-			function badgeos_insert_shortcode(){
-				var shortcode, attributes;
-
-				shortcode = jQuery('#select_shortcode option:selected').val();
-				attributes = badgeos_get_attributes( shortcode );
-
-				window.send_to_editor( badgeos_create_shortcode(attributes) );
-			}
-
-			//Grab our values from the inputs and add to our attributes object.
-			function badgeos_get_attributes(shortcode) {
-				var attributes = {};
-
-				switch( shortcode ) {
-
-				}
-
-				attributes.shortcodename = shortcode;
-
-				return attributes;
-			}
-
-			//Concatenate all of our attributes into one string.
-			function badgeos_create_shortcode(attributes) {
-				var shortcode = '[';
-				shortcode += attributes.shortcodename;
-
-				shortcode += ']';
-
-				return shortcode;
-			}
-
-			jQuery(document).ready(function($){
-				//Handle changing the html used for the selected shortcode.
-				$('#select_shortcode').on('change',function(){
-					var selected = $('#select_shortcode option:selected').val();
-
-					switch( selected ) {
-						case "credly_assertion_page":
-
-							break;
-
-						default:
-
-							break;
-					}
-				});
-			});
-
-		</script>
-		<?php
-
-		$this->add_shortcode_popup_html();
-	}
-
-	public function add_shortcode_popup_html() { ?>
 		<div id="select_badgeos_shortcode" style="display:none;">
 			<div class="wrap">
 				<div>
