@@ -62,8 +62,12 @@ class WP_Editor_Shortcodes {
 		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS Shortcode', 'badgeos' ) . '">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
 	}
 
-	public function add_shortcode_css() {
-		echo '<style>.wp-core-ui a.badgeos_media_link{ padding-left: 0.4em; } </style>';
+	public function styles() {
+		echo '<style>.wp-core-ui a.badgeos_media_link{ padding-left: 0.4em; } #shortcode_options { min-height: 200px; padding-top: 20px; }</style>';
+	}
+
+	public function scripts() {
+		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . '/js/badgeos-shortcode-embed.js', array( 'jquery' ), '', true );
 	}
 
 }
