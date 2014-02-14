@@ -92,6 +92,13 @@
 		var shortcode = '[';
 		shortcode += requested.shortcode;
 
+		if ( requested.params ) {
+			for( i = 0; i < requested.params.length; i++ ) {
+				shortcode += ' ' + requested.params[i];
+			}
+
+			$.trim(shortcode);
+		}
 		shortcode += ']';
 
 		return shortcode;
