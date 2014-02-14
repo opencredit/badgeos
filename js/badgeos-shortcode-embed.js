@@ -101,6 +101,11 @@
 	$( '#select_shortcode' ).on( 'change', function(){
 		var selected = $( '#select_shortcode option:selected' ).val(), html = '';
 
+		if ( 'credly_assertion_page' == selected || 'unselected' === selected ) {
+			$( '#shortcode_options' ).html('');
+			return;
+		}
+
 		inputs = badgeos_construct_input( selected );
 		$( '#shortcode_options' ).html( inputs );
 	});
