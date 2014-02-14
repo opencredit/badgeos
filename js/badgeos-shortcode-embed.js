@@ -59,6 +59,7 @@
 	function badgeos_set_current_attributes( shortcode ){
 		var attributes = badgeos_get_attributes( shortcode );
 
+		return false;
 	}
 
 	/*
