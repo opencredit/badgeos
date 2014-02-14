@@ -57,9 +57,22 @@
 	Set the values from the inputs for the provided shortcode.
 	 */
 	function badgeos_set_current_attributes( shortcode ){
-		var attributes = badgeos_get_attributes( shortcode );
+		var attributes = badgeos_get_attributes( shortcode ), result = {}, params = [], input = '', value = '';
 
-		return false;
+		result.shortcode = attributes.shortcode;
+
+		if ( attributes.params ) {
+			for( i = 0; i < attributes.params.length; i++ ) {
+				input = $('#badgeos_'+attributes.params[i] ).val();
+				value = ( input.length > 0 ) ? input : null;
+
+				if ( value ) {
+					params.push( attributes.params[i]+'="'+value+'"' );
+				}
+			}
+			result.params = params;
+		}
+		return result;
 	}
 
 	/*
