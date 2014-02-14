@@ -35,7 +35,7 @@ class WP_Editor_Shortcodes {
 					<p><?php _e( 'Select a shortcode below to add it to your post or page.', 'badgeos' ); ?></p>
 
 					<select id="select_shortcode">
-						<option value=""><?php _e( 'Select a shortcode', 'badgeos' ); ?></option>
+						<option value="unselected"><?php _e( 'Select a shortcode', 'badgeos' ); ?></option>
 						<?php
 							foreach( badgeos_get_shortcodes() as $name => $shortcode ) { ?>
 								<option value="<?php echo $shortcode ?>"><?php echo $name; ?></option>
