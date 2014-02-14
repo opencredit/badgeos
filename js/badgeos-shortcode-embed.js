@@ -130,6 +130,10 @@
 		$( '#shortcode_options' ).html( inputs );
 	});
 
+	$('#insert_badgeos_shortcodes').on( 'click', function(){
+		$( '#select_shortcode' ).val( 'unselected' );
+		$( '#shortcode_options' ).html('');
+	});
 	//Handle click events in our modal popup.
 	$( '#badgeos_insert' ).on( 'click', function(){
 		badgeos_insert_shortcode();
