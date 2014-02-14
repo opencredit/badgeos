@@ -87,7 +87,9 @@
 		window.send_to_editor( badgeos_construct_shortcode( requested ) );
 	}
 
-	//Concatenate all of our attributes into one string.
+	/*
+	Concatenate all of our attributes into one string.
+	 */
 	function badgeos_construct_shortcode( requested ) {
 		var shortcode = '[';
 		shortcode += requested.shortcode;
@@ -130,6 +132,7 @@
 		$( '#shortcode_options' ).html( inputs );
 	});
 
+	//Reset some values upon clicking.
 	$('#insert_badgeos_shortcodes').on( 'click', function(){
 		$( '#select_shortcode' ).val( 'unselected' );
 		$( '#shortcode_options' ).html('');
