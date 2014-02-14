@@ -88,9 +88,11 @@
 	 */
 	function badgeos_construct_input( shortcode ) {
 		inputs = '';
-		requested = badgeos_get_attributes( shortcode ); console.log(requested);
-		inputs += '<label>'+requested.shortcode+'</label><br/>';
-		inputs += '<input id="" name="" type="text" />';
+		requested = badgeos_get_attributes( shortcode );
+		for( i = 0; i < requested.params.length; i++ ) {
+			inputs += '<p><label for="badgeos_'+requested.params[i]+'">'+requested.params[i]+'</label><br/>';
+			inputs += '<input id="badgeos_'+requested.params[i]+'" name="badgeos_'+requested.params[i]+'" type="text" /></p>';
+		}
 
 		return inputs;
 	}
