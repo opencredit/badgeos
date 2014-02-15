@@ -68,6 +68,60 @@ class WP_Editor_Shortcodes {
 
 	public function scripts() {
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . '/js/badgeos-shortcode-embed.js', array( 'jquery' ), '', true );
+		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcodes', $this->default_parameters() );
+		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_bool', $this->bools() );
+	}
+
+	public function default_parameters() {
+		$defaults = apply_filters( 'badgeos_shortcodes_defaults', array() );
+
+        $defaults['badgeos_achievements_list']  = array(
+			array( 'param' => 'type', 'type' => 'text' ),
+			array( 'param' => 'limit', 'type' => 'text' ),
+			array( 'param' => 'show_filter', 'type' => 'bool' ),
+			array( 'param' => 'show_search', 'type' => 'bool' ),
+			array( 'param' => 'wpms', 'type' => 'bool' ),
+			array( 'param' => 'orderby', 'type' => 'text' ),
+			array( 'param' => 'order', 'type' => 'text' ),
+			array( 'param' => 'include', 'type' => 'text' ),
+			array( 'param' => 'exclude', 'type' => 'text' ),
+			array( 'param' => 'meta_key', 'type' => 'text' ),
+			array( 'param' => 'meta_value', 'type' => 'text' )
+		);
+        $defaults['badgeos_user_achievements']  = array(
+			array( 'param' => 'user', 'type' => 'text' ),
+			array( 'param' => 'type', 'type' => 'text' ),
+			array( 'param' => 'limit', 'type' => 'text' )
+		);
+        $defaults['badgeos_achievement'] = array(
+			array( 'param' => 'id', 'type' => 'text' )
+		);
+        $defaults['badgeos_nomination'] = array(
+        	array( 'param' => 'achievement_id', 'type' => 'text' )
+        );
+        $defaults['badgeos_submission'] = array(
+			array( 'param' => 'achievement_id', 'type' => 'text' )
+		);
+        $defaults['badgeos_submissions'] = array(
+			array( 'param' => 'limit', 'type' => 'text' ),
+			array( 'param' => 'status', 'type' => 'text' ),
+			array( 'param' => 'show_filter', 'type' => 'bool' ),
+			array( 'param' => 'show_search', 'type' => 'bool' ),
+			array( 'param' => 'show_attachments', 'type' => 'bool' ),
+			array( 'param' => 'show_comments', 'type' => 'bool' )
+		);
+        $defaults['badgeos_nominations'] = array(
+			array( 'param' => 'limit', 'type' => 'text' ),
+			array( 'param' => 'status', 'type' => 'text' ),
+			array( 'param' => 'show_filter', 'type' => 'bool' ),
+			array( 'param' => 'show_search', 'type' => 'bool' )
+		);
+
+		return $defaults;
+	}
+
+	public function bools() {
+		return array( __( 'True', 'badgeos' ), __( 'False', 'badgeos' ) );
 	}
 
 }
