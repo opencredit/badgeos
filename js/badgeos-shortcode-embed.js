@@ -1,56 +1,19 @@
 (function($) {
-	/*
-	Construct all of our possible attributes.
-	 */
-	function badgeos_get_attributes_object() {
-		attributes = {};
-        attributes.badgeos_achievements_list    = [ 'type', 'limit', 'show_filter', 'show_search', 'wpms', 'orderby', 'order', 'include', 'exclude', 'meta_key', 'meta_value' ];
-        attributes.badgeos_user_achievements    = [ 'user', 'type', 'limit' ];
-        attributes.badgeos_achievement          = [ 'id' ];
-        attributes.badgeos_nomination           = [ 'achievement_id' ];
-        attributes.badgeos_submission           = [ 'achievement_id' ];
-        attributes.badgeos_submissions          = [ 'limit', 'status', 'show_filter', 'show_search', 'show_attachments', 'show_comments' ];
-        attributes.badgeos_nominations          = [ 'limit', 'status', 'show_filter', 'show_search' ];
-
-		return attributes;
-	}
 
 	/*
 	Construct and return our attributes list for the provided shortcode.
 	 */
 	function badgeos_get_attributes( shortcode ) {
+		//badgeos_shortcodes will be a localized variable
 		var result = {};
-		var defaults = badgeos_get_attributes_object();
 
 		result.shortcode = shortcode;
 
-		switch( shortcode ) {
-			case 'badgeos_achievements_list':
-				result.params = defaults.badgeos_achievements_list;
-				break;
-			case 'badgeos_user_achievements':
-				result.params = defaults.badgeos_user_achievements;
-				break;
-			case 'badgeos_achievement':
-				result.params = defaults.badgeos_achievement;
-				break;
-			case 'badgeos_nomination':
-				result.params = defaults.badgeos_nomination;
-				break;
-			case 'badgeos_submission':
-				result.params = defaults.badgeos_submission;
-				break;
-			case 'badgeos_nominations':
-				result.params = defaults.badgeos_nominations;
-				break;
-			case 'badgeos_submissions':
-				result.params = defaults.badgeos_submissions;
-				break;
-			default:
-				break;
-		}
+		if ( badgeos_shortcodes.hasOwnProperty(shortcode) ) {
+			result.params = badgeos_shortcodes[shortcode];
 
-		return result;
+			return result;
+		}
 	}
 
 	/*
@@ -112,8 +75,17 @@
 		inputs = '';
 		requested = badgeos_get_attributes( shortcode );
 		for( i = 0; i < requested.params.length; i++ ) {
-			inputs += '<p><label for="badgeos_'+requested.params[i]+'">'+requested.params[i]+'</label><br/>';
-			inputs += '<input id="badgeos_'+requested.params[i]+'" name="badgeos_'+requested.params[i]+'" type="text" /></p>';
+			if ( 'bool' === requested.params[i].type ) {
+				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
+				inputs += '<select name="badgeos_'+requested.params[i].param+'"">';
+				inputs += '<option value="1">'+badgeos_shortcode_bool[0]+'</option>';
+				inputs += '<option value="0">'+badgeos_shortcode_bool[1]+'</option>';
+				inputs += '</select></p>';
+			} else {
+				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
+				inputs += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" /></p>';
+			}
+
 		}
 
 		return inputs;
