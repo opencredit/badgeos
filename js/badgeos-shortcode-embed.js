@@ -80,6 +80,7 @@
 		requested = badgeos_get_attributes( shortcode );
 		for( i = 0; i < requested.params.length; i++ ) {
 			if ( 'bool' === requested.params[i].type ) {
+
 				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
 				inputs += '<select id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'">';
 				if ( requested.params[i].default == badgeos_shortcode_bool[0].toLowerCase() ) {
@@ -100,6 +101,7 @@
 				inputs += '</p>';
 
 			} else {
+
 				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
 				inputs += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" /></p>';
 			}
