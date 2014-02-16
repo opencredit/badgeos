@@ -26,7 +26,11 @@
 
 		if ( attributes.params ) {
 			for( i = 0; i < attributes.params.length; i++ ) {
-				input = $('#badgeos_'+attributes.params[i] ).val();
+				if ( 'bool' === attributes.params[i].type ) {
+					input = $('#badgeos_'+attributes.params[i].param+' option:selected' ).val();
+				} else {
+					input = $('#badgeos_'+attributes.params[i].param ).val();
+				}
 				value = ( input.length > 0 ) ? input : null;
 
 				if ( value ) {
