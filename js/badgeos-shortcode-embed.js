@@ -34,7 +34,7 @@
 				value = ( input.length > 0 ) ? input : null;
 
 				if ( value ) {
-					params.push( attributes.params[i]+'="'+value+'"' );
+					params.push( attributes.params[i].param+'="'+value+'"' );
 				}
 			}
 			result.params = params;
