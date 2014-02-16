@@ -32,7 +32,15 @@ class WP_Editor_Shortcodes {
 				<div>
 					<h3><?php _e( 'Insert a shortcode', 'badgeos' ); ?></h3>
 
-					<p><?php _e( 'Select a shortcode below to add it to your post or page.', 'badgeos' ); ?></p>
+					<p>
+						<?php _e( 'Select a shortcode below to add it to your post or page.', 'badgeos' ); ?><br/>
+						<?php echo sprintf( __( 'See the %s page for more information', 'badgeos' ),
+							sprintf(
+								'<a href="%s">' . __( 'Help/Support', 'badgeos' ) . '</a>',
+								admin_url( 'admin.php?page=badgeos_sub_help_support' )
+							)
+						); ?>
+					</p>
 
 					<select id="select_shortcode">
 						<option value="unselected"><?php _e( 'Select a shortcode', 'badgeos' ); ?></option>
