@@ -81,10 +81,24 @@
 		for( i = 0; i < requested.params.length; i++ ) {
 			if ( 'bool' === requested.params[i].type ) {
 				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
-				inputs += '<select name="badgeos_'+requested.params[i].param+'"">';
-				inputs += '<option value="1">'+badgeos_shortcode_bool[0]+'</option>';
-				inputs += '<option value="0">'+badgeos_shortcode_bool[1]+'</option>';
-				inputs += '</select></p>';
+				inputs += '<select id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'">';
+				if ( requested.params[i].default == badgeos_shortcode_bool[0].toLowerCase() ) {
+					inputs += '<option selected="selected" value="1">'+badgeos_shortcode_bool[0]+'</option>';
+				} else {
+					inputs += '<option value="1">'+badgeos_shortcode_bool[0]+'</option>';
+				}
+				if ( requested.params[i].default == badgeos_shortcode_bool[1].toLowerCase() ) {
+					inputs += '<option selected="selected" value="0">'+badgeos_shortcode_bool[1]+'</option>';
+				} else {
+					inputs += '<option value="0">'+badgeos_shortcode_bool[1]+'</option>';
+				}
+
+				inputs += '</select>';
+				if ( requested.params[i].default_text ) {
+					inputs += '<br/>' + requested.params[i].default_text;
+				}
+				inputs += '</p>';
+
 			} else {
 				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
 				inputs += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" /></p>';
