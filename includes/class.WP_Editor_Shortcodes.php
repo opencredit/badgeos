@@ -77,45 +77,45 @@ class WP_Editor_Shortcodes {
 		$defaults = apply_filters( 'badgeos_shortcodes_defaults', array() );
 
         $defaults['badgeos_achievements_list']  = array(
-			array( 'param' => 'type', 'type' => 'text' ),
-			array( 'param' => 'limit', 'type' => 'text' ),
-			array( 'param' => 'show_filter', 'type' => 'bool' ),
-			array( 'param' => 'show_search', 'type' => 'bool' ),
-			array( 'param' => 'wpms', 'type' => 'bool' ),
-			array( 'param' => 'orderby', 'type' => 'text' ),
-			array( 'param' => 'order', 'type' => 'text' ),
+			array( 'param' => 'type', 'type' => 'text', 'default_text' => __( 'Default: all', 'badgeos' ) ),
+			array( 'param' => 'limit', 'type' => 'text', 'default_text' => __( 'Default: 10', 'badgeos' ) ),
+			array( 'param' => 'show_filter', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'show_search', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'wpms', 'type' => 'bool', 'default' => 'false', 'default_text' => __( 'Default: false', 'badgeos' ) ),
+			array( 'param' => 'orderby', 'type' => 'text', 'default_text' => __( 'Default: menu_order', 'badgeos' ) ),
+			array( 'param' => 'order', 'type' => 'text', 'default_text' => __( 'Default: ASC', 'badgeos' ) ),
 			array( 'param' => 'include', 'type' => 'text' ),
 			array( 'param' => 'exclude', 'type' => 'text' ),
 			array( 'param' => 'meta_key', 'type' => 'text' ),
 			array( 'param' => 'meta_value', 'type' => 'text' )
 		);
         $defaults['badgeos_user_achievements']  = array(
-			array( 'param' => 'user', 'type' => 'text' ),
-			array( 'param' => 'type', 'type' => 'text' ),
-			array( 'param' => 'limit', 'type' => 'text' )
+			array( 'param' => 'user', 'type' => 'text', 'default_text' => __( 'Default: current user', 'badgeos' ) ),
+			array( 'param' => 'type', 'type' => 'text', 'default_text' => __( 'Default: none', 'badgeos' ) ),
+			array( 'param' => 'limit', 'type' => 'text', 'default_text' => __( 'Default: 5', 'badgeos' ) )
 		);
         $defaults['badgeos_achievement'] = array(
-			array( 'param' => 'id', 'type' => 'text' )
+			array( 'param' => 'id', 'type' => 'text', 'default_text' => __( 'Default: none', 'badgeos' ) )
 		);
         $defaults['badgeos_nomination'] = array(
-        	array( 'param' => 'achievement_id', 'type' => 'text' )
+        	array( 'param' => 'achievement_id', 'type' => 'text', 'default_text' => __( 'Default: none', 'badgeos' ) )
         );
         $defaults['badgeos_submission'] = array(
-			array( 'param' => 'achievement_id', 'type' => 'text' )
+			array( 'param' => 'achievement_id', 'type' => 'text', 'default_text' => __( 'Default: none', 'badgeos' ) )
 		);
         $defaults['badgeos_submissions'] = array(
-			array( 'param' => 'limit', 'type' => 'text' ),
-			array( 'param' => 'status', 'type' => 'text' ),
-			array( 'param' => 'show_filter', 'type' => 'bool' ),
-			array( 'param' => 'show_search', 'type' => 'bool' ),
-			array( 'param' => 'show_attachments', 'type' => 'bool' ),
-			array( 'param' => 'show_comments', 'type' => 'bool' )
+			array( 'param' => 'limit', 'type' => 'text', 'default_text' => __( 'Default: 10', 'badgeos' ) ),
+			array( 'param' => 'status', 'type' => 'text', 'default_text' => __( 'Default: all', 'badgeos' ) ),
+			array( 'param' => 'show_filter', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'show_search', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'show_attachments', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'show_comments', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) )
 		);
         $defaults['badgeos_nominations'] = array(
-			array( 'param' => 'limit', 'type' => 'text' ),
-			array( 'param' => 'status', 'type' => 'text' ),
-			array( 'param' => 'show_filter', 'type' => 'bool' ),
-			array( 'param' => 'show_search', 'type' => 'bool' )
+			array( 'param' => 'limit', 'type' => 'text', 'default_text' => __( 'Default: 10', 'badgeos' ) ),
+			array( 'param' => 'status', 'type' => 'text', 'default_text' => __( 'Default: all', 'badgeos' ) ),
+			array( 'param' => 'show_filter', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) ),
+			array( 'param' => 'show_search', 'type' => 'bool', 'default' => 'true', 'default_text' => __( 'Default: true', 'badgeos' ) )
 		);
 
 		return $defaults;
