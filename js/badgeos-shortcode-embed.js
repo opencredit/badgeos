@@ -103,7 +103,12 @@
 			} else {
 
 				inputs += '<p><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
-				inputs += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" /></p>';
+				inputs += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" />';
+				if ( requested.params[i].default_text ) {
+					inputs += '<br/>' + requested.params[i].default_text;
+				}
+				inputs += '</p>';
+
 			}
 
 		}
