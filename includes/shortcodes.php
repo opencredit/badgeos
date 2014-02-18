@@ -9,14 +9,14 @@
  * @link https://credly.com
  */
 
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_achievements_list.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_achievement.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_user_achievements.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_nomination.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_submission.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_submissions.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/badgeos_nominations.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . '/shortcodes/credly_assertion_page.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievements_list.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievement.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_achievements.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_nomination.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_submission.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_submissions.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_nominations.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/credly_assertion_page.php' );
 
 /**
  * Add help content for [badgeos_achievements_list] to BadgeOS Help page
