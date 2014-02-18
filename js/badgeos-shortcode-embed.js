@@ -105,6 +105,50 @@
 		return inputs;
 	}
 
+	/*
+	Put together a single true/false select input
+	 */
+	function badgeos_construct_bool_input( requested ) {
+		var input = '';
+
+		input += '<div><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
+		input += '<select id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'">';
+		if ( requested.params[i].default == badgeos_shortcode_bool[0].toLowerCase() ) {
+			input += '<option selected="selected" value="1">'+badgeos_shortcode_bool[0]+'</option>';
+		} else {
+			input += '<option value="1">'+badgeos_shortcode_bool[0]+'</option>';
+		}
+		if ( requested.params[i].default == badgeos_shortcode_bool[1].toLowerCase() ) {
+			input += '<option selected="selected" value="0">'+badgeos_shortcode_bool[1]+'</option>';
+		} else {
+			input += '<option value="0">'+badgeos_shortcode_bool[1]+'</option>';
+		}
+
+		input += '</select>';
+		if ( requested.params[i].default_text ) {
+			input += '<br/>' + requested.params[i].default_text;
+		}
+		input += '</div>';
+
+		return input;
+	}
+
+	/*
+	Put together a single text input
+	 */
+	function badgeos_construct_text_input( requested ) {
+		var input = '';
+
+		input += '<div><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
+		input += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" />';
+		if ( requested.params[i].default_text ) {
+			input += '<br/>' + requested.params[i].default_text;
+		}
+		input += '</div>';
+
+		return input;
+	}
+
 	//Handle changing the html used for the selected shortcode.
 	$( '#select_shortcode' ).on( 'change', function(){
 		var selected = $( '#select_shortcode option:selected' ).val(), html = '';
