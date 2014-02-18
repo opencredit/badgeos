@@ -157,6 +157,13 @@ class WP_Editor_Shortcodes {
 		return array( __( 'True', 'badgeos' ), __( 'False', 'badgeos' ) );
 	}
 
+	public function messages() {
+		return array(
+			'noparams' => __( 'This shortcode does not have any attributes', 'badgeos' ),
+			'starting' => __( 'Select a shortcode from the dropdown above to configure attributes. Once you have all desired attributes, click "Insert Shortcode"', 'badgeos' )
+		);
+	}
+
 }
 
 new WP_Editor_Shortcodes();
