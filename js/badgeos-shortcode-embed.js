@@ -126,7 +126,7 @@
 
 		input += '</select>';
 		if ( requested.params[i].default_text ) {
-			input += '<br/>' + requested.params[i].default_text;
+			input += '<br/><span>' + requested.params[i].default_text + '</span>';
 		}
 		input += '</div>';
 
@@ -142,7 +142,7 @@
 		input += '<div><label for="badgeos_'+requested.params[i].param+'">'+requested.params[i].param+'</label><br/>';
 		input += '<input id="badgeos_'+requested.params[i].param+'" name="badgeos_'+requested.params[i].param+'" type="text" />';
 		if ( requested.params[i].default_text ) {
-			input += '<br/>' + requested.params[i].default_text;
+			input += '<br/><span>' + requested.params[i].default_text + '</span>';
 		}
 		input += '</div>';
 
