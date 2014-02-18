@@ -81,9 +81,11 @@
 	/*
 	Create all of the inputs for the requested shortcode. Inputs will provide no default values.
 	 */
-	function badgeos_construct_input( shortcode ) {
-		inputs = '';
+	function badgeos_construct_inputs( shortcode ) {
+		var inputs = '', pingpong = '', requested;
 		requested = badgeos_get_attributes( shortcode );
+		pingpong = 'odd';
+
 		for( i = 0; i < requested.params.length; i++ ) {
 			if ( 'bool' === requested.params[i].type ) {
 
