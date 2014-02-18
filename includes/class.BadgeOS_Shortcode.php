@@ -15,7 +15,7 @@ class BadgeOS_Shortcode {
 
 		// Register this shortcode with WP and BadgeOS
 		add_shortcode( $this->slug, $this->output_callback );
-		add_filter( 'badgeos_shortcodes', array( $this, '_register_shortcode' ) );
+		add_filter( 'badgeos_shortcodes', array( $this, 'register_shortcode' ) );
 	}
 
 	private function _set_properties( $_args = array() ) {
@@ -36,8 +36,8 @@ class BadgeOS_Shortcode {
 		$this->output_callback = $args['output_callback'];
 	}
 
-	private function _register_shortcode( $shorctodes = array() ) {
-		$shorctodes[ $this->slug ] = $this;
+	public function register_shortcode( $shortcodes = array() ) {
+		$shortcodes[ $this->slug ] = $this;
 		return $shortcodes;
 	}
 
