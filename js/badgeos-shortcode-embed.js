@@ -11,9 +11,8 @@
 		//If the localized variable has the requested property aka requested shortcode, add those to our params property.
 		if ( badgeos_shortcodes.hasOwnProperty(shortcode) ) {
 			result.params = badgeos_shortcodes[shortcode];
-
-			return result;
 		}
+		return result;
 	}
 
 	/*
