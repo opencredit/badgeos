@@ -102,6 +102,7 @@ class WP_Editor_Shortcodes {
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "/js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcodes', $this->default_parameters() );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_bool', $this->bools() );
+		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_messages', $this->messages() );
 	}
 
 	public function default_parameters() {
