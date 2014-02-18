@@ -22,7 +22,6 @@ class WP_Editor_Shortcodes {
 
 		add_action( 'admin_footer',  array( $this, 'add_shortcode_popup' ) );
 		add_action( 'media_buttons', array( $this, 'add_shortcode_button'), 20 );
-		add_action( 'admin_head', array( $this, 'styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 99 );
 	}
 
@@ -67,34 +66,6 @@ class WP_Editor_Shortcodes {
 		// do a version check for the new 3.5 UI
 			// display button matching new UI
 		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS', 'badgeos' ) . '">' . __( 'Add BadgeOS', 'badgeos' ) . '</a>';
-	}
-
-	public function styles() {
-		echo '<style>
-			.wp-core-ui a.badgeos_media_link, .wp-core-ui a.badgeos_media_link:hover {
-				background: url("'. $this->directory_url . '/images/badgeos_icon.png") 4% 50% no-repeat;
-				padding-left: 1.8em;
-			}
-			.badgeos_input {
-				width: 50%;
-			}
-			.badgeos_input > div {
-				margin: 5px 0;
-			}
-			#shortcode_options {
-				margin-top: 10px;
-				max-height: 200px;
-				overflow: auto;
-				padding-top: 10px;
-				width: 100%;
-			}
-			.odd {
-				clear: both;
-			}
-			.clear {
-				clear: both;
-			}
-			</style>';
 	}
 
 	public function scripts() {
