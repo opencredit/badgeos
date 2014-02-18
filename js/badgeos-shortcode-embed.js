@@ -168,7 +168,7 @@
 	//Set/reset some values upon clicking.
 	$('#insert_badgeos_shortcodes').on( 'click', function(){
 		$( '#select_shortcode' ).val( 'unselected' );
-		$( '#shortcode_options' ).html('');
+		$( '#shortcode_options' ).html( '<p>'+badgeos_shortcode_messages.starting+'</p>' );
 	});
 	//Insert constructed shortcode and close popup
 	$( '#badgeos_insert' ).on( 'click', function(){
