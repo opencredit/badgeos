@@ -44,10 +44,11 @@ class WP_Editor_Shortcodes {
 				<select id="select_shortcode">
 					<option value="unselected">--</option>
 					<?php
-						foreach( $this->get_shortcodes() as $name => $shortcode ) { ?>
+						$shortcodes = badgeos_get_shortcodes();
+						/*foreach( $shortcodes as $name => $shortcode ) { ?>
 							<option value="<?php echo $shortcode ?>"><?php echo $name; ?></option>
 							<?php
-						}
+						}*/
 					?>
 				</select>
 				</div>
