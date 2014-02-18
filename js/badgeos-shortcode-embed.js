@@ -98,7 +98,8 @@
 				inputs += badgeos_construct_text_input( requested );
 
 			}
-
+			inputs += '</div>';
+			pingpong = ( 'odd' == pingpong ) ? 'even' : 'odd';
 		}
 
 		return inputs;
