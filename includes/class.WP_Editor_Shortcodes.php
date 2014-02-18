@@ -77,6 +77,7 @@ class WP_Editor_Shortcodes {
 	}
 
 	public function default_parameters() {
+		//Pass it through a filter first so that users can't accidentally unset core shortcodes.
 		$defaults = apply_filters( 'badgeos_shortcodes_defaults', array() );
 
         $defaults['badgeos_achievements_list']  = array(
