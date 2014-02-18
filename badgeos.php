@@ -67,6 +67,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/p2p/load.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Editor_Shortcodes.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
+		require_once( $this->directory_path . 'includes/class.BadgeOS_Shortcode.php' );
 		require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
