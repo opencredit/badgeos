@@ -29,34 +29,33 @@ class WP_Editor_Shortcodes {
 	public function add_shortcode_popup() { ?>
 		<div id="select_badgeos_shortcode" style="display:none;">
 			<div class="wrap">
-				<div>
-					<h3><?php _e( 'Insert a shortcode', 'badgeos' ); ?></h3>
+				<h3><?php _e( 'Insert a shortcode', 'badgeos' ); ?></h3>
 
-					<p>
-						<?php _e( 'Select a shortcode below to add it to your post or page.', 'badgeos' ); ?><br/>
-						<?php echo sprintf( __( 'See the %s page for more information', 'badgeos' ),
-							sprintf(
-								'<a href="%s">' . __( 'Help/Support', 'badgeos' ) . '</a>',
-								admin_url( 'admin.php?page=badgeos_sub_help_support' )
-							)
-						); ?>
-					</p>
-
-					<select id="select_shortcode">
-						<option value="unselected"><?php _e( 'Select a shortcode', 'badgeos' ); ?></option>
-						<?php
-							foreach( badgeos_get_shortcodes() as $name => $shortcode ) { ?>
-								<option value="<?php echo $shortcode ?>"><?php echo $name; ?></option>
-								<?php
-							}
-						?>
-					</select>
-					<div id="shortcode_options"></div>
-					<div>
-						<input id="badgeos_insert" type="button" class="button-primary" value="<?php esc_attr_e( 'Insert Shortcode', 'badgeos' ); ?>" />
-						<a id="badgeos_cancel" class="button" href="#"><?php _e( 'Cancel', 'badgeos' ); ?></a>
-					</div>
+				<p>
+					<?php echo sprintf( __( 'See the %s page for more information', 'badgeos' ),
+						sprintf(
+							'<a href="%s">' . __( 'Help/Support', 'badgeos' ) . '</a>',
+							admin_url( 'admin.php?page=badgeos_sub_help_support' )
+						)
+					); ?>
+				</p>
+				<div class="alignleft">
+				<select id="select_shortcode">
+					<option value="unselected">--</option>
+					<?php
+						foreach( badgeos_get_shortcodes() as $name => $shortcode ) { ?>
+							<option value="<?php echo $shortcode ?>"><?php echo $name; ?></option>
+							<?php
+						}
+					?>
+				</select>
 				</div>
+				<div class="alignright">
+					<input id="badgeos_insert" type="button" class="button-primary" value="<?php esc_attr_e( 'Insert Shortcode', 'badgeos' ); ?>" />
+					<a id="badgeos_cancel" class="button" href="#"><?php _e( 'Cancel', 'badgeos' ); ?></a>
+				</div>
+
+				<div id="shortcode_options" class="alignleft clear"></div>
 			</div>
 		</div>
 
