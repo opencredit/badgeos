@@ -66,7 +66,7 @@ class WP_Editor_Shortcodes {
 	public function add_shortcode_button() {
 		// do a version check for the new 3.5 UI
 			// display button matching new UI
-		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS Shortcode', 'badgeos' ) . '">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
+		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS', 'badgeos' ) . '">' . __( 'Add BadgeOS', 'badgeos' ) . '</a>';
 	}
 
 	public function styles() {
