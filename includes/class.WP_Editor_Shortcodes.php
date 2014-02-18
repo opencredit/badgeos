@@ -70,7 +70,31 @@ class WP_Editor_Shortcodes {
 	}
 
 	public function styles() {
-		echo '<style>.wp-core-ui a.badgeos_media_link{ padding-left: 0.4em; } #shortcode_options { min-height: 200px; padding-top: 20px; }</style>';
+		echo '<style>
+			.wp-core-ui a.badgeos_media_link, .wp-core-ui a.badgeos_media_link:hover {
+				background: url("'. $this->directory_url . '/images/badgeos_icon.png") 4% 50% no-repeat;
+				padding-left: 1.8em;
+			}
+			.badgeos_input {
+				width: 50%;
+			}
+			.badgeos_input > div {
+				margin: 5px 0;
+			}
+			#shortcode_options {
+				margin-top: 10px;
+				max-height: 200px;
+				overflow: auto;
+				padding-top: 10px;
+				width: 100%;
+			}
+			.odd {
+				clear: both;
+			}
+			.clear {
+				clear: both;
+			}
+			</style>';
 	}
 
 	public function scripts() {
