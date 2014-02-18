@@ -122,17 +122,17 @@ class WP_Editor_Shortcodes {
 		);
 	}
 
-	/**
-	 * Return a filtered array of available shortcode names and shortcode
-	 *
-	 * @since  1.4.0
-	 *
-	 * @return array  array of available shortcodes.
-	 */
-	public function get_shortcodes() {
-		return apply_filters( 'badgeos_get_shortcodes', array() );
-	}
-
 }
 
 new WP_Editor_Shortcodes();
+
+/**
+ * Return a filtered array of available shortcode names and shortcode
+ *
+ * @since  1.4.0
+ *
+ * @return array  array of available shortcodes.
+ */
+function badgeos_get_shortcodes() {
+	return apply_filters( 'badgeos_shortcodes', array() );
+}
