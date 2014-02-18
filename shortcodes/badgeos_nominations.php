@@ -61,8 +61,8 @@ function badgeos_display_nominations( $atts = array() ) {
 		'status'           => 'all',
 		'show_filter'      => true,
 		'show_search'      => true,
-		'show_attachments' => 'false',
-		'show_comments'    => 'false'
+		'show_attachments' => false,
+		'show_comments'    => false
 	), $atts );
 
 	$feedback = badgeos_render_feedback( $atts );
