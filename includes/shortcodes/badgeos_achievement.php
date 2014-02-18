@@ -7,8 +7,8 @@ $badgeos_achievement_shortcode = badgeos_register_shortcode( array(
 	'attributes' => array(
 		'id' => array(
 			'name' => __( 'ID', 'badgeos' ),
-			'type' => 'string',
-			'default' => __( 'Current achievement ID', 'badgeos' )
+			'type' => 'integer',
+			'description' => __( 'The ID of the achievement to render. Default: Current achievement ID', 'badgeos' )
 			),
 	),
 	'output_callback' => 'badgeos_achievement_shortcode'
