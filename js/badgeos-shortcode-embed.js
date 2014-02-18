@@ -161,7 +161,7 @@
 			return;
 		}
 
-		inputs = badgeos_construct_input( selected );
+		inputs = badgeos_construct_inputs( selected );
 		$( '#shortcode_options' ).html( inputs );
 	});
 
