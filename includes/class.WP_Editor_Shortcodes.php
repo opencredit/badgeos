@@ -29,7 +29,7 @@ class WP_Editor_Shortcodes {
 	public function add_shortcode_popup() { ?>
 		<div id="select_badgeos_shortcode" style="display:none;">
 			<div class="wrap">
-				<h3><?php _e( 'Insert a shortcode', 'badgeos' ); ?></h3>
+				<h3><?php _e( 'Insert a BadgeOS shortcode', 'badgeos' ); ?></h3>
 
 				<p>
 					<?php echo sprintf( __( 'See the %s page for more information', 'badgeos' ),
