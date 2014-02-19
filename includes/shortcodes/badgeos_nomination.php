@@ -8,7 +8,7 @@ $badgeos_nomination_shortcode = badgeos_register_shortcode( array(
 		'achievement_id' => array(
 			'name' => __( 'Achievement ID', 'badgeos' ),
 			'type' => 'string',
-			'default' => __( 'Current achievement ID', 'badgeos' )
+			'description' => __( 'Achievement ID to create a nomination form for. Default: current achievement ID', 'badgeos' )
 			),
 	),
 	'output_callback' => 'badgeos_nomination_form'
