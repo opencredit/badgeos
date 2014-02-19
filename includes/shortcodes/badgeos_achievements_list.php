@@ -18,12 +18,14 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 		'show_filter' => array(
 			'name' => __( 'Show Filter', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to show filter controls. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to show filter controls. Default: true', 'badgeos' ),
+			'default' => true
 			),
 		'show_search' => array(
 			'name' => __( 'Show Search', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to show search inputs. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to show search inputs. Default: true', 'badgeos' ),
+			'default' => true
 			),
 		'group_id' => array(
 			'name' => __( 'Group ID', 'badgeos' ),
@@ -38,7 +40,8 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 		'wpms' => array(
 			'name' => __( 'Multisite', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether to display achievements from across a multisite network. Default: false', 'badgeos' )
+			'description' => __( 'Whether to display achievements from across a multisite network. Default: false', 'badgeos' ),
+			'default' => false
 			),
 		'orderby' => array(
 			'name' => __( 'Order By', 'badgeos' ),
