@@ -8,37 +8,37 @@ $badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
 		'type' => array(
 			'name' => __( 'Achievement type', 'badgeos' ),
 			'type' => 'string',
-			'default' => __( 'nomination', 'badgeos' )
+			'description' => __( 'Achievement type to list nominations for. Default: nomination', 'badgeos' )
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
-			'type' => 'string',
-			'default' => '10',
+			'type' => 'integery',
+			'description' => __( 'How many nominations to list at a time. Default: 10', 'badgeos' )
 			),
 		'status' => array(
 			'name' => __( 'Status', 'badgeos' ),
 			'type' => 'string',
-			'default' => __( 'all', 'badgeos' )
+			'description' => __( 'Achievement status to query for. Default: all', 'badgeos' )
 			),
 		'show_filter' => array(
-			'name' => __( 'Show filter', 'badgeos' ),
+			'name' => __( 'Show Filter', 'badgeos' ),
 			'type' => 'boolean',
-			'default' => __( 'true', 'badgeos' )
+			'description' => __( 'Whether or not to render filter controls. Default: true', 'badgeos' )
 			),
 		'show_search' => array(
-			'name' => __( 'Show search', 'badgeos' ),
+			'name' => __( 'Show Search', 'badgeos' ),
 			'type' => 'boolean',
-			'default' => __( 'true', 'badgeos' )
+			'description' => __( 'Whether or not to render search controls. Default: true', 'badgeos' )
 			),
 		'show_attachments' => array(
 			'name' => __( 'Show attachments', 'badgeos' ),
 			'type' => 'boolean',
-			'default' => __( 'false', 'badgeos' )
+			'description' => __( 'Whether or not to display submitted attachments. Default: true', 'badgeos' )
 			),
 		'show_comments' => array(
 			'name' => __( 'Show comments', 'badgeos' ),
 			'type' => 'boolean',
-			'default' => __( 'false', 'badgeos' )
+			'description' => __( 'Whether or not to display submitted comments. Default: true', 'badgeos' )
 			),
 	),
 	'output_callback' => 'badgeos_display_nominations'
