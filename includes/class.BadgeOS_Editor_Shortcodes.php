@@ -94,7 +94,25 @@ class WP_Editor_Shortcodes {
 	 * @return array  array of available shortcodes and their parameters
 	 */
 	public function default_parameters() {
-		return apply_filters( 'badgeos_shortcodes_defaults', array() );
+		$shortcodes = badgeos_get_shortcodes();
+
+		$defaults = array();
+
+		foreach( $shortcodes as $name => $shortcode_properties ) {
+			$defaults[ $shortcode_properties->slug ] = array();
+			foreach ( $shortcode_properties->attributes as $attribute => $value ) {
+				$parameters = array();
+				$parameters['param'] = isset( $attribute ) ? $attribute : '';
+				$parameters['type'] = isset( $value['type'] ) ? $value['type'] : '';
+				$parameters['default_text'] = isset( $value['description'] ) ? $value['description'] : '';
+				$parameters['default'] = isset( $value['default'] ) ? $value['default'] : '';
+
+				$defaults[ $shortcode_properties->slug ][] = $parameters;
+			}
+
+		}
+
+		return $defaults;
 	}
 
 	/**
