@@ -23,22 +23,26 @@ $badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
 		'show_filter' => array(
 			'name' => __( 'Show Filter', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to render filter controls. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to render filter controls. Default: true', 'badgeos' ),
+			'default' => true
 			),
 		'show_search' => array(
 			'name' => __( 'Show Search', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to render search controls. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to render search controls. Default: true', 'badgeos' ),
+			'default' => true
 			),
 		'show_attachments' => array(
 			'name' => __( 'Show attachments', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to display submitted attachments. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to display submitted attachments. Default: true', 'badgeos' ),
+			'default' => true
 			),
 		'show_comments' => array(
 			'name' => __( 'Show comments', 'badgeos' ),
 			'type' => 'boolean',
-			'description' => __( 'Whether or not to display submitted comments. Default: true', 'badgeos' )
+			'description' => __( 'Whether or not to display submitted comments. Default: true', 'badgeos' ),
+			'default' => true
 			),
 	),
 	'output_callback' => 'badgeos_display_nominations'
