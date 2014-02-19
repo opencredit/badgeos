@@ -2,11 +2,11 @@
 
 class BadgeOS_Shortcode {
 
-	private $name            = '';
-	private $slug            = '';
-	private $description     = '';
-	private $attributes      = array();
-	private $output_callback = '';
+	public $name            = '';
+	public $slug            = '';
+	public $description     = '';
+	public $attributes      = array();
+	public $output_callback = '';
 
 	public function __construct( $_args = array() ) {
 
