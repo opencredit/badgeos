@@ -41,6 +41,7 @@ class WP_Editor_Shortcodes {
 					); ?>
 				</p>
 				<div class="alignleft">
+				<?php $shortcodes = badgeos_get_shortcodes(); ?>
 				<select id="select_shortcode">
 					<option value="unselected">--</option>
 					<?php
