@@ -8,17 +8,17 @@ $credly_assertion_shortcode = badgeos_register_shortcode( array(
 		'CID' => array(
 			'name' => __( 'CID', 'badgeos' ),
 			'type' => 'string',
-			'default' => __( 'Provided $_GET parameter or zero', 'badgeos' )
+			'description' => __( 'Credly assertion ID to display. Default: CID $_GET parameter or 0', 'badgeos' )
 			),
 		'width' => array(
 			'name' => __( 'Width', 'badgeos' ),
 			'type' => 'string',
-			'default' => __( 'Global content_width value or 560', 'badgeos' )
+			'description' => __( 'Width to display the rendered shortcode at. Default: $content_width value if set or 560', 'badgeos' )
 			),
 		'height' => array(
 			'name' => __( 'Height', 'badgeos' ),
 			'type' => 'string',
-			'default' => '1000'
+			'description' => __( 'Height to display the rendered shortcode. Default: 1000', 'badgeos' )
 			),
 	),
 	'output_callback' => 'badgeos_credly_assertion_page'
