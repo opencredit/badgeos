@@ -12,7 +12,7 @@ $badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
-			'type' => 'integery',
+			'type' => 'integer',
 			'description' => __( 'How many nominations to list at a time. Default: 10', 'badgeos' )
 			),
 		'status' => array(
