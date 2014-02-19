@@ -153,10 +153,7 @@
 	$( '#select_shortcode' ).on( 'change', function(){
 		var selected = $( '#select_shortcode option:selected' ).val(), html = '';
 
-		if ( 'credly_assertion_page' == selected ) {
-			$( '#shortcode_options' ).html( '<p>'+badgeos_shortcode_messages.noparams+'</p>' );
-			return;
-		} else if ( 'unselected' === selected ) {
+		if ( 'unselected' === selected ) {
 			$( '#shortcode_options' ).html( '<p>'+badgeos_shortcode_messages.starting+'</p>' );
 			return;
 		}
