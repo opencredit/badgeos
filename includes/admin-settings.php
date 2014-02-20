@@ -341,7 +341,7 @@ function badgeos_add_ons_get_feed() {
  * @since  1.0.0
  * @return void
  */
-function badgeos_help_support_page() { ?>
+/*function badgeos_help_support_page() { ?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'BadgeOS Help and Support', 'badgeos' ); ?></h2>
@@ -360,7 +360,7 @@ function badgeos_help_support_page() { ?>
 		<?php do_action( 'badgeos_help_support_page_shortcodes' ); ?>
 	</div>
 	<?php
-}
+}*/
 
 /**
  * BadgeOS Credly Integration settings page.
