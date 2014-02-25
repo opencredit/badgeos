@@ -35,7 +35,7 @@ class WP_Editor_Shortcodes {
 				<p>
 					<?php echo sprintf( __( 'See the %s page for more information', 'badgeos' ),
 						sprintf(
-							'<a href="%s">' . __( 'Help/Support', 'badgeos' ) . '</a>',
+							'<a target="_blank" href="%s">' . __( 'Help/Support', 'badgeos' ) . '</a>',
 							admin_url( 'admin.php?page=badgeos_sub_help_support' )
 						)
 					); ?>
