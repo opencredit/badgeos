@@ -57,7 +57,28 @@ class WP_Editor_Shortcodes {
 					<a id="badgeos_cancel" class="button" href="#"><?php _e( 'Cancel', 'badgeos' ); ?></a>
 				</div>
 
-				<div id="shortcode_options" class="alignleft clear"></div>
+				<div id="shortcode_options" class="alignleft clear">
+					<?php
+					$count = 1;
+					foreach( $shortcodes as $shortcode ) {
+						if ( $count == 1 ) {
+							echo '<div class="alignleft" id="' . $shortcode->slug . '_wrapper">';
+						} else {
+							echo '<div class="alignleft" style="display: none" class="hidden" id="' . $shortcode->slug . '_wrapper">';
+						}
+					$count++;
+						foreach( $shortcode->attributes as $attribute ) {
+							if ( 'integer' == $attribute['type'] ) {
+								$this->text_input( array( 'name' => $shortcode->name, 'slug' => $shortcode->slug, 'attributes' => $attribute ) );
+							} else {
+								$this->select_input( array( 'name' => $shortcode->name, 'slug' => $shortcode->slug, 'attributes' => $attribute ) );
+							}
+
+						}
+						echo '</div>';
+					}
+					?>
+				</div>
 			</div>
 		</div>
 
@@ -80,64 +101,50 @@ class WP_Editor_Shortcodes {
 	 */
 	public function scripts() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "/js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
-		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcodes', $this->default_parameters() );
-		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_bool', $this->bools() );
-		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_messages', $this->messages() );
+		//wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "/js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
 	}
 
-	/**
-	 * Return a filtered array of default shortcode parameters.
-	 *
-	 * @since  1.4.0
-	 *
-	 * @return array  array of available shortcodes and their parameters
-	 */
-	public function default_parameters() {
-		$shortcodes = badgeos_get_shortcodes();
-
-		$defaults = array();
-
-		foreach( $shortcodes as $name => $shortcode_properties ) {
-			$defaults[ $shortcode_properties->slug ] = array();
-			foreach ( $shortcode_properties->attributes as $attribute => $value ) {
-				$parameters = array();
-				$parameters['param'] = isset( $attribute ) ? $attribute : '';
-				$parameters['type'] = isset( $value['type'] ) ? $value['type'] : '';
-				$parameters['default_text'] = isset( $value['description'] ) ? $value['description'] : '';
-				$parameters['default'] = isset( $value['default'] ) ? $value['default'] : '';
-
-				$defaults[ $shortcode_properties->slug ][] = $parameters;
-			}
-
+	public function text_input( $shortcode ) {
+		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
+		echo '<input id="' . $shortcode['name'] . '" name="' . $shortcode['name'] . '" type="text" />';
+		if ( $shortcode['attributes']['description'] ) {
+			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
 		}
-
-		return $defaults;
+		echo '</div>';
 	}
 
-	/**
-	 * Localize boolean values to be used with modal popup and select inputs
-	 *
-	 * @since  1.4.0
-	 *
-	 * @return array  array of i10n-ready boolean text.
-	 */
-	public function bools() {
-		return array( __( 'True', 'badgeos' ), __( 'False', 'badgeos' ) );
+	public function select_input( $shortcode ) {
+
+		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
+		echo '<select id="badgeos_' . $shortcode['slug'] . '" name="badgeos_' . $shortcode['slug'] . '">';
+		if ( $shortcode['attributes']['default'] ) {
+			echo '<option selected="selected" value="' . $shortcode['slug'] . '">' . $shortcode['slug'] . '</option>';
+		} else {
+			echo '<option value="' . $shortcode['slug'] . '">' . $shortcode['name'] . '</option>';
+		}
+		echo '</select>';
+
+		if ( $shortcode['attributes']['description'] ) {
+			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
+		}
+		echo '</div>';
 	}
 
-	/**
-	 * Localize messages to be used with the modal popup.
-	 *
-	 * @since  1.4
-	 *
-	 * @return array  array of i10n-ready messages.
-	 */
-	public function messages() {
-		return array(
-			'noparams' => __( 'This shortcode does not have any attributes', 'badgeos' ),
-			'starting' => __( 'Select a shortcode from the dropdown above to configure attributes. Once you have all desired attributes, click "Insert Shortcode". To return to the post editor without a shortcode, click "Cancel".', 'badgeos' )
-		);
+	public function select_bool_input( $shortcode ) {
+
+		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
+		echo '<select id="badgeos_' . $shortcode['slug'] . '" name="badgeos_' . $shortcode['slug'] . '">';
+		if ( $shortcode['attributes']['default'] ) {
+			echo '<option selected="selected" value="' . $shortcode['slug'] . '">' . $shortcode['slug'] . '</option>';
+		} else {
+			echo '<option value="' . $shortcode['slug'] . '">' . $shortcode['name'] . '</option>';
+		}
+		echo '</select>';
+
+		if ( $shortcode['attributes']['description'] ) {
+			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
+		}
+		echo '</div>';
 	}
 
 }
@@ -154,3 +161,20 @@ new WP_Editor_Shortcodes();
 function badgeos_get_shortcodes() {
 	return apply_filters( 'badgeos_shortcodes', array() );
 }
+
+function badgeos_get_awardable_achievements() {
+	$achievements = badgeos_get_achievement_types();
+
+	unset( $achievements['step'] );
+	unset( $achievements['submission'] );
+	unset( $achievements['nomination'] );
+	unset( $achievements['badgeos-log-entry'] );
+
+	return wp_list_pluck( $achievements, 'single_name' );
+}
+
+
+/*
+Use badgeos_activity_trigger_post_select_ajax_handler() to fetch posts in achievement type. Consider "post_select_ajax" for action
+select achievement type from dropdown list. This would be fine for localized data.
+ */

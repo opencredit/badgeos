@@ -8,7 +8,7 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 		'type' => array(
 			'name' => __( 'Type', 'badgeos' ),
 			'type' => 'string',
-			'description' => __( 'The achievement type to display. Default: all', 'badgeos' )
+			'description' => __( 'The achievement type to display. Default: all', 'badgeos' ),
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
@@ -19,12 +19,14 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 			'name' => __( 'Show Filter', 'badgeos' ),
 			'type' => 'boolean',
 			'description' => __( 'Whether or not to show filter controls. Default: true', 'badgeos' ),
-			'default' => true
+			'values' => array( 'true', 'false' ),
+			'default' => 'true'
 			),
 		'show_search' => array(
 			'name' => __( 'Show Search', 'badgeos' ),
 			'type' => 'boolean',
 			'description' => __( 'Whether or not to show search inputs. Default: true', 'badgeos' ),
+			'values' => array( 'true', 'false' ),
 			'default' => true
 			),
 		'group_id' => array(
@@ -41,6 +43,7 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 			'name' => __( 'Multisite', 'badgeos' ),
 			'type' => 'boolean',
 			'description' => __( 'Whether to display achievements from across a multisite network. Default: false', 'badgeos' ),
+			'values' => array( 'true', 'false' ),
 			'default' => false
 			),
 		'orderby' => array(
@@ -51,7 +54,8 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 		'order' => array(
 			'name' => __( 'Order', 'badgeos' ),
 			'type' => 'string',
-			'description' => __( 'Whether to display in ascending or descending order. Default: ASC', 'badgeos' )
+			'description' => __( 'Whether to display in ascending or descending order. Default: ASC', 'badgeos' ),
+			'values' => array( 'ASC', 'DESC' ),
 			),
 		'include' => array(
 			'name' => __( 'Include', 'badgeos' ),

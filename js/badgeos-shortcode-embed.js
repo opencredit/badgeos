@@ -82,7 +82,7 @@
 	Create all of the inputs for the requested shortcode. Inputs will provide no default values.
 	 */
 	function badgeos_construct_inputs( shortcode ) {
-		var inputs = '', pingpong = '', requested;
+		var inputs = '', pingpong, requested;
 		requested = badgeos_get_attributes( shortcode );
 		pingpong = 'odd';
 
@@ -149,9 +149,23 @@
 		return input;
 	}
 
+	function badgeos_populate_achievements() {
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				'action': 'post_select_ajax'
+				//'achievement_type':
+			},
+			dataType: 'json',
+			success: function(response) {
+			}
+		});
+	}
+
 	//Handle changing the html used for the selected shortcode.
 	$( '#select_shortcode' ).on( 'change', function(){
-		var selected = $( '#select_shortcode option:selected' ).val(), html = '';
+		var selected = $( '#select_shortcode option:selected' ).val();
 
 		if ( 'unselected' === selected ) {
 			//If we reselect the default, disable.
