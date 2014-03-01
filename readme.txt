@@ -1,7 +1,7 @@
 === BadgeOS ===
-Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
+Contributors: learningtimes, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
 Donate link: http://badgeos.org/contribute/donate/
-Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
+Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.7.1
 Stable tag: 1.3.4
@@ -12,7 +12,7 @@ Easily create badges and set up the steps and achievements users complete to ear
 
 == Description ==
 
-[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
+[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like,c and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
 
@@ -149,7 +149,7 @@ Want to contribute to BadgeOS core? That's great! Visit our [GitHub site for the
 
 = License Info =
 
-Credly, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
+LearningTimes, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 
 There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License, version 3, at [http://www.gnu.org/licenses/agpl-3.0.html](http://www.gnu.org/licenses/agpl-3.0.html "License") for more details.
 
