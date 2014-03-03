@@ -8,7 +8,7 @@ Stable tag: 1.3.4
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
-Easily create badges and set up the steps and achievements users complete to earn them. Badges are Mozilla OBI compatible and can be stored and share for life via Credly.
+BadgeOS turns your site into an achievement and badging system. Easily create badges and set up the steps and achievements users complete to earn them.
 
 == Description ==
 
