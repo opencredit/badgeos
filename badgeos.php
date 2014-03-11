@@ -204,7 +204,7 @@ class BadgeOS {
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
 			$badgeos_settings['minimum_role']     = 'manage_options';
-			$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+			$badgeos_settings['submission_email'] = 'enabled';
 			$badgeos_settings['debug_mode']       = 'disabled';
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
