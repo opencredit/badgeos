@@ -1,6 +1,8 @@
 <?php
 
-$badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
+function badgeos_register_achievements_list_shortcode() {
+
+	$badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 	'name' => __( 'BadgeOS Achievements List', 'badgeos' ),
 	'slug' => 'badgeos_achievements_list',
 	'description' => __( 'Output a list of achievements of any type on any post or page.', 'badgeos' ),
@@ -79,7 +81,9 @@ $badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 			)
 	),
 	'output_callback' => 'badgeos_achievements_list_shortcode'
-) );
+	) );
+}
+add_action( 'init', 'badgeos_register_achievements_list_shortcode' );
 
 /**
  * Master Achievement List Short Code
