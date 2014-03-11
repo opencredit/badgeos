@@ -53,7 +53,7 @@ function badgeos_register_achievements_list_shortcode() {
 			'name' => __( 'Order By', 'badgeos' ),
 			'type' => 'select',
 			'description' => __( 'What content to order the achievements by. Default: menu_order', 'badgeos' ),
-			'values' = array( 'none', 'ID', 'author', 'title', 'name', 'date', 'modified', 'parent', 'rand', 'comment_count', 'menu_order', 'meta_value', 'meta_value_num', 'post__in' )
+			'values' => array( 'none', 'ID', 'author', 'title', 'name', 'date', 'modified', 'parent', 'rand', 'comment_count', 'menu_order', 'meta_value', 'meta_value_num', 'post__in' )
 			),
 		'order' => array(
 			'name' => __( 'Order', 'badgeos' ),
