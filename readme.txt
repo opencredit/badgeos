@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, webdevstudios, williamsba1, rzen, jtsternb
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
-Tested up to: 3.7.1
-Stable tag: 1.3.4
+Tested up to: 3.8.1
+Stable tag: 1.3.5
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -215,6 +215,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.3.5 =
+* Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
+* Fixed: Eliminated some PHP warnings
+
 = 1.3.4 =
 * Updated: Upgraded bundled CMB library to 1.0.8.
 * Updated: Upgraded bundled posts-to-posts library to 1.6.3-alpha.
@@ -320,6 +324,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.5 =
+* Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
+* Fixed: Eliminated some PHP warnings
 
 = 1.3.4 =
 * Updated: Upgraded bundled CMB library to 1.0.8.
