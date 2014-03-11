@@ -9,44 +9,44 @@ function badgeos_register_achievements_list_shortcode() {
 	'attributes' => array(
 		'type' => array(
 			'name' => __( 'Type', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'select',
 			'description' => __( 'The achievement type to display. Default: all', 'badgeos' ),
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
-			'type' => 'integer',
+			'type' => 'text',
 			'description' => __( 'How many achievements to display at a time. Default: 10', 'badgeos' )
 			),
 		'show_filter' => array(
 			'name' => __( 'Show Filter', 'badgeos' ),
-			'type' => 'boolean',
+			'type' => 'select_bool',
 			'description' => __( 'Whether or not to show filter controls. Default: true', 'badgeos' ),
 			'values' => array( 'true', 'false' ),
 			'default' => 'true'
 			),
 		'show_search' => array(
 			'name' => __( 'Show Search', 'badgeos' ),
-			'type' => 'boolean',
+			'type' => 'select_bool',
 			'description' => __( 'Whether or not to show search inputs. Default: true', 'badgeos' ),
 			'values' => array( 'true', 'false' ),
-			'default' => true
+			'default' => 'true'
 			),
 		'group_id' => array(
 			'name' => __( 'Group ID', 'badgeos' ),
-			'type' => 'integer',
+			'type' => 'text',
 			'description' => '0'
 			),
 		'user_id' => array(
 			'name' => __( 'User ID', 'badgeos' ),
-			'type' => 'integer',
+			'type' => 'text',
 			'description' => __( 'The user ID to display achievements for. Default: 0', 'badgeos' )
 			),
 		'wpms' => array(
 			'name' => __( 'Multisite', 'badgeos' ),
-			'type' => 'boolean',
+			'type' => 'select_bool',
 			'description' => __( 'Whether to display achievements from across a multisite network. Default: false', 'badgeos' ),
 			'values' => array( 'true', 'false' ),
-			'default' => false
+			'default' => 'false'
 			),
 		'orderby' => array(
 			'name' => __( 'Order By', 'badgeos' ),
@@ -55,28 +55,28 @@ function badgeos_register_achievements_list_shortcode() {
 			),
 		'order' => array(
 			'name' => __( 'Order', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'select',
 			'description' => __( 'Whether to display in ascending or descending order. Default: ASC', 'badgeos' ),
 			'values' => array( 'ASC', 'DESC' ),
 			),
 		'include' => array(
 			'name' => __( 'Include', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'text',
 			'description' => __( 'Comma-separated list of IDs to include. Default: none', 'badgeos' )
 			),
 		'exclude' => array(
 			'name' => __( 'Exclude', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'text',
 			'description' => __( 'Comma-separated list of IDs to exclude. none', 'badgeos' )
 			),
 		'meta_key' => array(
 			'name' => __( 'Meta Key', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'text',
 			'description' => __( 'Meta key to use in the query. Default: none', 'badgeos' )
 			),
 		'meta_value' => array(
 			'name' => __( 'Meta Value', 'badgeos' ),
-			'type' => 'string',
+			'type' => 'text',
 			'description' => __( 'Meta value to use in the query. Default: none', 'badgeos' )
 			)
 	),
