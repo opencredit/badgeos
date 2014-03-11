@@ -11,6 +11,7 @@ function badgeos_register_achievements_list_shortcode() {
 			'name' => __( 'Type', 'badgeos' ),
 			'type' => 'select',
 			'description' => __( 'The achievement type to display. Default: all', 'badgeos' ),
+			'values' => badgeos_get_awardable_achievements()
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
