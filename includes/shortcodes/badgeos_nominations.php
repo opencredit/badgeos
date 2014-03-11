@@ -1,52 +1,62 @@
 <?php
 
-$badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
-	'name' => __( 'BadgeOS Nominations List', 'badgeos' ),
-	'slug' => 'badgeos_nominations',
-	'description' => __( 'Display a filterable list of nominations', 'badgeos' ),
-	'attributes' => array(
-		'type' => array(
-			'name' => __( 'Achievement type', 'badgeos' ),
-			'type' => 'string',
-			'description' => __( 'Achievement type to list nominations for. Default: nomination', 'badgeos' )
-			),
-		'limit' => array(
-			'name' => __( 'Limit', 'badgeos' ),
-			'type' => 'integer',
-			'description' => __( 'How many nominations to list at a time. Default: 10', 'badgeos' )
-			),
-		'status' => array(
-			'name' => __( 'Status', 'badgeos' ),
-			'type' => 'string',
-			'description' => __( 'Achievement status to query for. Default: all', 'badgeos' )
-			),
-		'show_filter' => array(
-			'name' => __( 'Show Filter', 'badgeos' ),
-			'type' => 'boolean',
-			'description' => __( 'Whether or not to render filter controls. Default: true', 'badgeos' ),
-			'default' => true
-			),
-		'show_search' => array(
-			'name' => __( 'Show Search', 'badgeos' ),
-			'type' => 'boolean',
-			'description' => __( 'Whether or not to render search controls. Default: true', 'badgeos' ),
-			'default' => true
-			),
-		'show_attachments' => array(
-			'name' => __( 'Show attachments', 'badgeos' ),
-			'type' => 'boolean',
-			'description' => __( 'Whether or not to display submitted attachments. Default: true', 'badgeos' ),
-			'default' => true
-			),
-		'show_comments' => array(
-			'name' => __( 'Show comments', 'badgeos' ),
-			'type' => 'boolean',
-			'description' => __( 'Whether or not to display submitted comments. Default: true', 'badgeos' ),
-			'default' => true
-			),
-	),
-	'output_callback' => 'badgeos_display_nominations'
-) );
+function badgeos_register_nominations_list_shortcode() {
+	$badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
+		'name' => __( 'BadgeOS Nominations List', 'badgeos' ),
+		'slug' => 'badgeos_nominations',
+		'description' => __( 'Display a filterable list of nominations', 'badgeos' ),
+		'attributes' => array(
+			'type' => array(
+				'name' => __( 'Achievement type', 'badgeos' ),
+				'type' => 'select',
+				'description' => __( 'Achievement type to list nominations for. Default: nomination', 'badgeos' ),
+				'values' => badgeos_get_awardable_achievements()
+				),
+			'limit' => array(
+				'name' => __( 'Limit', 'badgeos' ),
+				'type' => 'text',
+				'description' => __( 'How many nominations to list at a time. Default: 10', 'badgeos' )
+				),
+			'status' => array(
+				'name' => __( 'Status', 'badgeos' ),
+				'type' => 'select',
+				'description' => __( 'Nomination status to query for. Default: all', 'badgeos' ),
+				'values' => array( 'all', 'approved', 'denied', 'pending' ),
+				'default' => 'all'
+				),
+			'show_filter' => array(
+				'name' => __( 'Show Filter', 'badgeos' ),
+				'type' => 'select_bool',
+				'description' => __( 'Whether or not to render filter controls. Default: true', 'badgeos' ),
+				'values' => array( 'true', 'false' ),
+				'default' => 'true'
+				),
+			'show_search' => array(
+				'name' => __( 'Show Search', 'badgeos' ),
+				'type' => 'select_bool',
+				'description' => __( 'Whether or not to render search controls. Default: true', 'badgeos' ),
+				'values' => array( 'true', 'false' ),
+				'default' => 'true'
+				),
+			'show_attachments' => array(
+				'name' => __( 'Show attachments', 'badgeos' ),
+				'type' => 'select_bool',
+				'description' => __( 'Whether or not to display submitted attachments. Default: true', 'badgeos' ),
+				'values' => array( 'true', 'false' ),
+				'default' => 'true'
+				),
+			'show_comments' => array(
+				'name' => __( 'Show comments', 'badgeos' ),
+				'type' => 'select_bool',
+				'description' => __( 'Whether or not to display submitted comments. Default: true', 'badgeos' ),
+				'values' => array( 'true', 'false' ),
+				'default' => 'true'
+				),
+		),
+		'output_callback' => 'badgeos_display_nominations'
+	) );
+}
+add_action( 'init', 'badgeos_register_nominations_list_shortcode' );
 
 /**
  * Shortcode to display a filterable list of Nominations
