@@ -1,18 +1,21 @@
 <?php
 
-$badgeos_achievement_shortcode = badgeos_register_shortcode( array(
-	'name' => __( 'BadgeOS Achievement', 'badgeos' ),
-	'slug' => 'badgeos_achievement',
-	'description' => __( 'Render a single achievement', 'badgeos' ),
-	'attributes' => array(
-		'id' => array(
-			'name' => __( 'ID', 'badgeos' ),
-			'type' => 'integer',
-			'description' => __( 'The ID of the achievement to render. Default: Current achievement ID', 'badgeos' )
-			),
-	),
-	'output_callback' => 'badgeos_achievement_shortcode'
-) );
+function badgeos_register_achievement_shortcode() {
+	$badgeos_achievement_shortcode = badgeos_register_shortcode( array(
+		'name' => __( 'BadgeOS Achievement', 'badgeos' ),
+		'slug' => 'badgeos_achievement',
+		'description' => __( 'Render a single achievement', 'badgeos' ),
+		'attributes' => array(
+			'id' => array(
+				'name' => __( 'ID', 'badgeos' ),
+				'type' => 'text',
+				'description' => __( 'The ID of the achievement to render. Default: Current achievement ID', 'badgeos' )
+				),
+		),
+		'output_callback' => 'badgeos_achievement_shortcode'
+	) );
+}
+add_action( 'init', 'badgeos_register_achievement_shortcode' );
 /**
  * Render a single achievement
  *
