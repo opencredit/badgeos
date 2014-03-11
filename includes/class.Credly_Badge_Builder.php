@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Classes
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */

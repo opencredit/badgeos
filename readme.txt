@@ -1,18 +1,18 @@
 === BadgeOS ===
-Contributors: credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
+Contributors: badgeos, learningtimes, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
 Donate link: http://badgeos.org/contribute/donate/
-Tags: badge, badges, openbadges, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
+Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
-Easily create badges and set up the steps and achievements users complete to earn them. Badges are Mozilla OBI compatible and can be stored and share for life via Credly.
+BadgeOS turns your site into an achievement and badging system. Easily create badges and set up the steps and achievements users complete to earn them.
 
 == Description ==
 
-[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
+[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like,c and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
 
@@ -130,9 +130,10 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 
 = Stay Connected / Helpful Links =
 
-BadgeOS is made available by [Credly, LLC](https://credly.com/ "Credly web site"). Here are some ways to stay connected and to see what else we are up to:
+BadgeOS is made available by [LearningTimes, LLC](http://www.learningtimes.com/ "LearningTimes web site"). Here are some ways to stay connected and to see what else we are up to:
 
 * [BadgeOS.org](http://badgeos.org/ "BadgeOS web site") - Contact Us, Video Tutorials, Examples, News
+* [LearningTimes](http://www.learningtimes.com "LearningTimes web site") - Online learning programs, development and expertise
 * [Credly.com](https://credly.com/ "Credly web site") - Manage lifelong credentials that matter
 * [BadgeOS Developer Resources](http://badgeos.org/developers "BadgeOS Developer Docs and APIs") - Open documentation, APIs and resources for BadgeOS developers.
 * [Credly Knowledgebase](http://support.credly.com/ "Credly FAQ and Support") - Credly FAQ
@@ -149,7 +150,7 @@ Want to contribute to BadgeOS core? That's great! Visit our [GitHub site for the
 
 = License Info =
 
-Credly, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
+LearningTimes, LLC licenses BadgeOS to you under the terms of the GNU Affero General Public License, version 3, as published by the Free Software Foundation.
 
 There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License, version 3, at [http://www.gnu.org/licenses/agpl-3.0.html](http://www.gnu.org/licenses/agpl-3.0.html "License") for more details.
 
@@ -213,6 +214,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 
 == Changelog ==
+
+= 1.3.5 =
+* Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
+* Fixed: Eliminated some PHP warnings
 
 = 1.3.4 =
 * Updated: Upgraded bundled CMB library to 1.0.8.
@@ -319,6 +324,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.3.5 =
+* Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
+* Fixed: Eliminated some PHP warnings
 
 = 1.3.4 =
 * Updated: Upgraded bundled CMB library to 1.0.8.

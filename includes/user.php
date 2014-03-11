@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Admin
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
@@ -121,6 +121,8 @@ function badgeos_user_profile_data( $user = null ) {
 	$badgeos_settings = get_option( 'badgeos_settings' );
 	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
 
+	$achievement_ids = array();
+
 	//verify uesr meets minimum role to view earned badges
 	if ( current_user_can( $minimum_role ) ) {
 
@@ -146,8 +148,6 @@ function badgeos_user_profile_data( $user = null ) {
 				echo '<th>'. __( 'Name', 'badgeos' ) .'</th>';
 				echo '<th>'. __( 'Action', 'badgeos' ) .'</th>';
 			echo '</tr></thead>';
-
-			$achievement_ids = array();
 
 			foreach ( $achievements as $achievement ) {
 
