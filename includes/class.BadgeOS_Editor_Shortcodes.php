@@ -123,21 +123,59 @@ class WP_Editor_Shortcodes {
 		echo $text;
 	}
 
-	public function select_bool_input( $shortcode ) {
+	public function select_input( $args = array() ) {
 
-		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
-		echo '<select id="badgeos_' . $shortcode['slug'] . '" name="badgeos_' . $shortcode['slug'] . '">';
-		if ( $shortcode['attributes']['default'] ) {
-			echo '<option selected="selected" value="' . $shortcode['slug'] . '">' . $shortcode['slug'] . '</option>';
-		} else {
-			echo '<option value="' . $shortcode['slug'] . '">' . $shortcode['name'] . '</option>';
+		$options = '';
+		if ( 'select_bool' == $args['attributes']['type'] ) {
+			foreach( $args['attributes']['values'] as $value ) {
+				$options .= sprintf(
+					'<option value="%s"%s>%s</option>',
+					$args['slug'],
+					$selected = ( $value === $args['attributes']['default'] ) ? ' selected="selected"' : '',
+					$value
+				);
+			}
 		}
-		echo '</select>';
 
-		if ( $shortcode['attributes']['description'] ) {
-			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
+		if ( 'select' == $args['attributes']['type'] ) {
+			if ( isset( $args['attributes']['values'] ) ) {
+				if ( 'badgeos_achievements_list' == $args['slug'] ) {
+					foreach( $args['attributes']['values'] as $value ) {
+						$options .= sprintf(
+							'<option value="%s">%s</option>',
+							$val = ( isset( $value['single_name'] ) ) ? $value['single_name'] : $value,
+							$val = ( isset( $value['single_name'] ) ) ? $value['single_name'] : $value
+						);
+					}
+				} else {
+					foreach( $args['attributes']['values'] as $value ) {
+						$options .= sprintf(
+							'<option value="%s">%s</option>',
+							$value,
+							$value
+						);
+					}
+				}
+
+			}
 		}
-		echo '</div>';
+
+		$description = '';
+		if ( $args['attributes']['description'] ) {
+			$description = '<br/><span>' . $args['attributes']['description'] . '</span>';
+		}
+
+		$select = sprintf(
+			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><select id="badgeos_%s" name="badgeos_%s">%s</select>%s</div>',
+			$args['name'],
+			$args['attributes']['name'],
+			$args['slug'],
+			$args['slug'],
+			$options,
+			$description
+		);
+
+		echo $select;
 	}
 
 }
