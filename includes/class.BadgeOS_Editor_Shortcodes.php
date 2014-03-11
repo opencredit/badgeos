@@ -119,21 +119,8 @@ class WP_Editor_Shortcodes {
 			$description
 		);
 
-	public function select_input( $shortcode ) {
 
-		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
-		echo '<select id="badgeos_' . $shortcode['slug'] . '" name="badgeos_' . $shortcode['slug'] . '">';
-		if ( $shortcode['attributes']['default'] ) {
-			echo '<option selected="selected" value="' . $shortcode['slug'] . '">' . $shortcode['slug'] . '</option>';
-		} else {
-			echo '<option value="' . $shortcode['slug'] . '">' . $shortcode['name'] . '</option>';
-		}
-		echo '</select>';
-
-		if ( $shortcode['attributes']['description'] ) {
-			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
-		}
-		echo '</div>';
+		echo $text;
 	}
 
 	public function select_bool_input( $shortcode ) {
