@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Credly
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
@@ -232,6 +232,7 @@ class BadgeOS_Credly {
             'timeout'     => 45,
             'redirection' => 5,
             'httpversion' => '1.0',
+			'ssl_verify' => false,
             'blocking'    => true,
             'headers'     => array(),
             'body'        => $body,
@@ -252,7 +253,7 @@ class BadgeOS_Credly {
      */
     private function credly_api_get( $url = '' ) {
 
-        $response = wp_remote_get( $url );
+        $response = wp_remote_get( $url, array( 'ssl_verify' => false ) );
 
         return $response;
 
