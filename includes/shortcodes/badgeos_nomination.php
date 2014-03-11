@@ -1,18 +1,22 @@
 <?php
 
-$badgeos_nomination_shortcode = badgeos_register_shortcode( array(
-	'name' => __( 'BadgeOS Nomination Form', 'badgeos' ),
-	'slug' => 'badgeos_nomination',
-	'description' => __( 'Render a nomination form', 'badgeos' ),
-	'attributes' => array(
-		'achievement_id' => array(
-			'name' => __( 'Achievement ID', 'badgeos' ),
-			'type' => 'string',
-			'description' => __( 'Achievement ID to create a nomination form for. Default: current achievement ID', 'badgeos' )
-			),
-	),
-	'output_callback' => 'badgeos_nomination_form'
-) );
+function badgeos_register_nomination_shortcode() {
+
+	$badgeos_nomination_shortcode = badgeos_register_shortcode( array(
+		'name' => __( 'BadgeOS Nomination Form', 'badgeos' ),
+		'slug' => 'badgeos_nomination',
+		'description' => __( 'Render a nomination form', 'badgeos' ),
+		'attributes' => array(
+			'achievement_id' => array(
+				'name' => __( 'Achievement ID', 'badgeos' ),
+				'type' => 'text',
+				'description' => __( 'Achievement ID to create a nomination form for. Default: current achievement ID', 'badgeos' )
+				),
+		),
+		'output_callback' => 'badgeos_nomination_form'
+	) );
+}
+add_action( 'init', 'badgeos_register_nomination_shortcode' );
 
 /**
  * Display nomination form for awarding an achievemen
