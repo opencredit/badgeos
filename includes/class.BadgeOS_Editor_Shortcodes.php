@@ -104,14 +104,20 @@ class WP_Editor_Shortcodes {
 		//wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "/js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
 	}
 
-	public function text_input( $shortcode ) {
-		echo '<div class="badgeos_input alignleft"><label for="' . $shortcode['name'] . '">' . $shortcode['attributes']['name'] . '</label><br/>';
-		echo '<input id="' . $shortcode['name'] . '" name="' . $shortcode['name'] . '" type="text" />';
-		if ( $shortcode['attributes']['description'] ) {
-			echo '<br/><span>' . $shortcode['attributes']['description'] . '</span>';
+	public function text_input( $args = array() ) {
+
+		$description = '';
+		if ( $args['attributes']['description'] ) {
+			$description = '<br/><span>' . $args['attributes']['description'] . '</span>';
 		}
-		echo '</div>';
-	}
+		$text = sprintf(
+			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><input id="%s" name="%s" type="text" />%s</div>',
+			$args['name'],
+			$args['attributes']['name'],
+			$args['name'],
+			$args['name'],
+			$description
+		);
 
 	public function select_input( $shortcode ) {
 
