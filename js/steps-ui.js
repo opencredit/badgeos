@@ -55,15 +55,17 @@ jQuery(document).ready(function($) {
 		var achievement_type     = achievement_selector.val();
 		var step_id              = achievement_selector.parent('li').attr('data-step-id');
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
+		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
 
 		// If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
-		if ( '' !== achievement_type && 'specific-achievement' == achievement_selector.siblings('.select-trigger-type').val() ) {
+		if ( ( '' !== achievement_type && 'specific-achievement' == trigger_type ) || 0 === trigger_type.indexOf( 'badgeos_specific_' ) ) {
 			$.post(
 				ajaxurl,
 				{
 					action: 'post_select_ajax',
 					achievement_type: achievement_type,
+					trigger_type: trigger_type,
 					step_id: step_id,
 					excluded_posts: excluded_posts
 				},
