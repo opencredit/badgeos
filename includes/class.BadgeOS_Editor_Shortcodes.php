@@ -91,7 +91,7 @@ class WP_Editor_Shortcodes {
 	 * @since 1.4.0
 	 */
 	public function add_shortcode_button() {
-		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=480&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS', 'badgeos' ) . '">' . __( 'Add BadgeOS', 'badgeos' ) . '</a>';
+		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=660&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" title="' . esc_attr__( 'Add BadgeOS', 'badgeos' ) . '">' . __( 'Add BadgeOS', 'badgeos' ) . '</a>';
 	}
 
 	/**
