@@ -98,7 +98,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 
 	// check if shortcode has already been run
 	if ( isset( $GLOBALS['badgeos_achievements_list'] ) )
-		return;
+		return '';
 
 	global $user_ID;
 	extract( shortcode_atts( array(
@@ -146,7 +146,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		$post_type_plural = ( 1 == count( $types ) ) ? get_post_type_object( $type )->labels->name : 'achievements';
 	}
 
-	$badges = null;
+	$badges = '';
 
 	$badges .= '<div id="badgeos-achievements-filters-wrap">';
 		// Filter
