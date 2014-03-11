@@ -1,18 +1,21 @@
 <?php
 
-$badgeos_submission_shortcode = badgeos_register_shortcode( array(
-	'name' => __( 'BadgeOS Submission Form', 'badgeos' ),
-	'slug' => 'badgeos_submission',
-	'description' => __( 'Render a submission form', 'badgeos' ),
-	'attributes' => array(
-		'achievement_id' => array(
-			'name' => __( 'Achievement ID', 'badgeos' ),
-			'type' => 'string',
-			'description' => __( 'Achievement ID to create a submission form for. Default: current achievement ID', 'badgeos' )
-			),
-	),
-	'output_callback' => 'badgeos_submission_form'
-) );
+function badgeos_register_submission_shortcode() {
+	$badgeos_submission_shortcode = badgeos_register_shortcode( array(
+		'name' => __( 'BadgeOS Submission Form', 'badgeos' ),
+		'slug' => 'badgeos_submission',
+		'description' => __( 'Render a submission form', 'badgeos' ),
+		'attributes' => array(
+			'achievement_id' => array(
+				'name' => __( 'Achievement ID', 'badgeos' ),
+				'type' => 'text',
+				'description' => __( 'Achievement ID to create a submission form for. Default: current achievement ID', 'badgeos' )
+				),
+		),
+		'output_callback' => 'badgeos_submission_form'
+	) );
+}
+add_action( 'init', 'badgeos_register_submission_shortcode' );
 
 /**
  * Submission Form
