@@ -68,7 +68,7 @@ class WP_Editor_Shortcodes {
 						}
 					$count++;
 						foreach( $shortcode->attributes as $attribute ) {
-							if ( 'integer' == $attribute['type'] ) {
+							if ( 'text' == $attribute['type'] ) {
 								$this->text_input( array( 'name' => $shortcode->name, 'slug' => $shortcode->slug, 'attributes' => $attribute ) );
 							} else {
 								$this->select_input( array( 'name' => $shortcode->name, 'slug' => $shortcode->slug, 'attributes' => $attribute ) );
