@@ -126,13 +126,14 @@ class WP_Editor_Shortcodes {
 	}
 
 	public function select_input( $args = array() ) {
+		$attr = strtolower( str_replace( ' ', '_', $args['attributes']['name'] ) );
 
 		$options = '';
 		if ( 'select_bool' == $args['attributes']['type'] ) {
 			foreach( $args['attributes']['values'] as $value ) {
 				$options .= sprintf(
 					'<option value="%s"%s>%s</option>',
-					$args['slug'],
+					$attr,
 					$selected = ( $value === $args['attributes']['default'] ) ? ' selected="selected"' : '',
 					$value
 				);
@@ -144,16 +145,18 @@ class WP_Editor_Shortcodes {
 				if ( 'badgeos_achievements_list' == $args['slug'] ) {
 					foreach( $args['attributes']['values'] as $value ) {
 						$options .= sprintf(
-							'<option value="%s">%s</option>',
+							'<option value="%s"%s>%s</option>',
 							$val = ( isset( $value['single_name'] ) ) ? $value['single_name'] : $value,
+							$selected = ( isset( $args['attributes']['default'] ) && $value === $args['attributes']['default'] ) ? ' selected="selected"' : '',
 							$val = ( isset( $value['single_name'] ) ) ? $value['single_name'] : $value
 						);
 					}
 				} else {
 					foreach( $args['attributes']['values'] as $value ) {
 						$options .= sprintf(
-							'<option value="%s">%s</option>',
+							'<option value="%s"%s>%s</option>',
 							$value,
+							$selected = ( isset( $args['attributes']['default'] ) && $value === $args['attributes']['default'] ) ? ' selected="selected"' : '',
 							$value
 						);
 					}
@@ -168,11 +171,12 @@ class WP_Editor_Shortcodes {
 		}
 
 		$select = sprintf(
-			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><select id="badgeos_%s" name="badgeos_%s">%s</select>%s</div>',
-			$args['name'],
+			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><select class="%s" id="%s" name="%s">%s</select>%s</div>',
+			$attr,
 			$args['attributes']['name'],
 			$args['slug'],
-			$args['slug'],
+			$attr,
+			$attr,
 			$options,
 			$description
 		);
