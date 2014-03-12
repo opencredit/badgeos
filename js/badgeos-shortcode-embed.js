@@ -31,7 +31,7 @@
 	Construct our final shortcode string and return it to the WP Editor. This gets called when the user clicks "Insert Shortcode".
 	 */
 	function badgeos_insert_shortcode(){
-		var shortcode, attributes;
+		var shortcode, requested;
 
 		//Grab our requested shortcode from the dropdown, set the attributes for the chosen.
 		shortcode = $( '#select_shortcode option:selected' ).val();
