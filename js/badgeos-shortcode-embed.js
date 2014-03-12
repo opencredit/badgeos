@@ -1,7 +1,7 @@
 (function($) {
 
 	/*
-	Set the values from the inputs for the provided shortcode. This constructs all of the attributes that have user-set values.
+	Set the values from the inputs for the provided shortcode.
 	 */
 	function badgeos_set_current_attributes( shortcode ){
 		//Keep that global namespace clean.
