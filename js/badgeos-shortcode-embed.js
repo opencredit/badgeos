@@ -1,48 +1,29 @@
 (function($) {
 
 	/*
-	Construct and return our attributes list for the provided shortcode. Grabs all results from a localized variable.
-	 */
-	function badgeos_get_attributes( shortcode ) {
-		var result = {};
-
-		result.shortcode = shortcode;
-
-		//If the localized variable has the requested property aka requested shortcode, add those to our params property.
-		if ( badgeos_shortcodes.hasOwnProperty(shortcode) ) {
-			result.params = badgeos_shortcodes[shortcode];
-		}
-		return result;
-	}
-
-	/*
 	Set the values from the inputs for the provided shortcode. This constructs all of the attributes that have user-set values.
 	 */
 	function badgeos_set_current_attributes( shortcode ){
 		//Keep that global namespace clean.
-		var attributes = badgeos_get_attributes( shortcode ), result = {}, params = [], input = '', value = '';
+		var result = {}, attrs = [], params = [], input = '', value = '';
 
-		result.shortcode = attributes.shortcode;
-
-		//If we have any available parameters
-		if ( attributes.params ) {
-			for( i = 0; i < attributes.params.length; i++ ) {
-				//Had to grab the values out of the select input differently.
-				if ( 'bool' === attributes.params[i].type ) {
-					input = $('#badgeos_'+attributes.params[i].param+' option:selected' ).val();
-				} else {
-					input = $('#badgeos_'+attributes.params[i].param ).val();
-				}
-				value = ( input.length > 0 ) ? input : null;
-
-				//If we had a value at all, push it intou our params array.
-				if ( value ) {
-					params.push( attributes.params[i].param+'="'+value+'"' );
-				}
+		var inputs = $('#shortcode_options input[type="text"]');
+		$.each( inputs, function(index, el){
+			if ( el.className === shortcode && el.value !== '' ) {
+				attrs.push( el.id+'="'+el.value+'"');
 			}
-			//assign the params property with our array of found parameters.
-			result.params = params;
-		}
+		});
+		var selects = $('#shortcode_options select option:selected');
+		$.each( selects, function(index, el){
+			$parent = $(this).parent();
+			if ( $parent.attr('class') === shortcode ) {
+				attrs.push( $parent.attr('id')+'="'+el.text+'"');
+			}
+		});
+
+		result.shortcode = shortcode;
+		result.params = attrs;
+
 		return result;
 	}
 
