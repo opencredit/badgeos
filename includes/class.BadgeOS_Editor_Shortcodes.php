@@ -184,6 +184,12 @@ class WP_Editor_Shortcodes {
 		echo $select;
 	}
 
+	public function localized_text() {
+		return array(
+			'default_text' => __( 'Select a shortcode from the dropdown above to configure attributes. Once you have all desired attributes, click "Insert Shortcode". To return to the post editor without a shortcode, click "Cancel".', 'badgeos' )
+		);
+	}
+
 }
 
 new WP_Editor_Shortcodes();
