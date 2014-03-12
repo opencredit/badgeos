@@ -84,6 +84,7 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 				//set the admin email address
 				$admin_email = apply_filters( 'badgeos_nomination_notify_email', get_bloginfo( 'admin_email' ) );
 
+				//add email addresses set for site
 				if ( isset( $badgeos_settings[ 'submission_email_addresses' ] ) && !empty( $badgeos_settings[ 'submission_email_addresses' ] ) ) {
 					if ( !is_array( $admin_email ) ) {
 						$admin_email = explode( ',', $admin_email );
