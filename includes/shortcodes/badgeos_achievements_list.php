@@ -13,7 +13,8 @@ function badgeos_register_achievements_list_shortcode() {
 			'name' => __( 'Type', 'badgeos' ),
 			'type' => 'select',
 			'description' => __( 'The achievement type to display. Default: all', 'badgeos' ),
-			'values' => badgeos_get_awardable_achievements()
+			'values' => $achievement_types,
+			'default' => 'all'
 			),
 		'limit' => array(
 			'name' => __( 'Limit', 'badgeos' ),
@@ -45,7 +46,7 @@ function badgeos_register_achievements_list_shortcode() {
 			'description' => __( 'The user ID to display achievements for. Default: 0', 'badgeos' )
 			),
 		'wpms' => array(
-			'name' => __( 'Multisite', 'badgeos' ),
+			'name' => __( 'Wpms', 'badgeos' ),
 			'type' => 'select_bool',
 			'description' => __( 'Whether to display achievements from across a multisite network. Default: false', 'badgeos' ),
 			'values' => array( 'true', 'false' ),
@@ -55,7 +56,8 @@ function badgeos_register_achievements_list_shortcode() {
 			'name' => __( 'Order By', 'badgeos' ),
 			'type' => 'select',
 			'description' => __( 'What content to order the achievements by. Default: menu_order', 'badgeos' ),
-			'values' => array( 'none', 'ID', 'author', 'title', 'name', 'date', 'modified', 'parent', 'rand', 'comment_count', 'menu_order', 'meta_value', 'meta_value_num', 'post__in' )
+			'values' => array( 'none', 'ID', 'author', 'title', 'name', 'date', 'modified', 'parent', 'rand', 'comment_count', 'menu_order', 'meta_value', 'meta_value_num', 'post__in' ),
+			'default' => 'menu_order'
 			),
 		'order' => array(
 			'name' => __( 'Order', 'badgeos' ),
