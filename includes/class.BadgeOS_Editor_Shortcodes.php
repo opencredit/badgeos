@@ -104,6 +104,13 @@ class WP_Editor_Shortcodes {
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->localized_text() );
 	}
 
+	/**
+	 * Construct markup for a text input
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array $args args to use with input
+	 */
 	public function text_input( $args = array() ) {
 		$attr = strtolower( str_replace( ' ', '_', $args['attributes']['name'] ) );
 
@@ -125,6 +132,13 @@ class WP_Editor_Shortcodes {
 		echo $text;
 	}
 
+	/**
+	 * Construct markup for a select input
+	 *
+	 * @since 1.4.0
+	 *
+	 * @param array $args args to use with input
+	 */
 	public function select_input( $args = array() ) {
 		$attr = strtolower( str_replace( ' ', '_', $args['attributes']['name'] ) );
 
@@ -184,6 +198,13 @@ class WP_Editor_Shortcodes {
 		echo $select;
 	}
 
+	/**
+	 * i10n our text for use with javascript
+	 *
+	 * @since 1.4.0
+	 *
+	 * @return array Array of translated text
+	 */
 	public function localized_text() {
 		return array(
 			'default_text' => __( 'Select a shortcode from the dropdown above to configure attributes. Once you have all desired attributes, click "Insert Shortcode". To return to the post editor without a shortcode, click "Cancel".', 'badgeos' )
