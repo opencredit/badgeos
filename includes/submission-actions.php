@@ -84,6 +84,16 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 				//set the admin email address
 				$admin_email = apply_filters( 'badgeos_nomination_notify_email', get_bloginfo( 'admin_email' ) );
 
+				if ( isset( $badgeos_settings[ 'submission_email_addresses' ] ) && !empty( $badgeos_settings[ 'submission_email_addresses' ] ) ) {
+					if ( !is_array( $admin_email ) ) {
+						$admin_email = explode( ',', $admin_email );
+					}
+
+					$admin_email = array_merge( $admin_email, explode( ',', $badgeos_settings[ 'submission_email_addresses' ] ) );
+					$admin_email = array_unique( array_filter( $admin_email ) );
+					$admin_email = implode( ',', $admin_email );
+				}
+
 				//set the email subject
 				$subject = sprintf( 'Nomination: %s from %s', get_the_title( absint( $achievement_id ) ), $nominating_data->display_name );
 				$subject = apply_filters( 'badgeos_nomination_notify_subject', $subject );
@@ -107,7 +117,9 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 				$message = apply_filters( 'badgeos_nomination_notify_message', $message );
 
 				//send notification email to admin
-				wp_mail( $admin_email, $subject, $message );
+				if ( !empty( $admin_email ) ) {
+					wp_mail( $admin_email, $subject, $message );
+				}
 
 			}
 
