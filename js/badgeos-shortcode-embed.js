@@ -15,7 +15,7 @@
 		});
 		var selects = $('#shortcode_options select option:selected');
 		$.each( selects, function(index, el){
-			$parent = $(this).parent();
+			var $parent = $(this).parent();
 			if ( $parent.attr('class') === shortcode ) {
 				attrs.push( $parent.attr('id')+'="'+el.text+'"');
 			}
