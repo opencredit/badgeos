@@ -13,7 +13,7 @@ function badgeos_register_nominations_list_shortcode() {
 				'name' => __( 'Achievement type', 'badgeos' ),
 				'type' => 'select',
 				'description' => __( 'Achievement type to list nominations for. Default: nomination', 'badgeos' ),
-				'values' => badgeos_get_awardable_achievements()
+				'values' => $achievement_types
 				),
 			'limit' => array(
 				'name' => __( 'Limit', 'badgeos' ),
