@@ -105,17 +105,19 @@ class WP_Editor_Shortcodes {
 	}
 
 	public function text_input( $args = array() ) {
+		$attr = strtolower( str_replace( ' ', '_', $args['attributes']['name'] ) );
 
 		$description = '';
 		if ( $args['attributes']['description'] ) {
 			$description = '<br/><span>' . $args['attributes']['description'] . '</span>';
 		}
 		$text = sprintf(
-			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><input id="%s" name="%s" type="text" />%s</div>',
-			$args['name'],
+			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><input class="%s" id="%s" name="%s" type="text" />%s</div>',
+			$attr,
 			$args['attributes']['name'],
-			$args['name'],
-			$args['name'],
+			$args['slug'],
+			$attr,
+			$attr,
 			$description
 		);
 
