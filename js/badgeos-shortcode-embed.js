@@ -64,29 +64,11 @@
 	$( '#select_shortcode' ).on( 'change', function(){
 		var selected = $( '#select_shortcode option:selected' ).val();
 
-		if ( 'unselected' === selected ) {
-			//If we reselect the default, disable.
-			$( '#badgeos_insert' ).attr( 'disabled', 'disabled' );
-			$( '#shortcode_options' ).html( '<p>'+badgeos_shortcode_messages.starting+'</p>' );
-			return;
-		}
-		//If we're at this point, we have selected an available shortcode.
-		$( '#badgeos_insert' ).removeAttr( 'disabled', 'disabled' );
+		$('.badgeos_input').parent().hide();
+		$('.'+selected).parent().parent().show();
 
-		inputs = badgeos_construct_inputs( selected );
-
-		$( '#shortcode_options' ).html( inputs );
 	});
 
-	//Set/reset some values upon clicking.
-	$('#insert_badgeos_shortcodes').on( 'click', function(){
-		//Reset to default when re-opening
-		$( '#select_shortcode' ).val( 'unselected' );
-		//Disable at the start.
-		$( '#badgeos_insert' ).attr( 'disabled', 'disabled' );
-		//Initial message.
-		$( '#shortcode_options' ).html( '<p>'+badgeos_shortcode_messages.starting+'</p>' );
-	});
 	//Insert constructed shortcode and close popup
 	$( '#badgeos_insert' ).on( 'click', function(e){
 		badgeos_insert_shortcode();
