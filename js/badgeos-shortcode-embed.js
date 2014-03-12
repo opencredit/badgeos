@@ -5,7 +5,7 @@
 	 */
 	function badgeos_set_current_attributes( shortcode ){
 		//Keep that global namespace clean.
-		var result = {}, attrs = [], params = [], input = '', value = '';
+		var result = {}, attrs = [], input = '';
 
 		var inputs = $('#shortcode_options input[type="text"]');
 		$.each( inputs, function(index, el){
