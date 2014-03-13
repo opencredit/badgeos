@@ -324,6 +324,8 @@ function badgeos_add_ons_get_feed() {
 		if ( ! is_wp_error( $feed ) ) {
 			if ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
 				$feed = wp_remote_retrieve_body( $feed );
+				$feed = str_replace( '<html><body>', '', $feed );
+				$feed = str_replace( '</body></html>', '', $feed );
 				// Cache our feed for 1 hour
 				set_transient( 'badgeos_add_ons_feed', $feed, HOUR_IN_SECONDS );
 			}
