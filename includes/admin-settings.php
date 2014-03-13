@@ -296,7 +296,7 @@ add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
 	?>
-	<div class="wrap" >
+	<div class="wrap badgeos-addons">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php printf( __( 'BadgeOS Add-Ons &nbsp;&mdash;&nbsp; %s', 'badgeos' ), '<a href="http://badgeos.org/add-ons/?ref=badgeos" class="button-primary" target="_blank">' . __( 'Browse All Add-Ons', 'badgeos' ) . '</a>' ); ?></h2>
 		<p><?php _e( 'These add-ons extend the functionality of BadgeOS.', 'badgeos' ); ?></p>
