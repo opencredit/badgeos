@@ -443,6 +443,17 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 			//set the admin email address
 			$admin_email = apply_filters( 'badgeos_submission_notify_email', get_bloginfo( 'admin_email' ) );
 
+			//add email addresses set for site
+			if ( isset( $badgeos_settings[ 'submission_email_addresses' ] ) && !empty( $badgeos_settings[ 'submission_email_addresses' ] ) ) {
+				if ( !is_array( $admin_email ) ) {
+					$admin_email = explode( ',', $admin_email );
+				}
+
+				$admin_email = array_merge( $admin_email, explode( ',', $badgeos_settings[ 'submission_email_addresses' ] ) );
+				$admin_email = array_unique( array_filter( $admin_email ) );
+				$admin_email = implode( ',', $admin_email );
+			}
+
 			//set the email subject
 			$subject = 'Submission: '.get_the_title( absint( $achievement_id ) ). ' from ' .$user_data->display_name;
 			$subject = apply_filters( 'badgeos_submission_notify_subject', $subject );
