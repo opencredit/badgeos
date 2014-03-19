@@ -239,9 +239,3 @@ function badgeos_get_awardable_achievements() {
 
 	return wp_list_pluck( $achievements, 'single_name' );
 }
-
-
-/*
-Use badgeos_activity_trigger_post_select_ajax_handler() to fetch posts in achievement type. Consider "post_select_ajax" for action
-select achievement type from dropdown list. This would be fine for localized data.
- */
