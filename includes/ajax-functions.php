@@ -225,22 +225,22 @@ function badgeos_ajax_update_feedback() {
 	// Verify our nonce
 	check_ajax_referer( 'review_feedback', 'nonce' );
 
-	// Get the feedback post type
-	$feedback_type = $_REQUEST['feedback_type'];
-	$status = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
+	// Status workflow
+	$status_args = array(
+		'achievement_id' => $_REQUEST[ 'achievement_id' ],
+		'user_id' => $_REQUEST[ 'user_id' ],
+		'submission_type' => $_REQUEST[ 'feedback_type' ]
+	);
 
-	// Update our meta
-	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $status );
+	// Setup status
+	$status = ( 'approve' == $_REQUEST[ 'status' ] ) ? 'approved' : 'denied';
 
-	// If our status was just approved, award the achievement
-	if ( 'approved' == $status ) {
-		badgeos_award_achievement_to_user( absint( $_REQUEST['achievement_id'] ), absint( $_REQUEST['user_id'] ) );
-	}
+	badgeos_set_submission_status( $_REQUEST[ 'feedback_id' ], $status, $status_args );
 
 	// Send back our successful response
 	wp_send_json_success( array(
 		'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>',
-		'status'  => ucfirst( $status )
+		'status' => ucfirst( $status )
 	) );
 
 }
