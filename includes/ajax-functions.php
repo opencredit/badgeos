@@ -9,7 +9,7 @@
  * @link https://credly.com
  */
 
-// Setup our MVP AJAX actions
+// Setup our badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
 	'get-feedback',
