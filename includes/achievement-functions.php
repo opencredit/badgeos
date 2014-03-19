@@ -435,13 +435,15 @@ function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 }
 
 /**
- * Returns achievements that must be earned to earn given achievement.
+ * Get dependent achievements (steps) for a given achievement.
  *
  * @since  1.0.0
- * @param  integer $achievement_id The given achievement's post ID
- * @return array                   An array of achievements that are dependent on the given achievement
+ *
+ * @param  integer $achievement_id Achievement ID.
+ * @param  bool    $override       True to lookup steps no matter what, otherwise false.
+ * @return array|bool              Post objects, or false.
  */
-function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 ) {
+function badgeos_get_required_achievements_for_achievement( $achievement_id = 0, $override = false ) {
 	global $wpdb;
 
 	// Grab the current achievement ID if none specified
@@ -450,9 +452,10 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		$achievement_id = $post->ID;
 	}
 
-	// Don't retrieve requirements if achievement is not earned by steps
-	if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) != 'triggers' )
+	// Unless explicitly told otherwise, do not return anything for achievements not earned by steps.
+	if ( ! $override && 'triggers' !== get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
 		return false;
+	}
 
 	// Grab our requirements for this achievement
 	$requirements = $wpdb->get_results( $wpdb->prepare(

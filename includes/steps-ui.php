@@ -406,3 +406,128 @@ function badgeos_compare_step_order( $step1 = 0, $step2 = 0 ) {
 	if ( $step1->order == $step2->order ) return 0;
 	return ( $step1->order < $step2->order ) ? -1 : 1;
 }
+
+/**
+ * Attempt to trash steps when a post is trashed.
+ *
+ * @since alpha
+ *
+ * @param integer $post_id Post ID.
+ */
+function badgeos_maybe_trash_achievement_steps( $post_id ) {
+
+	if ( ! current_user_can( 'delete_post' ) ) {
+		return;
+	}
+
+	if ( badgeos_is_achievement( $post_id ) && 'triggers' == get_post_meta( $post_id, '_badgeos_earned_by', true ) ) {
+		badgeos_trash_achievement_steps( $post_id );
+	}
+}
+add_action( 'wp_trash_post', 'badgeos_maybe_trash_achievement_steps' );
+
+/**
+ * Trash all steps connected to a given achievement.
+ *
+ * @since alpha
+ *
+ * @param integer $achievement_id Achievement ID.
+ */
+function badgeos_trash_achievement_steps( $achievement_id = 0 ) {
+	$steps = badgeos_get_required_achievements_for_achievement( $achievement_id );
+
+	if ( ! empty( $steps ) ) {
+		foreach ( $steps as $step ) {
+			wp_trash_post( $step->ID );
+		}
+	}
+}
+
+/**
+ * Attempt to restore steps when a post is restored.
+ *
+ * @since alpha
+ *
+ * @param integer $post_id Post ID.
+ */
+function badgeos_maybe_restore_achievement_steps( $post_id ) {
+
+	if ( ! current_user_can( 'edit_post' ) ) {
+		return;
+	}
+
+	if ( badgeos_is_achievement( $post_id ) && 'triggers' == get_post_meta( $post_id, '_badgeos_earned_by', true ) ) {
+		badgeos_restore_achievement_steps( $post_id );
+	}
+}
+add_action( 'untrash_post', 'badgeos_maybe_restore_achievement_steps' );
+
+/**
+ * Restore all steps connected to a given achievement.
+ *
+ * @since alpha
+ *
+ * @param integer $achievement_id Achievement ID.
+ */
+function badgeos_restore_achievement_steps( $achievement_id = 0 ) {
+	$steps = badgeos_get_required_achievements_for_achievement( $achievement_id );
+	if ( ! empty( $steps ) ) {
+		foreach ( $steps as $step ) {
+			wp_untrash_post( $step->ID );
+		}
+	}
+}
+
+/**
+ * Attempt to permanently delete steps when a post is deleted.
+ *
+ * @since alpha
+ *
+ * @param integer $post_id Post ID.
+ */
+function badgeos_maybe_delete_achievement_steps_on_delete( $post_id ) {
+
+	if ( ! current_user_can( 'delete_post' ) ) {
+		return;
+	}
+
+	if ( 'triggers' == get_post_meta( $post_id, '_badgeos_earned_by', true ) ) {
+		badgeos_delete_achievement_steps( $post_id );
+	}
+}
+add_action( 'before_delete_post', 'badgeos_maybe_delete_achievement_steps_on_delete' );
+
+/**
+ * Permanently delete all steps connected to a given achievement.
+ *
+ * @since alpha
+ *
+ * @param integer $achievement_id Achievement ID.
+ */
+function badgeos_delete_achievement_steps( $achievement_id = 0 ) {
+	$steps = badgeos_get_required_achievements_for_achievement( $achievement_id, true );
+	if ( ! empty( $steps ) ) {
+		foreach ( $steps as $step ) {
+			wp_delete_post( $step->ID, true );
+		}
+	}
+}
+
+/**
+ * Attempt to permanently delete steps when an achievement is not earned by steps.
+ *
+ * @since alpha
+ *
+ * @param integer $post_id Post ID.
+ */
+function badgeos_maybe_delete_achievement_steps_on_save( $post_id ) {
+
+	if ( ! current_user_can( 'edit_post' ) ) {
+		return;
+	}
+
+	if ( badgeos_is_achievement( $post_id ) && 'triggers' !== get_post_meta( $post_id, '_badgeos_earned_by', true ) ) {
+		badgeos_delete_achievement_steps( $post_id );
+	}
+}
+add_action( 'save_post', 'badgeos_maybe_delete_achievement_steps_on_save', 20 );
