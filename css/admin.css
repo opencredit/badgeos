@@ -67,7 +67,7 @@ li.step-row .delete-step {
 }
 
 /* Add-ons page */
-.addon {
+.badgeos-addons .addon {
 	display: block;
 	background: #fafafa;
 	border: 1px solid #eee;
@@ -78,16 +78,16 @@ li.step-row .delete-step {
 	position: relative;
 	float: left;
 }
-.addon:nth-child(3n+4) {
+.badgeos-addons .addon:nth-child(3n+4) {
 	clear: both;
 }
-.addon .thumbnail-link {
+.badgeos-addons .addon .thumbnail-link {
 	display: block;
 	margin:0 auto;
 	width: 200px;
 	height: 200px;
 	text-align: center;
 }
-.addon img {
+.badgeos-addons .addon img {
 	max-width: 100%;
 }

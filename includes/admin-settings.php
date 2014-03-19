@@ -296,7 +296,7 @@ add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
 	?>
-	<div class="wrap" >
+	<div class="wrap badgeos-addons">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php printf( __( 'BadgeOS Add-Ons &nbsp;&mdash;&nbsp; %s', 'badgeos' ), '<a href="http://badgeos.org/add-ons/?ref=badgeos" class="button-primary" target="_blank">' . __( 'Browse All Add-Ons', 'badgeos' ) . '</a>' ); ?></h2>
 		<p><?php _e( 'These add-ons extend the functionality of BadgeOS.', 'badgeos' ); ?></p>
@@ -324,6 +324,8 @@ function badgeos_add_ons_get_feed() {
 		if ( ! is_wp_error( $feed ) ) {
 			if ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
 				$feed = wp_remote_retrieve_body( $feed );
+				$feed = str_replace( '<html><body>', '', $feed );
+				$feed = str_replace( '</body></html>', '', $feed );
 				// Cache our feed for 1 hour
 				set_transient( 'badgeos_add_ons_feed', $feed, HOUR_IN_SECONDS );
 			}
