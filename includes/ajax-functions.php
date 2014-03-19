@@ -13,7 +13,9 @@
 $badgeos_ajax_actions = array(
 	'get-achievements',
 	'get-feedback',
-	'update-feedback'
+	'get-posts',
+	'get-users',
+	'update-feedback',
 );
 
 // Register core Ajax calls.
