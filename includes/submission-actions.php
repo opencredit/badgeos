@@ -434,6 +434,9 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 	$status = $args[ 'status' ];
 	$submission_type = $args[ 'submission_type' ];
 
+	// Get old status
+	$args[ 'old_status' ] = get_post_meta( $submission_id, '_badgeos_' . $submission_type . '_status', true );
+
 	$user_id = $args[ 'user_id' ] = absint( $args[ 'user_id' ] );
 	$from_user_id = $args[ 'from_user_id' ] = absint( $args[ 'from_user_id' ] );
 	$user_data = $from_user_data = false;
