@@ -5,7 +5,19 @@
 	 */
 	function badgeos_set_current_attributes( shortcode ){
 		//Keep that global namespace clean.
-		var result = {}, attrs = [], input = '';
+		var result = {}, attrs = [];
+
+		attrs = badgeos_get_text_inputs( attrs, shortcode );
+
+		attrs = badgeos_get_select_inputs( attrs, shortcode );
+
+		attrs = badgeos_get_select2_inputs( attrs, shortcode );
+
+		result.shortcode = shortcode;
+		result.params = attrs;
+
+		return result;
+	}
 
 		var inputs = $('#shortcode_options input[type="text"]');
 		$.each( inputs, function(index, el){
