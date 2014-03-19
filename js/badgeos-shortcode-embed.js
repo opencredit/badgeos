@@ -78,6 +78,26 @@
 		return shortcode;
 	}
 
+	/*
+	Used with our Select2 implementation for User IDs
+	 */
+	function s2formatResult_users(item) {
+		return item.user_login;
+	}
+	/*
+	Used with our Select2 implementation for Post IDs
+	 */
+	function s2formatResult_posts(item) {
+		return item.post_title;
+	}
+
+	/*
+	Used to set the ID of the user or post
+	 */
+	function s2formatSelection(item) {
+		return item.ID;
+	}
+
 	//Handle changing the html used for the selected shortcode.
 	$( '#select_shortcode' ).on( 'change', function(){
 		var selected = $( '#select_shortcode option:selected' ).val();
