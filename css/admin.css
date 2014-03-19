@@ -128,3 +128,6 @@ Shortcode Embed styles
 .clear {
 	clear: both;
 }
+.select2-container {
+	width: 100%;
+}
