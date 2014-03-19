@@ -117,4 +117,80 @@
 		tb_remove();
 	});
 
+	/*
+	Add Select2 to our user ID input for the badgeos_achievements_list shortcode
+	 */
+	$("#badgeos_achievements_list_user_id").select2({
+		ajax: {
+			url: ajaxurl,
+			type: 'POST',
+			data: function (term) {
+				return {
+					q: term, // search term
+					action: 'get-users'
+				};
+			},
+			results: function (data, page) {
+				return {
+					results: data.data
+				};
+			}
+		},
+		id: function (object) {
+			return object.user_login;
+		},
+		formatResult: s2formatResult_users,
+		formatSelection: s2formatSelection
+	});
+
+	/*
+	Add Select2 to our three shortcodes that only need a single ID.
+	 */
+	$('#badgeos_achievement_id,#badgeos_nomination_achievement_id,#badgeos_submission_achievement_id').select2({
+		ajax: {
+			url: ajaxurl,
+			type: 'POST',
+			data: function (term) {
+				return {
+					q: term, // search term
+					action: 'get-posts'
+				};
+			},
+			results: function (data, page) {
+				return {
+					results: data.data
+				};
+			}
+		},
+		id: function (object) {
+			return object.post_title;
+		},
+		formatResult: s2formatResult_posts,
+		formatSelection: s2formatSelection
+	});
+
+	//TODO: figure out how to get multiples int one input.
+	$('#badgeos_achievements_list_include,#badgeos_achievements_list_exclude').select2({
+		ajax: {
+			url: ajaxurl,
+			type: 'POST',
+			data: function (term) {
+				return {
+					q: term, // search term
+					action: 'get-posts'
+				};
+			},
+			results: function (data, page) {
+				return {
+					results: data.data
+				};
+			}
+		},
+		id: function (object) {
+			return object.post_title;
+		},
+		formatResult: s2formatResult_posts,
+		formatSelection: s2formatSelection
+	});
+
 })(jQuery);
