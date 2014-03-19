@@ -123,10 +123,10 @@ class WP_Editor_Shortcodes {
 		}
 		$text = sprintf(
 			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><input class="%s" id="%s" name="%s" type="text" />%s</div>',
-			$attr,
+			$args['slug'] . '_' . $attr,
 			$args['attributes']['name'],
 			$args['slug'],
-			$attr,
+			$args['slug'] . '_' . $attr,
 			$attr,
 			$description
 		);
@@ -189,10 +189,10 @@ class WP_Editor_Shortcodes {
 
 		$select = sprintf(
 			'<div class="badgeos_input alignleft"><label for="%s">%s</label><br/><select class="%s" id="%s" name="%s">%s</select>%s</div>',
-			$attr,
+			$args['slug'] . '_' . $attr,
 			$args['attributes']['name'],
 			$args['slug'],
-			$attr,
+			$args['slug'] . '_' . $attr,
 			$attr,
 			$options,
 			$description
