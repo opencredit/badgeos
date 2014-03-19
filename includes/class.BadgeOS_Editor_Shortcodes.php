@@ -103,7 +103,6 @@ class WP_Editor_Shortcodes {
 		wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery', 'badgeos-select2' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->localized_text() );
-		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_select2_data', $this->select2_data() );
 
 		wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
 	}
