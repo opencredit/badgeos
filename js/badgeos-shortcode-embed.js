@@ -19,12 +19,17 @@
 		return result;
 	}
 
+	function badgeos_get_text_inputs( attrs, shortcode ){
 		var inputs = $('#shortcode_options input[type="text"]');
 		$.each( inputs, function(index, el){
 			if ( el.className === shortcode && el.value !== '' ) {
 				attrs.push( el.id+'="'+el.value+'"');
 			}
 		});
+		return attrs;
+	}
+
+	function badgeos_get_select_inputs( attrs, shortcode ){
 		var selects = $('#shortcode_options select option:selected');
 		$.each( selects, function(index, el){
 			var $parent = $(this).parent();
@@ -32,11 +37,12 @@
 				attrs.push( $parent.attr('id')+'="'+el.text+'"');
 			}
 		});
+		return attrs;
+	}
 
-		result.shortcode = shortcode;
-		result.params = attrs;
+	function badgeos_get_select2_inputs( attrs, shortcode ){
 
-		return result;
+		return attrs;
 	}
 
 	/*
