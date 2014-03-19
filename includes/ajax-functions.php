@@ -246,3 +246,56 @@ function badgeos_ajax_update_feedback() {
 	) );
 
 }
+
+function badgeos_ajax_get_users() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	global $wpdb;
+
+	// Pull back the search string
+	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+	$sql = "SELECT ID, user_login FROM {$wpdb->users}";
+
+	// Build our query
+	if ( !empty( $search ) ) {
+		$sql .= " WHERE user_login LIKE '%{$search}%'";
+	}
+
+	// Fetch our results (store as associative array)
+	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
+
+function badgeos_ajax_get_posts() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	global $wpdb;
+
+	// Pull back the search string
+	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+	$achievements = implode( "','", badgeos_get_awardable_achievements() );
+
+	$sql = "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ('{$achievements}')";
+
+	// Build our query
+	if ( !empty( $search ) ) {
+		$sql .= " AND post_title LIKE '%{$search}%'";
+	}
+
+	// Fetch our results (store as associative array)
+	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
