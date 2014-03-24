@@ -23,7 +23,7 @@
 		var inputs = $('#shortcode_options input[type="text"]');
 		$.each( inputs, function(index, el){
 			if ( el.className === shortcode && el.value !== '' ) {
-				attrs.push( el.id+'="'+el.value+'"');
+				attrs.push( el.name+'="'+el.value+'"');
 			}
 		});
 		return attrs;
@@ -34,7 +34,7 @@
 		$.each( selects, function(index, el){
 			var $parent = $(this).parent();
 			if ( $parent.attr('class') === shortcode ) {
-				attrs.push( $parent.attr('id')+'="'+el.text+'"');
+				attrs.push( $parent.attr('name')+'="'+el.text+'"');
 			}
 		});
 		return attrs;
