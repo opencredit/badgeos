@@ -4,6 +4,13 @@
 	Set the values from the inputs for the provided shortcode.
 	 */
 	function badgeos_set_current_attributes( shortcode ){
+		/*
+		you'll probably need different support functions for the different select2 inputs, too
+		because some, like user_id, would use a single input
+		but others, like include, will allow multiple selections
+
+		http://underscorejs.org/#flatten <---for multiple ID fields.
+		 */
 		//Keep that global namespace clean.
 		var result = {}, attrs = [];
 
@@ -41,7 +48,11 @@
 	}
 
 	function badgeos_get_select2_inputs( attrs, shortcode ){
-
+		var inputs = $('.select2-input');
+		console.log($('.select2-chosen').html());
+		/*$.each( inputs, function(index, el){
+			console.log($(el).select2("val"));
+		});*/
 		return attrs;
 	}
 
