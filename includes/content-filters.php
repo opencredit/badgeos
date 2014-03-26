@@ -420,7 +420,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 			// Render our Steps
 			if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
 				$output.='<div class="badgeos-item-attached">';
-					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">Show Details</a></div>';
+					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
 					$output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
 				$output.= '</div><!-- .badgeos-item-attached -->';
 			}
