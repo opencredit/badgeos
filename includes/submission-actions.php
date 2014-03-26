@@ -85,22 +85,25 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 				$admin_email = apply_filters( 'badgeos_nomination_notify_email', get_bloginfo( 'admin_email' ) );
 
 				//set the email subject
-				$subject = 'Nomination: '.get_the_title( absint( $achievement_id ) ). ' from ' .$nominating_data->display_name;
+				$subject = sprintf( 'Nomination: %s from %s', get_the_title( absint( $achievement_id ) ), $nominating_data->display_name );
 				$subject = apply_filters( 'badgeos_nomination_notify_subject', $subject );
 
 				//set the email message
-				$message = 'A new nomination has been received:
+				$message = sprintf( __(
+	'A new nomination has been received:
 
-	In response to: ' .get_the_title( absint( $achievement_id ) ).'
-	Nominee: '.$nominee_data->display_name.'
-	Nominated by: '.$nominating_data->display_name.'
+	In response to: %s
+	Nominee: %
+	Nominated by: %s
 
-	Review the complete submission and approve or deny it at:
-	'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $new_post_id ) ) ) ).'
-
-	To view all submissions, visit:
-	'.admin_url( 'edit.php?post_type=nomination' );
-
+	Review the complete submission and approve or deny it at: %s
+	To view all submissions, visit: %s', 'badgeos' ),
+	get_the_title( absint( $achievement_id ) ),
+	$nominee_data->display_name,
+	$nominating_data->display_name,
+	html_entity_decode( esc_url_raw( get_edit_post_link( absint( $new_post_id ) ) ) ),
+	admin_url( 'edit.php?post_type=nomination' )
+	);
 				$message = apply_filters( 'badgeos_nomination_notify_message', $message );
 
 				//send notification email to admin
@@ -435,16 +438,22 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 			$subject = apply_filters( 'badgeos_submission_notify_subject', $subject );
 
 			//set the email message
-			$message = 'A new submission has been received:
+			$message = sprintf( __(
+'A new submission has been received:
 
-In response to: ' .get_the_title( absint( $achievement_id ) ).'
-Submitted by: '.$user_data->display_name.'
+In response to: %s
+Submitted by: %s
 
 Review the complete submission and approve or deny it at:
-'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $submission_id ) ) ) ).'
+%s
 
 To view all submissions, visit:
-'.admin_url( 'edit.php?post_type=submission' );
+%s', 'badgeos' ),
+get_the_title( absint( $achievement_id ) ),
+$user_data->display_name,
+html_entity_decode( esc_url_raw( get_edit_post_link( absint( $submission_id ) ) ) ),
+admin_url( 'edit.php?post_type=submission' )
+);
 
 			$message = apply_filters( 'badgeos_submission_notify_message', $message );
 
