@@ -187,8 +187,8 @@
 				};
 			}
 		},
-		id: function (object) {
-			return object.user_login;
+		id: function( object ) {
+			return object.ID;
 		},
 		formatResult: s2formatResult_users,
 		formatSelection: s2formatSelection
