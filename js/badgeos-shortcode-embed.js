@@ -171,7 +171,7 @@
 	/*
 	Add Select2 to our user ID input for the badgeos_achievements_list shortcode
 	 */
-	$("#badgeos_achievements_list_user_id").select2({
+	$( '#badgeos_achievements_list_user_id' ).select2({
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
