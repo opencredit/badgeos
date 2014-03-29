@@ -26,22 +26,28 @@
 		return result;
 	}
 
-	function badgeos_get_text_inputs( attrs, shortcode ){
-		var inputs = $('#shortcode_options input[type="text"]');
-		$.each( inputs, function(index, el){
+	/*
+	Get the values for all the plain text inputs
+	 */
+	function badgeos_get_text_inputs( attrs, shortcode ) {
+		var inputs = $( '#shortcode_options input[type="text"]' );
+		$.each( inputs, function( index, el ) {
 			if ( el.className === shortcode && el.value !== '' ) {
-				attrs.push( el.name+'="'+el.value+'"');
+				attrs.push( el.name+'="'+el.value+'"' );
 			}
 		});
 		return attrs;
 	}
 
-	function badgeos_get_select_inputs( attrs, shortcode ){
-		var selects = $('#shortcode_options select option:selected');
-		$.each( selects, function(index, el){
-			var $parent = $(this).parent();
-			if ( $parent.attr('class') === shortcode ) {
-				attrs.push( $parent.attr('name')+'="'+el.text+'"');
+	/*
+	Get the values for all the normal select inputs
+	 */
+	function badgeos_get_select_inputs( attrs, shortcode ) {
+		var selects = $( '#shortcode_options select option:selected' );
+		$.each( selects, function( index, el ) {
+			var $parent = $( this ).parent();
+			if ( $parent.attr( 'class' ) === shortcode ) {
+				attrs.push( $parent.attr( 'name' )+'="'+el.text+'"' );
 			}
 		});
 		return attrs;
