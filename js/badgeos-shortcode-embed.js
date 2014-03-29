@@ -244,11 +244,14 @@
 				};
 			}
 		},
-		id: function (object) {
-			return object.post_title;
+		id: function ( object ) {
+			return object.ID;
 		},
+		allowClear: true,
+		placeholder: badgeos_shortcode_embed_messages.id_placeholder,
+		multiple: true,
 		formatResult: s2formatResult_posts,
-		formatSelection: s2formatSelection
+		formatSelection: s2formatSelection_posts
 	});
 
 })( jQuery );
