@@ -86,7 +86,7 @@
 	/*
 	Construct our final shortcode string and return it to the WP Editor. This gets called when the user clicks "Insert Shortcode".
 	 */
-	function badgeos_insert_shortcode(){
+	function badgeos_insert_shortcode() {
 		var shortcode, requested;
 
 		//Grab our requested shortcode from the dropdown, set the attributes for the chosen.
@@ -109,7 +109,7 @@
 				shortcode += ' ' + requested.params[i];
 			}
 
-			$.trim(shortcode);
+			$.trim( shortcode );
 		}
 		shortcode += ']';
 
@@ -119,13 +119,13 @@
 	/*
 	Used with our Select2 implementation for User IDs
 	 */
-	function s2formatResult_users(item) {
+	function s2formatResult_users( item ) {
 		return item.user_login;
 	}
 	/*
 	Used with our Select2 implementation for Post IDs
 	 */
-	function s2formatResult_posts(item) {
+	function s2formatResult_posts( item ) {
 		return item.post_title;
 	}
 
@@ -137,20 +137,20 @@
 	}
 
 	//Handle changing the html used for the selected shortcode.
-	$( '#select_shortcode' ).on( 'change', function(){
+	$( '#select_shortcode' ).on( 'change', function() {
 		var selected = $( '#select_shortcode option:selected' ).val();
 
-		$('.badgeos_input').parent().hide();
-		$('.'+selected).parent().parent().show();
+		$( '.badgeos_input' ).parent().hide();
+		$( '.'+selected ).parent().parent().show();
 
 	});
 
 	//Insert constructed shortcode and close popup
-	$( '#badgeos_insert' ).on( 'click', function(e){
+	$( '#badgeos_insert' ).on( 'click', function( e ) {
 		badgeos_insert_shortcode();
 	});
 	//Close the modal popup without doing anything.
-	$( '#badgeos_cancel' ).on( 'click', function(e){
+	$( '#badgeos_cancel' ).on( 'click', function( e ) {
 		e.preventDefault();
 		tb_remove();
 	});
@@ -162,13 +162,13 @@
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
-			data: function (term) {
+			data: function( term ) {
 				return {
 					q: term, // search term
 					action: 'get-users'
 				};
 			},
-			results: function (data, page) {
+			results: function( data, page ) {
 				return {
 					results: data.data
 				};
@@ -184,17 +184,17 @@
 	/*
 	Add Select2 to our three shortcodes that only need a single ID.
 	 */
-	$('#badgeos_achievement_id,#badgeos_nomination_achievement_id,#badgeos_submission_achievement_id').select2({
+	$( '#badgeos_achievement_id,#badgeos_nomination_achievement_id,#badgeos_submission_achievement_id' ).select2({
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
-			data: function (term) {
+			data: function( term ) {
 				return {
 					q: term, // search term
 					action: 'get-posts'
 				};
 			},
-			results: function (data, page) {
+			results: function( data, page ) {
 				return {
 					results: data.data
 				};
@@ -207,18 +207,20 @@
 		formatSelection: s2formatSelection
 	});
 
-	//TODO: figure out how to get multiples int one input.
-	$('#badgeos_achievements_list_include,#badgeos_achievements_list_exclude').select2({
+	/*
+	Add Select2 to our include/exclude inputs. Supports multiple values.
+	 */
+	$( '#badgeos_achievements_list_include,#badgeos_achievements_list_exclude' ).select2({
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
-			data: function (term) {
+			data: function( term ) {
 				return {
 					q: term, // search term
 					action: 'get-posts'
 				};
 			},
-			results: function (data, page) {
+			results: function( data, page ) {
 				return {
 					results: data.data
 				};
@@ -231,4 +233,4 @@
 		formatSelection: s2formatSelection
 	});
 
-})(jQuery);
+})( jQuery );
