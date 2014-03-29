@@ -284,7 +284,7 @@ function badgeos_ajax_get_posts() {
 
 	// Pull back the search string
 	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
-	$achievements = implode( "','", badgeos_get_awardable_achievements() );
+	$achievements = ( isset( $_REQUEST['post_type'] ) && 'all' != $_REQUEST['post_type'] ) ? esc_sql( $_REQUEST['post_type'] ) : implode( "','", badgeos_get_awardable_achievements() );
 
 	$sql = "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_status = 'publish' AND post_type IN ('{$achievements}')";
 
