@@ -71,6 +71,18 @@
 		return attrs;
 	}
 
+	function badgeos_select2_trim_id( input, shortcode ) {
+		if ( shortcode === 'badgeos_achievements_list' ) {
+			return input.replace( 's2id_badgeos_achievements_list_', '' );
+		} else if ( shortcode === 'badgeos_achievement' ) {
+			return input.replace( 's2id_badgeos_achievement_', '' );
+		} else if ( shortcode === 'badgeos_nomination' ) {
+			return input.replace( 's2id_badgeos_nomination_', '' );
+		} else if ( shortcode === 'badgeos_submission' ) {
+			return input.replace( 's2id_badgeos_submission_', '' );
+		}
+	}
+
 	/*
 	Construct our final shortcode string and return it to the WP Editor. This gets called when the user clicks "Insert Shortcode".
 	 */
