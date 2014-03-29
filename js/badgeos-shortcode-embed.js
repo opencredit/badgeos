@@ -8,12 +8,18 @@
 		//Keep that global namespace clean.
 		var result = {}, attrs = [];
 
+		/*
+		Pass the same variable into all three functions so that they are concatenated together.
+		 */
 		attrs = badgeos_get_text_inputs( attrs, shortcode );
 
 		attrs = badgeos_get_select_inputs( attrs, shortcode );
 
 		attrs = badgeos_get_select2_inputs( attrs, shortcode );
 
+		/*
+		Construct our final object for the shortcode instance.
+		 */
 		result.shortcode = shortcode;
 		result.params = attrs;
 
