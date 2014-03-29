@@ -53,12 +53,21 @@
 		return attrs;
 	}
 
-	function badgeos_get_select2_inputs( attrs, shortcode ){
-		var inputs = $('.select2-input');
-		console.log($('.select2-chosen').html());
-		/*$.each( inputs, function(index, el){
-			console.log($(el).select2("val"));
-		});*/
+	/*
+	Get all the values for the select2 inputs
+	 */
+	function badgeos_get_select2_inputs( attrs, shortcode ) {
+		var inputs = $( '#'+shortcode+'_wrapper .select2-container' );
+		$.each( inputs, function( index, el ) {
+			var val = $( el ).select2( 'val' );
+
+			var theattr = $( el ).prop( 'id' );
+			var trimmed = badgeos_select2_trim_id( theattr, shortcode );
+
+			if ( val.length > 0 && val !== '' ) {
+				attrs.push( trimmed+'="'+val+'"' );
+			}
+		});
 		return attrs;
 	}
 
