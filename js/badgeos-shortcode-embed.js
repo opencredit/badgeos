@@ -190,8 +190,10 @@
 		id: function( object ) {
 			return object.ID;
 		},
+		allowClear: true,
+		placeholder: badgeos_shortcode_embed_messages.id_placeholder,
 		formatResult: s2formatResult_users,
-		formatSelection: s2formatSelection
+		formatSelection: s2formatSelection_users
 	});
 
 	/*
