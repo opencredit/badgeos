@@ -123,6 +123,13 @@
 		return item.user_login;
 	}
 	/*
+	Used to set the ID of the user or post
+	 */
+	function s2formatSelection_users( item ) {
+		return item.user_login;
+	}
+
+	/*
 	Used with our Select2 implementation for Post IDs
 	 */
 	function s2formatResult_posts( item ) {
@@ -132,8 +139,8 @@
 	/*
 	Used to set the ID of the user or post
 	 */
-	function s2formatSelection(item) {
-		return item.ID;
+	function s2formatSelection_posts( item ) {
+		return item.post_title;
 	}
 
 	//Handle changing the html used for the selected shortcode.
