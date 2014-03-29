@@ -234,7 +234,8 @@
 			data: function( term ) {
 				return {
 					q: term, // search term
-					action: 'get-posts'
+					action: 'get-posts',
+					post_type: $( '#badgeos_achievements_list_type' ).val()
 				};
 			},
 			results: function( data, page ) {
