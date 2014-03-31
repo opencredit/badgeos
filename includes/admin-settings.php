@@ -112,8 +112,11 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 	$url = BADGEOS_CREDLY_API_URL . 'authenticate/';
 
 	$response = wp_remote_post( $url, array(
-			'headers' => array( 'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password ) )
-	) ) ;
+		'headers' => array(
+			'Authorization' => 'Basic ' . base64_encode( $username . ':' . $password )
+		),
+		'sslverify' => false
+	) );
 
 	// If the response is a WP error
 	if ( is_wp_error( $response ) ) {
