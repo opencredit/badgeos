@@ -85,14 +85,7 @@ function badgeos_log_users_points( $user_id, $new_points, $total_points, $admin_
 		$log_message = sprintf( __( '%1$s earned %2$s points for a new total of %3$s points', 'badgeos' ), $user->user_login, number_format( $new_points ), number_format( $total_points ) );
 
 	// Create a log entry
-	$log_entry_id = badgeos_post_log_entry( $achievement_id, $user_id, 'points', $log_message );
-
-	// Add relevant meta to our log entry
-	update_post_meta( $log_entry_id, '_badgeos_awarded_points', $new_points );
-	update_post_meta( $log_entry_id, '_badgeos_total_user_points', $total_points );
-	if ( $admin_id )
-		update_post_meta( $log_entry_id, '_badgeos_admin_awarded', $admin_id );
-
+	badgeos_post_log_entry( $achievement_id, $user_id, 'points', $log_message );
 }
 add_action( 'badgeos_update_users_points', 'badgeos_log_users_points', 10, 5 );
 

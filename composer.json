@@ -1,0 +1,9 @@
+{
+    "require": {
+        "monolog/monolog": "1.7.*",
+        "illuminate/database": "4.1.*"
+    },
+    "autoload": {
+        "psr-4": {"BadgeOS\\": "includes/"}
+    }
+}

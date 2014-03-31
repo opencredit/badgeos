@@ -185,6 +185,7 @@ function badgeos_settings_page() {
 			<?php $badgeos_settings = get_option( 'badgeos_settings' ); ?>
 			<?php
 			//load settings
+            $site_id = ( isset( $badgeos_settings['site_id'] ) ) ? $badgeos_settings['site_id'] : '';
 			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
@@ -193,6 +194,11 @@ function badgeos_settings_page() {
 			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
+                <tr valign="top"><th scope="row"><label for="site_id"><?php _e( 'Site ID: ', 'badgeos' ); ?></label></th>
+                    <td>
+                        <input id="site_id" name="badgeos_settings[site_id]" value="<?php print $site_id; ?>"/>
+                    </td>
+                </tr> 
 				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
 					<td>
                         <select id="minimum_role" name="badgeos_settings[minimum_role]">
