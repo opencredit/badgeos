@@ -248,6 +248,11 @@ function badgeos_ajax_update_feedback() {
 
 }
 
+/**
+ * AJAX Helper for selecting users in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
 function badgeos_ajax_get_users() {
 
 	// If no query was sent, die here
@@ -274,6 +279,11 @@ function badgeos_ajax_get_users() {
 	wp_send_json_success( $results );
 }
 
+/**
+ * AJAX Helper for selecting posts in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
 function badgeos_ajax_get_posts() {
 
 	// If no query was sent, die here
