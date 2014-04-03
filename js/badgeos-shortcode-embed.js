@@ -272,4 +272,30 @@
 		formatSelection: s2formatSelection_posts
 	});
 
+	$( '#badgeos_achievements_list_type,#badgeos_nominations_achievement_type,#badgeos_submissions_achievement_type' ).select2({
+		ajax: {
+			url: ajaxurl,
+			type: 'POST',
+			data: function( term ) {
+				return {
+					q: term,
+					action: 'get-post-types'
+				};
+			},
+			results: function( data, page ) {
+				return {
+					results: data.data
+				};
+			}
+		},
+		id: function( object ) {
+			return object.post_type
+		},
+		allowClear: true,
+		placeholder: badgeos_shortcode_embed_messages.post_type_placeholder,
+		multiple: true,
+		formatResult: s2formatResult_posttypes,
+		formatSelection: s2formatSelection_posttypes
+	});
+
 })( jQuery );
