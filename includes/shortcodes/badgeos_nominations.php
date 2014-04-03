@@ -1,8 +1,6 @@
 <?php
 
 function badgeos_register_nominations_list_shortcode() {
-	$achievement_types = badgeos_get_awardable_achievements();
-	array_unshift( $achievement_types, 'nomination' );
 
 	$badgeos_nominations_list_shortcode = badgeos_register_shortcode( array(
 		'name' => __( 'BadgeOS Nominations List', 'badgeos' ),
@@ -11,9 +9,8 @@ function badgeos_register_nominations_list_shortcode() {
 		'attributes' => array(
 			'type' => array(
 				'name' => __( 'Achievement type', 'badgeos' ),
-				'type' => 'select',
+				'type' => 'text',
 				'description' => __( 'Achievement type to list nominations for. Default: nomination', 'badgeos' ),
-				'values' => $achievement_types
 				),
 			'limit' => array(
 				'name' => __( 'Limit', 'badgeos' ),
