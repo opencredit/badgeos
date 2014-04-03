@@ -80,6 +80,10 @@
 			return input.replace( 's2id_badgeos_nomination_', '' );
 		} else if ( shortcode === 'badgeos_submission' ) {
 			return input.replace( 's2id_badgeos_submission_', '' );
+		} else if ( shortcode === 'badgeos_submissions' ) {
+			return input.replace( 's2id_badgeos_submissions_achievement_', '' );
+		} else if ( shortcode === 'badgeos_nominations' ) {
+			return input.replace( 's2id_badgeos_nominations_achievement_', '' );
 		}
 	}
 
