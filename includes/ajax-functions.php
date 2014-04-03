@@ -14,6 +14,7 @@ $badgeos_ajax_actions = array(
 	'get-achievements',
 	'get-feedback',
 	'get-posts',
+	'get-post-types',
 	'get-users',
 	'update-feedback',
 );
