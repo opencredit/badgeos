@@ -310,3 +310,38 @@ function badgeos_ajax_get_posts() {
 	// Return our results
 	wp_send_json_success( $results );
 }
+
+/**
+ * AJAX Helper for selecting post types in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_post_types() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	global $wpdb;
+
+	// Pull back the search string
+	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+	$sql = "SELECT ID, post_type FROM {$wpdb->posts} WHERE post_type LIKE '%{$search}%' GROUP BY post_type";
+
+	// Fetch our results (store as associative array)
+	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+	$newresults = array();
+
+	//Need to filter out non achievement types.
+	foreach( $results as $result ) {
+		if ( in_array( $result['post_type'], badgeos_get_awardable_achievements() ) ) {
+			$newresults[] = $result;
+		}
+	}
+
+	// Return our results
+	wp_send_json_success( $newresults );
+}
