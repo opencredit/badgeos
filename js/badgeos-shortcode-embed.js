@@ -147,6 +147,20 @@
 		return item.post_title;
 	}
 
+	/*
+	Used with our Select2 implementation for Post IDs
+	 */
+	function s2formatResult_posttypes( item ) {
+		return item.post_type;
+	}
+
+	/*
+	Used to set the ID of the user or post
+	 */
+	function s2formatSelection_posttypes( item ) {
+		return item.post_type;
+	}
+
 	//Handle changing the html used for the selected shortcode.
 	$( '#select_shortcode' ).on( 'change', function() {
 		var selected = $( '#select_shortcode option:selected' ).val();
