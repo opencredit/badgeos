@@ -1,8 +1,6 @@
 <?php
 
 function badgeos_register_achievements_list_shortcode() {
-	$achievement_types = badgeos_get_awardable_achievements();
-	array_unshift( $achievement_types, 'all' );
 
 	$badgeos_achievements_list_shortcode = badgeos_register_shortcode( array(
 	'name' => __( 'BadgeOS Achievements List', 'badgeos' ),
@@ -11,9 +9,8 @@ function badgeos_register_achievements_list_shortcode() {
 	'attributes' => array(
 		'type' => array(
 			'name' => __( 'Type', 'badgeos' ),
-			'type' => 'select',
+			'type' => 'text',
 			'description' => __( 'The achievement type to display. Default: all', 'badgeos' ),
-			'values' => $achievement_types,
 			'default' => 'all'
 			),
 		'limit' => array(
