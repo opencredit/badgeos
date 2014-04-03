@@ -262,7 +262,7 @@
 				};
 			}
 		},
-		id: function ( object ) {
+		id: function( object ) {
 			return object.ID;
 		},
 		allowClear: true,
