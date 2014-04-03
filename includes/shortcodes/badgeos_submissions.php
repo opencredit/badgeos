@@ -1,8 +1,6 @@
 <?php
 
 function badgeos_register_submissions_list_shortcode() {
-	$achievement_types = badgeos_get_awardable_achievements();
-	array_unshift( $achievement_types, 'submission' );
 
 	$badgeos_submissions_list_shortcode = badgeos_register_shortcode( array(
 		'name' => __( 'BadgeOS Submissions List', 'badgeos' ),
@@ -10,10 +8,9 @@ function badgeos_register_submissions_list_shortcode() {
 		'description' => __( 'Display a filterable list of submissions', 'badgeos' ),
 		'attributes' => array(
 			'type' => array(
-				'name' => __( 'Type', 'badgeos' ),
-				'type' => 'select',
+				'name' => __( 'Achievement type', 'badgeos' ),
+				'type' => 'text',
 				'description' => __( 'Achievement type to list submissions for. Default: submission', 'badgeos' ),
-				'values' => $achievement_types
 				),
 			'limit' => array(
 				'name' => __( 'Limit', 'badgeos' ),
