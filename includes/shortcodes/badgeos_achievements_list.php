@@ -32,11 +32,6 @@ function badgeos_register_achievements_list_shortcode() {
 			'values' => array( 'true', 'false' ),
 			'default' => 'true'
 			),
-		'group_id' => array(
-			'name' => __( 'Group ID', 'badgeos' ),
-			'type' => 'text',
-			'description' => '0'
-			),
 		'user_id' => array(
 			'name' => __( 'User ID', 'badgeos' ),
 			'type' => 'text',
