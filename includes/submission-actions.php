@@ -322,8 +322,7 @@ function badgeos_process_submission_review( $post_id = 0 ) {
 		// Give the achievement to the user
 		if ( $achievement_id && $user_id ) {
 
-			badgeos_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
-
+			badgeos_maybe_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
 		}
 
 	}
