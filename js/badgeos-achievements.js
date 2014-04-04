@@ -55,8 +55,8 @@ jQuery(document).ready(function($){
 			},
 			dataType: 'json',
 			success: function( response ) {
-				button.parent().children('a').hide();
-				button.parent().append( response.data.message );
+				$( '.badgeos-feedback-response', button.parent() ).remove();
+				$( response.data.message ).appendTo( button.parent() ).fadeOut(3000);
 				$('.badgeos-feedback-' + button.attr('data-feedback-id') + ' .badgeos-feedback-status').html( response.data.status );
 			}
 		});

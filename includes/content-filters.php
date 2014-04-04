@@ -559,9 +559,9 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
 		$output .= '</p>';
 
-		// Approve/Deny Buttons, for admins and pending posts only
+		// Approve/Deny Buttons for admins only
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == get_post_meta( $nomination->ID, '_badgeos_nomination_status', true ) ) {
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) ) {
 			$output .= badgeos_render_feedback_buttons( $nomination->ID );
 		}
 
@@ -617,9 +617,9 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 			$output .= badgeos_get_submission_attachments( $submission->ID );
 		}
 
-		// Approve/Deny Buttons, for admins and pending posts only
+		// Approve/Deny Buttons for admins only
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == $status ) {
+		if ( current_user_can( $badgeos_settings['minimum_role'] ) ) {
 			$output .= badgeos_render_feedback_buttons( $submission->ID );
 		}
 
@@ -702,7 +702,7 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
  * @return string               The concatinated markup
  */
 function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
-	global $post;
+	global $post, $user_ID;
 
 	// Use the current post ID if no ID provided
 	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : $post->ID;
@@ -721,6 +721,12 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
 		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
 	$output .= '</div>';
+
+	// Enqueue and localize our JS
+	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	$atts['user_id']  = $user_ID;
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
 
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );
