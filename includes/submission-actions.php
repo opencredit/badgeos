@@ -502,14 +502,18 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'A new nomination has been received and auto-approved:
+				$message = sprintf( __( 'A new nomination has been received and auto-approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Nominee: ' . $user_data->display_name . '
-					Nominated by: ' . $from_user_data->display_name . '
+					In response to: %s
+					Nominee: %s
+					Nominated by: %s
 
-					To view all nominations, including this one, visit:
-					' . admin_url( 'edit.php?post_type=nomination' );
+					To view all nominations, including this one, visit: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					$from_user_data->display_name,
+					admin_url( 'edit.php?post_type=nomination' )
+				);
 
 				// @todo set $email based on nominee and nominated by
 			}
