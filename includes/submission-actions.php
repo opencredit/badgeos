@@ -537,12 +537,15 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'Your nomination has been approved:
+				$message = sprintf( __( 'Your nomination has been approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Nominee: ' . $user_data->display_name . '
-					Nominated by: ' . $from_user_data->display_name;
-
+					In response to: %s
+					Nominee: %s
+					Nominated by: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					$from_user_data->display_name
+				);
 				// @todo set $email based on nominee and nominated by
 			}
 		}
