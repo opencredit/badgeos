@@ -487,13 +487,16 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'A new submission has been received and auto-approved:
+				$message = sprintf( __( 'A new submission has been received and auto-approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Submitted by: ' . $user_data->display_name . '
+					In response to: %s
+					Submitted by: %s
 
-					To view all submissions, including this one, visit:
-					' . admin_url( 'edit.php?post_type=submission' );
+					To view all submissions, including this one, visit: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					admin_url( 'edit.php?post_type=submission' )
+				);
 			}
 			elseif ( 'nomination' == $subject ) {
 				$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
