@@ -571,11 +571,15 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 			$subject = sprintf( __( 'Nomination Not Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 			// set the email message
-			$message = 'Your submission has not been approved:
+			$message = sprintf( __( 'Your submission has not been approved:
 
-				In response to: ' . get_the_title( $achievement_id ) . '
-				Nominee: ' . $user_data->display_name . '
-				Nominated by: ' . $from_user_data->display_name;
+				In response to: %s
+				Nominee: %s
+				Nominated by: %s', 'badgeos' ),
+				get_the_title( $achievement_id ),
+				$user_data->display_name,
+				$from_user_data->display_name
+			);
 
 			// @todo set $email based on nominee and nominated by
 		}
