@@ -605,16 +605,21 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 			$subject = sprintf( __( 'Submission: %s from %s', 'badgeos' ), get_the_title( $achievement_id ), $user_data->display_name );
 
 			//set the email message
-			$message = 'A new submission has been received:
+			$message = sprintf( __( 'A new submission has been received:
 
-				In response to: ' . get_the_title( $achievement_id ) . '
-				Submitted by: ' . $user_data->display_name . '
+				In response to: %s
+				Submitted by: %s
 
 				Review the complete submission and approve or deny it at:
-				' . html_entity_decode( esc_url_raw( get_edit_post_link( $submission_id ) ) ) . '
+				%s
 
 				To view all submissions, visit:
-				' . admin_url( 'edit.php?post_type=submission' );
+				%s', 'badgeos' ),
+				get_the_title( $achievement_id ),
+				$user_data->display_name,
+				html_entity_decode( esc_url_raw( get_edit_post_link( $submission_id ) ) ),
+				admin_url( 'edit.php?post_type=submission' )
+			);
 		}
 		elseif ( 'nomination' == $subject ) {
 			$subject = sprintf( __( 'Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ), $user_data->display_name );
