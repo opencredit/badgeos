@@ -525,10 +525,13 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Submission Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'Your submission has been approved:
+				$message = sprintf( __( 'Your submission has been approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Submitted by: ' . $user_data->display_name;
+					In response to: %s
+					Submitted by: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name
+				);
 			}
 			elseif ( 'nomination' == $subject ) {
 				$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
