@@ -487,26 +487,33 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'A new submission has been received and auto-approved:
+				$message = sprintf( __( 'A new submission has been received and auto-approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Submitted by: ' . $user_data->display_name . '
+					In response to: %s
+					Submitted by: %s
 
-					To view all submissions, including this one, visit:
-					' . admin_url( 'edit.php?post_type=submission' );
+					To view all submissions, including this one, visit: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					admin_url( 'edit.php?post_type=submission' )
+				);
 			}
 			elseif ( 'nomination' == $subject ) {
 				$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'A new nomination has been received and auto-approved:
+				$message = sprintf( __( 'A new nomination has been received and auto-approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Nominee: ' . $user_data->display_name . '
-					Nominated by: ' . $from_user_data->display_name . '
+					In response to: %s
+					Nominee: %s
+					Nominated by: %s
 
-					To view all nominations, including this one, visit:
-					' . admin_url( 'edit.php?post_type=nomination' );
+					To view all nominations, including this one, visit: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					$from_user_data->display_name,
+					admin_url( 'edit.php?post_type=nomination' )
+				);
 
 				// @todo set $email based on nominee and nominated by
 			}
@@ -518,21 +525,27 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				$subject = sprintf( __( 'Submission Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'Your submission has been approved:
+				$message = sprintf( __( 'Your submission has been approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Submitted by: ' . $user_data->display_name;
+					In response to: %s
+					Submitted by: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name
+				);
 			}
 			elseif ( 'nomination' == $subject ) {
 				$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 				// set the email message
-				$message = 'Your nomination has been approved:
+				$message = sprintf( __( 'Your nomination has been approved:
 
-					In response to: ' . get_the_title( $achievement_id ) . '
-					Nominee: ' . $user_data->display_name . '
-					Nominated by: ' . $from_user_data->display_name;
-
+					In response to: %s
+					Nominee: %s
+					Nominated by: %s', 'badgeos' ),
+					get_the_title( $achievement_id ),
+					$user_data->display_name,
+					$from_user_data->display_name
+				);
 				// @todo set $email based on nominee and nominated by
 			}
 		}
@@ -546,20 +559,27 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 			$subject = sprintf( __( 'Submission Not Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 			// set the email message
-			$message = 'Your submission has not been approved:
+			$message = sprintf( __( 'Your submission has not been approved:
 
-				In response to: ' . get_the_title( $achievement_id ) . '
-				Submitted by: ' . $user_data->display_name;
+				In response to: %s
+				Submitted by: %s', 'badgeos' ),
+				get_the_title( $achievement_id ),
+				$user_data->display_name
+			);
 		}
 		elseif ( 'nomination' == $subject ) {
 			$subject = sprintf( __( 'Nomination Not Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 			// set the email message
-			$message = 'Your submission has not been approved:
+			$message = sprintf( __( 'Your submission has not been approved:
 
-				In response to: ' . get_the_title( $achievement_id ) . '
-				Nominee: ' . $user_data->display_name . '
-				Nominated by: ' . $from_user_data->display_name;
+				In response to: %s
+				Nominee: %s
+				Nominated by: %s', 'badgeos' ),
+				get_the_title( $achievement_id ),
+				$user_data->display_name,
+				$from_user_data->display_name
+			);
 
 			// @todo set $email based on nominee and nominated by
 		}
