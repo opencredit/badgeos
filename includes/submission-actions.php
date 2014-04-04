@@ -624,17 +624,23 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 		elseif ( 'nomination' == $subject ) {
 			$subject = sprintf( __( 'Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ), $user_data->display_name );
 
-			$message = 'A new nomination has been received:
+			$message = sprintf( __( 'A new nomination has been received:
 
-				In response to: ' . get_the_title( $achievement_id ) . '
-				Nominee: ' . $user_data->display_name . '
-				Nominated by: ' . $from_user_data->display_name . '
+				In response to: %s
+				Nominee: %s
+				Nominated by: %s
 
 				Review the complete submission and approve or deny it at:
-				' . html_entity_decode( esc_url_raw( get_edit_post_link( $submission_id ) ) ) . '
+				%s
 
 				To view all nominations, visit:
-				' . admin_url( 'edit.php?post_type=nomination' );
+				%s', 'badgeos' ),
+				get_the_title( $achievement_id ),
+				$user_data->display_name,
+				$from_user_data->display_name,
+				html_entity_decode( esc_url_raw( get_edit_post_link( $submission_id ) ) ),
+				admin_url( 'edit.php?post_type=nomination' )
+			);
 		}
 	}
 
