@@ -58,6 +58,7 @@ jQuery(document).ready(function($){
 				$( '.badgeos-feedback-response', button.parent() ).remove();
 				$( response.data.message ).appendTo( button.parent() ).fadeOut(3000);
 				$('.badgeos-feedback-' + button.attr('data-feedback-id') + ' .badgeos-feedback-status').html( response.data.status );
+				$('.cmb_id__badgeos_submission_status td').html( response.data.status );
 			}
 		});
 	});

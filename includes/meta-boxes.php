@@ -153,15 +153,16 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 		'show_names' => true, // Show field names on the left
 		'fields'     => array(
 			array(
-				'name' => __( 'Status', 'badgeos' ),
-				'desc' => __( 'Approve or Deny this entry.', 'badgeos' ),
-				'id'   => $prefix . 'submission_status',
-				'type' => 'select',
-				'options' => array(
-					array( 'name' => 'Pending Review', 'value' => 'pending', ),
-					array( 'name' => 'Approved', 'value' => 'approved', ),
-					array( 'name' => 'Denied', 'value' => 'denied', ),
-				),
+				'name' => __( 'Current Status', 'badgeos' ),
+				'desc' => ucfirst( get_post_meta( $post_id, $prefix . 'submission_status', true ) ),
+				'id'   => $prefix . 'submission_current',
+				'type' => 'text_only',
+			),
+			array(
+				'name' => __( 'Change Status', 'badgeos' ),
+				'desc' => badgeos_render_feedback_buttons( $post_id ),
+				'id'   => $prefix . 'submission_update',
+				'type' => 'text_only',
 			),
 			array(
 				'name' => __( 'Achievement ID to Award', 'badgeos' ),
