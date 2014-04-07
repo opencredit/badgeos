@@ -91,12 +91,12 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 				'id'      => $prefix . 'earned_by',
 				'type'    => 'select',
 				'options' => apply_filters( 'badgeos_achievement_earned_by', array(
-						array( 'name' => 'Completing Steps',           'value' => 'triggers' ),
-						array( 'name' => 'Minimum Number of Points',   'value' => 'points' ),
-						array( 'name' => 'Submission (Reviewed)',      'value' => 'submission' ),
-						array( 'name' => 'Submission (Auto-accepted)', 'value' => 'submission_auto' ),
-						array( 'name' => 'Nomination',                 'value' => 'nomination' ),
-						array( 'name' => 'Admin-awarded Only',         'value' => 'admin' ),
+						array( 'name' => __( 'Completing Steps', 'badgeos' ),           'value' => 'triggers' ),
+						array( 'name' => __( 'Minimum Number of Points', 'badgeos' ),   'value' => 'points' ),
+						array( 'name' => __( 'Submission (Reviewed)', 'badgeos' ),      'value' => 'submission' ),
+						array( 'name' => __( 'Submission (Auto-accepted)', 'badgeos' ), 'value' => 'submission_auto' ),
+						array( 'name' => __( 'Nomination', 'badgeos' ),                 'value' => 'nomination' ),
+						array( 'name' => __( 'Admin-awarded Only', 'badgeos' ),         'value' => 'admin' ),
 					) )
 			),
 			array(
@@ -136,8 +136,8 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 				'id'      => $prefix . 'hidden',
 				'type'    => 'select',
 				'options' => array(
-					array( 'name' => 'Show to User', 'value' => 'show', ),
-					array( 'name' => 'Hidden to User', 'value' => 'hidden', ),
+					array( 'name' => __( 'Show to User', 'badgeos' ), 'value' => 'show', ),
+					array( 'name' => __( 'Hidden to User', 'badgeos' ), 'value' => 'hidden', ),
 				),
 			),
 		), $prefix, $achievement_types )
@@ -188,9 +188,9 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'nomination_status',
 				'type' => 'select',
 				'options' => array(
-					array( 'name' => 'Pending Review', 'value' => 'pending', ),
-					array( 'name' => 'Approved', 'value' => 'approved', ),
-					array( 'name' => 'Denied', 'value' => 'denied', ),
+					array( 'name' => __( 'Pending Review', 'badgeos' ), 'value' => 'pending', ),
+					array( 'name' => __( 'Approved', 'badgeos' ), 'value' => 'approved', ),
+					array( 'name' => __( 'Denied', 'badgeos' ), 'value' => 'denied', ),
 				),
 			),
 			array(
