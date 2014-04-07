@@ -322,8 +322,7 @@ function badgeos_process_submission_review( $post_id = 0 ) {
 		// Give the achievement to the user
 		if ( $achievement_id && $user_id ) {
 
-			badgeos_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
-
+			badgeos_maybe_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
 		}
 
 	}
@@ -343,7 +342,7 @@ function badgeos_save_submission_data() {
 		return;
 
 	// Nonce check for security
-	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
+	check_admin_referer( 'badgeos_submission_form' . absint( $_POST['achievement_id'] ), 'submit_submission' );
 
 	// Publish the submission
 	return badgeos_create_submission(
@@ -830,7 +829,7 @@ function badgeos_get_submission_form( $args = array() ) {
 		// submit button
 		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /></p>';
 		// hidden fields
-		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
+		$sub_form .= wp_nonce_field( 'badgeos_submission_form' . $defaults['achievement_id'], 'submit_submission', true, false );
 		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
 		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
 	$sub_form .= '</form>';
