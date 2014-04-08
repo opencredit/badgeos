@@ -9,11 +9,14 @@
  * @link https://credly.com
  */
 
-// Setup our MVP AJAX actions
+// Setup our badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
 	'get-feedback',
-	'update-feedback'
+	'get-achievements-select2',
+	'get-achievement-types',
+	'get-users',
+	'update-feedback',
 );
 
 // Register core Ajax calls.
@@ -243,4 +246,88 @@ function badgeos_ajax_update_feedback() {
 		'status' => ucfirst( $status )
 	) );
 
+}
+
+/**
+ * AJAX Helper for selecting users in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_users() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	global $wpdb;
+
+	// Pull back the search string
+	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+	$sql = "SELECT ID, user_login FROM {$wpdb->users}";
+
+	// Build our query
+	if ( !empty( $search ) ) {
+		$sql .= " WHERE user_login LIKE '%{$search}%'";
+	}
+
+	// Fetch our results (store as associative array)
+	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
+
+/**
+ * AJAX Helper for selecting posts in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_achievements_select2() {
+	global $wpdb;
+
+	// Pull back the search string
+	$search = isset( $_REQUEST['q'] ) ? like_escape( $_REQUEST['q'] ) : '';
+	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
+		? array( esc_sql( $_REQUEST['post_type'] ) )
+		: array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
+	$post_type = sprintf( 'AND post_type IN(\'%s\')', implode( "','", $achievement_types ) );
+
+	$results = $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT ID, post_title
+		FROM   $wpdb->posts
+		WHERE  post_title LIKE %s
+		       {$post_type}
+		       AND post_status = 'publish'
+		",
+		"%%{$search}%%"
+	) );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
+
+/**
+ * AJAX Helper for selecting achievement types in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_achievement_types() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
+	$matches = preg_grep( "/{$_REQUEST['q']}/", $achievement_types );
+	$found = array_map( 'get_post_type_object', $matches );
+
+	// Include an "all" option as the first option
+	array_unshift( $found, (object) array( 'name' => 'all', 'label' => 'All' ) );
+
+	// Return our results
+	wp_send_json_success( $found );
 }
