@@ -108,8 +108,7 @@
 		allowClear: true,
 		multiple: false
 	};
-	var select2_post_multiples = select2_post_defaults;
-	select2_post_multiples.multiple = true;
+	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { multiple: true } );
 
 	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id' ).select2( select2_post_defaults );
 	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).select2( select2_post_multiples );
