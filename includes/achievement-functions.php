@@ -139,7 +139,7 @@ function badgeos_get_achievements_children_orderby( $orderby = '' ) {
  */
 function badgeos_get_achievements_parents_join( $join = '' ) {
 	global $wpdb;
-	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_to = $wpdb->posts.ID AND p2p.p2p_type = 'step-to-$wpdb->posts.post_type'";
+	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_to = $wpdb->posts.ID";
 	return $join;
 }
 
