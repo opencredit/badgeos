@@ -484,7 +484,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 			}
 
 			if ( 'submission' == $subject ) {
-				$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
+				$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $achievement_id ), $user_data->display_name );
 
 				// set the email message
 				$message = sprintf( __( 'A new submission has been received and auto-approved:
@@ -499,7 +499,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 				);
 			}
 			elseif ( 'nomination' == $subject ) {
-				$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ) );
+				$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $achievement_id ), $user_data->display_name );
 
 				// set the email message
 				$message = sprintf( __( 'A new nomination has been received and auto-approved:
