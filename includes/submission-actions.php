@@ -571,7 +571,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 			$subject = sprintf( __( 'Nomination Not Approved: %s', 'badgeos' ), get_the_title( $achievement_id ) );
 
 			// set the email message
-			$message = sprintf( __( 'Your submission has not been approved:
+			$message = sprintf( __( 'Your nomination has not been approved:
 
 				In response to: %s
 				Nominee: %s
