@@ -499,15 +499,6 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 		}
 	}
 
-	if ( 'pending' == $status && $badgeos_settings && 'disabled' != $badgeos_settings[ 'submission_email' ] ) {
-		if ( 'submission' == $subject ) {
-			//
-		}
-		elseif ( 'nomination' == $subject ) {
-			//
-		}
-	}
-
 }
 
 /**
