@@ -214,7 +214,7 @@ class BadgeOS {
 		// Setup default Credly options
 		$credly_settings = (array) get_option( 'credly_settings', array() );
 
-		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credyl_enable' ] ) ) {
+		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credly_enable' ] ) ) {
 			$credly_settings['credly_enable']                      = 'true';
 			$credly_settings['credly_badge_title']                 = 'post_title';
 			$credly_settings['credly_badge_description']           = 'post_body';
