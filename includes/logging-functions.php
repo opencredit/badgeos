@@ -22,7 +22,6 @@ use BadgeOS\Log;
  * @return integer             The post ID of the newly created log entry
  */
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
-error_log(print_r(debug_backtrace(), true));
 	// Get the current user if no ID specified
 	if ( empty( $user_id ) )
 		$user_id = get_current_user_id();

@@ -23,10 +23,10 @@ class Log implements Logging {
      * Defines what handlers to use for logging
      */
     public function pushHandlers() {
-        $this->pushHandler(new BadgeOSLogHandler(), 'info');
+        $this->pushHandler(new BadgeOSLogHandler());
     }
 
-    public function pushHandler($handler, $severity) {
+    public function pushHandler($handler, $severity = 'info') {
         $severity = $this->parseLevel($severity);
         $this->logger->pushHandler($handler, $severity);
     }
