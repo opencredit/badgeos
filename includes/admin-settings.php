@@ -29,6 +29,7 @@ function badgeos_settings_validate( $input = '' ) {
 
 	// Sanitize the settings data submitted
 	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
+	$input['submission_manager_role'] = sanitize_text_field( $input['submission_manager_role'] );
 	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
 	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
 
@@ -188,7 +189,8 @@ function badgeos_settings_page() {
 			<?php $badgeos_settings = get_option( 'badgeos_settings' ); ?>
 			<?php
 			//load settings
-			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
+			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
+			$submission_manager_role = ( isset( $badgeos_settings['submission_manager_role'] ) ) ? $badgeos_settings['submission_manager_role'] : 'manage_options';
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$submission_email_addresses = ( isset( $badgeos_settings['submission_email_addresses'] ) ) ? $badgeos_settings['submission_email_addresses'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
@@ -205,6 +207,17 @@ function badgeos_settings_page() {
                             <option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
                             <option value="edit_posts" <?php selected( $minimum_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
                             <option value="read" <?php selected( $minimum_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
+                        </select>
+					</td>
+				</tr>
+				<tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
+					<td>
+                        <select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
+                            <option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+                            <option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+                            <option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+                            <option value="edit_posts" <?php selected( $submission_manager_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
+                            <option value="read" <?php selected( $submission_manager_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
                         </select>
 					</td>
 				</tr>

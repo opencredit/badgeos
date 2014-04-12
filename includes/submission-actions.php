@@ -1211,9 +1211,24 @@ function badgeos_get_feedback( $args = array() ) {
 
 	// Setup our author limit
 	if ( empty( $args['author'] ) && 'nomination' != $args['post_type'] ) {
-		// If we're not an admin, limit results to the current user
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
+
+		$submission_manager_role = $minimum_role;
+
+		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+		}
+
+		// If user doesn't have access to settings,
+		// restrict posts to ones they've authored
+		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
 			$args['author'] = $user_ID;
 		}
 	}
@@ -1291,9 +1306,24 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
 		// Use the provided user ID
 		$args['author'] = absint( $user_id );
 	} else {
-		// If we're not an admin, limit results to the current user
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
+
+		$submission_manager_role = $minimum_role;
+
+		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+		}
+
+		// If user doesn't have access to settings,
+		// restrict posts to ones they've authored
+		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
 			$args['author'] = $user_ID;
 		}
 	}
@@ -1337,9 +1367,24 @@ function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
 			'value' => absint( $user_id )
 		);
 	} else {
-		// If we're not an admin, limit results to the current user
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
+
+		$submission_manager_role = $minimum_role;
+
+		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+		}
+
+		// If user doesn't have access to settings,
+		// restrict posts to ones they've authored
+		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
 			$args['meta_query'][] = array(
 				'key'   => '_badgeos_nominating_user_id',
 				'value' => absint( $user_ID )

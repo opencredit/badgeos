@@ -119,7 +119,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 	// Get minimum role setting for menus
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
 
 	$achievement_ids = array();
 
@@ -335,7 +335,7 @@ function badgeos_process_user_data() {
 
 	// Get minimum role setting for menus
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
 
 	//verify uesr meets minimum role to view earned badges
 	if ( current_user_can( $minimum_role ) ) {

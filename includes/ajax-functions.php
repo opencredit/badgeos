@@ -200,10 +200,24 @@ function badgeos_ajax_get_feedback() {
 	if ( ! empty( $_REQUEST['search'] ) )
 		$args['s'] = $_REQUEST['search'];
 
+	// Get our BadgeOS Settings
+	$badgeos_settings = get_option( 'badgeos_settings' );
+
+	$minimum_role = 'manage_options';
+
+	if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+		$minimum_role = $badgeos_settings[ 'minimum_role' ];
+	}
+
+	$submission_manager_role = $minimum_role;
+
+	if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+		$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+	}
+
 	// If user doesn't have access to settings,
 	// restrict posts to ones they've authored
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	if ( ! user_can( absint( $_REQUEST['user_id'] ), $badgeos_settings['minimum_role'] ) ) {
+	if ( !user_can( absint( $_REQUEST[ 'user_id' ] ), $minimum_role ) && !user_can( absint( $_REQUEST[ 'user_id' ] ), $submission_manager_role ) ) {
 		$args['author'] = absint( $_REQUEST['user_id'] );
 	}
 

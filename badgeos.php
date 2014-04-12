@@ -206,6 +206,7 @@ class BadgeOS {
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
 			$badgeos_settings['minimum_role']     = 'manage_options';
+			$badgeos_settings['submission_manager_role'] = 'manage_options';
 			$badgeos_settings['submission_email'] = 'enabled';
 			$badgeos_settings['debug_mode']       = 'disabled';
 			update_option( 'badgeos_settings', $badgeos_settings );
@@ -241,7 +242,11 @@ class BadgeOS {
 		$badgeos_settings = get_option( 'badgeos_settings' );
 
 		// Set minimum role setting for menus
-		$minimum_role = $badgeos_settings['minimum_role'];
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
 
 		// Create main menu
 		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
