@@ -5,6 +5,7 @@ namespace BadgeOS;
 use Monolog\Logger;
 use Monolog\Handler\AbstractProcessingHandler;
 use BadgeOS\LogEntry;
+use DateTimeZone;
 
 class BadgeOSLogHandler extends AbstractProcessingHandler {
     private $statement;
@@ -23,13 +24,18 @@ class BadgeOSLogHandler extends AbstractProcessingHandler {
         $log->action            = $record['context']['action'];
         $log->object_id         = $record['context']['object_id'];
 
+        // Set timezone to local time
+        $tzstring = get_option('timezone_string');
+        $timezone = new DateTimeZone($tzstring);
+        $record['datetime']->setTimezone($timezone);
+
         if ( isset( $record['context']['object_id'] ) ) {
             $achievement        = get_post_meta( $record['context']['object_id'] );
             $log->points_earned = isset($achievement['_badgeos_points'][0]) ? $achievement['_badgeos_points'][0] : 0;
         }
 
         $log->total_points      = isset($user_meta['_badgeos_points'][0]) ? $user_meta['_badgeos_points'][0] : 0;
-        $log->timestamp         = isset($record['context']['timestamp']) ? $record['context']['timestamp'] : $record['datetime']->format('Y-m-d H:i:s');
+        $log->timestamp         = isset($record['context']['timestamp']) ? $record['context']['timestamp'] : $record['datetime']->format('Y-m-d H:i:s e');
         $log->timezone          = isset($record['context']['timezone']) ? $record['context']['timezone'] : $record['datetime']->getTimezone()->getName(); 
         $log->user_id           = $record['context']['user_id'];
         $log->user_registered   = $user->data->user_registered; 
