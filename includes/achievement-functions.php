@@ -726,10 +726,12 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		return $post_id;
 	}
 
+	$thumbnail_id = 0;
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
-		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
-		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+    	if ($achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' )) {
+    		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+    	}
 	}
 
 	// If there is no thumbnail set, load in our default image
@@ -779,3 +781,93 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
+
+/**
+ * Update existing achievements and p2p relationships when a registered achievement-type changes.
+ *
+ * @since  alpha
+ *
+ * @param  array $data    Post data.
+ * @param  array $postarr Provided args.
+ * @return array          Updated post data.
+ */
+function badgeos_maybe_update_achievement_type( $data = '', $postarr = '') {
+	if ( isset( $postarr['ID'] ) ) {
+		if ( $original_post = get_post( $postarr['ID'] ) ) {
+			if ( 'achievement-type' == $original_post->post_type ) {
+				$new_post_name = badgeos_get_unique_post_type_name_from_title( $original_post->post_title, $postarr['post_title'] );
+				if ( $original_post->post_name !== $new_post_name ) {
+					$data['post_name'] = $new_post_name;
+					badgeos_replace_achievement_type( $original_post->post_name, $new_post_name );
+					badgeos_replace_p2p_type( $original_post->post_name, $new_post_name );
+				}
+			}	
+		}
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
+ 
+/**
+ * Change all achievements of one type to a new type.
+ *
+ * @since  alpha
+ *
+ * @param  string $original_achievement_type Original achievement type.
+ * @param  string $new_achievement_type      New achievement type.
+ */
+function badgeos_replace_achievement_type( $original_achievement_type = '', $new_achievement_type = '' ) {
+	$items = get_posts( array(
+		'posts_per_page' => -1,
+		'post_status'    => 'any',
+		'post_type'      => $original_achievement_type,
+		'fields'         => 'id',
+	) );
+	foreach ( $items as $item ) {
+		set_post_type( $item->ID, $new_achievement_type );
+	}
+}
+ 
+/**
+ * Change all p2p connections for an achievement type to a new achievement type.
+ *
+ * @since  alpha
+ *
+ * @param  string $original_achievement_type Original achievement type.
+ * @param  string $new_achievement_type      New achievement type.
+ */
+function badgeos_replace_p2p_type( $original_achievement_type = '', $new_achievement_type = '' ) {
+	global $wpdb;
+	$p2p_relationships = array(
+		"step-to-{$original_achievement_type}" => "step-to-{$new_achievement_type}",
+		"{$original_achievement_type}-to-step" => "{$new_achievement_type}-to-step",
+	);
+	foreach ( $p2p_relationships as $old => $new ) {
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->p2p SET p2p_type = %s WHERE p2p_type = %s", $old, $new ) );
+	}
+}
+
+/**
+ * Similar to get_unique slug get a unique post_type name that is not in use.
+ *
+ * @since  alpha
+ *
+ * @param  array $original_achievement_type Original achievement post.
+ * @param  string $new_achievement_type      New achievement type.
+ * @return string of unique post_type based on post_title
+ */
+function badgeos_get_unique_post_type_name_from_title($original_post_title, $new_achievement_title = '', $increment = 0 ) {
+    global $wpdb;
+    $substr_length = 20 - strlen( $increment );
+    $title = substr( sanitize_title( $new_achievement_title, $original_post_title ), 0, $substr_length );
+    if ($increment) {
+        $title .= $increment;
+    }
+    $original_post_id = $original_post->ID;
+    if ( $row = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = '%s'", $title ) ) ) {
+        $increment++;
+        $title = badgeos_get_unique_post_type_name_from_title( $original_post_title, $title, $increment );
+        
+    } 
+    return $title;              
+}
