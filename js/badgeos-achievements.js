@@ -9,6 +9,12 @@ jQuery(document).ready(function($){
 		badgeos_get_feedback();
 	});
 
+	// Hide comment form on feedback posts with toggle
+	$('.submission-comment-toggle').show().siblings('.badgeos-comment-form').hide();
+	$('.submission-comment-toggle').on('click', function(){
+		$(this).hide().siblings('.badgeos-comment-form').slideDown();
+	});
+
 	// Get feedback posts
 	function badgeos_get_feedback() {
 		$('.badgeos-spinner').show();

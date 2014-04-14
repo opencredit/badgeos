@@ -798,7 +798,8 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 	$defaults = array(
 		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit'     => __( 'Submit Comment', 'badgeos' )
+		'submit'     => __( 'Submit Comment', 'badgeos' ),
+		'toggle'     => __( 'Add Comment', 'badgeos' ),
 	);
 	// filter our text
 	$new_defaults = apply_filters( 'badgeos_comment_form_language', $defaults );
@@ -829,6 +830,9 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		$sub_form .= '<input type="hidden" name="submission_id" value="' . $post_id . '">';
 
 	$sub_form .= '</form>';
+
+	// Toggle button for showing comment form
+	$sub_form .= '<input class="button submission-comment-toggle" type="submit" value="' . $language['toggle'] . '" style="display:none">';
 
 	return apply_filters( 'badgeos_get_comment_form', $sub_form, $post_id );
 
@@ -1121,7 +1125,7 @@ function badgeos_get_submission_form( $args = array() ) {
 
 	// Setup our defaults
 	$defaults = array(
-		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Create a New Submission', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit', 'badgeos' )
 	);
