@@ -806,17 +806,32 @@ function badgeos_maybe_update_achievement_type( $data = '', $postarr = '' ) {
 		if ( $original_post = get_post( $postarr['ID'] ) ) {
 			if ( 'achievement-type' == $original_post->post_type ) {
 				$new_post_name = badgeos_get_unique_post_type_name_from_title( $original_post, $postarr['post_title'] );
-				if ( $original_post->post_name !== $new_post_name ) {
+				if ( $original_post->post_name && $original_post->post_name !== $new_post_name ) {
 					$data['post_name'] = $new_post_name;
 					badgeos_replace_achievement_type( $original_post->post_name, $new_post_name );
 					badgeos_replace_p2p_type( $original_post->post_name, $new_post_name );
+					badgeos_register_post_types();
+					badgeos_register_achievement_type_cpt();
+					flush_rewrite_rules();
 				}
 			}	
 		}
 	}
 	return $data;
+
 }
+
+
+
 add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
+add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3);
+
+function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
+	var_dump($new_status);
+	if ('achievement-type' == $post->post_type && 'publish' == $new_status && 'publish' != $old_status) {
+		flush_rewrite_rules();
+	}
+}
 
 /**
  * Change all achievements of one type to a new type.
