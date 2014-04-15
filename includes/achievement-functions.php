@@ -826,6 +826,14 @@ function badgeos_maybe_update_achievement_type( $data = '', $postarr = '' ) {
 add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
 add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
 
+/**
+ * Flush the rewrite rules if its a achievement type update and it is published
+ * 
+ * @since alpha
+ * @param string $new_status New achievement status
+ * @param string $old_status Old achievement status
+ * @param string object $post post that is being updated
+ */
 function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
 	if ( 'achievement-type' == $post->post_type && 'publish' == $new_status && 'publish' != $old_status ) {
 		badgeos_register_post_types();
