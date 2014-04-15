@@ -38,8 +38,8 @@ class BadgeOSLogHandler extends AbstractProcessingHandler {
         $log->timestamp         = isset($record['context']['timestamp']) ? $record['context']['timestamp'] : $record['datetime']->format('Y-m-d H:i:s e');
         $log->timezone          = isset($record['context']['timezone']) ? $record['context']['timezone'] : $record['datetime']->getTimezone()->getName(); 
         $log->user_id           = $record['context']['user_id'];
-        $log->user_registered   = $user->data->user_registered; 
-        $log->zip               = $user_meta['zip'][0];
+        $log->user_registered   = isset($user->data->user_registered) ? $user->data->user_registered : '0000-00-00 00:00:00'; 
+        $log->zip               = isset($user_meta['zip'][0]) ? $user_meta['zip'][0] : null;
         $log->save();
     }
 }

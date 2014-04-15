@@ -380,7 +380,7 @@ function badgeos_update() {
     if (!Capsule::schema()->hasTable('badgeos_logs')) {
         badgeos_upgrade_2_0();
     }
-        
+
 }
 
 add_action('admin_init', 'badgeos_update');
@@ -394,14 +394,13 @@ function badgeos_upgrade_2_0() {
         $table->string('site_id')->nullable();
         $table->string('action');
         $table->longText('message');
-        $table->integer('object_id')->default(0)->nullable();
+        $table->string('object_id')->default('')->nullable();
         $table->integer('points_earned')->default(0)->nullable();
         $table->integer('total_points')->default(0)->nullable();
         $table->timestamp('timestamp');
         $table->string('timezone');
-        $table->integer('user_id');
+        $table->bigInteger('user_id')->unsigned();
         $table->timestamp('user_registered');
         $table->string('zip')->nullable();
     });
-
 }
