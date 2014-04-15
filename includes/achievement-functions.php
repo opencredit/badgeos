@@ -92,8 +92,9 @@ function badgeos_get_achievements( $args = array() ) {
 function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_from = $wpdb->posts.ID";
-	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' )
+	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' ) {
 		$join .= " LEFT JOIN $wpdb->p2pmeta AS p2pm1 ON p2pm1.p2p_id = p2p.p2p_id";
+	}
 	$join .= " LEFT JOIN $wpdb->p2pmeta AS p2pm2 ON p2pm2.p2p_id = p2p.p2p_id";
 	return $join;
 }
@@ -328,13 +329,15 @@ function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 	$hidden_ids = array();
 
 	// Grab our hidden achievements
-	$hidden_achievements = get_posts( array(
-		'post_type'      => $achievement_type,
-		'post_status'    => 'publish',
-		'posts_per_page' => -1,
-		'meta_key'       => '_badgeos_hidden',
-		'meta_value'     => 'hidden'
-	) );
+	$hidden_achievements = get_posts(
+		array(
+			'post_type'      => $achievement_type,
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'meta_key'       => '_badgeos_hidden',
+			'meta_value'     => 'hidden',
+		)
+	);
 
 	foreach ( $hidden_achievements as $achievement )
 		$hidden_ids[] = $achievement->ID;
@@ -357,10 +360,12 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 	$earned_ids = array();
 
 	// Grab our earned achievements
-	$earned_achievements = badgeos_get_user_achievements( array(
-		'user_id'          => $user_id,
-		'achievement_type' => $achievement_type
-	) );
+	$earned_achievements = badgeos_get_user_achievements(
+		array(
+			'user_id'          => $user_id,
+			'achievement_type' => $achievement_type,
+		)
+	);
 
 	foreach ( $earned_achievements as $achievement )
 		$earned_ids[] = $achievement->ID;
@@ -403,29 +408,33 @@ function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 	}
 
 	// Grab posts that can be earned by unlocking the given achievement
-	$specific_achievements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT *
-		FROM   $wpdb->posts as posts,
-		       $wpdb->p2p as p2p
-		WHERE  posts.ID = p2p.p2p_to
-		       AND p2p.p2p_from = %d
-		",
+	$specific_achievements = $wpdb->get_results(
+		$wpdb->prepare(
+			"
+			SELECT *
+			FROM   $wpdb->posts as posts,
+				   $wpdb->p2p as p2p
+			WHERE  posts.ID = p2p.p2p_to
+				   AND p2p.p2p_from = %d
+			",
 		$achievement_id
-	) );
+		)
+	);
 
 	// Grab posts triggered by unlocing any/all of the given achievement's type
-	$type_achievements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT *
-		FROM   $wpdb->posts as posts,
-		       $wpdb->postmeta as meta
-		WHERE  posts.ID = meta.post_id
-		       AND meta.meta_key = '_badgeos_achievement_type'
-		       AND meta.meta_value = %s
-		",
-		get_post_type( $achievement_id )
-	) );
+	$type_achievements = $wpdb->get_results(
+		$wpdb->prepare(
+			"
+			SELECT *
+			FROM   $wpdb->posts as posts,
+				   $wpdb->postmeta as meta
+			WHERE  posts.ID = meta.post_id
+				   AND meta.meta_key = '_badgeos_achievement_type'
+				   AND meta.meta_value = %s
+			",
+			get_post_type( $achievement_id )
+		)
+	);
 
 	// Merge our dependent achievements together
 	$achievements = array_merge( $specific_achievements, $type_achievements );
@@ -455,21 +464,23 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		return false;
 
 	// Grab our requirements for this achievement
-	$requirements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT   *
-		FROM     $wpdb->posts as posts
-		         LEFT JOIN $wpdb->p2p as p2p
-		                   ON p2p.p2p_from = posts.ID
-		         LEFT JOIN $wpdb->p2pmeta AS p2pmeta
-		                   ON p2p.p2p_id = p2pmeta.p2p_id
-		WHERE    p2p.p2p_to = %d
-		         AND p2pmeta.meta_key = %s
-		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
-		",
-		$achievement_id,
-		'order'
-	) );
+	$requirements = $wpdb->get_results(
+		$wpdb->prepare(
+			"
+			SELECT   *
+			FROM     $wpdb->posts as posts
+					 LEFT JOIN $wpdb->p2p as p2p
+							   ON p2p.p2p_from = posts.ID
+					 LEFT JOIN $wpdb->p2pmeta AS p2pmeta
+							   ON p2p.p2p_id = p2pmeta.p2p_id
+			WHERE    p2p.p2p_to = %d
+					 AND p2pmeta.meta_key = %s
+			ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
+			",
+			$achievement_id,
+			'order'
+		)
+	);
 
 	return $requirements;
 }
@@ -499,7 +510,7 @@ function badgeos_get_points_based_achievements() {
 		);
 
 		// Store these posts to a transient for 7 days
-		set_transient( 'badgeos_points_based_achievements', $achievements, 60*60*24*7 );
+		set_transient( 'badgeos_points_based_achievements', $achievements, 60 * 60 * 24 * 7 );
 	}
 
 	return (array) maybe_unserialize( $achievements );
@@ -514,8 +525,8 @@ function badgeos_get_points_based_achievements() {
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-	$post             = get_post($post_id);
+	$minimum_role     = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
+	$post             = get_post( $post_id );
 
 	// If the user has the authority to do what they're doing,
 	// and the post is one of our achievement types,
@@ -565,11 +576,10 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 			// If we already have an array for image size
 			if ( is_array( $image_size ) ) {
 				// Write our sizes to an associative array
-				$image_sizes['width'] = $image_size[0];
+				$image_sizes['width']  = $image_size[0];
 				$image_sizes['height'] = $image_size[1];
 
-			// Otherwise, attempt to grab the width/height from our specified image size
-			} else {
+			} else { // Otherwise, attempt to grab the width/height from our specified image size
 				global $_wp_additional_image_sizes;
 				if ( isset( $_wp_additional_image_sizes[$image_size] ) )
 					$image_sizes = $_wp_additional_image_sizes[$image_size];
@@ -579,7 +589,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 			if ( empty( $image_sizes ) ) {
 				$image_sizes = array(
 					'width'  => 100,
-					'height' => 100
+					'height' => 100,
 				);
 			}
 
@@ -622,11 +632,13 @@ add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
 function badgeos_get_achievement_earners( $achievement_id = 0 ) {
 
 	// Grab our earners
-	$earners = new WP_User_Query( array(
-		'meta_key'     => '_badgeos_achievements',
-		'meta_value'   => $achievement_id,
-		'meta_compare' => 'LIKE'
-	) );
+	$earners = new WP_User_Query(
+		array(
+			'meta_key'     => '_badgeos_achievements',
+			'meta_value'   => $achievement_id,
+			'meta_compare' => 'LIKE',
+		) 
+	);
 
 	// Send back our query results
 	return $earners->results;
@@ -643,7 +655,7 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 
 	// Grab our users
 	$earners = badgeos_get_achievement_earners( $achievement_id );
-	$output = '';
+	$output  = '';
 
 	// Only generate output if we have earners
 	if ( ! empty( $earners ) )  {
@@ -670,12 +682,12 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 function badgeos_ms_show_all_achievements(){
 	$ms_show_all_achievements = NULL;
 	if ( is_multisite() ) {
-    	$badgeos_settings = get_option( 'badgeos_settings' );
-    	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
-    	if( 'enabled' == $ms_show_all_achievements )
-    		return true;
-    }
-    return false;
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+		if ( 'enabled' == $ms_show_all_achievements ) 
+			return true;
+	}
+	return false;
 }
 
 /**
@@ -686,15 +698,15 @@ function badgeos_ms_show_all_achievements(){
  */
 function badgeos_get_network_site_ids() {
 	global $wpdb;
-    if( badgeos_ms_show_all_achievements() ) {
-    	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) );
-		foreach ($blog_ids as $key => $value ) {
-            $sites[] = $value->blog_id;
-        }
-    } else {
-    	$sites[] = get_current_blog_id();
-    }
-    return $sites;
+	if ( badgeos_ms_show_all_achievements() ) {
+		$blog_ids = $wpdb->get_results( $wpdb->prepare( 'SELECT blog_id FROM ' . $wpdb->base_prefix . 'blogs', NULL ) );
+		foreach ( $blog_ids as $key => $value ) {
+			$sites[] = $value->blog_id;
+		}
+	} else {
+		$sites[] = get_current_blog_id();
+	}
+	return $sites;
 }
 
 /**
@@ -713,12 +725,11 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	// OR current user CAN NOT edit this post
 	// OR the post already has a thumbnail
 	// OR we've just loaded the new post page
-	if (
-		! (
+	if ( ! (
 			badgeos_is_achievement( $post_id )
 			|| 'achievement-type' == get_post_type( $post_id )
 		)
-		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		|| ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 		|| ! current_user_can( 'edit_post', $post_id )
 		|| has_post_thumbnail( $post_id )
 		|| 'post-new.php' == $pagenow
@@ -729,9 +740,9 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	$thumbnail_id = 0;
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
-    	if ($achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' )) {
-    		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
-    	}
+		if ( $achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' ) ) {
+			$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+		}
 	}
 
 	// If there is no thumbnail set, load in our default image
@@ -746,7 +757,7 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		// Set variables for storage
 		// fix file filename for query strings
 		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
-		$file_array['name'] = basename( $matches[0] );
+		$file_array['name']     = basename( $matches[0] );
 		$file_array['tmp_name'] = $tmp;
 
 		// If error storing temporarily, unlink
@@ -761,11 +772,10 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		// If upload errored, unlink the image file
 		if ( is_wp_error( $thumbnail_id ) ) {
 			@unlink( $file_array['tmp_name'] );
-
-		// Otherwise, if the achievement type truly doesn't have
-		// a thumbnail already, set this as its thumbnail, too.
-		// We do this so that WP won't upload a duplicate version
-		// of this image for every single achievement of this type.
+			// Otherwise, if the achievement type truly doesn't have
+			// a thumbnail already, set this as its thumbnail, too.
+			// We do this so that WP won't upload a duplicate version
+			// of this image for every single achievement of this type.
 		} elseif (
 			badgeos_is_achievement( $post_id )
 			&& is_object( $achievement_type )
@@ -791,7 +801,7 @@ add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
  * @param  array $postarr Provided args.
  * @return array          Updated post data.
  */
-function badgeos_maybe_update_achievement_type( $data = '', $postarr = '') {
+function badgeos_maybe_update_achievement_type( $data = '', $postarr = '' ) {
 	if ( isset( $postarr['ID'] ) ) {
 		if ( $original_post = get_post( $postarr['ID'] ) ) {
 			if ( 'achievement-type' == $original_post->post_type ) {
@@ -807,7 +817,7 @@ function badgeos_maybe_update_achievement_type( $data = '', $postarr = '') {
 	return $data;
 }
 add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
- 
+
 /**
  * Change all achievements of one type to a new type.
  *
@@ -817,17 +827,19 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '9
  * @param  string $new_achievement_type      New achievement type.
  */
 function badgeos_replace_achievement_type( $original_achievement_type = '', $new_achievement_type = '' ) {
-	$items = get_posts( array(
-		'posts_per_page' => -1,
-		'post_status'    => 'any',
-		'post_type'      => $original_achievement_type,
-		'fields'         => 'id',
-	) );
+	$items = get_posts(
+		array(
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+			'post_type'      => $original_achievement_type,
+			'fields'         => 'id',
+		)
+	);
 	foreach ( $items as $item ) {
 		set_post_type( $item->ID, $new_achievement_type );
 	}
 }
- 
+
 /**
  * Change all p2p connections for an achievement type to a new achievement type.
  *
@@ -856,21 +868,20 @@ function badgeos_replace_p2p_type( $original_achievement_type = '', $new_achieve
  * @param  string $new_achievement_type      New achievement type.
  * @return string of unique post_type based on post_title
  */
-function badgeos_get_unique_post_type_name_from_title($original_post, $new_achievement_title = '', $increment = 0 ) {
+function badgeos_get_unique_post_type_name_from_title( $original_post, $new_achievement_title = '', $increment = 0 ) {
 	global $wpdb;
 	$substr_length = 20 - strlen( $increment );
 	$title = substr( sanitize_title( $new_achievement_title, $original_post->post_title ), 0, $substr_length );
-    if ( $increment ) {
+	if ( $increment ) {
 		$title .= $increment;
 	}
-    if ( $original_post->post_name == $title ) {
-    	return $title;
-    }
-    $original_post_id = $original_post->ID;
-    if ( $row = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = '%s'", $title ) ) ) {
-        $increment++;
-        $title = badgeos_get_unique_post_type_name_from_title( $original_post, $title, $increment );
-        
-    } 
-    return $title;              
+	if ( $original_post->post_name == $title ) {
+		return $title;
+	}
+	$original_post_id = $original_post->ID;
+	if ( $row = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = '%s'", $title ) ) ) {
+		$increment++;
+		$title = badgeos_get_unique_post_type_name_from_title( $original_post, $title, $increment );    
+	} 
+	return $title;              
 }
