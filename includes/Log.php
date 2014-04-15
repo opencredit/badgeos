@@ -5,6 +5,8 @@ namespace BadgeOS;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use BadgeOS\BadgeOSLogHandler;
+use DateTime;
+use DateTimeZone;
 
 interface Logging {
     public function pushHandlers();
@@ -40,6 +42,36 @@ class Log implements Logging {
      *
      */
     public function write($title, $args) {
+        $badgeos_settings       = get_option( 'badgeos_settings' );
+        $user                   = get_userdata( $args['user_id'] );
+        $user_meta              = get_user_meta( $args['user_id'] );
+
+        if ( isset( $args['object_id'] ) ) { 
+            $achievement            = get_post_meta( $args['object_id'] );
+            $args['points_earned']  = isset($achievement['_badgeos_points'][0]) ? $achievement['_badgeos_points'][0] : 0;
+        }   
+
+        $args['total_points']       = isset($user_meta['_badgeos_points'][0]) ? $user_meta['_badgeos_points'][0] : 0;
+        $args['user_registered']    = isset($user->data->user_registered) ? $user->data->user_registered : '0000-00-00 00:00:00'; 
+        $args['zip']                = isset($user_meta['zip'][0]) ? $user_meta['zip'][0] : null;
+        $args['site_id']            = $badgeos_settings['site_id'];
+        $args['message']            = $title;
+
+        if (isset($args['timestamp'])) {
+            $datetime = new DateTime($args['timestamp']);
+        } else {
+            $datetime = new DateTime;
+        }
+
+        // Set timezone to local time
+        $tzstring = get_option('timezone_string');
+        $timezone = new DateTimeZone($tzstring);
+        $datetime->setTimezone($timezone);
+
+        //$args['timestamp'] = $datetime->format('Y-m-d H:i:s');
+        $args['timestamp'] = $datetime->format('c');
+        $args['timezone']  = $datetime->getTimezone()->getName(); 
+
         return $this->logger->addInfo($title, $args);
     }
 
