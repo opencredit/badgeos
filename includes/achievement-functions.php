@@ -824,14 +824,7 @@ function badgeos_maybe_update_achievement_type( $data = '', $postarr = '' ) {
 
 
 add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
-add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3);
 
-function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
-	var_dump($new_status);
-	if ('achievement-type' == $post->post_type && 'publish' == $new_status && 'publish' != $old_status) {
-		flush_rewrite_rules();
-	}
-}
 
 /**
  * Change all achievements of one type to a new type.
