@@ -142,7 +142,7 @@ class Credly_Badge_Builder {
 
 		// Include teaser output if we have no API key
 		if ( ! $this->credly_api_key )
-			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="Enable Credly Integration to use the Badge Builder"></a></div>';
+			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="' . esc_attr__( 'Enable Credly Integration to use the Badge Builder', 'badgeos' ) . '"></a></div>';
 
 		// Include our proper scripts
 		add_thickbox();

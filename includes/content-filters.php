@@ -420,7 +420,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 			// Render our Steps
 			if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
 				$output.='<div class="badgeos-item-attached">';
-					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">Show Details</a></div>';
+					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
 					$output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
 				$output.= '</div><!-- .badgeos-item-attached -->';
 			}
@@ -465,9 +465,24 @@ function badgeos_render_feedback( $atts = array() ) {
 		'status'           => $atts['status']
 	);
 
-	// If we're not an admin, limit results to the current user
+	// Get our BadgeOS Settings
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+
+	$minimum_role = 'manage_options';
+
+	if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+		$minimum_role = $badgeos_settings[ 'minimum_role' ];
+	}
+
+	$submission_manager_role = $minimum_role;
+
+	if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+		$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+	}
+
+	// If user doesn't have access to settings,
+	// restrict posts to ones they've authored
+	if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
 		$args['author'] = $current_user->ID;
 	}
 
@@ -559,9 +574,23 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
 		$output .= '</p>';
 
-		// Approve/Deny Buttons, for admins and pending posts only
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == get_post_meta( $nomination->ID, '_badgeos_nomination_status', true ) ) {
+
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
+
+		$submission_manager_role = $minimum_role;
+
+		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+		}
+
+		// Approve/Deny Buttons for admins only
+		if ( current_user_can( $minimum_role ) || current_user_can( $submission_manager_role ) ) {
 			$output .= badgeos_render_feedback_buttons( $nomination->ID );
 		}
 
@@ -617,9 +646,23 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 			$output .= badgeos_get_submission_attachments( $submission->ID );
 		}
 
-		// Approve/Deny Buttons, for admins and pending posts only
+		// Get our BadgeOS Settings
 		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( current_user_can( $badgeos_settings['minimum_role'] ) && 'pending' == $status ) {
+
+		$minimum_role = 'manage_options';
+
+		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
+			$minimum_role = $badgeos_settings[ 'minimum_role' ];
+		}
+
+		$submission_manager_role = $minimum_role;
+
+		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
+			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
+		}
+
+		// Approve/Deny Buttons for admins only
+		if ( current_user_can( $minimum_role ) || current_user_can( $submission_manager_role ) ) {
 			$output .= badgeos_render_feedback_buttons( $submission->ID );
 		}
 
@@ -702,14 +745,14 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
  * @return string               The concatinated markup
  */
 function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
-	global $post;
+	global $post, $user_ID;
 
 	// Use the current post ID if no ID provided
-	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : $post->ID;
+	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : ( isset( $post->ID ) ? $post->ID : 0 );
 	$feedback       = get_post( $feedback_id );
 	$feedback_type  = get_post_type( $feedback_id );
 	$achievement_id = get_post_meta( $feedback_id, "_badgeos_{$feedback_type}_achievement_id", true );
-	$user_id        = $feedback->post_author;
+	$user_id        = isset( $feedback->post_author ) ? $feedback->post_author : 0;
 
 	// Concatenate our output
 	$output = '';
@@ -721,6 +764,12 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
 		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
 	$output .= '</div>';
+
+	// Enqueue and localize our JS
+	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	$atts['user_id']  = $user_ID;
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
 
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );

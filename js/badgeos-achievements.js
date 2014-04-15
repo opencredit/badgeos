@@ -9,6 +9,12 @@ jQuery(document).ready(function($){
 		badgeos_get_feedback();
 	});
 
+	// Hide comment form on feedback posts with toggle
+	$('.submission-comment-toggle').show().siblings('.badgeos-comment-form').hide();
+	$('.submission-comment-toggle').on('click', function(){
+		$(this).hide().siblings('.badgeos-comment-form').slideDown();
+	});
+
 	// Get feedback posts
 	function badgeos_get_feedback() {
 		$('.badgeos-spinner').show();
@@ -55,9 +61,10 @@ jQuery(document).ready(function($){
 			},
 			dataType: 'json',
 			success: function( response ) {
-				button.parent().children('a').hide();
-				button.parent().append( response.data.message );
+				$( '.badgeos-feedback-response', button.parent() ).remove();
+				$( response.data.message ).appendTo( button.parent() ).fadeOut(3000);
 				$('.badgeos-feedback-' + button.attr('data-feedback-id') + ' .badgeos-feedback-status').html( response.data.status );
+				$('.cmb_id__badgeos_submission_status td').html( response.data.status );
 			}
 		});
 	});

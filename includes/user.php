@@ -119,7 +119,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 	// Get minimum role setting for menus
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
 
 	$achievement_ids = array();
 
@@ -176,8 +176,8 @@ function badgeos_user_profile_data( $user = null ) {
 		// If debug mode is on, output our achievements array
 		if ( badgeos_is_debug_mode() ) {
 
-			echo 'DEBUG MODE ENABLED<br />';
-			echo 'Metadata value for: _badgeos_achievements<br />';
+			echo __( 'DEBUG MODE ENABLED', 'badgeos' ) . '<br />';
+			echo __( 'Metadata value for:', 'badgeos' ) . ' _badgeos_achievements<br />';
 
 			var_dump ( $achievements );
 
@@ -335,7 +335,7 @@ function badgeos_process_user_data() {
 
 	// Get minimum role setting for menus
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
+	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
 
 	//verify uesr meets minimum role to view earned badges
 	if ( current_user_can( $minimum_role ) ) {

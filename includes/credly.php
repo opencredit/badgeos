@@ -1316,8 +1316,7 @@ function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id 
         return;
 
     // Log the action
-    $title = sprintf(
-            '%1$s sent %2$s to Credly',
+    $title = sprintf( __( '%1$s sent %2$s to Credly', 'badgeos' ),
             $user->user_login,
             get_the_title( $achievement_id )
             );
