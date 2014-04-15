@@ -857,15 +857,15 @@ function badgeos_replace_p2p_type( $original_achievement_type = '', $new_achieve
  * @return string of unique post_type based on post_title
  */
 function badgeos_get_unique_post_type_name_from_title($original_post, $new_achievement_title = '', $increment = 0 ) {
-    global $wpdb;
-    $substr_length = 20 - strlen( $increment );
-    $title = substr( sanitize_title( $new_achievement_title, $original_post->post_title ), 0, $substr_length );
+	global $wpdb;
+	$substr_length = 20 - strlen( $increment );
+	$title = substr( sanitize_title( $new_achievement_title, $original_post->post_title ), 0, $substr_length );
     if ( $increment ) {
-        $title .= $increment;
-    }
+		$title .= $increment;
+	}
     if ( $original_post->post_name == $title ) {
     	return $title;
- 	}
+    }
     $original_post_id = $original_post->ID;
     if ( $row = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = '%s'", $title ) ) ) {
         $increment++;
