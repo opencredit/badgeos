@@ -795,7 +795,7 @@ function badgeos_maybe_update_achievement_type( $data = '', $postarr = '') {
 	if ( isset( $postarr['ID'] ) ) {
 		if ( $original_post = get_post( $postarr['ID'] ) ) {
 			if ( 'achievement-type' == $original_post->post_type ) {
-				$new_post_name = badgeos_get_unique_post_type_name_from_title( $original_post->post_title, $postarr['post_title'] );
+				$new_post_name = badgeos_get_unique_post_type_name_from_title( $original_post, $postarr['post_title'] );
 				if ( $original_post->post_name !== $new_post_name ) {
 					$data['post_name'] = $new_post_name;
 					badgeos_replace_achievement_type( $original_post->post_name, $new_post_name );
@@ -856,17 +856,21 @@ function badgeos_replace_p2p_type( $original_achievement_type = '', $new_achieve
  * @param  string $new_achievement_type      New achievement type.
  * @return string of unique post_type based on post_title
  */
-function badgeos_get_unique_post_type_name_from_title($original_post_title, $new_achievement_title = '', $increment = 0 ) {
+function badgeos_get_unique_post_type_name_from_title($original_post, $new_achievement_title = '', $increment = 0 ) {
     global $wpdb;
+    
     $substr_length = 20 - strlen( $increment );
-    $title = substr( sanitize_title( $new_achievement_title, $original_post_title ), 0, $substr_length );
+    $title = substr( sanitize_title( $new_achievement_title, $original_post->post_title ), 0, $substr_length );
     if ($increment) {
         $title .= $increment;
     }
+    if ($original_post->post_name == $title) {
+    	return $title;
+ 	}
     $original_post_id = $original_post->ID;
     if ( $row = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type = '%s'", $title ) ) ) {
         $increment++;
-        $title = badgeos_get_unique_post_type_name_from_title( $original_post_title, $title, $increment );
+        $title = badgeos_get_unique_post_type_name_from_title( $original_post->post_title, $title, $increment );
         
     } 
     return $title;              
