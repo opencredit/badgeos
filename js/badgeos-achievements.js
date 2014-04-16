@@ -145,7 +145,7 @@ jQuery(document).ready(function($){
 	});
 
 	// Listen for users clicking the show/hide details link
-	$('#badgeos-achievements-container').on( 'click', '.badgeos-open-close-switch a', function(event){
+	$('.badgeos-single-achievement').on( 'click', '.badgeos-open-close-switch a', function(event){
 		event.preventDefault();
 
 		var link = $(this);
