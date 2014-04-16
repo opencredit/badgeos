@@ -542,9 +542,11 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 		$message = sprintf( __( 'Your submission has been approved:
 
 			In response to: %s
-			Submitted by: %s', 'badgeos' ),
+			Submitted by: %s
+			%s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
-			$args[ 'user_data' ]->display_name
+			$args[ 'user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
 		);
 	}
 
@@ -606,10 +608,12 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 			In response to: %s
 			Nominee: %s
-			Nominated by: %s', 'badgeos' ),
+			Nominated by: %s
+			%s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
-			$args[ 'from_user_data' ]->display_name
+			$args[ 'from_user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
 		);
 
 		// @todo set $email based on nominee and nominated by
@@ -644,9 +648,11 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 	$message = sprintf( __( 'Your submission has not been approved:
 
 		In response to: %s
-		Submitted by: %s', 'badgeos' ),
+		Submitted by: %s
+		%s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
-		$args[ 'user_data' ]->display_name
+		$args[ 'user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
 	);
 
 	$messages[ 'badgeos_submission_denied' ] = array(
@@ -679,10 +685,12 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 
 		In response to: %s
 		Nominee: %s
-		Nominated by: %s', 'badgeos' ),
+		Nominated by: %s
+		%s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
 		$args[ 'user_data' ]->display_name,
-		$args[ 'from_user_data' ]->display_name
+		$args[ 'from_user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
 	);
 
 	// @todo set $email based on nominee and nominated by
