@@ -446,3 +446,25 @@ function badgeos_get_user_notification_types( $user_id = 0 ) {
 	$types = get_user_meta( $user_id, '_badgeos_user_email_notifications', true );
 	return ( '' !== $types ) ? $types : array();
 }
+
+/**
+ * Get specific notification type
+ *
+ * @param int    $user_id            User ID
+ * @param string $notification_type  Notification type to check
+ *
+ * @return string
+ */
+function badgeos_get_user_specific_notification_type( $user_id = 0, $notification_type = 'all' ) {
+
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	$notification_type = strtolower( $notification_type );
+
+	$types = badgeos_get_user_notification_types( $user_id );
+
+	return ( badgeos_user_has_notification_type( $types, $notification_type ) ) ? $types[ $notification_type ] : '0';
+}
+
