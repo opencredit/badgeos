@@ -123,6 +123,16 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
+		echo '<h2>' . __( 'BadgeOS Notification Emails', 'badgeos' ) . '</h2>';
+		echo '<table class="form-table">';
+		echo '<tr>';
+			echo '<th scope="row"><label for="badgeos_user_receive_email">' . __( 'Receive emails?', 'badgeos' ) . '</label></th>';
+			echo '<td>';
+				echo '<input type="checkbox" name="badgeos_user_receive_email" id="badgeos_user_receive_email" value="1" ' . checked( badgeos_get_user_specific_notification_type( $user->ID ), true, false ) . '/>' . __( 'Receive notification emails when submissions or nominations are processed?', 'badgeos' ) . '</label>';
+			echo '</td>';
+		echo '</tr>';
+		echo '</table>';
+
 	//verify uesr meets minimum role to view earned badges
 	if ( current_user_can( $minimum_role ) ) {
 
