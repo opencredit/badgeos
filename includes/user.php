@@ -542,3 +542,21 @@ function badgeos_user_has_notification_type( $current = array() , $notification_
 
 	return ( isset( $current[ $notification_type ] ) && '1' == $current[ $notification_type ] ) ? true : false;
 }
+
+/**
+ * Check if we can send a notification type to user.
+ * @param int    $user_id             User ID
+ * @param string $notification_type   Name of notification to check for
+ *
+ * @return bool                       Whether we can send or not.
+ */
+function badgeos_can_notify_user( $user_id = 0, $notification_type = 'all' ) {
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	$notification_type = strtolower( $notification_type );
+
+	$current = badgeos_get_user_notification_types( $user_id );
+	return badgeos_user_has_notification_type( $current, $notification_type );
+}
