@@ -488,3 +488,18 @@ function badgeos_unset_user_specific_notification_type( $user_id = 0, $notificat
 
 	badgeos_set_user_notification_types( $user_id, $types );
 }
+
+/**
+ * Set our user's new notification types.
+ *
+ * @param int   $user_id User ID
+ * @param array $new     array of notification types to save
+ */
+function badgeos_set_user_notification_types( $user_id = 0, $new = array() ) {
+
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	update_user_meta( $user_id, '_badgeos_user_email_notifications', $new );
+}
