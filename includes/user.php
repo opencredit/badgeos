@@ -429,3 +429,20 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	// Return all found achievements
 	return $achievement_types;
 }
+
+/**
+ * Get our user's saved notification types
+ *
+ * @param int $user_id User ID
+ *
+ * @return array       array of set notification types for user
+ */
+function badgeos_get_user_notification_types( $user_id = 0 ) {
+
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	$types = get_user_meta( $user_id, '_badgeos_user_email_notifications', true );
+	return ( '' !== $types ) ? $types : array();
+}
