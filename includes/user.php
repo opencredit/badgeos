@@ -503,3 +503,28 @@ function badgeos_set_user_notification_types( $user_id = 0, $new = array() ) {
 
 	update_user_meta( $user_id, '_badgeos_user_email_notifications', $new );
 }
+
+/**
+ * Process newly saved notification types from user profile.
+ *
+ * @param int    $user_id            User ID
+ * @param string $notification_type  Name of notification to save.
+ */
+function badgeos_handle_user_notification_types( $user_id = 0, $notification_type = 'all' ) {
+
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	$notification_type = strtolower( $notification_type );
+
+	$current = badgeos_get_user_notification_types( $user_id );
+
+	if ( ! badgeos_user_has_notification_type( $current, $notification_type ) ) {
+		$current[ $notification_type ] = '1';
+	} else {
+		unset( $current[ $notification_type ] );
+	}
+
+	badgeos_set_user_notification_types( $user_id, $current );
+}
