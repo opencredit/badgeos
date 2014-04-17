@@ -528,3 +528,17 @@ function badgeos_handle_user_notification_types( $user_id = 0, $notification_typ
 
 	badgeos_set_user_notification_types( $user_id, $current );
 }
+
+/**
+ * Check if user has a value saved for this notification type.
+ *
+ * @param array  $current            Current notification types
+ * @param string $notification_type  Name of notification to check for.
+ *
+ * @return bool                      Whether the checked for is set.
+ */
+function badgeos_user_has_notification_type( $current = array() , $notification_type = 'all' ) {
+	$notification_type = strtolower( $notification_type );
+
+	return ( isset( $current[ $notification_type ] ) && '1' == $current[ $notification_type ] ) ? true : false;
+}
