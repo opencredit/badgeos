@@ -217,6 +217,12 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
 	if ( !current_user_can( 'edit_user', $user_id ) )
 		return false;
 
+	if ( $_POST['badgeos_user_receive_email'] ) {
+		badgeos_handle_user_notification_types( $user_id );
+	} else {
+		badgeos_unset_user_specific_notification_type( $user_id );
+	}
+
 	// Update our user's points total, but only if edited
 	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) )
 		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
