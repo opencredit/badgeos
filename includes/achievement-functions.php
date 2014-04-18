@@ -779,3 +779,4 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
+
