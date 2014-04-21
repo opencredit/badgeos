@@ -54,7 +54,7 @@ class Log implements Logging {
         $args['total_points']       = isset($user_meta['_badgeos_points'][0]) ? $user_meta['_badgeos_points'][0] : 0;
         $args['user_registered']    = isset($user->data->user_registered) ? $user->data->user_registered : '0000-00-00 00:00:00'; 
         $args['zip']                = isset($user_meta['zip'][0]) ? $user_meta['zip'][0] : null;
-        $args['site_id']            = $badgeos_settings['site_id'];
+        $args['site_id']            = gethostname();
         $args['message']            = $title;
 
         if (isset($args['timestamp'])) {
