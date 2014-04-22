@@ -758,7 +758,7 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	$output = '';
 	$output .= '<div class="badgeos-feedback-buttons">';
 		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
-		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="deny">Deny</a>';
+		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="denied">Deny</a>';
 		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
 		$output .= '<input type="hidden" name="user_id" value="' . $user_id . '">';
 		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';

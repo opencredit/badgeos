@@ -250,7 +250,7 @@ function badgeos_ajax_update_feedback() {
 	);
 
 	// Setup status
-	$status = ( 'approve' == $_REQUEST[ 'status' ] ) ? 'approved' : 'denied';
+	$status = ( in_array( $_REQUEST[ 'status' ], array( 'approve', 'approved' ) ) ) ? 'approved' : 'denied';
 
 	badgeos_set_submission_status( $_REQUEST[ 'feedback_id' ], $status, $status_args );
 

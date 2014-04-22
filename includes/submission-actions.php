@@ -125,7 +125,7 @@ add_filter( 'post_row_actions', 'badgeos_hide_quick_edit' );
 function badgeos_add_submission_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
- 	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
+	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
 	$column_status = array( 'status' => __( 'Status', 'badgeos' ) );
 
 	$columns = array_slice( $columns, 0, 2, true ) + $column_content + array_slice( $columns, 2, NULL, true );
@@ -151,7 +151,7 @@ function badgeos_add_nomination_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
 	$column_userid = array( 'user' => __( 'User', 'badgeos' ) );
- 	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
+	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
 	$column_status = array( 'status' => __( 'Status', 'badgeos' ) );
 
 	$columns = array_slice( $columns, 0, 2, true ) + $column_content + array_slice( $columns, 2, NULL, true );
@@ -182,7 +182,7 @@ function badgeos_submission_column_action( $column = '' ) {
 			$user_id = ( isset( $_GET['post_type'] ) && 'submission' == $_GET['post_type'] ) ? $post->post_author : get_post_meta( $post->ID, '_badgeos_submission_user_id', true );
 
 			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'approve', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Approve', 'badgeos' ).'</a>&nbsp;&nbsp;';
-			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'deny', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Deny', 'badgeos' ).'</a>';
+			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'denied', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Deny', 'badgeos' ).'</a>';
 			break;
 
 		case 'content':
@@ -217,19 +217,23 @@ add_action( 'manage_posts_custom_column', 'badgeos_submission_column_action', 10
  * @return void
  */
 function badgeos_add_submission_dropdown_filters() {
-    global $typenow;
+	global $typenow;
 
 	if ( $typenow == 'submission' ) {
-        //array of current status values available
-        $submission_statuses = array( __( 'Approve', 'badgeos' ), __( 'Deny', 'badgeos' ), __( 'Pending', 'badgeos' ) );
+		//array of current status values available
+		$submission_statuses = array( 
+			'approve' => __( 'Approve', 'badgeos' ), 
+			'denied'  => __( 'Deny', 'badgeos' ), 
+			'pending' => __( 'Pending', 'badgeos' ),
+		);
 
 		$current_status = ( isset( $_GET['badgeos_submission_status'] ) ) ? $_GET['badgeos_submission_status'] : '';
 
 		//output html for status dropdown filter
 		echo "<select name='badgeos_submission_status' id='badgeos_submission_status' class='postform'>";
 		echo "<option value=''>" .__( 'Show All Statuses', 'badgeos' ).'</option>';
-		foreach ( $submission_statuses as $status ) {
-			echo '<option value="'.strtolower( $status ).'"  '.selected( $current_status, strtolower( $status ) ).'>' .$status .'</option>';
+		foreach ( $submission_statuses as $status_key => $status ) {
+			echo '<option value="'.strtolower( $status_key ).'"  '.selected( $current_status, $status_key ).'>' .$status .'</option>';
 		}
 		echo '</select>';
 	}
@@ -312,7 +316,7 @@ function badgeos_save_submission_data() {
 		return;
 
 	// Nonce check for security
-	check_admin_referer( 'badgeos_submission_form' . absint( $_POST['achievement_id'] ), 'submit_submission' );
+	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
 
 	// Publish the submission
 	return badgeos_create_submission(
@@ -542,9 +546,11 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 		$message = sprintf( __( 'Your submission has been approved:
 
 			In response to: %s
-			Submitted by: %s', 'badgeos' ),
+			Submitted by: %s
+			%s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
-			$args[ 'user_data' ]->display_name
+			$args[ 'user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
 		);
 	}
 
@@ -606,10 +612,12 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 			In response to: %s
 			Nominee: %s
-			Nominated by: %s', 'badgeos' ),
+			Nominated by: %s
+			%s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
-			$args[ 'from_user_data' ]->display_name
+			$args[ 'from_user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
 		);
 
 		// @todo set $email based on nominee and nominated by
@@ -644,9 +652,11 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 	$message = sprintf( __( 'Your submission has not been approved:
 
 		In response to: %s
-		Submitted by: %s', 'badgeos' ),
+		Submitted by: %s
+		%s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
-		$args[ 'user_data' ]->display_name
+		$args[ 'user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
 	);
 
 	$messages[ 'badgeos_submission_denied' ] = array(
@@ -679,10 +689,12 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 
 		In response to: %s
 		Nominee: %s
-		Nominated by: %s', 'badgeos' ),
+		Nominated by: %s
+		%s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
 		$args[ 'user_data' ]->display_name,
-		$args[ 'from_user_data' ]->display_name
+		$args[ 'from_user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
 	);
 
 	// @todo set $email based on nominee and nominated by
@@ -1154,7 +1166,7 @@ function badgeos_get_submission_form( $args = array() ) {
 		// submit button
 		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /></p>';
 		// hidden fields
-		$sub_form .= wp_nonce_field( 'badgeos_submission_form' . $defaults['achievement_id'], 'submit_submission', true, false );
+		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
 		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
 		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
 	$sub_form .= '</form>';
@@ -1421,13 +1433,15 @@ function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
 function badgeos_get_submission_attachments( $submission_id = 0 ) {
 
 	// Get attachments
-	$attachments = get_posts( array(
-		'post_type'      => 'attachment',
-		'posts_per_page' => -1,
-		'post_parent'    => $submission_id,
-		'orderby'        => 'date',
-		'order'          => 'ASC',
-	) );
+	$attachments = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'posts_per_page' => -1,
+			'post_parent'    => $submission_id,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
+		)
+	);
 
 	// If we have attachments
 	$output = '';
