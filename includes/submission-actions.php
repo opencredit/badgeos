@@ -221,9 +221,9 @@ function badgeos_add_submission_dropdown_filters() {
 
 	if ( $typenow == 'submission' ) {
 		//array of current status values available
-		$submission_statuses = array( 
-			'approve' => __( 'Approve', 'badgeos' ), 
-			'denied'  => __( 'Deny', 'badgeos' ), 
+		$submission_statuses = array(
+			'approve' => __( 'Approve', 'badgeos' ),
+			'denied'  => __( 'Deny', 'badgeos' ),
 			'pending' => __( 'Pending', 'badgeos' ),
 		);
 
