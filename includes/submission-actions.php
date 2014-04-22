@@ -563,7 +563,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_approved', 'badgeos_set_submission_status_submission_approved', 10, 2 );
+add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_submission_status_submission_approved', 10, 2 );
 
 
 /**
@@ -632,7 +632,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_nomination_approved', 'badgeos_set_submission_status_nomination_approved', 10, 2 );
+add_filter( 'badgeos_notifications_nomination_approved_messages', 'badgeos_set_submission_status_nomination_approved', 10, 2 );
 
 /**
  * Filter submission messages and send one for Submission Denial
@@ -668,7 +668,7 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_denied', 'badgeos_set_submission_status_submission_denied', 10, 2 );
+add_filter( 'badgeos_notifications_submission_denied_messages', 'badgeos_set_submission_status_submission_denied', 10, 2 );
 
 /**
  * Filter submission messages and send one for Nomination Denial
@@ -708,7 +708,7 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_nomination_denied', 'badgeos_set_submission_status_nomination_denied', 10, 2 );
+add_filter( 'badgeos_notifications_nomination_denied_messages', 'badgeos_set_submission_status_nomination_denied', 10, 2 );
 
 /**
  * Filter submission messages and send one for Submission Pending
@@ -749,7 +749,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_pending', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
 
 /**
  * Filter submission messages and send one for Nomination Pending
@@ -792,7 +792,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_pending', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
 
 /**
  * Returns the comment form for Submissions
