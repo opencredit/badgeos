@@ -525,7 +525,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Approved Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		// set the email message
 		$message = sprintf( __( 'A new submission has been received and auto-approved:
@@ -586,7 +586,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Approved Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		// set the email message
 		$message = sprintf( __( 'A new nomination has been received and auto-approved:
@@ -646,7 +646,7 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 
 	$args[ 'notification_type' ] = 'notify_denied';
 
-	$subject = sprintf( __( 'Submission Not Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+	$subject = sprintf( __( 'Submission Not Approved: %1$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 	// set the email message
 	$message = sprintf( __( 'Your submission has not been approved:
@@ -682,7 +682,7 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 
 	$args[ 'notification_type' ] = 'notify_denied';
 
-	$subject = sprintf( __( 'Nomination Not Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+	$subject = sprintf( __( 'Nomination Not Approved: %1$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 	// set the email message
 	$message = sprintf( __( 'Your submission has not been approved:
@@ -721,7 +721,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		$message = sprintf(
 			__( 'A new submission has been received:
@@ -762,7 +762,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Nomination: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		$message = sprintf(
 			__( 'A new nomination has been received:
