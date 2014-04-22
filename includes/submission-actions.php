@@ -525,7 +525,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+		$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		// set the email message
 		$message = sprintf( __( 'A new submission has been received and auto-approved:
