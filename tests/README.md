@@ -50,8 +50,3 @@ npm install
 grunt githooks
 ```
 **Note:** You'll need to install [npm](https://www.npmjs.org/) if that's not available. You could also install this via [homebrew](http://brew.sh/) using `brew install npm`.
-
-External, Automated Testing URLs
------------------------------
-* Travis-CI (automated unit testing): https://travis-ci.org/opencredit/badgeos/
-* Coveralls.io (automated code coverage reports): https://coveralls.io/r/opencredit/badgeos/
