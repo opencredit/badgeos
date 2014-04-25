@@ -498,7 +498,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 	foreach ( $email_messages as $email_message ) {
 		$email_message = wp_parse_args( $email_message, $default_message );
 
-		if ( !empty( $email_message ) && !empty( $email_message[ 'email' ] ) && !empty( $email_message[ 'subject' ] ) && !empty( $email_message[ 'message' ] ) ) {
+		if ( !empty( $email_message ) && !empty( $email_message[ 'email' ] ) && !empty( $email_message[ 'subject' ] ) && !empty( $email_message[ 'message' ] ) && badgeos_can_notify_user( $args[ 'user_id' ] ) ) {
 			call_user_func_array( 'wp_mail', array_values( $email_message ) );
 		}
 	}
