@@ -2,19 +2,12 @@
 <phpunit
 	bootstrap                   = "tests/phpunit/includes/bootstrap.php"
 	backupGlobals               = "false"
-	backupStaticAttributes      = "false"
 	colors                      = "true"
-	processIsolation            = "false"
 	convertErrorsToExceptions   = "true"
 	convertNoticesToExceptions  = "true"
 	convertWarningsToExceptions = "true"
-	stopOnError                 = "false"
-	stopOnFailure               = "false"
-	stopOnIncomplete            = "false"
-	stopOnSkipped               = "false"
 	syntaxCheck                 = "false"
 	verbose                     = "true"
-	strict                      = "false"
 	>
 	<testsuites>
 		<!-- Default test suite to run all tests -->

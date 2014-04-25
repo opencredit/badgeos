@@ -3,22 +3,19 @@ language: php
 php:
     - 5.3
     - 5.4
-    - 5.5
 
 env:
-    - WP_VERSION=master WP_MULTISITE=0
-    - WP_VERSION=master WP_MULTISITE=1
+    - WP_VERSION=latest WP_MULTISITE=0
+    - WP_VERSION=latest WP_MULTISITE=1
+    - WP_VERSION=3.8 WP_MULTISITE=0
+    - WP_VERSION=3.8 WP_MULTISITE=1
+    - WP_VERSION=3.5 WP_MULTISITE=0
+    - WP_VERSION=3.5 WP_MULTISITE=1
 
 before_script:
-    - svn export http://develop.svn.wordpress.org/trunk/ /tmp/wordpress-tests
-    - cp /tmp/wordpress-tests/wp-tests-config-sample.php /tmp/wordpress-tests/wp-tests-config.php
-    - sed -i "s/youremptytestdbnamehere/wordpress_test/" /tmp/wordpress-tests/wp-tests-config.php
-    - sed -i "s/yourusernamehere/root/" /tmp/wordpress-tests/wp-tests-config.php
-    - sed -i "s/yourpasswordhere//" /tmp/wordpress-tests/wp-tests-config.php
-    - mysql -e 'CREATE DATABASE wordpress_test;' -uroot
+    - bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
-script:
-    - phpunit -c phpunit.xml
+script: phpunit
 
 branches:
     only:
