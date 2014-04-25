@@ -46,18 +46,21 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 	$current_points = badgeos_get_users_points( $user_id );
 
 	// If we're getting an admin ID, $new_points is actually the final total, so subtract the current points
-	if ( $admin_id ) $new_points = $new_points - $current_points;
+	if ( $admin_id ) {
+		$new_points = $new_points - $current_points;
+	}
 
 	// Update our user's total
-	$total_points = absint( $current_points + $new_points );
+	$total_points = max( $current_points + $new_points, 0 );
 	update_user_meta( $user_id, '_badgeos_points', $total_points );
 
 	// Available action for triggering other processes
 	do_action( 'badgeos_update_users_points', $user_id, $new_points, $total_points, $admin_id, $achievement_id );
 
 	// Maybe award some points-based badges
-	foreach ( badgeos_get_points_based_achievements() as $achievement )
+	foreach ( badgeos_get_points_based_achievements() as $achievement ) {
 		badgeos_maybe_award_achievement_to_user( $achievement->ID );
+	}
 
 	return $total_points;
 }
