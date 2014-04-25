@@ -45,8 +45,10 @@ function badgeos_submission_form( $atts = array() ) {
 	if ( is_user_logged_in() ) {
 
 		// If submission data was saved, output success message
-		if ( badgeos_save_submission_data() ) {
-			$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+		if ( isset( $_REQUEST['achievement_id'] ) && $_REQUEST['achievement_id'] == $atts['achievement_id'] ) {
+			if ( badgeos_save_submission_data() ) {
+				$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+			}
 		}
 
 		// If user has already submitted something, show their submissions
