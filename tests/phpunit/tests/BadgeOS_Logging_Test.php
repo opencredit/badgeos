@@ -17,4 +17,9 @@ class BadgeOS_Logging_Test extends WP_UnitTestCase {
 	 */
 	public function test_badgeos_log_achievement_id() {}
 
+	/**
+	 * @covers badgeos_log_users_points()
+	 */
+	public function test_badgeos_log_users_points() {}
+
 }
