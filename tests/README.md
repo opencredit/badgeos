@@ -12,14 +12,17 @@ The master branch of BadgeOS is automatically tested on [travis-ci.org](http://t
 Quick Start (For Manual Runs)
 -----------------------------
 
-# 1. Clone this repository
+### 1. Clone this repository
 ```bash
 git clone git://github.com/opencredit/badgeos.git ./
 ```
 
-# 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation).
+### 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation).
+This might be tricky. We recommend using [homebrew](http://brew.sh/) because it lets you install lots of things very easily.
 
-# 3. Initialize the testing environment locally:
+If you use homebrew, you can just run `brew install phpunit`.
+
+### 3. Initialize the testing environment locally:
 If you haven't already installed the WordPress testing library, we have a helpful script to do so for you.
 
 Note: you'll need to already have `svn`, `wget`, and `mysql` available.
@@ -33,13 +36,13 @@ Note: you'll need to already have `svn`, `wget`, and `mysql` available.
 * `localhost` is the MySQL server host
 * `latest` is the WordPress version; could also be `3.7`, `3.6.2` etc.
 
-# 4. Run the plugin tests:
+### 4. Run the plugin tests:
 Note: MySQL must be running in order for tests to run.
 ```bash
 phpunit
 ```
 
-# 5. Bonus Round: Automatically run tests prior to commit with help from Grunt
+### 5. Bonus Round: Automatically run tests prior to commit with help from Grunt
 All you need to do is run these two commands, and then priort to accepting any commit grunt will run phpunit.
 If a test fails, the commit will be rejected, giving you the opportunity to fix the problem first.
 
@@ -47,6 +50,7 @@ If a test fails, the commit will be rejected, giving you the opportunity to fix 
 npm install
 grunt githooks
 ```
+Note: You'll need to install [npm](https://www.npmjs.org/) if that's not available. You could also install this via [homebrew](http://brew.sh/) using `brew install npm`.
 
 -------------------------
 
