@@ -438,8 +438,7 @@ function badgeos_can_notify_user( $user_id = 0, $notification_type = 'all' ) {
 		$user_id = get_current_user_id();
 	}
 
-	$notification_type = strtolower( $notification_type );
+	$can_email = get_user_meta( $user_id, '_badgeos_enable_email_notifications', true );
 
-	$current = badgeos_get_user_notification_types( $user_id );
-	return badgeos_user_has_notification_type( $current, $notification_type );
+	return ! empty( $can_email );
 }
