@@ -442,3 +442,8 @@ function badgeos_can_notify_user( $user_id = 0, $notification_type = 'all' ) {
 
 	return ! empty( $can_email );
 }
+
+function badgeos_new_user_notification_setup( $user_id ) {
+	add_user_meta( $user_id, '_badgeos_enable_email_notifications', 1 );
+}
+add_action( 'user_register', 'badgeos_new_user_notification_setup' );
