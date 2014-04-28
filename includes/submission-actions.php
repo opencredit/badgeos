@@ -761,7 +761,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 			Submitted by: %2$s
 
 			Review the complete submission and approve or deny it at:
-			%$3s
+			%3$s
 
 			To view all submissions, visit: %4$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
