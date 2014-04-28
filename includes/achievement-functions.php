@@ -23,16 +23,19 @@ function badgeos_is_achievement( $post = null ) {
 	$return = true;
 
 	// If passed an ID, get the post object
-	if ( is_numeric( $post ) )
+	if ( is_numeric( $post ) ) {
 		$post = get_post( $post );
+	}
 
 	// If $post is NOT an object it cannot be an achievement
-	if ( ! is_object( $post ) )
+	if ( ! is_object( $post ) ) {
 		$return = false;
+	}
 
 	// If post type is NOT a registered achievement type, it cannot be an achievement
-	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) ) {
 		$return = false;
+	}
 
 	// If we pass both previous tests, this is a valid achievement (with filter to override)
 	return apply_filters( 'badgeos_is_achievement', $return, $post );
@@ -92,6 +95,7 @@ function badgeos_get_achievements( $args = array() ) {
 function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
 	$join .= " LEFT JOIN $wpdb->p2p AS p2p ON p2p.p2p_from = $wpdb->posts.ID";
+
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] != 'any' )
 		$join .= " LEFT JOIN $wpdb->p2pmeta AS p2pm1 ON p2pm1.p2p_id = p2p.p2p_id";
 	$join .= " LEFT JOIN $wpdb->p2pmeta AS p2pm2 ON p2pm2.p2p_id = p2p.p2p_id";
@@ -108,11 +112,13 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  */
 function badgeos_get_achievements_children_where( $where = '', $query_object ) {
 	global $wpdb;
-	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
+	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' ) {
 		$where .= " AND p2pm1.meta_key ='Required'";
+	}
 
-	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'optional' )
+	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'optional' ) {
 		$where .= " AND p2pm1.meta_key ='Optional'";
+	}
 	// ^^ TODO, add required and optional. right now just returns all achievemnts.
 	$where .= " AND p2pm2.meta_key ='order'";
 	$where .= $wpdb->prepare( ' AND p2p.p2p_to = %d', $query_object->query_vars['children_of'] );
@@ -183,8 +189,9 @@ function badgeos_get_achievement_types_slugs() {
 
 	// If we do have any achievement types, loop through each and add their slug to our array
 	if ( isset( $GLOBALS['badgeos']->achievement_types ) && ! empty( $GLOBALS['badgeos']->achievement_types ) ) {
-		foreach ( $GLOBALS['badgeos']->achievement_types as $slug => $data )
+		foreach ( $GLOBALS['badgeos']->achievement_types as $slug => $data ) {
 			$achievement_type_slugs[] = $slug;
+		}
 	}
 
 	// Finally, return our data
@@ -210,10 +217,11 @@ function badgeos_get_parent_of_achievement( $achievement_id = 0 ) {
 	$parents = badgeos_get_achievements( array( 'parent_of' => $achievement_id ) );
 
 	// If it has a parent, return it, otherwise return false
-	if ( ! empty( $parents ) )
+	if ( ! empty( $parents ) ) {
 		return $parents[0];
-	else
-		return false;
+	}
+
+	return false;
 }
 
 /**
@@ -251,10 +259,11 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
 	}
 
 	// If our achievement requires sequential steps, return true, otherwise false
-	if ( get_post_meta( $achievement_id, '_badgeos_sequential', true ) )
+	if ( get_post_meta( $achievement_id, '_badgeos_sequential', true ) ) {
 		return true;
-	else
-		return false;
+	}
+
+	return false;
 }
 
 /**
@@ -294,8 +303,9 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
-	if ( is_null( $achievement ) )
+	if ( is_null( $achievement ) ) {
 		return false;
+	}
 
 	// Setup a new object for the achievement
 	$achievement_object            = new stdClass;
@@ -451,8 +461,9 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 	}
 
 	// Don't retrieve requirements if achievement is not earned by steps
-	if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) != 'triggers' )
+	if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) != 'triggers' ) {
 		return false;
+	}
 
 	// Grab our requirements for this achievement
 	$requirements = $wpdb->get_results( $wpdb->prepare(
@@ -774,8 +785,9 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	}
 
 	// Finally, if we have an image, set the thumbnail for our achievement
-	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) )
+	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) ) {
 		set_post_thumbnail( $post_id, $thumbnail_id );
+	}
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
@@ -784,7 +796,7 @@ add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achiev
 
 /**
  * Flush the rewrite rules if its a achievement type update and it is published
- * 
+ *
  * @since alpha
  * @param string $new_status New achievement status
  * @param string $old_status Old achievement status
