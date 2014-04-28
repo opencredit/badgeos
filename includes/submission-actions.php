@@ -516,6 +516,11 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 	// Award achievement
 	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
 
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
 	$email = $args[ 'user_data' ]->user_email;
 
 	$message_id = 'badgeos_submission_approved';
@@ -576,6 +581,11 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 	// Award achievement
 	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
 
 	$email = $args[ 'user_data' ]->user_email;
 
@@ -642,6 +652,11 @@ add_filter( 'badgeos_notifications_nomination_approved', 'badgeos_set_submission
  */
 function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
 	$email = $args[ 'user_data' ]->user_email;
 
 	$args[ 'notification_type' ] = 'notify_denied';
@@ -677,6 +692,11 @@ add_filter( 'badgeos_notifications_submission_denied', 'badgeos_set_submission_s
  * @param array $args Submission Args
  */
 function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
 
 	$email = $args[ 'user_data' ]->user_email;
 
