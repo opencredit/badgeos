@@ -221,9 +221,9 @@ function badgeos_add_submission_dropdown_filters() {
 
 	if ( $typenow == 'submission' ) {
 		//array of current status values available
-		$submission_statuses = array( 
-			'approve' => __( 'Approve', 'badgeos' ), 
-			'denied'  => __( 'Deny', 'badgeos' ), 
+		$submission_statuses = array(
+			'approve' => __( 'Approve', 'badgeos' ),
+			'denied'  => __( 'Deny', 'badgeos' ),
 			'pending' => __( 'Pending', 'badgeos' ),
 		);
 
@@ -498,8 +498,18 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 	foreach ( $email_messages as $email_message ) {
 		$email_message = wp_parse_args( $email_message, $default_message );
 
-		if ( !empty( $email_message ) && !empty( $email_message[ 'email' ] ) && !empty( $email_message[ 'subject' ] ) && !empty( $email_message[ 'message' ] ) ) {
-			call_user_func_array( 'wp_mail', array_values( $email_message ) );
+		$emails = $email_message[ 'email' ];
+
+		if ( ! is_array( $emails ) ) {
+			$emails = str_replace( array( ';', "\t", "\n", ' ' ), ',', $emails );
+			$emails = explode( ',', $emails );
+		}
+
+		if ( ! empty( $emails ) && ! empty( $email_message[ 'subject' ] ) && ! empty( $email_message[ 'message' ] ) && badgeos_can_notify_user( $args[ 'user_id' ] ) ) {
+			foreach ( $emails as $email ) {
+				$email_message[ 'email' ] = $email;
+				call_user_func_array( 'wp_mail', array_values( $email_message ) );
+			}
 		}
 	}
 
@@ -530,7 +540,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Approved Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+		$subject = sprintf( __( 'Approved Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		// set the email message
 		$message = sprintf( __( 'A new submission has been received and auto-approved:
@@ -568,7 +578,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_approved', 'badgeos_set_submission_status_submission_approved', 10, 2 );
+add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_submission_status_submission_approved', 10, 2 );
 
 
 /**
@@ -596,7 +606,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Approved Nomination: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+		$subject = sprintf( __( 'Approved Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		// set the email message
 		$message = sprintf( __( 'A new nomination has been received and auto-approved:
@@ -642,7 +652,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_nomination_approved', 'badgeos_set_submission_status_nomination_approved', 10, 2 );
+add_filter( 'badgeos_notifications_nomination_approved_messages', 'badgeos_set_submission_status_nomination_approved', 10, 2 );
 
 /**
  * Filter submission messages and send one for Submission Denial
@@ -683,7 +693,7 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_denied', 'badgeos_set_submission_status_submission_denied', 10, 2 );
+add_filter( 'badgeos_notifications_submission_denied_messages', 'badgeos_set_submission_status_submission_denied', 10, 2 );
 
 /**
  * Filter submission messages and send one for Nomination Denial
@@ -728,7 +738,7 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_nomination_denied', 'badgeos_set_submission_status_nomination_denied', 10, 2 );
+add_filter( 'badgeos_notifications_nomination_denied_messages', 'badgeos_set_submission_status_nomination_denied', 10, 2 );
 
 /**
  * Filter submission messages and send one for Submission Pending
@@ -741,7 +751,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Submission: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		$message = sprintf(
 			__( 'A new submission has been received:
@@ -750,7 +760,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 			Submitted by: %2$s
 
 			Review the complete submission and approve or deny it at:
-			%$3s
+			%3$s
 
 			To view all submissions, visit: %4$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
@@ -769,7 +779,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_pending', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
 
 /**
  * Filter submission messages and send one for Nomination Pending
@@ -782,7 +792,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
 		$email = $args[ 'submission_email_addresses' ];
 
-		$subject = sprintf( __( 'Nomination: %s from %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+		$subject = sprintf( __( 'Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
 
 		$message = sprintf(
 			__( 'A new nomination has been received:
@@ -812,7 +822,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_pending', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
 
 /**
  * Returns the comment form for Submissions
