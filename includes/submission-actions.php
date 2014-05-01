@@ -17,8 +17,9 @@
 function badgeos_save_nomination_data() {
 
 	// If the form hasn't been submitted, bail.
-	if ( ! isset( $_POST['badgeos_nomination_submit'] ) )
+	if ( ! isset( $_POST['badgeos_nomination_submit'] ) ) {
 		return false;
+	}
 
 	// Nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
@@ -81,12 +82,9 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 
 			return true;
 
-		} else {
-
-			return false;
-
 		}
 
+		return false;
 	}
 }
 
@@ -221,9 +219,9 @@ function badgeos_add_submission_dropdown_filters() {
 
 	if ( $typenow == 'submission' ) {
 		//array of current status values available
-		$submission_statuses = array( 
-			'approve' => __( 'Approve', 'badgeos' ), 
-			'denied'  => __( 'Deny', 'badgeos' ), 
+		$submission_statuses = array(
+			'approve' => __( 'Approve', 'badgeos' ),
+			'denied'  => __( 'Deny', 'badgeos' ),
 			'pending' => __( 'Pending', 'badgeos' ),
 		);
 
@@ -312,8 +310,9 @@ add_action( 'save_post', 'badgeos_process_submission_review' );
 function badgeos_save_submission_data() {
 
 	// If form items don't exist, bail.
-	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) )
+	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) ) {
 		return;
+	}
 
 	// Nonce check for security
 	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
@@ -353,12 +352,14 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 		//process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
 
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-			if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
+			if ( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
 
 				$filetype   = wp_check_filetype( basename( $upload['file'] ), null );
 				$title      = $file['name'];
@@ -400,11 +401,9 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
 		return true;
 
-	} else {
-
-		return false;
-
 	}
+
+	return false;
 }
 
 /**
@@ -538,8 +537,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 			$args[ 'user_data' ]->display_name,
 			admin_url( 'edit.php?post_type=submission' )
 		);
-	}
-	else {
+	} else {
 		$subject = sprintf( __( 'Submission Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 		// set the email message
@@ -603,8 +601,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 		);
 
 		// @todo set $email based on nominee and nominated by
-	}
-	else {
+	} else {
 		$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 		// set the email message
@@ -804,8 +801,9 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 	global $current_user;
 
 	// user must be logged in to see the submission form
-	if ( !is_user_logged_in() )
+	if ( !is_user_logged_in() ) {
 		return '';
+	}
 
 	$defaults = array(
 		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
@@ -859,12 +857,14 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 function badgeos_save_comment_data() {
 
 	// If our nonce data is empty, bail
-	if ( ! isset( $_POST['badgeos_comment_nonce'] ) )
+	if ( ! isset( $_POST['badgeos_comment_nonce'] ) ) {
 		return;
+	}
 
 	// If our nonce doesn't vaildate, bail
-	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
+	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) ) {
 		return;
+	}
 
 	// Process comment data
 	$comment_data = array(
@@ -878,12 +878,14 @@ function badgeos_save_comment_data() {
 		// Process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
 
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-			if( ! isset( $upload['error'] ) && isset( $upload['file'] ) ) {
+			if ( ! isset( $upload['error'] ) && isset( $upload['file'] ) ) {
 
 				$filetype = wp_check_filetype( basename( $upload['file'] ), null );
 				$title    = $file['name'];
@@ -922,8 +924,9 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 	) );
 
 	// If we have no comments, bail
-	if ( empty( $comments ) )
+	if ( empty( $comments ) ) {
 		return;
+	}
 
 	// Concatenate our output
 	$output = '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
@@ -954,10 +957,11 @@ function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
 	$achievement_id = get_post_meta( $submission_id, '_badgeos_submission_achievement_id', true );
 
 	// If the achievement is set to auto-approve, return true
-	if ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) )
+	if ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
 		return true;
-	else
-		return false;
+	}
+
+	return false;
 }
 
 /**
@@ -997,12 +1001,12 @@ function badgeos_check_if_user_has_feedback( $user_id = 0, $achievement_id = 0, 
 	$feedback = get_posts( $args );
 
 	// User DOES have a submission for this achievement
-	if ( ! empty( $feedback ) )
+	if ( ! empty( $feedback ) ) {
 		return true;
+	}
 
 	// User does NOT have a submission
-	else
-		return false;
+	return false;
 }
 
 /**
@@ -1185,8 +1189,9 @@ function badgeos_get_feedback( $args = array() ) {
 	global $user_ID;
 
 	// If no one is logged in, bail now
-	if ( ! is_user_logged_in() )
+	if ( ! is_user_logged_in() ) {
 		return '<p class="error must-be-logged-in">' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
+	}
 
 	// Setup our default args
 	$defaults = array(
@@ -1196,10 +1201,11 @@ function badgeos_get_feedback( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Eliminate need for case-sensitivity on status
-	if ( ! empty( $args['status'] ) )
+	if ( ! empty( $args['status'] ) ) {
 		$args['status'] = strtolower( $args['status'] );
-	else
+	} else {
 		$args['status'] = '';
+	}
 
 	// If we're looking for auto-approved only
 	$show_auto_approved = true;
@@ -1260,14 +1266,16 @@ function badgeos_get_feedback( $args = array() ) {
 		foreach( $feedback as $submission ) {
 
 			// Bail if we do NOT want to show auto approved, and it is
-			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) )
+			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) ) {
 				continue;
+			}
 
 			// Setup our output
-			if ( 'nomination' == $args['post_type'] )
+			if ( 'nomination' == $args['post_type'] ) {
 				$output .= badgeos_render_nomination( $submission, $args );
-			else
+			} else {
 				$output .= badgeos_render_submission( $submission, $args );
+			}
 
 		} // End: foreach( $feedback )
 
