@@ -23,20 +23,24 @@
 function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args = array() ) {
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Grab current user ID if one isn't specified
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// If the user does not have access to this achievement, bail here
-	if ( ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id, $this_trigger, $site_id, $args ) )
+	if ( ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id, $this_trigger, $site_id, $args ) ) {
 		return false;
+	}
 
 	// If the user has completed the achievement, award it
-	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id, $this_trigger, $site_id, $args ) )
+	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id, $this_trigger, $site_id, $args ) ) {
 		badgeos_award_achievement_to_user( $achievement_id, $user_id, $this_trigger, $site_id, $args );
+	}
 }
 
 /**
@@ -56,8 +60,9 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 	$return = true;
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// If the user has not already earned the achievement...
 	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => 1 + badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
@@ -101,15 +106,13 @@ function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $
 		$points_required = absint( get_post_meta( $achievement_id, '_badgeos_points_required', true ) );
 		$last_activity   = badgeos_achievement_last_user_activity( $achievement_id );
 
-		if ( $user_points >= $points_required )
-			$return = true;
-		else
-			$return = false;
+		$return = ( $user_points >= $points_required ) ? true : false;
 
 		// If the user just earned the badge, though, don't let them earn it again
 		// This prevents an infinite loop if the badge has no maximum earnings limit
-		if ( $last_activity >= time('-2 seconds') )
+		if ( $last_activity >= time('-2 seconds') ) {
 			$return = false;
+		}
 	}
 
 	// Return our eligibility status
@@ -133,16 +136,19 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 	global $wp_filter, $wp_version;
 
 	// Sanity Check: ensure we're working with an achievement post
-	if ( ! badgeos_is_achievement( $achievement_id ) )
+	if ( ! badgeos_is_achievement( $achievement_id ) ) {
 		return false;
+	}
 
 	// Use the current user ID if none specified
-	if ( $user_id == 0 )
+	if ( $user_id == 0 ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// Get the current site ID none specified
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Setup our achievement object
 	$achievement_object = badgeos_build_achievement_object( $achievement_id );
@@ -190,8 +196,9 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0 ) {
 
 	// Use the current user's ID if none specified
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// Grab the user's earned achievements
 	$earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
@@ -233,8 +240,9 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 	$dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
 
 	// Loop through each dependent achievement and see if it can be awarded
-	foreach ( $dependent_achievements as $achievement )
+	foreach ( $dependent_achievements as $achievement ) {
 		badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+	}
 
 	// See if a user has unlocked all achievements of a given type
 	badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
@@ -366,12 +374,14 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_id = 0 ) {
 
 	// If we're not working with a step, bail here
-	if ( 'step' != get_post_type( $step_id ) )
+	if ( 'step' != get_post_type( $step_id ) ) {
 		return $return;
+	}
 
 	// Prevent user from earning steps with no parents
-	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
+	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) ) {
 		$return = false;
+	}
 
 	// Prevent user from repeatedly earning the same step
 	if ( $return && badgeos_get_user_achievements( array(
@@ -379,8 +389,9 @@ function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_i
 			'achievement_id' => absint( $step_id ),
 			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 		) )
-	)
+	) {
 		$return = false;
+	}
 
 	// Send back our eligigbility
 	return $return;
@@ -408,10 +419,7 @@ function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0
 		$relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
 
 		// If we meet or exceed the required number of checkins, they deserve the step
-		if ( $relevant_count >= $minimum_activity_count )
-			$return = true;
-		else
-			$return = false;
+		$return = ( $relevant_count >= $minimum_activity_count ) ? true : false;
 	}
 
 	return $return;
@@ -442,10 +450,11 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 			$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
 
 			// If the user has any interaction with this achievement, only get activity since that date
-			if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) ) {
 				$since = $date;
-			else
+			} else {
 				$since = 0;
+			}
 
 			// Get our achievement activity
 			$achievements = badgeos_get_user_achievements( array(
