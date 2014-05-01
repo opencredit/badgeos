@@ -38,8 +38,9 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 	), $atts );
 
 	// return if post id not specified
-	if ( empty($atts['id']) )
-	  return;
+	if ( empty($atts['id']) ) {
+		return;
+	}
 
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
