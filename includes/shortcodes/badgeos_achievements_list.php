@@ -113,8 +113,9 @@ add_action( 'init', 'badgeos_register_achievements_list_shortcode' );
 function badgeos_achievements_list_shortcode( $atts = array () ){
 
 	// check if shortcode has already been run
-	if ( isset( $GLOBALS['badgeos_achievements_list'] ) )
+	if ( isset( $GLOBALS['badgeos_achievements_list'] ) ) {
 		return '';
+	}
 
 	global $user_ID;
 	extract( shortcode_atts( array(
@@ -175,7 +176,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 			}
 			$badges .= '<input type="hidden" name="achievements_list_filter" id="achievements_list_filter" value="'.$filter_value.'">';
 
-		}else{
+		} else {
 
 			$badges .= '<div id="badgeos-achievements-filter">';
 
