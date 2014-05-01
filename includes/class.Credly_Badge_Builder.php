@@ -72,8 +72,9 @@ class Credly_Badge_Builder {
 				$response_body = json_decode( $response['body'] );
 
 				// If response was successful, return the temp token
-				if ( isset( $response_body->temp_token ) )
+				if ( isset( $response_body->temp_token ) ) {
 					return $response_body->temp_token;
+				}
 			}
 		}
 
@@ -134,15 +135,18 @@ class Credly_Badge_Builder {
 		$args = wp_parse_args( $args, $defaults );
 
 		// Build our link tag
-		if ( $this->credly_api_key )
+		if ( $this->credly_api_key ) {
 			$link = admin_url( 'admin-ajax.php?action=badge-builder-generate-link&attachment_id=' . $args['attachment_id'] . '&TB_iframe=true' );
-		else
+		} else {
 			$link = $link = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
+		}
+
 		$output = '<a href="' . $link . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '" data-attachment_id="' . $args['attachment_id'] . '">' . $args['link_text'] . '</a>';
 
 		// Include teaser output if we have no API key
-		if ( ! $this->credly_api_key )
+		if ( ! $this->credly_api_key ) {
 			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="' . esc_attr__( 'Enable Credly Integration to use the Badge Builder', 'badgeos' ) . '"></a></div>';
+		}
 
 		// Include our proper scripts
 		add_thickbox();
@@ -177,8 +181,9 @@ class Credly_Badge_Builder {
 	public function ajax_save_badge() {
 
 		// If this wasn't an ajax call from admin, bail
-		if ( ! defined( 'DOING_AJAX' ) || ! defined( 'WP_ADMIN' ) )
+		if ( ! defined( 'DOING_AJAX' ) || ! defined( 'WP_ADMIN' ) ) {
 			wp_send_json_error();
+		}
 
 		// Grab all our data
 		$post_id    = $_REQUEST['post_id'];
@@ -260,11 +265,13 @@ class Credly_Badge_Builder {
 	public function update_badge_meta( $attachment_id = 0, $badge_meta = null, $icon_meta = null ) {
 
 		// Bail if no attachment ID
-		if ( ! $attachment_id )
+		if ( ! $attachment_id ) {
 			return;
+		}
 
-		if ( ! empty( $badge_meta ) )
+		if ( ! empty( $badge_meta ) ) {
 			update_post_meta( $attachment_id, '_credly_badge_meta', $badge_meta );
+		}
 
 		if ( ! empty( $icon_meta ) ) {
 			update_post_meta( $attachment_id, '_credly_icon_meta', $icon_meta );
