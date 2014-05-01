@@ -56,15 +56,17 @@ function badgeos_ajax_get_achievements() {
 		$type = badgeos_get_achievement_types_slugs();
 		// Drop steps from our list of "all" achievements
 		$step_key = array_search( 'step', $type );
-		if ( $step_key )
+		if ( $step_key ) {
 			unset( $type[$step_key] );
+		}
 	} else {
 		$type = explode( ',', $type );
 	}
 
 	// Get the current user if one wasn't specified
-	if( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = $user_ID;
+	}
 
 	// Build $include array
 	if ( !is_array( $include ) ) {
@@ -85,18 +87,19 @@ function badgeos_ajax_get_achievements() {
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
 
 	// If we're polling all sites, grab an array of site IDs
-	if( $wpms && $wpms != 'false' )
+	if ( $wpms && $wpms != 'false' ) {
 		$sites = badgeos_get_network_site_ids();
-	// Otherwise, use only the current site
-	else
+	} else { // Otherwise, use only the current site
 		$sites = array( $blog_id );
+	}
 
 	// Loop through each site (default is current site only)
 	foreach( $sites as $site_blog_id ) {
 
 		// If we're not polling the current site, switch to the site we're polling
-		if( $blog_id != $site_blog_id )
+		if( $blog_id != $site_blog_id ) {
 			switch_to_blog( $site_blog_id );
+		}
 
 		// Grab our earned badges (used to filter the query)
 		$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
@@ -115,7 +118,7 @@ function badgeos_ajax_get_achievements() {
 		// Filter - query completed or non completed achievements
 		if ( $filter == 'completed' ) {
 			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
-		}elseif( $filter == 'not-completed' ) {
+		} elseif ( $filter == 'not-completed' ) {
 			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
 		}
 
@@ -143,6 +146,7 @@ function badgeos_ajax_get_achievements() {
 		// Loop Achievements
 		$achievement_posts = new WP_Query( $args );
 		$query_count += $achievement_posts->found_posts;
+
 		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
 			$achievements .= badgeos_render_achievement( get_the_ID() );
 			$achievement_count++;
@@ -162,7 +166,7 @@ function badgeos_ajax_get_achievements() {
 			$achievements .= '<div class="badgeos-no-results">';
 			if ( 'completed' == $filter ) {
 				$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-			}else{
+			} else {
 				$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
 			}
 			$achievements .= '</div><!-- .badgeos-no-results -->';
@@ -197,8 +201,9 @@ function badgeos_ajax_get_feedback() {
 	);
 
 	// If we're searching, include the search param
-	if ( ! empty( $_REQUEST['search'] ) )
+	if ( ! empty( $_REQUEST['search'] ) ) {
 		$args['s'] = $_REQUEST['search'];
+	}
 
 	// Get our BadgeOS Settings
 	$badgeos_settings = get_option( 'badgeos_settings' );
@@ -217,7 +222,9 @@ function badgeos_ajax_get_feedback() {
 
 	// If user doesn't have access to settings,
 	// restrict posts to ones they've authored
-	if ( !user_can( absint( $_REQUEST[ 'user_id' ] ), $minimum_role ) && !user_can( absint( $_REQUEST[ 'user_id' ] ), $submission_manager_role ) ) {
+	if (
+		!user_can( absint( $_REQUEST[ 'user_id' ] ), $minimum_role ) &&
+		!user_can( absint( $_REQUEST[ 'user_id' ] ), $submission_manager_role ) ) {
 		$args['author'] = absint( $_REQUEST['user_id'] );
 	}
 
