@@ -29,15 +29,17 @@ function badgeos_get_user_achievements( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Use current user's ID if none specified
-	if ( ! $args['user_id'] )
+	if ( ! $args['user_id'] ) {
 		$args['user_id'] = get_current_user_id();
+	}
 
 	// Grab the user's current achievements
 	$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? (array) $earned_items : array();
 
 	// If we want all sites (or no specific site), return the full array
-	if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] )
+	if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] ) {
 		return $achievements;
+	}
 
 	// Otherwise, we only want the specific site's achievements
 	$achievements = $achievements[$args['site_id']];
@@ -46,22 +48,25 @@ function badgeos_get_user_achievements( $args = array() ) {
 		foreach ( $achievements as $key => $achievement ) {
 
 			// Drop any achievements earned before our since timestamp
-			if ( absint($args['since']) > $achievement->date_earned )
+			if ( absint($args['since']) > $achievement->date_earned ) {
 				unset($achievements[$key]);
+			}
 
 			// Drop any achievements that don't match our achievement ID
-			if ( ! empty( $args['achievement_id'] ) && absint( $args['achievement_id'] ) != $achievement->ID )
+			if ( ! empty( $args['achievement_id'] ) && absint( $args['achievement_id'] ) != $achievement->ID ) {
 				unset($achievements[$key]);
+			}
 
 			// Drop any achievements that don't match our achievement type
-			if ( ! empty( $args['achievement_type'] ) && ( $args['achievement_type'] != $achievement->post_type && ( !is_array( $args['achievement_type'] ) || !in_array( $achievement->post_type, $args['achievement_type'] ) ) ) )
+			if ( ! empty( $args['achievement_type'] ) && ( $args['achievement_type'] != $achievement->post_type && ( !is_array( $args['achievement_type'] ) || !in_array( $achievement->post_type, $args['achievement_type'] ) ) ) ) {
 				unset($achievements[$key]);
+			}
 
 		}
 	}
 
 	// Return our $achievements array_values (so our array keys start back at 0), or an empty array
-	return ( is_array( $achievements ) ? array_values( $achievements ) : array());
+	return ( is_array( $achievements ) ? array_values( $achievements ) : array() );
 
 }
 
@@ -86,21 +91,24 @@ function badgeos_update_user_achievements( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Use current user's ID if none specified
-	if ( ! $args['user_id'] )
+	if ( ! $args['user_id'] ) {
 		$args['user_id'] = wp_get_current_user()->ID;
+	}
 
 	// Grab our user's achievements
 	$achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $args['user_id'] ), 'site_id' => 'all' ) );
 
 	// If we don't already have an array stored for this site, create a fresh one
-	if ( !isset( $achievements[$args['site_id']] ) )
+	if ( !isset( $achievements[$args['site_id']] ) ) {
 		$achievements[$args['site_id']] = array();
+	}
 
 	// Determine if we should be replacing or appending to our achievements array
-	if ( is_array( $args['all_achievements'] ) )
+	if ( is_array( $args['all_achievements'] ) ) {
 		$achievements[$args['site_id']] = $args['all_achievements'];
-	elseif ( is_array( $args['new_achievements'] ) && ! empty( $args['new_achievements'] ) )
+	} elseif ( is_array( $args['new_achievements'] ) && ! empty( $args['new_achievements'] ) ) {
 		$achievements[$args['site_id']] = array_merge( $achievements[$args['site_id']], $args['new_achievements'] );
+	}
 
 	// Finally, update our user meta
 	return update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements);
@@ -204,12 +212,14 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  */
 function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
-	if ( !current_user_can( 'edit_user', $user_id ) )
+	if ( !current_user_can( 'edit_user', $user_id ) ) {
 		return false;
+	}
 
 	// Update our user's points total, but only if edited
-	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) )
+	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
 		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
+	}
 
 }
 add_action( 'personal_options_update', 'badgeos_save_user_profile_fields' );
@@ -392,7 +402,7 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 
 	// Loop through all active sites
 	$sites = badgeos_get_network_site_ids();
-	foreach( $sites as $site_blog_id ){
+	foreach( $sites as $site_blog_id ) {
 
 		// If we're polling a different blog, switch to it
 		if ( $blog_id != $site_blog_id )
