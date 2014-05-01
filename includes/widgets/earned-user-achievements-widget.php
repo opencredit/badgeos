@@ -77,8 +77,9 @@ class earned_user_achievements_widget extends WP_Widget {
 		if ( is_user_logged_in() ) {
 
 			//display user's points if widget option is enabled
-			if ( $instance['point_total'] == 'on' )
+			if ( $instance['point_total'] == 'on' ) {
 				echo '<p class="badgeos-total-points">' . sprintf( __( 'My Total Points: %s', 'badgeos' ), '<strong>' . number_format( badgeos_get_users_points() ) . '</strong>' ) . '</p>';
+			}
 
 			$achievements = badgeos_get_user_achievements();
 
