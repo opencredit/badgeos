@@ -171,8 +171,9 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 			'connected_type'   => $requirements['achievement_type'] . '-to-step',
 			'connected_to'     => $step_id
 		));
-		if ( ! empty( $connected_activities ) )
+		if ( ! empty( $connected_activities ) ) {
 			$requirements['achievement_post'] = $connected_activities[0]->ID;
+		}
 	}
 
 	// Available filter for overriding elsewhere
@@ -342,8 +343,9 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 	$requirements = badgeos_get_step_requirements( $_REQUEST['step_id'] );
 
 	// If we don't have an achievement type, bail now
-	if ( empty( $achievement_type ) )
+	if ( empty( $achievement_type ) ) {
 		die();
+	}
 
 	// Grab all our posts for this achievement type
 	$achievements = get_posts( array(
@@ -390,7 +392,10 @@ function get_step_menu_order( $step_id = 0 ) {
 	global $wpdb;
 	$p2p_id = $wpdb->get_var( $wpdb->prepare( "SELECT p2p_id FROM $wpdb->p2p WHERE p2p_from = %d", $step_id ) );
 	$menu_order = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->p2pmeta WHERE p2p_id=%d AND meta_key='order'", $p2p_id ) );
-	if ( ! $menu_order || $menu_order == 'NaN' ) $menu_order = '0';
+	if ( ! $menu_order || $menu_order == 'NaN' ) {
+		$menu_order = '0';
+	}
+
 	return $menu_order;
 }
 
@@ -403,6 +408,9 @@ function get_step_menu_order( $step_id = 0 ) {
  * @return integer        0 if the order matches, -1 if it's lower, 1 if it's higher
  */
 function badgeos_compare_step_order( $step1 = 0, $step2 = 0 ) {
-	if ( $step1->order == $step2->order ) return 0;
+	if ( $step1->order == $step2->order ) {
+		return 0;
+	}
+
 	return ( $step1->order < $step2->order ) ? -1 : 1;
 }
