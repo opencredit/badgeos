@@ -31,13 +31,15 @@ function badgeos_achievement_submissions( $content = '' ) {
 			// check for other variations
 			foreach ( $labels as $label ) {
 				$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
-				if ( $achievement )
+				if ( $achievement ) {
 					break;
+				}
 			}
 		}
 
-		if ( !$achievement )
+		if ( !$achievement ) {
 			return $content;
+		}
 
 
 		// check if submission or nomination is set
@@ -97,8 +99,9 @@ add_action( 'wp_enqueue_scripts', 'badgeos_do_single_filters' );
 function badgeos_remove_to_reformat_entries_title( $html = '', $id = 0 ) {
 
 	// remove, but only on the main loop!
-	if ( badgeos_is_main_loop( $id ) )
+	if ( badgeos_is_main_loop( $id ) ) {
 		return '';
+	}
 
 	// nothing to see here... move along
 	return $html;
@@ -118,8 +121,9 @@ function badgeos_reformat_entries( $content ) {
 	$badge_id = get_the_ID();
 
 	// filter, but only on the main loop!
-	if ( !badgeos_is_main_loop( $badge_id ) )
+	if ( !badgeos_is_main_loop( $badge_id ) ) {
 		return wpautop( $content );
+	}
 
 	// now that we're where we want to be, tell the filters to stop removing
 	$GLOBALS['badgeos_reformat_content'] = true;
@@ -147,8 +151,9 @@ function badgeos_reformat_entries( $content ) {
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
 
 	// Include achievement earners, if this achievement supports it
-	if ( $show_earners = get_post_meta( $badge_id, '_badgeos_show_earners', true ) )
+	if ( $show_earners = get_post_meta( $badge_id, '_badgeos_show_earners', true ) ) {
 		$newcontent .= badgeos_get_achievement_earners_list( $badge_id );
+	}
 
 	$newcontent .= '</div><!-- .achievement-wrap -->';
 
@@ -170,11 +175,13 @@ function badgeos_is_main_loop( $id = false ) {
 
 	$slugs = badgeos_get_achievement_types_slugs();
 	// only run our filters on the badgeos singular pages
-	if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) )
+	if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) ) {
 		return false;
+	}
 	// w/o id, we're only checking template context
-	if ( !$id )
+	if ( !$id ) {
 		return true;
+	}
 
 	// Checks several variables to be sure we're in the main loop (and won't effect things like post pagination titles)
 	return ( ( $GLOBALS['post']->ID == $id ) && in_the_loop() && empty( $GLOBALS['badgeos_reformat_content'] ) );
@@ -197,8 +204,9 @@ function badgeos_get_required_achievements_for_achievement_list( $achievement_id
 	}
 
 	// Grab the current user's ID if none was specifed
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// Grab our achievement's required steps
 	$steps = badgeos_get_required_achievements_for_achievement( $achievement_id );
@@ -223,8 +231,9 @@ function badgeos_get_required_achievements_for_achievement_list( $achievement_id
 function badgeos_get_required_achievements_for_achievement_list_markup( $steps = array(), $achievement_id = 0, $user_id = 0 ) {
 
 	// If we don't have any steps, or our steps aren't an array, return nothing
-	if ( ! $steps || ! is_array( $steps ) )
+	if ( ! $steps || ! is_array( $steps ) ) {
 		return null;
+	}
 
 	// Grab the current post ID if no achievement_id was specified
 	if ( ! $achievement_id ) {
@@ -235,12 +244,14 @@ function badgeos_get_required_achievements_for_achievement_list_markup( $steps =
 	$count = count( $steps );
 
 	// If we have no steps, return nothing
-	if ( ! $count )
+	if ( ! $count ) {
 		return null;
+	}
 
 	// Grab the current user's ID if none was specifed
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// Setup our variables
 	$output = $step_output = '';
@@ -286,14 +297,16 @@ function badgeos_step_link_title_to_achievement( $title = '', $step = null ) {
 	$step_requirements = badgeos_get_step_requirements( $step->ID );
 
 	// Setup a URL to link to a specific achievement or an achievement type
-	if ( ! empty( $step_requirements['achievement_post'] ) )
+	if ( ! empty( $step_requirements['achievement_post'] ) ) {
 		$url = get_permalink( $step_requirements['achievement_post'] );
+	}
 	// elseif ( ! empty( $step_requirements['achievement_type'] ) )
 	//  $url = get_post_type_archive_link( $step_requirements['achievement_type'] );
 
 	// If we have a URL, update the title to link to it
-	if ( isset( $url ) && ! empty( $url ) )
+	if ( isset( $url ) && ! empty( $url ) ) {
 		$title = '<a href="' . esc_url( $url ) . '">' . $title . '</a>';
+	}
 
 	return $title;
 }
@@ -353,8 +366,9 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
 			$earned_message = '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
 
 			// If the achievement has congrats text, output that, too.
-			if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) )
+			if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) {
 				$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( $congrats_text ) . '</div>';
+			}
 
 			return apply_filters( 'badgeos_earned_achievement_message', $earned_message, $achievement_id, $user_id );
 
@@ -375,8 +389,9 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	global $user_ID;
 
 	// If we were given an ID, get the post
-	if ( is_numeric( $achievement ) )
+	if ( is_numeric( $achievement ) ) {
 		$achievement = get_post( $achievement );
+	}
 
 	// make sure our JS and CSS is enqueued
 	wp_enqueue_script( 'badgeos-achievements' );
