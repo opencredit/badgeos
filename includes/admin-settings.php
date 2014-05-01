@@ -64,11 +64,13 @@ function badgeos_credly_settings_validate( $options = array() ) {
 
 			$error = '';
 
-			if ( ! is_email( $username ) )
+			if ( ! is_email( $username ) ) {
 				$error .= '<p>'. __( 'Please enter a valid email address in the username field.', 'badgeos' ). '</p>';
+			}
 
-			if ( empty( $password ) )
+			if ( empty( $password ) ) {
 				$error .= '<p>'. __( 'Please enter a password.', 'badgeos' ). '</p>';
+			}
 
 			// Save our error message.
 			badgeos_credly_get_api_key_error( $error );
@@ -160,8 +162,9 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
  */
 function badgeos_credly_api_key_errors() {
 
-	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) )
+	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) ) {
 		return;
+	}
 
 	// If we have an error message, we'll display it
 	echo '<div id="message" class="error">'. $has_notice .'</div>';
@@ -175,9 +178,12 @@ function badgeos_credly_api_key_errors() {
  * @return void
  */
 function badgeos_settings_page() {
+
 	flush_rewrite_rules();
-	if ( badgeos_is_debug_mode() )
+
+	if ( badgeos_is_debug_mode() ) {
 		echo 'debug mode is on';
+	}
 
 	?>
 	<div class="wrap" >
@@ -245,7 +251,7 @@ function badgeos_settings_page() {
 				</tr>
 				<?php
                 // check if multisite is enabled & if plugin is network activated
-                if ( is_super_admin() ){
+                if ( is_super_admin() ) {
 	                if ( is_multisite() ) {
 	                ?>
 	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
@@ -668,15 +674,16 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
 			|| ( isset( $_GET['post'] ) && badgeos_is_achievement( $_GET['post'] ) )
 		) && 'Featured Image' == $string
 
-	)
+	) {
 		$string = __( 'Achievement Image', 'badgeos' );
-	elseif (
+	} elseif (
 		(
 			( isset( $_GET['post_type'] ) && 'achievement-type' == $_GET['post_type'] )
 			|| ( isset( $_GET['post'] ) && 'achievement-type' == get_post_type( $_GET['post'] ) )
 		) && 'Featured Image' == $string
-	)
+	) {
 		$string = __( 'Default Achievement Image', 'badgeos' );
+	}
 
 	return $string;
 }
@@ -692,10 +699,11 @@ add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
  * @return string           Potentially modified output.
  */
 function badgeos_featured_image_metabox_text( $content = '', $ID = 0 ) {
-	if ( badgeos_is_achievement( $ID ) )
+	if ( badgeos_is_achievement( $ID ) ) {
 		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
-	elseif ( 'achievement-type' == get_post_type( $ID ) )
+	} elseif ( 'achievement-type' == get_post_type( $ID ) ) {
 		$content = str_replace( 'featured image', __( 'default achievement image', 'badgeos' ), $content );
+	}
 
 	return $content;
 }
