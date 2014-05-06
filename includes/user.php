@@ -432,7 +432,7 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
  *
  * @return bool                       Whether we can send or not.
  */
-function badgeos_can_notify_user( $user_id = 0, $notification_type = 'all' ) {
+function badgeos_can_notify_user( $user_id = 0 ) {
 	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
