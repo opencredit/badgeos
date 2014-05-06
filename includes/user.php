@@ -429,7 +429,6 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 /**
  * Check if we can send a notification type to user.
  * @param int    $user_id             User ID
- * @param string $notification_type   Name of notification to check for
  *
  * @return bool                       Whether we can send or not.
  */
