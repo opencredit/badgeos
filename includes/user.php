@@ -437,12 +437,5 @@ function badgeos_can_notify_user( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-	$can_email = get_user_meta( $user_id, '_badgeos_enable_email_notifications', true );
-
-	return ! empty( $can_email );
+	return false !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
 }
-
-function badgeos_new_user_notification_setup( $user_id ) {
-	add_user_meta( $user_id, '_badgeos_enable_email_notifications', 1 );
-}
-add_action( 'user_register', 'badgeos_new_user_notification_setup' );
