@@ -224,6 +224,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
+* Updated: Submission Lists are now highly customizable via WP hooks. The search input, filter inputs, and even the results can be altered programatically.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Fixed: Prevent users from repeatedly earning auto-approved submissions
 * Fixed: Submissions List status filter now indicates the displayed status on page load
@@ -347,6 +348,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
+* Updated: Submission Lists are now highly customizable via WP hooks. The search input, filter inputs, and even the results can be altered programatically.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Fixed: Prevent users from repeatedly earning auto-approved submissions
 * Fixed: Submissions List status filter now indicates the displayed status on page load
