@@ -545,10 +545,10 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 		// set the email message
 		$message = sprintf( __( 'A new submission has been received and auto-approved:
 
-			In response to: %s
-			Submitted by: %s
+			In response to: %1$s
+			Submitted by: %2$s
 
-			To view all submissions, including this one, visit: %s', 'badgeos' ),
+			To view all submissions, including this one, visit: %3$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
 			admin_url( 'edit.php?post_type=submission' )
@@ -560,9 +560,9 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 		// set the email message
 		$message = sprintf( __( 'Your submission has been approved:
 
-			In response to: %s
-			Submitted by: %s
-			%s', 'badgeos' ),
+			In response to: %1$s
+			Submitted by: %2$s
+			%3$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
 			get_permalink( $args[ 'achievement_id' ] )
@@ -611,11 +611,11 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 		// set the email message
 		$message = sprintf( __( 'A new nomination has been received and auto-approved:
 
-			In response to: %s
-			Nominee: %s
-			Nominated by: %s
+			In response to: %1$s
+			Nominee: %2$s
+			Nominated by: %3$s
 
-			To view all nominations, including this one, visit: %s', 'badgeos' ),
+			To view all nominations, including this one, visit: %4$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
 			$args[ 'from_user_data' ]->display_name,
@@ -630,10 +630,10 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 		// set the email message
 		$message = sprintf( __( 'Your nomination has been approved:
 
-			In response to: %s
-			Nominee: %s
-			Nominated by: %s
-			%s', 'badgeos' ),
+			In response to: %1$s
+			Nominee: %2$s
+			Nominated by: %3$s
+			%4$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
 			$args[ 'from_user_data' ]->display_name,
@@ -676,9 +676,9 @@ function badgeos_set_submission_status_submission_denied( $messages, $args ) {
 	// set the email message
 	$message = sprintf( __( 'Your submission has not been approved:
 
-		In response to: %s
-		Submitted by: %s
-		%s', 'badgeos' ),
+		In response to: %1$s
+		Submitted by: %2$s
+		%3$s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
 		$args[ 'user_data' ]->display_name,
 		get_permalink( $args[ 'achievement_id' ] )
@@ -717,10 +717,10 @@ function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
 	// set the email message
 	$message = sprintf( __( 'Your submission has not been approved:
 
-		In response to: %s
-		Nominee: %s
-		Nominated by: %s
-		%s', 'badgeos' ),
+		In response to: %1$s
+		Nominee: %2$s
+		Nominated by: %3$s
+		%4$s', 'badgeos' ),
 		get_the_title( $args[ 'achievement_id' ] ),
 		$args[ 'user_data' ]->display_name,
 		$args[ 'from_user_data' ]->display_name,
