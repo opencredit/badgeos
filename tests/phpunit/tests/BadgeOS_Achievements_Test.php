@@ -5,12 +5,39 @@ class BadgeOS_Achievements_Test extends WP_UnitTestCase {
 	/**
 	 * @covers badgeos_is_achievement()
 	 */
-	public function test_badgeos_is_achievement() {}
+	public function test_badgeos_is_achievement() {
+
+		// Setup an achievement type
+		$achievement_type_post = $this->factory->post->create( array( 'post_title' => 'Trophy', 'post_type' => 'achievement-type' ) );
+		badgeos_register_achievement_type_cpt();
+		$achievement_id = $this->factory->post->create( array( 'post_type' => 'trophy' ) );
+
+		$is_achievement = badgeos_is_achievement( $achievement_id );
+		$this->assertTrue( $is_achievement );
+
+	}
+
+	/**
+	 * @covers badgeos_is_achievement()
+	 */
+	public function test_badgeos_is_not_achievement() {
+		$achievement_id = $this->factory->post->create();
+		$is_achievement = badgeos_is_achievement( $achievement_id );
+		$this->assertFalse( $is_achievement );
+	}
 
 	/**
 	 * @covers badgeos_get_achievements()
 	 */
-	public function test_badgeos_get_achievements() {}
+	public function test_badgeos_get_achievements() {
+		// $this->factory->post->create_many( 10, array( 'post_type' => 'achievement-type' ) );
+		// badgeos_register_achievement_type_cpt();
+
+		// $actual_achievements = get_posts( array( 'post_type' => 'achievement-type' ) );
+		// $expected_achievements = badgeos_get_achievements();
+
+		// $this->assertSame( $actual_achievements, $expected_achievements );
+	}
 
 	/**
 	 * @covers badgeos_get_achievement_types()

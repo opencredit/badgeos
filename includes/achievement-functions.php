@@ -22,17 +22,10 @@ function badgeos_is_achievement( $post = null ) {
 	// Assume we are working with an achievment object
 	$return = true;
 
-	// If passed an ID, get the post object
-	if ( is_numeric( $post ) )
-		$post = get_post( $post );
-
-	// If $post is NOT an object it cannot be an achievement
-	if ( ! is_object( $post ) )
-		$return = false;
-
 	// If post type is NOT a registered achievement type, it cannot be an achievement
-	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) ) {
 		$return = false;
+	}
 
 	// If we pass both previous tests, this is a valid achievement (with filter to override)
 	return apply_filters( 'badgeos_is_achievement', $return, $post );
