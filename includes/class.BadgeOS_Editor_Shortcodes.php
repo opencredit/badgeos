@@ -60,7 +60,7 @@ class BadgeOS_Editor_Shortcodes {
 	 * @since 1.4.0
 	 */
 	public function render_button() {
-		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=660&height=800&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
+		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=660&height=800&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" data-width="800">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
 	}
 
 	/**

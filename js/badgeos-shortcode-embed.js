@@ -172,4 +172,42 @@
 		allowClear: true
 	});
 
+	// Resize ThickBox when "Add BadgeOS Shortcode" link is clicked
+	$('body').on( 'click', '#insert_badgeos_shortcodes', function(e) {
+		e.preventDefault();
+		badgeos_shortcode_setup_thickbox( $(this) );
+	});
+
+	// Resize shortcode thickbox on window resize
+	$(window).resize(function() {
+		badgeos_shortcode_resize_tb( $('#insert_badgeos_shortcodes') );
+	});
+
+	// Add a custom class to our shortcode thickbox, then resize
+	function badgeos_shortcode_setup_thickbox( link ) {
+		setTimeout( function() {
+		$('#TB_window').addClass('badgeos-shortcode-thickbox');
+			badgeos_shortcode_resize_tb( link );
+		}, 0 );
+	}
+
+	// Force shortcode thickboxes to our specified width/height
+	function badgeos_shortcode_resize_tb( link ) {
+		setTimeout( function() {
+
+		var width = link.attr('data-width');
+
+		$('.badgeos-shortcode-thickbox').width( width );
+
+		var containerheight = $('.badgeos-shortcode-thickbox').height();
+
+		$(
+			'.badgeos-shortcode-thickbox #TB_ajaxContent,' +
+			'.badgeos-shortcode-thickbox .wrap'
+		).width( ( width - 50 ) )
+		 .height( ( containerheight - 50 ) );
+
+		}, 0 );
+	}
+
 }(jQuery));
