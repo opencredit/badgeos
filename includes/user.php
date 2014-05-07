@@ -123,12 +123,12 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
-		echo '<h2>' . __( 'BadgeOS Notification Emails', 'badgeos' ) . '</h2>';
+		echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
 		echo '<table class="form-table">';
 		echo '<tr>';
-			echo '<th scope="row"><label for="badgeos_can_notify_user">' . __( 'Receive emails', 'badgeos' ) . '</label></th>';
+			echo '<th scope="row">' . __( 'Email Preference', 'badgeos' ) . '</th>';
 			echo '<td>';
-				echo '<input type="checkbox" name="badgeos_can_notify_user" id="badgeos_can_notify_user" value="1" ' . checked( badgeos_can_notify_user( $user->ID ), true, false ) . '/>' . __( 'Receive notification emails when submissions or nominations are processed', 'badgeos' ) . '</label>';
+				echo '<label for="_badgeos_can_notify_user"><input type="checkbox" name="_badgeos_can_notify_user" id="_badgeos_can_notify_user" value="1" ' . checked( badgeos_can_notify_user( $user->ID ), true, false ) . '/>' . __( 'Enable BadgeOS Email Notifications', 'badgeos' ) . '</label>';
 			echo '</td>';
 		echo '</tr>';
 		echo '</table>';
@@ -217,7 +217,8 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
 	if ( !current_user_can( 'edit_user', $user_id ) )
 		return false;
 
-	update_user_meta( $user_id, '_badgeos_can_notify_user', isset( $_POST['badgeos_can_notify_user'] ) );
+	$can_notify = isset( $_POST['_badgeos_can_notify_user'] ) ? 'true' : 'false';
+	update_user_meta( $user_id, '_badgeos_can_notify_user', $can_notify );
 
 	// Update our user's points total, but only if edited
 	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) )
@@ -427,15 +428,17 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 }
 
 /**
- * Check if we can send a notification type to user.
- * @param int    $user_id             User ID
+ * Check if a user has disabled email notifications.
  *
- * @return bool                       Whether we can send or not.
+ * @since  alpha
+ *
+ * @param  int   $user_id User ID.
+ * @return bool           True if user can be emailed, otherwise false.
  */
 function badgeos_can_notify_user( $user_id = 0 ) {
 	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
 
-	return false !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
+	return 'false' !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
 }
