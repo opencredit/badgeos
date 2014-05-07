@@ -430,7 +430,7 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 /**
  * Check if a user has disabled email notifications.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  int   $user_id User ID.
  * @return bool           True if user can be emailed, otherwise false.

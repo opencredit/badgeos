@@ -777,8 +777,9 @@ add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achiev
 
 /**
  * Flush the rewrite rules if its a achievement type update and it is published
- * 
- * @since alpha
+ *
+ * @since 1.4.0
+ *
  * @param string $new_status New achievement status
  * @param string $old_status Old achievement status
  * @param string object $post post that is being updated
