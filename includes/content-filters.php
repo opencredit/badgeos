@@ -442,9 +442,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
  * @return string       Contatenated markup
  */
 function badgeos_render_feedback( $atts = array() ) {
-	global $current_user;
 
-	// Parse our attributes
 	$defaults = array(
 		'type'             => 'submission',
 		'limit'            => '10',
@@ -456,54 +454,61 @@ function badgeos_render_feedback( $atts = array() ) {
 	);
 	$atts = wp_parse_args( $atts, $defaults );
 
-	// Setup our feedback args
-	$args = array(
+	$feedback = badgeos_get_feedback( array(
 		'post_type'        => $atts['type'],
 		'posts_per_page'   => $atts['limit'],
 		'show_attachments' => $atts['show_attachments'],
 		'show_comments'    => $atts['show_comments'],
 		'status'           => $atts['status']
-	);
+	) );
 
-	// Get our BadgeOS Settings
-	$badgeos_settings = get_option( 'badgeos_settings' );
-
-	$minimum_role = 'manage_options';
-
-	if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-		$minimum_role = $badgeos_settings[ 'minimum_role' ];
-	}
-
-	$submission_manager_role = $minimum_role;
-
-	if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-		$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-	}
-
-	// If user doesn't have access to settings,
-	// restrict posts to ones they've authored
-	if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
-		$args['author'] = $current_user->ID;
-	}
-
-	// Get our feedback
-	$feedback = badgeos_get_feedback( $args );
 	$output = '';
+	$output .= badgeos_render_feedback_search( $atts );
+	$output .= badgeos_render_feedback_filters( $atts );
+	$output .= '<div class="badgeos-spinner" style="display:none;"></div>';
+	$output .= '<div class="badgeos-feedback-container">';
+	$output .= $feedback;
+	$output .= '</div>';
 
-	// Show Search
+	return apply_filters( 'badgeos_render_feedback', $output, $atts );
+
+}
+
+/**
+ * Render feedback search input.
+ *
+ * @since  alpha
+ *
+ * @param  array  $atts Shortcode attributes.
+ * @return string       HTML Markup.
+ */
+function badgeos_render_feedback_search( $atts = array() ) {
+	$output = '';
+	$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
+
 	if ( 'false' !== $atts['show_search'] ) {
-
-		$search = isset( $_POST['feedback_search'] ) ? $_POST['feedback_search'] : '';
 		$output .= '<div class="badgeos-feedback-search">';
-			$output .= '<form class="badgeos-feedback-search-form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+			$output .= '<form class="badgeos-feedback-search-form" action="" method="POST">';
 			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" class="badgeos-feedback-search-input" name="feedback_search" value="'. $search .'">';
 			$output .= '<input type="submit" class="badgeos-feedback-search-button" name="feedback_search_button" value="' . __( 'Search', 'badgeos' ) . '">';
 			$output .= '</form>';
 		$output .= '</div><!-- .badgeos-feedback-search -->';
-
 	}
 
-	// Show Filter
+	return apply_filters( 'badgeos_render_feedback_search', $output, $atts, $search );
+}
+
+/**
+ * Render feedback filter inputs.
+ *
+ * @since  alpha
+ *
+ * @param  array  $atts Shortcode atts.
+ * @return string       HTML Markup.
+ */
+function badgeos_render_feedback_filters( $atts = array() ) {
+	$output = '';
+
 	if ( 'false' !== $atts['show_filter'] ) {
 
 		$output .= '<div class="badgeos-feedback-filter">';
@@ -519,20 +524,10 @@ function badgeos_render_feedback( $atts = array() ) {
 		$output .= '</div>';
 
 	} else {
-
 		$output .= '<input type="hidden" name="status_filter" id="status_filter" value="' . esc_attr( $atts['status'] ) . '">';
-
 	}
 
-	// Show Feedback
-	$output .= '<div class="badgeos-spinner" style="display:none;"></div>';
-	$output .= '<div class="badgeos-feedback-container">';
-	$output .= $feedback;
-	$output .= '</div>';
-
-	// Return our filterable output
-	return apply_filters( 'badgeos_render_feedback', $output, $atts );
-
+	return apply_filters( 'badgeos_render_feedback_filters', $output, $atts );
 }
 
 /**
