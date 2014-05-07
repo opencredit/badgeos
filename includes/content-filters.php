@@ -509,12 +509,12 @@ function badgeos_render_feedback( $atts = array() ) {
 		$output .= '<div class="badgeos-feedback-filter">';
 			$output .= __( 'Filter:', 'badgeos' );
 			$output .= ' <select name="status_filter" id="status_filter">';
-				$output .= '<option value="all">' . __( 'All', 'badgeos' ) . '</option>';
-				$output .= '<option value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
-				$output .= '<option value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
+				$output .= '<option' . selected( $atts['status'], 'all', false ) . ' value="all">' . __( 'All', 'badgeos' ) . '</option>';
+				$output .= '<option' . selected( $atts['status'], 'pending', false ) . ' value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
+				$output .= '<option' . selected( $atts['status'], 'approved', false ) . ' value="approved">' . __( 'Approved', 'badgeos' ) . '</option>';
 				if ( 'submission' == $atts['type'] )
-					$output .= '<option value="auto-approved">' . __( 'Auto-approved', 'badgeos' ) . '</option>';
-				$output .= '<option value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
+					$output .= '<option' . selected( $atts['status'], 'auto-approved', false ) . ' value="auto-approved">' . __( 'Auto-approved', 'badgeos' ) . '</option>';
+				$output .= '<option' . selected( $atts['status'], 'denied', false ) . ' value="denied">' . __( 'Denied', 'badgeos' ) . '</option>';
 			$output .= '</select>';
 		$output .= '</div>';
 
