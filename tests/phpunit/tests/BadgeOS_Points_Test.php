@@ -23,13 +23,13 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 
 		$starting_points = 100;
 		$additional_points = 150;
-		$actual_points = 250;
+		$expected_points = 250;
 
 		$user_id = $this->factory->user->create();
 		update_user_meta( $user_id, '_badgeos_points', $starting_points );
-		$new_total = badgeos_update_users_points( $user_id, $additional_points );
+		$actual_points = badgeos_update_users_points( $user_id, $additional_points );
 
-		$this->assertSame( $new_total, $actual_points );
+		$this->assertSame( $actual_points, $expected_points );
 	}
 
 	/**
