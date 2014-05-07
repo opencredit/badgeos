@@ -773,8 +773,6 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
 
-add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
-
 /**
  * Flush the rewrite rules if its a achievement type update and it is published
  *
@@ -791,3 +789,4 @@ function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_statu
 		flush_rewrite_rules();
 	}
 }
+add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
