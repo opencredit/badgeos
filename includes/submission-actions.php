@@ -1262,6 +1262,7 @@ function badgeos_get_feedback( $args = array() ) {
 	}
 
 	// Get our feedback
+	$args = apply_filters( 'badgeos_get_feedback_args', $args );
 	$feedback = get_posts( $args );
 	$output = '';
 
