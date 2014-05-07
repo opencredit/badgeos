@@ -44,10 +44,14 @@ function badgeos_submission_form( $atts = array() ) {
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
 
-		// If submission data was saved, output success message
+		// If submission data was submitted, output success message
 		if ( isset( $_REQUEST['achievement_id'] ) && $_REQUEST['achievement_id'] == $atts['achievement_id'] ) {
-			if ( badgeos_save_submission_data() ) {
-				$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+			// Don't award if this achievement was earned in the past 10 seconds
+			$recently_earned = badgeos_get_user_achievements( array( 'user_id' => get_current_user_id(), 'achievement_id' => $_REQUEST['achievement_id'], 'since' => ( time() - 10 ) ) );
+			if ( empty( $recently_earned ) ) {
+				if ( badgeos_save_submission_data() ) {
+					$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
+				}
 			}
 		}
 

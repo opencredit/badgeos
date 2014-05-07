@@ -524,7 +524,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
 	// Award achievement
-	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
 
 	// Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
@@ -590,7 +590,7 @@ add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_s
 function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
 	// Award achievement
-	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
 
 	// Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
