@@ -116,11 +116,6 @@ function badgeos_update_user_achievements( $args = array() ) {
  */
 function badgeos_user_profile_data( $user = null ) {
 
-
-	// Get minimum role setting for menus
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-
 	$achievement_ids = array();
 
 		echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
@@ -134,7 +129,7 @@ function badgeos_user_profile_data( $user = null ) {
 		echo '</table>';
 
 	//verify uesr meets minimum role to view earned badges
-	if ( current_user_can( $minimum_role ) ) {
+	if ( current_user_can( badgeos_get_manager_capability() ) ) {
 
 		$achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
 
@@ -214,15 +209,17 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  */
 function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
-	if ( !current_user_can( 'edit_user', $user_id ) )
+	if ( ! current_user_can( 'edit_user', $user_id ) ) {
 		return false;
+	}
 
 	$can_notify = isset( $_POST['_badgeos_can_notify_user'] ) ? 'true' : 'false';
 	update_user_meta( $user_id, '_badgeos_can_notify_user', $can_notify );
 
 	// Update our user's points total, but only if edited
-	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) )
+	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
 		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
+	}
 
 }
 add_action( 'personal_options_update', 'badgeos_save_user_profile_fields' );
@@ -346,12 +343,8 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
  */
 function badgeos_process_user_data() {
 
-	// Get minimum role setting for menus
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-
 	//verify uesr meets minimum role to view earned badges
-	if ( current_user_can( $minimum_role ) ) {
+	if ( current_user_can( badgeos_get_manager_capability() ) ) {
 
 		// Process awarding achievement to user
 		if ( isset( $_GET['action'] ) && 'award' == $_GET['action'] &&  isset( $_GET['user_id'] ) && isset( $_GET['achievement_id'] ) ) {

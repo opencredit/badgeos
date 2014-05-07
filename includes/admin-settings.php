@@ -725,3 +725,43 @@ function badgeos_media_modal_featured_image_text( $strings = array(), $post = nu
 	return $strings;
 }
 add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10, 2 );
+
+/**
+ * Get capability required for BadgeOS administration.
+ *
+ * @since  alpha
+ *
+ * @return string User capability.
+ */
+function badgeos_get_manager_capability() {
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	return isset( $badgeos_settings[ 'minimum_role' ] ) ? $badgeos_settings[ 'minimum_role' ] : 'manage_options';
+}
+
+/**
+ * Get capability required for Submission management.
+ *
+ * @since  alpha
+ *
+ * @return string User capability.
+ */
+function badgeos_get_submission_manager_capability() {
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	$submission_manager_role = isset( $badgeos_settings[ 'submission_manager_role' ] ) ? $badgeos_settings[ 'submission_manager_role' ] : badgeos_get_manager_capability();
+}
+
+/**
+ * Check if a user can manage submissions.
+ *
+ * @since  alpha
+ *
+ * @param  integer $user_id User ID.
+ * @return bool             True if user can manaage submissions, otherwise false.
+ */
+function badgeos_user_can_manage_submissions( $user_id = 0 ) {
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	return ( user_can( $user_id, badgeos_get_submission_manager_capability() ) || user_can( $user_id, badgeos_get_manager_capability() ) );
+}

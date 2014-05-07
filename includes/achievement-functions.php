@@ -506,16 +506,12 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-	$post             = get_post($post_id);
+	$post = get_post($post_id);
 
-	// If the user has the authority to do what they're doing,
-	// and the post is one of our achievement types,
+	// If the post is one of our achievement types,
 	// and the achievement is awarded by minimum points
 	if (
-		current_user_can( $minimum_role )
-		&& badgeos_is_achievement( $post )
+		badgeos_is_achievement( $post )
 		&& (
 			'points' == get_post_meta( $post_id, '_badgeos_earned_by', true )
 			|| ( isset( $_POST['_badgeos_earned_by'] ) && 'points' == $_POST['_badgeos_earned_by'] )

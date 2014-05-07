@@ -1212,7 +1212,6 @@ function badgeos_get_submission_form( $args = array() ) {
  * @return string       Conatenated output for feedback
  */
 function badgeos_get_feedback( $args = array() ) {
-	global $user_ID;
 
 	// If no one is logged in, bail now
 	if ( ! is_user_logged_in() )
@@ -1257,25 +1256,8 @@ function badgeos_get_feedback( $args = array() ) {
 
 	// Setup our author limit
 	if ( empty( $args['author'] ) && 'nomination' != $args['post_type'] ) {
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
-
-		$submission_manager_role = $minimum_role;
-
-		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-		}
-
-		// If user doesn't have access to settings,
-		// restrict posts to ones they've authored
-		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
-			$args['author'] = $user_ID;
+		if ( ! badgeos_user_can_manage_submissions() ) {
+			$args['author'] = get_current_user_id();
 		}
 	}
 
@@ -1342,7 +1324,7 @@ function badgeos_get_submissions( $args = array() ) {
  * @return string                  Conatenated output for submission, attachments and comments
  */
 function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
-	global $user_ID, $post;
+	global $post;
 
 	// Setup our empty args array
 	$args = array();
@@ -1352,25 +1334,8 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
 		// Use the provided user ID
 		$args['author'] = absint( $user_id );
 	} else {
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
-
-		$submission_manager_role = $minimum_role;
-
-		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-		}
-
-		// If user doesn't have access to settings,
-		// restrict posts to ones they've authored
-		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
-			$args['author'] = $user_ID;
+		if ( ! badgeos_user_can_manage_submissions() ) {
+			$args['author'] = get_current_user_id();
 		}
 	}
 
@@ -1396,7 +1361,7 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
  * @return string                  Conatenated output for submission, attachments and comments
  */
 function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
-	global $user_ID, $post;
+	global $post;
 
 	// Setup our empty args array
 	$args = array(
@@ -1413,27 +1378,13 @@ function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
 			'value' => absint( $user_id )
 		);
 	} else {
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
-
-		$submission_manager_role = $minimum_role;
-
-		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-		}
 
 		// If user doesn't have access to settings,
 		// restrict posts to ones they've authored
-		if ( !current_user_can( $minimum_role ) && !current_user_can( $submission_manager_role ) ) {
+		if ( ! badgeos_user_can_manage_submissions() ) {
 			$args['meta_query'][] = array(
 				'key'   => '_badgeos_nominating_user_id',
-				'value' => absint( $user_ID )
+				'value' => get_current_user_id()
 			);
 		}
 	}

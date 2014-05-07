@@ -569,23 +569,8 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 			$output .= get_post_meta( $nomination->ID, '_badgeos_nomination_status', true );
 		$output .= '</p>';
 
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
-
-		$submission_manager_role = $minimum_role;
-
-		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-		}
-
 		// Approve/Deny Buttons for admins only
-		if ( current_user_can( $minimum_role ) || current_user_can( $submission_manager_role ) ) {
+		if ( badgeos_user_can_manage_submissions() ) {
 			$output .= badgeos_render_feedback_buttons( $nomination->ID );
 		}
 
@@ -641,23 +626,8 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 			$output .= badgeos_get_submission_attachments( $submission->ID );
 		}
 
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
-
-		$submission_manager_role = $minimum_role;
-
-		if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-			$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-		}
-
 		// Approve/Deny Buttons for admins only
-		if ( current_user_can( $minimum_role ) || current_user_can( $submission_manager_role ) ) {
+		if ( badgeos_user_can_manage_submissions() ) {
 			$output .= badgeos_render_feedback_buttons( $submission->ID );
 		}
 

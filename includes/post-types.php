@@ -18,21 +18,6 @@
 function badgeos_register_post_types() {
 	global $badgeos;
 
-	// Get our BadgeOS Settings
-	$badgeos_settings = get_option( 'badgeos_settings' );
-
-	$minimum_role = 'manage_options';
-
-	if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-		$minimum_role = $badgeos_settings[ 'minimum_role' ];
-	}
-
-	$submission_manager_role = $minimum_role;
-
-	if ( isset( $badgeos_settings[ 'submission_manager_role' ] ) ) {
-		$submission_manager_role = $badgeos_settings[ 'submission_manager_role' ];
-	}
-
 	// Register our Achivement Types CPT
 	register_post_type( 'achievement-type', array(
 		'labels'             => array(
@@ -52,7 +37,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => false,
 		'publicly_queryable' => false,
-		'show_ui'            => current_user_can( $minimum_role ),
+		'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'query_var'          => false,
 		'rewrite'            => false,
@@ -83,7 +68,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => apply_filters( 'badgeos_public_steps', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_steps', false ),
-		'show_ui'            => current_user_can( $minimum_role ),
+		'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
 		'show_in_menu'       => apply_filters( 'badgeos_public_steps', false ),
 		'query_var'          => false,
 		'rewrite'            => false,
@@ -115,7 +100,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => apply_filters( 'badgeos_public_submissions', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_submissions', false ),
-		'show_ui'            => ( current_user_can( $submission_manager_role ) || current_user_can( $minimum_role ) ),
+		'show_ui'            => badgeos_user_can_manage_submissions(),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'show_in_nav_menus'  => apply_filters( 'badgeos_public_submissions', false ),
 		'query_var'          => true,
@@ -147,7 +132,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => apply_filters( 'badgeos_public_nominations', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_nominations', false ),
-		'show_ui'            => ( current_user_can( $submission_manager_role ) || current_user_can( $minimum_role ) ),
+		'show_ui'            => badgeos_user_can_manage_submissions(),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'show_in_nav_menus'  => apply_filters( 'badgeos_public_nominations', false ),
 		'query_var'          => true,
@@ -178,7 +163,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => false,
 		'publicly_queryable' => false,
-		'show_ui'            => current_user_can( $minimum_role ),
+		'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'show_in_nav_menus'  => false,
 		'query_var'          => true,
@@ -216,15 +201,6 @@ function badgeos_register_achievement_type( $achievement_name_singular = '', $ac
  * @return void
  */
 function badgeos_register_achievement_type_cpt() {
-
-	// Get our BadgeOS Settings
-	$badgeos_settings = get_option( 'badgeos_settings' );
-
-	$minimum_role = 'manage_options';
-
-	if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-		$minimum_role = $badgeos_settings[ 'minimum_role' ];
-	}
 
 	// Grab all of our achievement type posts
 	$achievement_types = get_posts( array(
@@ -268,7 +244,7 @@ function badgeos_register_achievement_type_cpt() {
 			),
 			'public'             => true,
 			'publicly_queryable' => true,
-			'show_ui'            => current_user_can( $minimum_role ),
+			'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
 			'show_in_menu'       => $show_in_menu,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => sanitize_title( strtolower( $achievement_name_singular ) ) ),
