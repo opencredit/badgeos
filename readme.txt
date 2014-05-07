@@ -1,5 +1,5 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
+Contributors: badgeos, learningtimes, credly, webdevstudios, williamsba1, rzen, jtsternberg, ryanduff, Messenlehner, LisaSabinWilson, tw2113
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.5
@@ -95,12 +95,13 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Members can share their badges right from the widget to their Credly profile and off to their linked social networks or Mozilla Backpack.
 
 
-**Theme Agnostic & Shortcodes**
+**Theme Agnostic, Shortcodes and Shortcode Embedder**
 
 * BadgeOS works with just about any standard WordPress theme.
 * No special hooks or theme updates are needed.
 * Turn any page or post into a way to display available achievements and for users to track their progress.
-* Multiple options and parameters for each for great flexibility.
+* Multiple options and parameters for each shortcode for great flexibility.
+* Shortcode WYSIWYG embedder - appears in the toolbar of all WordPress content editor areas, allowing you to transform any page or post into part of your achievement system -- without referencing any of the shortcodes.
 * Shortcodes to bring submission and nomination review to the front-end of your site.
 * Shortcode to integrate specific available achievements into any post or page of your site.
 * Shortcode for Credly "[Custom Assertion Location](http://blog.credly.com/custom-assertion-location/ "Credly Custom Redirection")" for displaying badges issued by Credly Pro users on your site
@@ -113,9 +114,11 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Easily review submissions and nominations from members.
 * Approve or deny submissions with one click.
 * Shortcodes with multiple options for review of submissions on any page or post on your site.
-* Powerful shortcodes to add an achievement submission or nominiation form to any post or page.
+* Powerful shortcodes to add an achievement submission or nomination form to any post or page.
 * Add comments to engage the member and elaborate on your decisions.
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
+* Submission Notification Settings: Specify an unlimited number of email addresses for submission admin notifications.
+* Notifications for: new submissions, new comments, and submission status changes
 
 
 = Extensibility and BadgeOS Add-ons =
@@ -161,7 +164,8 @@ There is NO WARRANTY for this software, express or implied, including the implie
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the BadgeOS menu to add Badges and set up new Achievement Types.
 4. Enter Credly credentials for the badge Issuer in the Credly Integration settings to enable the free Credly Badge Builder and badge sharing. (First get a [free account](https://credly.com/#!/create-account "Create a free Credly account") at Credly.com if you do not have one.)
-5. Visit the Help/Support section of the BadgeOS menu for shortcodes to turn any page or post on your site into a BadgeOS list of available achievements and badges.
+5. Use the BadgeOS Shortcode button available from any content editor in our site to turn any page or post into a part of your achievement or engagement system. For example, add lists of badges or other achievements, submission lists, a single badge and much more. Visit the Help/Support section of the BadgeOS menu for more information on available shortcodes.
+6. See video tutorials about BadgeOS at: [http://badgeos.org/support/tutorials/](http://badgeos.org/support/tutorials/ "BadgeOS Tutorials")
 
 
 == Frequently Asked Questions ==
@@ -220,7 +224,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
 * Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
-* Added: Several new submission notification types: new submission, new comment, and submission status change
+* Added: Several new submission notification types - new submission, new comment, and submission status change
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
