@@ -217,13 +217,16 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
-* Added: Submission Notification Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
+* Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
+* Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
 * Added: Several new submission notification types: new submission, new comment, and submission status change
+* Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Fixed: Prevent users from repeatedly earning auto-approved submissions
+* Fixed: Submissions List status filter now indicates the displayed status on page load
 
 = 1.3.5 =
 * Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
@@ -337,13 +340,16 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
-* Added: Submission Notification Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
+* Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
+* Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
 * Added: Several new submission notification types: new submission, new comment, and submission status change
+* Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Fixed: Prevent users from repeatedly earning auto-approved submissions
+* Fixed: Submissions List status filter now indicates the displayed status on page load
 
 = 1.3.5 =
 * Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
