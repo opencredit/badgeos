@@ -131,3 +131,6 @@ Shortcode Embed styles
 .select2-container {
 	width: 100%;
 }
+#select2-drop {
+	z-index: 100051;
+}
