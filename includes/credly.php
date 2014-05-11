@@ -112,6 +112,7 @@ class BadgeOS_Credly {
         // Credly enable user meta setting
         add_action( 'personal_options', array( $this, 'credly_profile_setting' ), 99 );
         add_action( 'personal_options_update', array( $this, 'credly_profile_setting_save' ) );
+        add_action( 'edit_user_profile_update', array( $this, 'credly_profile_setting_save' ) );
         add_action( 'init', array( $this, 'credly_profile_setting_force_enable' ), 999 );
 
         // Update Credly ID on profile save
