@@ -498,6 +498,9 @@ class BadgeOS_Credly {
      */
     public function credly_profile_setting_save( $user_id = 0 ) {
 
+		if ( !current_user_can( 'edit_user', $user_id ) )
+			return false;
+
         $credly_enable = ( ! empty( $_POST['credly_user_enable'] ) && $_POST['credly_user_enable'] == 'true' ? 'true' : 'false' );
 
         $this->credly_profile_setting_update_meta( $user_id, $credly_enable );
