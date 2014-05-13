@@ -93,7 +93,7 @@ function badgeos_display_submissions( $atts = array() ) {
 		'show_search'      => true,
 		'show_attachments' => true,
 		'show_comments'    => true
-	), $atts );
+	), $atts, 'badgeos_submissions' );
 
 	$atts['ajax_url'] = admin_url( 'admin-ajax.php', 'relative' );
 	$atts['user_id']  = get_current_user_id();

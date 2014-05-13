@@ -75,7 +75,7 @@ function badgeos_display_nominations( $atts = array() ) {
 		'show_search'      => true,
 		'show_attachments' => false,
 		'show_comments'    => false
-	), $atts );
+	), $atts, 'badgeos_nominations' );
 
 	$feedback = badgeos_render_feedback( $atts );
 

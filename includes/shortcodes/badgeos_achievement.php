@@ -35,7 +35,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 	// get the post id
 	$atts = shortcode_atts( array(
 	  'id' => get_the_ID(),
-	), $atts );
+	), $atts, 'badgeos_achievement' );
 
 	// return if post id not specified
 	if ( empty($atts['id']) )

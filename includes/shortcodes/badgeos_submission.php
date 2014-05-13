@@ -36,7 +36,7 @@ function badgeos_submission_form( $atts = array() ) {
 	// Parse our attributes
 	$atts = shortcode_atts( array(
 		'achievement_id' => get_the_ID(),
-	), $atts );
+	), $atts, 'badgeos_submission' );
 
 	// Initialize output
 	$output = '';

@@ -131,7 +131,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'exclude'     => array(),
 		'meta_key'    => '',
 		'meta_value'  => ''
-	), $atts ) );
+	), $atts, 'badgeos_achievements_list' ) );
 
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
