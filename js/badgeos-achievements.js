@@ -4,30 +4,33 @@ jQuery( function( $ ) {
 
 	// Retrieve feedback posts when an approriate action is taken
 	$body.on( 'change', '.badgeos-feedback-filter select', badgeos_get_feedback );
-
 	$body.on( 'submit', '.badgeos-feedback-search-form', function( event ) {
-
 		event.preventDefault();
 		badgeos_get_feedback();
-
 	} );
+
+	function badgeos_hide_submission_comments( submissions_wrapper ) {
+		submissions_wrapper.find( '.badgeos-submission-comments-wrap' ).hide();
+		submissions_wrapper.find( '.badgeos-comment-form' ).hide();
+		submissions_wrapper.find( '.submission-comment-toggle' ).show();
+	}
 
 	// Hide comment form on feedback posts with toggle
-	var $submission_comment_toggle = $( '.submission-comment-toggle' );
+	var $submissions_wrapper = $('.badgeos-feedback-container');
+	badgeos_hide_submission_comments( $submissions_wrapper );
+	$submissions_wrapper.on( 'click', '.submission-comment-toggle', function() {
+		event.preventDefault();
 
-	$submission_comment_toggle.show().siblings( '.badgeos-comment-form' ).hide();
-
-	$submission_comment_toggle.on( 'click', function() {
-
-		$( this ).hide().siblings( '.badgeos-comment-form' ).slideDown();
-
+		var $button = $(this);
+		$button.siblings( '.badgeos-submission-comments-wrap' ).fadeIn('fast');
+		$button.siblings( '.badgeos-comment-form' ).fadeIn('fast');
+		$button.hide();
 	} );
+
 
 	// Get feedback posts
 	function badgeos_get_feedback() {
-
 		$( '.badgeos-spinner' ).show();
-
 		$.ajax( {
 			url : badgeos_feedback.ajax_url,
 			data : {
@@ -43,30 +46,24 @@ jQuery( function( $ ) {
 			},
 			dataType : 'json',
 			success : function( response ) {
-
-				if ( window.console ) {
-					console.log( $( '.badgeos-feedback-search-input' ).val() );
-					console.log( response );
-				}
-
 				$( '.badgeos-spinner' ).hide();
-
-				$( '.badgeos-feedback-container' ).html( response.data.feedback );
-
+				$submissions_wrapper.html( response.data.feedback );
+				badgeos_hide_submission_comments( $submissions_wrapper );
+			},
+			error : function( x, t, m ) {
+				if ( window.console ) {
+					console.log( [t, m] );
+				}
 			}
 		} );
-
 	}
 
 	// Approve/deny feedback
 	$body.on( 'click', '.badgeos-feedback-buttons .button', function( event ) {
-
 		event.preventDefault();
-
 		var $button = $( this );
-
 		$.ajax( {
-			url : badgeos_feedback.ajax_url,
+			url : badgeos_feedback_buttons.ajax_url,
 			data : {
 				'action' : 'update-feedback',
 				'status' : $button.data( 'action' ),
@@ -79,18 +76,12 @@ jQuery( function( $ ) {
 			},
 			dataType : 'json',
 			success : function( response ) {
-
 				$( '.badgeos-feedback-response', $button.parent() ).remove();
-
 				$( response.data.message ).appendTo( $button.parent() ).fadeOut( 3000 );
-
 				$( '.badgeos-feedback-' + $button.data( 'feedback-id' ) + ' .badgeos-feedback-status' ).html( response.data.status );
-
 				$( '.cmb_id__badgeos_submission_status td' ).html( response.data.status );
-
 			}
 		} );
-
 	} );
 
 	// Our main achievement list AJAX call
@@ -119,9 +110,6 @@ jQuery( function( $ ) {
 					},
 					dataType : 'json',
 					success : function( response ) {
-						if ( window.console ) {
-							console.log( response );
-						}
 						$( '.badgeos-spinner' ).hide();
 						if ( response.data.message === null ) {
 							//alert("That's all folks!");
@@ -242,10 +230,6 @@ jQuery( function( $ ) {
 			var elPosition = el.offset();
 			var id = parent.data( 'credlyid' );
 
-			if ( window.console ) {
-				console.log( id );
-			}
-
 			// move credly popup
 			credly.width( width ).css( {
 				top : Math.floor( elPosition.top - credly.outerHeight() ), left : Math.floor( elPosition.left )
@@ -267,10 +251,6 @@ jQuery( function( $ ) {
 
 			credlySend.hide();
 			credlySpinner.show();
-
-			if ( window.console ) {
-				console.log( credly.data( 'credlyid' ) );
-			}
 
 			badgeos_send_to_credly( credly.data( 'credlyid' ) );
 
@@ -302,10 +282,6 @@ jQuery( function( $ ) {
 				},
 				success : function( response ) {
 
-					if ( window.console ) {
-						console.log( response );
-					}
-
 					// hide our loading spinner
 					credlySpinner.hide();
 
@@ -320,12 +296,6 @@ jQuery( function( $ ) {
 
 				},
 				error : function( x, t, m ) {
-
-					if ( window.console ) {
-						console.log( x );
-						console.log( t );
-						console.log( m );
-					}
 
 					if ( t === 'timeout' ) {
 						credlySpinner.hide();
