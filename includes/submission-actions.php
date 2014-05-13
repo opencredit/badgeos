@@ -831,27 +831,22 @@ add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_su
  * @return string 		   The submission markup
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
-	global $current_user;
 
-	// user must be logged in to see the submission form
-	if ( !is_user_logged_in() )
+	if ( ! is_user_logged_in() )
 		return '';
 
 	$defaults = array(
 		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit Comment', 'badgeos' ),
-		'toggle'     => __( 'Add Comment', 'badgeos' ),
+		'toggle'     => __( 'Show/Add Comments', 'badgeos' ),
 	);
-	// filter our text
-	$new_defaults = apply_filters( 'badgeos_comment_form_language', $defaults );
-	// fill in missing data
-	$language = wp_parse_args( $new_defaults, $defaults );
+	$language = wp_parse_args( apply_filters( 'badgeos_comment_form_language', $defaults ), $defaults );
 
 	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
 
 		// comment form heading
-		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		$sub_form .= '<legend>'. wp_kses_post( $language['heading'] ) .'</legend>';
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
@@ -860,7 +855,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-submission-file">';
-		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+		$sub_form .= '<p><label>'. esc_html( $language['attachment'] ) . ' <input type="file" name="document_file" id="document_file" /></label></p>';
 		$sub_form .= '</fieldset>';
 
 		// submit button
@@ -868,13 +863,13 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// Hidden Fields
 		$sub_form .= wp_nonce_field( 'submit_comment', 'badgeos_comment_nonce', true, false );
-		$sub_form .= '<input type="hidden" name="user_id" value="' . $current_user->ID . '">';
-		$sub_form .= '<input type="hidden" name="submission_id" value="' . $post_id . '">';
+		$sub_form .= '<input type="hidden" name="user_id" value="' . get_current_user_id() . '">';
+		$sub_form .= '<input type="hidden" name="submission_id" value="' . absint( $post_id ) . '">';
 
 	$sub_form .= '</form>';
 
 	// Toggle button for showing comment form
-	$sub_form .= '<input class="button submission-comment-toggle" type="submit" value="' . $language['toggle'] . '" style="display:none">';
+	$sub_form .= '<a href="" class="button submission-comment-toggle" style="display:none">' . esc_html( $language['toggle'] ) . '</a>';
 
 	return apply_filters( 'badgeos_get_comment_form', $sub_form, $post_id );
 
@@ -956,16 +951,15 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 		return;
 
 	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
+	$output = '<div class="badgeos-submission-comments-wrap">';
+	$output .= '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
 	$output .= '<ul class="badgeos-submission-comments-list">';
-	foreach( $comments as $comment ) {
-		// Setup an alternating odd/even class
-		$odd_even = ( isset( $odd_even ) && 'odd' == $odd_even ) ? 'even' : 'odd';
-
-		// Render the comment
+	foreach( $comments as $key => $comment ) {
+		$odd_even = $key % 2 ? 'even' : 'odd';
 		$output .= badgeos_render_submission_comment( $comment, $odd_even );
 	}
 	$output .= '</ul><!-- .badgeos-submission-comments-list -->';
+	$output .= '</div><!-- .badgeos-submission-comments-wrap -->';
 
 	return apply_filters( 'badgeos_get_comments_for_submission', $output, $submission_id, $comments );
 
@@ -979,15 +973,8 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
  * @return bool                   True if connected achievement is set to auto-approve, false otherwise
  */
 function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
-
-	// Get the submission's connected achievement
 	$achievement_id = get_post_meta( $submission_id, '_badgeos_submission_achievement_id', true );
-
-	// If the achievement is set to auto-approve, return true
-	if ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) )
-		return true;
-	else
-		return false;
+	return ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) );
 }
 
 /**
@@ -1213,40 +1200,62 @@ function badgeos_get_submission_form( $args = array() ) {
  */
 function badgeos_get_feedback( $args = array() ) {
 
-	// If no one is logged in, bail now
-	if ( ! is_user_logged_in() )
+	if ( ! is_user_logged_in() ) {
 		return '<p class="error must-be-logged-in">' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
-
-	// Setup our default args
-	$defaults = array(
-		'post_status' => 'publish',
-		'post_type'   => 'submission'
-	);
-	$args = wp_parse_args( $args, $defaults );
-
-	// Eliminate need for case-sensitivity on status
-	if ( ! empty( $args['status'] ) )
-		$args['status'] = strtolower( $args['status'] );
-	else
-		$args['status'] = '';
-
-	// If we're looking for auto-approved only
-	$show_auto_approved = true;
-	if ( 'auto-approved' == $args['status'] ) {
-		$args['status'] = 'approved';
-	} elseif ( 'all' !== $args['status'] ) {
-		$show_auto_approved = false;
 	}
 
-	// If we're looking for a specific approval status
-	if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+	$args = badgeos_parse_feedback_args( $args );
+	$feedback_posts = get_posts( $args );
+	$output = '';
+
+	if ( ! empty( $feedback_posts ) ) {
+		$output .= '<div class="badgeos-submissions">';
+		foreach( $feedback_posts as $feedback ) {
+			if ( badgeos_is_submission_auto_approved( $feedback->ID ) && false === $args['show_auto_approved'] ) {
+				continue;
+			}
+			$output .= call_user_func_array( "badgeos_render_{$feedback->post_type}", array( $feedback, $args ) );
+		}
+
+		$output .= '</div><!-- badgeos-submissions -->';
+	}
+
+	return apply_filters( 'badgeos_get_submissions', $output, $args );
+
+}
+
+/**
+ * Parse and prepare feedback list args.
+ *
+ * @since  alpha
+ *
+ * @param  array  $args Feedback args.
+ * @return array        Modified feedback args.
+ */
+function badgeos_parse_feedback_args( $args = array() ) {
+
+	$args = wp_parse_args( $args, array(
+		'post_status' => 'publish',
+		'post_type'   => 'submission',
+		'status'      => 'all',
+	) );
+
+	// Eliminate case-sensitivitiy
+	$args = array_map( 'strtolower', $args );
+
+	// Handler for auto-approved results
+	$args['show_auto_approved'] = in_array( $args['status'], array( 'all', 'auto-approved' ) );
+	$args['status'] = ( 'auto-approved' == $args['status'] ) ? 'approved' : $args['status'];
+
+	// Limit results by approval status
+	if ( 'all' !== $args['status'] ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_status",
 			'value' => $args['status']
 		);
 	}
 
-	// If we want feedback connected to a specific achievement
+	// Limit results by achievement ID
 	if ( isset( $args['achievement_id'] ) ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_achievement_id",
@@ -1254,42 +1263,14 @@ function badgeos_get_feedback( $args = array() ) {
 		);
 	}
 
-	// Setup our author limit
-	if ( empty( $args['author'] ) && 'nomination' != $args['post_type'] ) {
+	// Limit results by author
+	if ( empty( $args['author'] ) && 'nomination' !== $args['post_type'] ) {
 		if ( ! badgeos_user_can_manage_submissions() ) {
 			$args['author'] = get_current_user_id();
 		}
 	}
 
-	// Get our feedback
-	$args = apply_filters( 'badgeos_get_feedback_args', $args );
-	$feedback = get_posts( $args );
-	$output = '';
-
-	if ( ! empty( $feedback ) ) {
-
-		$output .= '<div class="badgeos-submissions">';
-
-		foreach( $feedback as $submission ) {
-
-			// Bail if we do NOT want to show auto approved, and it is
-			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) )
-				continue;
-
-			// Setup our output
-			if ( 'nomination' == $args['post_type'] )
-				$output .= badgeos_render_nomination( $submission, $args );
-			else
-				$output .= badgeos_render_submission( $submission, $args );
-
-		} // End: foreach( $feedback )
-
-		$output .= '</div><!-- badgeos-submissions -->';
-
-	} // End: if ( $feedback )
-
-	// Return our filterable output
-	return apply_filters( 'badgeos_get_submissions', $output, $args, $feedback );
+	return apply_filters( 'badgeos_get_feedback_args', $args );
 }
 
 /**
