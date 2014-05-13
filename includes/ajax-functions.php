@@ -187,32 +187,17 @@ function badgeos_ajax_get_achievements() {
  */
 function badgeos_ajax_get_feedback() {
 
-	// Parse our passed args
-	$args = array(
-		'post_type'        => $_REQUEST['type'],
-		'posts_per_page'   => $_REQUEST['limit'],
-		'status'           => $_REQUEST['status'],
-		'show_attachments' => $_REQUEST['show_attachments'],
-		'show_comments'    => $_REQUEST['show_comments']
-	);
+	$feedback = badgeos_get_feedback( array(
+		'post_type'        => isset( $_REQUEST['type'] ) ? esc_html( $_REQUEST['type'] ) : '',
+		'posts_per_page'   => isset( $_REQUEST['limit'] ) ? esc_html( $_REQUEST['limit'] ) : '',
+		'status'           => isset( $_REQUEST['status'] ) ? esc_html( $_REQUEST['status'] ) : '',
+		'show_attachments' => isset( $_REQUEST['show_attachments'] ) ? esc_html( $_REQUEST['show_attachments'] ) : '',
+		'show_comments'    => isset( $_REQUEST['show_comments'] ) ? esc_html( $_REQUEST['show_comments'] ) : '',
+		's'                => isset( $_REQUEST['search'] ) ? esc_html( $_REQUEST['search'] ) : '',
+	) );
 
-	// If we're searching, include the search param
-	if ( ! empty( $_REQUEST['search'] ) )
-		$args['s'] = $_REQUEST['search'];
-
-	// If user doesn't have access to settings,
-	// restrict posts to ones they've authored
-	if ( ! badgeos_user_can_manage_submissions( absint( $_REQUEST[ 'user_id' ] ) ) ) {
-		$args['author'] = absint( $_REQUEST['user_id'] );
-	}
-
-	$feedback = badgeos_get_feedback( $args );
-
-	// Send back our successful response
 	wp_send_json_success( array(
-		'message'  => 'Success!',
-		'feedback' => $feedback,
-		'search'   => $_REQUEST['search']
+		'feedback' => $feedback
 	) );
 }
 

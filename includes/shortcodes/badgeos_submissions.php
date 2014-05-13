@@ -85,7 +85,6 @@ add_action( 'init', 'badgeos_register_submissions_list_shortcode');
  */
 function badgeos_display_submissions( $atts = array() ) {
 
-	// Parse our attributes
 	$atts = shortcode_atts( array(
 		'type'             => 'submission',
 		'limit'            => '10',
@@ -96,15 +95,12 @@ function badgeos_display_submissions( $atts = array() ) {
 		'show_comments'    => true
 	), $atts );
 
-	$feedback = badgeos_render_feedback( $atts );
-
-	// Enqueue and localize our JS
-	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
+	$atts['ajax_url'] = admin_url( 'admin-ajax.php', 'relative' );
 	$atts['user_id']  = get_current_user_id();
 	wp_enqueue_script( 'badgeos-achievements' );
 	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
 
-	// Return our rendered content
-	return $feedback;
+	$feedback = badgeos_render_feedback( $atts );
 
+	return $feedback;
 }
