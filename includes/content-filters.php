@@ -443,7 +443,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
  */
 function badgeos_render_feedback( $atts = array() ) {
 
-	$defaults = array(
+	$atts = wp_parse_args( $atts, array(
 		'type'             => 'submission',
 		'limit'            => '10',
 		'status'           => 'all',
@@ -451,8 +451,7 @@ function badgeos_render_feedback( $atts = array() ) {
 		'show_search'      => true,
 		'show_attachments' => true,
 		'show_comments'    => true
-	);
-	$atts = wp_parse_args( $atts, $defaults );
+	) );
 
 	$feedback = badgeos_get_feedback( array(
 		'post_type'        => $atts['type'],
@@ -599,18 +598,19 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 	// Get the connected achievement ID
 	$achievement_id = get_post_meta( $submission->ID, '_badgeos_submission_achievement_id', true );
 	$status = get_post_meta( $submission->ID, '_badgeos_submission_status', true );
+	$submission_author = get_userdata( $submission->post_author );
+	$display_name = is_object( $submission_author ) ? $submission_author->display_name : '';
 
 	// Concatenate our output
 	$output = '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
 
 		// Submission Title
 		$output .= '<h2>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h2>';
-
 		// Submission Meta
 		$output .= '<p class="badgeos-submission-meta">';
-			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-author">%2$s</span><br/>', __( 'Author:', 'badgeos' ), get_userdata( $submission->post_author )->display_name );
+			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-author">%2$s</span><br/>', __( 'Author:', 'badgeos' ), $display_name );
 			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-date">%2$s</span><br/>', __( 'Date:', 'badgeos' ), get_the_time( 'F j, Y h:i a', $submission ) );
-			if ( $achievement_id != $post->ID ) {
+			if ( $achievement_id != $submission->ID ) {
 				$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-link">%2$s</span><br/>', __( 'Achievement:', 'badgeos' ), '<a href="' . get_permalink( $achievement_id ) .'">' . get_the_title( $achievement_id ) . '</a>' );
 			}
 			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-status">%2$s</span><br/>', __( 'Status:', 'badgeos' ), ucfirst( $status ) );
@@ -639,6 +639,7 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 
 	$output .= '</div><!-- .badgeos-submission -->';
 
+
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_submission', $output, $submission );
 }
@@ -657,12 +658,15 @@ function badgeos_render_submission_attachment( $attachment = null ) {
 		$attachment = $post;
 	}
 
+	$userdata = get_userdata( $attachment->post_author );
+	$display_name = is_object( $userdata ) ? $userdata->display_name : '';
+
 	// Concatenate the markup
 	$output = '<li class="badgeos-attachment">';
 	$output .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
 		wp_get_attachment_link( $attachment->ID, 'full', false, null, $attachment->post_title ),
 		get_the_time( 'F j, Y g:i a', $attachment ),
-		get_userdata( $attachment->post_author )->display_name
+		$display_name
 	);
 	$output .= '</li><!-- .badgeos-attachment -->';
 
@@ -721,20 +725,20 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 
 	// Concatenate our output
 	$output = '';
-	$output .= '<div class="badgeos-feedback-buttons">';
+	$output .= '<p class="badgeos-feedback-buttons">';
 		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
 		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="denied">Deny</a>';
 		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
 		$output .= '<input type="hidden" name="user_id" value="' . $user_id . '">';
 		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
 		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
-	$output .= '</div>';
+	$output .= '</p>';
 
 	// Enqueue and localize our JS
 	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
 	$atts['user_id']  = $user_ID;
 	wp_enqueue_script( 'badgeos-achievements' );
-	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
+	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback_buttons', $atts );
 
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );
