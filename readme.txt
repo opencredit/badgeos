@@ -216,6 +216,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 8. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
 
+9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges, submission inboxes, forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
 
