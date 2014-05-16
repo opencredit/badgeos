@@ -726,12 +726,12 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	// Concatenate our output
 	$output = '';
 	$output .= '<p class="badgeos-feedback-buttons">';
-		$output .= '<a href="#" class="button approve" data-feedback-id="' . $feedback_id . '" data-action="approve">Approve</a> ';
-		$output .= '<a href="#" class="button deny" data-feedback-id="' . $feedback_id . '" data-action="denied">Deny</a>';
+		$output .= '<a href="#" class="button approve" data-feedback-id="' . absint( $feedback_id ) . '" data-action="approve">Approve</a> ';
+		$output .= '<a href="#" class="button deny" data-feedback-id="' . absint( $feedback_id ) . '" data-action="denied">Deny</a>';
 		$output .= wp_nonce_field( 'review_feedback', 'badgeos_feedback_review', true, false );
-		$output .= '<input type="hidden" name="user_id" value="' . $user_id . '">';
-		$output .= '<input type="hidden" name="feedback_type" value="' . $feedback_type . '">';
-		$output .= '<input type="hidden" name="achievement_id" value="' . $achievement_id . '">';
+		$output .= '<input type="hidden" name="user_id" value="' . absint( $user_id ) . '">';
+		$output .= '<input type="hidden" name="feedback_type" value="' . esc_attr( $feedback_type ) . '">';
+		$output .= '<input type="hidden" name="achievement_id" value="' . absint( $achievement_id ) . '">';
 	$output .= '</p>';
 
 	// Enqueue and localize our JS
