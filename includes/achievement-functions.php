@@ -715,10 +715,15 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		return $post_id;
 	}
 
+	$thumbnail_id = 0;
+
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
 		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
-		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+
+		if ( $achievement_type ) {
+			$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+		}
 	}
 
 	// If there is no thumbnail set, load in our default image

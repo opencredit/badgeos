@@ -45,6 +45,8 @@ class BadgeOS_Credly {
 
 		$default_settings = array(
 			'api_key' => '',
+			'credly_user' => '',
+			'credly_password' => '',
 			'credly_enable' => empty( $this->credly_settings ) ? 'false' : 'true',
 			'credly_badge_title' => 'post_title',
 			'credly_badge_short_description' => 'post_excerpt',
