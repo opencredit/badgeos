@@ -524,7 +524,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
 	// Award achievement
-	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
 
 	// Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
@@ -1066,7 +1066,7 @@ function badgeos_user_has_access_to_submission_form( $user_id = 0, $achievement_
 	}
 
 	// If user cannot access achievement, they cannot submit anything
-	if ( $has_access && ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id ) ) {
+	if ( $has_access && badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) ) {
 		$has_access = false;
 	}
 
