@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Achievements
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
@@ -36,7 +36,7 @@ function badgeos_add_steps_ui_meta_box() {
 		add_meta_box( 'badgeos_steps_ui', apply_filters( 'badgeos_steps_ui_title', __( 'Required Steps', 'badgeos' ) ), 'badgeos_steps_ui_meta_box', $achievement_type, 'advanced', 'high' );
 	}
 }
-add_action( 'admin_menu', 'badgeos_add_steps_ui_meta_box', 99 );
+add_action( 'add_meta_boxes', 'badgeos_add_steps_ui_meta_box' );
 
 /**
  * Renders the HTML for meta box, refreshes whenever a new step is added
@@ -173,6 +173,13 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		));
 		if ( ! empty( $connected_activities ) )
 			$requirements['achievement_post'] = $connected_activities[0]->ID;
+	}
+	else {
+		$achievement_post = absint( get_post_meta( $step_id, '_badgeos_achievement_post', true ) );
+
+		if ( 0 < $achievement_post ) {
+			$requirements[ 'achievement_post' ] = $achievement_post;
+		}
 	}
 
 	// Available filter for overriding elsewhere
@@ -338,11 +345,12 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 
 	// Grab our achievement type from the AJAX request
 	$achievement_type = $_REQUEST['achievement_type'];
+	$trigger_type = $_REQUEST['trigger_type'];
 	$exclude_posts = (array) $_REQUEST['excluded_posts'];
 	$requirements = badgeos_get_step_requirements( $_REQUEST['step_id'] );
 
 	// If we don't have an achievement type, bail now
-	if ( empty( $achievement_type ) )
+	if ( empty( $achievement_type ) || 0 !== strpos( $trigger_type, 'badgeos_specific_' ) )
 		die();
 
 	// Grab all our posts for this achievement type

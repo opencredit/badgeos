@@ -1,52 +1,52 @@
 # BadgeOS Test Suite [![Build Status](https://travis-ci.org/opencredit/badgeos.png?branch=master)](https://travis-ci.org/opencredit/badgeos) #
 
--------------------------
 
 The BadgeOS Test Suite uses PHPUnit to help us maintain the best possible code quality.
 
 Travis-CI Automated Testing
------------
+-----------------------------
 
 The master branch of BadgeOS is automatically tested on [travis-ci.org](http://travis-ci.org). The image above will show you the latest test's output. Travis-CI will also automatically test all new Pull Requests to make sure they will not break our build.
 
 Quick Start (For Manual Runs)
 -----------------------------
 
-	# Clone this repository
-    git clone git://github.com/opencredit/badgeos.git
-    cd BadgeOS
+### 1. Clone this repository
+```bash
+git clone git://github.com/opencredit/badgeos.git ./
+```
 
-    # Download the WordPress Testing Suite
-	svn co --ignore-externals http://unit-tests.svn.wordpress.org/trunk/ /tmp/wordpress-tests
+### 2. [Install PHPUnit](https://github.com/sebastianbergmann/phpunit#installation)
+This might be tricky. We recommend using [homebrew](http://brew.sh/) because it lets you install lots of things very easily.
 
-    # Copy and edit the WordPress Unit Tests Configuration
-    cp tests/phpunit/includes/unittests-config.travis.php /tmp/wordpress-tests/wp-tests-config.php
+If you use homebrew, you can just run `brew install phpunit`.
 
-Now edit `wp-tests-config.php` in a code editor. Make sure to have an empty database ready (all data will die) and double-check that your path to WordPress is correct.
+### 3. Initialize local testing environment
+If you haven't already installed the WordPress testing library, we have a helpful script to do so for you.
 
-BadgeOS does not need to be in the `wp-content/plugins` directory. For example in Travis-CI's `.travis.yml` we copy WordPress into `tmp/wordpress`
+Note: you'll need to already have `svn`, `wget`, and `mysql` available.
 
-    <?php
+```bash
+./tests/bin/install-wp-tests.sh wordpress_test root '' localhost latest
+```
+* `wordpress_test` is the name of the test database (**all data will be deleted!**)
+* `root` is the MySQL user name
+* `''` is the MySQL user password
+* `localhost` is the MySQL server host
+* `latest` is the WordPress version; could also be `3.7`, `3.6.2` etc.
 
-    /* Path to the WordPress codebase you'd like to test. Add a backslash in the end. */
-    define( 'ABSPATH', 'path-to-WP/' );
-    define( 'DB_NAME', 'badgeos_test' );
-    define( 'DB_USER', 'user' );
-    define( 'DB_PASSWORD', 'password' );
+### 4. Run the tests manually
+Note: MySQL must be running in order for tests to run.
+```bash
+phpunit
+```
 
-    # ...
+### 5. Bonus Round: Run tests automatically before each commit
+All you need to do is run these two commands, and then priort to accepting any commit grunt will run phpunit.
+If a test fails, the commit will be rejected, giving you the opportunity to fix the problem first.
 
-Load up the Terminal and cd into the directory where BadgeOS is stored and run this command:
-
-    phpunit
-
-Please note: MySQL will need to be running otherwise the unit tests will fail and you'll receive WordPress's standard 'Error Establishing a Database Connection.'
-
--------------------------
-
-# External Testing URLs #
-* Travis-CI (automated unit testing): https://travis-ci.org/opencredit/badgeos/
-* Coveralls.io (automated code coverage reports): https://coveralls.io/r/opencredit/badgeos/
-
-Other Supported (manually run):
-* PHPUnit: http://phpunit.de/manual/current/en/index.html
+```bash
+npm install
+grunt githooks
+```
+**Note:** You'll need to install [npm](https://www.npmjs.org/) if that's not available. You could also install this via [homebrew](http://brew.sh/) using `brew install npm`.

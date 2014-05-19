@@ -22,17 +22,10 @@ function badgeos_is_achievement( $post = null ) {
 	// Assume we are working with an achievment object
 	$return = true;
 
-	// If passed an ID, get the post object
-	if ( is_numeric( $post ) )
-		$post = get_post( $post );
-
-	// If $post is NOT an object it cannot be an achievement
-	if ( ! is_object( $post ) )
-		$return = false;
-
 	// If post type is NOT a registered achievement type, it cannot be an achievement
-	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) ) {
 		$return = false;
+	}
 
 	// If we pass both previous tests, this is a valid achievement (with filter to override)
 	return apply_filters( 'badgeos_is_achievement', $return, $post );
@@ -513,16 +506,12 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
-	$post             = get_post($post_id);
+	$post = get_post($post_id);
 
-	// If the user has the authority to do what they're doing,
-	// and the post is one of our achievement types,
+	// If the post is one of our achievement types,
 	// and the achievement is awarded by minimum points
 	if (
-		current_user_can( $minimum_role )
-		&& badgeos_is_achievement( $post )
+		badgeos_is_achievement( $post )
 		&& (
 			'points' == get_post_meta( $post_id, '_badgeos_earned_by', true )
 			|| ( isset( $_POST['_badgeos_earned_by'] ) && 'points' == $_POST['_badgeos_earned_by'] )
@@ -726,10 +715,15 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		return $post_id;
 	}
 
+	$thumbnail_id = 0;
+
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
 		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
-		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+
+		if ( $achievement_type ) {
+			$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+		}
 	}
 
 	// If there is no thumbnail set, load in our default image
@@ -779,3 +773,21 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
+
+/**
+ * Flush the rewrite rules if its a achievement type update and it is published
+ *
+ * @since 1.4.0
+ *
+ * @param string $new_status New achievement status
+ * @param string $old_status Old achievement status
+ * @param string object $post post that is being updated
+ */
+function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
+	if ( 'achievement-type' == $post->post_type && 'publish' == $new_status && 'publish' != $old_status ) {
+		badgeos_register_post_types();
+		badgeos_register_achievement_type_cpt();
+		flush_rewrite_rules();
+	}
+}
+add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
