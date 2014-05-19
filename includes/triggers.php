@@ -151,10 +151,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 			break;
 		case 'badgeos_new_comment' :
 		case 'badgeos_specific_new_comment' :
-			$user_id = 0;
-			if ( is_array( $args[ 1 ] ) && isset( $args[ 1 ][ 'user_id' ] ) ) {
-				$user_id = $args[ 1 ][ 'user_id' ];
-			}
+			$user_id = $args[1];
 			break;
 		default :
 			$user_id = get_current_user_id();
@@ -328,14 +325,25 @@ add_action( 'publish_page', 'badgeos_publish_listener', 0 );
  *
  * @since  1.4.0
  * @param  integer $comment_ID The comment ID
- * @param  array $comment The comment array
+ * @param  array|object $comment The comment array
  * @return void
  */
 function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
+	// Enforce array for both hooks (wp_insert_comment uses object, comment_{status}_comment uses array)
+	if ( is_object( $comment ) ) {
+		$comment = get_object_vars( $comment );
+	}
+
+	// Check if comment is approved
+	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
+		return;
+	}
+
 	// Trigger a comment actions
-	do_action( 'badgeos_specific_new_comment', $comment_ID, $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
-	do_action( 'badgeos_new_comment', $comment_ID, $comment[ 'user_id' ], $comment );
+	do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment );
 
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
+add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );
