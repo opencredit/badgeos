@@ -56,6 +56,7 @@ jQuery(document).ready(function($) {
 		var step_id              = achievement_selector.parent('li').attr('data-step-id');
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
 		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
+		var $post_select         = achievement_selector.siblings( '.select-achievement-post' );
 
 		// If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
@@ -71,8 +72,7 @@ jQuery(document).ready(function($) {
 				},
 				function( response ) {
 
-					var $post_select = achievement_selector.siblings( '.select-achievement-post' ),
-						post_selected = $post_select.val();
+					var post_selected = $post_select.val();
 
 					// Convert <select> a text field if an empty response to allow custom values
 					if ( '' === response ) {
@@ -97,7 +97,7 @@ jQuery(document).ready(function($) {
 
 		// Otherwise, keep our post selector hidden
 		} else {
-			achievement_selector.siblings('.select-achievement-post').hide();
+			$post_select.hide();
 		}
 	});
 	// Trigger a change for our achievement type post selector to determine if it should show
