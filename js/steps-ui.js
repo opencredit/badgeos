@@ -70,8 +70,28 @@ jQuery(document).ready(function($) {
 					excluded_posts: excluded_posts
 				},
 				function( response ) {
-					achievement_selector.siblings('.select-achievement-post').html( response );
-					achievement_selector.siblings('.select-achievement-post').show();
+
+					var $post_select = achievement_selector.siblings( '.select-achievement-post' ),
+						post_selected = $post_select.val();
+
+					// Convert <select> a text field if an empty response to allow custom values
+					if ( '' === response ) {
+						if ( $post_select.is( 'select' ) ) {
+							$post_select.replaceWith( '<input type="text" value="" class="' + $post_select.attr( 'class' ) + '" />' );
+						}
+					}
+					else {
+						// Make <select> field
+						if ( $post_select.is( 'input' ) ) {
+							$post_select.replaceWith( '<select class="' + $post_select.attr( 'class' ) + '"></select>' );
+						}
+
+						$post_select.html( response );
+					}
+
+					$post_select.val( post_selected );
+					$post_select.show();
+
 				}
 			);
 

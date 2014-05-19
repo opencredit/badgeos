@@ -23,7 +23,7 @@ function badgeos_get_activity_triggers() {
 			// WordPress-specific
 			'wp_login'             => __( 'Log in to Website', 'badgeos' ),
 			'badgeos_new_comment'          => __( 'Comment on a post', 'badgeos' ),
-			'badgeos_new_comment_specific' => __( 'Comment on a specific post', 'badgeos' ),
+			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
 
@@ -321,7 +321,7 @@ add_action( 'publish_page', 'badgeos_publish_listener', 0 );
 /**
  * Listener function for comment publishing
  *
- * This triggers separate hooks: badgeos_new_comment, badgeos_new_comment_specific
+ * This triggers separate hooks: badgeos_new_comment, badgeos_specific_new_comment
  *
  * @since  1.4.0
  * @param  integer $comment_ID The comment ID
