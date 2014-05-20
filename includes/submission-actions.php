@@ -468,12 +468,12 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 	$email = get_bloginfo( 'admin_email' );
 
 	// add email addresses set for site
-	if ( isset( $badgeos_settings[ 'submission_email_addresses' ] ) && !empty( $badgeos_settings[ 'submission_email_addresses' ] ) ) {
+	if ( isset( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) && !empty( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) ) {
 		if ( !is_array( $email ) ) {
 			$email = explode( ',', $email );
 		}
 
-		$email = array_merge( $email, explode( ',', $badgeos_settings[ 'submission_email_addresses' ] ) );
+		$email = array_merge( $email, explode( ',', $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) );
 		$email = array_unique( array_filter( $email ) );
 		$email = implode( ',', $email );
 	}
