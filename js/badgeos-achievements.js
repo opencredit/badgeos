@@ -182,7 +182,7 @@ jQuery( function( $ ) {
 	} );
 
 	// Listen for users clicking the show/hide details link
-	$( '.badgeos-single-achievement' ).on( 'click', '.badgeos-open-close-switch a', function( event ) {
+	$( '#badgeos-achievements-container,.badgeos-single-achievement' ).on( 'click', '.badgeos-open-close-switch a', function( event ) {
 
 		event.preventDefault();
 
