@@ -1240,9 +1240,6 @@ function badgeos_parse_feedback_args( $args = array() ) {
 		'status'      => 'all',
 	) );
 
-	// Eliminate case-sensitivitiy
-	$args = array_map( 'strtolower', $args );
-
 	// Handler for auto-approved results
 	$args['show_auto_approved'] = in_array( $args['status'], array( 'all', 'auto-approved' ) );
 	$args['status'] = ( 'auto-approved' == $args['status'] ) ? 'approved' : $args['status'];
