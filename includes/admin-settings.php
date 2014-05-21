@@ -747,7 +747,7 @@ function badgeos_get_manager_capability() {
  */
 function badgeos_get_submission_manager_capability() {
 	$badgeos_settings = get_option( 'badgeos_settings' );
-	$submission_manager_role = isset( $badgeos_settings[ 'submission_manager_role' ] ) ? $badgeos_settings[ 'submission_manager_role' ] : badgeos_get_manager_capability();
+	return isset( $badgeos_settings[ 'submission_manager_role' ] ) ? $badgeos_settings[ 'submission_manager_role' ] : badgeos_get_manager_capability();
 }
 
 /**
