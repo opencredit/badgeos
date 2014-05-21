@@ -717,7 +717,7 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	global $post, $user_ID;
 
 	// Use the current post ID if no ID provided
-	$feedback_id    = ! empty( $feedback_id ) ? $feedback_id : ( isset( $post->ID ) ? $post->ID : 0 );
+	$feedback_id    = ! empty( $feedback_id ) ? ( is_array( $feedback_id ) ? $feedback_id[0] : $feedback_id ) : ( isset( $post->ID ) ? $post->ID : 0 );
 	$feedback       = get_post( $feedback_id );
 	$feedback_type  = get_post_type( $feedback_id );
 	$achievement_id = get_post_meta( $feedback_id, "_badgeos_{$feedback_type}_achievement_id", true );
