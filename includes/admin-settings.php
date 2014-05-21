@@ -219,6 +219,7 @@ function badgeos_settings_page() {
                             <option value="edit_posts" <?php selected( $submission_manager_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
                             <option value="read" <?php selected( $submission_manager_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
                         </select>
+						<p class="description"><?php _e( 'Note: in order to administrate the submission and nomination posts in the admin area, managers will need post publishing capabilities (Author role or better).', 'badgeos' ); ?></p>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
