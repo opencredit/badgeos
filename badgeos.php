@@ -238,15 +238,8 @@ class BadgeOS {
 	 */
 	function plugin_menu() {
 
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
 		// Set minimum role setting for menus
-		$minimum_role = 'manage_options';
-
-		if ( isset( $badgeos_settings[ 'minimum_role' ] ) ) {
-			$minimum_role = $badgeos_settings[ 'minimum_role' ];
-		}
+		$minimum_role = badgeos_get_manager_capability();
 
 		// Create main menu
 		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
