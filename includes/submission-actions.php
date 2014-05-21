@@ -468,12 +468,12 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 	$email = get_bloginfo( 'admin_email' );
 
 	// add email addresses set for site
-	if ( isset( $badgeos_settings[ 'submission_email_addresses' ] ) && !empty( $badgeos_settings[ 'submission_email_addresses' ] ) ) {
+	if ( isset( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) && !empty( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) ) {
 		if ( !is_array( $email ) ) {
 			$email = explode( ',', $email );
 		}
 
-		$email = array_merge( $email, explode( ',', $badgeos_settings[ 'submission_email_addresses' ] ) );
+		$email = array_merge( $email, explode( ',', $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) );
 		$email = array_unique( array_filter( $email ) );
 		$email = implode( ',', $email );
 	}
@@ -765,7 +765,7 @@ function badgeos_set_submission_status_submission_pending( $messages, $args ) {
 			To view all submissions, visit: %4$s', 'badgeos' ),
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
-			html_entity_decode( esc_url_raw( get_edit_post_link( $args[ 'submission_id' ] ) ) ),
+			admin_url( sprintf( 'post.php?post=%d&action=edit', $args[ 'submission_id' ] ) ),
 			admin_url( 'edit.php?post_type=submission' )
 		);
 
@@ -808,7 +808,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 			get_the_title( $args[ 'achievement_id' ] ),
 			$args[ 'user_data' ]->display_name,
 			$args[ 'from_user_data' ]->display_name,
-			html_entity_decode( esc_url_raw( get_edit_post_link( $args[ 'submission_id' ] ) ) ),
+			admin_url( sprintf( 'post.php?post=%d&action=edit', $args[ 'submission_id' ] ) ),
 			admin_url( 'edit.php?post_type=nomination' )
 		);
 
