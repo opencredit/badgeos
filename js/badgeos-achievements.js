@@ -18,7 +18,7 @@ jQuery( function( $ ) {
 	// Hide comment form on feedback posts with toggle
 	var $submissions_wrapper = $('.badgeos-feedback-container');
 	badgeos_hide_submission_comments( $submissions_wrapper );
-	$submissions_wrapper.on( 'click', '.submission-comment-toggle', function() {
+	$submissions_wrapper.on( 'click', '.submission-comment-toggle', function( event ) {
 		event.preventDefault();
 
 		var $button = $(this);
