@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
 "POT-Creation-Date: 2014-05-16 09:22-0300\n"
-"PO-Revision-Date: 2014-05-16 09:23-0300\n"
+"PO-Revision-Date: 2014-05-23 17:17-0300\n"
 "Last-Translator: Victor Perin <victor_perin@nerdhitech.com.br>\n"
 "Language-Team: BadgeOS\n"
 "Language: pt_BR\n"
@@ -330,7 +330,7 @@ msgstr "Descrição:"
 
 #: ../includes/admin-settings.php:537
 msgid "Criteria: "
-msgstr ""
+msgstr "Critério:"
 
 #: ../includes/admin-settings.php:547
 msgid "Image: "
@@ -471,7 +471,7 @@ msgstr ""
 
 #: ../includes/cmb/example-functions.php:57
 msgid "Website URL"
-msgstr ""
+msgstr "URL do Site"
 
 #: ../includes/cmb/example-functions.php:65
 msgid "Test Text Email"
@@ -484,7 +484,7 @@ msgstr ""
 #: ../includes/cmb/example-functions.php:78
 #: ../includes/cmb/example-functions.php:79
 msgid "Time zone"
-msgstr ""
+msgstr "Fuso Horário"
 
 #: ../includes/cmb/example-functions.php:84
 msgid "Test Date Picker"
@@ -534,19 +534,19 @@ msgstr ""
 #: ../includes/cmb/example-functions.php:167
 #: ../includes/cmb/example-functions.php:178
 msgid "Option One"
-msgstr ""
+msgstr "Primeira Opção"
 
 #: ../includes/cmb/example-functions.php:157
 #: ../includes/cmb/example-functions.php:168
 #: ../includes/cmb/example-functions.php:179
 msgid "Option Two"
-msgstr ""
+msgstr "Segunda Opção"
 
 #: ../includes/cmb/example-functions.php:158
 #: ../includes/cmb/example-functions.php:169
 #: ../includes/cmb/example-functions.php:180
 msgid "Option Three"
-msgstr ""
+msgstr "Terceira Opção"
 
 #: ../includes/cmb/example-functions.php:162
 msgid "Test Radio inline"
@@ -598,11 +598,11 @@ msgstr "Testar Imagem"
 
 #: ../includes/cmb/example-functions.php:233
 msgid "Upload an image or enter a URL."
-msgstr ""
+msgstr "Envie uma imagem ou insira uma URL"
 
 #: ../includes/cmb/example-functions.php:238
 msgid "Multiple Files"
-msgstr ""
+msgstr "Multiplos Arquivos"
 
 #: ../includes/cmb/example-functions.php:239
 msgid "Upload or add multiple images/attachments."
@@ -629,31 +629,31 @@ msgstr ""
 
 #: ../includes/cmb/example-functions.php:281
 msgid "Extra Info"
-msgstr ""
+msgstr "Informação Extra"
 
 #: ../includes/cmb/example-functions.php:288
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: ../includes/cmb/example-functions.php:295
 msgid "Facebook URL"
-msgstr ""
+msgstr "URL do Facebook"
 
 #: ../includes/cmb/example-functions.php:301
 msgid "Twitter URL"
-msgstr ""
+msgstr "URL do Twitter"
 
 #: ../includes/cmb/example-functions.php:307
 msgid "Google+ URL"
-msgstr ""
+msgstr "URL do Google+"
 
 #: ../includes/cmb/example-functions.php:313
 msgid "Linkedin URL"
-msgstr ""
+msgstr "URL do Linkedin"
 
 #: ../includes/cmb/example-functions.php:319
 msgid "User Field"
-msgstr ""
+msgstr "Campo do Usuário"
 
 #: ../includes/cmb/example-functions.php:332
 msgid "Theme Options Metabox"
@@ -661,11 +661,11 @@ msgstr ""
 
 #: ../includes/cmb/example-functions.php:336
 msgid "Site Background Color"
-msgstr ""
+msgstr "Cor de Fundo do Site"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:47
 msgid "Please Try Again"
-msgstr ""
+msgstr "Por favor, tente novamente"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:131
 msgid "Remove Embed"
@@ -684,12 +684,12 @@ msgstr "Adicionar Coluna"
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:499
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:542
 msgid "Remove"
-msgstr ""
+msgstr "Remover"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:477
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:515
 msgid "Add or Upload File"
-msgstr ""
+msgstr "Adicionar ou Enviar Arquivo"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:488
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:534
@@ -699,32 +699,32 @@ msgstr "Remover Imagem"
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:499
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:542
 msgid "File:"
-msgstr ""
+msgstr "Arquivo:"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:499
 #: ../includes/cmb/helpers/cmb_Meta_Box_types.php:542
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: ../includes/cmb/init.php:243
 msgid "Clear"
-msgstr ""
+msgstr "Limpar"
 
 #: ../includes/cmb/init.php:244
 msgid "Default"
-msgstr ""
+msgstr "Padrão"
 
 #: ../includes/cmb/init.php:245
 msgid "Select Color"
-msgstr ""
+msgstr "Selecionar Cor"
 
 #: ../includes/cmb/init.php:246
 msgid "Current Color"
-msgstr ""
+msgstr "Cor Atual"
 
 #: ../includes/cmb/init.php:1226
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: ../includes/content-filters.php:265
 #, php-format
@@ -869,7 +869,7 @@ msgstr "Incluir Evidência"
 
 #: ../includes/credly.php:876
 msgid "Include Testimonial"
-msgstr ""
+msgstr "Incluir Testemunho"
 
 #: ../includes/credly.php:884
 msgid "Expiration ( In days; 0 = never )"
@@ -1038,19 +1038,19 @@ msgstr ""
 
 #: ../includes/meta-boxes.php:168 ../includes/meta-boxes.php:209
 msgid "View Achievement"
-msgstr ""
+msgstr "Ver Conquista"
 
 #: ../includes/meta-boxes.php:178
 msgid "Nomination Data"
-msgstr ""
+msgstr "Data da Nomação"
 
 #: ../includes/meta-boxes.php:196
 msgid "Nominee"
-msgstr ""
+msgstr "Nomeado"
 
 #: ../includes/meta-boxes.php:202
 msgid "Nominated By"
-msgstr ""
+msgstr "Nomeado por"
 
 #: ../includes/meta-boxes.php:244
 msgid "Submission Attachments"
@@ -1294,44 +1294,44 @@ msgstr "Nenhum passo encontrado no lixo"
 #: ../includes/post-types.php:87 ../includes/post-types.php:93
 #: ../includes/post-types.php:99
 msgid "Submissions"
-msgstr ""
+msgstr "Submissões"
 
 #: ../includes/post-types.php:88
 msgid "Submission"
-msgstr ""
+msgstr "Submissão"
 
 #: ../includes/post-types.php:90
 msgid "Add New Submission"
-msgstr ""
+msgstr "Adicionar Nova Submissão"
 
 #: ../includes/post-types.php:91
 msgid "Edit Submission"
-msgstr ""
+msgstr "Editar Submissão"
 
 #: ../includes/post-types.php:92
 msgid "New Submission"
-msgstr ""
+msgstr "Nova Submissão"
 
 #: ../includes/post-types.php:94
 msgid "View Submission"
-msgstr ""
+msgstr "Visualizar Submissão"
 
 #: ../includes/post-types.php:95
 msgid "Search Submissions"
-msgstr ""
+msgstr "Procurar Submissões"
 
 #: ../includes/post-types.php:96
 msgid "No submissions found"
-msgstr ""
+msgstr "Nenhuma submissão encontrada"
 
 #: ../includes/post-types.php:97
 msgid "No submissions found in Trash"
-msgstr ""
+msgstr "Sem submissões encontradas na Lixeira"
 
 #: ../includes/post-types.php:119 ../includes/post-types.php:125
 #: ../includes/post-types.php:131
 msgid "Nominations"
-msgstr ""
+msgstr "Nomeações"
 
 #: ../includes/post-types.php:120
 msgid "Nomination"
@@ -1520,7 +1520,7 @@ msgstr ""
 
 #: ../includes/shortcodes.php:271
 msgid "user"
-msgstr ""
+msgstr "usuário"
 
 #: ../includes/shortcodes.php:271
 msgid "The ID of the user to display."
@@ -1528,7 +1528,7 @@ msgstr ""
 
 #: ../includes/shortcodes.php:272
 msgid "type"
-msgstr ""
+msgstr "tipo"
 
 #: ../includes/shortcodes.php:272
 msgid "The achievement type to display from the user."
@@ -1536,7 +1536,7 @@ msgstr ""
 
 #: ../includes/shortcodes.php:273
 msgid "limit"
-msgstr ""
+msgstr "limite"
 
 #: ../includes/shortcodes.php:273
 msgid "The maximum amount of achievements to display."
@@ -1734,7 +1734,7 @@ msgstr "Pendente"
 
 #: ../includes/submission-actions.php:259
 msgid "Show All Statuses"
-msgstr ""
+msgstr "Mostar todos os estatos"
 
 #: ../includes/submission-actions.php:479
 #, php-format
@@ -1756,7 +1756,7 @@ msgstr "Comentários:"
 
 #: ../includes/submission-actions.php:758
 msgid "Nomination Form"
-msgstr ""
+msgstr "Formulário de Nomeação"
 
 #: ../includes/submission-actions.php:759
 #: ../includes/submission-actions.php:806
@@ -1892,11 +1892,11 @@ msgstr ""
 
 #: ../includes/widgets/earned-user-achievements-widget.php:9
 msgid "Displays all achievements earned by the logged in user"
-msgstr ""
+msgstr "Mostrar todas as medalhas conquistadas pelo usuário que está logado"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:11
 msgid "BadgeOS Earned User Achievements"
-msgstr ""
+msgstr "BadgeOS Conquistas conquistadas por usuários"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:23
 msgid "Title"
@@ -1904,15 +1904,15 @@ msgstr "Título"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:24
 msgid "Number to display (0 = all)"
-msgstr ""
+msgstr "Número a mostrar (0 = todos)"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:25
 msgid "Display user's total points"
-msgstr ""
+msgstr "Mostrar total de pontos do usuário"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:26
 msgid "Display only the following Achievement Types:"
-msgstr ""
+msgstr "Mostrar apenas os seguintes Tipos de Conquistas:"
 
 #: ../includes/widgets/earned-user-achievements-widget.php:81
 #, php-format
