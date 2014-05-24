@@ -31,19 +31,30 @@ jQuery( function( $ ) {
 	// Get feedback posts
 	function badgeos_get_feedback() {
 		$( '.badgeos-spinner' ).show();
+
+		// Get initial data
+		var ajax_data = badgeos_feedback.ajax_data;
+
+		// Set data from form
+		if ( 'undefined' != typeof badgeos_feedback.filters && badgeos_feedback.filters ) {
+			var field_name,
+				field_selector;
+
+			for ( field_name in badgeos_feedback.filters ) {
+				field_selector = badgeos_feedback.filters[ field_name ];
+
+				if ( '' == field_selector ) {
+					ajax_data[ field_name ] = '';
+				}
+				else {
+					ajax_data[ field_name ] = $( field_selector ).val();
+				}
+			}
+		}
+
 		$.ajax( {
 			url : badgeos_feedback.ajax_url,
-			data : {
-				'action' : 'get-feedback',
-				'type' : badgeos_feedback.type,
-				'limit' : badgeos_feedback.limit,
-				'status' : $( '.badgeos-feedback-filter select' ).val(),
-				'show_attachments' : badgeos_feedback.show_attachments,
-				'show_comments' : badgeos_feedback.show_comments,
-				'user_id' : badgeos_feedback.user_id,
-				'wpms' : badgeos_feedback.wpms,
-				'search' : $( '.badgeos-feedback-search-input' ).val()
-			},
+			data : ajax_data,
 			dataType : 'json',
 			success : function( response ) {
 				$( '.badgeos-spinner' ).hide();
