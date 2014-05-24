@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
 "POT-Creation-Date: 2014-05-16 09:22-0300\n"
-"PO-Revision-Date: 2014-05-23 17:17-0300\n"
+"PO-Revision-Date: 2014-05-24 07:55-0300\n"
 "Last-Translator: Victor Perin <victor_perin@nerdhitech.com.br>\n"
 "Language-Team: BadgeOS\n"
 "Language: pt_BR\n"
@@ -424,7 +424,7 @@ msgstr ""
 #: ../includes/cmb/example-functions.php:33
 #: ../includes/cmb/example-functions.php:262
 msgid "Test Text"
-msgstr ""
+msgstr "Texto de teste"
 
 #: ../includes/cmb/example-functions.php:34
 #: ../includes/cmb/example-functions.php:44
@@ -459,7 +459,7 @@ msgstr ""
 #: ../includes/cmb/example-functions.php:320
 #: ../includes/cmb/example-functions.php:337
 msgid "field description (optional)"
-msgstr ""
+msgstr "descrição do campo (opicional)"
 
 #: ../includes/cmb/example-functions.php:43
 msgid "Test Text Small"
@@ -578,19 +578,19 @@ msgstr ""
 
 #: ../includes/cmb/example-functions.php:218
 msgid "Check One"
-msgstr ""
+msgstr "Primeira Checagem"
 
 #: ../includes/cmb/example-functions.php:219
 msgid "Check Two"
-msgstr ""
+msgstr "Segunda Checagem"
 
 #: ../includes/cmb/example-functions.php:220
 msgid "Check Three"
-msgstr ""
+msgstr "Terceira Checagem"
 
 #: ../includes/cmb/example-functions.php:225
 msgid "Test wysiwyg"
-msgstr ""
+msgstr "Teste wysiwyg"
 
 #: ../includes/cmb/example-functions.php:232
 msgid "Test Image"
@@ -606,11 +606,11 @@ msgstr "Multiplos Arquivos"
 
 #: ../includes/cmb/example-functions.php:239
 msgid "Upload or add multiple images/attachments."
-msgstr ""
+msgstr "Enviar ou adicional multiplas imagens/anexos"
 
 #: ../includes/cmb/example-functions.php:244
 msgid "oEmbed"
-msgstr ""
+msgstr "oEmbed"
 
 #: ../includes/cmb/example-functions.php:245
 msgid ""
@@ -669,7 +669,7 @@ msgstr "Por favor, tente novamente"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:131
 msgid "Remove Embed"
-msgstr ""
+msgstr "Remover Embed"
 
 #: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:134
 #, php-format
