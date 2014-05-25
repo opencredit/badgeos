@@ -85,7 +85,15 @@ add_action( 'init', 'badgeos_register_submissions_list_shortcode');
  */
 function badgeos_display_submissions( $atts = array() ) {
 
+	$defaults = array(
+		'type'             => 'submission',
+		'show_attachments' => false,
+		'show_comments'    => false
+	);
+
+	$atts = wp_parse_args( $defaults, $atts );
+
 	// Call submissions shortcode handler
-	return badgeos_shortcode_submissions_handler( $atts, 'submission', 'badgeos_submissions' );
+	return badgeos_shortcode_submissions_handler( $atts, 'badgeos_submissions' );
 
 }

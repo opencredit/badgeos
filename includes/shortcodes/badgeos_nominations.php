@@ -65,12 +65,15 @@ add_action( 'init', 'badgeos_register_nominations_list_shortcode' );
  */
 function badgeos_display_nominations( $atts = array() ) {
 
-	$defaults_override = array(
+	$defaults = array(
+		'type'             => 'nomination',
 		'show_attachments' => false,
 		'show_comments'    => false
 	);
 
+	$atts = wp_parse_args( $defaults, $atts );
+
 	// Call submissions shortcode handler
-	return badgeos_shortcode_submissions_handler( $atts, 'nomination', 'badgeos_nominations', $defaults_override );
+	return badgeos_shortcode_submissions_handler( $atts, 'badgeos_nominations' );
 
 }

@@ -148,21 +148,18 @@ function badgeos_shortcode_help_attributes( $key, $value ) {
  *
  * @return string
  */
-function badgeos_shortcode_submissions_handler( $atts = array(), $type = 'submission', $shortcode = '', $defaults_override = array() ) {
+function badgeos_shortcode_submissions_handler( $atts = array(), $shortcode = '' ) {
 
 	// Setup defaults and allow override
-	$defaults = array_merge(
-		array(
-			'type'             => $type,
-			'limit'            => '10',
-			'status'           => 'all',
-			'show_filter'      => true,
-			'show_search'      => true,
-			'show_attachments' => true,
-			'show_comments'    => true,
-			'wpms'             => false
-		),
-		$defaults_override
+	$defaults = array(
+		'type'             => 'submission',
+		'limit'            => '10',
+		'status'           => 'all',
+		'show_filter'      => true,
+		'show_search'      => true,
+		'show_attachments' => true,
+		'show_comments'    => true,
+		'wpms'             => false
 	);
 
 	// Parse shortcode attributes
