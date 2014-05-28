@@ -27,34 +27,15 @@ jQuery( function( $ ) {
 		$button.hide();
 	} );
 
-
 	// Get feedback posts
 	function badgeos_get_feedback() {
 		$( '.badgeos-spinner' ).show();
 
-		// Get initial data
-		var ajax_data = badgeos_feedback.ajax_data;
-
-		// Set data from form
-		if ( 'undefined' != typeof badgeos_feedback.filters && badgeos_feedback.filters ) {
-			var field_name,
-				field_selector;
-
-			for ( field_name in badgeos_feedback.filters ) {
-				field_selector = badgeos_feedback.filters[ field_name ];
-
-				if ( '' == field_selector ) {
-					ajax_data[ field_name ] = '';
-				}
-				else {
-					ajax_data[ field_name ] = $( field_selector ).val();
-				}
-			}
-		}
+		badgeos_setup_feedback_filters();
 
 		$.ajax( {
 			url : badgeos_feedback.ajax_url,
-			data : ajax_data,
+			data : badgeos_feedback,
 			dataType : 'json',
 			success : function( response ) {
 				$( '.badgeos-spinner' ).hide();
@@ -67,6 +48,17 @@ jQuery( function( $ ) {
 				}
 			}
 		} );
+	}
+
+	// Setup feedback filters
+	function badgeos_setup_feedback_filters() {
+		if ( 'undefined' != typeof badgeos_feedback.filters && badgeos_feedback.filters ) {
+			for ( var field_selector in badgeos_feedback.filters ) {
+				if ( '' !== badgeos_feedback.filters[ field_selector ] ) {
+					badgeos_feedback[ field_selector ] = $( badgeos_feedback.filters[ field_selector ] ).val();
+				}
+			}
+		}
 	}
 
 	// Approve/deny feedback
