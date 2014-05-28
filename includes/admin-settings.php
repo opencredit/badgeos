@@ -224,43 +224,43 @@ function badgeos_settings_page() {
 				<?php } /* endif current_user_can( 'manage_options' ); */ ?>
 				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
 					<td>
-                        <select id="submission_email" name="badgeos_settings[submission_email]">
-                            <option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                            <option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                        </select>
+						<select id="submission_email" name="badgeos_settings[submission_email]">
+							<option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+							<option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+						</select>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="submission_email_addresses"><?php _e( 'Notification email addresses:', 'badgeos' ); ?></label></th>
 					<td>
-                        <input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
+						<input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
 						<p class="description"><?php _e( 'Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email.', 'badgeos' ); ?></p>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Debug Mode:', 'badgeos' ); ?></label></th>
 					<td>
 						<select id="debug_mode" name="badgeos_settings[debug_mode]">
-                            <option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                            <option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                        </select>
+							<option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+							<option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+						</select>
 					</td>
 				</tr>
 				<?php
-                // check if multisite is enabled & if plugin is network activated
-                if ( is_super_admin() ){
-	                if ( is_multisite() ) {
-	                ?>
-	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-	                        <td>
-	                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-	                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-	                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	            	<?php
-	                }
-            	}
-        		do_action( 'badgeos_settings', $badgeos_settings ); ?>
+				// check if multisite is enabled & if plugin is network activated
+				if ( is_super_admin() ){
+					if ( is_multisite() ) {
+					?>
+						<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+							<td>
+								<select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
+									<option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+									<option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+								</select>
+							</td>
+						</tr>
+					<?php
+					}
+				}
+				do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
