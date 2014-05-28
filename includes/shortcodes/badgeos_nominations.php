@@ -64,28 +64,16 @@ add_action( 'init', 'badgeos_register_nominations_list_shortcode' );
  * @return string 	   HTML markup.
  */
 function badgeos_display_nominations( $atts = array() ) {
-	global $user_ID;
 
-	// Parse our attributes
-	$atts = shortcode_atts( array(
+	$defaults = array(
 		'type'             => 'nomination',
-		'limit'            => '10',
-		'status'           => 'all',
-		'show_filter'      => true,
-		'show_search'      => true,
 		'show_attachments' => false,
 		'show_comments'    => false
-	), $atts, 'badgeos_nominations' );
+	);
 
-	$feedback = badgeos_render_feedback( $atts );
+	$atts = wp_parse_args( $defaults, $atts );
 
-	// Enqueue and localize our JS
-	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
-	$atts['user_id']  = $user_ID;
-	wp_enqueue_script( 'badgeos-achievements' );
-	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
-
-	// Return our rendered content
-	return $feedback;
+	// Call submissions shortcode handler
+	return badgeos_shortcode_submissions_handler( $atts, 'badgeos_nominations' );
 
 }
