@@ -46,8 +46,8 @@ function badgeos_submission_form( $atts = array() ) {
 
 		// If submission data was submitted, output success message
 		if ( isset( $_REQUEST['achievement_id'] ) && $_REQUEST['achievement_id'] == $atts['achievement_id'] ) {
-			// Don't award if this achievement was earned in the past 10 seconds
-			$recently_earned = badgeos_get_user_achievements( array( 'user_id' => get_current_user_id(), 'achievement_id' => $_REQUEST['achievement_id'], 'since' => ( time() - 10 ) ) );
+			// Don't award if this achievement was earned in the past 30 seconds
+			$recently_earned = badgeos_get_user_achievements( array( 'user_id' => get_current_user_id(), 'achievement_id' => $_REQUEST['achievement_id'], 'since' => ( time() - 30 ) ) );
 			if ( empty( $recently_earned ) ) {
 				if ( badgeos_save_submission_data() ) {
 					$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
