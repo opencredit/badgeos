@@ -27,11 +27,14 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  */
 function badgeos_settings_validate( $input = '' ) {
 
+	// Fetch existing settings
+	$original_settings = get_option( 'badgeos_settings' );
+
 	// Sanitize the settings data submitted
-	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
-	$input['submission_manager_role'] = sanitize_text_field( $input['submission_manager_role'] );
-	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
-	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
+	$input['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
+	$input['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
+	$input['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
+	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
