@@ -183,15 +183,16 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 		'show_names' => true, // Show field names on the left
 		'fields'     => array(
 			array(
-				'name' => __( 'Status', 'badgeos' ),
-				'desc' => __( 'Approve or Deny this entry.', 'badgeos' ),
-				'id'   => $prefix . 'nomination_status',
-				'type' => 'select',
-				'options' => array(
-					array( 'name' => __( 'Pending Review', 'badgeos' ), 'value' => 'pending', ),
-					array( 'name' => __( 'Approved', 'badgeos' ), 'value' => 'approved', ),
-					array( 'name' => __( 'Denied', 'badgeos' ), 'value' => 'denied', ),
-				),
+				'name' => __( 'Current Status', 'badgeos' ),
+				'desc' => ucfirst( get_post_meta( $post_id, $prefix . 'nomination_status', true ) ),
+				'id'   => $prefix . 'nomination_current',
+				'type' => 'text_only',
+			),
+			array(
+				'name' => __( 'Change Status', 'badgeos' ),
+				'desc' => badgeos_render_feedback_buttons( $post_id ),
+				'id'   => $prefix . 'nomination_update',
+				'type' => 'text_only',
 			),
 			array(
 				'name' => __( 'Nominee', 'badgeos' ),
