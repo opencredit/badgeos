@@ -451,6 +451,7 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
 
 	$args[ 'user_id' ] = absint( $args[ 'user_id' ] );
 	$args[ 'from_user_id' ] = absint( $args[ 'from_user_id' ] );
+	$args[ 'from_user_id' ] = ( !empty( $args[ 'from_user_id' ] ) ) ? absint( $args[ 'from_user_id' ] ) : get_post_meta( $submission_id, '_badgeos_nominating_user_id', true );
 
 	if ( $args[ 'user_id' ] && !$args[ 'user_data' ] ) {
 		$args[ 'user_data' ] = get_userdata( $args[ 'user_id' ] );
