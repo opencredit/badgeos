@@ -488,7 +488,7 @@ function badgeos_render_feedback_search( $atts = array() ) {
 	if ( 'false' !== $atts['show_search'] ) {
 		$output .= '<div class="badgeos-feedback-search">';
 			$output .= '<form class="badgeos-feedback-search-form" action="" method="POST">';
-			$output .= __( 'Search:', 'badgeos' ) . ' <input type="text" class="badgeos-feedback-search-input" name="feedback_search" value="'. $search .'">';
+			$output .= '<input type="text" class="badgeos-feedback-search-input" name="feedback_search" value="'. $search .'">';
 			$output .= '<input type="submit" class="badgeos-feedback-search-button" name="feedback_search_button" value="' . __( 'Search', 'badgeos' ) . '">';
 			$output .= '</form>';
 		$output .= '</div><!-- .badgeos-feedback-search -->';
@@ -511,7 +511,7 @@ function badgeos_render_feedback_filters( $atts = array() ) {
 	if ( 'false' !== $atts['show_filter'] ) {
 
 		$output .= '<div class="badgeos-feedback-filter">';
-			$output .= __( 'Filter:', 'badgeos' );
+			$output .= '<label for="status_filter">' . __( 'Status:', 'badgeos' ) . '</label>';
 			$output .= ' <select name="status_filter" id="status_filter">';
 				$output .= '<option' . selected( $atts['status'], 'all', false ) . ' value="all">' . __( 'All', 'badgeos' ) . '</option>';
 				$output .= '<option' . selected( $atts['status'], 'pending', false ) . ' value="pending">' . __( 'Pending', 'badgeos' ) . '</option>';
