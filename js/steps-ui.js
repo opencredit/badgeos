@@ -135,15 +135,16 @@ function badgeos_update_steps(e) {
 
 		// Cache our step object
 		var step = jQuery(this);
+		var trigger_type = step.find( '.select-trigger-type' ).val();
 
 		// Setup our step object
 		var step_details = {
 			"step_id"          : step.attr( 'data-step-id' ),
 			"order"            : step.find( 'input[name="order"]' ).val(),
 			"required_count"   : step.find( '.required-count' ).val(),
-			"trigger_type"     : step.find( '.select-trigger-type' ).val(),
+			"trigger_type"     : trigger_type,
 			"achievement_type" : step.find( '.select-achievement-type' ).val(),
-			"achievement_post" : step.find( '.select-achievement-post' ).last().val(),
+			"achievement_post" : 'badgeos_specific_new_comment' === trigger_type ? step.find( 'input.select-achievement-post' ).val() : step.find( 'select.select-achievement-post' ).val(),
 			"title"            : step.find( '.step-title .title' ).val()
 		};
 

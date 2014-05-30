@@ -132,7 +132,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			<option value=""></option>
 		</select>
 
-		<input type="text" size="5" placeholder="Post ID" value="<?php echo absint( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
+		<input type="text" size="5" placeholder="Post ID" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
@@ -269,6 +269,7 @@ function badgeos_update_steps_ajax_handler() {
 
 			// Clear all relation data
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
+			delete_post_meta( $step_id, '_badgeos_achievement_post' );
 
 			// Flip between our requirement types and make an appropriate connection
 			switch ( $trigger_type ) {
