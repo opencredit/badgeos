@@ -306,7 +306,6 @@ function badgeos_publish_listener( $post_id = 0 ) {
 
 	// Trigger a badgeos_new_{$post_type} action
 	$post = get_post( $post_id );
-
 	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author, $post );
 
 }
@@ -337,7 +336,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
 	// Trigger a comment actions
 	do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
-	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment );
+	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
