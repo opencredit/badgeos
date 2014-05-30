@@ -20,6 +20,20 @@ function badgeos_register_settings() {
 add_action( 'admin_init', 'badgeos_register_settings' );
 
 /**
+ * Grant BadgeOS manager role ability to edit BadgeOS settings.
+ *
+ * @since  alpha
+ *
+ * @param  string $capability Required capability.
+ * @return string             Required capability.
+ */
+function badgeos_edit_settings_capability( $capability ) {
+	return badgeos_get_manager_capability();
+}
+add_filter( 'option_page_capability_badgeos_settings_group', 'badgeos_edit_settings_capability' );
+add_filter( 'option_page_capability_credly_settings_group', 'badgeos_edit_settings_capability' );
+
+/**
  * BadgeOS Settings validation
  *
  * @param  string $input The input we want to validate
