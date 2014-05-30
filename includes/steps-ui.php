@@ -165,7 +165,7 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 	);
 
 	// If the step requires a specific achievement
-	if ( !empty( $requirements['achievement_type'] ) ) {
+	if ( ! empty( $requirements['achievement_type'] ) ) {
 		$connected_activities = @get_posts( array(
 			'post_type'        => $requirements['achievement_type'],
 			'posts_per_page'   => 1,
@@ -175,10 +175,8 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		));
 		if ( ! empty( $connected_activities ) )
 			$requirements['achievement_post'] = $connected_activities[0]->ID;
-	}
-	else {
+	} elseif ( 'badgeos_specific_new_comment' === $requirements['trigger_type'] ) {
 		$achievement_post = absint( get_post_meta( $step_id, '_badgeos_achievement_post', true ) );
-
 		if ( 0 < $achievement_post ) {
 			$requirements[ 'achievement_post' ] = $achievement_post;
 		}

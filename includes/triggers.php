@@ -22,7 +22,7 @@ function badgeos_get_activity_triggers() {
 		array(
 			// WordPress-specific
 			'wp_login'             => __( 'Log in to Website', 'badgeos' ),
-			'badgeos_new_comment'          => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
@@ -144,11 +144,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 			$user_id = $args[0];
 			break;
 		case 'badgeos_new_post' :
-		case 'badgeos_specific_new_post' :
 		case 'badgeos_new_page' :
-		case 'badgeos_specific_new_page' :
-			$user_id = $args[1];
-			break;
 		case 'badgeos_new_comment' :
 		case 'badgeos_specific_new_comment' :
 			$user_id = $args[1];
