@@ -31,7 +31,6 @@ jQuery(document).ready(function($) {
 		// Grab our selected trigger type and achievement selector
 		var trigger_type = $(this).val();
 		var achievement_selector = $(this).siblings('.select-achievement-type');
-		console.log( achievement_selector );
 
 		// If we're working with achievements, show the achievement selecter (otherwise, hide it)
 		if ( 'any-achievement' == trigger_type || 'all-achievements' == trigger_type || 'specific-achievement' == trigger_type ) {
@@ -76,11 +75,9 @@ jQuery(document).ready(function($) {
 
 		// Otherwise, keep our post selector hidden
 		} else {
-			achievement_selector.siblings('select.select-achievement-post').hide();
+			achievement_selector.siblings('.select-achievement-post').hide();
 			if ( 'badgeos_specific_new_comment' == trigger_type ) {
 				achievement_selector.siblings('input.select-achievement-post').show();
-			} else {
-				achievement_selector.siblings('input.select-achievement-post').hide();
 			}
 		}
 	});
