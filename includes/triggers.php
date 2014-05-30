@@ -22,7 +22,8 @@ function badgeos_get_activity_triggers() {
 		array(
 			// WordPress-specific
 			'wp_login'             => __( 'Log in to Website', 'badgeos' ),
-			'comment_post'         => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
 
@@ -144,6 +145,8 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 			break;
 		case 'badgeos_new_post' :
 		case 'badgeos_new_page' :
+		case 'badgeos_new_comment' :
+		case 'badgeos_specific_new_comment' :
 			$user_id = $args[1];
 			break;
 		default :
@@ -303,7 +306,38 @@ function badgeos_publish_listener( $post_id = 0 ) {
 
 	// Trigger a badgeos_new_{$post_type} action
 	$post = get_post( $post_id );
-	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author );
+	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author, $post );
+
 }
 add_action( 'publish_post', 'badgeos_publish_listener', 0 );
 add_action( 'publish_page', 'badgeos_publish_listener', 0 );
+
+/**
+ * Listener function for comment publishing
+ *
+ * This triggers separate hooks: badgeos_new_comment, badgeos_specific_new_comment
+ *
+ * @since  1.4.0
+ * @param  integer $comment_ID The comment ID
+ * @param  array|object $comment The comment array
+ * @return void
+ */
+function badgeos_approved_comment_listener( $comment_ID, $comment ) {
+
+	// Enforce array for both hooks (wp_insert_comment uses object, comment_{status}_comment uses array)
+	if ( is_object( $comment ) ) {
+		$comment = get_object_vars( $comment );
+	}
+
+	// Check if comment is approved
+	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
+		return;
+	}
+
+	// Trigger a comment actions
+	do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+
+}
+add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
+add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );
