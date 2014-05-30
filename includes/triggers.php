@@ -307,7 +307,6 @@ function badgeos_publish_listener( $post_id = 0 ) {
 	// Trigger a badgeos_new_{$post_type} action
 	$post = get_post( $post_id );
 
-	do_action( "badgeos_specific_new_{$post->post_type}", $post_id, $post->post_author, $post );
 	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author, $post );
 
 }
