@@ -192,10 +192,6 @@ function badgeos_credly_api_key_errors() {
  * @return void
  */
 function badgeos_settings_page() {
-	flush_rewrite_rules();
-	if ( badgeos_is_debug_mode() )
-		echo 'debug mode is on';
-
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
