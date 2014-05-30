@@ -476,7 +476,7 @@ function badgeos_render_feedback( $atts = array() ) {
 /**
  * Render feedback search input.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  array  $atts Shortcode attributes.
  * @return string       HTML Markup.
@@ -500,7 +500,7 @@ function badgeos_render_feedback_search( $atts = array() ) {
 /**
  * Render feedback filter inputs.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  array  $atts Shortcode atts.
  * @return string       HTML Markup.

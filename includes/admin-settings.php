@@ -22,7 +22,7 @@ add_action( 'admin_init', 'badgeos_register_settings' );
 /**
  * Grant BadgeOS manager role ability to edit BadgeOS settings.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  string $capability Required capability.
  * @return string             Required capability.
@@ -740,7 +740,7 @@ add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10,
 /**
  * Get capability required for BadgeOS administration.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @return string User capability.
  */
@@ -752,7 +752,7 @@ function badgeos_get_manager_capability() {
 /**
  * Get capability required for Submission management.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @return string User capability.
  */
@@ -764,7 +764,7 @@ function badgeos_get_submission_manager_capability() {
 /**
  * Check if a user can manage submissions.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  integer $user_id User ID.
  * @return bool             True if user can manaage submissions, otherwise false.

@@ -1228,7 +1228,7 @@ function badgeos_get_feedback( $args = array() ) {
 /**
  * Parse and prepare feedback list args.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  array  $args Feedback args.
  * @return array        Modified feedback args.

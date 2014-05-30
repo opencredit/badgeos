@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 3.8.1
-Stable tag: 1.4.0
+Stable tag: 1.3.9
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -227,12 +227,19 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: Submission Notifications to users who have made a submission.
 * Added: Several new submission notification types - new submission, new comment, and submission status change
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
+* Added: Trigger for commenting on specific posts.
+* Added: Many hooks for modifying shortcodes, submission lists, and more.
+* Updated: Revised trigger for commenting on posts to only award when comment is approved.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
 * Updated: Submission Lists are now highly customizable via WP hooks. The search input, filter inputs, and even the results can be altered programatically.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
-* Fixed: Prevent users from repeatedly earning auto-approved submissions
-* Fixed: Submissions List status filter now indicates the displayed status on page load
+* Updated: BadgeOS management role selector is hidden on the settings page to non-admins.
+* Updated: Badgeos management role selector now excludes contributor and subscriber roles.
+* Fixed: BadgeOS settings can now be modified by the minimum selected management role.
+* Fixed: Prevent users from repeatedly earning auto-approved submissions.
+* Fixed: Submissions List status filter now indicates the displayed status on page load.
+* Fixed: Lots of other minor bugs.
 
 = 1.3.5 =
 * Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
@@ -349,14 +356,21 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
 * Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
-* Added: Several new submission notification types: new submission, new comment, and submission status change
+* Added: Several new submission notification types - new submission, new comment, and submission status change
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
+* Added: Trigger for commenting on specific posts.
+* Added: Many hooks for modifying shortcodes, submission lists, and more.
+* Updated: Revised trigger for commenting on posts to only award when comment is approved.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
 * Updated: Submission Lists are now highly customizable via WP hooks. The search input, filter inputs, and even the results can be altered programatically.
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
-* Fixed: Prevent users from repeatedly earning auto-approved submissions
-* Fixed: Submissions List status filter now indicates the displayed status on page load
+* Updated: BadgeOS management role selector is hidden on the settings page to non-admins.
+* Updated: Badgeos management role selector now excludes contributor and subscriber roles.
+* Fixed: BadgeOS settings can now be modified by the minimum selected management role.
+* Fixed: Prevent users from repeatedly earning auto-approved submissions.
+* Fixed: Submissions List status filter now indicates the displayed status on page load.
+* Fixed: Lots of other minor bugs.
 
 = 1.3.5 =
 * Fixed: Eliminated an error when attempting to use Credly Badge Builder over SSL
