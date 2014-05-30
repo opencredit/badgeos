@@ -56,48 +56,32 @@ jQuery(document).ready(function($) {
 		var step_id              = achievement_selector.parent('li').attr('data-step-id');
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
 		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
-		var $post_select         = achievement_selector.siblings( '.select-achievement-post' );
 
 		// If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
-		if ( ( '' !== achievement_type && 'specific-achievement' == trigger_type ) || 0 === trigger_type.indexOf( 'badgeos_specific_' ) ) {
+		if ( '' !== achievement_type && 'specific-achievement' == trigger_type ) {
 			$.post(
 				ajaxurl,
 				{
 					action: 'post_select_ajax',
 					achievement_type: achievement_type,
-					trigger_type: trigger_type,
 					step_id: step_id,
 					excluded_posts: excluded_posts
 				},
 				function( response ) {
-
-					var post_selected = $post_select.val();
-
-					// Convert <select> a text field if an empty response to allow custom values
-					if ( '' === response ) {
-						if ( $post_select.is( 'select' ) ) {
-							$post_select.replaceWith( '<input type="text" value="" class="' + $post_select.attr( 'class' ) + '" />' );
-						}
-					}
-					else {
-						// Make <select> field
-						if ( $post_select.is( 'input' ) ) {
-							$post_select.replaceWith( '<select class="' + $post_select.attr( 'class' ) + '"></select>' );
-						}
-
-						$post_select.html( response );
-					}
-
-					$post_select.val( post_selected );
-					$post_select.show();
-
+					achievement_selector.siblings('select.select-achievement-post').html( response );
+					achievement_selector.siblings('select.select-achievement-post').show();
 				}
 			);
 
 		// Otherwise, keep our post selector hidden
 		} else {
-			$post_select.hide();
+			achievement_selector.siblings('select.select-achievement-post').hide();
+			if ( 'badgeos_specific_new_comment' == trigger_type ) {
+				achievement_selector.siblings('input.select-achievement-post').show();
+			} else {
+				achievement_selector.siblings('input.select-achievement-post').hide();
+			}
 		}
 	});
 	// Trigger a change for our achievement type post selector to determine if it should show
@@ -158,12 +142,12 @@ function badgeos_update_steps(e) {
 		// Setup our step object
 		var step_details = {
 			"step_id"          : step.attr( 'data-step-id' ),
-			"order"            : step.children( 'input[name="order"]' ).val(),
-			"required_count"   : step.children( '.required-count' ).val(),
-			"trigger_type"     : step.children( '.select-trigger-type' ).val(),
-			"achievement_type" : step.children( '.select-achievement-type' ).val(),
-			"achievement_post" : step.children( '.select-achievement-post' ).val(),
-			"title"            : step.children( '.step-title' ).children( '.title' ).val()
+			"order"            : step.find( 'input[name="order"]' ).val(),
+			"required_count"   : step.find( '.required-count' ).val(),
+			"trigger_type"     : step.find( '.select-trigger-type' ).val(),
+			"achievement_type" : step.find( '.select-achievement-type' ).val(),
+			"achievement_post" : step.find( '.select-achievement-post' ).last().val(),
+			"title"            : step.find( '.step-title .title' ).val()
 		};
 
 		// Allow external functions to add their own data to the array

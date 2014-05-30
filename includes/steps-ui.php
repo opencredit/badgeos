@@ -132,6 +132,8 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			<option value=""></option>
 		</select>
 
+		<input type="text" size="5" placeholder="Post ID" value="<?php echo absint( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
+
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
 		<input class="required-count" type="text" size="2" maxlength="2" value="<?php echo $count; ?>" placeholder="1">
@@ -274,14 +276,10 @@ function badgeos_update_steps_ajax_handler() {
 				// Connect the step to ANY of the given achievement type
 				case 'any-achievement' :
 					$title = sprintf( __( 'any %s', 'badgeos' ), $achievement_type );
-				break;
-
-				// Connect the step to ALL of the given achievement type
+					break;
 				case 'all-achievements' :
 					$title = sprintf( __( 'all %s', 'badgeos' ), $achievement_type );
-				break;
-
-				// Connect the step to a specific achievement
+					break;
 				case 'specific-achievement' :
 					p2p_create_connection(
 						$step['achievement_type'] . '-to-step',
@@ -294,8 +292,11 @@ function badgeos_update_steps_ajax_handler() {
 						)
 					);
 					$title = '"' . get_the_title( $step['achievement_post'] ) . '"';
-				break;
-
+					break;
+				case 'badgeos_specific_new_comment' :
+					update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
+					$title = sprintf( __( 'comment on post %d', 'badgeos' ),  $step['achievement_post'] );
+					break;
 				default :
 					$triggers = badgeos_get_activity_triggers();
 					$title = $triggers[$trigger_type];
@@ -345,13 +346,13 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 
 	// Grab our achievement type from the AJAX request
 	$achievement_type = $_REQUEST['achievement_type'];
-	$trigger_type = $_REQUEST['trigger_type'];
 	$exclude_posts = (array) $_REQUEST['excluded_posts'];
 	$requirements = badgeos_get_step_requirements( $_REQUEST['step_id'] );
 
 	// If we don't have an achievement type, bail now
-	if ( empty( $achievement_type ) || 0 !== strpos( $trigger_type, 'badgeos_specific_' ) )
+	if ( empty( $achievement_type ) ) {
 		die();
+	}
 
 	// Grab all our posts for this achievement type
 	$achievements = get_posts( array(
