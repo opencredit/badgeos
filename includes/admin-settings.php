@@ -20,6 +20,20 @@ function badgeos_register_settings() {
 add_action( 'admin_init', 'badgeos_register_settings' );
 
 /**
+ * Grant BadgeOS manager role ability to edit BadgeOS settings.
+ *
+ * @since  alpha
+ *
+ * @param  string $capability Required capability.
+ * @return string             Required capability.
+ */
+function badgeos_edit_settings_capability( $capability ) {
+	return badgeos_get_manager_capability();
+}
+add_filter( 'option_page_capability_badgeos_settings_group', 'badgeos_edit_settings_capability' );
+add_filter( 'option_page_capability_credly_settings_group', 'badgeos_edit_settings_capability' );
+
+/**
  * BadgeOS Settings validation
  *
  * @param  string $input The input we want to validate
@@ -27,11 +41,14 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  */
 function badgeos_settings_validate( $input = '' ) {
 
+	// Fetch existing settings
+	$original_settings = get_option( 'badgeos_settings' );
+
 	// Sanitize the settings data submitted
-	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
-	$input['submission_manager_role'] = sanitize_text_field( $input['submission_manager_role'] );
-	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
-	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
+	$input['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
+	$input['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
+	$input['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
+	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
@@ -175,10 +192,6 @@ function badgeos_credly_api_key_errors() {
  * @return void
  */
 function badgeos_settings_page() {
-	flush_rewrite_rules();
-	if ( badgeos_is_debug_mode() )
-		echo 'debug mode is on';
-
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
@@ -199,68 +212,65 @@ function badgeos_settings_page() {
 			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
-				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
-					<td>
-                        <select id="minimum_role" name="badgeos_settings[minimum_role]">
-                            <option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-                            <option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-                            <option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-                            <option value="edit_posts" <?php selected( $minimum_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
-                            <option value="read" <?php selected( $minimum_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
-                        </select>
-					</td>
-				</tr>
-				<tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
-					<td>
-                        <select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
-                            <option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-                            <option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-                            <option value="publish_posts" <?php selected( $submission_manager_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-                            <option value="edit_posts" <?php selected( $submission_manager_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
-                            <option value="read" <?php selected( $submission_manager_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
-                        </select>
-						<p class="description"><?php _e( 'Note: in order to administrate the submission and nomination posts in the admin area, managers will need post publishing capabilities (Author role or better).', 'badgeos' ); ?></p>
-					</td>
-				</tr>
+				<?php if ( current_user_can( 'manage_options' ) ) { ?>
+					<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="minimum_role" name="badgeos_settings[minimum_role]">
+								<option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+								<option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+								<option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
+								<option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+								<option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+								<option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+							</select>
+						</td>
+					</tr>
+				<?php } /* endif current_user_can( 'manage_options' ); */ ?>
 				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
 					<td>
-                        <select id="submission_email" name="badgeos_settings[submission_email]">
-                            <option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                            <option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                        </select>
+						<select id="submission_email" name="badgeos_settings[submission_email]">
+							<option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+							<option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+						</select>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="submission_email_addresses"><?php _e( 'Notification email addresses:', 'badgeos' ); ?></label></th>
 					<td>
-                        <input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
+						<input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
 						<p class="description"><?php _e( 'Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email.', 'badgeos' ); ?></p>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Debug Mode:', 'badgeos' ); ?></label></th>
 					<td>
 						<select id="debug_mode" name="badgeos_settings[debug_mode]">
-                            <option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                            <option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                        </select>
+							<option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+							<option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+						</select>
 					</td>
 				</tr>
 				<?php
-                // check if multisite is enabled & if plugin is network activated
-                if ( is_super_admin() ){
-	                if ( is_multisite() ) {
-	                ?>
-	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-	                        <td>
-	                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-	                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-	                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	            	<?php
-	                }
-            	}
-        		do_action( 'badgeos_settings', $badgeos_settings ); ?>
+				// check if multisite is enabled & if plugin is network activated
+				if ( is_super_admin() ){
+					if ( is_multisite() ) {
+					?>
+						<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+							<td>
+								<select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
+									<option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+									<option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+								</select>
+							</td>
+						</tr>
+					<?php
+					}
+				}
+				do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
