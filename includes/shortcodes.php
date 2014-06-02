@@ -323,10 +323,13 @@ function badgeos_nomination_form( $atts = array() ) {
 
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
-
+		$saved = false;
+		
 		// If we've just saved nomination data
-		if ( badgeos_save_nomination_data() )
+		if ( ! $saved && badgeos_save_nomination_data() ) {
+			$saved = true;
 			$output .= sprintf( '<p>%s</p>', __( 'Nomination saved successfully.', 'badgeos' ) );
+		}
 
 		// Return the user's nominations
 		if ( badgeos_check_if_user_has_nomination( $user_ID, $atts['achievement_id'] ) )
@@ -390,9 +393,11 @@ function badgeos_submission_form( $atts = array() ) {
 
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
+		$saved = false;
 
 		// If submission data was saved, output success message
-		if ( badgeos_save_submission_data() ) {
+		if ( ! $saved && badgeos_save_submission_data() ) {
+			$saved = true;
 			$output .= sprintf( '<p>%s</p>', __( 'Submission saved successfully.', 'badgeos' ) );
 		}
 
