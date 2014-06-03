@@ -1206,19 +1206,24 @@ function badgeos_get_feedback( $args = array() ) {
 	}
 
 	$args = badgeos_parse_feedback_args( $args );
-	$feedback_posts = get_posts( $args );
 	$output = '';
+	if ( empty( $args ) ) {
+		$output .= '<p>' . __( 'Sorry, no results to display', 'badgeos' ) . '</p>';
+	} else {
+		$feedback_posts = get_posts( $args );
 
-	if ( ! empty( $feedback_posts ) ) {
-		$output .= '<div class="badgeos-submissions">';
-		foreach( $feedback_posts as $feedback ) {
-			if ( badgeos_is_submission_auto_approved( $feedback->ID ) && false === $args['show_auto_approved'] ) {
-				continue;
+
+		if ( ! empty( $feedback_posts ) ) {
+			$output .= '<div class="badgeos-submissions">';
+			foreach( $feedback_posts as $feedback ) {
+				if ( badgeos_is_submission_auto_approved( $feedback->ID ) && false === $args['show_auto_approved'] ) {
+					continue;
+				}
+				$output .= call_user_func_array( "badgeos_render_{$feedback->post_type}", array( $feedback, $args ) );
 			}
-			$output .= call_user_func_array( "badgeos_render_{$feedback->post_type}", array( $feedback, $args ) );
-		}
 
-		$output .= '</div><!-- badgeos-submissions -->';
+			$output .= '</div><!-- badgeos-submissions -->';
+		}
 	}
 
 	return apply_filters( 'badgeos_get_submissions', $output, $args );
