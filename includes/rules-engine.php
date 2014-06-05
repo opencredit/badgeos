@@ -158,7 +158,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 
 	// Patch for WordPress to support recursive actions, specifically for badgeos_award_achievement
 	// Because global iteration is fun, assuming we can get this fixed for WordPress 3.9
-	$is_recursed_filter = ( 'badgeos_award_achievement' == current_filter() && version_compare( $wp_version, '3.9', '<' ) );
+	$is_recursed_filter = ( 'badgeos_award_achievement' == current_filter() );
 	$current_key = null;
 
 	// Get current position
