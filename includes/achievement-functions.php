@@ -800,3 +800,194 @@ function badgeos_flush_rewrite_rules() {
 	badgeos_register_achievement_type_cpt();
 	flush_rewrite_rules();
 }
+
+/**
+ * Update all dependent data if achievement type name has changed.
+ *
+ * @since  alpha
+ *
+ * @param  array $data      Post data.
+ * @param  array $post_args Post args.
+ * @return array            Updated post data.
+ */
+function badgeos_maybe_update_achievement_type( $data = '', $post_args = '' ) {
+	if ( badgeos_achievement_type_changed( $post_args ) ) {
+		$original_type = get_post( $post_args['ID'] )->post_name;
+		$new_type = wp_unique_post_slug( sanitize_title( $post_args['post_title'] ), $post_args['ID'], $post_args['post_status'], $post_args['post_type'], $post_args['post_parent'] );
+		$data['post_name'] = badgeos_update_achievement_types( $original_type, $new_type );
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
+
+/**
+ * Check if an achievement type name has changed.
+ *
+ * @since  alpha
+ *
+ * @param  array $post_args Post args.
+ * @return bool             True if name has changed, otherwise false.
+ */
+function badgeos_achievement_type_changed( $post_args = array() ) {
+	return (
+		'achievement-type' === $post_args['post_type']
+		&& $post_args['ID']
+		&& get_post( $post_args['ID'] )->post_title !== $post_args['post_title']
+	);
+}
+
+/**
+ * Replace all instances of one achievement type with another.
+ *
+ * @since  alpha
+ *
+ * @param  string $original_type Original achievement type.
+ * @param  string $new_type      New achievement type.
+ * @return string                New achievement type.
+ */
+function badgeos_update_achievement_types( $original_type = '', $new_type = '' ) {
+	badgeos_update_achievements_achievement_types( $original_type, $new_type );
+	badgeos_update_p2p_achievement_types( $original_type, $new_type );
+	badgeos_update_earned_meta_achievement_types( $original_type, $new_type );
+	badgeos_update_active_meta_achievement_types( $original_type, $new_type );
+	badgeos_flush_rewrite_rules();
+	return $new_type;
+}
+
+/**
+ * Change all achievements of one type to a new type.
+ *
+ * @since alpha
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_achievements_achievement_types( $original_type = '', $new_type = '' ) {
+	$items = get_posts( array(
+		'posts_per_page' => -1,
+		'post_status'    => 'any',
+		'post_type'      => $original_type,
+		'fields'         => 'id',
+	) );
+	foreach ( $items as $item ) {
+		set_post_type( $item->ID, $new_type );
+	}
+}
+
+/**
+ * Change all p2p connections of one achievement type to a new type.
+ *
+ * @since alpha
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_p2p_achievement_types( $original_type = '', $new_type = '' ) {
+	global $wpdb;
+	$p2p_relationships = array(
+		"step-to-{$original_type}" => "step-to-{$new_type}",
+		"{$original_type}-to-step" => "{$new_type}-to-step",
+	);
+	foreach ( $p2p_relationships as $old => $new ) {
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->p2p SET p2p_type = %s WHERE p2p_type = %s", $new, $old ) );
+	}
+}
+
+/**
+ * Change all earned meta from one achievement type to another.
+ *
+ * @since alpha
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_earned_meta_achievement_types( $original_type = '', $new_type = '' ) {
+	$metas = badgeos_get_unserialized_achievement_metas( '_badgeos_achievements', $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $meta ) {
+			foreach ( $meta->meta_value as $site_id => $achievements ) {
+				$meta->meta_value[ $site_id ] = badgeos_update_meta_achievement_types( $achievements, $original_type, $new_type );
+			}
+			update_user_meta( $meta->user_id, $meta->meta_key, $meta->meta_value );
+		}
+	}
+}
+
+/**
+ * Change all active meta from one achievement type to another.
+ *
+ * @since alpha
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_active_meta_achievement_types( $original_type = '', $new_type = '' ) {
+	$metas = badgeos_get_unserialized_achievement_metas( '_badgeos_active_achievements', $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $meta ) {
+			$meta->meta_value = badgeos_update_meta_achievement_types( $meta->meta_value, $original_type, $new_type );
+			update_user_meta( $meta->user_id, $meta->meta_key, $meta->meta_value );
+		}
+	}
+}
+
+/**
+ * Get unserialized user achievement metas.
+ *
+ * @since  alpha
+ *
+ * @param  string $meta_key      Meta key.
+ * @param  string $original_type Achievement type.
+ * @return array                 User achievement metas.
+ */
+function badgeos_get_unserialized_achievement_metas( $meta_key = '', $original_type = '' ) {
+	$metas = badgeos_get_achievement_metas( $meta_key, $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $key => $meta ) {
+			$metas[ $key ]->meta_value = maybe_unserialize( $meta->meta_value );
+		}
+	}
+	return $metas;
+}
+
+/**
+ * Get serialized user achievement metas.
+ *
+ * @since  alpha
+ *
+ * @param  string $meta_key      Meta key.
+ * @param  string $original_type Achievement type.
+ * @return array                 User achievement metas.
+ */
+function badgeos_get_achievement_metas( $meta_key = '', $original_type = '' ) {
+	global $wpdb;
+	return $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT *
+		FROM   $wpdb->usermeta
+		WHERE  meta_key = %s
+		       AND meta_value LIKE '%%%s%%'
+		",
+		$meta_key,
+		$original_type
+	) );
+}
+
+/**
+ * Change user achievement meta from one achievement type to another.
+ *
+ * @since alpha
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_meta_achievement_types( $achievements = array(), $original_type = '', $new_type = '' ) {
+	if ( is_array( $achievements ) && ! empty( $achievements ) ) {
+		foreach ( $achievements as $key => $achievement ) {
+			if ( $achievement->post_type === $original_type ) {
+				$achievements[ $key ]->post_type = $new_type;
+			}
+		}
+	}
+	return $achievements;
+}
