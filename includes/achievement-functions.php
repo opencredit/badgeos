@@ -775,19 +775,28 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
 
 /**
- * Flush the rewrite rules if its a achievement type update and it is published
+ * Flush rewrite rules whenever an achievement type is published.
  *
  * @since 1.4.0
  *
- * @param string $new_status New achievement status
- * @param string $old_status Old achievement status
- * @param string object $post post that is being updated
+ * @param string $new_status New status.
+ * @param string $old_status Old status.
+ * @param object $post       Post object.
  */
 function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
-	if ( 'achievement-type' == $post->post_type && 'publish' == $new_status && 'publish' != $old_status ) {
-		badgeos_register_post_types();
-		badgeos_register_achievement_type_cpt();
-		flush_rewrite_rules();
+	if ( 'achievement-type' === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
+		badgeos_flush_rewrite_rules();
 	}
 }
 add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
+
+/**
+ * Register achievement types and flush rewrite rules.
+ *
+ * @since alpha
+ */
+function badgeos_flush_rewrite_rules() {
+	badgeos_register_post_types();
+	badgeos_register_achievement_type_cpt();
+	flush_rewrite_rules();
+}
