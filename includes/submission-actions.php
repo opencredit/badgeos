@@ -27,7 +27,7 @@ function badgeos_save_nomination_data() {
 	return badgeos_create_nomination(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		sanitize_text_field( $_POST['badgeos_nomination_content'] ),
+		esc_textarea( $_POST['badgeos_nomination_content'] ),
 		absint( $_POST['badgeos_nomination_user_id'] ),
 		absint( absint( $_POST['user_id'] ) )
 	);
@@ -49,8 +49,8 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 	if ( ! badgeos_check_if_user_has_nomination( absint( $user_nominated ), absint( $achievement_id ) ) ) {
 
 		$submission_data = array(
-			'post_title'	=>	sanitize_text_field( $title ),
-			'post_content'	=>	sanitize_text_field( $content ),
+			'post_title'	=>	esc_html( $title ),
+			'post_content'	=>	esc_text_area( $content ),
 			'post_status'	=>	'publish',
 			'post_author'	=>	absint( $user_nominated ),
 			'post_type'		=>	'nomination',
@@ -58,9 +58,6 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 
 		//insert the post into the database
 		if ( $new_post_id = wp_insert_post( $submission_data ) ) {
-			//save the submission status metadata
-			add_post_meta( $new_post_id, '_badgeos_nomination_status', 'pending' );
-
 			//save the achievement id metadata
 			add_post_meta( $new_post_id, '_badgeos_nomination_achievement_id', absint( $achievement_id ) );
 
@@ -72,41 +69,15 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 
 			do_action( 'badgeos_save_nomination', $new_post_id );
 
-			//load BadgeOS settings
-			$badgeos_settings = get_option( 'badgeos_settings' );
+			// Submission status workflow
+			$status_args = array(
+				'achievement_id' => $achievement_id,
+				'user_id' => $user_nominated,
+				'from_user_id' => $user_nominating,
+				'submission_type' => 'nomination'
+			);
 
-			//check if nomination emails are enabled
-			if ( $badgeos_settings['submission_email'] != 'disabled' ) {
-
-				$nominee_data = get_userdata( absint( $user_nominated ) );
-				$nominating_data = get_userdata( absint( $user_nominating ) );
-
-				//set the admin email address
-				$admin_email = apply_filters( 'badgeos_nomination_notify_email', get_bloginfo( 'admin_email' ) );
-
-				//set the email subject
-				$subject = 'Nomination: '.get_the_title( absint( $achievement_id ) ). ' from ' .$nominating_data->display_name;
-				$subject = apply_filters( 'badgeos_nomination_notify_subject', $subject );
-
-				//set the email message
-				$message = 'A new nomination has been received:
-
-	In response to: ' .get_the_title( absint( $achievement_id ) ).'
-	Nominee: '.$nominee_data->display_name.'
-	Nominated by: '.$nominating_data->display_name.'
-
-	Review the complete submission and approve or deny it at:
-	'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $new_post_id ) ) ) ).'
-
-	To view all submissions, visit:
-	'.admin_url( 'edit.php?post_type=nomination' );
-
-				$message = apply_filters( 'badgeos_nomination_notify_message', $message );
-
-				//send notification email to admin
-				wp_mail( $admin_email, $subject, $message );
-
-			}
+			badgeos_set_submission_status( $new_post_id, 'pending', $status_args );
 
 			return true;
 
@@ -154,7 +125,7 @@ add_filter( 'post_row_actions', 'badgeos_hide_quick_edit' );
 function badgeos_add_submission_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
- 	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
+	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
 	$column_status = array( 'status' => __( 'Status', 'badgeos' ) );
 
 	$columns = array_slice( $columns, 0, 2, true ) + $column_content + array_slice( $columns, 2, NULL, true );
@@ -180,7 +151,7 @@ function badgeos_add_nomination_columns( $columns = array() ) {
 
 	$column_content = array( 'content' => __( 'Content', 'badgeos' ) );
 	$column_userid = array( 'user' => __( 'User', 'badgeos' ) );
- 	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
+	//$column_action = array( 'action' => __( 'Action', 'badgeos' ) );
 	$column_status = array( 'status' => __( 'Status', 'badgeos' ) );
 
 	$columns = array_slice( $columns, 0, 2, true ) + $column_content + array_slice( $columns, 2, NULL, true );
@@ -211,7 +182,7 @@ function badgeos_submission_column_action( $column = '' ) {
 			$user_id = ( isset( $_GET['post_type'] ) && 'submission' == $_GET['post_type'] ) ? $post->post_author : get_post_meta( $post->ID, '_badgeos_submission_user_id', true );
 
 			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'approve', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Approve', 'badgeos' ).'</a>&nbsp;&nbsp;';
-			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'deny', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Deny', 'badgeos' ).'</a>';
+			echo '<a class="button-secondary" href="'.wp_nonce_url( add_query_arg( array( 'badgeos_status' => 'denied', 'post_id' => absint( $post->ID ), 'user_id' => absint( $user_id ) ) ), 'badgeos_status_action' ).'">'.__( 'Deny', 'badgeos' ).'</a>';
 			break;
 
 		case 'content':
@@ -246,19 +217,23 @@ add_action( 'manage_posts_custom_column', 'badgeos_submission_column_action', 10
  * @return void
  */
 function badgeos_add_submission_dropdown_filters() {
-    global $typenow;
+	global $typenow;
 
 	if ( $typenow == 'submission' ) {
-        //array of current status values available
-        $submission_statuses = array( __( 'Approve', 'badgeos' ), __( 'Deny', 'badgeos' ), __( 'Pending', 'badgeos' ) );
+		//array of current status values available
+		$submission_statuses = array(
+			'approve' => __( 'Approve', 'badgeos' ),
+			'denied'  => __( 'Deny', 'badgeos' ),
+			'pending' => __( 'Pending', 'badgeos' ),
+		);
 
 		$current_status = ( isset( $_GET['badgeos_submission_status'] ) ) ? $_GET['badgeos_submission_status'] : '';
 
 		//output html for status dropdown filter
 		echo "<select name='badgeos_submission_status' id='badgeos_submission_status' class='postform'>";
 		echo "<option value=''>" .__( 'Show All Statuses', 'badgeos' ).'</option>';
-		foreach ( $submission_statuses as $status ) {
-			echo '<option value="'.strtolower( $status ).'"  '.selected( $current_status, strtolower( $status ) ).'>' .$status .'</option>';
+		foreach ( $submission_statuses as $status_key => $status ) {
+			echo '<option value="'.strtolower( $status_key ).'"  '.selected( $current_status, $status_key ).'>' .$status .'</option>';
 		}
 		echo '</select>';
 	}
@@ -299,32 +274,30 @@ add_filter( 'pre_get_posts', 'badgeos_submission_status_filter' );
  */
 function badgeos_process_submission_review( $post_id = 0 ) {
 
-	// Confirm we're deailing with either a submission or nomination post type,
-	// and our nonce is valid
-	// and the user is allowed to edit the post
-	// and we've gained an approved status
 	if (
 		!empty( $_POST )
-		&& isset( $_POST['post_type'] )
-		&& ( 'submission' == $_POST['post_type'] || 'nomination' == $_POST['post_type'] ) //verify post type is submission or nomination
-		&& isset( $_POST['wp_meta_box_nonce'] )
-		&& wp_verify_nonce( $_POST['wp_meta_box_nonce'], 'init.php' ) //verify nonce for security
-		&& current_user_can( 'edit_post', $post_id ) //check if current user has permission to edit this submission/nomination
-		&& ( 'approved' == $_POST['_badgeos_submission_status'] || 'approved' == $_POST['_badgeos_nomination_status']  ) //verify user is approving a submission or nomination
-		&& get_post_meta( $post_id, '_badgeos_nomination_status', true ) != 'approved' //if nomination is already approved, skip it
-		&& get_post_meta( $post_id, '_badgeos_submission_status', true ) != 'approved' //if submission is already approved, skip it
+		&& isset( $_POST[ 'post_type' ] ) // verify post_type is set
+		&& in_array( $_POST[ 'post_type' ], array( 'submission', 'nomination' ) ) // verify post type is submission/nomination
+		&& isset( $_POST[ 'wp_meta_box_nonce' ] ) // verify nonce is set
+		&& wp_verify_nonce( $_POST[ 'wp_meta_box_nonce' ], 'init.php' ) // verify nonce for security
+		&& current_user_can( 'edit_post', $post_id ) // check if current user has permission to edit this submission/nomination
+		&& isset( $_POST[ '_badgeos_' . $_POST[ 'post_type' ] . '_status' ] ) // verify status is set
+		&& $_POST[ '_badgeos_' . $_POST[ 'post_type' ] . '_status' ] != get_post_meta( $post_id, '_badgeos_' . $_POST[ 'post_type' ] . '_status', true ) // if submission/nomination hasn't changed, skip it
 	) {
 
-		// Get the achievement and user attached to this Submission
-		$achievement_id = ( get_post_type( $post_id ) == 'submission' ) ? get_post_meta( $post_id, '_badgeos_submission_achievement_id', true ) : get_post_meta( $post_id, '_badgeos_nomination_achievement_id', true );
-		$user_id = isset( $_POST['_badgeos_nominated_user_id'] ) ? $_POST['_badgeos_nominated_user_id'] : $_POST['post_author'];
+		// Get the achievement and user attached to this submission/nomination
+		$achievement_id = get_post_meta( $post_id, '_badgeos_' . $_POST[ 'post_type' ] . '_achievement_id', true );
+		$user_id = isset( $_POST[ '_badgeos_nominated_user_id' ] ) ? $_POST[ '_badgeos_nominated_user_id' ] : $_POST[ 'post_author' ];
 
-		// Give the achievement to the user
-		if ( $achievement_id && $user_id ) {
+		// Submission/nomination status workflow
+		$status_args = array(
+			'achievement_id' => $achievement_id,
+			'user_id' => $user_id
+		);
 
-			badgeos_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
+		$status = $_POST[ '_badgeos_' . $_POST[ 'post_type' ] . '_status' ];
 
-		}
+		badgeos_set_submission_status( $post_id, $status, $status_args );
 
 	}
 
@@ -349,7 +322,7 @@ function badgeos_save_submission_data() {
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		sanitize_text_field( $_POST['badgeos_submission_content'] ),
+		esc_textarea( $_POST['badgeos_submission_content'] ),
 		absint( $_POST['user_id'] )
 	);
 }
@@ -374,19 +347,8 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
 	//insert the post into the database
 	if ( $submission_id = wp_insert_post( $submission_data ) ) {
-
 		// save the achievement ID related to the submission
 		add_post_meta( $submission_id, '_badgeos_submission_achievement_id', $achievement_id );
-
-		// Check if submission is auto approved or not
-		$submission_status = badgeos_is_submission_auto_approved( $submission_id ) ? 'approved' : 'pending';
-
-		// Set the submission approval status
-		add_post_meta( $submission_id, '_badgeos_submission_status', sanitize_text_field( $submission_status ) );
-
-		//if submission is set to auto-approve, award the achievement to the user
-		if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) == 'submission_auto' )
-			badgeos_award_achievement_to_user( absint( $achievement_id ), absint( $user_id ) );
 
 		//process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
@@ -419,39 +381,22 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 		// Available action for other processes
 		do_action( 'badgeos_save_submission', $submission_id );
 
-		//load BadgeOS settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
+		// Submission status workflow
+		$status_args = array(
+			'achievement_id' => $achievement_id,
+			'user_id' => $user_id
+		);
 
-		//check if submission emails are enabled
-		if ( $badgeos_settings['submission_email'] != 'disabled' ) {
+		$status = 'pending';
 
-			$user_data = get_userdata( absint( $user_id ) );
+		// Check if submission is auto approved or not
+		if ( badgeos_is_submission_auto_approved( $submission_id ) ) {
+			$status = 'approved';
 
-			//set the admin email address
-			$admin_email = apply_filters( 'badgeos_submission_notify_email', get_bloginfo( 'admin_email' ) );
-
-			//set the email subject
-			$subject = 'Submission: '.get_the_title( absint( $achievement_id ) ). ' from ' .$user_data->display_name;
-			$subject = apply_filters( 'badgeos_submission_notify_subject', $subject );
-
-			//set the email message
-			$message = 'A new submission has been received:
-
-In response to: ' .get_the_title( absint( $achievement_id ) ).'
-Submitted by: '.$user_data->display_name.'
-
-Review the complete submission and approve or deny it at:
-'.html_entity_decode( esc_url_raw( get_edit_post_link( absint( $submission_id ) ) ) ).'
-
-To view all submissions, visit:
-'.admin_url( 'edit.php?post_type=submission' );
-
-			$message = apply_filters( 'badgeos_submission_notify_message', $message );
-
-			//send notification email to admin
-			wp_mail( $admin_email, $subject, $message );
-
+			$status_args[ 'auto' ] = true;
 		}
+
+		badgeos_set_submission_status( $submission_id, $status, $status_args );
 
 		return true;
 
@@ -463,32 +408,446 @@ To view all submissions, visit:
 }
 
 /**
+ * Set submission / nominiation status
+ * @since 1.4.0
+ * @param int $submission_id Object ID
+ * @param string $status Status (pending/approved/denied)
+ * @param array $args Additional args for config
+ */
+function badgeos_set_submission_status( $submission_id, $status, $args = array() ) {
+
+	$args = array_merge(
+		array(
+			'submission_id' => $submission_id,
+			'status' => $status,
+			'achievement_id' => 0,
+			'user_id' => 0,
+			'from_user_id' => 0,
+			'submission_type' => 'submission',
+			'notification_type' => null,
+			'auto' => false,
+			'user_data' => false,
+			'from_user_data' => false
+		),
+		$args
+	);
+
+	$args = apply_filters( 'badgeos_' . $args[ 'submission_type' ] . '_args', $args );
+
+	$args[ 'badgeos_settings' ] = get_option( 'badgeos_settings' );
+
+	$submission_id = $args[ 'submission_id' ] = absint( $args[ 'submission_id' ] );
+	$args[ 'achievement_id' ] = absint( $args[ 'achievement_id' ] );
+
+	$status = $args[ 'status' ];
+	$submission_type = $args[ 'submission_type' ];
+
+	// Get old status
+	$args[ 'old_status' ] = get_post_meta( $submission_id, '_badgeos_' . $submission_type . '_status', true );
+
+	if ( empty( $args[ 'old_status' ] ) ) {
+		$args[ 'old_status' ] = 'new';
+	}
+
+	$args[ 'user_id' ] = absint( $args[ 'user_id' ] );
+	$args[ 'from_user_id' ] = absint( $args[ 'from_user_id' ] );
+	$args[ 'from_user_id' ] = ( !empty( $args[ 'from_user_id' ] ) ) ? absint( $args[ 'from_user_id' ] ) : get_post_meta( $submission_id, '_badgeos_nominating_user_id', true );
+
+	if ( $args[ 'user_id' ] && !$args[ 'user_data' ] ) {
+		$args[ 'user_data' ] = get_userdata( $args[ 'user_id' ] );
+	}
+
+	if ( $args[ 'from_user_id' ] && !$args[ 'from_user_data' ]  ) {
+		$args[ 'from_user_data' ] = get_userdata( $args[ 'from_user_id' ] );
+	}
+
+	if ( !$args[ 'achievement_id' ] || !$args[ 'user_data' ] ) {
+		return;
+	}
+
+	// set the admin email address
+	$email = get_bloginfo( 'admin_email' );
+
+	// add email addresses set for site
+	if ( isset( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) && !empty( $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) ) {
+		if ( !is_array( $email ) ) {
+			$email = explode( ',', $email );
+		}
+
+		$email = array_merge( $email, explode( ',', $args[ 'badgeos_settings' ][ 'submission_email_addresses' ] ) );
+		$email = array_unique( array_filter( $email ) );
+		$email = implode( ',', $email );
+	}
+
+	$args[ 'submission_email_addresses' ] = $email;
+
+	update_post_meta( $submission_id, '_badgeos_' . $submission_type . '_status', $status );
+
+	$email_messages = array();
+	$email_messages = apply_filters( 'badgeos_notifications_' . $submission_type . '_' . $args[ 'old_status' ] . '_to_' . $status . '_messages', $email_messages, $args );
+	$email_messages = apply_filters( 'badgeos_notifications_' . $submission_type . '_' . $status . '_messages', $email_messages, $args );
+	$email_messages = apply_filters( 'badgeos_notifications_' . $submission_type . '_messages', $email_messages, $args );
+
+	$default_message = array(
+		'email' => '',
+		'subject' => '',
+		'message' => '',
+		'headers' => '',
+		'attachments' => array()
+	);
+
+	foreach ( $email_messages as $email_message ) {
+		$email_message = wp_parse_args( $email_message, $default_message );
+
+		$emails = $email_message[ 'email' ];
+
+		if ( ! is_array( $emails ) ) {
+			$emails = str_replace( array( ';', "\t", "\n", ' ' ), ',', $emails );
+			$emails = explode( ',', $emails );
+		}
+
+		if ( ! empty( $emails ) && ! empty( $email_message[ 'subject' ] ) && ! empty( $email_message[ 'message' ] ) && badgeos_can_notify_user( $args[ 'user_id' ] ) ) {
+			foreach ( $emails as $email ) {
+				$email_message[ 'email' ] = $email;
+				call_user_func_array( 'wp_mail', array_values( $email_message ) );
+			}
+		}
+	}
+
+}
+
+/**
+ * Filter submission messages and send one for Submission Approval
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_submission_approved( $messages, $args ) {
+
+	// Award achievement
+	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
+	$email = $args[ 'user_data' ]->user_email;
+
+	$message_id = 'badgeos_submission_approved';
+
+	if ( $args[ 'auto' ] ) {
+		$message_id = 'badgeos_submission_auto_approved';
+
+		$email = $args[ 'submission_email_addresses' ];
+
+		$subject = sprintf( __( 'Approved Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+
+		// set the email message
+		$message = sprintf( __( 'A new submission has been received and auto-approved:
+
+			In response to: %1$s
+			Submitted by: %2$s
+
+			To view all submissions, including this one, visit: %3$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			admin_url( 'edit.php?post_type=submission' )
+		);
+	}
+	else {
+		$subject = sprintf( __( 'Submission Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+
+		// set the email message
+		$message = sprintf( __( 'Your submission has been approved:
+
+			In response to: %1$s
+			Submitted by: %2$s
+			%3$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
+		);
+	}
+
+	$messages[ $message_id ] = array(
+		'email' => $email,
+		'subject' => $subject,
+		'message' => $message
+	);
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_submission_status_submission_approved', 10, 2 );
+
+
+/**
+ * Filter submission messages and send one for Nomination Approval
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
+
+	// Award achievement
+	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
+	$email = $args[ 'user_data' ]->user_email;
+
+	$message_id = 'badgeos_nomination_approved';
+
+	if ( $args[ 'auto' ] ) {
+		$message_id = 'badgeos_nomination_auto_approved';
+
+		$email = $args[ 'submission_email_addresses' ];
+
+		$subject = sprintf( __( 'Approved Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+
+		// set the email message
+		$message = sprintf( __( 'A new nomination has been received and auto-approved:
+
+			In response to: %1$s
+			Nominee: %2$s
+			Nominated by: %3$s
+
+			To view all nominations, including this one, visit: %4$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			$args[ 'from_user_data' ]->display_name,
+			admin_url( 'edit.php?post_type=nomination' )
+		);
+
+		// @todo set $email based on nominee and nominated by
+	}
+	else {
+		$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+
+		// set the email message
+		$message = sprintf( __( 'Your nomination has been approved:
+
+			In response to: %1$s
+			Nominee: %2$s
+			Nominated by: %3$s
+			%4$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			$args[ 'from_user_data' ]->display_name,
+			get_permalink( $args[ 'achievement_id' ] )
+		);
+
+		// @todo set $email based on nominee and nominated by
+	}
+
+	$messages[ $message_id ] = array(
+		'email' => $email,
+		'subject' => $subject,
+		'message' => $message
+	);
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_nomination_approved_messages', 'badgeos_set_submission_status_nomination_approved', 10, 2 );
+
+/**
+ * Filter submission messages and send one for Submission Denial
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_submission_denied( $messages, $args ) {
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
+	$email = $args[ 'user_data' ]->user_email;
+
+	$args[ 'notification_type' ] = 'notify_denied';
+
+	$subject = sprintf( __( 'Submission Not Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+
+	// set the email message
+	$message = sprintf( __( 'Your submission has not been approved:
+
+		In response to: %1$s
+		Submitted by: %2$s
+		%3$s', 'badgeos' ),
+		get_the_title( $args[ 'achievement_id' ] ),
+		$args[ 'user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
+	);
+
+	$messages[ 'badgeos_submission_denied' ] = array(
+		'email' => $email,
+		'subject' => $subject,
+		'message' => $message
+	);
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_submission_denied_messages', 'badgeos_set_submission_status_submission_denied', 10, 2 );
+
+/**
+ * Filter submission messages and send one for Nomination Denial
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_nomination_denied( $messages, $args ) {
+
+	// Check if user can be notified
+	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
+		return $messages;
+	}
+
+	$email = $args[ 'user_data' ]->user_email;
+
+	$args[ 'notification_type' ] = 'notify_denied';
+
+	$subject = sprintf( __( 'Nomination Not Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
+
+	// set the email message
+	$message = sprintf( __( 'Your submission has not been approved:
+
+		In response to: %1$s
+		Nominee: %2$s
+		Nominated by: %3$s
+		%4$s', 'badgeos' ),
+		get_the_title( $args[ 'achievement_id' ] ),
+		$args[ 'user_data' ]->display_name,
+		$args[ 'from_user_data' ]->display_name,
+		get_permalink( $args[ 'achievement_id' ] )
+	);
+
+	// @todo set $email based on nominee and nominated by
+
+	$messages[ 'badgeos_nomination_denied' ] = array(
+		'email' => $email,
+		'subject' => $subject,
+		'message' => $message
+	);
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_nomination_denied_messages', 'badgeos_set_submission_status_nomination_denied', 10, 2 );
+
+/**
+ * Filter submission messages and send one for Submission Pending
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_submission_pending( $messages, $args ) {
+
+	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
+		$email = $args[ 'submission_email_addresses' ];
+
+		$subject = sprintf( __( 'Submission: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+
+		$message = sprintf(
+			__( 'A new submission has been received:
+
+			In response to: %1$s
+			Submitted by: %2$s
+
+			Review the complete submission and approve or deny it at:
+			%3$s
+
+			To view all submissions, visit: %4$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			admin_url( sprintf( 'post.php?post=%d&action=edit', $args[ 'submission_id' ] ) ),
+			admin_url( 'edit.php?post_type=submission' )
+		);
+
+		$messages[ 'badgeos_submission_pending' ] = array(
+			'email' => $email,
+			'subject' => $subject,
+			'message' => $message
+		);
+	}
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+
+/**
+ * Filter submission messages and send one for Nomination Pending
+ *
+ * @param array $messages Messages to send
+ * @param array $args Submission Args
+ */
+function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
+
+	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
+		$email = $args[ 'submission_email_addresses' ];
+
+		$subject = sprintf( __( 'Nomination: %1$s from %2$s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ), $args[ 'user_data' ]->display_name );
+
+		$message = sprintf(
+			__( 'A new nomination has been received:
+
+			In response to: %1$s
+			Nominee: %2$s
+			Nominated by: %3$s
+
+			Review the complete submission and approve or deny it at:
+			%4$s
+
+			To view all nominations, visit: %5$s', 'badgeos' ),
+			get_the_title( $args[ 'achievement_id' ] ),
+			$args[ 'user_data' ]->display_name,
+			$args[ 'from_user_data' ]->display_name,
+			admin_url( sprintf( 'post.php?post=%d&action=edit', $args[ 'submission_id' ] ) ),
+			admin_url( 'edit.php?post_type=nomination' )
+		);
+
+		$messages[ 'badgeos_nomination_pending' ] = array(
+			'email' => $email,
+			'subject' => $subject,
+			'message' => $message
+		);
+	}
+
+	return $messages;
+
+}
+add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+
+/**
  * Returns the comment form for Submissions
  * @since 1.0.0
  * @param integer $post_id The post_id for the current page
  * @return string 		   The submission markup
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
-	global $current_user;
 
-	// user must be logged in to see the submission form
-	if ( !is_user_logged_in() )
+	if ( ! is_user_logged_in() )
 		return '';
 
 	$defaults = array(
 		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
-		'submit'     => __( 'Submit Comment', 'badgeos' )
+		'submit'     => __( 'Submit Comment', 'badgeos' ),
+		'toggle'     => __( 'Show/Add Comments', 'badgeos' ),
 	);
-	// filter our text
-	$new_defaults = apply_filters( 'badgeos_comment_form_language', $defaults );
-	// fill in missing data
-	$language = wp_parse_args( $new_defaults, $defaults );
+	$language = wp_parse_args( apply_filters( 'badgeos_comment_form_language', $defaults ), $defaults );
 
 	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
 
 		// comment form heading
-		$sub_form .= '<legend>'. $language['heading'] .'</legend>';
+		$sub_form .= '<legend>'. wp_kses_post( $language['heading'] ) .'</legend>';
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
@@ -497,7 +856,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-submission-file">';
-		$sub_form .= '<p><label>'. $language['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+		$sub_form .= '<p><label>'. esc_html( $language['attachment'] ) . ' <input type="file" name="document_file" id="document_file" /></label></p>';
 		$sub_form .= '</fieldset>';
 
 		// submit button
@@ -505,10 +864,13 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// Hidden Fields
 		$sub_form .= wp_nonce_field( 'submit_comment', 'badgeos_comment_nonce', true, false );
-		$sub_form .= '<input type="hidden" name="user_id" value="' . $current_user->ID . '">';
-		$sub_form .= '<input type="hidden" name="submission_id" value="' . $post_id . '">';
+		$sub_form .= '<input type="hidden" name="user_id" value="' . get_current_user_id() . '">';
+		$sub_form .= '<input type="hidden" name="submission_id" value="' . absint( $post_id ) . '">';
 
 	$sub_form .= '</form>';
+
+	// Toggle button for showing comment form
+	$sub_form .= '<a href="" class="button submission-comment-toggle" style="display:none">' . esc_html( $language['toggle'] ) . '</a>';
 
 	return apply_filters( 'badgeos_get_comment_form', $sub_form, $post_id );
 
@@ -534,7 +896,7 @@ function badgeos_save_comment_data() {
 	$comment_data = array(
 		'user_id'         => absint( $_POST['user_id'] ),
 		'comment_post_ID' => absint( $_POST['submission_id'] ),
-		'comment_content' => sanitize_text_field( $_POST['badgeos_comment'] ),
+		'comment_content' => esc_textarea( $_POST['badgeos_comment'] ),
 	);
 
 	if ( $comment_id = wp_insert_comment( $comment_data ) ) {
@@ -590,16 +952,15 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 		return;
 
 	// Concatenate our output
-	$output = '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
+	$output = '<div class="badgeos-submission-comments-wrap">';
+	$output .= '<h4>' . sprintf( __( 'Comments:', 'badgeos' ), $submission_id ) . '</h4>';
 	$output .= '<ul class="badgeos-submission-comments-list">';
-	foreach( $comments as $comment ) {
-		// Setup an alternating odd/even class
-		$odd_even = ( isset( $odd_even ) && 'odd' == $odd_even ) ? 'even' : 'odd';
-
-		// Render the comment
+	foreach( $comments as $key => $comment ) {
+		$odd_even = $key % 2 ? 'even' : 'odd';
 		$output .= badgeos_render_submission_comment( $comment, $odd_even );
 	}
 	$output .= '</ul><!-- .badgeos-submission-comments-list -->';
+	$output .= '</div><!-- .badgeos-submission-comments-wrap -->';
 
 	return apply_filters( 'badgeos_get_comments_for_submission', $output, $submission_id, $comments );
 
@@ -613,15 +974,8 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
  * @return bool                   True if connected achievement is set to auto-approve, false otherwise
  */
 function badgeos_is_submission_auto_approved( $submission_id = 0 ) {
-
-	// Get the submission's connected achievement
 	$achievement_id = get_post_meta( $submission_id, '_badgeos_submission_achievement_id', true );
-
-	// If the achievement is set to auto-approve, return true
-	if ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) )
-		return true;
-	else
-		return false;
+	return ( 'submission_auto' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) );
 }
 
 /**
@@ -713,7 +1067,7 @@ function badgeos_user_has_access_to_submission_form( $user_id = 0, $achievement_
 	}
 
 	// If user cannot access achievement, they cannot submit anything
-	if ( $has_access && ! badgeos_user_has_access_to_achievement( $user_id, $achievement_id ) ) {
+	if ( $has_access && badgeos_achievement_user_exceeded_max_earnings( $user_id, $achievement_id ) ) {
 		$has_access = false;
 	}
 
@@ -801,7 +1155,7 @@ function badgeos_get_submission_form( $args = array() ) {
 
 	// Setup our defaults
 	$defaults = array(
-		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission Form', 'badgeos' ) ),
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Create a New Submission', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit', 'badgeos' )
 	);
@@ -846,42 +1200,62 @@ function badgeos_get_submission_form( $args = array() ) {
  * @return string       Conatenated output for feedback
  */
 function badgeos_get_feedback( $args = array() ) {
-	global $user_ID;
 
-	// If no one is logged in, bail now
-	if ( ! is_user_logged_in() )
+	if ( ! is_user_logged_in() ) {
 		return '<p class="error must-be-logged-in">' . __( 'You must be logged in to see results.', 'badgeos' ) . '</p>';
-
-	// Setup our default args
-	$defaults = array(
-		'post_status' => 'publish',
-		'post_type'   => 'submission'
-	);
-	$args = wp_parse_args( $args, $defaults );
-
-	// Eliminate need for case-sensitivity on status
-	if ( ! empty( $args['status'] ) )
-		$args['status'] = strtolower( $args['status'] );
-	else
-		$args['status'] = '';
-
-	// If we're looking for auto-approved only
-	$show_auto_approved = true;
-	if ( 'auto-approved' == $args['status'] ) {
-		$args['status'] = 'approved';
-	} elseif ( 'all' !== $args['status'] ) {
-		$show_auto_approved = false;
 	}
 
-	// If we're looking for a specific approval status
-	if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
+	$args = badgeos_parse_feedback_args( $args );
+
+	$output = '<div class="badgeos-submissions">';
+	if ( empty( $args ) ) {
+		$output .= '<p class="no-results">' . __( 'Sorry, no results to display', 'badgeos' ) . '</p>';
+	} else {
+		$feedback_posts = get_posts( $args );
+		if ( ! empty( $feedback_posts ) ) {
+			foreach( $feedback_posts as $feedback ) {
+				if ( badgeos_is_submission_auto_approved( $feedback->ID ) && false === $args['show_auto_approved'] ) {
+					continue;
+				}
+				$output .= call_user_func_array( "badgeos_render_{$feedback->post_type}", array( $feedback, $args ) );
+			}
+		}
+	}
+	$output .= '</div><!-- badgeos-submissions -->';
+
+	return apply_filters( 'badgeos_get_submissions', $output, $args );
+
+}
+
+/**
+ * Parse and prepare feedback list args.
+ *
+ * @since  1.4.0
+ *
+ * @param  array  $args Feedback args.
+ * @return array        Modified feedback args.
+ */
+function badgeos_parse_feedback_args( $args = array() ) {
+
+	$args = wp_parse_args( $args, array(
+		'post_status' => 'publish',
+		'post_type'   => 'submission',
+		'status'      => 'all',
+	) );
+
+	// Handler for auto-approved results
+	$args['show_auto_approved'] = in_array( $args['status'], array( 'all', 'auto-approved' ) );
+	$args['status'] = ( 'auto-approved' == $args['status'] ) ? 'approved' : $args['status'];
+
+	// Limit results by approval status
+	if ( 'all' !== $args['status'] ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_status",
 			'value' => $args['status']
 		);
 	}
 
-	// If we want feedback connected to a specific achievement
+	// Limit results by achievement ID
 	if ( isset( $args['achievement_id'] ) ) {
 		$args['meta_query'][] = array(
 			'key'   => "_badgeos_{$args['post_type']}_achievement_id",
@@ -889,43 +1263,14 @@ function badgeos_get_feedback( $args = array() ) {
 		);
 	}
 
-	// Setup our author limit
-	if ( empty( $args['author'] ) && 'nomination' != $args['post_type'] ) {
-		// If we're not an admin, limit results to the current user
-		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
-			$args['author'] = $user_ID;
+	// Limit results by author
+	if ( empty( $args['author'] ) && 'nomination' !== $args['post_type'] ) {
+		if ( ! badgeos_user_can_manage_submissions() ) {
+			$args['author'] = get_current_user_id();
 		}
 	}
 
-	// Get our feedback
-	$feedback = get_posts( $args );
-	$output = '';
-
-	if ( ! empty( $feedback ) ) {
-
-		$output .= '<div class="badgeos-submissions">';
-
-		foreach( $feedback as $submission ) {
-
-			// Bail if we do NOT want to show auto approved, and it is
-			if ( ! $show_auto_approved && badgeos_is_submission_auto_approved( $submission->ID ) )
-				continue;
-
-			// Setup our output
-			if ( 'nomination' == $args['post_type'] )
-				$output .= badgeos_render_nomination( $submission, $args );
-			else
-				$output .= badgeos_render_submission( $submission, $args );
-
-		} // End: foreach( $feedback )
-
-		$output .= '</div><!-- badgeos-submissions -->';
-
-	} // End: if ( $feedback )
-
-	// Return our filterable output
-	return apply_filters( 'badgeos_get_submissions', $output, $args, $feedback );
+	return apply_filters( 'badgeos_get_feedback_args', $args );
 }
 
 /**
@@ -961,7 +1306,7 @@ function badgeos_get_submissions( $args = array() ) {
  * @return string                  Conatenated output for submission, attachments and comments
  */
 function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
-	global $user_ID, $post;
+	global $post;
 
 	// Setup our empty args array
 	$args = array();
@@ -971,10 +1316,8 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
 		// Use the provided user ID
 		$args['author'] = absint( $user_id );
 	} else {
-		// If we're not an admin, limit results to the current user
-		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
-			$args['author'] = $user_ID;
+		if ( ! badgeos_user_can_manage_submissions() ) {
+			$args['author'] = get_current_user_id();
 		}
 	}
 
@@ -1000,7 +1343,7 @@ function badgeos_get_user_submissions( $user_id = 0, $achievement_id = 0 ) {
  * @return string                  Conatenated output for submission, attachments and comments
  */
 function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
-	global $user_ID, $post;
+	global $post;
 
 	// Setup our empty args array
 	$args = array(
@@ -1017,12 +1360,13 @@ function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
 			'value' => absint( $user_id )
 		);
 	} else {
-		// If we're not an admin, limit results to the current user
-		$badgeos_settings = get_option( 'badgeos_settings' );
-		if ( ! current_user_can( $badgeos_settings['minimum_role'] ) ) {
+
+		// If user doesn't have access to settings,
+		// restrict posts to ones they've authored
+		if ( ! badgeos_user_can_manage_submissions() ) {
 			$args['meta_query'][] = array(
 				'key'   => '_badgeos_nominating_user_id',
-				'value' => absint( $user_ID )
+				'value' => get_current_user_id()
 			);
 		}
 	}
@@ -1052,13 +1396,15 @@ function badgeos_get_user_nominations( $user_id = 0, $achievement_id = 0 ) {
 function badgeos_get_submission_attachments( $submission_id = 0 ) {
 
 	// Get attachments
-	$attachments = get_posts( array(
-		'post_type'      => 'attachment',
-		'posts_per_page' => -1,
-		'post_parent'    => $submission_id,
-		'orderby'        => 'date',
-		'order'          => 'ASC',
-	) );
+	$attachments = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'posts_per_page' => -1,
+			'post_parent'    => $submission_id,
+			'orderby'        => 'date',
+			'order'          => 'ASC',
+		)
+	);
 
 	// If we have attachments
 	$output = '';

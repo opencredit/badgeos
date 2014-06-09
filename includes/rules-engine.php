@@ -158,7 +158,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 
 	// Patch for WordPress to support recursive actions, specifically for badgeos_award_achievement
 	// Because global iteration is fun, assuming we can get this fixed for WordPress 3.9
-	$is_recursed_filter = ( 'badgeos_award_achievement' == current_filter() && version_compare( $wp_version, '3.9', '<' ) );
+	$is_recursed_filter = ( 'badgeos_award_achievement' == current_filter() );
 	$current_key = null;
 
 	// Get current position
@@ -370,11 +370,13 @@ function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_i
 		return $return;
 
 	// Prevent user from earning steps with no parents
-	if ( ! $parent_achievement = badgeos_get_parent_of_achievement( $step_id ) )
+	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
+	if ( ! $parent_achievement ) {
 		$return = false;
+	}
 
 	// Prevent user from repeatedly earning the same step
-	if ( $return && badgeos_get_user_achievements( array(
+	if ( $return && $parent_achievement && badgeos_get_user_achievements( array(
 			'user_id'        => absint( $user_id ),
 			'achievement_id' => absint( $step_id ),
 			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
@@ -442,7 +444,7 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 			$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
 
 			// If the user has any interaction with this achievement, only get activity since that date
-			if ( $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			if ( $parent_achievement && $date = badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
 				$since = $date;
 			else
 				$since = 0;

@@ -45,6 +45,8 @@ class BadgeOS_Credly {
 
 		$default_settings = array(
 			'api_key' => '',
+			'credly_user' => '',
+			'credly_password' => '',
 			'credly_enable' => empty( $this->credly_settings ) ? 'false' : 'true',
 			'credly_badge_title' => 'post_title',
 			'credly_badge_short_description' => 'post_excerpt',
@@ -112,6 +114,7 @@ class BadgeOS_Credly {
         // Credly enable user meta setting
         add_action( 'personal_options', array( $this, 'credly_profile_setting' ), 99 );
         add_action( 'personal_options_update', array( $this, 'credly_profile_setting_save' ) );
+        add_action( 'edit_user_profile_update', array( $this, 'credly_profile_setting_save' ) );
         add_action( 'init', array( $this, 'credly_profile_setting_force_enable' ), 999 );
 
         // Update Credly ID on profile save
@@ -496,6 +499,10 @@ class BadgeOS_Credly {
      * @return void
      */
     public function credly_profile_setting_save( $user_id = 0 ) {
+
+		if ( !current_user_can( 'edit_user', $user_id ) ) {
+			return false;
+		}
 
         $credly_enable = ( ! empty( $_POST['credly_user_enable'] ) && $_POST['credly_user_enable'] == 'true' ? 'true' : 'false' );
 
@@ -1212,7 +1219,7 @@ function credly_get_api_key() {
 /**
  * Check if an earned acheivement instance has been sent to credly
  *
- * @since  alpha
+ * @since  1.3.4
  *
  * @param  object $earned_achievement_instance BadgeOS Achievement object.
  * @return bool                                True if achievement has been sent to Credly, otherwise false.
@@ -1231,7 +1238,7 @@ function badgeos_achievement_has_been_sent_to_credly( $earned_achievement_instan
 /**
  * Check if user is elligble to send an achievement to Credly.
  *
- * @since  alpha
+ * @since  1.3.4
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.
@@ -1267,7 +1274,7 @@ function badgeos_can_user_send_achievement_to_credly( $user_id = 0, $achievement
 /**
  * Update user's earned achievements to reflect a specific acheivement has been sent to Credly.
  *
- * @since  alpha
+ * @since  1.3.4
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.=
@@ -1301,7 +1308,7 @@ add_action( 'post_credly_user_badge', 'badgeos_user_sent_achievement_to_credly',
 /**
  * Create a log entry for an achievement being sent to Credly.
  *
- * @since  alpha
+ * @since  1.3.4
  *
  * @param  integer $user_id        User ID.
  * @param  integer $achievement_id Achievement post ID.
@@ -1316,8 +1323,7 @@ function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id 
         return;
 
     // Log the action
-    $title = sprintf(
-            '%1$s sent %2$s to Credly',
+    $title = sprintf( __( '%1$s sent %2$s to Credly', 'badgeos' ),
             $user->user_login,
             get_the_title( $achievement_id )
             );

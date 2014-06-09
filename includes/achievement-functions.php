@@ -22,17 +22,10 @@ function badgeos_is_achievement( $post = null ) {
 	// Assume we are working with an achievment object
 	$return = true;
 
-	// If passed an ID, get the post object
-	if ( is_numeric( $post ) )
-		$post = get_post( $post );
-
-	// If $post is NOT an object it cannot be an achievement
-	if ( ! is_object( $post ) )
-		$return = false;
-
 	// If post type is NOT a registered achievement type, it cannot be an achievement
-	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) )
+	if ( ! in_array( get_post_type( $post ), badgeos_get_achievement_types_slugs() ) ) {
 		$return = false;
+	}
 
 	// If we pass both previous tests, this is a valid achievement (with filter to override)
 	return apply_filters( 'badgeos_is_achievement', $return, $post );
@@ -513,16 +506,12 @@ function badgeos_get_points_based_achievements() {
  */
 function badgeos_bust_points_based_achievements_cache( $post_id ) {
 
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role     = ( !empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
-	$post             = get_post($post_id);
+	$post = get_post($post_id);
 
-	// If the user has the authority to do what they're doing,
-	// and the post is one of our achievement types,
+	// If the post is one of our achievement types,
 	// and the achievement is awarded by minimum points
 	if (
-		current_user_can( $minimum_role )
-		&& badgeos_is_achievement( $post )
+		badgeos_is_achievement( $post )
 		&& (
 			'points' == get_post_meta( $post_id, '_badgeos_earned_by', true )
 			|| ( isset( $_POST['_badgeos_earned_by'] ) && 'points' == $_POST['_badgeos_earned_by'] )
@@ -726,10 +715,15 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 		return $post_id;
 	}
 
+	$thumbnail_id = 0;
+
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
 		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
-		$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+
+		if ( $achievement_type ) {
+			$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
+		}
 	}
 
 	// If there is no thumbnail set, load in our default image
@@ -779,3 +773,247 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
+
+/**
+ * Flush rewrite rules whenever an achievement type is published.
+ *
+ * @since 1.4.0
+ *
+ * @param string $new_status New status.
+ * @param string $old_status Old status.
+ * @param object $post       Post object.
+ */
+function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
+	if ( 'achievement-type' === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
+		badgeos_flush_rewrite_rules();
+	}
+}
+add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
+
+/**
+ * Register achievement types and flush rewrite rules.
+ *
+ * @since 1.4.0
+ */
+function badgeos_flush_rewrite_rules() {
+	badgeos_register_post_types();
+	badgeos_register_achievement_type_cpt();
+	flush_rewrite_rules();
+}
+
+/**
+ * Update all dependent data if achievement type name has changed.
+ *
+ * @since  1.4.0
+ *
+ * @param  array $data      Post data.
+ * @param  array $post_args Post args.
+ * @return array            Updated post data.
+ */
+function badgeos_maybe_update_achievement_type( $data = '', $post_args = '' ) {
+	if ( badgeos_achievement_type_changed( $post_args ) ) {
+		$original_type = get_post( $post_args['ID'] )->post_name;
+		$new_type = wp_unique_post_slug( sanitize_title( $post_args['post_title'] ), $post_args['ID'], $post_args['post_status'], $post_args['post_type'], $post_args['post_parent'] );
+		$data['post_name'] = badgeos_update_achievement_types( $original_type, $new_type );
+		add_filter( 'redirect_post_location', 'badgeos_achievement_type_rename_redirect', 99 );
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '99', 2 );
+
+/**
+ * Check if an achievement type name has changed.
+ *
+ * @since  1.4.0
+ *
+ * @param  array $post_args Post args.
+ * @return bool             True if name has changed, otherwise false.
+ */
+function badgeos_achievement_type_changed( $post_args = array() ) {
+	return (
+		'achievement-type' === $post_args['post_type']
+		&& $post_args['ID']
+		&& get_post( $post_args['ID'] )->post_title !== $post_args['post_title']
+	);
+}
+
+/**
+ * Replace all instances of one achievement type with another.
+ *
+ * @since  1.4.0
+ *
+ * @param  string $original_type Original achievement type.
+ * @param  string $new_type      New achievement type.
+ * @return string                New achievement type.
+ */
+function badgeos_update_achievement_types( $original_type = '', $new_type = '' ) {
+	badgeos_update_achievements_achievement_types( $original_type, $new_type );
+	badgeos_update_p2p_achievement_types( $original_type, $new_type );
+	badgeos_update_earned_meta_achievement_types( $original_type, $new_type );
+	badgeos_update_active_meta_achievement_types( $original_type, $new_type );
+	badgeos_flush_rewrite_rules();
+	return $new_type;
+}
+
+/**
+ * Change all achievements of one type to a new type.
+ *
+ * @since 1.4.0
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_achievements_achievement_types( $original_type = '', $new_type = '' ) {
+	$items = get_posts( array(
+		'posts_per_page' => -1,
+		'post_status'    => 'any',
+		'post_type'      => $original_type,
+		'fields'         => 'id',
+	) );
+	foreach ( $items as $item ) {
+		set_post_type( $item->ID, $new_type );
+	}
+}
+
+/**
+ * Change all p2p connections of one achievement type to a new type.
+ *
+ * @since 1.4.0
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_p2p_achievement_types( $original_type = '', $new_type = '' ) {
+	global $wpdb;
+	$p2p_relationships = array(
+		"step-to-{$original_type}" => "step-to-{$new_type}",
+		"{$original_type}-to-step" => "{$new_type}-to-step",
+	);
+	foreach ( $p2p_relationships as $old => $new ) {
+		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->p2p SET p2p_type = %s WHERE p2p_type = %s", $new, $old ) );
+	}
+}
+
+/**
+ * Change all earned meta from one achievement type to another.
+ *
+ * @since 1.4.0
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_earned_meta_achievement_types( $original_type = '', $new_type = '' ) {
+	$metas = badgeos_get_unserialized_achievement_metas( '_badgeos_achievements', $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $meta ) {
+			foreach ( $meta->meta_value as $site_id => $achievements ) {
+				$meta->meta_value[ $site_id ] = badgeos_update_meta_achievement_types( $achievements, $original_type, $new_type );
+			}
+			update_user_meta( $meta->user_id, $meta->meta_key, $meta->meta_value );
+		}
+	}
+}
+
+/**
+ * Change all active meta from one achievement type to another.
+ *
+ * @since 1.4.0
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_active_meta_achievement_types( $original_type = '', $new_type = '' ) {
+	$metas = badgeos_get_unserialized_achievement_metas( '_badgeos_active_achievements', $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $meta ) {
+			$meta->meta_value = badgeos_update_meta_achievement_types( $meta->meta_value, $original_type, $new_type );
+			update_user_meta( $meta->user_id, $meta->meta_key, $meta->meta_value );
+		}
+	}
+}
+
+/**
+ * Get unserialized user achievement metas.
+ *
+ * @since  1.4.0
+ *
+ * @param  string $meta_key      Meta key.
+ * @param  string $original_type Achievement type.
+ * @return array                 User achievement metas.
+ */
+function badgeos_get_unserialized_achievement_metas( $meta_key = '', $original_type = '' ) {
+	$metas = badgeos_get_achievement_metas( $meta_key, $original_type );
+	if ( ! empty( $metas ) ) {
+		foreach ( $metas as $key => $meta ) {
+			$metas[ $key ]->meta_value = maybe_unserialize( $meta->meta_value );
+		}
+	}
+	return $metas;
+}
+
+/**
+ * Get serialized user achievement metas.
+ *
+ * @since  1.4.0
+ *
+ * @param  string $meta_key      Meta key.
+ * @param  string $original_type Achievement type.
+ * @return array                 User achievement metas.
+ */
+function badgeos_get_achievement_metas( $meta_key = '', $original_type = '' ) {
+	global $wpdb;
+	return $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT *
+		FROM   $wpdb->usermeta
+		WHERE  meta_key = %s
+		       AND meta_value LIKE '%%%s%%'
+		",
+		$meta_key,
+		$original_type
+	) );
+}
+
+/**
+ * Change user achievement meta from one achievement type to another.
+ *
+ * @since 1.4.0
+ *
+ * @param string $original_type Original achievement type.
+ * @param string $new_type      New achievement type.
+ */
+function badgeos_update_meta_achievement_types( $achievements = array(), $original_type = '', $new_type = '' ) {
+	if ( is_array( $achievements ) && ! empty( $achievements ) ) {
+		foreach ( $achievements as $key => $achievement ) {
+			if ( $achievement->post_type === $original_type ) {
+				$achievements[ $key ]->post_type = $new_type;
+			}
+		}
+	}
+	return $achievements;
+}
+
+/**
+ * Redirect to inclue custom rename message.
+ *
+ * @since  1.4.0
+ *
+ * @param  string $location Original URI.
+ * @return string           Updated URI.
+ */
+function badgeos_achievement_type_rename_redirect( $location = '' ) {
+	remove_filter( 'redirect_post_location', __FUNCTION__, 99 );
+	return add_query_arg( 'message', 99, $location );
+}
+
+/**
+ * Filter the "post updated" messages to include support for achievement types.
+ *
+ * @since 1.4.0
+ */
+function badgeos_achievement_type_update_messages( $messages ) {
+	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );
+	$messages['achievement-type']['99'] = sprintf( __('Achievement Type renamed successfully. <p>All achievements of this type, and all active and earned user achievements, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old achievement type slug must be updated <strong>manually</strong>.', 'badgeos'), '<a href="' . esc_url( admin_url( 'widgets.php' ) ) . '">' . __( 'widgets', 'badgeos' ) . '</a>' );
+	return $messages;
+}
+add_filter( 'post_updated_messages', 'badgeos_achievement_type_update_messages' );

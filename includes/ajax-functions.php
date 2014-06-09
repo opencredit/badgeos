@@ -9,11 +9,14 @@
  * @link https://credly.com
  */
 
-// Setup our MVP AJAX actions
+// Setup our badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
 	'get-feedback',
-	'update-feedback'
+	'get-achievements-select2',
+	'get-achievement-types',
+	'get-users',
+	'update-feedback',
 );
 
 // Register core Ajax calls.
@@ -184,33 +187,17 @@ function badgeos_ajax_get_achievements() {
  */
 function badgeos_ajax_get_feedback() {
 
-	// Parse our passed args
-	$args = array(
-		'post_type'        => $_REQUEST['type'],
-		'posts_per_page'   => $_REQUEST['limit'],
-		'status'           => $_REQUEST['status'],
-		'show_attachments' => $_REQUEST['show_attachments'],
-		'show_comments'    => $_REQUEST['show_comments']
-	);
+	$feedback = badgeos_get_feedback( array(
+		'post_type'        => isset( $_REQUEST['type'] ) ? esc_html( $_REQUEST['type'] ) : '',
+		'posts_per_page'   => isset( $_REQUEST['limit'] ) ? esc_html( $_REQUEST['limit'] ) : '',
+		'status'           => isset( $_REQUEST['status'] ) ? esc_html( $_REQUEST['status'] ) : '',
+		'show_attachments' => isset( $_REQUEST['show_attachments'] ) ? esc_html( $_REQUEST['show_attachments'] ) : '',
+		'show_comments'    => isset( $_REQUEST['show_comments'] ) ? esc_html( $_REQUEST['show_comments'] ) : '',
+		's'                => isset( $_REQUEST['search'] ) ? esc_html( $_REQUEST['search'] ) : '',
+	) );
 
-	// If we're searching, include the search param
-	if ( ! empty( $_REQUEST['search'] ) )
-		$args['s'] = $_REQUEST['search'];
-
-	// If user doesn't have access to settings,
-	// restrict posts to ones they've authored
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	if ( ! user_can( absint( $_REQUEST['user_id'] ), $badgeos_settings['minimum_role'] ) ) {
-		$args['author'] = absint( $_REQUEST['user_id'] );
-	}
-
-	$feedback = badgeos_get_feedback( $args );
-
-	// Send back our successful response
 	wp_send_json_success( array(
-		'message'  => 'Success!',
-		'feedback' => $feedback,
-		'search'   => $_REQUEST['search']
+		'feedback' => $feedback
 	) );
 }
 
@@ -225,22 +212,106 @@ function badgeos_ajax_update_feedback() {
 	// Verify our nonce
 	check_ajax_referer( 'review_feedback', 'nonce' );
 
-	// Get the feedback post type
-	$feedback_type = $_REQUEST['feedback_type'];
-	$status = ( 'approve' == $_REQUEST['status'] ) ? 'approved' : 'denied';
+	// Status workflow
+	$status_args = array(
+		'achievement_id' => $_REQUEST[ 'achievement_id' ],
+		'user_id' => $_REQUEST[ 'user_id' ],
+		'submission_type' => $_REQUEST[ 'feedback_type' ]
+	);
 
-	// Update our meta
-	update_post_meta( absint( $_REQUEST['feedback_id'] ), "_badgeos_{$feedback_type}_status", $status );
+	// Setup status
+	$status = ( in_array( $_REQUEST[ 'status' ], array( 'approve', 'approved' ) ) ) ? 'approved' : 'denied';
 
-	// If our status was just approved, award the achievement
-	if ( 'approved' == $status ) {
-		badgeos_award_achievement_to_user( absint( $_REQUEST['achievement_id'] ), absint( $_REQUEST['user_id'] ) );
-	}
+	badgeos_set_submission_status( $_REQUEST[ 'feedback_id' ], $status, $status_args );
 
 	// Send back our successful response
 	wp_send_json_success( array(
 		'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>',
-		'status'  => ucfirst( $status )
+		'status' => ucfirst( $status )
 	) );
 
+}
+
+/**
+ * AJAX Helper for selecting users in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_users() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	global $wpdb;
+
+	// Pull back the search string
+	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+	$sql = "SELECT ID, user_login FROM {$wpdb->users}";
+
+	// Build our query
+	if ( !empty( $search ) ) {
+		$sql .= " WHERE user_login LIKE '%{$search}%'";
+	}
+
+	// Fetch our results (store as associative array)
+	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
+
+/**
+ * AJAX Helper for selecting posts in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_achievements_select2() {
+	global $wpdb;
+
+	// Pull back the search string
+	$search = isset( $_REQUEST['q'] ) ? like_escape( $_REQUEST['q'] ) : '';
+	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
+		? array( esc_sql( $_REQUEST['post_type'] ) )
+		: array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
+	$post_type = sprintf( 'AND post_type IN(\'%s\')', implode( "','", $achievement_types ) );
+
+	$results = $wpdb->get_results( $wpdb->prepare(
+		"
+		SELECT ID, post_title
+		FROM   $wpdb->posts
+		WHERE  post_title LIKE %s
+		       {$post_type}
+		       AND post_status = 'publish'
+		",
+		"%%{$search}%%"
+	) );
+
+	// Return our results
+	wp_send_json_success( $results );
+}
+
+/**
+ * AJAX Helper for selecting achievement types in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
+function badgeos_ajax_get_achievement_types() {
+
+	// If no query was sent, die here
+	if ( ! isset( $_REQUEST['q'] ) ) {
+		die();
+	}
+
+	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
+	$matches = preg_grep( "/{$_REQUEST['q']}/", $achievement_types );
+	$found = array_map( 'get_post_type_object', $matches );
+
+	// Include an "all" option as the first option
+	array_unshift( $found, (object) array( 'name' => 'all', 'label' => 'All' ) );
+
+	// Return our results
+	wp_send_json_success( $found );
 }
