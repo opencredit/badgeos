@@ -815,6 +815,7 @@ function badgeos_maybe_update_achievement_type( $data = '', $post_args = '' ) {
 		$original_type = get_post( $post_args['ID'] )->post_name;
 		$new_type = wp_unique_post_slug( sanitize_title( $post_args['post_title'] ), $post_args['ID'], $post_args['post_status'], $post_args['post_type'], $post_args['post_parent'] );
 		$data['post_name'] = badgeos_update_achievement_types( $original_type, $new_type );
+		add_filter( 'redirect_post_location', 'badgeos_achievement_type_rename_redirect', 99 );
 	}
 	return $data;
 }
@@ -991,3 +992,28 @@ function badgeos_update_meta_achievement_types( $achievements = array(), $origin
 	}
 	return $achievements;
 }
+
+/**
+ * Redirect to inclue custom rename message.
+ *
+ * @since  alpha
+ *
+ * @param  string $location Original URI.
+ * @return string           Updated URI.
+ */
+function badgeos_achievement_type_rename_redirect( $location = '' ) {
+	remove_filter( 'redirect_post_location', __FUNCTION__, 99 );
+	return add_query_arg( 'message', 99, $location );
+}
+
+/**
+ * Filter the "post updated" messages to include support for achievement types.
+ *
+ * @since alpha
+ */
+function badgeos_achievement_type_update_messages( $messages ) {
+	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );
+	$messages['achievement-type']['99'] = sprintf( __('Achievement Type renamed successfully. <p>All achievements of this type, and all active and earned user achievements, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old achievement type slug must be updated <strong>manually</strong>.', 'badgeos'), '<a href="' . esc_url( admin_url( 'widgets.php' ) ) . '">' . __( 'widgets', 'badgeos' ) . '</a>' );
+	return $messages;
+}
+add_filter( 'post_updated_messages', 'badgeos_achievement_type_update_messages' );
