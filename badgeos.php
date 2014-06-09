@@ -229,8 +229,7 @@ class BadgeOS {
 		}
 
 		// Register our post types and flush rewrite rules
-		badgeos_register_post_types();
-		flush_rewrite_rules();
+		badgeos_flush_rewrite_rules();
 	}
 
 	/**
