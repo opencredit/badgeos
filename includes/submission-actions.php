@@ -27,7 +27,7 @@ function badgeos_save_nomination_data() {
 	return badgeos_create_nomination(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		sanitize_text_field( $_POST['badgeos_nomination_content'] ),
+		esc_textarea( $_POST['badgeos_nomination_content'] ),
 		absint( $_POST['badgeos_nomination_user_id'] ),
 		absint( absint( $_POST['user_id'] ) )
 	);
@@ -49,8 +49,8 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 	if ( ! badgeos_check_if_user_has_nomination( absint( $user_nominated ), absint( $achievement_id ) ) ) {
 
 		$submission_data = array(
-			'post_title'	=>	sanitize_text_field( $title ),
-			'post_content'	=>	sanitize_text_field( $content ),
+			'post_title'	=>	esc_html( $title ),
+			'post_content'	=>	esc_text_area( $content ),
 			'post_status'	=>	'publish',
 			'post_author'	=>	absint( $user_nominated ),
 			'post_type'		=>	'nomination',
@@ -322,7 +322,7 @@ function badgeos_save_submission_data() {
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		sanitize_text_field( $_POST['badgeos_submission_content'] ),
+		esc_textarea( $_POST['badgeos_submission_content'] ),
 		absint( $_POST['user_id'] )
 	);
 }
@@ -896,7 +896,7 @@ function badgeos_save_comment_data() {
 	$comment_data = array(
 		'user_id'         => absint( $_POST['user_id'] ),
 		'comment_post_ID' => absint( $_POST['submission_id'] ),
-		'comment_content' => sanitize_text_field( $_POST['badgeos_comment'] ),
+		'comment_content' => esc_textarea( $_POST['badgeos_comment'] ),
 	);
 
 	if ( $comment_id = wp_insert_comment( $comment_data ) ) {
@@ -1206,7 +1206,7 @@ function badgeos_get_feedback( $args = array() ) {
 	}
 
 	$args = badgeos_parse_feedback_args( $args );
-	
+
 	$output = '<div class="badgeos-submissions">';
 	if ( empty( $args ) ) {
 		$output .= '<p class="no-results">' . __( 'Sorry, no results to display', 'badgeos' ) . '</p>';
