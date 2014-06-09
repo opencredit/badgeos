@@ -119,6 +119,7 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
 * Submission Notification Settings: Specify an unlimited number of email addresses for submission admin notifications.
 * Notifications for: new submissions, new comments, and submission status changes
+* Filter Submissions to only show those from members of specific BuddyPress Groups (requires plugins: [BuddyPress](http://wordpress.org/extend/plugins/buddypress/ "BuddyPress") and [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
 
 
 = Extensibility and BadgeOS Add-ons =
