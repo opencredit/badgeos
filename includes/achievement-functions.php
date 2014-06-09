@@ -793,7 +793,7 @@ add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achiev
 /**
  * Register achievement types and flush rewrite rules.
  *
- * @since alpha
+ * @since 1.4.0
  */
 function badgeos_flush_rewrite_rules() {
 	badgeos_register_post_types();
@@ -804,7 +804,7 @@ function badgeos_flush_rewrite_rules() {
 /**
  * Update all dependent data if achievement type name has changed.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  array $data      Post data.
  * @param  array $post_args Post args.
@@ -824,7 +824,7 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '9
 /**
  * Check if an achievement type name has changed.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  array $post_args Post args.
  * @return bool             True if name has changed, otherwise false.
@@ -840,7 +840,7 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
 /**
  * Replace all instances of one achievement type with another.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  string $original_type Original achievement type.
  * @param  string $new_type      New achievement type.
@@ -858,7 +858,7 @@ function badgeos_update_achievement_types( $original_type = '', $new_type = '' )
 /**
  * Change all achievements of one type to a new type.
  *
- * @since alpha
+ * @since 1.4.0
  *
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
@@ -878,7 +878,7 @@ function badgeos_update_achievements_achievement_types( $original_type = '', $ne
 /**
  * Change all p2p connections of one achievement type to a new type.
  *
- * @since alpha
+ * @since 1.4.0
  *
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
@@ -897,7 +897,7 @@ function badgeos_update_p2p_achievement_types( $original_type = '', $new_type = 
 /**
  * Change all earned meta from one achievement type to another.
  *
- * @since alpha
+ * @since 1.4.0
  *
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
@@ -917,7 +917,7 @@ function badgeos_update_earned_meta_achievement_types( $original_type = '', $new
 /**
  * Change all active meta from one achievement type to another.
  *
- * @since alpha
+ * @since 1.4.0
  *
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
@@ -935,7 +935,7 @@ function badgeos_update_active_meta_achievement_types( $original_type = '', $new
 /**
  * Get unserialized user achievement metas.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  string $meta_key      Meta key.
  * @param  string $original_type Achievement type.
@@ -954,7 +954,7 @@ function badgeos_get_unserialized_achievement_metas( $meta_key = '', $original_t
 /**
  * Get serialized user achievement metas.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  string $meta_key      Meta key.
  * @param  string $original_type Achievement type.
@@ -977,7 +977,7 @@ function badgeos_get_achievement_metas( $meta_key = '', $original_type = '' ) {
 /**
  * Change user achievement meta from one achievement type to another.
  *
- * @since alpha
+ * @since 1.4.0
  *
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
@@ -996,7 +996,7 @@ function badgeos_update_meta_achievement_types( $achievements = array(), $origin
 /**
  * Redirect to inclue custom rename message.
  *
- * @since  alpha
+ * @since  1.4.0
  *
  * @param  string $location Original URI.
  * @return string           Updated URI.
@@ -1009,7 +1009,7 @@ function badgeos_achievement_type_rename_redirect( $location = '' ) {
 /**
  * Filter the "post updated" messages to include support for achievement types.
  *
- * @since alpha
+ * @since 1.4.0
  */
 function badgeos_achievement_type_update_messages( $messages ) {
 	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );

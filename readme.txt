@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, credly, webdevstudios, williamsba1, rzen, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 3.8.1
-Stable tag: 1.3.9
+Tested up to: 3.9.1
+Stable tag: 1.4.0
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -222,6 +222,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
+* Added: BadgeOS Shortcode registration API – Easily add support for new BadgeOS-related shortcodes and modify existing shortcodes with automatic support for the BOS Shortcode Embedder and help page.
 * Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
 * Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
@@ -229,6 +230,8 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Added: Trigger for commenting on specific posts.
 * Added: Many hooks for modifying shortcodes, submission lists, and more.
+* Added: Baseline support for renaming achievement types, including the auto-migrating all achievements (and user earnings) from original achievement type to the new.
+* Added: Helper functions for checking if user meets BOS management roles.
 * Updated: Revised trigger for commenting on posts to only award when comment is approved.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
@@ -236,6 +239,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Updated: BadgeOS management role selector is hidden on the settings page to non-admins.
 * Updated: Badgeos management role selector now excludes contributor and subscriber roles.
+* Fixed: Rewrite rules automatically flush when a new achievement type is added (or an existing is renamed).
 * Fixed: BadgeOS settings can now be modified by the minimum selected management role.
 * Fixed: Prevent users from repeatedly earning auto-approved submissions.
 * Fixed: Submissions List status filter now indicates the displayed status on page load.
@@ -353,6 +357,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
+* Added: BadgeOS Shortcode registration API – Easily add support for new BadgeOS-related shortcodes and modify existing shortcodes with automatic support for the BOS Shortcode Embedder and help page.
 * Added: Submission Manager Role selector – allow users to moderate submissions without granting them full access to BadgeOS administration.
 * Added: Submission Notification Admin Settings – Specify an unlimited number of email addresses in a comma-separated list for submission admin notifications.
 * Added: Submission Notifications to users who have made a submission.
@@ -360,6 +365,8 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Added: User Email Notification Setting - Users can opt-out of email notifications in the profile editor.
 * Added: Trigger for commenting on specific posts.
 * Added: Many hooks for modifying shortcodes, submission lists, and more.
+* Added: Baseline support for renaming achievement types, including the auto-migrating all achievements (and user earnings) from original achievement type to the new.
+* Added: Helper functions for checking if user meets BOS management roles.
 * Updated: Revised trigger for commenting on posts to only award when comment is approved.
 * Updated: Submission status can now be altered on the front-end from approved to denied or back again.
 * Updated: Admin area for editing a submission now uses the same approve/deny buttons as the rest of the site.
@@ -367,6 +374,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Updated: Many, many internationalization enhancements. Help us release BadgeOS in your language!
 * Updated: BadgeOS management role selector is hidden on the settings page to non-admins.
 * Updated: Badgeos management role selector now excludes contributor and subscriber roles.
+* Fixed: Rewrite rules automatically flush when a new achievement type is added (or an existing is renamed).
 * Fixed: BadgeOS settings can now be modified by the minimum selected management role.
 * Fixed: Prevent users from repeatedly earning auto-approved submissions.
 * Fixed: Submissions List status filter now indicates the displayed status on page load.
