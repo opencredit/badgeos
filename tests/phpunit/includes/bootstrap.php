@@ -22,9 +22,9 @@ error_reporting(E_ALL);
  */
 if ( ! $wp_test_dir = getenv('WP_TESTS_DIR') ) {
 
-	$wp_test_dir = '/tmp/wordpress-tests';
+	$wp_test_dir = '/tmp/wordpress-tests-lib';
 
-	if ( ! file_exists( $wp_test_dir ) || ! file_exists( $wp_test_dir . '/tests' ) ) {
+	if ( ! file_exists( $wp_test_dir . '/includes' ) ) {
 		die( "Fatal Error: Could not find the WordPress tests directory.\n" );
 	}
 }
@@ -32,7 +32,7 @@ if ( ! $wp_test_dir = getenv('WP_TESTS_DIR') ) {
 /**
  * Loads WP utility functions like `tests_add_filter` and `_delete_all_posts`.
  */
-require_once $wp_test_dir . '/tests/phpunit/includes/functions.php';
+require_once $wp_test_dir . '/includes/functions.php';
 
 /**
  * Preset wp_options before loading the WordPress stack.
@@ -59,4 +59,4 @@ tests_add_filter( 'muplugins_loaded', '_tests_load_badgeos' );
 /**
  * Bootstraps the WordPress stack.
  */
-require $wp_test_dir . '/tests/phpunit/includes/bootstrap.php';
+require $wp_test_dir . '/includes/bootstrap.php';

@@ -13,13 +13,17 @@
  * Posts a log entry when a user unlocks any achievement post
  *
  * @since  1.0.0
- * @param  integer $object_id    The post id of the activity we're logging
+ * @param  integer $object_id  The post id of the activity we're logging
  * @param  integer $user_id    The user ID
  * @param  string  $action     The action word to be used for the generated title
  * @param  string  $title      An optional default title for the log post
  * @return integer             The post ID of the newly created log entry
  */
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
+
+	if ( empty( $object_id ) ) {
+		return;
+	}
 
 	// Get the current user if no ID specified
 	if ( empty( $user_id ) )

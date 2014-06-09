@@ -31,7 +31,6 @@ jQuery(document).ready(function($) {
 		// Grab our selected trigger type and achievement selector
 		var trigger_type = $(this).val();
 		var achievement_selector = $(this).siblings('.select-achievement-type');
-		console.log( achievement_selector );
 
 		// If we're working with achievements, show the achievement selecter (otherwise, hide it)
 		if ( 'any-achievement' == trigger_type || 'all-achievements' == trigger_type || 'specific-achievement' == trigger_type ) {
@@ -55,10 +54,11 @@ jQuery(document).ready(function($) {
 		var achievement_type     = achievement_selector.val();
 		var step_id              = achievement_selector.parent('li').attr('data-step-id');
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
+		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
 
 		// If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
-		if ( '' !== achievement_type && 'specific-achievement' == achievement_selector.siblings('.select-trigger-type').val() ) {
+		if ( '' !== achievement_type && 'specific-achievement' == trigger_type ) {
 			$.post(
 				ajaxurl,
 				{
@@ -68,14 +68,17 @@ jQuery(document).ready(function($) {
 					excluded_posts: excluded_posts
 				},
 				function( response ) {
-					achievement_selector.siblings('.select-achievement-post').html( response );
-					achievement_selector.siblings('.select-achievement-post').show();
+					achievement_selector.siblings('select.select-achievement-post').html( response );
+					achievement_selector.siblings('select.select-achievement-post').show();
 				}
 			);
 
 		// Otherwise, keep our post selector hidden
 		} else {
 			achievement_selector.siblings('.select-achievement-post').hide();
+			if ( 'badgeos_specific_new_comment' == trigger_type ) {
+				achievement_selector.siblings('input.select-achievement-post').show();
+			}
 		}
 	});
 	// Trigger a change for our achievement type post selector to determine if it should show
@@ -132,16 +135,17 @@ function badgeos_update_steps(e) {
 
 		// Cache our step object
 		var step = jQuery(this);
+		var trigger_type = step.find( '.select-trigger-type' ).val();
 
 		// Setup our step object
 		var step_details = {
 			"step_id"          : step.attr( 'data-step-id' ),
-			"order"            : step.children( 'input[name="order"]' ).val(),
-			"required_count"   : step.children( '.required-count' ).val(),
-			"trigger_type"     : step.children( '.select-trigger-type' ).val(),
-			"achievement_type" : step.children( '.select-achievement-type' ).val(),
-			"achievement_post" : step.children( '.select-achievement-post' ).val(),
-			"title"            : step.children( '.step-title' ).children( '.title' ).val()
+			"order"            : step.find( 'input[name="order"]' ).val(),
+			"required_count"   : step.find( '.required-count' ).val(),
+			"trigger_type"     : trigger_type,
+			"achievement_type" : step.find( '.select-achievement-type' ).val(),
+			"achievement_post" : 'badgeos_specific_new_comment' === trigger_type ? step.find( 'input.select-achievement-post' ).val() : step.find( 'select.select-achievement-post' ).val(),
+			"title"            : step.find( '.step-title .title' ).val()
 		};
 
 		// Allow external functions to add their own data to the array

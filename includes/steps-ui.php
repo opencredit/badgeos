@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Achievements
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
@@ -36,7 +36,7 @@ function badgeos_add_steps_ui_meta_box() {
 		add_meta_box( 'badgeos_steps_ui', apply_filters( 'badgeos_steps_ui_title', __( 'Required Steps', 'badgeos' ) ), 'badgeos_steps_ui_meta_box', $achievement_type, 'advanced', 'high' );
 	}
 }
-add_action( 'admin_menu', 'badgeos_add_steps_ui_meta_box', 99 );
+add_action( 'add_meta_boxes', 'badgeos_add_steps_ui_meta_box' );
 
 /**
  * Renders the HTML for meta box, refreshes whenever a new step is added
@@ -132,6 +132,8 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			<option value=""></option>
 		</select>
 
+		<input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
+
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
 		<input class="required-count" type="text" size="2" maxlength="2" value="<?php echo $count; ?>" placeholder="1">
@@ -163,7 +165,7 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 	);
 
 	// If the step requires a specific achievement
-	if ( !empty( $requirements['achievement_type'] ) ) {
+	if ( ! empty( $requirements['achievement_type'] ) ) {
 		$connected_activities = @get_posts( array(
 			'post_type'        => $requirements['achievement_type'],
 			'posts_per_page'   => 1,
@@ -173,6 +175,11 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		));
 		if ( ! empty( $connected_activities ) )
 			$requirements['achievement_post'] = $connected_activities[0]->ID;
+	} elseif ( 'badgeos_specific_new_comment' === $requirements['trigger_type'] ) {
+		$achievement_post = absint( get_post_meta( $step_id, '_badgeos_achievement_post', true ) );
+		if ( 0 < $achievement_post ) {
+			$requirements[ 'achievement_post' ] = $achievement_post;
+		}
 	}
 
 	// Available filter for overriding elsewhere
@@ -260,6 +267,7 @@ function badgeos_update_steps_ajax_handler() {
 
 			// Clear all relation data
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
+			delete_post_meta( $step_id, '_badgeos_achievement_post' );
 
 			// Flip between our requirement types and make an appropriate connection
 			switch ( $trigger_type ) {
@@ -267,14 +275,10 @@ function badgeos_update_steps_ajax_handler() {
 				// Connect the step to ANY of the given achievement type
 				case 'any-achievement' :
 					$title = sprintf( __( 'any %s', 'badgeos' ), $achievement_type );
-				break;
-
-				// Connect the step to ALL of the given achievement type
+					break;
 				case 'all-achievements' :
 					$title = sprintf( __( 'all %s', 'badgeos' ), $achievement_type );
-				break;
-
-				// Connect the step to a specific achievement
+					break;
 				case 'specific-achievement' :
 					p2p_create_connection(
 						$step['achievement_type'] . '-to-step',
@@ -287,8 +291,11 @@ function badgeos_update_steps_ajax_handler() {
 						)
 					);
 					$title = '"' . get_the_title( $step['achievement_post'] ) . '"';
-				break;
-
+					break;
+				case 'badgeos_specific_new_comment' :
+					update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
+					$title = sprintf( __( 'comment on post %d', 'badgeos' ),  $step['achievement_post'] );
+					break;
 				default :
 					$triggers = badgeos_get_activity_triggers();
 					$title = $triggers[$trigger_type];
@@ -342,8 +349,9 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 	$requirements = badgeos_get_step_requirements( $_REQUEST['step_id'] );
 
 	// If we don't have an achievement type, bail now
-	if ( empty( $achievement_type ) )
+	if ( empty( $achievement_type ) ) {
 		die();
+	}
 
 	// Grab all our posts for this achievement type
 	$achievements = get_posts( array(

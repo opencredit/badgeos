@@ -204,7 +204,9 @@ function badgeos_user_update_active_achievement_on_earnings( $user_id, $achievem
 	// If achievement is a step, update its parent activity
 	if ( 'step' == get_post_type( $achievement_id ) ) {
 		$parent_achievement = badgeos_get_parent_of_achievement( $achievement_id );
-		badgeos_user_update_active_achievement( $user_id, $parent_achievement->ID );
+		if ( $parent_achievement ) {
+			badgeos_user_update_active_achievement( $user_id, $parent_achievement->ID );
+		}
 
 	// Otherwise, drop the earned achievement form the user's active achievement array
 	} else {

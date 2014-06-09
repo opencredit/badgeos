@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 1.3.5
+* Version: 1.4.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 */
@@ -32,7 +32,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '1.3.5';
+	public static $version = '1.4.0';
 
 	function __construct() {
 		// Define plugin constants
@@ -65,7 +65,9 @@ class BadgeOS {
 	 */
 	function includes() {
 		require_once( $this->directory_path . 'includes/p2p/load.php' );
+		require_once( $this->directory_path . 'includes/class.BadgeOS_Editor_Shortcodes.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
+		require_once( $this->directory_path . 'includes/class.BadgeOS_Shortcode.php' );
 		require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
@@ -144,7 +146,7 @@ class BadgeOS {
 					'admin_box' => false,
 					'fields'    => array(
 						'order'   => array(
-							'title'   => 'Order',
+							'title'   => __( 'Order', 'badgeos' ),
 							'type'    => 'text',
 							'default' => 0,
 						),
@@ -160,7 +162,7 @@ class BadgeOS {
 					'admin_box' => false,
 					'fields'    => array(
 						'order'   => array(
-							'title'   => 'Order',
+							'title'   => __( 'Order', 'badgeos' ),
 							'type'    => 'text',
 							'default' => 0,
 						),
@@ -191,7 +193,7 @@ class BadgeOS {
 		if ( !get_page_by_title( 'Badges', 'OBJECT', 'achievement-type' ) ) {
 			$badge_post_id = wp_insert_post( array(
 				'post_title'   => __( 'Badges', 'badgeos'),
-				'post_content' => 'Badges badge type',
+				'post_content' => __( 'Badges badge type', 'badgeos' ),
 				'post_status'  => 'publish',
 				'post_author'  => 1,
 				'post_type'    => 'achievement-type',
@@ -204,7 +206,8 @@ class BadgeOS {
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
 			$badgeos_settings['minimum_role']     = 'manage_options';
-			$badgeos_settings['submission_email'] = get_option( 'admin_email' );
+			$badgeos_settings['submission_manager_role'] = 'manage_options';
+			$badgeos_settings['submission_email'] = 'enabled';
 			$badgeos_settings['debug_mode']       = 'disabled';
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
@@ -212,7 +215,7 @@ class BadgeOS {
 		// Setup default Credly options
 		$credly_settings = (array) get_option( 'credly_settings', array() );
 
-		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credyl_enable' ] ) ) {
+		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credly_enable' ] ) ) {
 			$credly_settings['credly_enable']                      = 'true';
 			$credly_settings['credly_badge_title']                 = 'post_title';
 			$credly_settings['credly_badge_description']           = 'post_body';
@@ -226,8 +229,7 @@ class BadgeOS {
 		}
 
 		// Register our post types and flush rewrite rules
-		badgeos_register_post_types();
-		flush_rewrite_rules();
+		badgeos_flush_rewrite_rules();
 	}
 
 	/**
@@ -235,20 +237,17 @@ class BadgeOS {
 	 */
 	function plugin_menu() {
 
-		// Get our BadgeOS Settings
-		$badgeos_settings = get_option( 'badgeos_settings' );
-
 		// Set minimum role setting for menus
-		$minimum_role = $badgeos_settings['minimum_role'];
+		$minimum_role = badgeos_get_manager_capability();
 
 		// Create main menu
 		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items
-		add_submenu_page( 'badgeos_badgeos', 'BadgeOS Settings', 'Settings', $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
-		add_submenu_page( 'badgeos_badgeos', 'Credly Integration', 'Credly Integration', $minimum_role, 'badgeos_sub_credly_integration', 'badgeos_credly_options_page' );
-		add_submenu_page( 'badgeos_badgeos', 'Add-Ons', 'Add-Ons', $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
-		add_submenu_page( 'badgeos_badgeos', 'Help / Support', 'Help / Support', $minimum_role, 'badgeos_sub_help_support', 'badgeos_help_support_page' );
+		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
+		add_submenu_page( 'badgeos_badgeos', __( 'Credly Integration', 'badgeos' ), __( 'Credly Integration', 'badgeos' ), $minimum_role, 'badgeos_sub_credly_integration', 'badgeos_credly_options_page' );
+		add_submenu_page( 'badgeos_badgeos', __( 'Add-Ons', 'badgeos' ), __( 'Add-Ons', 'badgeos' ), $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
+		add_submenu_page( 'badgeos_badgeos', __( 'Help / Support', 'badgeos' ), __( 'Help / Support', 'badgeos' ), $minimum_role, 'badgeos_sub_help_support', 'badgeos_help_support_page' );
 
 	}
 

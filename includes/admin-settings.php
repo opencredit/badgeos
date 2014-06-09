@@ -4,7 +4,7 @@
  *
  * @package BadgeOS
  * @subpackage Admin
- * @author Credly, LLC
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
@@ -20,6 +20,20 @@ function badgeos_register_settings() {
 add_action( 'admin_init', 'badgeos_register_settings' );
 
 /**
+ * Grant BadgeOS manager role ability to edit BadgeOS settings.
+ *
+ * @since  1.4.0
+ *
+ * @param  string $capability Required capability.
+ * @return string             Required capability.
+ */
+function badgeos_edit_settings_capability( $capability ) {
+	return badgeos_get_manager_capability();
+}
+add_filter( 'option_page_capability_badgeos_settings_group', 'badgeos_edit_settings_capability' );
+add_filter( 'option_page_capability_credly_settings_group', 'badgeos_edit_settings_capability' );
+
+/**
  * BadgeOS Settings validation
  *
  * @param  string $input The input we want to validate
@@ -27,10 +41,14 @@ add_action( 'admin_init', 'badgeos_register_settings' );
  */
 function badgeos_settings_validate( $input = '' ) {
 
+	// Fetch existing settings
+	$original_settings = get_option( 'badgeos_settings' );
+
 	// Sanitize the settings data submitted
-	$input['minimum_role'] = sanitize_text_field( $input['minimum_role'] );
-	$input['debug_mode']   = sanitize_text_field( $input['debug_mode'] );
-	$input['ms_show_all_achievements'] = sanitize_text_field( $input['ms_show_all_achievements'] );
+	$input['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
+	$input['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
+	$input['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
+	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
@@ -174,10 +192,6 @@ function badgeos_credly_api_key_errors() {
  * @return void
  */
 function badgeos_settings_page() {
-	flush_rewrite_rules();
-	if ( badgeos_is_debug_mode() )
-		echo 'debug mode is on';
-
 	?>
 	<div class="wrap" >
 		<div id="icon-options-general" class="icon32"></div>
@@ -188,58 +202,75 @@ function badgeos_settings_page() {
 			<?php $badgeos_settings = get_option( 'badgeos_settings' ); ?>
 			<?php
 			//load settings
-			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : '';
+			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
+			$submission_manager_role = ( isset( $badgeos_settings['submission_manager_role'] ) ) ? $badgeos_settings['submission_manager_role'] : 'manage_options';
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
+			$submission_email_addresses = ( isset( $badgeos_settings['submission_email_addresses'] ) ) ? $badgeos_settings['submission_email_addresses'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
 			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
 
 			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
-				<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
-					<td>
-                        <select id="minimum_role" name="badgeos_settings[minimum_role]">
-                            <option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-                            <option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-                            <option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-                            <option value="edit_posts" <?php selected( $minimum_role, 'edit_posts' ); ?>><?php _e( 'Contributor', 'badgeos' ); ?></option>
-                            <option value="read" <?php selected( $minimum_role, 'read' ); ?>><?php _e( 'Subscriber', 'badgeos' ); ?></option>
-                        </select>
-					</td>
-				</tr>
+				<?php if ( current_user_can( 'manage_options' ) ) { ?>
+					<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="minimum_role" name="badgeos_settings[minimum_role]">
+								<option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+								<option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+								<option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
+						<td>
+							<select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
+								<option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
+								<option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
+								<option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
+							</select>
+						</td>
+					</tr>
+				<?php } /* endif current_user_can( 'manage_options' ); */ ?>
 				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
 					<td>
-                        <select id="debug_mode" name="badgeos_settings[submission_email]">
-                            <option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                            <option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                        </select>
+						<select id="submission_email" name="badgeos_settings[submission_email]">
+							<option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+							<option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr valign="top"><th scope="row"><label for="submission_email_addresses"><?php _e( 'Notification email addresses:', 'badgeos' ); ?></label></th>
+					<td>
+						<input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
+						<p class="description"><?php _e( 'Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email.', 'badgeos' ); ?></p>
 					</td>
 				</tr>
 				<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Debug Mode:', 'badgeos' ); ?></label></th>
 					<td>
 						<select id="debug_mode" name="badgeos_settings[debug_mode]">
-                            <option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                            <option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                        </select>
+							<option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+							<option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+						</select>
 					</td>
 				</tr>
 				<?php
-                // check if multisite is enabled & if plugin is network activated
-                if ( is_super_admin() ){
-	                if ( is_multisite() ) {
-	                ?>
-	                    <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-	                        <td>
-	                            <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-	                                <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-	                                <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	            	<?php
-	                }
-            	}
-        		do_action( 'badgeos_settings', $badgeos_settings ); ?>
+				// check if multisite is enabled & if plugin is network activated
+				if ( is_super_admin() ){
+					if ( is_multisite() ) {
+					?>
+						<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+							<td>
+								<select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
+									<option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+									<option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+								</select>
+							</td>
+						</tr>
+					<?php
+					}
+				}
+				do_action( 'badgeos_settings', $badgeos_settings ); ?>
 			</table>
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
@@ -296,7 +327,7 @@ add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
 function badgeos_add_ons_page() {
 	$image_url = $GLOBALS['badgeos']->directory_url .'images/';
 	?>
-	<div class="wrap" >
+	<div class="wrap badgeos-addons">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php printf( __( 'BadgeOS Add-Ons &nbsp;&mdash;&nbsp; %s', 'badgeos' ), '<a href="http://badgeos.org/add-ons/?ref=badgeos" class="button-primary" target="_blank">' . __( 'Browse All Add-Ons', 'badgeos' ) . '</a>' ); ?></h2>
 		<p><?php _e( 'These add-ons extend the functionality of BadgeOS.', 'badgeos' ); ?></p>
@@ -324,6 +355,8 @@ function badgeos_add_ons_get_feed() {
 		if ( ! is_wp_error( $feed ) ) {
 			if ( isset( $feed['body'] ) && strlen( $feed['body'] ) > 0 ) {
 				$feed = wp_remote_retrieve_body( $feed );
+				$feed = str_replace( '<html><body>', '', $feed );
+				$feed = str_replace( '</body></html>', '', $feed );
 				// Cache our feed for 1 hour
 				set_transient( 'badgeos_add_ons_feed', $feed, HOUR_IN_SECONDS );
 			}
@@ -346,17 +379,40 @@ function badgeos_help_support_page() { ?>
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'BadgeOS Help and Support', 'badgeos' ); ?></h2>
 		<h2><?php _e( 'About BadgeOS', 'badgeos' ); ?>:</h2>
-		<p><?php printf( __( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievement, and earn badges. You define the Achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by <a href="%s" target="_blank">Credly</a>, the free web service for issuing, earning and sharing badges.', 'badgeos' ), 'https://credly.com/' ); ?></p>
-		<p><?php printf( __( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on %s so we can keep making BadgeOS better for everyone.", 'badgeos' ), '<a href="https://github.com/opencredit/BadgeOS" target="_blank">Github</a>' ); ?></p>
+		<p><?php printf(
+			__( 'BadgeOS&trade; is plugin to WordPress that allows your site\'s users to complete tasks, demonstrate achievements, and earn badges. You define the achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the "Open Credit" API by %s, the free web service for issuing, earning and sharing badges.', 'badgeos' ),
+			'<a href="https://credly.com/" target="_blank">Credly</a>'
+		); ?></p>
+		<p><?php printf(
+			__( "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on %s so we can keep making BadgeOS better for everyone.", 'badgeos' ),
+			'<a href="https://github.com/opencredit/BadgeOS" target="_blank">GitHub</a>'
+		); ?></p>
 		<?php do_action( 'badgeos_help_support_page_about' ); ?>
 
 		<h2><?php _e( 'Help / Support', 'badgeos' ); ?>:</h2>
-		<p><?php _e( 'For support on using BadgeOS or to suggest feature enhancements, visit the <a href="http://badgeos.org" target="_blank">BadgeOS site</a>.  The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. <a href="http://badgeos.org/" target="_blank">Contact us</a> with inquiries. See examples of enhanced BadgeOS projects.', 'badgeos' ); ?></p>
+		<p><?php printf(
+			__( 'For support on using BadgeOS or to suggest feature enhancements, visit the %1$s. The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. %2$s with inquiries. See examples of %3$s.', 'badgeos' ),
+			sprintf(
+				'<a href="http://badgeos.org" target="_blank">%s</a>',
+				__( 'BadgeOS site', 'badgeos' )
+			),
+			sprintf(
+				'<a href="http://badgeos.org/contact/" target="_blank">%s</a>',
+				__( 'Contact us', 'badgeos' )
+			),
+			sprintf(
+				'<a href="http://badgeos.org/about/sample-sites/">%s</a>',
+				__( 'enhanced BadgeOS projects', 'badgeos' )
+			)
+		); ?></p>
 		<p><?php printf( __( 'Please submit bugs or issues to %s for the BadgeOS Project.', 'badgeos' ), '<a href="https://github.com/opencredit/BadgeOS" target="_blank">Github</a>' ); ?></p>
 		<?php do_action( 'badgeos_help_support_page_help' ); ?>
 
 		<h2><?php _e( 'Shortcodes', 'badgeos' ); ?>:</h2>
-		<p><?php _e( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions.  Visit <a href="http://badgeos.org/support/shortcodes/" target="_blank">BadgeOS.org</a> for additional information on shortcodes.', 'badgeos' ); ?></p>
+		<p><?php printf(
+			__( 'With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions. Visit %s for additional information on shortcodes.', 'badgeos' ),
+			'<a href="http://badgeos.org/support/shortcodes/" target="_blank">BadgeOS.org</a>'
+		); ?></p>
 		<?php do_action( 'badgeos_help_support_page_shortcodes' ); ?>
 	</div>
 	<?php
@@ -680,3 +736,43 @@ function badgeos_media_modal_featured_image_text( $strings = array(), $post = nu
 	return $strings;
 }
 add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10, 2 );
+
+/**
+ * Get capability required for BadgeOS administration.
+ *
+ * @since  1.4.0
+ *
+ * @return string User capability.
+ */
+function badgeos_get_manager_capability() {
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	return isset( $badgeos_settings[ 'minimum_role' ] ) ? $badgeos_settings[ 'minimum_role' ] : 'manage_options';
+}
+
+/**
+ * Get capability required for Submission management.
+ *
+ * @since  1.4.0
+ *
+ * @return string User capability.
+ */
+function badgeos_get_submission_manager_capability() {
+	$badgeos_settings = get_option( 'badgeos_settings' );
+	return isset( $badgeos_settings[ 'submission_manager_role' ] ) ? $badgeos_settings[ 'submission_manager_role' ] : badgeos_get_manager_capability();
+}
+
+/**
+ * Check if a user can manage submissions.
+ *
+ * @since  1.4.0
+ *
+ * @param  integer $user_id User ID.
+ * @return bool             True if user can manaage submissions, otherwise false.
+ */
+function badgeos_user_can_manage_submissions( $user_id = 0 ) {
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	return ( user_can( $user_id, badgeos_get_submission_manager_capability() ) || user_can( $user_id, badgeos_get_manager_capability() ) );
+}
