@@ -183,11 +183,11 @@ jQuery( function( $ ) {
 
 		if ( 'close' == link.data( 'action' ) ) {
 			link.parent().siblings( '.badgeos-extras-window' ).slideUp( 300 );
-			link.data( 'action', 'open' ).prop( 'class', 'show-hide-open' ).text( 'Show Details' );
+			link.data( 'action', 'open' ).prop( 'class', 'show-hide-open' ).text( badgeos_feedback.show_details );
 		}
 		else {
 			link.parent().siblings( '.badgeos-extras-window' ).slideDown( 300 );
-			link.data( 'action', 'close' ).prop( 'class', 'show-hide-close' ).text( 'Hide Details' );
+			link.data( 'action', 'close' ).prop( 'class', 'show-hide-close' ).text( badgeos_feedback.hide_details );
 		}
 
 	} );
