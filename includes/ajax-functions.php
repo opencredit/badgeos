@@ -311,7 +311,7 @@ function badgeos_ajax_get_achievement_types() {
 	$found = array_map( 'get_post_type_object', $matches );
 
 	// Include an "all" option as the first option
-	array_unshift( $found, (object) array( 'name' => 'all', 'label' => 'All' ) );
+	array_unshift( $found, (object) array( 'name' => 'all', 'label' => __( 'All', 'badgeos' ) ) );
 
 	// Return our results
 	wp_send_json_success( $found );
