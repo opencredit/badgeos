@@ -737,6 +737,11 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	// Enqueue and localize our JS
 	$atts['ajax_url'] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
 	$atts['user_id']  = $user_ID;
+	
+	// Add localization
+        $atts[ 'show_details' ] = __( 'Show Details', 'badgeos' );
+        $atts[ 'hide_details' ] = __( 'Hide Details', 'badgeos' );
+	
 	wp_enqueue_script( 'badgeos-achievements' );
 	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback_buttons', $atts );
 
