@@ -52,17 +52,18 @@ class BadgeOS_Editor_Shortcodes {
 			'id_multiple_placeholder' => __( 'Select Post(s)', 'badgeos' ),
 			'user_placeholder'        => __( 'Select a user', 'badgeos' ),
 			'post_type_placeholder'   => __( 'Default: All', 'badgeos' ),
-			'plural_suffix'           => __( 's', 'badgeos' );
-			'matches_placeholder'     => __( ' results are available, use up and down arrow keys to navigate.', 'badgeos' );
-			'no_matches_placeholder'  => __( 'No matches found.', 'badgeos' );
-			'short_placeholder1'      => __( 'Please enter ', 'badgeos' );
-			'short_placeholder2'      => __( ' or more character', 'badgeos' );
-			'long_placeholder1'       => __( 'Please delete ', 'badgeos' );
-			'long_placeholder2'       => __( ' character', 'badgeos' );
-			'big_placeholder1'        => __( 'You can only select ', 'badgeos' );
-			'big_placeholder2'        => __( ' item', 'badgeos' );
-			'loading_placeholder'     => __( 'Loading more results…', 'badgeos' );
-			'searching_placeholder'   => __( 'Searching…', 'badgeos' );
+			
+			'plural_suffix' => __( 's', 'badgeos' );
+			'matches'       => __( ' results are available, use up and down arrow keys to navigate.', 'badgeos' );
+			'no_matches'    => __( 'No matches found.', 'badgeos' );
+			'too_short1'    => __( 'Please enter ', 'badgeos' );
+			'too_short2'    => __( ' or more character', 'badgeos' );
+			'too_long1'     => __( 'Please delete ', 'badgeos' );
+			'too_long2'     => __( ' character', 'badgeos' );
+			'too_big1'      => __( 'You can only select ', 'badgeos' );
+			'too_big2'      => __( ' item', 'badgeos' );
+			'loading'       => __( 'Loading more results…', 'badgeos' );
+			'searching'     => __( 'Searching…', 'badgeos' );
 		);
 	}
 
