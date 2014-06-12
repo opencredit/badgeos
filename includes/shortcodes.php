@@ -176,6 +176,7 @@ function badgeos_shortcode_submissions_handler( $atts = array(), $shortcode = ''
 	// AJAX url
 	$atts[ 'ajax_url' ] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
 	$atts[ 'action' ]   = 'get-feedback';
+
 	// Enqueue and localize our JS
 	wp_enqueue_script( 'badgeos-achievements' );
 	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
