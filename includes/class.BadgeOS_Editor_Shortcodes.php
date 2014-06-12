@@ -33,6 +33,7 @@ class BadgeOS_Editor_Shortcodes {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$min = '';
 		wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
+		wp_localize_script( 'badgeos-select2', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery', 'badgeos-select2' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
 		wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
@@ -51,6 +52,17 @@ class BadgeOS_Editor_Shortcodes {
 			'id_multiple_placeholder' => __( 'Select Post(s)', 'badgeos' ),
 			'user_placeholder'        => __( 'Select a user', 'badgeos' ),
 			'post_type_placeholder'   => __( 'Default: All', 'badgeos' ),
+			'plural_suffix'           => __( 's', 'badgeos' );
+			'matches_placeholder'     => __( ' results are available, use up and down arrow keys to navigate.', 'badgeos' );
+			'no_matches_placeholder'  => __( 'No matches found.', 'badgeos' );
+			'short_placeholder1'      => __( 'Please enter ', 'badgeos' );
+			'short_placeholder2'      => __( ' or more character', 'badgeos' );
+			'long_placeholder1'       => __( 'Please delete ', 'badgeos' );
+			'long_placeholder2'       => __( ' character', 'badgeos' );
+			'big_placeholder1'        => __( 'You can only select ', 'badgeos' );
+			'big_placeholder2'        => __( ' item', 'badgeos' );
+			'loading_placeholder'     => __( 'Loading more results…', 'badgeos' );
+			'searching_placeholder'   => __( 'Searching…', 'badgeos' );
 		);
 	}
 
