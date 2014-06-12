@@ -830,10 +830,12 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '9
  * @return bool             True if name has changed, otherwise false.
  */
 function badgeos_achievement_type_changed( $post_args = array() ) {
+	$original_post = isset( $post_args['ID'] ) ? get_post( $post_args['ID'] ) : null;
 	return (
 		'achievement-type' === $post_args['post_type']
-		&& $post_args['ID']
-		&& get_post( $post_args['ID'] )->post_title !== $post_args['post_title']
+		&& is_object( $original_post )
+		&& ! empty( $original_post->post_name )
+		&& $original_post->post_title !== $post_args['post_title']
 	);
 }
 
@@ -847,6 +849,12 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
  * @return string                New achievement type.
  */
 function badgeos_update_achievement_types( $original_type = '', $new_type = '' ) {
+
+	// Sanity check to prevent alterating core posts
+	if ( ! $original_type || in_array( $original_type, array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item' ) ) ) {
+		return $new_type;
+	}
+
 	badgeos_update_achievements_achievement_types( $original_type, $new_type );
 	badgeos_update_p2p_achievement_types( $original_type, $new_type );
 	badgeos_update_earned_meta_achievement_types( $original_type, $new_type );

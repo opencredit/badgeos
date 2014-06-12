@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 3.9.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -119,10 +119,10 @@ BadgeOS is extremely powerful and infinitely extensible. Check out some of the o
 * Optional notification emails inform you when people on your site have made submissions or nominated peers.
 * Submission Notification Settings: Specify an unlimited number of email addresses for submission admin notifications.
 * Notifications for: new submissions, new comments, and submission status changes
+* Filter Submissions to only show those from members of specific BuddyPress Groups (requires plugins: [BuddyPress](http://wordpress.org/extend/plugins/buddypress/ "BuddyPress") and [BadgeOS Community Add-on](http://wordpress.org/extend/plugins/badgeos-community-add-on/ "BadgeOS Community Add-on"))
 
 
 = Extensibility and BadgeOS Add-ons =
-
 
 * BadgeOS is designed to be a true operating system for turning any WordPress site into an engagement management application.
 * BadgeOS offers a growing catalog of [Add-ons](http://badgeos.org/add-ons/ "BadgeOS Add-ons") to the plugin that enhance core functionality with specialized functions.
@@ -219,6 +219,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 1.4.1 =
+* Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
@@ -354,6 +357,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.1 =
+* Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
 
 = 1.4.0 =
 * Added: BadgeOS Shortcode Embedder – Easily add any shortcode to any content area with a few clicks.
