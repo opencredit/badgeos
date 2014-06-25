@@ -134,7 +134,7 @@ function badgeos_reformat_entries( $content ) {
 	$newcontent = '<div class="achievement-wrap'. $class .'">';
 
 	// Check if current user has earned this achievement
-	$newcontent .= badgeos_has_user_earned_achievement( $badge_id );
+	$newcontent .= badgeos_render_earned_achievement_text( $badge_id, get_current_user_id() );
 
 	$newcontent .= '<div class="alignleft badgeos-item-image">'. badgeos_get_achievement_post_thumbnail( $badge_id ) .'</div>';
 	// $newcontent .= $title;
@@ -335,33 +335,41 @@ function badgeos_add_earned_class_single( $classes = array() ) {
 add_filter( 'post_class', 'badgeos_add_earned_class_single' );
 
 /**
- * Returns a message if user has earned the achievement
+ * Returns a message if user has earned the achievement.
  *
  * @since  1.1.0
- * @param  integer $achievement_id The given achievment's ID
- * @param  integer $user_id        The given user's ID
- * @return string                  The HTML markup for our earned message
+ *
+ * @param  integer $achievement_id Achievement ID.
+ * @param  integer $user_id        User ID.
+ * @return string                  HTML Markup.
  */
-function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
+function badgeos_render_earned_achievement_text( $achievement_id = 0, $user_id = 0 ) {
 
-	if ( is_user_logged_in() ) {
+	$earned_message = '';
 
-		// Check if the user has earned the achievement
-		if ( badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) ) ) {
-
-			// Return a message stating the user has earned the achievement
-			$earned_message = '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
-
-			// If the achievement has congrats text, output that, too.
-			if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) )
-				$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( $congrats_text ) . '</div>';
-
-			return apply_filters( 'badgeos_earned_achievement_message', $earned_message, $achievement_id, $user_id );
-
+	if ( badgeos_has_user_earned_achievement( $achievement_id, $user_id ) ) {
+		$earned_message .= '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
+		if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) {
+			$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( $congrats_text ) . '</div>';
 		}
-
 	}
 
+	return apply_filters( 'badgeos_earned_achievement_message', $earned_message, $achievement_id, $user_id );
+}
+
+/**
+ * Check if user has earned a given achievement.
+ *
+ * @since  alpha
+ *
+ * @param  integer $achievement_id Achievement ID.
+ * @param  integer $user_id        User ID.
+ * @return bool                    True if user has earned the achievement, otherwise false.
+ */
+function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 ) {
+	$earned_achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ) ) );
+	$earned_achievement = ! empty( $earned_achievements );
+	return apply_filters( 'badgeos_has_user_earned_achievement', $earned_achievement, $achievement_id, $user_id );
 }
 
 /**
