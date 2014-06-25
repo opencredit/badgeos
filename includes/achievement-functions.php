@@ -836,6 +836,7 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
 		&& is_object( $original_post )
 		&& ! empty( $original_post->post_name )
 		&& $original_post->post_title !== $post_args['post_title']
+		&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 	);
 }
 
