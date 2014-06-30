@@ -45,7 +45,7 @@ function badgeos_register_post_types() {
 		'has_archive'        => false,
 		'hierarchical'       => false,
 		'menu_position'      => null,
-		'supports'           => array( 'title', 'thumbnail' ),
+		'supports'           => array( 'title', 'thumbnail', 'page-attributes' ),
 
 	) );
 

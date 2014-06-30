@@ -221,6 +221,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.4.2 =
+* Updated: Achievement Types now support menu ordering.
 * Fixed: Eliminated a fatal error in the nomination saving process.
 * Fixed: Updated submission manager role setting to correctly show the selected value.
 * Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
@@ -364,6 +365,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Upgrade Notice ==
 
 = 1.4.2 =
+* Updated: Achievement Types now support menu ordering.
 * Fixed: Eliminated a fatal error in the nomination saving process.
 * Fixed: Updated submission manager role setting to correctly show the selected value.
 * Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
