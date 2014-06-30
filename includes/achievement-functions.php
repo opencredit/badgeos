@@ -836,6 +836,7 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
 		&& is_object( $original_post )
 		&& ! empty( $original_post->post_name )
 		&& $original_post->post_title !== $post_args['post_title']
+		&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 	);
 }
 
@@ -851,7 +852,7 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
 function badgeos_update_achievement_types( $original_type = '', $new_type = '' ) {
 
 	// Sanity check to prevent alterating core posts
-	if ( ! $original_type || in_array( $original_type, array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item' ) ) ) {
+	if ( empty( $original_type ) || in_array( $original_type, array( 'post', 'page', 'attachment', 'revision', 'nav_menu_item' ) ) ) {
 		return $new_type;
 	}
 
