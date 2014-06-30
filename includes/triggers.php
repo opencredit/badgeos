@@ -171,16 +171,18 @@ function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
 	$user_triggers = ( $array_exists = get_user_meta( $user_id, '_badgeos_triggered_triggers', true ) ) ? $array_exists : array( $site_id => array() );
 
 	// Use current site ID if site ID is not set, AND not explicitly set to false
-	if ( ! $site_id && false !== $site_id )
+	if ( ! $site_id && false !== $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Return only the triggers that are relevant to the provided $site_id
-	if ( $site_id )
-		return $user_triggers[$site_id];
+	if ( $site_id && isset( $user_triggers[ $site_id ] ) ) {
+		return $user_triggers[ $site_id ];
 
 	// Otherwise, return the full array of all triggers across all sites
-	else
+	} else {
 		return $user_triggers;
+	}
 }
 
 /**

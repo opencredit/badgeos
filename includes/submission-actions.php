@@ -50,7 +50,7 @@ function badgeos_create_nomination( $achievement_id  = 0, $title = '', $content 
 
 		$submission_data = array(
 			'post_title'	=>	esc_html( $title ),
-			'post_content'	=>	esc_text_area( $content ),
+			'post_content'	=>	esc_textarea( $content ),
 			'post_status'	=>	'publish',
 			'post_author'	=>	absint( $user_nominated ),
 			'post_type'		=>	'nomination',
