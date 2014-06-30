@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 3.9.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -220,6 +220,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixed: Eliminated a fatal error in the nomination saving process.
+* Fixed: Updated submission manager role setting to correctly show the selected value.
+* Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
+
 = 1.4.1 =
 * Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
 
@@ -357,6 +362,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.2 =
+* Fixed: Eliminated a fatal error in the nomination saving process.
+* Fixed: Updated submission manager role setting to correctly show the selected value.
+* Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
 
 = 1.4.1 =
 * Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
