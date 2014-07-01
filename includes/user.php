@@ -410,8 +410,10 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
 	}
 
-	// Restore the original blog so the sky doesn't fall
-	switch_to_blog( $cached_id );
+	if ( is_multisite() ) {
+		// Restore the original blog so the sky doesn't fall
+		switch_to_blog( $cached_id );
+	}
 
 	// Pare down achievement type list so we return no duplicates
 	$achievement_types = array_unique( $all_achievement_types );
