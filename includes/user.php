@@ -217,7 +217,7 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
 	update_user_meta( $user_id, '_badgeos_can_notify_user', $can_notify );
 
 	// Update our user's points total, but only if edited
-	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
+	if ( isset( $_POST['user_points'] ) && $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
 		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
 	}
 
