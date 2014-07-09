@@ -1,0 +1,35 @@
+{
+    "require": {
+        "monolog/monolog": "1.7.*",
+        "illuminate/database": "4.1.*"
+    },
+    "autoload": {
+        "psr-4": {"BadgeOS\\": "includes/"},
+        "files": [ 
+            "includes/p2p/load.php",
+            "includes/class.BadgeOS_Plugin_Updater.php",
+            "includes/class.Credly_Badge_Builder.php",
+            "includes/class.BadgeOS_Shortcode.php",
+            "includes/post-types.php",
+            "includes/admin-settings.php",
+            "includes/achievement-functions.php",
+            "includes/activity-functions.php",
+            "includes/ajax-functions.php",
+            "includes/logging-functions.php",
+            "includes/meta-boxes.php",
+            "includes/points-functions.php",
+            "includes/triggers.php",
+            "includes/steps-ui.php",
+            "includes/shortcodes.php",
+            "includes/content-filters.php",
+            "includes/submission-actions.php",
+            "includes/rules-engine.php",
+            "includes/user.php",
+            "includes/credly.php",
+            "includes/credly-badge-builder.php",
+            "includes/widgets.php",
+            "includes/widgets/earned-user-achievements-widget.php",
+            "includes/widgets/credly-credit-issuer-widget.php"
+        ]  
+    }
+}

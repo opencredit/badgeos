@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 3.9.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -12,7 +12,7 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 
 == Description ==
 
-[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like,c and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
+[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
 
@@ -220,6 +220,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.2 =
+* Updated: Achievement Types now support menu ordering.
+* Fixed: Eliminated a fatal error in the nomination saving process.
+* Fixed: Updated submission manager role setting to correctly show the selected value.
+* Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
+
 = 1.4.1 =
 * Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
 
@@ -357,6 +363,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.2 =
+* Updated: Achievement Types now support menu ordering.
+* Fixed: Eliminated a fatal error in the nomination saving process.
+* Fixed: Updated submission manager role setting to correctly show the selected value.
+* Fixed: Additional hardening for achievement-type migration so that it doesn't happen prematurely due to autosave.
 
 = 1.4.1 =
 * Fixed: Eliminated a critical bug that could cause all posts to be migrated to a brand new achievement type on publish.
