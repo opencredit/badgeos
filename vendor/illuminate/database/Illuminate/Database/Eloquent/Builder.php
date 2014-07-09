@@ -77,6 +77,8 @@ class Builder {
 	 */
 	public function findMany($id, $columns = array('*'))
 	{
+		if (empty($id)) return $this->model->newCollection();
+
 		$this->query->whereIn($this->model->getKeyName(), $id);
 
 		return $this->get($columns);
@@ -521,7 +523,7 @@ class Builder {
 	{
 		$me = $this;
 
-		// We want to run a relationship query without any constrains so that we will
+		// We want to do a relationship query without any constraints so that we will
 		// not have to remove these where clauses manually which gets really hacky
 		// and is error prone while we remove the developer's own where clauses.
 		$query = Relation::noConstraints(function() use ($me, $relation)
@@ -577,7 +579,7 @@ class Builder {
 	{
 		$dots = str_contains($name, '.');
 
-		return $dots && starts_with($name, $relation) && $name != $relation;
+		return $dots && starts_with($name, $relation.'.');
 	}
 
 	/**
@@ -695,6 +697,11 @@ class Builder {
 	protected function addHasWhere(Builder $hasQuery, Relation $relation, $operator, $count, $boolean)
 	{
 		$this->mergeWheresToHas($hasQuery, $relation);
+
+		if (is_numeric($count))
+		{
+			$count = new Expression($count);
+		}
 
 		return $this->where(new Expression('('.$hasQuery->toSql().')'), $operator, $count, $boolean);
 	}

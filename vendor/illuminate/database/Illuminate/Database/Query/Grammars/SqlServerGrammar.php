@@ -16,13 +16,6 @@ class SqlServerGrammar extends Grammar {
 	);
 
 	/**
-	 * The keyword identifier wrapper format.
-	 *
-	 * @var string
-	 */
-	protected $wrapper = '[%s]';
-
-	/**
 	 * Compile a select query into SQL.
 	 *
 	 * @param  \Illuminate\Database\Query\Builder
@@ -119,8 +112,6 @@ class SqlServerGrammar extends Grammar {
 		// Next we need to calculate the constraints that should be placed on the query
 		// to get the right offset and limit from our query but if there is no limit
 		// set we will just handle the offset only since that is all that matters.
-		$start = $query->offset + 1;
-
 		$constraint = $this->compileRowConstraint($query);
 
 		$sql = $this->concatenate($components);
@@ -217,6 +208,19 @@ class SqlServerGrammar extends Grammar {
 	public function getDateFormat()
 	{
 		return 'Y-m-d H:i:s.000';
+	}
+
+	/**
+	 * Wrap a single string in keyword identifiers.
+	 *
+	 * @param  string  $value
+	 * @return string
+	 */
+	protected function wrapValue($value)
+	{
+		if ($value === '*') return $value;
+
+		return '['.str_replace(']', ']]', $value).']';
 	}
 
 }

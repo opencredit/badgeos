@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as BaseCollection;
 
@@ -59,7 +58,7 @@ class MorphTo extends BelongsTo {
 	}
 
 	/**
-	 * Buiild a dictionary with the models.
+	 * Build a dictionary with the models.
 	 *
 	 * @param  \Illuminate\Database\Eloquent\Models  $models
 	 * @return void
@@ -68,7 +67,7 @@ class MorphTo extends BelongsTo {
 	{
 		foreach ($models as $model)
 		{
-			if ($model->{$this->morphType}) 
+			if ($model->{$this->morphType})
 			{
 				$this->dictionary[$model->{$this->morphType}][$model->{$this->foreignKey}][] = $model;
 			}
@@ -86,6 +85,21 @@ class MorphTo extends BelongsTo {
 	public function match(array $models, Collection $results, $relation)
 	{
 		return $models;
+	}
+
+	/**
+	 * Associate the model instance to the given parent.
+	 *
+	 * @param  \Illuminate\Database\Eloquent\Model  $model
+	 * @return \Illuminate\Database\Eloquent\Model
+	 */
+	public function associate(Model $model)
+	{
+		$this->parent->setAttribute($this->foreignKey, $model->getKey());
+
+		$this->parent->setAttribute($this->morphType, get_class($model));
+
+		return $this->parent->setRelation($this->relation, $model);
 	}
 
 	/**

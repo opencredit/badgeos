@@ -56,7 +56,6 @@ class BadgeOS {
         register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
         // Hook in all our important pieces
-        add_action( 'plugins_loaded', array( $this, 'includes' ) );
         add_action( 'init', array( $this, 'register_scripts_and_styles' ) );
         add_action( 'init', array( $this, 'include_cmb' ), 999 );
         add_action( 'init', array( $this, 'register_achievement_relationships' ) );
@@ -82,33 +81,6 @@ class BadgeOS {
         $capsule->setAsGlobal();
         $capsule->setEventDispatcher(new Dispatcher(new Container)); 
         $capsule->bootEloquent();
-    }
-
-    /**
-     * Include all our important files.
-     */
-    function includes() {
-        require_once( $this->directory_path . 'includes/p2p/load.php' );
-        require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
-        require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
-        require_once( $this->directory_path . 'includes/post-types.php' );
-        require_once( $this->directory_path . 'includes/admin-settings.php' );
-        require_once( $this->directory_path . 'includes/achievement-functions.php' );
-        require_once( $this->directory_path . 'includes/activity-functions.php' );
-        require_once( $this->directory_path . 'includes/ajax-functions.php' );
-        require_once( $this->directory_path . 'includes/logging-functions.php' );
-        require_once( $this->directory_path . 'includes/meta-boxes.php' );
-        require_once( $this->directory_path . 'includes/points-functions.php' );
-        require_once( $this->directory_path . 'includes/triggers.php' );
-        require_once( $this->directory_path . 'includes/steps-ui.php' );
-        require_once( $this->directory_path . 'includes/shortcodes.php' );
-        require_once( $this->directory_path . 'includes/content-filters.php' );
-        require_once( $this->directory_path . 'includes/submission-actions.php' );
-        require_once( $this->directory_path . 'includes/rules-engine.php' );
-        require_once( $this->directory_path . 'includes/user.php' );
-        require_once( $this->directory_path . 'includes/credly.php' );
-        require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
-        require_once( $this->directory_path . 'includes/widgets.php' );
     }
 
     /**
@@ -207,9 +179,6 @@ class BadgeOS {
      * Activation hook for the plugin.
      */
     function activate() {
-
-        // Include our important bits
-        $this->includes();
 
         // Create Badges achievement type
         if ( !get_page_by_title( 'Badges', 'OBJECT', 'achievement-type' ) ) {
