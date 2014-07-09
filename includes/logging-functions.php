@@ -9,7 +9,7 @@
  * @link https://credly.com
  */
 
-use BadgeOS\Log as Log;
+use BadgeOS\Log;
 
 /**
  * Posts a log entry when a user unlocks any achievement post
@@ -34,7 +34,7 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
     // Load factory class and write log
     $badgeos_settings = get_option( 'badgeos_settings' );
     if (!$badgeos_settings['log_factory']) {
-        $badgeos_settings['log_factory'] = 'Log';
+        $badgeos_settings['log_factory'] = 'BadgeOS\Log';
     }
 
     $log = new $badgeos_settings['log_factory']();

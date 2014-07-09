@@ -352,7 +352,7 @@ function badgeos_update() {
 
 }
 
-add_action('admin_init', 'badgeos_update');
+add_action('init', 'badgeos_update');
 
 /**
  * Create a log schema

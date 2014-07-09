@@ -64,7 +64,7 @@ class Log implements Logging {
         }
 
         // Set timezone to local time
-        $tzstring = get_option('timezone_string');
+        $tzstring = (get_option('timezone_string')) ? get_option('timezone_string') : date_default_timezone_get();
         $timezone = new DateTimeZone($tzstring);
         $datetime->setTimezone($timezone);
 
