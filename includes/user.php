@@ -116,15 +116,20 @@ function badgeos_update_user_achievements( $args = array() ) {
  */
 function badgeos_user_profile_data( $user = null ) {
 
-
-	// Get minimum role setting for menus
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
-
 	$achievement_ids = array();
 
+		echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
+		echo '<table class="form-table">';
+		echo '<tr>';
+			echo '<th scope="row">' . __( 'Email Preference', 'badgeos' ) . '</th>';
+			echo '<td>';
+				echo '<label for="_badgeos_can_notify_user"><input type="checkbox" name="_badgeos_can_notify_user" id="_badgeos_can_notify_user" value="1" ' . checked( badgeos_can_notify_user( $user->ID ), true, false ) . '/>' . __( 'Enable BadgeOS Email Notifications', 'badgeos' ) . '</label>';
+			echo '</td>';
+		echo '</tr>';
+		echo '</table>';
+
 	//verify uesr meets minimum role to view earned badges
-	if ( current_user_can( $minimum_role ) ) {
+	if ( current_user_can( badgeos_get_manager_capability() ) ) {
 
 		$achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
 
@@ -176,8 +181,8 @@ function badgeos_user_profile_data( $user = null ) {
 		// If debug mode is on, output our achievements array
 		if ( badgeos_is_debug_mode() ) {
 
-			echo 'DEBUG MODE ENABLED<br />';
-			echo 'Metadata value for: _badgeos_achievements<br />';
+			echo __( 'DEBUG MODE ENABLED', 'badgeos' ) . '<br />';
+			echo __( 'Metadata value for:', 'badgeos' ) . ' _badgeos_achievements<br />';
 
 			var_dump ( $achievements );
 
@@ -204,12 +209,17 @@ add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
  */
 function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
-	if ( !current_user_can( 'edit_user', $user_id ) )
+	if ( ! current_user_can( 'edit_user', $user_id ) ) {
 		return false;
+	}
+
+	$can_notify = isset( $_POST['_badgeos_can_notify_user'] ) ? 'true' : 'false';
+	update_user_meta( $user_id, '_badgeos_can_notify_user', $can_notify );
 
 	// Update our user's points total, but only if edited
-	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) )
+	if ( $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
 		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
+	}
 
 }
 add_action( 'personal_options_update', 'badgeos_save_user_profile_fields' );
@@ -333,12 +343,8 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
  */
 function badgeos_process_user_data() {
 
-	// Get minimum role setting for menus
-	$badgeos_settings = get_option( 'badgeos_settings' );
-	$minimum_role = ( ! empty( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'administrator';
-
 	//verify uesr meets minimum role to view earned badges
-	if ( current_user_can( $minimum_role ) ) {
+	if ( current_user_can( badgeos_get_manager_capability() ) ) {
 
 		// Process awarding achievement to user
 		if ( isset( $_GET['action'] ) && 'award' == $_GET['action'] &&  isset( $_GET['user_id'] ) && isset( $_GET['achievement_id'] ) ) {
@@ -412,4 +418,20 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 
 	// Return all found achievements
 	return $achievement_types;
+}
+
+/**
+ * Check if a user has disabled email notifications.
+ *
+ * @since  1.4.0
+ *
+ * @param  int   $user_id User ID.
+ * @return bool           True if user can be emailed, otherwise false.
+ */
+function badgeos_can_notify_user( $user_id = 0 ) {
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	return 'false' !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
 }

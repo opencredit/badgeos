@@ -107,7 +107,10 @@ ul.badgeos-achievement-earners-list li {
 	margin:5px;
 	padding:0;
 }
-.badgeos-feedback-buttons .button {
+.badgeos-feedback-buttons .button,
+.badgeos-feedback-buttons .button:visited,
+.badgeos-feedback .submission-comment-toggle,
+.badgeos-feedback .submission-comment-toggle:visited {
 	display: inline-block;
 	text-decoration: none;
 	font-size: 12px;
@@ -136,7 +139,9 @@ ul.badgeos-achievement-earners-list li {
 	text-shadow: 0 1px 0 #fff;
 }
 .badgeos-feedback-buttons .button:hover,
-.badgeos-feedback-buttons .button:focus {
+.badgeos-feedback .submission-comment-toggle:hover,
+.badgeos-feedback-buttons .button:focus,
+.badgeos-feedback .submission-comment-toggle:focus {
 	background: #f3f3f3;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f3f3f3));
 	background-image: -webkit-linear-gradient(top, #fff, #f3f3f3);
@@ -147,7 +152,8 @@ ul.badgeos-achievement-earners-list li {
 	border-color: #999;
 	color: #222;
 }
-.badgeos-feedback-buttons .button:active {
+.badgeos-feedback-buttons .button:active,
+.badgeos-feedback .submission-comment-toggle:active {
 	background: #eee;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#f4f4f4), to(#fefefe));
 	background-image: -webkit-linear-gradient(top, #f4f4f4, #fefefe);

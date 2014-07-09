@@ -67,7 +67,7 @@ li.step-row .delete-step {
 }
 
 /* Add-ons page */
-.addon {
+.badgeos-addons .addon {
 	display: block;
 	background: #fafafa;
 	border: 1px solid #eee;
@@ -78,16 +78,59 @@ li.step-row .delete-step {
 	position: relative;
 	float: left;
 }
-.addon:nth-child(3n+4) {
+.badgeos-addons .addon:nth-child(3n+4) {
 	clear: both;
 }
-.addon .thumbnail-link {
+.badgeos-addons .addon .thumbnail-link {
 	display: block;
 	margin:0 auto;
 	width: 200px;
 	height: 200px;
 	text-align: center;
 }
-.addon img {
+.badgeos-addons .addon img {
 	max-width: 100%;
+}
+
+/*
+Shortcode Embed styles
+ */
+.wp-core-ui a.badgeos_media_link, .wp-core-ui a.badgeos_media_link:hover {
+	background: url('../images/badgeos_icon.png') 4% 50% no-repeat;
+	padding-left: 1.8em;
+}
+.badgeos_input {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 5px;
+	width: 50%;
+}
+.badgeos_input > div {
+	margin: 5px 0;
+}
+#shortcode_options {
+	margin-top: 10px;
+	min-height: 100%;
+	overflow: auto;
+	padding-top: 10px;
+	width: 100%;
+}
+#shortcode_options label {
+	font-weight: bold;
+}
+#shortcode_options span {
+	font-style: italic;
+}
+.odd {
+	clear: both;
+}
+.clear {
+	clear: both;
+}
+.select2-container {
+	width: 100%;
+}
+#select2-drop {
+	z-index: 100051;
 }

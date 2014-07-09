@@ -13,7 +13,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//build the widget settings form
 	function form( $instance ) {
-		$defaults = array( 'title' => 'My Achievements', 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
+		$defaults = array( 'title' => __( 'My Achievements', 'badgeos' ), 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$number = $instance['number'];
