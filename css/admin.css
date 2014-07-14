@@ -44,6 +44,9 @@ li.step-row .delete-step {
 	padding: 8px 10px;
 	text-transform: uppercase;
 }
+.badgeos-table a.error {
+	color: #a00;
+}
 
 /* License Settings */
 .badgeos-license-status {
