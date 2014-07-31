@@ -7,6 +7,7 @@
 * Version: 1.4.2
 * Author URI: https://credly.com/
 * License: GNU AGPL
+* Text Domain: badgeos
 */
 
 /*
