@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, credly, webdevstudios, williamsba1, rzen, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 3.9.1
-Stable tag: 1.4.2
+Tested up to: 4.0
+Stable tag: 1.4.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -220,6 +220,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.3 =
+* Fix issue with user scores being zero'd out when they save their profile in WP Admin.
+* Added French translation files. Credit: http://extremraym.com
+* Made it possible for admins to award achievements, that can be earned multiple times, to users via the User's admin profile
+* Misc code tweaks.
+
 = 1.4.2 =
 * Updated: Achievement Types now support menu ordering.
 * Fixed: Eliminated a fatal error in the nomination saving process.
@@ -363,6 +369,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.3 =
+* Fix issue with user scores being zero'd out when they save their profile in WP Admin.
+* Added French translation files. Credit: http://extremraym.com
+* Made it possible for admins to award achievements, that can be earned multiple times, to users via the User's admin profile
+* Misc code tweaks.
 
 = 1.4.2 =
 * Updated: Achievement Types now support menu ordering.

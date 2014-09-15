@@ -290,6 +290,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 									<?php echo edit_post_link( get_the_title() ); ?>
 								</td>
 								<td>
+									<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
 									<?php if ( in_array( get_the_ID(), (array) $achievement_ids ) ) :
 										// Setup our revoke URL
 										$revoke_url = add_query_arg( array(
@@ -299,8 +300,6 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 										) );
 										?>
 										<span class="delete"><a class="error" href="<?php echo esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ); ?>"><?php _e( 'Revoke Award', 'badgeos' ); ?></a></span>
-									<?php else : ?>
-										<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
 									<?php endif; ?>
 
 								</td>
