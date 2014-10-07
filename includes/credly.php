@@ -436,7 +436,7 @@ class BadgeOS_Credly {
 
             foreach ( $categories as $category ) {
 
-                $markup .= '<label for="' . $category->name . '"><input type="checkbox" name="_badgeos_credly_categories[' . $category->name . ']" id="'. $category->name . '" value="' . $category->id . '" /> ' . ucwords( $category->name ) . '</label><br />';
+                $markup .= '<label for="' . esc_attr( $category->name ) . '"><input type="checkbox" name="_badgeos_credly_categories[' . $category->name . ']" id="'. esc_attr( $category->name ) . '" value="' . esc_attr( $category->id ) . '" /> ' . ucwords( $category->name ) . '</label><br />';
 
             }
 
@@ -464,7 +464,7 @@ class BadgeOS_Credly {
 
         foreach ( $categories as $name => $value ) {
 
-            $markup .= '<label for="' . $name . '"><input type="checkbox" name="_badgeos_credly_categories[' . $name . ']" id="'. $name . '" value="' . $value . '" checked="checked" /> ' . ucwords( $name ) . '</label><br />';
+            $markup .= '<label for="' . esc_attr( $name ). '"><input type="checkbox" name="_badgeos_credly_categories[' . $name . ']" id="'. esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" checked="checked" /> ' . ucwords( $name ) . '</label><br />';
         }
 
         return $markup;
@@ -916,7 +916,7 @@ class BadgeOS_Credly {
             </tr>
             <tr valign="top"><th scope="row"><label for="_badgeos_credly_badge_id"><?php _e( 'Credly Badge ID', 'badgeos' ); ?></label></th>
                 <td>
-                    <input type="text" id="_badgeos_credly_badge_id" name="_badgeos_credly_badge_id" value="<?php echo $credly_badge_id; ?>" class="widefat" readonly="readonly" />
+                    <input type="text" id="_badgeos_credly_badge_id" name="_badgeos_credly_badge_id" value="<?php echo esc_attr( $credly_badge_id ); ?>" class="widefat" readonly="readonly" />
                 </td>
             </tr>
             </table>
