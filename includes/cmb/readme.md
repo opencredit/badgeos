@@ -1,99 +1,186 @@
 # Custom Metaboxes and Fields for WordPress
 
+**Note: all future development will continue on [CMB2](https://github.com/WebDevStudios/CMB2). It is currently in beta testing, so use at your own risk. Backwards compatibility is not guaranteed.**
+
 **Contributors**:
 
+* WebDevStudios ( [@webdevstudios](http://twitter.com/webdevstudios ) / [webdevstudios.com](http://webdevstudios.com) )
 * Justin Sternberg ( [@jtsternberg](http://twitter.com/jtsternberg ) / [webdevstudios.com](http://webdevstudios.com) )
 * Jared Atchison ( [@jaredatch](http://twitter.com/jaredatch ) / [jaredatchison.com](http://jaredatchison.com/) )
 * Bill Erickson ( [@billerickson](http://twitter.com/billerickson ) / [billerickson.net](http://billerickson.net/) )
 * Andrew Norcross ( [@norcross](http://twitter.com/norcross ) / [andrewnorcross.com](http://andrewnorcross.com/) )
 
-**Version**: 1.0.1  
+**Version**: 1.2.0 
 **Requires at least**: 3.5  
-**Tested up to**: 3.8  
+**Tested up to**: 3.9  
 **License**: GPLv2  
 
 ## Description
 
-Custom Metaboxes and Fields (CMB for short) will create metaboxes with custom fields that will blow your mind.
+Custom Metaboxes and Fields (CMB for short) will create metaboxes and forms with custom fields that will blow your mind.
 
-New in version 1.0.0:
+##### Features:
 
-* Bring your metaboxes to the frontend.
-* Create metaboxes to handle user meta and display them on user profile add/edit pages. Or even on the front-end.
+* Create metaboxes to be used on post edit screens.
+* Create forms to be used on options pages.
+* Create forms to handle user meta and display them on user profile add/edit pages.
+* Flexible API that allows you to use CMB forms almost anywhere, even on the front-end.
+* Several field types are included and are [listed below](#field-types).
+* Custom API hook that allows you to create your own field types.
+* There are numerous hooks and filters, allowing you to modify many aspects of the library (without editing it directly).
+* Repeatable fields for most field types are supported, as well as repeatable field groups.
+
+##### Field Types:
+1. [`title`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#title) An arbitrary title field *
+1. [`text`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text)
+1. [`text_small`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_small)
+1. [`text_medium`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_medium)
+1. [`text_email`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_email)
+1. [`text_url`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_url)
+1. [`text_money`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_money)
+1. [`textarea`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea)
+1. [`textarea_small`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_small)
+1. [`textarea_code`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#textarea_code)
+1. [`text_date`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date) Date Picker
+1. [`text_time`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_time) Time picker
+1. [`select_timezone`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select_timezone) Time zone dropdown
+1. [`text_date_timestamp`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_date_timestamp) Date Picker (UNIX timestamp)
+1. [`text_datetime_timestamp`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp) Test Date/Time Picker Combo (UNIX timestamp)
+1. [`text_datetime_timestamp_timezone`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#text_datetime_timestamp_timezone) Test Date/Time Picker/Time zone Combo (serialized DateTime object)
+1. [`colorpicker`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#colorpicker) Color picker
+1. [`radio`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio) *
+1. [`radio_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#radio_inline) *
+1. [`taxonomy_radio`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio) *
+1. [`taxonomy_radio_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_radio_inline) *
+1. [`select`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#select)
+1. [`taxonomy_select`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_select) *
+1. [`checkbox`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#checkbox) *
+1. [`multicheck`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#multicheck)
+1. [`taxonomy_multicheck`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck) *
+1. [`taxonomy_multicheck_inline`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#taxonomy_multicheck_inline)
+1. [`wysiwyg`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#wysiwyg) (TinyMCE) *
+1. [`file`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file) Image/File upload *†
+1. [`file_list`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#file_list) Image/File list upload
+1. [`oembed`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#oembed) Converts oembed urls (instagram, twitter, youtube, etc. [oEmbed in the Codex](https://codex.wordpress.org/Embeds))
+1. [`group`](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group) Hybrid field that supports adding other fields as a repeatable group. *
+1. [Create your own custom field type](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#Custom)
+
+\* Not available as a repeatable field  
+† Use `file_list` for repeatable  
+
+[More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
+
+##### 3rd Party Resources
+* [CMB Attached Posts Field](https://github.com/coreymcollins/cmb-attached-posts) from [coreymcollins](https://github.com/coreymcollins): Custom field type for attaching posts to a page.
+* [CMB Field Type: Google Maps](https://github.com/mustardBees/cmb_field_map) from [mustardBees](https://github.com/mustardBees): Custom field type for Google Maps.
+	> The `pw_map` field stores the latitude/longitude values which you can then use to display a map in your theme.
+* [CMB Field Type: Select2](https://github.com/mustardBees/cmb-field-select2) from [mustardBees](https://github.com/mustardBees): Custom field types which use the [Select2](http://ivaynberg.github.io/select2/) script:
+
+	> 1. The `pw_select field` acts much like the default select field. However, it adds typeahead-style search allowing you to quickly make a selection from a large list
+	> 2. The `pw_multiselect` field allows you to select multiple values with typeahead-style search. The values can be dragged and dropped to reorder
+* [Taxonomy_MetaData](https://github.com/jtsternberg/Taxonomy_MetaData#to-use-taxonomy_metadata-with-custom-metaboxes-and-fields): WordPress Helper Class for saving pseudo-metadata for taxonomy terms. Includes an extended class for using CMB to generate the actual form fields.
+
+##### Contribution
+All contributions welcome. If you would like to submit a pull request, please check out the [trunk branch](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/tree/trunk) and pull request against it.
 
 ##### Links
 * [Github project page](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress)
 * [Documentation (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki)
 
-##### Field Types:
-* text (optionally repeatable)
-* text small (optionally repeatable)
-* text medium (optionally repeatable)
-* text url (optionally repeatable)
-* text email (optionally repeatable)
-* text money (optionally repeatable)
-* date picker
-* date picker (unix timestamp)
-* date time picker combo (unix timestamp)
-* date time picker with time zone combo (serialized DateTime object)
-* time zone dropdown
-* time picker
-* color picker
-* textarea
-* textarea small
-* textarea code
-* select
-* radio
-* radio inline
-* taxonomy radio
-* taxonomy select
-* checkbox
-* multicheck
-* WYSIWYG/TinyMCE
-* Image/file upload
-* oEmbed
-
-[More on field types (GitHub wiki)](https://github.com/webdevstudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types)
 
 ## Installation
 
-This script is easy to install. If you can't figure it out you probably shouldn't be using it.
-
-1. Place `metabox` directory inside of your (activated) theme. E.g. inside `/themes/twentyten/lib/metabox/`.
-2. Include `init.php` (preferably on the 'init' WordPress hook).
-3. See `example-functions.php` for further guidance.
+1. Place the CMB directory inside of your theme or plugin.
+2. Copy (and rename if desired) `example-functions.php` into a folder *above* the CMB directory OR copy the entirety of its contents to your theme's `functions.php` file.
+2. Edit to only include the fields you need and rename the functions (CMB directory should be left unedited in order to easily update the library).
 4. Profit.
-
-## Known Issues
-
-* Problem inserting file url inside field for image with caption (issue #50) May be fixed, needs testing.
-* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31) May be fixed, needs testing.
-* Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
-
-## To-do
-* Fix known issues (above)
-* move timepicker and datepicker jQuery inline
-* support for multiple configurable timepickers/datepickers
-* add ability to save fields in a single custom field
-* add ability to mark fields as required
-* repeatable fields (halfway there)
-* look at possiblity of tabs
-* look at preserving taxonomy hierarchies
-* Add input attributes filter
-* Always load newest version of CMB
 
 ## Changelog
 
-### 1.0.1
+### 1.2.0
+
+**Enhancements**
+ 
+* Add support for custom date/time formats. Props [@Scrent](https://github.com/Scrent). ([#506](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/506))
+* Simplify `wysiwyg` escaping and allow it to be overridden via the `escape_cb` parameter. ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/491))
+* Add a 'Select/Deselect all' button for the `multicheck` field type.
+* Add title option for [repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group). Title field takes an optional replacement hash, "{#}" that will be replaced by the row number.
+* New field parameter, `show_on_cb`, allows you to conditionally display a field via a callback. ([#47](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/47))
+* Unit testing (the beginning). Props [@brichards](https://github.com/brichards) and [@camdensegal](https://github.com/camdensegal).
+
+**Bug Fixes**  
+
+* Fixed issue where remove file button wouldn't clear the url field. ([#514](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/514))
+* `wysiwyg` fields now allow underscores. Fixes some wysiwyg display issues in WordPress 3.8. Props [@lswilson](https://github.com/lswilson). ([#491](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/491))
+* Nonce field should only be added once per page. ([#521](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/521))
+* Fix `in_array` issue when a post does not have any saved terms for a taxonomy multicheck. ([#527](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/527))
+* Fixed error: 'Uninitialized string offset: 0 in cmb_Meta_Box_field.php...`. Props [@DevinWalker](https://github.com/DevinWalker). ([#539](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/539), [#549](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/549)))
+* Fix missing `file` field description. ([#543](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/543), [#547](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/547))
+
+
+
+### 1.1.3
+**Bug Fixes**  
+
+* Update `cmb_get_field_value` function as it was passing the parameters to `cmb_get_field` in the wrong order.
+* Fix repeating fields not working correctly if meta key or prefix contained an integer. ([#503](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/503))
+
+### 1.1.2
+
+**Bug Fixes**  
+
+* Fix issue with `cmb_Meta_Box_types.php` calling a missing method, `image_id_from_url`. ([#502](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/502))
+
+
+### 1.1.1
 
 **Bug Fixes**
 
-* Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos)
-* A few php < 5.3 errors were addressed.
-* Fields with quotation marks no longer break the input/textarea fields.
-* metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting.
-* Occasionally fields wouldn't save because of the admin show_on filter.
-* Smaller images loaded to the file field type will no longer be blown up larger than their dimensions.
+* Radio button values were not showing saved value. ([#500](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/500))
+
+### 1.1.0
+
+**Enhancements**
+
+* [Repeatable groups](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#group)
+* Support for more fields to be repeatable, including oEmbed field, and date, time, and color picker fields, etc.
+* Codebase has been revamped to be more modular and object-oriented. 
+* New filter, `"cmb_{$element}_attributes"	` for modifying an element's attributes.
+* Every field now supports an `attributes` parameter that takes an array of attributes. [Read more](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/wiki/Field-Types#attributes).
+* Removed `cmb_std_filter` in favor of `cmb_default_filter`. **THIS IS A BREAKING CHANGE**
+* Better handling of labels in sidebar. They are now placed on top of the input rather than adjacent.
+* Added i18n compatibility to text_money. props [@ArchCarrier](https://github.com/ArchCarrier), ([#485](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/485))
+* New helper functions: `cmb_get_field` and `cmb_get_field_value` for getting access to CMB's field object and/or value.
+* New JavaScript events, `cmb_add_row` and `cmb_remove_row` for hooking in and manipulating the new row's data.
+* New filter, `cmb_localized_data`, for modifiying localized data passed to the CMB JS.
+
+**Bug Fixes**
+* Resolved occasional issue where only the first character of the label/value was diplayed. props [@mustardBees](https://github.com/mustardBees), ([#486](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/486))
+
+
+### 1.0.2
+
+**Enhancements**
+
+* Change the way the `'cmb_validate_{$field['type']}'` filter works.
+It is now passed a null value vs saved value. If null is returned, default sanitization will follow. **THIS IS A BREAKING CHANGE**. If you're already using this filter, take note.
+* All field types that take an option array have been simplified to take `key => value` pairs (vs `array( 'name' => 'value', 'value' => 'key', )`). This effects the 'select', 'radio', 'radio_inline' field types. The 'multicheck' field type was already using the `key => value` format. Backwards compatibility has been maintained for those using the older style.
+* Added default value option for `taxonomy_select` field type. props [@darlantc](https://github.com/darlantc), ([#473](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/473))
+* Added `preview_size` parameter for `file_list` field type. props [@IgorCode](https://github.com/IgorCode), ([#471](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/471))
+* Updated `file_list` images to be displayed horizontally instead of vertically. props [@IgorCode](https://github.com/IgorCode), ([#467](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/467))
+* Use `get_the_terms` where possible since the data is cached.
+
+**Bug Fixes**
+
+* Fixed wysiwyg escaping slashes. props [@gregrickaby](https://github.com/gregrickaby), ([#465](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/465))
+* Replaced `__DIR__`, as `dirname( __FILE__ )` is easier to maintain back-compatibility.
+* Fixed missing table styling on new posts. props [@mustardBees](https://github.com/mustardBees), ([#438](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/438))
+* Fix undeclared JS variable. [@veelen](https://github.com/veelen), ([#451](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/451))
+* Fix `file_list` errors when removing all files and saving.
+* Set correct `object_id` to be used later in `cmb_show_on` filter. [@lauravaq](https://github.com/lauravaq), ([#445](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/445))
+* Fix sanitization recursion memeory issues.
+
+### 1.0.1
 
 **Enhancements**
 
@@ -105,6 +192,14 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 * new `cmb_Meta_Box_types::esc()` method that handles escaping data for display.
 * New callback field parameter, `escape_cb`, for performing your own data escaping, as well as a new filter, `'cmb_types_esc_'. $field['type']`.
 
+**Bug Fixes**
+
+* Fixed wysiwyg editor button padding. props [@corvannoorloos](https://github.com/corvannoorloos), ([#391](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/pull/391))
+* A few php < 5.3 errors were addressed.
+* Fields with quotation marks no longer break the input/textarea fields.
+* metaboxes for Attachment pages now save correctly. Thanks [@nciske](https://github.com/nciske) for reporting. ([#412](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress/issues/412))
+* Occasionally fields wouldn't save because of the admin show_on filter.
+* Smaller images loaded to the file field type will no longer be blown up larger than their dimensions.
 
 ### 1.0.0
 * Added `text_datetime_timestamp_timezone` type, a datetime combo field with an additional timezone drop down, props [@dessibelle](https://github.com/dessibelle)
@@ -179,3 +274,25 @@ This script is easy to install. If you can't figure it out you probably shouldn'
 
 ### 0.4
 * Think we have a release that is mostly working. We'll say the initial release :)
+
+## Known Issues
+
+* Problem inserting file url inside field for image with caption (issue #50) May be fixed, needs testing.
+* `CMB_META_BOX_URL` does not define properly in WAMP/XAMP (Windows) (issue #31) May be fixed, needs testing.
+* Metabox containing WYSIWYG editor cannot be moved (this is a TinyMCE issue)
+
+## To-do
+**Enhancements**
+
+* Fix known issues (above)
+* move timepicker and datepicker jQuery inline
+* support for multiple configurable timepickers/datepickers
+* add ability to save fields in a single custom field
+* add ability to mark fields as required
+* repeatable fields (halfway there)
+* look at possiblity of tabs
+* look at preserving taxonomy hierarchies
+* Add input attributes filter
+* Always load newest version of CMB
+* Helper function to easily get oembed from stored oEmbed field
+
