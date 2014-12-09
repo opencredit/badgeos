@@ -1022,6 +1022,10 @@ function badgeos_achievement_type_rename_redirect( $location = '' ) {
  * Filter the "post updated" messages to include support for achievement types.
  *
  * @since 1.4.0
+ *
+ * @param array $messages Array of messages to display.
+ *
+ * @return array $messages Compiled list of messages.
  */
 function badgeos_achievement_type_update_messages( $messages ) {
 	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );
