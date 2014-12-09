@@ -988,8 +988,11 @@ function badgeos_get_achievement_metas( $meta_key = '', $original_type = '' ) {
  *
  * @since 1.4.0
  *
+ * @param array  $achievements  Array of achievements.
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
+ *
+ * @return array $achievements
  */
 function badgeos_update_meta_achievement_types( $achievements = array(), $original_type = '', $new_type = '' ) {
 	if ( is_array( $achievements ) && ! empty( $achievements ) ) {
