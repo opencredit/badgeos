@@ -810,7 +810,7 @@ function badgeos_flush_rewrite_rules() {
  * @param  array $post_args Post args.
  * @return array            Updated post data.
  */
-function badgeos_maybe_update_achievement_type( $data = '', $post_args = '' ) {
+function badgeos_maybe_update_achievement_type( $data = array(), $post_args = array() ) {
 	if ( badgeos_achievement_type_changed( $post_args ) ) {
 		$original_type = get_post( $post_args['ID'] )->post_name;
 		$new_type = wp_unique_post_slug( sanitize_title( $post_args['post_title'] ), $post_args['ID'], $post_args['post_status'], $post_args['post_type'], $post_args['post_parent'] );
