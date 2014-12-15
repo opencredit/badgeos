@@ -94,9 +94,8 @@ function badgeos_ajax_get_achievements() {
 	// Loop through each site (default is current site only)
 	foreach( $sites as $site_blog_id ) {
 
-		// If we're not polling the current site, switch to the site we're polling
-		if( $blog_id != $site_blog_id )
-			switch_to_blog( $site_blog_id );
+		// Switch to the site we're polling
+		switch_to_blog( $site_blog_id );
 
 		// Grab our earned badges (used to filter the query)
 		$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
@@ -167,6 +166,9 @@ function badgeos_ajax_get_achievements() {
 			}
 			$achievements .= '</div><!-- .badgeos-no-results -->';
 		}
+		
+		// Come back to current blog
+		restore_current_blog($site_blog_id);
 	}
 
 	// Send back our successful response
