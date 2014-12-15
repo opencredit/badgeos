@@ -156,7 +156,7 @@ function badgeos_ajax_get_achievements() {
 		// Display a message for no results
 		if ( empty( $achievements ) ) {
 			// If we have exactly one achivement type, get its plural name, otherwise use "achievements"
-			$post_type_plural = ( 1 == count( $type ) ) ? get_post_type_object( current( $type ) )->labels->name : 'achievements';
+			$post_type_plural = ( 1 == count( $type ) ) ? get_post_type_object( current( $type ) )->labels->name : __('achievements', 'badgeos');
 
 			// Setup our completion message
 			$achievements .= '<div class="badgeos-no-results">';
