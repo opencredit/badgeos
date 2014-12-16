@@ -12,7 +12,7 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 
 == Description ==
 
-[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like,c and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
+[BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
 
