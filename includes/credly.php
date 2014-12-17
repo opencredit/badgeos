@@ -904,7 +904,7 @@ class BadgeOS_Credly {
             <tr valign="top" class="credly_category_search"><th scope="row"><label for="credly_category_search"><?php _e( 'Credly Category Search', 'badgeos' ); ?></label></th>
                 <td>
                     <input type="text" id="credly_category_search" name="credly_category_search" value="" size="50" />
-                    <a id="credly_category_search_submit" class="button" />Search Categories</a>
+                    <a id="credly_category_search_submit" class="button" /><?php _e( 'Search Categories', 'badgeos' ); ?></a>
                 </td>
             </tr>
             <tr valign="top" id="credly_search_results" <?php if ( ! is_array( $credly_categories ) ) { ?>style="display:none"<?php } ?>><th scope="row"><label><?php _e( 'Credly Badge Category', 'badgeos' ); ?></label></th>
