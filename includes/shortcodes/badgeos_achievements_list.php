@@ -106,7 +106,17 @@ function badgeos_register_achievements_list_shortcode() {
 				'description' => __( 'Single, or comma-separated list of, achievement tag(s) to display.', 'badgeos' ),
 				'type'        => 'text',
 				'values'      => $achievement_tags,
-				'default'     => 'all',
+                'default'     => 'all',
+                ),
+			'layout' => array(
+				'name'        => __( 'Layout', 'badgeos' ),
+				'description' => __( 'Achievements layout', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'grid' => __('Grid', 'badgeos'),
+                    'list' => __('List', 'badgeos'),
+                    ),
+                'default'     => 'list',
 				),
 		),
 	) );
@@ -142,7 +152,8 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'exclude'     => array(),
 		'meta_key'    => '',
 		'meta_value'  => '',
-		'tag'         => 'all'
+		'tag'         => 'all',
+        'layout'      => '',
 	), $atts, 'badgeos_achievements_list' ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -163,7 +174,8 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'exclude'     => $exclude,
 		'meta_key'    => $meta_key,
 		'meta_value'  => $meta_value,
-		'tag'         => $tag
+		'tag'         => $tag,
+        'layout'      => $layout,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -225,9 +237,10 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 	$badges .= '</div><!-- #badgeos-achievements-filters-wrap -->';
 
 	// Content Container
-	$badges .= '<div id="badgeos-achievements-container"></div>';
+    $badges .= '<div id="badgeos-achievements-container"></div>'; 
 
 	// Hidden fields and Load More button
+	$badges .= '<input type="hidden" id="badgeos_layout" value="'.$layout.'">';
 	$badges .= '<input type="hidden" id="badgeos_achievements_offset" value="0">';
 	$badges .= '<input type="hidden" id="badgeos_achievements_count" value="0">';
 	$badges .= '<input type="button" id="achievements_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';

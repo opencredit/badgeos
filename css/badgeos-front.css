@@ -59,6 +59,35 @@
 .badgeos-achievements-list-item.user-has-earned .badgeos-item-image {
 	opacity: 1;
 }
+.badgeos-achievements-grid-item{
+	float: left;
+	width: 100%;
+	text-align: center;
+    padding: 20px 0px;
+}
+.badgeos-achievements-grid-item .badgeos-item-image {
+	opacity: .3;
+}
+.badgeos-achievements-grid-item.user-has-earned .badgeos-item-image {
+	opacity: 1;
+}
+.badgeos-achievements-grid-item .badgeos-item-title {
+	color: #AAA;
+	font-size: 15px;
+	line-height: 18px;
+}
+@media screen and (min-width: 800px) {
+	.badgeos-achievements-grid-1 {
+		width: 100%; }
+	.badgeos-achievements-grid-2 {
+		width: 49.5833333333%; }
+	.badgeos-achievements-grid-3 {
+		width: 32.7777777778%; }
+	.badgeos-achievements-grid-4 {
+		width: 24.375%; }
+	.badgeos-achievements-grid-5 {
+		width: 19.5%; }
+}
 #badgeos-achievements-container .badgeos-item-title {
 	display: inline-block;
 	margin-top: 0;

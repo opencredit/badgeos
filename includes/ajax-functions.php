@@ -26,6 +26,28 @@ foreach ( $badgeos_ajax_actions as $action ) {
 	add_action( 'wp_ajax_nopriv_' . $action, 'badgeos_ajax_' . str_replace( '-', '_', $action ), 1 );
 }
 
+/**
+ * AJAX Helper for customizing rendering of achievement based on layout.
+ * Curently, can display List view (do nothing) or Grid view
+ *
+ * @return achievement
+ */
+function custom_render_achievement ( $achievement ){
+
+    global $layout;
+
+    if ( isset($layout) )
+        switch ( $layout ) {
+        case 'grid':
+            // alter CSS for Grid view
+            $achievement = str_replace("badgeos-achievements-list-item", "badgeos-achievements-grid-item badgeos-achievements-grid-5", $achievement);
+            $achievement = preg_replace('/height="[0-9]*"/', '', $achievement);
+            $achievement = preg_replace('/width="[0-9]*"/', '', $achievement);
+            $achievement = preg_replace('/<div class="badgeos-item-excerpt">(\s|.)*<!-- .badgeos-item-excerpt -->/', '', $achievement);
+    }
+
+    return $achievement;
+}
 
 /**
  * AJAX Helper for returning achievements
@@ -34,7 +56,7 @@ foreach ( $badgeos_ajax_actions as $action ) {
  * @return void
  */
 function badgeos_ajax_get_achievements() {
-	global $user_ID, $blog_id;
+	global $user_ID, $blog_id, $layout;
 
 	// Setup our AJAX query vars
 	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
@@ -52,6 +74,7 @@ function badgeos_ajax_get_achievements() {
 	$meta_key   = isset( $_REQUEST['meta_key'] )   ? $_REQUEST['meta_key']   : '';
 	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
 	$tag        = isset( $_REQUEST['tag'] )        ? $_REQUEST['tag']        : false;
+    $layout     = isset( $_REQUEST['layout'] )     ? $_REQUEST['layout']     : 'list';
 
 	// Convert $type to properly support multiple achievement types
 	if ( 'all' == $type ) {

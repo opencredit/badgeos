@@ -58,6 +58,7 @@ class BadgeOS {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'init', array( $this, 'credly_init' ) );
+		add_action( 'badgeos_render_achievement', 'custom_render_achievement' );
 
 	}
 
