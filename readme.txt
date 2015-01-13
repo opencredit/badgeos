@@ -222,6 +222,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.4 =
 * Improved checks to prevent accidental achievement type switching when editing achievement types.
+* Check if in multisite before trying to use multisite functions.
 * Added missed internationalization strings and updated pot file.
 * Inline documentation corrections.
 
@@ -377,6 +378,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.4 =
 * Improved checks to prevent accidental achievement type switching when editing achievement types.
+* Check if in multisite before trying to use multisite functions.
 * Added missed internationalization strings and updated pot file.
 * Inline documentation corrections.
 
