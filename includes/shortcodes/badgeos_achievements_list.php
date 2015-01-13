@@ -156,10 +156,10 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 
 	// If we're dealing with multiple achievement types
 	if ( 'all' == $type ) {
-		$post_type_plural = 'achievements';
+		$post_type_plural = __( 'achievements', 'badgeos' );
 	} else {
 		$types = explode( ',', $type );
-		$post_type_plural = ( 1 == count( $types ) ) ? get_post_type_object( $type )->labels->name : 'achievements';
+		$post_type_plural = ( 1 == count( $types ) ) ? get_post_type_object( $type )->labels->name : __( 'achievements', 'badgeos' );
 	}
 
 	$badges = '';
