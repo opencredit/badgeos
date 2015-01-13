@@ -397,20 +397,24 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 
 	// Loop through all active sites
 	$sites = badgeos_get_network_site_ids();
-	foreach( $sites as $site_blog_id ){
+	foreach( $sites as $site_blog_id ) {
 
 		// If we're polling a different blog, switch to it
-		if ( $blog_id != $site_blog_id )
+		if ( $blog_id != $site_blog_id ) {
 			switch_to_blog( $site_blog_id );
+		}
 
 		// Merge earned achievements to our achievement type array
 		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
-		if ( is_array($achievement_types) )
+		if ( is_array($achievement_types) ) {
 			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
+		}
 	}
 
-	// Restore the original blog so the sky doesn't fall
-	switch_to_blog( $cached_id );
+	if ( is_multisite() ) {
+		// Restore the original blog so the sky doesn't fall
+		switch_to_blog( $cached_id );
+	}
 
 	// Pare down achievement type list so we return no duplicates
 	$achievement_types = array_unique( $all_achievement_types );

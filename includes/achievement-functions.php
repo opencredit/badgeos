@@ -810,7 +810,7 @@ function badgeos_flush_rewrite_rules() {
  * @param  array $post_args Post args.
  * @return array            Updated post data.
  */
-function badgeos_maybe_update_achievement_type( $data = '', $post_args = '' ) {
+function badgeos_maybe_update_achievement_type( $data = array(), $post_args = array() ) {
 	if ( badgeos_achievement_type_changed( $post_args ) ) {
 		$original_type = get_post( $post_args['ID'] )->post_name;
 		$new_type = wp_unique_post_slug( sanitize_title( $post_args['post_title'] ), $post_args['ID'], $post_args['post_status'], $post_args['post_type'], $post_args['post_parent'] );
@@ -830,14 +830,24 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_achievement_type' , '9
  * @return bool             True if name has changed, otherwise false.
  */
 function badgeos_achievement_type_changed( $post_args = array() ) {
-	$original_post = isset( $post_args['ID'] ) ? get_post( $post_args['ID'] ) : null;
-	return (
-		'achievement-type' === $post_args['post_type']
-		&& is_object( $original_post )
-		&& ! empty( $original_post->post_name )
-		&& $original_post->post_title !== $post_args['post_title']
-		&& ! ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-	);
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return false;
+	}
+
+	$original_post = ( !empty( $post_args['ID'] ) && isset( $post_args['ID'] ) ) ? get_post( $post_args['ID'] ) : null;
+	$status = false;
+	if ( is_object( $original_post ) ) {
+		if (
+			'achievement-type' === $post_args['post_type']
+			&& $original_post->post_status !== 'auto-draft'
+			&& ! empty( $original_post->post_name )
+			&& $original_post->post_title !== $post_args['post_title']
+		) {
+			$status = true;
+		}
+	}
+
+	return $status;
 }
 
 /**
@@ -988,8 +998,11 @@ function badgeos_get_achievement_metas( $meta_key = '', $original_type = '' ) {
  *
  * @since 1.4.0
  *
+ * @param array  $achievements  Array of achievements.
  * @param string $original_type Original achievement type.
  * @param string $new_type      New achievement type.
+ *
+ * @return array $achievements
  */
 function badgeos_update_meta_achievement_types( $achievements = array(), $original_type = '', $new_type = '' ) {
 	if ( is_array( $achievements ) && ! empty( $achievements ) ) {
@@ -1019,6 +1032,10 @@ function badgeos_achievement_type_rename_redirect( $location = '' ) {
  * Filter the "post updated" messages to include support for achievement types.
  *
  * @since 1.4.0
+ *
+ * @param array $messages Array of messages to display.
+ *
+ * @return array $messages Compiled list of messages.
  */
 function badgeos_achievement_type_update_messages( $messages ) {
 	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );

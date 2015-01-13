@@ -163,7 +163,7 @@ add_filter( 'the_content', 'badgeos_reformat_entries', 9 );
  * Helper function tests that we're in the main loop
  *
  * @since  1.0.0
- * @param  integer $id The page id
+ * @param  bool|integer $id The page id
  * @return boolean     A boolean determining if the function is in the main loop
  */
 function badgeos_is_main_loop( $id = false ) {

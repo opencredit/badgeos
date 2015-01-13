@@ -141,7 +141,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_count_text', $step_id, $post_id ); ?>
 
-		<div class="step-title"><label for="step-<?php echo $step_id; ?>-title">Label:</label> <input type="text" name="step-title" id="step-<?php echo $step_id; ?>-title" class="title" value="<?php echo get_the_title( $step_id ); ?>" /></div>
+		<div class="step-title"><label for="step-<?php echo $step_id; ?>-title"><?php _e( 'Label', 'badgeos' ); ?>:</label> <input type="text" name="step-title" id="step-<?php echo $step_id; ?>-title" class="title" value="<?php echo get_the_title( $step_id ); ?>" /></div>
 		<span class="spinner spinner-step-<?php echo $step_id;?>"></span>
 	</li>
 	<?php

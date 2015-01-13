@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-07-24 23:37-0600\n"
-"Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
+"PO-Revision-Date: 2014-09-14 03:09+0100\n"
+"Last-Translator: X-Raym <extremraym@yahoo.fr>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.6\n"
+"X-Generator: Poedit 1.6.9\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
@@ -102,7 +102,7 @@ msgstr "Erreur : Temps épuisé"
 # @ badgeos
 #: includes/achievement-functions.php:640
 msgid "People who have earned this:"
-msgstr "Personnes qui ont reçu cela :"
+msgstr "Liste de Personnes ayant reçu cet Accomplissement :"
 
 # @ badgeos
 #: includes/achievement-functions.php:1024
@@ -318,10 +318,11 @@ msgid ""
 "BadgeOS platform in some incredibly powerful ways. %2$s with inquiries. See "
 "examples of %3$s."
 msgstr ""
-"Pour soutenir l'utilisation de BadgeOS ou suggérer des améliorations, vous "
-"pouvez vister %1$s. L'équipe de BadgeOS fait du développement personnalisé "
-"qui va au delà la plateforme de BadgeOS, et ce de manière incroyablement "
-"puissante. %2$s aux questions (≈). Regardez des exemples de %3$s."
+"Pour du soutien concernant l'utilisation de BadgeOS ou pour suggérer des "
+"améliorations, vous pouvez vister %1$s. L'équipe de BadgeOS fait du "
+"développement personnalisé qui va au delà la plateforme de BadgeOS, et ce de "
+"manière incroyablement puissante. %2$s aux questions. Regardez des exemples "
+"de %3$s."
 
 # @ badgeos
 #: includes/admin-settings.php:397
@@ -471,7 +472,7 @@ msgstr "Clé API Credly"
 # @ badgeos
 #: includes/admin-settings.php:559
 msgid "Credly Field Mapping"
-msgstr "Cartographier les champs Credly (≈)"
+msgstr "Correspondance avec les champs Credly"
 
 # @ badgeos
 #: includes/admin-settings.php:561
@@ -1052,13 +1053,13 @@ msgstr "Sauver"
 #: includes/content-filters.php:265
 #, php-format
 msgid "%1$d Required %2$s"
-msgstr "%1$d Requis %2$s"
+msgstr "%1$d %2$s Requises"
 
 # @ badgeos
 #: includes/content-filters.php:318
 #, php-format
 msgid "%d Points"
-msgstr "Points %d"
+msgstr "%d Points"
 
 # @ badgeos
 #: includes/content-filters.php:351
@@ -1460,7 +1461,7 @@ msgstr ""
 # @ badgeos
 #: includes/meta-boxes.php:121
 msgid "Congratulations Text"
-msgstr "Text de Félicitations"
+msgstr "Texte de Félicitations"
 
 # @ badgeos
 #: includes/meta-boxes.php:122
@@ -1468,9 +1469,11 @@ msgid ""
 "Displayed after achievement is earned. If sending to Credly, a great place "
 "for a testimonial for those who complete this achievement."
 msgstr ""
-"Affiché après que l'accomplissement soit gagné. Si cela est envoyé à Credly, "
-"un endroit génial pour ceux qui ont complété cet accomplissement. (≈)"
+"Affiché après que l'accomplissement ait été gagné. Si cela est envoyé à "
+"Credly, un endroit génial pour que ceux qui ont complété cet accomplissement "
+"puisse laisser un témoignage. (<a href="
 
+# " title="Traduction Approximative">≈</a>)"
 # @ badgeos
 #: includes/meta-boxes.php:127
 msgid "Maximum Earnings"
@@ -1674,7 +1677,7 @@ msgstr "Utilisateur"
 # @ badgeos
 #: includes/p2p/p2p-core/side-user.php:26
 msgid "Search Users"
-msgstr "Recherché Utilisateurs"
+msgstr "Rechercher Utilisateurs"
 
 # @ badgeos
 #: includes/p2p/p2p-core/side-user.php:27
@@ -1726,7 +1729,7 @@ msgstr "Réglages <strong>sauvegardé</strong>."
 #, php-format
 msgid "%1$s awarded %2$s %3$s points for a new total of %4$s points"
 msgstr ""
-"%1$s récompensé %2$s %3$s points pour un nouveau total de %4$s points (≈)"
+"%1$s a récompensé %2$s de %3$s points pour un nouveau total de %4$s points"
 
 # @ badgeos
 #: includes/points-functions.php:88
@@ -2222,25 +2225,25 @@ msgstr "Montrer les accomplissements depuis tous les sites du réseau."
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:182
 msgid "Filter:"
-msgstr "Filtres : "
+msgstr "Filtrer : "
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:184
 #, php-format
 msgid "All %s"
-msgstr "Tous %s"
+msgstr "Tous les %s"
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:187
 #, php-format
 msgid "Completed %s"
-msgstr "Complété %s"
+msgstr "%s Complétés"
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:188
 #, php-format
 msgid "Not Completed %s"
-msgstr "Non Complété %s"
+msgstr "%s Non Complétés"
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:205
@@ -2900,7 +2903,7 @@ msgid ""
 "The user's points total. Entering a new total will automatically log the "
 "change and difference between totals."
 msgstr ""
-"Points total de l'utilisateur. Entrer un nouveau total va automatiquement "
+"Total de points de l'utilisateur. Entrer un nouveau total va automatiquement "
 "enregistrer le changement et faire la différence entre les totaux."
 
 # @ badgeos
@@ -2936,7 +2939,7 @@ msgstr "Récompenser un Accomplissement"
 # @ badgeos
 #: includes/user.php:246
 msgid "Select an Achievement Type to Award:"
-msgstr "Sélectionnerun un Type d'Accomplissement à Récompenser:"
+msgstr "Sélectionner un Type d'Accomplissement à Récompenser :"
 
 # @ badgeos
 #: includes/user.php:265
@@ -2947,7 +2950,7 @@ msgstr "Récompensé"
 #: includes/user.php:303
 #, php-format
 msgid "Award %s"
-msgstr "Récompense %s"
+msgstr "Récompenser %s"
 
 # @ badgeos
 #: includes/user.php:312
@@ -2958,8 +2961,9 @@ msgstr "Aucun %s trouvé."
 # @ badgeos
 #: includes/widgets/credly-credit-issuer-widget.php:9
 msgid "Display the Credly Credit Issuer badge"
-msgstr "Afficher badge de l'Émetteur du Credly Credit (≈)"
+msgstr "Afficher le badge de l'Émetteur du Credly Credit (<a href="
 
+# " title="Traduction Approximative">≈</a>)"
 # @ badgeos
 #: includes/widgets/credly-credit-issuer-widget.php:11
 msgid "BadgeOS Credly Credit Issuer"
@@ -2973,8 +2977,9 @@ msgstr "URL du Profil Credly"
 # @ badgeos
 #: includes/widgets/credly-credit-issuer-widget.php:43
 msgid "Credly Credit Issuer"
-msgstr "Émetteur du Credly Credit (≈)"
+msgstr "Émetteur du Credly Credit (<a href="
 
+# " title="Traduction Approximative">≈</a>)"
 # @ badgeos
 #: includes/widgets/earned-user-achievements-widget.php:9
 msgid "Displays all achievements earned by the logged in user"
@@ -3003,7 +3008,7 @@ msgstr "Nombre a afficher (0 = tous)"
 # @ badgeos
 #: includes/widgets/earned-user-achievements-widget.php:25
 msgid "Display user's total points"
-msgstr "Afficher le nombre de points total de l'utilisateur"
+msgstr "Afficher le total de points de l'utilisateur"
 
 # @ badgeos
 #: includes/widgets/earned-user-achievements-widget.php:26
@@ -3014,7 +3019,7 @@ msgstr "Afficher uniquement les Types d'Accomplissement suivants : "
 #: includes/widgets/earned-user-achievements-widget.php:81
 #, php-format
 msgid "My Total Points: %s"
-msgstr "Mes Points Total : %s"
+msgstr "Mon Total de Points : %s"
 
 # @ badgeos
 #: includes/widgets/earned-user-achievements-widget.php:143
