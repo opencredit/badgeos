@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
-"POT-Creation-Date: 2014-06-09 15:44-0500\n"
-"PO-Revision-Date: 2014-06-09 15:44-0500\n"
-"Last-Translator: Brian Richards <brian@rzen.net>\n"
+"POT-Creation-Date: 2015-01-13 10:09-0600\n"
+"PO-Revision-Date: 2015-01-13 10:09-0600\n"
+"Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: BadgeOS\n"
 "Language: en_EN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.7.3\n"
 "X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_attr_x;_n;_x;_ex;_nx;"
 "esc_html__;esc_html_e;esc_html_x\n"
 "X-Poedit-Basepath: .\n"
@@ -17,66 +17,66 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../badgeos.php:149 ../badgeos.php:165
+#: ../badgeos.php:150 ../badgeos.php:166
 #: ../includes/shortcodes/badgeos_achievements_list.php:69
 msgid "Order"
 msgstr ""
 
-#: ../badgeos.php:195
+#: ../badgeos.php:196
 msgid "Badges"
 msgstr ""
 
-#: ../badgeos.php:196
+#: ../badgeos.php:197
 msgid "Badges badge type"
 msgstr ""
 
-#: ../badgeos.php:201
+#: ../badgeos.php:202
 msgid "Badge"
 msgstr ""
 
-#: ../badgeos.php:247 ../includes/admin-settings.php:198
+#: ../badgeos.php:248 ../includes/admin-settings.php:198
 msgid "BadgeOS Settings"
 msgstr ""
 
-#: ../badgeos.php:247 ../includes/p2p/scb/AdminPage.php:467
+#: ../badgeos.php:248 ../includes/p2p/scb/AdminPage.php:467
 msgid "Settings"
 msgstr ""
 
-#: ../badgeos.php:248
+#: ../badgeos.php:249
 msgid "Credly Integration"
 msgstr ""
 
-#: ../badgeos.php:249
+#: ../badgeos.php:250
 msgid "Add-Ons"
 msgstr ""
 
-#: ../badgeos.php:250 ../includes/admin-settings.php:392
+#: ../badgeos.php:251 ../includes/admin-settings.php:392
 msgid "Help / Support"
 msgstr ""
 
-#: ../badgeos.php:275
+#: ../badgeos.php:276
 msgid ""
 "Would you like to display this badge on social networks and add it to your "
 "lifelong badge collection?"
 msgstr ""
 
-#: ../badgeos.php:276
+#: ../badgeos.php:277
 msgid "Yes, send to Credly"
 msgstr ""
 
-#: ../badgeos.php:277 ../includes/class.BadgeOS_Editor_Shortcodes.php:81
+#: ../badgeos.php:278 ../includes/class.BadgeOS_Editor_Shortcodes.php:81
 msgid "Cancel"
 msgstr ""
 
-#: ../badgeos.php:278
+#: ../badgeos.php:279
 msgid "Share on Credly!"
 msgstr ""
 
-#: ../badgeos.php:279
+#: ../badgeos.php:280
 msgid "Error:"
 msgstr ""
 
-#: ../badgeos.php:280
+#: ../badgeos.php:281
 msgid "Error: Timed out"
 msgstr ""
 
@@ -84,11 +84,11 @@ msgstr ""
 msgid "People who have earned this:"
 msgstr ""
 
-#: ../includes/achievement-functions.php:1015
+#: ../includes/achievement-functions.php:1041
 msgid "Achievement Type saved successfully."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1016
+#: ../includes/achievement-functions.php:1042
 #, php-format
 msgid ""
 "Achievement Type renamed successfully. <p>All achievements of this type, and "
@@ -98,7 +98,7 @@ msgid ""
 "strong>."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1016
+#: ../includes/achievement-functions.php:1042
 msgid "widgets"
 msgstr ""
 
@@ -445,18 +445,30 @@ msgstr ""
 msgid "Set default achievement image"
 msgstr ""
 
-#: ../includes/ajax-functions.php:164
+#: ../includes/ajax-functions.php:160
+#: ../includes/shortcodes/badgeos_achievements_list.php:159
+#: ../includes/shortcodes/badgeos_achievements_list.php:162
+msgid "achievements"
+msgstr ""
+
+#: ../includes/ajax-functions.php:165
 #, php-format
 msgid "No completed %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:166
+#: ../includes/ajax-functions.php:167
 #, php-format
 msgid "No %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:229
+#: ../includes/ajax-functions.php:236
 msgid "Status Updated!"
+msgstr ""
+
+#: ../includes/ajax-functions.php:320 ../includes/content-filters.php:524
+#: ../includes/shortcodes/badgeos_nominations.php:26
+#: ../includes/shortcodes/badgeos_submissions.php:26
+msgid "All"
 msgstr ""
 
 #: ../includes/class.BadgeOS_Editor_Shortcodes.php:50
@@ -828,90 +840,84 @@ msgstr ""
 msgid "%d Points"
 msgstr ""
 
-#: ../includes/content-filters.php:353
+#: ../includes/content-filters.php:351
 msgid "You have earned this achievement!"
 msgstr ""
 
-#: ../includes/content-filters.php:423
+#: ../includes/content-filters.php:431
 msgid "Show Details"
 msgstr ""
 
-#: ../includes/content-filters.php:492 ../includes/p2p/p2p-admin/box.php:140
+#: ../includes/content-filters.php:500 ../includes/p2p/p2p-admin/box.php:140
 msgid "Search"
 msgstr ""
 
-#: ../includes/content-filters.php:514 ../includes/content-filters.php:567
-#: ../includes/content-filters.php:616
+#: ../includes/content-filters.php:522 ../includes/content-filters.php:575
+#: ../includes/content-filters.php:624
 msgid "Status:"
 msgstr ""
 
-#: ../includes/content-filters.php:516
-#: ../includes/shortcodes/badgeos_nominations.php:26
-#: ../includes/shortcodes/badgeos_submissions.php:26
-msgid "All"
-msgstr ""
-
-#: ../includes/content-filters.php:517
+#: ../includes/content-filters.php:525
 #: ../includes/shortcodes/badgeos_nominations.php:29
 #: ../includes/shortcodes/badgeos_submissions.php:29
 #: ../includes/submission-actions.php:227
 msgid "Pending"
 msgstr ""
 
-#: ../includes/content-filters.php:518
+#: ../includes/content-filters.php:526
 #: ../includes/shortcodes/badgeos_nominations.php:27
 #: ../includes/shortcodes/badgeos_submissions.php:27
 msgid "Approved"
 msgstr ""
 
-#: ../includes/content-filters.php:520
+#: ../includes/content-filters.php:528
 msgid "Auto-approved"
 msgstr ""
 
-#: ../includes/content-filters.php:521
+#: ../includes/content-filters.php:529
 #: ../includes/shortcodes/badgeos_nominations.php:28
 #: ../includes/shortcodes/badgeos_submissions.php:28
 msgid "Denied"
 msgstr ""
 
-#: ../includes/content-filters.php:556
+#: ../includes/content-filters.php:564
 #, php-format
 msgid "%1$s nominated for %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:608
+#: ../includes/content-filters.php:616
 #, php-format
 msgid "Submission: \"%1$s\" (#%2$d)"
 msgstr ""
 
-#: ../includes/content-filters.php:611
+#: ../includes/content-filters.php:619
 msgid "Author:"
 msgstr ""
 
-#: ../includes/content-filters.php:612
+#: ../includes/content-filters.php:620
 msgid "Date:"
 msgstr ""
 
-#: ../includes/content-filters.php:614
+#: ../includes/content-filters.php:622
 msgid "Achievement:"
 msgstr ""
 
-#: ../includes/content-filters.php:666
+#: ../includes/content-filters.php:674
 #, php-format
 msgid "%1$s - uploaded %2$s by %3$s"
 msgstr ""
 
-#: ../includes/content-filters.php:692
+#: ../includes/content-filters.php:700
 #, php-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:729 ../includes/submission-actions.php:184
+#: ../includes/content-filters.php:737 ../includes/submission-actions.php:184
 #: ../includes/submission-actions.php:225
 msgid "Approve"
 msgstr ""
 
-#: ../includes/content-filters.php:730 ../includes/submission-actions.php:185
+#: ../includes/content-filters.php:738 ../includes/submission-actions.php:185
 #: ../includes/submission-actions.php:226
 msgid "Deny"
 msgstr ""
@@ -989,6 +995,10 @@ msgstr ""
 
 #: ../includes/credly.php:904
 msgid "Credly Category Search"
+msgstr ""
+
+#: ../includes/credly.php:907
+msgid "Search Categories"
 msgstr ""
 
 #: ../includes/credly.php:910
@@ -1955,6 +1965,10 @@ msgstr ""
 msgid "time(s)."
 msgstr ""
 
+#: ../includes/steps-ui.php:144
+msgid "Label"
+msgstr ""
+
 #: ../includes/steps-ui.php:277
 #, php-format
 msgid "any %s"
@@ -2263,7 +2277,7 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: ../includes/user.php:169 ../includes/user.php:301
+#: ../includes/user.php:169 ../includes/user.php:302
 msgid "Revoke Award"
 msgstr ""
 
@@ -2287,12 +2301,12 @@ msgstr ""
 msgid "Awarded"
 msgstr ""
 
-#: ../includes/user.php:303
+#: ../includes/user.php:293
 #, php-format
 msgid "Award %s"
 msgstr ""
 
-#: ../includes/user.php:312
+#: ../includes/user.php:311
 #, php-format
 msgid "No %s found."
 msgstr ""
