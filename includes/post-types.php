@@ -252,7 +252,8 @@ function badgeos_register_achievement_type_cpt() {
 			'has_archive'        => true,
 			'hierarchical'       => true,
 			'menu_position'      => null,
-			'supports'           => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'page-attributes' )
+            'supports'           => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'page-attributes' ),
+            'taxonomies'         => array( 'post_tag'),
 		) );
 
 		// Register the Achievement type
