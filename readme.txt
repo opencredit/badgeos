@@ -221,10 +221,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.4.4 =
-* Improved checks to prevent accidental achievement type switching when editing achievement types.
-* Check if in multisite before trying to use multisite functions.
-* Added missed internationalization strings and updated pot file.
-* Inline documentation corrections.
+* Improved checks to prevent achievement type switching when editing achievement types.
+* Added a check to ensure multisite is active before calling multisite functions.
+* Added internationalization strings and updated pot file.
+* Inline documentation improvements.
 
 = 1.4.3 =
 * Fix issue with user scores being zero'd out when they save their profile in WP Admin.
@@ -377,10 +377,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Upgrade Notice ==
 
 = 1.4.4 =
-* Improved checks to prevent accidental achievement type switching when editing achievement types.
-* Check if in multisite before trying to use multisite functions.
-* Added missed internationalization strings and updated pot file.
-* Inline documentation corrections.
+* Improved checks to prevent achievement type switching when editing achievement types.
+* Added a check to ensure multisite is active before calling multisite functions.
+* Added internationalization strings and updated pot file.
+* Inline documentation improvements.
 
 = 1.4.3 =
 * Fix issue with user scores being zero'd out when they save their profile in WP Admin.
