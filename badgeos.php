@@ -125,7 +125,9 @@ class BadgeOS {
 	 * Initialize CMB.
 	 */
 	function include_cmb() {
-		require_once( $this->directory_path . 'includes/cmb/load.php' );
+		if ( !class_exists( 'cmb_Meta_Box' ) ) {
+			require_once( $this->directory_path . 'includes/cmb/init.php' );
+		}
 	}
 
 	/**
