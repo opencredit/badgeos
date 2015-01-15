@@ -2,6 +2,14 @@
 
 class BadgeOS_Plugin_Updater_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @covers BadgeOS_Plugin_Updater::validate_license()
 	 */

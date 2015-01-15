@@ -2,6 +2,20 @@
 
 class BadgeOS_Steps_UI_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
+	/** @covers badgeos_add_steps_ui_meta_box() */
+	public function test_badgeos_add_steps_ui_meta_box() {}
+
+	/** @covers badgeos_steps_ui_meta_box() */
+	public function test_badgeos_steps_ui_meta_box() {}
+
 	/**
 	 * @covers badgeos_get_step_requirements()
 	 */
@@ -33,7 +47,7 @@ class BadgeOS_Steps_UI_Test extends WP_UnitTestCase {
 	public function test_badgeos_get_p2p_id_from_child_id() {}
 
 	/**
-	 * @covers get_step_menu_order()]
+	 * @covers get_step_menu_order()
 	 */
 	public function test_get_step_menu_order() {}
 

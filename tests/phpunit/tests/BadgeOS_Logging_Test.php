@@ -2,6 +2,14 @@
 
 class BadgeOS_Logging_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @covers badgeos_post_log_entry()
 	 */
