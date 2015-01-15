@@ -11,8 +11,8 @@ function badgeos_register_achievements_list_shortcode() {
 	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
 	array_unshift( $achievement_types, 'all' );
 
-    // Setup a custom array of achievement tag
-    $achievement_tags = get_terms('post_tag', 'fields=names&orderby=name');
+	// Setup a custom array of achievement tag
+	$achievement_tags = get_terms( 'post_tag', array( 'fields' => 'names', 'orderby' => 'name' ) );
 	array_unshift( $achievement_tags, 'all' );
 
 	badgeos_register_shortcode( array(
@@ -101,13 +101,13 @@ function badgeos_register_achievements_list_shortcode() {
 					),
 				'default'     => 'false',
 				),
-            'tag' => array(
+			'tag' => array(
 				'name'        => __( 'Achievement Tag(s)', 'badgeos' ),
 				'description' => __( 'Single, or comma-separated list of, achievement tag(s) to display.', 'badgeos' ),
 				'type'        => 'text',
 				'values'      => $achievement_tags,
-                'default'     => 'all',
-                ),
+				'default'     => 'all',
+				),
 		),
 	) );
 }
