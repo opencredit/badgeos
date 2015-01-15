@@ -143,6 +143,36 @@
 		multiple: true
 	});
 
+	$( '#badgeos_achievements_list_tag' ).select2({
+		ajax: {
+			url: ajaxurl,
+			type: 'POST',
+			data: function ( term ) {
+				return {
+					q: term,
+					action: 'get-achievement-tags'
+				};
+			},
+			results: function ( results, page ) {
+				return {
+					results: results.data
+				};
+			}
+		},
+		id: function ( item ) {
+			return item.id;
+		},
+		formatResult: function ( item ) {
+			return item.name;
+		},
+		formatSelection: function ( item ) {
+			return item.name;
+		},
+		placeholder: badgeos_shortcode_embed_messages.post_type_placeholder,
+		allowClear: true,
+		multiple: true
+	});
+
 	$( '#badgeos_achievements_list_user_id' ).select2({
 		ajax: {
 			url: ajaxurl,

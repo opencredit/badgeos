@@ -110,7 +110,8 @@ jQuery( function( $ ) {
 						'include' : badgeos.include,
 						'exclude' : badgeos.exclude,
 						'meta_key' : badgeos.meta_key,
-						'meta_value' : badgeos.meta_value
+						'meta_value' : badgeos.meta_value,
+						'tag' : badgeos.tag
 					},
 					dataType : 'json',
 					success : function( response ) {
