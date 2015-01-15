@@ -78,12 +78,12 @@ function badgeos_ajax_get_achievements() {
 		$exclude = explode( ',', $exclude );
 	}
 
-    // Initialize our output and counters
-    $achievements = '';
-    $achievement_count = 0;
-    $query_count = 0;
+	// Initialize our output and counters
+	$achievements = '';
+	$achievement_count = 0;
+	$query_count = 0;
 
-    // Grab our hidden badges (used to filter the query)
+	// Grab our hidden badges (used to filter the query)
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
 
 	// If we're polling all sites, grab an array of site IDs
@@ -143,11 +143,11 @@ function badgeos_ajax_get_achievements() {
 			$args[ 's' ] = $search;
 		}
 
-        // Tag Filter
-        if ( 'all'!== $tag ) {
-		    $tag = explode( ',', $tag );
-            $args[ 'tag__in' ] = $tag;
-        }
+		// Tag Filter
+		if ( 'all' !== $tag ) {
+			$tag = explode( ',', $tag );
+			$args[ 'tag__in' ] = $tag;
+		}
 
 		// Loop Achievements
 		$achievement_posts = new WP_Query( $args );
@@ -298,8 +298,8 @@ function badgeos_ajax_get_achievements_select2() {
 		SELECT ID, post_title
 		FROM   $wpdb->posts
 		WHERE  post_title LIKE %s
-		       {$post_type}
-		       AND post_status = 'publish'
+			   {$post_type}
+			   AND post_status = 'publish'
 		",
 		"%%{$search}%%"
 	) );
@@ -338,12 +338,12 @@ function badgeos_ajax_get_achievement_types() {
  */
 function badgeos_ajax_get_achievement_tags() {
 
-	$achievement_tags = get_terms('post_tag');
-    
-    $found = array();
-    foreach($achievement_tags as $achievement_tag){
-	    array_unshift( $found, (object) array( 'id' => $achievement_tag->term_id, 'name' => $achievement_tag->name ) );
-    }
+	$achievement_tags = get_terms( 'post_tag' );
+
+	$found = array();
+	foreach( $achievement_tags as $achievement_tag ) {
+		array_unshift( $found, (object) array( 'id' => $achievement_tag->term_id, 'name' => $achievement_tag->name ) );
+	}
 	// Include an "all" option as the first option
 	array_unshift( $found, (object) array( 'id' => 'all', 'name' => 'All' ) );
 
