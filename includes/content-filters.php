@@ -358,6 +358,31 @@ function badgeos_render_earned_achievement_text( $achievement_id = 0, $user_id =
 }
 
 /**
+ * Congrats text entities bug fixe by oncevision.
+ *
+ * @since  1.4.5
+ *
+ */
+ 
+function badgeos_entities_fix( $fields ) {
+
+	foreach( $fields as $key => $field ) {
+		if ( '_badgeos_congratulations_text' == $field['id'] ) {
+			$fields[ $key ]['escape_cb'] = 'wp_kses_post';
+			break;
+		}
+	}
+
+	return $fields;
+}
+add_filter( 'badgeos_achievement_data_meta_box_fields', 'badgeos_entities_fix' );
+
+function badgeos_entities_output( $text ) {
+	return html_entity_decode( $text );
+}
+add_filter( 'badgeos_earned_achievement_message', 'badgeos_entities_output' );
+
+/**
  * Check if user has earned a given achievement.
  *
  * @since  alpha
