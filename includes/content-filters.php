@@ -375,12 +375,12 @@ function badgeos_entities_fix( $fields ) {
 
 	return $fields;
 }
-add_filter( 'badgeos_achievement_data_meta_box_fields', 'oncevision_badgeos_entities_fix' );
+add_filter( 'badgeos_achievement_data_meta_box_fields', 'badgeos_entities_fix' );
 
 function badgeos_entities_output( $text ) {
 	return html_entity_decode( $text );
 }
-add_filter( 'badgeos_earned_achievement_message', 'oncevision_badgeos_entities_output' );
+add_filter( 'badgeos_earned_achievement_message', 'badgeos_entities_output' );
 
 /**
  * Check if user has earned a given achievement.
