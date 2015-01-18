@@ -27,36 +27,13 @@ foreach ( $badgeos_ajax_actions as $action ) {
 }
 
 /**
- * AJAX Helper for customizing rendering of achievement based on layout.
- * Curently, can display List view (do nothing) or Grid view
- *
- * @return achievement
- */
-function custom_render_achievement ( $achievement ){
-
-    global $layout;
-
-    if ( isset($layout) )
-        switch ( $layout ) {
-        case 'grid':
-            // alter CSS for Grid view
-            $achievement = str_replace("badgeos-achievements-list-item", "badgeos-achievements-grid-item badgeos-achievements-grid-5", $achievement);
-            $achievement = preg_replace('/height="[0-9]*"/', '', $achievement);
-            $achievement = preg_replace('/width="[0-9]*"/', '', $achievement);
-            $achievement = preg_replace('/<div class="badgeos-item-excerpt">(\s|.)*<!-- .badgeos-item-excerpt -->/', '', $achievement);
-    }
-
-    return $achievement;
-}
-
-/**
  * AJAX Helper for returning achievements
  *
  * @since 1.0.0
  * @return void
  */
 function badgeos_ajax_get_achievements() {
-	global $user_ID, $blog_id, $layout;
+	global $user_ID, $blog_id;
 
 	// Setup our AJAX query vars
 	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
@@ -171,6 +148,10 @@ function badgeos_ajax_get_achievements() {
 			$tag = explode( ',', $tag );
 			$args[ 'tag__in' ] = $tag;
 		}
+        
+        if ( 'grid' == $layout ) {
+            add_action( 'badgeos_render_achievement', 'badgeos_grid_render_achievement', 10, 2 );
+        }
 
 		// Loop Achievements
 		$achievement_posts = new WP_Query( $args );
