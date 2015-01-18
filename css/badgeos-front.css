@@ -56,8 +56,25 @@
 .badgeos-item-points {
 	font-weight: bold;
 }
-.badgeos-achievements-list-item.user-has-earned .badgeos-item-image {
+.badgeos-achievements-list-item.user-has-earned .badgeos-item-image, .badgeos-achievements-grid-item.user-has-earned .badgeos-item-image {
 	opacity: 1;
+}
+.badgeos-achievements-grid-item{
+	float: left;
+	text-align: center;
+    padding: 20px 0px;
+	width: 19.5%;
+    min-width: 150px;
+    min-height: 200px;
+}
+.badgeos-achievements-grid-item .badgeos-item-image {
+	opacity: .3;
+    min-height: 110px;
+}
+.badgeos-achievements-grid-item .badgeos-item-title {
+	color: #AAA;
+	font-size: 15px;
+	line-height: 18px;
 }
 #badgeos-achievements-container .badgeos-item-title {
 	display: inline-block;

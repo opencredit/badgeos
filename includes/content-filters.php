@@ -443,6 +443,58 @@ function badgeos_render_achievement( $achievement = 0 ) {
 }
 
 /**
+ * AJAX Helper for customizing rendering of achievement based on layout.
+ * Curently, can display List view (do nothing) or Grid view
+ *
+ * @return achievement
+ */
+function badgeos_grid_render_achievement ( $output, $achievement ){
+	global $user_ID;
+
+	// If we were given an ID, get the post
+	if ( is_numeric( $achievement ) )
+		$achievement = get_post( $achievement );
+
+	// make sure our JS and CSS is enqueued
+	wp_enqueue_script( 'badgeos-achievements' );
+	wp_enqueue_style( 'badgeos-widget' );
+
+	// check if user has earned this Achievement, and add an 'earned' class
+	$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+
+	// Setup our credly classes
+	$credly_class = '';
+	$credly_ID = '';
+
+	// If the achievement is earned and givable, override our credly classes
+	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
+		$credly_class = ' share-credly addCredly';
+		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
+	}
+
+	// Each Achievement
+	$output = '';
+	$output .= '<div id="badgeos-achievements-grid-item-' . $achievement->ID . '" class="badgeos-achievements-grid-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+
+		// Achievement Image
+		$output .= '<div class="badgeos-item-image">';
+		$output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+		$output .= '</div><!-- .badgeos-item-image -->';
+
+		// Achievement Content
+		$output .= '<div class="badgeos-item-description">';
+
+			// Achievement Title
+			$output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
+
+		$output .= '</div><!-- .badgeos-item-description -->';
+
+	$output .= '</div><!-- .badgeos-achievements-grid-item -->';
+
+    return $output;
+}
+
+/**
  * Render a filterable list of feedback
  *
  * @since  1.1.0

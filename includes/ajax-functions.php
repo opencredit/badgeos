@@ -26,7 +26,6 @@ foreach ( $badgeos_ajax_actions as $action ) {
 	add_action( 'wp_ajax_nopriv_' . $action, 'badgeos_ajax_' . str_replace( '-', '_', $action ), 1 );
 }
 
-
 /**
  * AJAX Helper for returning achievements
  *
@@ -52,6 +51,7 @@ function badgeos_ajax_get_achievements() {
 	$meta_key   = isset( $_REQUEST['meta_key'] )   ? $_REQUEST['meta_key']   : '';
 	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
 	$tag        = isset( $_REQUEST['tag'] )        ? $_REQUEST['tag']        : false;
+    $layout     = isset( $_REQUEST['layout'] )     ? $_REQUEST['layout']     : 'list';
 
 	// Convert $type to properly support multiple achievement types
 	if ( 'all' == $type ) {
@@ -148,6 +148,10 @@ function badgeos_ajax_get_achievements() {
 			$tag = explode( ',', $tag );
 			$args[ 'tag__in' ] = $tag;
 		}
+        
+        if ( 'grid' == $layout ) {
+            add_action( 'badgeos_render_achievement', 'badgeos_grid_render_achievement', 10, 2 );
+        }
 
 		// Loop Achievements
 		$achievement_posts = new WP_Query( $args );

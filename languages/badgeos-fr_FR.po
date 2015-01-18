@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-01-14 17:54+0100\n"
+"PO-Revision-Date: 2015-01-17 19:05+0100\n"
 "Last-Translator: X-Raym <extremraym@yahoo.fr>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
 "MIME-Version: 1.0\n"
@@ -1719,7 +1719,7 @@ msgstr "lié"
 # @ badgeos
 #: includes/p2p/scb/AdminPage.php:228
 msgid "Settings <strong>saved</strong>."
-msgstr "Réglages <strong>sauvegardé</strong>."
+msgstr "Réglages <strong>sauvegardés</strong>."
 
 # @ badgeos
 #: includes/points-functions.php:86
@@ -2230,6 +2230,26 @@ msgid "Show achievements from all network sites."
 msgstr "Montrer les accomplissements depuis tous les sites du réseau."
 
 # @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:101
+msgid "Layout"
+msgstr "Format"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:102
+msgid "Achievements layout"
+msgstr "Format d'affichage des accomplissements"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:105
+msgid "Grid"
+msgstr "Grille"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:106
+msgid "List"
+msgstr "Liste"
+
+# @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:182
 msgid "Filter:"
 msgstr "Filtres : "
@@ -2267,7 +2287,7 @@ msgstr "Charger Plus"
 #: includes/shortcodes/badgeos_nomination.php:10
 #: includes/submission-actions.php:1112
 msgid "Nomination Form"
-msgstr "Forme de la Nomination"
+msgstr "Formulaire de Nomination"
 
 # @ badgeos
 #: includes/shortcodes/badgeos_nomination.php:11
