@@ -448,12 +448,13 @@ function badgeos_render_achievement( $achievement = 0 ) {
  *
  * @return achievement
  */
-function badgeos_grid_render_achievement ( $output, $achievement ){
+function badgeos_grid_render_achievement( $output, $achievement ) {
 	global $user_ID;
 
 	// If we were given an ID, get the post
-	if ( is_numeric( $achievement ) )
+	if ( is_numeric( $achievement ) ) {
 		$achievement = get_post( $achievement );
+	}
 
 	// make sure our JS and CSS is enqueued
 	wp_enqueue_script( 'badgeos-achievements' );
