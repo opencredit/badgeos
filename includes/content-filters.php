@@ -477,19 +477,18 @@ function badgeos_grid_render_achievement( $output, $achievement ) {
 	$output = '';
 	$output .= '<div id="badgeos-achievements-grid-item-' . $achievement->ID . '" class="badgeos-achievements-grid-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
-		// Achievement Image
-		$output .= '<div class="badgeos-item-image">';
-		$output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
-		$output .= '</div><!-- .badgeos-item-image -->';
+	// Achievement Image
+	$output .= '<div class="badgeos-item-image">';
+	$output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+	$output .= '</div><!-- .badgeos-item-image -->';
 
-		// Achievement Content
-		$output .= '<div class="badgeos-item-description">';
+	// Achievement Content
+	$output .= '<div class="badgeos-item-description">';
 
-			// Achievement Title
-			$output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
+	// Achievement Title
+	$output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
 
-		$output .= '</div><!-- .badgeos-item-description -->';
-
+	$output .= '</div><!-- .badgeos-item-description -->';
 	$output .= '</div><!-- .badgeos-achievements-grid-item -->';
 
     return $output;
