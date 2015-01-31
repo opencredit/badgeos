@@ -448,7 +448,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
  *
  * @return achievement
  */
-function badgeos_grid_render_achievement( $output, $achievement ) {
+function badgeos_grid_render_achievement( $achievement = 0 ) {
 	global $user_ID;
 
 	// If we were given an ID, get the post
@@ -491,7 +491,7 @@ function badgeos_grid_render_achievement( $output, $achievement ) {
 	$output .= '</div><!-- .badgeos-item-description -->';
 	$output .= '</div><!-- .badgeos-achievements-grid-item -->';
 
-    return $output;
+	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 }
 
 /**
