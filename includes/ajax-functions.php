@@ -149,15 +149,11 @@ function badgeos_ajax_get_achievements() {
 			$args[ 'tag__in' ] = $tag;
 		}
 
-        if ( 'grid' == $layout ) {
-            add_action( 'badgeos_render_achievement', 'badgeos_grid_render_achievement', 10, 2 );
-        }
-
 		// Loop Achievements
 		$achievement_posts = new WP_Query( $args );
 		$query_count += $achievement_posts->found_posts;
 		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-			$achievements .= badgeos_render_achievement( get_the_ID() );
+			$achievements .= ($layout == 'list')?badgeos_render_achievement( get_the_ID() ) : badgeos_grid_render_achievement( get_the_ID() );
 			$achievement_count++;
 		endwhile;
 
