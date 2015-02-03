@@ -438,7 +438,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 	$output .= '</div><!-- .badgeos-achievements-list-item -->';
 
 	// Return our filterable markup
-	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
+	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID, 'list' );
 
 }
 
@@ -491,7 +491,7 @@ function badgeos_grid_render_achievement( $achievement = 0 ) {
 	$output .= '</div><!-- .badgeos-item-description -->';
 	$output .= '</div><!-- .badgeos-achievements-grid-item -->';
 
-	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
+	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID, 'grid' );
 }
 
 /**
