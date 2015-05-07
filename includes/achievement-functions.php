@@ -613,7 +613,7 @@ function badgeos_get_achievement_earners( $achievement_id = 0 ) {
 	// Grab our earners
 	$earners = new WP_User_Query( array(
 		'meta_key'     => '_badgeos_achievements',
-		'meta_value'   => $achievement_id,
+		'meta_value'   => '"' . $achievement_id . '"',
 		'meta_compare' => 'LIKE'
 	) );
 
