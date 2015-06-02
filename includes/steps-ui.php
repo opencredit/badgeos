@@ -121,6 +121,9 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			<option value=""></option>
 			<?php
 				foreach ( $achievement_types as $achievement_type ) {
+					if ( 'step' == $achievement_type ){
+						continue;
+					}
 					echo '<option value="' . $achievement_type . '" ' . selected( $requirements['achievement_type'], $achievement_type, false ) . '>' . ucfirst( $achievement_type ) . '</option>';
 				}
 			?>

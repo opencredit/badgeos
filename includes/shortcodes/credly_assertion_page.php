@@ -16,7 +16,7 @@ function badgeos_register_credly_assertion_shortcode() {
 				'name'        => __( 'Width', 'badgeos' ),
 				'description' => __( 'Content width.', 'badgeos' ),
 				'type'        => 'text',
-				'default'     => 560,
+				'default'     => 590,
 				),
 			'height' => array(
 				'name'        => __( 'Height', 'badgeos' ),
@@ -47,7 +47,7 @@ function badgeos_credly_assertion_page( $atts = array() ) {
 
 	$atts = shortcode_atts( array(
 		'CID'    => isset( $_GET['CID'] ) ? absint( $_GET['CID'] ) : 0,
-		'width'  => isset( $content_width ) ? $content_width : 560,
+		'width'  => isset( $content_width ) ? $content_width : 590,
 		'height' => 1000,
 	), $atts, 'credly_assertion_page' );
 

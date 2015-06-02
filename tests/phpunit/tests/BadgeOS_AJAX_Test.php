@@ -2,6 +2,14 @@
 
 class BadgeOS_AJAX_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @covers badgeos_ajax_get_achievements()
 	 */

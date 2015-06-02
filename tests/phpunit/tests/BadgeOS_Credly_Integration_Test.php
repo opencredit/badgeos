@@ -2,6 +2,14 @@
 
 class BadgeOS_Credly_Integration_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @covers BadgeOS_Credly::post_credly_badge()
 	 */

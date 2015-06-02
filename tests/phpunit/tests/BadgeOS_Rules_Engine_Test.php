@@ -2,6 +2,14 @@
 
 class BadgeOS_Rules_Engine_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	/**
 	 * @covers badgeos_maybe_award_achievement_to_user()
 	 */

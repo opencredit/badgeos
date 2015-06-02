@@ -3,13 +3,21 @@ msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
+<<<<<<< HEAD
 "PO-Revision-Date: 2014-09-14 03:09+0100\n"
+=======
+"PO-Revision-Date: 2015-01-17 19:05+0100\n"
+>>>>>>> e1ffd718e3d7cd03d7e148fc559206e0c9f047eb
 "Last-Translator: X-Raym <extremraym@yahoo.fr>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+<<<<<<< HEAD
 "X-Generator: Poedit 1.6.9\n"
+=======
+"X-Generator: Poedit 1.7.1\n"
+>>>>>>> e1ffd718e3d7cd03d7e148fc559206e0c9f047eb
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
@@ -1722,7 +1730,7 @@ msgstr "lié"
 # @ badgeos
 #: includes/p2p/scb/AdminPage.php:228
 msgid "Settings <strong>saved</strong>."
-msgstr "Réglages <strong>sauvegardé</strong>."
+msgstr "Réglages <strong>sauvegardés</strong>."
 
 # @ badgeos
 #: includes/points-functions.php:86
@@ -2057,6 +2065,16 @@ msgstr ""
 "à afficher."
 
 # @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:105
+msgid "Achievement Tag(s)"
+msgstr "Tag(s) recherché(s)"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:106
+msgid "Single, or comma-separated list of, achievement tag(s) to display."
+msgstr "Tag unique ou liste de tags séparés par une virgule"
+
+# @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:28
 #: includes/shortcodes/badgeos_nominations.php:16
 #: includes/shortcodes/badgeos_submissions.php:16
@@ -2223,6 +2241,26 @@ msgid "Show achievements from all network sites."
 msgstr "Montrer les accomplissements depuis tous les sites du réseau."
 
 # @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:101
+msgid "Layout"
+msgstr "Format"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:102
+msgid "Achievements layout"
+msgstr "Format d'affichage des accomplissements"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:105
+msgid "Grid"
+msgstr "Grille"
+
+# @ badgeos
+#: includes/shortcodes/badgeos_achievements_list.php:106
+msgid "List"
+msgstr "Liste"
+
+# @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:182
 msgid "Filter:"
 msgstr "Filtrer : "
@@ -2260,7 +2298,7 @@ msgstr "Charger Plus"
 #: includes/shortcodes/badgeos_nomination.php:10
 #: includes/submission-actions.php:1112
 msgid "Nomination Form"
-msgstr "Forme de la Nomination"
+msgstr "Formulaire de Nomination"
 
 # @ badgeos
 #: includes/shortcodes/badgeos_nomination.php:11

@@ -2,6 +2,14 @@
 
 class BadgeOS_Core_Test extends WP_UnitTestCase {
 
+	public function setUp() {
+		parent::setUp();
+	}
+
+	public function tearDown() {
+		parent::tearDown();
+	}
+
 	public function test_badgeos_has_version_number() {
 		$this->assertNotNull( BadgeOS::$version );
 	}
@@ -11,26 +19,41 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 	 */
 	public function test_badgeos_includes_exist() {
 
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.BadgeOS_Plugin_Updater.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.Credly_Badge_Builder.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/post-types.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/admin-settings.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/achievement-functions.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/activity-functions.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/admin-settings.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/ajax-functions.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.BadgeOS_Editor_Shortcodes.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.BadgeOS_Plugin_Updater.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.BadgeOS_Shortcode.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/class.Credly_Badge_Builder.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/content-filters.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/credly.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/credly-badge-builder.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/logging-functions.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/meta-boxes.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/points-functions.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/triggers.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/steps-ui.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/content-filters.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/submission-actions.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/post-types.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/rules-engine.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/steps-ui.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/submission-actions.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/triggers.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/user.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/credly.php' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/credly-badge-builder.php' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/widgets.php' );
+
+		// Shortcodes
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_achievement.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_achievements_list.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_nomination.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_nominations.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_submission.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/badgeos_submissions.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/shortcodes/credly_assertion_page.php' );
+
+		// Widgets
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/widgets/credly-credit-issuer-widget.php' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'includes/widgets/earned-user-achievements-widget.php' );
 
 	}
 
@@ -47,8 +70,9 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 		// JS
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/admin.js' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/badgeos-achievements.js' );
-		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/credly-badge-builder.js' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/badgeos-shortcode-embed.js' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/credly.js' );
+		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/credly-badge-builder.js' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'js/steps-ui.js' );
 
 		// Images
@@ -59,6 +83,18 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'images/credly-credit-issuer.png' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'images/spinner.gif' );
 		$this->assertFileExists( BOS_DIRECTORY_PATH . 'images/ui_handle.png' );
+	}
+
+	public function test_shortcodes_are_registered() {
+		global $shortcode_tags;
+
+		$this->assertArrayHasKey( 'badgeos_achievement', $shortcode_tags );
+		$this->assertArrayHasKey( 'badgeos_achievements_list', $shortcode_tags );
+		$this->assertArrayHasKey( 'badgeos_nomination', $shortcode_tags );
+		$this->assertArrayHasKey( 'badgeos_nominations', $shortcode_tags );
+		$this->assertArrayHasKey( 'badgeos_submission', $shortcode_tags );
+		$this->assertArrayHasKey( 'badgeos_submissions', $shortcode_tags );
+		$this->assertArrayHasKey( 'credly_assertion_page', $shortcode_tags );
 	}
 
 	/**

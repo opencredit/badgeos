@@ -11,6 +11,10 @@ function badgeos_register_achievements_list_shortcode() {
 	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
 	array_unshift( $achievement_types, 'all' );
 
+	// Setup a custom array of achievement tag
+	$achievement_tags = get_terms( 'post_tag', array( 'fields' => 'names', 'orderby' => 'name' ) );
+	array_unshift( $achievement_tags, 'all' );
+
 	badgeos_register_shortcode( array(
 		'name'            => __( 'Achievement List', 'badgeos' ),
 		'description'     => __( 'Output a list of achievements.', 'badgeos' ),
@@ -97,6 +101,23 @@ function badgeos_register_achievements_list_shortcode() {
 					),
 				'default'     => 'false',
 				),
+			'tag' => array(
+				'name'        => __( 'Achievement Tag(s)', 'badgeos' ),
+				'description' => __( 'Single, or comma-separated list of, achievement tag(s) to display.', 'badgeos' ),
+				'type'        => 'text',
+				'values'      => $achievement_tags,
+				'default'     => 'all',
+				),
+			'layout' => array(
+				'name'        => __( 'Layout', 'badgeos' ),
+				'description' => __( 'Achievements layout', 'badgeos' ),
+				'type'        => 'select',
+				'values'      => array(
+					'grid' => __('Grid', 'badgeos'),
+					'list' => __('List', 'badgeos'),
+					),
+				'default'     => 'list',
+				),
 		),
 	) );
 }
@@ -130,7 +151,9 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'include'     => array(),
 		'exclude'     => array(),
 		'meta_key'    => '',
-		'meta_value'  => ''
+		'meta_value'  => '',
+		'tag'         => 'all',
+		'layout'      => 'list',
 	), $atts, 'badgeos_achievements_list' ) );
 
 	wp_enqueue_style( 'badgeos-front' );
@@ -150,7 +173,9 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'include'     => $include,
 		'exclude'     => $exclude,
 		'meta_key'    => $meta_key,
-		'meta_value'  => $meta_value
+		'meta_value'  => $meta_value,
+		'tag'         => $tag,
+		'layout'      => $layout,
 	);
 	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
