@@ -617,8 +617,14 @@ function badgeos_get_achievement_earners( $achievement_id = 0 ) {
 		'meta_compare' => 'LIKE'
 	) );
 
+	$earned_users = array();
+	foreach( $earners->results as $earner ) {
+		if ( badgeos_has_user_earned_achievement( $achievement_id, $earner->ID ) ) {
+			$earned_users[] = $earner;
+		}
+	}
 	// Send back our query results
-	return $earners->results;
+	return $earned_users;
 }
 
 /**
