@@ -19,12 +19,12 @@
 	margin-bottom: 1em;
 	float: right;
 }
-#badgeos-achievements-container, #achievements_list_load_more, #badgeos-achievements-filters-wrap {
+#badgeos-achievements-container, #badgeos-single-achievement-container, #achievements_list_load_more, #badgeos-achievements-filters-wrap {
 	display: block;
 	margin: 0 auto;
 	clear: both;
 }
-#badgeos-achievements-container {
+#badgeos-achievements-container, #badgeos-single-achievement-container {
 	border-top: 1px dotted #aaa;
 }
 #badgeos-achievements-filter select {
@@ -76,7 +76,7 @@
 	font-size: 15px;
 	line-height: 18px;
 }
-#badgeos-achievements-container .badgeos-item-title {
+#badgeos-achievements-container .badgeos-item-title, #badgeos-single-achievement-container .badgeos-item-title {
 	display: inline-block;
 	margin-top: 0;
 }
