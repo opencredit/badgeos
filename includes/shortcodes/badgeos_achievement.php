@@ -39,7 +39,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 
 	// return if post id not specified
 	if ( empty($atts['id']) )
-	  return;
+	  return '';
 
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
