@@ -220,6 +220,17 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= alpha =
+* Fix: Prevent false positives on "users who have earned achievement" listings.
+* Fix: Prevent potential empty array of achievements.
+* Fix: Added unique ID to single achievement shortcode output.
+* Fix: esc_attr() on some attributes.
+* Fix: Prevent submission and nomination columns from showing outside of submission and nomination pages.
+* Fix: Pass user ID to badgeos_maybe_award_achievement_to_user call inside badgeos_update_user_points().
+* Enhancement: Ability to show achievements in a grid layout.
+* Fix: Prevent steps from being listed in achievement type list in Steps UI.
+* Fix: Prevent media library "litter" with default thumbs up graphic being added multiple times. Now will check for existing copy of graphic before downloading new.
+
 = 1.4.4 =
 * Improved checks to prevent achievement type switching when editing achievement types.
 * Added a check to ensure multisite is active before calling multisite functions.
