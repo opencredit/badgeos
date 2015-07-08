@@ -1,7 +1,8 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
-"POT-Creation-Date: 2015-01-13 10:09-0600\n"
+"POT-Creation-Date: 2015-07-08 18:26-0500\n"
 "PO-Revision-Date: 2015-01-13 10:09-0600\n"
 "Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: BadgeOS\n"
@@ -9,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.8.2\n"
 "X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_attr_x;_n;_x;_ex;_nx;"
 "esc_html__;esc_html_e;esc_html_x\n"
 "X-Poedit-Basepath: .\n"
@@ -17,78 +18,96 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../badgeos.php:150 ../badgeos.php:166
-#: ../includes/shortcodes/badgeos_achievements_list.php:69
+#: ../badgeos.php:101
+msgid ""
+"Achievement Type supports a maximum of 20 characters. Please choose a "
+"shorter title."
+msgstr ""
+
+#: ../badgeos.php:106 ../includes/content-filters.php:431
+msgid "Show Details"
+msgstr ""
+
+#: ../badgeos.php:107
+msgid "Hide Details"
+msgstr ""
+
+#: ../badgeos.php:111
+msgid "Updating featured image, please wait..."
+msgstr ""
+
+#: ../badgeos.php:157 ../badgeos.php:173
+#: ../includes/shortcodes/badgeos_achievements_list.php:73
 msgid "Order"
 msgstr ""
 
-#: ../badgeos.php:196
+#: ../badgeos.php:203
 msgid "Badges"
 msgstr ""
 
-#: ../badgeos.php:197
+#: ../badgeos.php:204
 msgid "Badges badge type"
 msgstr ""
 
-#: ../badgeos.php:202
+#: ../badgeos.php:209
 msgid "Badge"
 msgstr ""
 
-#: ../badgeos.php:248 ../includes/admin-settings.php:198
+#: ../badgeos.php:255 ../includes/admin-settings.php:198
 msgid "BadgeOS Settings"
 msgstr ""
 
-#: ../badgeos.php:248 ../includes/p2p/scb/AdminPage.php:467
+#: ../badgeos.php:255 ../includes/p2p/scb/AdminPage.php:467
 msgid "Settings"
 msgstr ""
 
-#: ../badgeos.php:249
+#: ../badgeos.php:256
 msgid "Credly Integration"
 msgstr ""
 
-#: ../badgeos.php:250
+#: ../badgeos.php:257
 msgid "Add-Ons"
 msgstr ""
 
-#: ../badgeos.php:251 ../includes/admin-settings.php:392
+#: ../badgeos.php:258 ../includes/admin-settings.php:392
 msgid "Help / Support"
 msgstr ""
 
-#: ../badgeos.php:276
+#: ../badgeos.php:283
 msgid ""
 "Would you like to display this badge on social networks and add it to your "
 "lifelong badge collection?"
 msgstr ""
 
-#: ../badgeos.php:277
+#: ../badgeos.php:284
 msgid "Yes, send to Credly"
 msgstr ""
 
-#: ../badgeos.php:278 ../includes/class.BadgeOS_Editor_Shortcodes.php:81
+#: ../badgeos.php:285 ../includes/class.BadgeOS_Editor_Shortcodes.php:81
 msgid "Cancel"
 msgstr ""
 
-#: ../badgeos.php:279
+#: ../badgeos.php:286
 msgid "Share on Credly!"
 msgstr ""
 
-#: ../badgeos.php:280
+#: ../badgeos.php:287
 msgid "Error:"
 msgstr ""
 
-#: ../badgeos.php:281
+#: ../badgeos.php:288
 msgid "Error: Timed out"
 msgstr ""
 
-#: ../includes/achievement-functions.php:640
+#: ../includes/achievement-functions.php:646
 msgid "People who have earned this:"
 msgstr ""
 
-#: ../includes/achievement-functions.php:1041
+#: ../includes/achievement-functions.php:1061
 msgid "Achievement Type saved successfully."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1042
+#: ../includes/achievement-functions.php:1062
 #, php-format
 msgid ""
 "Achievement Type renamed successfully. <p>All achievements of this type, and "
@@ -98,7 +117,7 @@ msgid ""
 "strong>."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1042
+#: ../includes/achievement-functions.php:1062
 msgid "widgets"
 msgstr ""
 
@@ -445,27 +464,27 @@ msgstr ""
 msgid "Set default achievement image"
 msgstr ""
 
-#: ../includes/ajax-functions.php:160
-#: ../includes/shortcodes/badgeos_achievements_list.php:159
-#: ../includes/shortcodes/badgeos_achievements_list.php:162
+#: ../includes/ajax-functions.php:169
+#: ../includes/shortcodes/badgeos_achievements_list.php:184
+#: ../includes/shortcodes/badgeos_achievements_list.php:187
 msgid "achievements"
 msgstr ""
 
-#: ../includes/ajax-functions.php:165
+#: ../includes/ajax-functions.php:174
 #, php-format
 msgid "No completed %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:167
+#: ../includes/ajax-functions.php:176
 #, php-format
 msgid "No %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:236
+#: ../includes/ajax-functions.php:245
 msgid "Status Updated!"
 msgstr ""
 
-#: ../includes/ajax-functions.php:320 ../includes/content-filters.php:524
+#: ../includes/ajax-functions.php:329 ../includes/content-filters.php:576
 #: ../includes/shortcodes/badgeos_nominations.php:26
 #: ../includes/shortcodes/badgeos_submissions.php:26
 msgid "All"
@@ -844,81 +863,77 @@ msgstr ""
 msgid "You have earned this achievement!"
 msgstr ""
 
-#: ../includes/content-filters.php:431
-msgid "Show Details"
-msgstr ""
-
-#: ../includes/content-filters.php:500 ../includes/p2p/p2p-admin/box.php:140
+#: ../includes/content-filters.php:552 ../includes/p2p/p2p-admin/box.php:140
 msgid "Search"
 msgstr ""
 
-#: ../includes/content-filters.php:522 ../includes/content-filters.php:575
-#: ../includes/content-filters.php:624
+#: ../includes/content-filters.php:574 ../includes/content-filters.php:627
+#: ../includes/content-filters.php:676
 msgid "Status:"
 msgstr ""
 
-#: ../includes/content-filters.php:525
+#: ../includes/content-filters.php:577
 #: ../includes/shortcodes/badgeos_nominations.php:29
 #: ../includes/shortcodes/badgeos_submissions.php:29
-#: ../includes/submission-actions.php:227
+#: ../includes/submission-actions.php:232
 msgid "Pending"
 msgstr ""
 
-#: ../includes/content-filters.php:526
+#: ../includes/content-filters.php:578
 #: ../includes/shortcodes/badgeos_nominations.php:27
 #: ../includes/shortcodes/badgeos_submissions.php:27
 msgid "Approved"
 msgstr ""
 
-#: ../includes/content-filters.php:528
+#: ../includes/content-filters.php:580
 msgid "Auto-approved"
 msgstr ""
 
-#: ../includes/content-filters.php:529
+#: ../includes/content-filters.php:581
 #: ../includes/shortcodes/badgeos_nominations.php:28
 #: ../includes/shortcodes/badgeos_submissions.php:28
 msgid "Denied"
 msgstr ""
 
-#: ../includes/content-filters.php:564
+#: ../includes/content-filters.php:616
 #, php-format
 msgid "%1$s nominated for %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:616
+#: ../includes/content-filters.php:668
 #, php-format
 msgid "Submission: \"%1$s\" (#%2$d)"
 msgstr ""
 
-#: ../includes/content-filters.php:619
+#: ../includes/content-filters.php:671
 msgid "Author:"
 msgstr ""
 
-#: ../includes/content-filters.php:620
+#: ../includes/content-filters.php:672
 msgid "Date:"
 msgstr ""
 
-#: ../includes/content-filters.php:622
+#: ../includes/content-filters.php:674
 msgid "Achievement:"
 msgstr ""
 
-#: ../includes/content-filters.php:674
+#: ../includes/content-filters.php:726
 #, php-format
 msgid "%1$s - uploaded %2$s by %3$s"
 msgstr ""
 
-#: ../includes/content-filters.php:700
+#: ../includes/content-filters.php:752
 #, php-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:737 ../includes/submission-actions.php:184
-#: ../includes/submission-actions.php:225
+#: ../includes/content-filters.php:789 ../includes/submission-actions.php:189
+#: ../includes/submission-actions.php:230
 msgid "Approve"
 msgstr ""
 
-#: ../includes/content-filters.php:738 ../includes/submission-actions.php:185
-#: ../includes/submission-actions.php:226
+#: ../includes/content-filters.php:790 ../includes/submission-actions.php:190
+#: ../includes/submission-actions.php:231
 msgid "Deny"
 msgstr ""
 
@@ -1289,7 +1304,7 @@ msgid "Convert to registered connection type:"
 msgstr ""
 
 #: ../includes/p2p/p2p-admin/tools-page.php:129
-#: ../includes/shortcodes/badgeos_achievements_list.php:206
+#: ../includes/shortcodes/badgeos_achievements_list.php:231
 msgid "Go"
 msgstr ""
 
@@ -1611,7 +1626,7 @@ msgid "Render a single achievement."
 msgstr ""
 
 #: ../includes/shortcodes/badgeos_achievement.php:16
-#: ../includes/shortcodes/badgeos_achievements_list.php:59
+#: ../includes/shortcodes/badgeos_achievements_list.php:63
 #: ../includes/shortcodes/badgeos_nomination.php:16
 #: ../includes/shortcodes/badgeos_submission.php:16
 msgid "Achievement ID"
@@ -1621,47 +1636,47 @@ msgstr ""
 msgid "The ID of the achievement to render."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:15
+#: ../includes/shortcodes/badgeos_achievements_list.php:19
 msgid "Achievement List"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:16
+#: ../includes/shortcodes/badgeos_achievements_list.php:20
 msgid "Output a list of achievements."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:21
+#: ../includes/shortcodes/badgeos_achievements_list.php:25
 msgid "Achievement Type(s)"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:22
+#: ../includes/shortcodes/badgeos_achievements_list.php:26
 msgid "Single, or comma-separated list of, achievement type(s) to display."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:28
+#: ../includes/shortcodes/badgeos_achievements_list.php:32
 #: ../includes/shortcodes/badgeos_nominations.php:16
 #: ../includes/shortcodes/badgeos_submissions.php:16
 msgid "Limit"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:29
+#: ../includes/shortcodes/badgeos_achievements_list.php:33
 msgid "Number of achievements to display."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:34
+#: ../includes/shortcodes/badgeos_achievements_list.php:38
 #: ../includes/shortcodes/badgeos_nominations.php:34
 #: ../includes/shortcodes/badgeos_submissions.php:34
 msgid "Show Filter"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:35
+#: ../includes/shortcodes/badgeos_achievements_list.php:39
 #: ../includes/shortcodes/badgeos_nominations.php:35
 #: ../includes/shortcodes/badgeos_submissions.php:35
 msgid "Display filter controls."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:38
-#: ../includes/shortcodes/badgeos_achievements_list.php:48
-#: ../includes/shortcodes/badgeos_achievements_list.php:95
+#: ../includes/shortcodes/badgeos_achievements_list.php:42
+#: ../includes/shortcodes/badgeos_achievements_list.php:52
+#: ../includes/shortcodes/badgeos_achievements_list.php:99
 #: ../includes/shortcodes/badgeos_nominations.php:38
 #: ../includes/shortcodes/badgeos_nominations.php:48
 #: ../includes/shortcodes/badgeos_submissions.php:38
@@ -1671,9 +1686,9 @@ msgstr ""
 msgid "True"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:39
-#: ../includes/shortcodes/badgeos_achievements_list.php:49
-#: ../includes/shortcodes/badgeos_achievements_list.php:96
+#: ../includes/shortcodes/badgeos_achievements_list.php:43
+#: ../includes/shortcodes/badgeos_achievements_list.php:53
+#: ../includes/shortcodes/badgeos_achievements_list.php:100
 #: ../includes/shortcodes/badgeos_nominations.php:39
 #: ../includes/shortcodes/badgeos_nominations.php:49
 #: ../includes/shortcodes/badgeos_submissions.php:39
@@ -1683,124 +1698,148 @@ msgstr ""
 msgid "False"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:44
+#: ../includes/shortcodes/badgeos_achievements_list.php:48
 #: ../includes/shortcodes/badgeos_nominations.php:44
 #: ../includes/shortcodes/badgeos_submissions.php:44
 msgid "Show Search"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:45
+#: ../includes/shortcodes/badgeos_achievements_list.php:49
 #: ../includes/shortcodes/badgeos_nominations.php:45
 #: ../includes/shortcodes/badgeos_submissions.php:45
 msgid "Display a search input."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:54
+#: ../includes/shortcodes/badgeos_achievements_list.php:58
 msgid "Order By"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:55
+#: ../includes/shortcodes/badgeos_achievements_list.php:59
 msgid "Parameter to use for sorting."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:58
+#: ../includes/shortcodes/badgeos_achievements_list.php:62
 msgid "Menu Order"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:60
+#: ../includes/shortcodes/badgeos_achievements_list.php:64
 msgid "Achievement Title"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:61
+#: ../includes/shortcodes/badgeos_achievements_list.php:65
 msgid "Published Date"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:62
+#: ../includes/shortcodes/badgeos_achievements_list.php:66
 msgid "Last Modified Date"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:63
+#: ../includes/shortcodes/badgeos_achievements_list.php:67
 msgid "Achievement Author"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:64
+#: ../includes/shortcodes/badgeos_achievements_list.php:68
 msgid "Random"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:70
+#: ../includes/shortcodes/badgeos_achievements_list.php:74
 msgid "Sort order."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:72
+#: ../includes/shortcodes/badgeos_achievements_list.php:76
 msgid "Ascending"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:72
+#: ../includes/shortcodes/badgeos_achievements_list.php:76
 msgid "Descending"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:76
+#: ../includes/shortcodes/badgeos_achievements_list.php:80
 msgid "User ID"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:77
+#: ../includes/shortcodes/badgeos_achievements_list.php:81
 msgid "Show only achievements earned by a specific user."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:81
+#: ../includes/shortcodes/badgeos_achievements_list.php:85
 msgid "Include"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:82
+#: ../includes/shortcodes/badgeos_achievements_list.php:86
 msgid "Comma-separated list of specific achievement IDs to include."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:86
+#: ../includes/shortcodes/badgeos_achievements_list.php:90
 msgid "Exclude"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:87
+#: ../includes/shortcodes/badgeos_achievements_list.php:91
 msgid "Comma-separated list of specific achievement IDs to exclude."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:91
+#: ../includes/shortcodes/badgeos_achievements_list.php:95
 msgid "Include Multisite Achievements"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:92
+#: ../includes/shortcodes/badgeos_achievements_list.php:96
 msgid "Show achievements from all network sites."
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:182
+#: ../includes/shortcodes/badgeos_achievements_list.php:105
+msgid "Achievement Tag(s)"
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:106
+msgid "Single, or comma-separated list of, achievement tag(s) to display."
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:112
+msgid "Layout"
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:113
+msgid "Achievements layout"
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:116
+msgid "Grid"
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:117
+msgid "List"
+msgstr ""
+
+#: ../includes/shortcodes/badgeos_achievements_list.php:207
 msgid "Filter:"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:184
+#: ../includes/shortcodes/badgeos_achievements_list.php:209
 #, php-format
 msgid "All %s"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:187
+#: ../includes/shortcodes/badgeos_achievements_list.php:212
 #, php-format
 msgid "Completed %s"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:188
+#: ../includes/shortcodes/badgeos_achievements_list.php:213
 #, php-format
 msgid "Not Completed %s"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:205
+#: ../includes/shortcodes/badgeos_achievements_list.php:230
 #, php-format
 msgid "Search: %s"
 msgstr ""
 
-#: ../includes/shortcodes/badgeos_achievements_list.php:220
+#: ../includes/shortcodes/badgeos_achievements_list.php:245
 msgid "Load More"
 msgstr ""
 
 #: ../includes/shortcodes/badgeos_nomination.php:10
-#: ../includes/submission-actions.php:1112
+#: ../includes/submission-actions.php:1117
 msgid "Nomination Form"
 msgstr ""
 
@@ -1957,39 +1996,39 @@ msgstr ""
 msgid "Require"
 msgstr ""
 
-#: ../includes/steps-ui.php:135
+#: ../includes/steps-ui.php:138
 msgid "Post ID"
 msgstr ""
 
-#: ../includes/steps-ui.php:140
+#: ../includes/steps-ui.php:143
 msgid "time(s)."
 msgstr ""
 
-#: ../includes/steps-ui.php:144
+#: ../includes/steps-ui.php:147
 msgid "Label"
-msgstr ""
-
-#: ../includes/steps-ui.php:277
-#, php-format
-msgid "any %s"
 msgstr ""
 
 #: ../includes/steps-ui.php:280
 #, php-format
+msgid "any %s"
+msgstr ""
+
+#: ../includes/steps-ui.php:283
+#, php-format
 msgid "all %s"
 msgstr ""
 
-#: ../includes/steps-ui.php:297
+#: ../includes/steps-ui.php:300
 #, php-format
 msgid "comment on post %d"
 msgstr ""
 
-#: ../includes/steps-ui.php:315
+#: ../includes/steps-ui.php:318
 #, php-format
 msgid "Earn %1$s %2$s."
 msgstr ""
 
-#: ../includes/steps-ui.php:315
+#: ../includes/steps-ui.php:318
 #, php-format
 msgid "%d time"
 msgstr ""
@@ -2003,20 +2042,20 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: ../includes/submission-actions.php:196
+#: ../includes/submission-actions.php:201
 msgid "pending"
 msgstr ""
 
-#: ../includes/submission-actions.php:234
+#: ../includes/submission-actions.php:239
 msgid "Show All Statuses"
 msgstr ""
 
-#: ../includes/submission-actions.php:544
+#: ../includes/submission-actions.php:549
 #, php-format
 msgid "Approved Submission: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:547
+#: ../includes/submission-actions.php:552
 #, php-format
 msgid ""
 "A new submission has been received and auto-approved:\n"
@@ -2027,12 +2066,12 @@ msgid ""
 "\t\t\tTo view all submissions, including this one, visit: %3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:559
+#: ../includes/submission-actions.php:564
 #, php-format
 msgid "Submission Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:562
+#: ../includes/submission-actions.php:567
 #, php-format
 msgid ""
 "Your submission has been approved:\n"
@@ -2042,12 +2081,12 @@ msgid ""
 "\t\t\t%3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:610
+#: ../includes/submission-actions.php:615
 #, php-format
 msgid "Approved Nomination: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:613
+#: ../includes/submission-actions.php:618
 #, php-format
 msgid ""
 "A new nomination has been received and auto-approved:\n"
@@ -2059,12 +2098,12 @@ msgid ""
 "\t\t\tTo view all nominations, including this one, visit: %4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:629
+#: ../includes/submission-actions.php:634
 #, php-format
 msgid "Nomination Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:632
+#: ../includes/submission-actions.php:637
 #, php-format
 msgid ""
 "Your nomination has been approved:\n"
@@ -2075,12 +2114,12 @@ msgid ""
 "\t\t\t%4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:675
+#: ../includes/submission-actions.php:680
 #, php-format
 msgid "Submission Not Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:678
+#: ../includes/submission-actions.php:683
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2090,12 +2129,12 @@ msgid ""
 "\t\t%3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:716
+#: ../includes/submission-actions.php:721
 #, php-format
 msgid "Nomination Not Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:719
+#: ../includes/submission-actions.php:724
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2106,12 +2145,12 @@ msgid ""
 "\t\t%4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:755
+#: ../includes/submission-actions.php:760
 #, php-format
 msgid "Submission: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:758
+#: ../includes/submission-actions.php:763
 #, php-format
 msgid ""
 "A new submission has been received:\n"
@@ -2125,12 +2164,12 @@ msgid ""
 "\t\t\tTo view all submissions, visit: %4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:796
+#: ../includes/submission-actions.php:801
 #, php-format
 msgid "Nomination: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:799
+#: ../includes/submission-actions.php:804
 #, php-format
 msgid ""
 "A new nomination has been received:\n"
@@ -2145,54 +2184,54 @@ msgid ""
 "\t\t\tTo view all nominations, visit: %5$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:840
+#: ../includes/submission-actions.php:845
 #, php-format
 msgid "Comment on Submission (#%1$d):"
 msgstr ""
 
-#: ../includes/submission-actions.php:841
-#: ../includes/submission-actions.php:1159
+#: ../includes/submission-actions.php:846
+#: ../includes/submission-actions.php:1164
 msgid "Attachment:"
 msgstr ""
 
-#: ../includes/submission-actions.php:842
+#: ../includes/submission-actions.php:847
 msgid "Submit Comment"
 msgstr ""
 
-#: ../includes/submission-actions.php:843
+#: ../includes/submission-actions.php:848
 msgid "Show/Add Comments"
 msgstr ""
 
-#: ../includes/submission-actions.php:956
+#: ../includes/submission-actions.php:961
 msgid "Comments:"
 msgstr ""
 
-#: ../includes/submission-actions.php:1113
-#: ../includes/submission-actions.php:1160
+#: ../includes/submission-actions.php:1118
+#: ../includes/submission-actions.php:1165
 msgid "Submit"
 msgstr ""
 
-#: ../includes/submission-actions.php:1130
+#: ../includes/submission-actions.php:1135
 msgid "User to nominate"
 msgstr ""
 
-#: ../includes/submission-actions.php:1133
+#: ../includes/submission-actions.php:1138
 msgid "Reason for nomination"
 msgstr ""
 
-#: ../includes/submission-actions.php:1158
+#: ../includes/submission-actions.php:1163
 msgid "Create a New Submission"
 msgstr ""
 
-#: ../includes/submission-actions.php:1205
+#: ../includes/submission-actions.php:1210
 msgid "You must be logged in to see results."
 msgstr ""
 
-#: ../includes/submission-actions.php:1212
+#: ../includes/submission-actions.php:1217
 msgid "Sorry, no results to display"
 msgstr ""
 
-#: ../includes/submission-actions.php:1412
+#: ../includes/submission-actions.php:1417
 msgid "Submitted Attachments:"
 msgstr ""
 
