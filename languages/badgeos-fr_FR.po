@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2015-07-01 08:57-0500\n"
+"PO-Revision-Date: 2015-07-08 16:11-0500\n"
 "Last-Translator: Julien Lamarche <jlam@credil.org>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
 "MIME-Version: 1.0\n"
@@ -11,8 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
-"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
 "X-Poedit-Basepath: ../\n"
 "X-Textdomain-Support: yesPlural-Forms: nplurals=2; plural=(n > 1);\n"
 "Language: fr_FR\n"
@@ -20,7 +19,8 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 # @ badgeos
-#: badgeos.php:149 badgeos.php:165
+#: badgeos.php:149
+#: badgeos.php:165
 #: includes/shortcodes/badgeos_achievements_list.php:69
 msgid "Order"
 msgstr "Ordre"
@@ -41,12 +41,14 @@ msgid "Badge"
 msgstr "Badge"
 
 # @ badgeos
-#: badgeos.php:247 includes/admin-settings.php:198
+#: badgeos.php:247
+#: includes/admin-settings.php:198
 msgid "BadgeOS Settings"
 msgstr "Paramètres de BadgeOS"
 
 # @ badgeos
-#: badgeos.php:247 includes/p2p/scb/AdminPage.php:467
+#: badgeos.php:247
+#: includes/p2p/scb/AdminPage.php:467
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -61,18 +63,15 @@ msgid "Add-Ons"
 msgstr "Extensions"
 
 # @ badgeos
-#: badgeos.php:250 includes/admin-settings.php:392
+#: badgeos.php:250
+#: includes/admin-settings.php:392
 msgid "Help / Support"
 msgstr "Aide / Support"
 
 # @ badgeos
 #: badgeos.php:275
-msgid ""
-"Would you like to display this badge on social networks and add it to your "
-"lifelong badge collection?"
-msgstr ""
-"Voulez-vous afficher ce badge sur les réseaux sociaux et l'ajouter à votre "
-"collection de badge ?"
+msgid "Would you like to display this badge on social networks and add it to your lifelong badge collection?"
+msgstr "Voulez-vous afficher ce badge sur les réseaux sociaux et l'ajouter à votre collection de badge ?"
 
 # @ badgeos
 #: badgeos.php:276
@@ -80,7 +79,8 @@ msgid "Yes, send to Credly"
 msgstr "Oui, envoyer à Credly"
 
 # @ badgeos
-#: badgeos.php:277 includes/class.BadgeOS_Editor_Shortcodes.php:81
+#: badgeos.php:277
+#: includes/class.BadgeOS_Editor_Shortcodes.php:81
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -112,18 +112,8 @@ msgstr "Type d'Accomplissement sauvegardé avec succès."
 # @ badgeos
 #: includes/achievement-functions.php:1025
 #, php-format
-msgid ""
-"Achievement Type renamed successfully. <p>All achievements of this type, and "
-"all active and earned user achievements, have been updated "
-"<strong>automatically</strong>.</p> All shortcodes, %s, and URIs that "
-"reference the old achievement type slug must be updated <strong>manually</"
-"strong>."
-msgstr ""
-"Type d'Accomplissement renommé avec succès. <p>Tous les accomplissements de "
-"ce type, et tous les accomplissements actifs et obtenus, ont été mis à jour "
-"<strong>automatiquement</strong>.</p> Tous les shortcodes, %s, et les URL "
-"qui réfèrent au slug de l'ancien type d'accomplissement doivent être mis à "
-"jour <strong>manuellement</strong>."
+msgid "Achievement Type renamed successfully. <p>All achievements of this type, and all active and earned user achievements, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old achievement type slug must be updated <strong>manually</strong>."
+msgstr "Type d'Accomplissement renommé avec succès. <p>Tous les accomplissements de ce type, et tous les accomplissements actifs et obtenus, ont été mis à jour <strong>automatiquement</strong>.</p> Tous les shortcodes, %s, et les URL qui réfèrent au slug de l'ancien type d'accomplissement doivent être mis à jour <strong>manuellement</strong>."
 
 # @ badgeos
 #: includes/achievement-functions.php:1025
@@ -148,12 +138,8 @@ msgstr "Il y a eu une erreur pendant l'obtention de la clé Credly API : %s"
 
 # @ badgeos
 #: includes/admin-settings.php:147
-msgid ""
-"There was an error getting a Credly API Key: Please check your username and "
-"password."
-msgstr ""
-"Il y a eu une erreur pendant l'obtention de la clé Credly API :  Vérifier "
-"votre nom d'utilisateur et votre mot de passe."
+msgid "There was an error getting a Credly API Key: Please check your username and password."
+msgstr "Il y a eu une erreur pendant l'obtention de la clé Credly API :  Vérifier votre nom d'utilisateur et votre mot de passe."
 
 # @ badgeos
 #: includes/admin-settings.php:216
@@ -161,17 +147,20 @@ msgid "Minimum Role to Administer BadgeOS plugin: "
 msgstr "Role Minimum pour Administrer le plugin BadgeOS :"
 
 # @ badgeos
-#: includes/admin-settings.php:219 includes/admin-settings.php:228
+#: includes/admin-settings.php:219
+#: includes/admin-settings.php:228
 msgid "Administrator"
 msgstr "Administrateur"
 
 # @ badgeos
-#: includes/admin-settings.php:220 includes/admin-settings.php:229
+#: includes/admin-settings.php:220
+#: includes/admin-settings.php:229
 msgid "Editor"
 msgstr "Éditeur"
 
 # @ badgeos
-#: includes/admin-settings.php:221 includes/admin-settings.php:230
+#: includes/admin-settings.php:221
+#: includes/admin-settings.php:230
 msgid "Author"
 msgstr "Auteur"
 
@@ -186,13 +175,15 @@ msgid "Send email when submissions/nominations are received:"
 msgstr "Envoyer un e-mail quand les soumissions/nominations sont reçues :"
 
 # @ badgeos
-#: includes/admin-settings.php:238 includes/admin-settings.php:253
+#: includes/admin-settings.php:238
+#: includes/admin-settings.php:253
 #: includes/admin-settings.php:266
 msgid "Enabled"
 msgstr "Activé"
 
 # @ badgeos
-#: includes/admin-settings.php:239 includes/admin-settings.php:252
+#: includes/admin-settings.php:239
+#: includes/admin-settings.php:252
 #: includes/admin-settings.php:265
 msgid "Disabled"
 msgstr "Désactivé"
@@ -204,13 +195,8 @@ msgstr "E-mail pour les notifications :"
 
 # @ badgeos
 #: includes/admin-settings.php:246
-msgid ""
-"Comma-separated list of email addresses to send submission/nomination "
-"notifications, in addition to the Site Admin email."
-msgstr ""
-"Liste d'adresses e-mail séparées par des virgules pour envoyer les "
-"notifications de soumission/nomination, en supplément de celle de "
-"l'administrateur du site."
+msgid "Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email."
+msgstr "Liste d'adresses e-mail séparées par des virgules pour envoyer les notifications de soumission/nomination, en supplément de celle de l'administrateur du site."
 
 # @ badgeos
 #: includes/admin-settings.php:249
@@ -220,11 +206,11 @@ msgstr "Mode Débogage :"
 # @ badgeos
 #: includes/admin-settings.php:262
 msgid "Show achievements earned across all sites on the network:"
-msgstr ""
-"Montrer les accomplissements reçus à travers tous les sites sur le réseau."
+msgstr "Montrer les accomplissements reçus à travers tous les sites sur le réseau."
 
 # @ badgeos
-#: includes/admin-settings.php:276 includes/admin-settings.php:470
+#: includes/admin-settings.php:276
+#: includes/admin-settings.php:470
 msgid "Save Settings"
 msgstr "Sauvegarder Paramètres"
 
@@ -257,12 +243,8 @@ msgstr "Ces add-ons rajoutent des fonctionnalités à BadgeOS"
 
 # @ badgeos
 #: includes/admin-settings.php:364
-msgid ""
-"There was an error retrieving the add-ons list from the server. Please try "
-"again later."
-msgstr ""
-"Il y a eu une erreur pendant la génération de la liste des add-ons à partir "
-"du serveur. Essayez plus tard."
+msgid "There was an error retrieving the add-ons list from the server. Please try again later."
+msgstr "Il y a eu une erreur pendant la génération de la liste des add-ons à partir du serveur. Essayez plus tard."
 
 # @ badgeos
 #: includes/admin-settings.php:380
@@ -277,52 +259,20 @@ msgstr "À propos de BadgeOS"
 # @ badgeos
 #: includes/admin-settings.php:383
 #, php-format
-msgid ""
-"BadgeOS&trade; is plugin to WordPress that allows your site's users to "
-"complete tasks, demonstrate achievements, and earn badges. You define the "
-"achievement types, organize your requirements any way you like, and choose "
-"from a range of options to determine whether each task or requirement has "
-"been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through "
-"out-of-the-box integration of the \"Open Credit\" API by %s, the free web "
-"service for issuing, earning and sharing badges."
-msgstr ""
-"BadgeOS&trade; est un plugin pour WordPress qui permet aux utilisateurs de "
-"votre site de compléter des tâches, de faire des accomplissements, et de "
-"recevoir des badges. Vous définissez le type d'accomplissement, vous mettez "
-"en place les conditions nécessaires comme vous le souhaitez, et vous "
-"choisissez parmis une série d'option pour déterminer le moment ou chacune de "
-"ces tâches est accompli. Les Badges reçus dans BadgeOS sont compatibles "
-"Mozilla OBI grâce à l'intégrattion avec l'API de \"Open Credit\" par %s, le "
-"service web gratuit pour créer, recevoir et partager des badges."
+msgid "BadgeOS&trade; is plugin to WordPress that allows your site's users to complete tasks, demonstrate achievements, and earn badges. You define the achievement types, organize your requirements any way you like, and choose from a range of options to determine whether each task or requirement has been achieved. Badges earned in BadgeOS are Mozilla OBI compatible through out-of-the-box integration of the \"Open Credit\" API by %s, the free web service for issuing, earning and sharing badges."
+msgstr "BadgeOS&trade; est un plugin pour WordPress qui permet aux utilisateurs de votre site de compléter des tâches, de faire des accomplissements, et de recevoir des badges. Vous définissez le type d'accomplissement, vous mettez en place les conditions nécessaires comme vous le souhaitez, et vous choisissez parmis une série d'option pour déterminer le moment ou chacune de ces tâches est accompli. Les Badges reçus dans BadgeOS sont compatibles Mozilla OBI grâce à l'intégrattion avec l'API de \"Open Credit\" par %s, le service web gratuit pour créer, recevoir et partager des badges."
 
 # @ badgeos
 #: includes/admin-settings.php:387
 #, php-format
-msgid ""
-"BadgeOS is extremely extensible. Check out examples of what we've built with "
-"it, and stay connected to the project site for updates, add-ins and news. "
-"Share your ideas and code improvements on %s so we can keep making BadgeOS "
-"better for everyone."
-msgstr ""
-"BadgeOS est extrêmement extensible. Regardez les exemples de ce que nous "
-"avons élaboré, et restez connecté au site du projet pour les mises à jour et "
-"les nouveautés. Partagez vos idées et vos améliorations de code sur %s pour "
-"que nous puissions rendre BadgeOS meilleur pour tout le monde."
+msgid "BadgeOS is extremely extensible. Check out examples of what we've built with it, and stay connected to the project site for updates, add-ins and news. Share your ideas and code improvements on %s so we can keep making BadgeOS better for everyone."
+msgstr "BadgeOS est extrêmement extensible. Regardez les exemples de ce que nous avons élaboré, et restez connecté au site du projet pour les mises à jour et les nouveautés. Partagez vos idées et vos améliorations de code sur %s pour que nous puissions rendre BadgeOS meilleur pour tout le monde."
 
 # @ badgeos
 #: includes/admin-settings.php:394
 #, php-format
-msgid ""
-"For support on using BadgeOS or to suggest feature enhancements, visit the "
-"%1$s. The BadgeOS team does perform custom development that extends the "
-"BadgeOS platform in some incredibly powerful ways. %2$s with inquiries. See "
-"examples of %3$s."
-msgstr ""
-"Pour du soutien concernant l'utilisation de BadgeOS ou pour suggérer des "
-"améliorations, vous pouvez vister %1$s. L'équipe de BadgeOS fait du "
-"développement personnalisé qui va au delà la plateforme de BadgeOS, et ce de "
-"manière incroyablement puissante. %2$s aux questions. Regardez des exemples "
-"de %3$s."
+msgid "For support on using BadgeOS or to suggest feature enhancements, visit the %1$s. The BadgeOS team does perform custom development that extends the BadgeOS platform in some incredibly powerful ways. %2$s with inquiries. See examples of %3$s."
+msgstr "Pour du soutien concernant l'utilisation de BadgeOS ou pour suggérer des améliorations, vous pouvez vister %1$s. L'équipe de BadgeOS fait du développement personnalisé qui va au delà la plateforme de BadgeOS, et ce de manière incroyablement puissante. %2$s aux questions. Regardez des exemples de %3$s."
 
 # @ badgeos
 #: includes/admin-settings.php:397
@@ -353,15 +303,8 @@ msgstr "Shortcodes"
 # @ badgeos
 #: includes/admin-settings.php:413
 #, php-format
-msgid ""
-"With BadgeOS activated, the following shortcodes can be placed on any page "
-"or post within WordPress to expose a variety of BadgeOS functions. Visit %s "
-"for additional information on shortcodes."
-msgstr ""
-"Avec BadgeOS activé, les shortcodes suivant peuvent être placés sur "
-"n'importe quelle page ou n'importe quel article WordPress pour réaliser une "
-"variété de fonctions BadgeOS. Visitez %s pour plus d'information sur les "
-"shortcodes."
+msgid "With BadgeOS activated, the following shortcodes can be placed on any page or post within WordPress to expose a variety of BadgeOS functions. Visit %s for additional information on shortcodes."
+msgstr "Avec BadgeOS activé, les shortcodes suivant peuvent être placés sur n'importe quelle page ou n'importe quel article WordPress pour réaliser une variété de fonctions BadgeOS. Visitez %s pour plus d'information sur les shortcodes."
 
 # @ badgeos
 #: includes/admin-settings.php:437
@@ -371,30 +314,8 @@ msgstr "Réglages de l'intégration Credly"
 # @ badgeos
 #: includes/admin-settings.php:444
 #, php-format
-msgid ""
-"<a href=\"%1$s\" target=\"_blank\">Credly</a> is a universal way for people "
-"to earn and showcase their achievements and badges. With Credly Integration "
-"enabled here, badges or achievements you create on this BadgeOS site can "
-"automatically be created on your Credly account. As select badges are earned "
-"using BadgeOS, the badge will automatically be issued via Credly to the "
-"earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla "
-"Backpack, their web site, blog, Credly profile or other location. Credly "
-"makes badge issuing and sharing fun and easy! <a href=\"%1$s\" target="
-"\"_blank\">Learn more</a>.  <br /><br />If you do not yet have a Credly "
-"account, <a href=\"%1$s\" target=\"_blank\">create one now</a>. It's free."
-msgstr ""
-"<a href=\"%1$s\" target=\"_blank\">Credly</a> est une façon universelle pour "
-"tout le monde pour recevoir et montrer ses accomplissements et ses badges. "
-"Avec l'intégration Credly, les badges et les accomplissements que vous créez "
-"sur votre site en utilisant BadgeOS peuvent automatiquement être créés sur "
-"votre comptre Credly. Lorsque les badges sont reçus en utilisant BadgeOS, le "
-"badge va être automatiquement envoyé via Credly à son possesseur pour qu'il "
-"puisse le partager facilement sur Facebook, LinkedIn, Twitter, Mozilla "
-"Backpack, son site web, blog, son profil Credly ou à n'importe quel autre "
-"endroit. Credly rend la réception de badges et leur partage fun et facile ! "
-"<a href=\"%1$s\" target=\"_blank\">En savoir plus</a>.  <br /><br />Si vous "
-"n'avez pas encore de compte sur Credly, <a href=\"%1$s\" target=\"_blank"
-"\">créez en un maintenant</a>. C'est gratuit."
+msgid "<a href=\"%1$s\" target=\"_blank\">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href=\"%1$s\" target=\"_blank\">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href=\"%1$s\" target=\"_blank\">create one now</a>. It's free."
+msgstr "<a href=\"%1$s\" target=\"_blank\">Credly</a> est une façon universelle pour tout le monde pour recevoir et montrer ses accomplissements et ses badges. Avec l'intégration Credly, les badges et les accomplissements que vous créez sur votre site en utilisant BadgeOS peuvent automatiquement être créés sur votre comptre Credly. Lorsque les badges sont reçus en utilisant BadgeOS, le badge va être automatiquement envoyé via Credly à son possesseur pour qu'il puisse le partager facilement sur Facebook, LinkedIn, Twitter, Mozilla Backpack, son site web, blog, son profil Credly ou à n'importe quel autre endroit. Credly rend la réception de badges et leur partage fun et facile ! <a href=\"%1$s\" target=\"_blank\">En savoir plus</a>.  <br /><br />Si vous n'avez pas encore de compte sur Credly, <a href=\"%1$s\" target=\"_blank\">créez en un maintenant</a>. C'est gratuit."
 
 # @ badgeos
 #: includes/admin-settings.php:449
@@ -402,15 +323,21 @@ msgid "Enable Badge Sharing via Credly: "
 msgstr "Autoriser le partage de Badge via Credly :"
 
 # @ badgeos
-#: includes/admin-settings.php:453 includes/admin-settings.php:641
-#: includes/credly.php:867 includes/credly.php:879 includes/credly.php:887
+#: includes/admin-settings.php:453
+#: includes/admin-settings.php:641
+#: includes/credly.php:867
+#: includes/credly.php:879
+#: includes/credly.php:887
 #: includes/credly.php:900
 msgid "No"
 msgstr "Non"
 
 # @ badgeos
-#: includes/admin-settings.php:454 includes/admin-settings.php:642
-#: includes/credly.php:866 includes/credly.php:878 includes/credly.php:886
+#: includes/admin-settings.php:454
+#: includes/admin-settings.php:642
+#: includes/credly.php:866
+#: includes/credly.php:878
+#: includes/credly.php:886
 #: includes/credly.php:899
 msgid "Yes"
 msgstr "Oui"
@@ -423,9 +350,7 @@ msgstr "Se procurer une clé Credly API"
 # @ badgeos
 #: includes/admin-settings.php:502
 msgid "Enter your Credly account username and password to access your API key."
-msgstr ""
-"Entrer votre nom d'utilisateur et mot de passe Credly pour avoir accès à "
-"votre clé API."
+msgstr "Entrer votre nom d'utilisateur et mot de passe Credly pour avoir accès à votre clé API."
 
 # @ badgeos
 #: includes/admin-settings.php:504
@@ -449,7 +374,8 @@ msgid "Password: "
 msgstr "Mot de passe : "
 
 # @ badgeos
-#: includes/admin-settings.php:525 includes/admin-settings.php:552
+#: includes/admin-settings.php:525
+#: includes/admin-settings.php:552
 msgid "API Key: "
 msgstr "Clé API : "
 
@@ -476,27 +402,13 @@ msgstr "Correspondance avec les champs Credly"
 
 # @ badgeos
 #: includes/admin-settings.php:561
-msgid ""
-"Customize which Credly fields for badge creation and issuing (listed on the "
-"left) match which WordPress and BadgeOS fields (listed to the right)."
-msgstr ""
-"Choisissez les champs Credly pour la création du badge (listés sur la "
-"gauche) et leurs correspondance avec les champs Wordpress et BadgeOS (listez "
-"sur la droite)."
+msgid "Customize which Credly fields for badge creation and issuing (listed on the left) match which WordPress and BadgeOS fields (listed to the right)."
+msgstr "Choisissez les champs Credly pour la création du badge (listés sur la gauche) et leurs correspondance avec les champs Wordpress et BadgeOS (listez sur la droite)."
 
 # @ badgeos
 #: includes/admin-settings.php:562
-msgid ""
-"When badges are created and issued, the info sent to Credly will rely on the "
-"global mapping found here. (Note: Visit the edit screen for each achievement "
-"you create in BadgeOS to further configure the sharing and Credly settings "
-"for that achievement.)"
-msgstr ""
-"Quand les badges sont créés et distribués, les informations envoyées à "
-"Credly seront relayées sur la cartographie globale que vous trouverez ici. "
-"(Note : Visitez l'écran de modification pour chaque accomplissement que vous "
-"créerez sur BadgeOS pour configurer le partage et les réglages Credly des-"
-"dits accomplissements.)"
+msgid "When badges are created and issued, the info sent to Credly will rely on the global mapping found here. (Note: Visit the edit screen for each achievement you create in BadgeOS to further configure the sharing and Credly settings for that achievement.)"
+msgstr "Quand les badges sont créés et distribués, les informations envoyées à Credly seront relayées sur la cartographie globale que vous trouverez ici. (Note : Visitez l'écran de modification pour chaque accomplissement que vous créerez sur BadgeOS pour configurer le partage et les réglages Credly des-dits accomplissements.)"
 
 # @ badgeos
 #: includes/admin-settings.php:566
@@ -540,12 +452,8 @@ msgstr "Notification des paramètres de Credly"
 
 # @ badgeos
 #: includes/admin-settings.php:632
-msgid ""
-"Send custom notifications to users when they earn a Credly-enabled "
-"achievement."
-msgstr ""
-"Envoyer des notifications personnalisées aux utilisateurs quand ils "
-"remportent les accomplissements synchronisés avec Credly."
+msgid "Send custom notifications to users when they earn a Credly-enabled achievement."
+msgstr "Envoyer des notifications personnalisées aux utilisateurs quand ils remportent les accomplissements synchronisés avec Credly."
 
 # @ badgeos
 #: includes/admin-settings.php:637
@@ -669,8 +577,7 @@ msgstr "Utiliser le créateur de Badge Credly (Credly Badge Builder)"
 # @ badgeos
 #: includes/class.Credly_Badge_Builder.php:145
 msgid "Enable Credly Integration to use the Badge Builder"
-msgstr ""
-"Activer l'intégration avec Credly pour utiliser le Credly Badge Builder"
+msgstr "Activer l'intégration avec Credly pour utiliser le Credly Badge Builder"
 
 # @ badgeos
 #: includes/class.Credly_Badge_Builder.php:193
@@ -689,10 +596,14 @@ msgid "Test Text"
 msgstr "Texte Test"
 
 # @ cmb
-#: includes/cmb/example-functions.php:34 includes/cmb/example-functions.php:44
-#: includes/cmb/example-functions.php:51 includes/cmb/example-functions.php:58
-#: includes/cmb/example-functions.php:66 includes/cmb/example-functions.php:73
-#: includes/cmb/example-functions.php:85 includes/cmb/example-functions.php:91
+#: includes/cmb/example-functions.php:34
+#: includes/cmb/example-functions.php:44
+#: includes/cmb/example-functions.php:51
+#: includes/cmb/example-functions.php:58
+#: includes/cmb/example-functions.php:66
+#: includes/cmb/example-functions.php:73
+#: includes/cmb/example-functions.php:85
+#: includes/cmb/example-functions.php:91
 #: includes/cmb/example-functions.php:98
 #: includes/cmb/example-functions.php:113
 #: includes/cmb/example-functions.php:121
@@ -746,7 +657,8 @@ msgid "Test Time"
 msgstr "Heure du Test"
 
 # @ cmb
-#: includes/cmb/example-functions.php:78 includes/cmb/example-functions.php:79
+#: includes/cmb/example-functions.php:78
+#: includes/cmb/example-functions.php:79
 msgid "Time zone"
 msgstr "Zone horraire"
 
@@ -908,14 +820,8 @@ msgstr "oEmbed"
 
 # @ cmb
 #: includes/cmb/example-functions.php:245
-msgid ""
-"Enter a youtube, twitter, or instagram URL. Supports services listed at <a "
-"href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/"
-"Embeds</a>."
-msgstr ""
-"Entrez une URL youtube, twitter, or instagram. Les services supportés sont "
-"listés sur <a href=\"http://codex.wordpress.org/Embeds\">http://codex."
-"wordpress.org/Embeds</a>."
+msgid "Enter a youtube, twitter, or instagram URL. Supports services listed at <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
+msgstr "Entrez une URL youtube, twitter, or instagram. Les services supportés sont listés sur <a href=\"http://codex.wordpress.org/Embeds\">http://codex.wordpress.org/Embeds</a>."
 
 # @ cmb
 #: includes/cmb/example-functions.php:254
@@ -1053,7 +959,7 @@ msgstr "Sauver"
 #: includes/content-filters.php:265
 #, php-format
 msgid "%1$d Required %2$s"
-msgstr "%1$d %2$s Requises"
+msgstr "%1$d %2$s requises"
 
 # @ badgeos
 #: includes/content-filters.php:318
@@ -1069,15 +975,17 @@ msgstr "Vous avez gagné cet accomplissement !"
 # @ badgeos
 #: includes/content-filters.php:431
 msgid "Show Details"
-msgstr "Montrer Détails"
+msgstr "Montrer détails"
 
 # @ badgeos
-#: includes/content-filters.php:500 includes/p2p/p2p-admin/box.php:140
+#: includes/content-filters.php:500
+#: includes/p2p/p2p-admin/box.php:140
 msgid "Search"
 msgstr "Rechercher"
 
 # @ badgeos
-#: includes/content-filters.php:522 includes/content-filters.php:575
+#: includes/content-filters.php:522
+#: includes/content-filters.php:575
 #: includes/content-filters.php:624
 msgid "Status:"
 msgstr "Statut : "
@@ -1156,13 +1064,15 @@ msgid "%1$s on %2$s"
 msgstr "%1$s sur %2$s"
 
 # @ badgeos
-#: includes/content-filters.php:737 includes/submission-actions.php:184
+#: includes/content-filters.php:737
+#: includes/submission-actions.php:184
 #: includes/submission-actions.php:225
 msgid "Approve"
 msgstr "Approuver"
 
 # @ badgeos
-#: includes/content-filters.php:738 includes/submission-actions.php:185
+#: includes/content-filters.php:738
+#: includes/submission-actions.php:185
 #: includes/submission-actions.php:226
 msgid "Deny"
 msgstr "Refuser"
@@ -1180,32 +1090,14 @@ msgstr "Image du Badge \"%1$s (%2$s)\" fourni par %3$s sous %4$s"
 
 # @ badgeos
 #: includes/credly.php:59
-msgid ""
-"NOTE: To claim this official badge and share it on social networks click on "
-"the \"Save & Share\" button above. If you already have a Credly account, "
-"simply sign in and then \"Accept\" the badge. If you are not a member, "
-"Create an Account (it's free), confirm your email address, and then \"Accept"
-"\" your badge."
-msgstr ""
-"NOTE: Pour demander ce badge officiel et le partager sur les réseaux "
-"sociaux, cliquez sur le bouton \"Sauvegarder & Partager\" ci-dessus. Si vous "
-"avez déjà un compte Credly, connectez-vous et \"Accepter\" le badge. Si vous "
-"n'êtes pas un membre, Créer un Compte (gratuit), confirmez votre adresses e-"
-"mail, et \"Accepetez\" votre badge."
+msgid "NOTE: To claim this official badge and share it on social networks click on the \"Save & Share\" button above. If you already have a Credly account, simply sign in and then \"Accept\" the badge. If you are not a member, Create an Account (it's free), confirm your email address, and then \"Accept\" your badge."
+msgstr "NOTE: Pour demander ce badge officiel et le partager sur les réseaux sociaux, cliquez sur le bouton \"Sauvegarder & Partager\" ci-dessus. Si vous avez déjà un compte Credly, connectez-vous et \"Accepter\" le badge. Si vous n'êtes pas un membre, Créer un Compte (gratuit), confirmez votre adresses e-mail, et \"Accepetez\" votre badge."
 
 # @ badgeos
 #: includes/credly.php:138
 #, php-format
-msgid ""
-"<div class=\"updated\"><p>Note: Credly Integration is turned on, but you "
-"must first <a href=\"%s\">enter your Credly credentials</a> to allow earned "
-"badges to be shared by recipients (or Disable Credly Integration to hide "
-"this notice).</p></div>"
-msgstr ""
-"<div class=\"updated\"><p>Note: L'intégration avec Credly est activée, mais "
-"vous devez d'abord <a href=\"%s\">entrer vos informations Credly</a> pour "
-"autoriser le partage des badges gagnés (ou désactiver l'intégration avec "
-"Credly pour cacher cette notification).</p></div>"
+msgid "<div class=\"updated\"><p>Note: Credly Integration is turned on, but you must first <a href=\"%s\">enter your Credly credentials</a> to allow earned badges to be shared by recipients (or Disable Credly Integration to hide this notice).</p></div>"
+msgstr "<div class=\"updated\"><p>Note: L'intégration avec Credly est activée, mais vous devez d'abord <a href=\"%s\">entrer vos informations Credly</a> pour autoriser le partage des badges gagnés (ou désactiver l'intégration avec Credly pour cacher cette notification).</p></div>"
 
 # @ badgeos
 #: includes/credly.php:486
@@ -1224,23 +1116,14 @@ msgstr "Options de Partage du Badge"
 
 # @ badgeos
 #: includes/credly.php:861
-msgid ""
-"This setting makes the earned badge for this achievement sharable via Credly "
-"on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, "
-"or the badge earner's own blog or site."
-msgstr ""
-"Ces régalges permettent que le badge remporté pour cet accomplissement soit "
-"partagé via Credly sur les réseaux sociaux, tel que Facebook, Twitter, "
-"LindedIn, Mozilla Backpack, ou le blog/site de la personne ayant remporté le "
-"badge."
+msgid "This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner's own blog or site."
+msgstr "Ces régalges permettent que le badge remporté pour cet accomplissement soit partagé via Credly sur les réseaux sociaux, tel que Facebook, Twitter, LindedIn, Mozilla Backpack, ou le blog/site de la personne ayant remporté le badge."
 
 # @ badgeos
 #: includes/credly.php:861
 #, php-format
 msgid "<a href=\"%s\">Configure global settings</a> for Credly integration."
-msgstr ""
-"<a href=\"%s\">Configurer les paramètres globaux</a> pour l'intégration avec "
-"Credly."
+msgstr "<a href=\"%s\">Configurer les paramètres globaux</a> pour l'intégration avec Credly."
 
 # @ badgeos
 #: includes/credly.php:863
@@ -1326,19 +1209,12 @@ msgstr "Image du Badge par Défaut"
 # @ badgeos
 #: includes/meta-boxes.php:54
 #, php-format
-msgid ""
-"To set a default image, use the <strong>Default Achievement Image</strong> "
-"metabox to the right. For best results, use a square .png file with a "
-"transparent background, at least 200x200 pixels. Or, design a badge using "
-"the %1$s."
-msgstr ""
-"Pour définir une image par défaut, utilisez la metabox <strong>Image "
-"d'Accomplissement par Défaut</strong> vers la droite. Pour de meilleurs "
-"résultats, utiliser un fichier carré .png avec un arrière plan transparent, "
-"d'au moins 200x200 pixels. Ou, designez un badge utilisant le %1$s."
+msgid "To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s."
+msgstr "Pour définir une image par défaut, utilisez la metabox <strong>Image d'Accomplissement par Défaut</strong> vers la droite. Pour de meilleurs résultats, utiliser un fichier carré .png avec un arrière plan transparent, d'au moins 200x200 pixels. Ou, designez un badge utilisant le %1$s."
 
 # @ badgeos
-#: includes/meta-boxes.php:55 includes/meta-boxes.php:76
+#: includes/meta-boxes.php:55
+#: includes/meta-boxes.php:76
 msgid "Credly Badge Builder"
 msgstr "Credly Badge Builder"
 
@@ -1355,18 +1231,8 @@ msgstr "Uploader l'Image du Badge"
 # @ badgeos
 #: includes/meta-boxes.php:75
 #, php-format
-msgid ""
-"<p>To set an image use the <strong>Achievement Image</strong> metabox to the "
-"right. For best results, use a square .png file with a transparent "
-"background, at least 200x200 pixels. Or, design a badge using the %1$s.</"
-"p><p>If no image is specified, this achievement will default to the %2$s "
-"featurmeed image.</p>"
-msgstr ""
-"<p> Pour définir une image, utiliser la metabox <strong>Image "
-"d'Accomplissement</strong> vers la droite. Pour de meilleurs résultats, "
-"utilisez un fichier carré .png avec un arrière plan transparent, d'au moins "
-"200x200 pixels. Ou, designer un badge en utilisant le %1$s.</p><p> Si aucune "
-"image n'est spécifiée, cet accomplissement recevra l'image par défaut %2$s."
+msgid "<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featurmeed image.</p>"
+msgstr "<p> Pour définir une image, utiliser la metabox <strong>Image d'Accomplissement</strong> vers la droite. Pour de meilleurs résultats, utilisez un fichier carré .png avec un arrière plan transparent, d'au moins 200x200 pixels. Ou, designer un badge en utilisant le %1$s.</p><p> Si aucune image n'est spécifiée, cet accomplissement recevra l'image par défaut %2$s."
 
 # @ badgeos
 #: includes/meta-boxes.php:77
@@ -1380,12 +1246,8 @@ msgstr "Points Récompensés"
 
 # @ badgeos
 #: includes/meta-boxes.php:84
-msgid ""
-"Points awarded for earning this achievement (optional). Leave empty if no "
-"points are awarded."
-msgstr ""
-"Points récompensés pour avoir remporté cet accomplissement (optionel). "
-"Laissez vide si aucun point n'est donné."
+msgid "Points awarded for earning this achievement (optional). Leave empty if no points are awarded."
+msgstr "Points récompensés pour avoir remporté cet accomplissement (optionel). Laissez vide si aucun point n'est donné."
 
 # @ badgeos
 #: includes/meta-boxes.php:89
@@ -1418,7 +1280,8 @@ msgid "Submission (Auto-accepted)"
 msgstr "Soumission (Auto-accepté)"
 
 # @ badgeos
-#: includes/meta-boxes.php:98 includes/post-types.php:120
+#: includes/meta-boxes.php:98
+#: includes/post-types.php:120
 msgid "Nomination"
 msgstr "Nomination"
 
@@ -1455,8 +1318,7 @@ msgstr "Montrer les Propriétaires"
 # @ badgeos
 #: includes/meta-boxes.php:116
 msgid "Yes, display a list of users who have earned this achievement."
-msgstr ""
-"Oui, afficher la liste des utilisateurs qui ont gagné cet accomplissement."
+msgstr "Oui, afficher la liste des utilisateurs qui ont gagné cet accomplissement."
 
 # @ badgeos
 #: includes/meta-boxes.php:121
@@ -1465,13 +1327,8 @@ msgstr "Texte de Félicitations"
 
 # @ badgeos
 #: includes/meta-boxes.php:122
-msgid ""
-"Displayed after achievement is earned. If sending to Credly, a great place "
-"for a testimonial for those who complete this achievement."
-msgstr ""
-"Affiché après que l'accomplissement ait été gagné. Si cela est envoyé à "
-"Credly, un endroit génial pour que ceux qui ont complété cet accomplissement "
-"puisse laisser un témoignage. (<a href="
+msgid "Displayed after achievement is earned. If sending to Credly, a great place for a testimonial for those who complete this achievement."
+msgstr "Affiché après que l'accomplissement ait été gagné. Si cela est envoyé à Credly, un endroit génial pour que ceux qui ont complété cet accomplissement puisse laisser un témoignage. (<a href="
 
 # " title="Traduction Approximative">≈</a>)"
 # @ badgeos
@@ -1482,9 +1339,7 @@ msgstr "Maximum de fois que l'on peut obtenir cet accomplissement"
 # @ badgeos
 #: includes/meta-boxes.php:128
 msgid "Number of times a user can earn this badge (set to 0 for no maximum)."
-msgstr ""
-"Nombre de fois qu'un utilisateur peut remporter ce badge (de 0 à sans "
-"maximum)"
+msgstr "Nombre de fois qu'un utilisateur peut remporter ce badge (de 0 à sans maximum)"
 
 # @ badgeos
 #: includes/meta-boxes.php:134
@@ -1507,22 +1362,26 @@ msgid "Submission Status"
 msgstr "Statut Proposé"
 
 # @ badgeos
-#: includes/meta-boxes.php:156 includes/meta-boxes.php:186
+#: includes/meta-boxes.php:156
+#: includes/meta-boxes.php:186
 msgid "Current Status"
 msgstr "Statut Actuel"
 
 # @ badgeos
-#: includes/meta-boxes.php:162 includes/meta-boxes.php:192
+#: includes/meta-boxes.php:162
+#: includes/meta-boxes.php:192
 msgid "Change Status"
 msgstr "Changer le Statut"
 
 # @ badgeos
-#: includes/meta-boxes.php:168 includes/meta-boxes.php:210
+#: includes/meta-boxes.php:168
+#: includes/meta-boxes.php:210
 msgid "Achievement ID to Award"
 msgstr "ID de l'Accomplissement à Récompenser"
 
 # @ badgeos
-#: includes/meta-boxes.php:169 includes/meta-boxes.php:211
+#: includes/meta-boxes.php:169
+#: includes/meta-boxes.php:211
 msgid "View Achievement"
 msgstr "Voir l'Accomplissement"
 
@@ -1611,11 +1470,11 @@ msgstr "<em>%s</em> n'est pas un type de connexion enregistré."
 #: includes/p2p/p2p-admin/tools-page.php:50
 #, php-format
 msgid "Converted %1$s connections from <em>%2$s</em> to <em>%3$s</em>."
-msgstr ""
-"%1$s connexions converties à partir de <em>%2$s</em> vers <em>%3$s</em>."
+msgstr "%1$s connexions converties à partir de <em>%2$s</em> vers <em>%3$s</em>."
 
 # @ badgeos
-#: includes/p2p/p2p-admin/tools-page.php:64 includes/user.php:153
+#: includes/p2p/p2p-admin/tools-page.php:64
+#: includes/user.php:153
 msgid "Name"
 msgstr "Nom"
 
@@ -1638,9 +1497,7 @@ msgstr "Aucun type de connexion enregistré."
 #: includes/p2p/p2p-admin/tools-page.php:76
 #, php-format
 msgid "To register a connection type, see <a href=\"%s\">the wiki</a>."
-msgstr ""
-"Pour enregistrer un type de connexion, rendez-vous sur <a href=\"%s\">le "
-"wiki</a>."
+msgstr "Pour enregistrer un type de connexion, rendez-vous sur <a href=\"%s\">le wiki</a>."
 
 # @ badgeos
 #: includes/p2p/p2p-admin/tools-page.php:93
@@ -1670,7 +1527,8 @@ msgid "Users"
 msgstr "Utilisateurs"
 
 # @ badgeos
-#: includes/p2p/p2p-core/side-user.php:25 includes/submission-actions.php:153
+#: includes/p2p/p2p-core/side-user.php:25
+#: includes/submission-actions.php:153
 msgid "User"
 msgstr "Utilisateur"
 
@@ -1728,8 +1586,7 @@ msgstr "Réglages <strong>sauvegardé</strong>."
 #: includes/points-functions.php:86
 #, php-format
 msgid "%1$s awarded %2$s %3$s points for a new total of %4$s points"
-msgstr ""
-"%1$s a récompensé %2$s de %3$s points pour un nouveau total de %4$s points"
+msgstr "%1$s a récompensé %2$s de %3$s points pour un nouveau total de %4$s points"
 
 # @ badgeos
 #: includes/points-functions.php:88
@@ -1738,7 +1595,8 @@ msgid "%1$s earned %2$s points for a new total of %3$s points"
 msgstr "%1$s obtenus %2$s points pour un nouveau total de %3$s points"
 
 # @ badgeos
-#: includes/post-types.php:24 includes/post-types.php:30
+#: includes/post-types.php:24
+#: includes/post-types.php:30
 #: includes/post-types.php:36
 msgid "Achievement Types"
 msgstr "Types d'Accomplissement"
@@ -1749,9 +1607,12 @@ msgid "Achievement Type"
 msgstr "Type d'Accomplissement"
 
 # @ badgeos
-#: includes/post-types.php:26 includes/post-types.php:57
-#: includes/post-types.php:89 includes/post-types.php:121
-#: includes/post-types.php:152 includes/post-types.php:233
+#: includes/post-types.php:26
+#: includes/post-types.php:57
+#: includes/post-types.php:89
+#: includes/post-types.php:121
+#: includes/post-types.php:152
+#: includes/post-types.php:233
 msgid "Add New"
 msgstr "Ajouter un Nouveau"
 
@@ -1791,7 +1652,8 @@ msgid "No achievement types found in Trash"
 msgstr "Aucun type d'accomplissement trouvé dans la Corbeille"
 
 # @ badgeos
-#: includes/post-types.php:55 includes/post-types.php:61
+#: includes/post-types.php:55
+#: includes/post-types.php:61
 #: includes/post-types.php:67
 msgid "Steps"
 msgstr "Étapes"
@@ -1802,7 +1664,8 @@ msgid "Step"
 msgstr "Étape"
 
 # @ badgeos
-#: includes/post-types.php:58 includes/steps-ui.php:78
+#: includes/post-types.php:58
+#: includes/steps-ui.php:78
 msgid "Add New Step"
 msgstr "Ajouter une Nouvelle Étape"
 
@@ -1837,7 +1700,8 @@ msgid "No steps found in Trash"
 msgstr "Aucune étape trouvée dans la Corbeille "
 
 # @ badgeos
-#: includes/post-types.php:87 includes/post-types.php:93
+#: includes/post-types.php:87
+#: includes/post-types.php:93
 #: includes/post-types.php:99
 msgid "Submissions"
 msgstr "Soumissions"
@@ -1883,7 +1747,8 @@ msgid "No submissions found in Trash"
 msgstr "Aucune soumission trouvée dans la Corbeille"
 
 # @ badgeos
-#: includes/post-types.php:119 includes/post-types.php:125
+#: includes/post-types.php:119
+#: includes/post-types.php:125
 #: includes/post-types.php:131
 msgid "Nominations"
 msgstr "Nominations"
@@ -1924,7 +1789,8 @@ msgid "No nominations found in Trash"
 msgstr "Aucune nomination trouvée dans la Corbeille"
 
 # @ badgeos
-#: includes/post-types.php:150 includes/post-types.php:156
+#: includes/post-types.php:150
+#: includes/post-types.php:156
 #: includes/post-types.php:162
 msgid "Log Entries"
 msgstr "Entrées du Journal"
@@ -2052,9 +1918,7 @@ msgstr "Type(s) d'Accomplissement"
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:22
 msgid "Single, or comma-separated list of, achievement type(s) to display."
-msgstr ""
-"Type unique, liste ou séparée par une virgule, de type(s) d'accomplissement "
-"à afficher."
+msgstr "Type unique, liste ou séparée par une virgule, de type(s) d'accomplissement à afficher."
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:28
@@ -2185,8 +2049,7 @@ msgstr "ID de l'Utilisateur"
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:77
 msgid "Show only achievements earned by a specific user."
-msgstr ""
-"Montrer uniquement les accomplissements gagnés par un utilisateur spécifique."
+msgstr "Montrer uniquement les accomplissements gagnés par un utilisateur spécifique."
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:81
@@ -2196,9 +2059,7 @@ msgstr "Inclure"
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:82
 msgid "Comma-separated list of specific achievement IDs to include."
-msgstr ""
-"Liste séparée par une virgule des ID d'accomplissements spécifiques à "
-"inclure."
+msgstr "Liste séparée par une virgule des ID d'accomplissements spécifiques à inclure."
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:86
@@ -2208,9 +2069,7 @@ msgstr "Exclure"
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:87
 msgid "Comma-separated list of specific achievement IDs to exclude."
-msgstr ""
-"Liste d'ID d'accomplissements spécifiques à exclure, séparés par des "
-"virgules."
+msgstr "Liste d'ID d'accomplissements spécifiques à exclure, séparés par des virgules."
 
 # @ badgeos
 #: includes/shortcodes/badgeos_achievements_list.php:91
@@ -2300,7 +2159,8 @@ msgstr "Nombre de nominations à afficher."
 
 # @ badgeos
 #: includes/shortcodes/badgeos_nominations.php:22
-#: includes/submission-actions.php:129 includes/submission-actions.php:155
+#: includes/submission-actions.php:129
+#: includes/submission-actions.php:155
 msgid "Status"
 msgstr "Statut"
 
@@ -2382,21 +2242,8 @@ msgstr "Page d'Assertion Credly"
 # @ badgeos
 #: includes/shortcodes/credly_assertion_page.php:11
 #, php-format
-msgid ""
-"Adds support for Credly's \"Custom Assertion Location\" feature, available "
-"to Credly Pro members only. After placing this shortcode on a page, copy "
-"that page's URL and append \"?CID={id}\" to the end (e.g. %1$s). Paste this "
-"full URL in the \"Custom Assertion Location\" field in your Credly Account "
-"Settings. All of your Credly badges will be linked back to this site where "
-"the official badge information is displayed automatically."
-msgstr ""
-"Ajoute le support de la fonction Credly \"Custom Assertion Location\", "
-"disponible pour les membres Credly Pro Uniquement. Après avoir placé le "
-"shortcode sur une page, copier l'URL de la page et ajouter \"?CID={id}\" à "
-"la fin (par exemple %1$s). Collez l'URL complète dans le champ \"Custom "
-"Assertion Location\" dans les paramètres de votre compte Credly. Tous vos "
-"badges Credly redirigeront vers ce site où les informations officielles du "
-"badge sont affichées automatiquement."
+msgid "Adds support for Credly's \"Custom Assertion Location\" feature, available to Credly Pro members only. After placing this shortcode on a page, copy that page's URL and append \"?CID={id}\" to the end (e.g. %1$s). Paste this full URL in the \"Custom Assertion Location\" field in your Credly Account Settings. All of your Credly badges will be linked back to this site where the official badge information is displayed automatically."
+msgstr "Ajoute le support de la fonction Credly \"Custom Assertion Location\", disponible pour les membres Credly Pro Uniquement. Après avoir placé le shortcode sur une page, copier l'URL de la page et ajouter \"?CID={id}\" à la fin (par exemple %1$s). Collez l'URL complète dans le champ \"Custom Assertion Location\" dans les paramètres de votre compte Credly. Tous vos badges Credly redirigeront vers ce site où les informations officielles du badge sont affichées automatiquement."
 
 # @ badgeos
 #: includes/shortcodes/credly_assertion_page.php:16
@@ -2458,14 +2305,8 @@ msgstr "Étapes Recommandées"
 
 # @ badgeos
 #: includes/steps-ui.php:68
-msgid ""
-"Define the required \"steps\" for this achievement to be considered "
-"complete. Use the \"Label\" field to optionally customize the titles of each "
-"step."
-msgstr ""
-"Définit les \"étapes\" requises pour que cet accomplissement puisse être "
-"considéré comme complet. Vous pouvez utiliser le champs \"Label\" pour "
-"personnaliser le titre de chaque étape."
+msgid "Define the required \"steps\" for this achievement to be considered complete. Use the \"Label\" field to optionally customize the titles of each step."
+msgstr "Définit les \"étapes\" requises pour que cet accomplissement puisse être considéré comme complet. Vous pouvez utiliser le champs \"Label\" pour personnaliser le titre de chaque étape."
 
 # @ badgeos
 #: includes/steps-ui.php:79
@@ -2535,7 +2376,8 @@ msgid "Review"
 msgstr "Revoir"
 
 # @ badgeos
-#: includes/submission-actions.php:127 includes/submission-actions.php:152
+#: includes/submission-actions.php:127
+#: includes/submission-actions.php:152
 msgid "Content"
 msgstr "Contenu"
 
@@ -2760,7 +2602,8 @@ msgid "Comment on Submission (#%1$d):"
 msgstr "Commentaire sur la Soumission (#%1$d) :"
 
 # @ badgeos
-#: includes/submission-actions.php:841 includes/submission-actions.php:1159
+#: includes/submission-actions.php:841
+#: includes/submission-actions.php:1159
 msgid "Attachment:"
 msgstr "Pièce-Jointe : "
 
@@ -2780,7 +2623,8 @@ msgid "Comments:"
 msgstr "Commentaires : "
 
 # @ badgeos
-#: includes/submission-actions.php:1113 includes/submission-actions.php:1160
+#: includes/submission-actions.php:1113
+#: includes/submission-actions.php:1160
 msgid "Submit"
 msgstr "Soumettre"
 
@@ -2899,25 +2743,24 @@ msgstr "Points Gagnés"
 
 # @ badgeos
 #: includes/user.php:143
-msgid ""
-"The user's points total. Entering a new total will automatically log the "
-"change and difference between totals."
-msgstr ""
-"Total de points de l'utilisateur. Entrer un nouveau total va automatiquement "
-"enregistrer le changement et faire la différence entre les totaux."
+msgid "The user's points total. Entering a new total will automatically log the change and difference between totals."
+msgstr "Total de points de l'utilisateur. Entrer un nouveau total va automatiquement enregistrer le changement et faire la différence entre les totaux."
 
 # @ badgeos
-#: includes/user.php:152 includes/user.php:262
+#: includes/user.php:152
+#: includes/user.php:262
 msgid "Image"
 msgstr "Image"
 
 # @ badgeos
-#: includes/user.php:154 includes/user.php:264
+#: includes/user.php:154
+#: includes/user.php:264
 msgid "Action"
 msgstr "Action"
 
 # @ badgeos
-#: includes/user.php:169 includes/user.php:301
+#: includes/user.php:169
+#: includes/user.php:301
 msgid "Revoke Award"
 msgstr "Retirer la Récompense"
 
@@ -3040,3 +2883,4 @@ msgstr "Succès : Envoyé a Credly !"
 #: includes/widgets/earned-user-achievements-widget.php:173
 msgid "Error: Sorry, Send to Credly Failed."
 msgstr "Erreur : Désolé, l'envoie à Credly a échoué."
+
