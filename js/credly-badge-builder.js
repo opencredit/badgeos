@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
 			// Remove the badge builder thickbox
 			tb_remove();
 
-			win.WPSetThumbnailHTML('<p>Updating featured image, please wait...</p>');
+			win.WPSetThumbnailHTML('<p>'+credlyBadgeBuilder.updating_image+'</p>');
 
 			// Send the badge data along for uploading
 			$.ajax({

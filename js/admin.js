@@ -37,7 +37,7 @@ jQuery(document).ready(function($) {
 
 				// Output a custom warning (and delete any existing version of that warning)
 				$('#title-warning').remove();
-				$title.parent().append('<p id="title-warning">Achievement Type supports a maximum of 20 characters. Please choose a shorter title.</p>');
+				$title.parent().append('<p id="title-warning">' + badgeosAdmin.title_warning + '</p>');
 			} else {
 				// Set the input to standard style, hide our custom warning
 				$title.css({'background':'#fff', 'color':'#333', 'border-color':'#DFDFDF'});
