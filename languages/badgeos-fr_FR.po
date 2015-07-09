@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-08 18:26-0500\n"
-"PO-Revision-Date: 2015-07-09 16:12-0500\n"
+"PO-Revision-Date: 2015-07-09 17:24-0500\n"
 "Last-Translator: Julien Lamarche <jlam@credil.org>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
 "Language: fr_FR\n"
@@ -384,7 +384,6 @@ msgstr "Nom d'utilisateur et mot de passe Credly"
 
 # @ badgeos
 #: ../includes/admin-settings.php:509
-#, fuzzy
 msgid "Username: "
 msgstr "Nom d'utilisateur : "
 
@@ -529,9 +528,8 @@ msgstr "Définir l'image par défaut des accomplissements"
 #: ../includes/ajax-functions.php:169
 #: ../includes/shortcodes/badgeos_achievements_list.php:184
 #: ../includes/shortcodes/badgeos_achievements_list.php:187
-#, fuzzy
 msgid "achievements"
-msgstr "achievement_post"
+msgstr "accomplissements"
 
 # @ badgeos
 #: ../includes/ajax-functions.php:174
@@ -2422,7 +2420,7 @@ msgstr "Gagné %1$s %2$s."
 
 # @ default
 #: ../includes/steps-ui.php:318
-#, fuzzy, php-format
+#, php-format
 msgid "%d time"
 msgstr "%d fois"
 
