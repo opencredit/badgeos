@@ -3,12 +3,12 @@
 class earned_user_achievements_widget extends WP_Widget {
 
 	//process the new widget
-	function earned_user_achievements_widget() {
+	function __construct() {
 		$widget_ops = array(
 			'classname' => 'earned_user_achievements_class',
 			'description' => __( 'Displays all achievements earned by the logged in user', 'badgeos' )
 		);
-		$this->WP_Widget( 'earned_user_achievements_widget', __( 'BadgeOS Earned User Achievements', 'badgeos' ), $widget_ops );
+		parent::__construct( 'earned_user_achievements_widget', __( 'BadgeOS Earned User Achievements', 'badgeos' ), $widget_ops );
 	}
 
 	//build the widget settings form
@@ -20,9 +20,9 @@ class earned_user_achievements_widget extends WP_Widget {
 		$point_total = $instance['point_total'];
 		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? (array) $instance['set_achievements'] : array();
 		?>
-            <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
-			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'number' ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
-			<p><label><input type="checkbox" id="<?php echo $this->get_field_name( 'point_total' ); ?>" name="<?php echo $this->get_field_name( 'point_total' ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
+            <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
++			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
++			<p><label><input type="checkbox" id="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
 			<p><?php _e( 'Display only the following Achievement Types:', 'badgeos' ); ?><br />
 				<?php
 				//get all registered achievements
@@ -38,8 +38,8 @@ class earned_user_achievements_widget extends WP_Widget {
 					//if achievement displaying exists in the saved array it is enabled for display
 					$checked = checked( in_array( $achievement_slug, $set_achievements ), true, false );
 
-					echo '<label for="' . $this->get_field_name( 'set_achievements' ) . '_' . esc_attr( $achievement_slug ) . '">'
-						 . '<input type="checkbox" name="' . $this->get_field_name( 'set_achievements' ) . '[]" id="' . $this->get_field_name( 'set_achievements' ) . '_' . esc_attr( $achievement_slug ) . '" value="' . esc_attr( $achievement_slug ) . '" ' . $checked . ' />'
+					echo '<label for="' . esc_attr( $this->get_field_name( 'set_achievements' ) ) . '_' . esc_attr( $achievement_slug ) . '">'
+						 . '<input type="checkbox" name="' . esc_attr( $this->get_field_name( 'set_achievements' ) ) . '[]" id="' . esc_attr( $this->get_field_name( 'set_achievements' ) ) . '_' . esc_attr( $achievement_slug ) . '" value="' . esc_attr( $achievement_slug ) . '" ' . $checked . ' />'
 						 . ' ' . esc_html( ucfirst( $achievement[ 'plural_name' ] ) )
 						 . '</label><br />';
 

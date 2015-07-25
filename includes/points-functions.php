@@ -59,7 +59,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 
 	// Maybe award some points-based badges
 	foreach ( badgeos_get_points_based_achievements() as $achievement ) {
-		badgeos_maybe_award_achievement_to_user( $achievement->ID );
+		badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
 	}
 
 	return $total_points;

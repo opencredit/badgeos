@@ -175,6 +175,11 @@ function badgeos_add_nomination_columns( $columns = array() ) {
 function badgeos_submission_column_action( $column = '' ) {
 	global $post;
 
+	// Do not pollute other post types
+	if ( ! in_array( $post->post_type, array( 'submission', 'nomination' ) ) ) {
+		return;
+	}
+
 	switch ( $column ) {
 		case 'action':
 

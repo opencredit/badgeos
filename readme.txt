@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, credly, webdevstudios, williamsba1, rzen, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 4.1
-Stable tag: 1.4.4
+Tested up to: 4.2
+Stable tag: 1.4.5
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -220,6 +220,17 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.5 =
+* Fixed: Prevent false positives on "users who have earned achievement" listings.
+* Fixed: Prevent potential empty array of achievements.
+* Fixed: Added unique ID to single achievement shortcode output.
+* Fixed: esc_attr() on some attributes.
+* Fixed: Prevent submission and nomination columns from showing outside of submission and nomination pages.
+* Fixed: Pass user ID to badgeos_maybe_award_achievement_to_user call inside badgeos_update_user_points().
+* Fixed: Prevent steps from being listed in achievement type list in Steps UI.
+* Fixed: Prevent media library "litter" with default thumbs up graphic being added multiple times. Now will check for existing copy of graphic before downloading new.
+* Updated: Provided PHP5 compatible widget constructors in preparation of WordPress 4.3 changes.
+
 = 1.4.4 =
 * Improved checks to prevent achievement type switching when editing achievement types.
 * Added a check to ensure multisite is active before calling multisite functions.
@@ -375,6 +386,17 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.5 =
+* Fixed: Prevent false positives on "users who have earned achievement" listings.
+* Fixed: Prevent potential empty array of achievements.
+* Fixed: Added unique ID to single achievement shortcode output.
+* Fixed: esc_attr() on some attributes.
+* Fixed: Prevent submission and nomination columns from showing outside of submission and nomination pages.
+* Fixed: Pass user ID to badgeos_maybe_award_achievement_to_user call inside badgeos_update_user_points().
+* Fixed: Prevent steps from being listed in achievement type list in Steps UI.
+* Fixed: Prevent media library "litter" with default thumbs up graphic being added multiple times. Now will check for existing copy of graphic before downloading new.
+* Updated: Provided PHP5 compatible widget constructors in preparation of WordPress 4.3 changes.
 
 = 1.4.4 =
 * Improved checks to prevent achievement type switching when editing achievement types.
