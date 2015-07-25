@@ -617,8 +617,14 @@ function badgeos_get_achievement_earners( $achievement_id = 0 ) {
 		'meta_compare' => 'LIKE'
 	) );
 
+	$earned_users = array();
+	foreach( $earners->results as $earner ) {
+		if ( badgeos_has_user_earned_achievement( $achievement_id, $earner->ID ) ) {
+			$earned_users[] = $earner;
+		}
+	}
 	// Send back our query results
-	return $earners->results;
+	return $earned_users;
 }
 
 /**
@@ -716,6 +722,7 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	}
 
 	$thumbnail_id = 0;
+	$achievement_type = '';
 
 	// Get the thumbnail of our parent achievement
 	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
@@ -728,30 +735,42 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 
 	// If there is no thumbnail set, load in our default image
 	if ( empty( $thumbnail_id ) ) {
+		global $wpdb;
 
 		// Grab the default image
 		$file = apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' );
 
-		// Download file to temp location
-		$tmp = download_url( $file );
+		// Check for an existing copy of our default image
+		$file_name = 'af2e834c1e23ab30f1d672579d61c25a_15';
+		$attachment = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM $wpdb->posts WHERE post_type = '%s' AND guid LIKE '%%af2e834c1e23ab30f1d672579d61c25a_15%%' ", 'attachment'
+			)
+		);
 
-		// Set variables for storage
-		// fix file filename for query strings
-		preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
-		$file_array['name'] = basename( $matches[0] );
-		$file_array['tmp_name'] = $tmp;
+		if ( !empty( $attachment[0] ) ) {
+			$thumbnail_id = $attachment[0];
+		} else {
+			// Download file to temp location
+			$tmp = download_url( $file );
 
-		// If error storing temporarily, unlink
-		if ( is_wp_error( $tmp ) ) {
-			@unlink( $file_array['tmp_name'] );
-			$file_array['tmp_name'] = '';
+			// Set variables for storage
+			// fix file filename for query strings
+			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
+			$file_array['name']     = basename( $matches[0] );
+			$file_array['tmp_name'] = $tmp;
+
+			// If error storing temporarily, unlink
+			if ( is_wp_error( $tmp ) ) {
+				@unlink( $file_array['tmp_name'] );
+				$file_array['tmp_name'] = '';
+			}
+
+			// Upload the image
+			$thumbnail_id = media_handle_sideload( $file_array, $post_id );
 		}
-
-		// Upload the image
-		$thumbnail_id = media_handle_sideload( $file_array, $post_id );
-
 		// If upload errored, unlink the image file
-		if ( is_wp_error( $thumbnail_id ) ) {
+		if ( empty( $thumbnail_id ) || is_wp_error( $thumbnail_id ) ) {
 			@unlink( $file_array['tmp_name'] );
 
 		// Otherwise, if the achievement type truly doesn't have
@@ -768,8 +787,9 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	}
 
 	// Finally, if we have an image, set the thumbnail for our achievement
-	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) )
+	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) ) {
 		set_post_thumbnail( $post_id, $thumbnail_id );
+	}
 
 }
 add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );

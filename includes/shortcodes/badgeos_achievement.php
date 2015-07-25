@@ -50,7 +50,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 
 	// If we're dealing with an achievement post
 	if ( badgeos_is_achievement( $achievement ) ) {
-		$output .= '<div id="badgeos-achievements-container" class="badgeos-single-achievement">';  // necessary for the jquery click handler to be called
+		$output .= '<div id="badgeos-single-achievement-container" class="badgeos-single-achievement">';  // necessary for the jquery click handler to be called
 		$output .= badgeos_render_achievement( $achievement );
 		$output .= '</div>';
 	}

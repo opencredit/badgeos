@@ -3,12 +3,12 @@
 class credly_credit_issuer_widget extends WP_Widget {
 
 	//process the new widget
-	function credly_credit_issuer_widget() {
+	function __construct() {
 		$widget_ops = array(
 			'classname' => 'credly_credit_issuer_class',
 			'description' => __( 'Display the Credly Credit Issuer badge', 'badgeos' )
 		);
-		$this->WP_Widget( 'credly_credit_issuer_widget', __( 'BadgeOS Credly Credit Issuer', 'badgeos' ), $widget_ops );
+		parent::__construct( 'credly_credit_issuer_widget', __( 'BadgeOS Credly Credit Issuer', 'badgeos' ), $widget_ops );
 	}
 
 	//build the widget settings form
@@ -17,7 +17,7 @@ class credly_credit_issuer_widget extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$credly_profile_url = $instance['credly_profile_url'];
 		?>
-            <p><label><?php _e( 'Credly Profile URL', 'badgeos' ); ?>: <input class="widefat" name="<?php echo $this->get_field_name( 'credly_profile_url' ); ?>"  type="text" value="<?php echo esc_url( $credly_profile_url ); ?>" /></label></p>
+            <p><label><?php _e( 'Credly Profile URL', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'credly_profile_url' ) ); ?>"  type="text" value="<?php echo esc_url( $credly_profile_url ); ?>" /></label></p>
         <?php
 	}
 
@@ -40,7 +40,7 @@ class credly_credit_issuer_widget extends WP_Widget {
 		$url = ( ! empty( $instance['credly_profile_url'] ) ? esc_url( $instance['credly_profile_url'] ) : 'https://credly.com' );
 
 		//display the badge
-		echo '<p><a href="'. esc_url( $url ) .'" target="_blank"><img src="' .esc_url( $GLOBALS['badgeos']->directory_url .'images/credly-credit-issuer.png' ). '" alt="'.__( 'Credly Credit Issuer', 'badgeos' ) .'" /></a></p>';
+		echo '<p><a href="'. esc_url( $url ) .'" target="_blank"><img src="' .esc_url( $GLOBALS['badgeos']->directory_url .'images/credly-credit-issuer.png' ). '" alt="'.esc_attr_e( 'Credly Credit Issuer', 'badgeos' ) .'" /></a></p>';
 
 		echo $after_widget;
 	}
