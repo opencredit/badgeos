@@ -81,11 +81,13 @@ function badgeos_credly_settings_validate( $options = array() ) {
 
 			$error = '';
 
-			if ( ! is_email( $username ) )
+			if ( ! is_email( $username ) ) {
 				$error .= '<p>'. __( 'Please enter a valid email address in the username field.', 'badgeos' ). '</p>';
+			}
 
-			if ( empty( $password ) )
+			if ( empty( $password ) ) {
 				$error .= '<p>'. __( 'Please enter a password.', 'badgeos' ). '</p>';
+			}
 
 			// Save our error message.
 			badgeos_credly_get_api_key_error( $error );
@@ -177,8 +179,9 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
  */
 function badgeos_credly_api_key_errors() {
 
-	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) )
+	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) ) {
 		return;
+	}
 
 	// If we have an error message, we'll display it
 	echo '<div id="message" class="error">'. $has_notice .'</div>';
@@ -461,9 +464,8 @@ function badgeos_credly_options_page() {
 				// We need to get our api key
 				if ( empty( $credly_settings['api_key'] ) ) {
 					badgeos_credly_options_no_api( $credly_settings );
-				}
-				// We already have our api key
-				else {
+				} else {
+					// We already have our api key
 					badgeos_credly_options_yes_api( $credly_settings );
 				}
 
@@ -679,15 +681,16 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
 			|| ( isset( $_GET['post'] ) && badgeos_is_achievement( $_GET['post'] ) )
 		) && 'Featured Image' == $string
 
-	)
+	) {
 		$string = __( 'Achievement Image', 'badgeos' );
-	elseif (
+	} elseif (
 		(
 			( isset( $_GET['post_type'] ) && 'achievement-type' == $_GET['post_type'] )
 			|| ( isset( $_GET['post'] ) && 'achievement-type' == get_post_type( $_GET['post'] ) )
 		) && 'Featured Image' == $string
-	)
+	) {
 		$string = __( 'Default Achievement Image', 'badgeos' );
+	}
 
 	return $string;
 }
@@ -703,10 +706,11 @@ add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
  * @return string           Potentially modified output.
  */
 function badgeos_featured_image_metabox_text( $content = '', $ID = 0 ) {
-	if ( badgeos_is_achievement( $ID ) )
+	if ( badgeos_is_achievement( $ID ) ) {
 		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
-	elseif ( 'achievement-type' == get_post_type( $ID ) )
+	} elseif ( 'achievement-type' == get_post_type( $ID ) ) {
 		$content = str_replace( 'featured image', __( 'default achievement image', 'badgeos' ), $content );
+	}
 
 	return $content;
 }
