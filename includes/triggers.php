@@ -53,8 +53,9 @@ function badgeos_load_activity_triggers() {
 
 		// Grab the post type object, and bail if it's not actually an object
 		$post_type_object = get_post_type_object( $achievement_type );
-		if ( ! is_object( $post_type_object ) )
+		if ( ! is_object( $post_type_object ) ) {
 			continue;
+		}
 
 		// Add trigger for unlocking ANY and ALL posts for each achievement type
 		$activity_triggers['badgeos_unlock_'.$achievement_type] = sprintf( __( 'Unlocked a %s', 'badgeos' ), $post_type_object->labels->singular_name );
@@ -63,8 +64,9 @@ function badgeos_load_activity_triggers() {
 	}
 
 	// Loop through each trigger and add our trigger event to the hook
-	foreach ( $activity_triggers as $trigger => $label )
+	foreach ( $activity_triggers as $trigger => $label ) {
 		add_action( $trigger, 'badgeos_trigger_event', 10, 20 );
+	}
 
 }
 add_action( 'init', 'badgeos_load_activity_triggers' );
@@ -92,12 +94,14 @@ function badgeos_trigger_event() {
 	$user_data = get_user_by( 'id', $user_id );
 
 	// Sanity check, if we don't have a user object, bail here
-	if ( ! is_object( $user_data ) )
+	if ( ! is_object( $user_data ) ) {
 		return $args[ 0 ];
+	}
 
 	// If the user doesn't satisfy the trigger requirements, bail here
-	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
+	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
 		return $args[ 0 ];
+	}
 
 	// Update hook count for this user
 	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
@@ -198,8 +202,9 @@ function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
 function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 0, $args = array() ) {
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Grab the user's logged triggers
 	$user_triggers = badgeos_get_user_triggers( $user_id, $site_id );
@@ -207,13 +212,12 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 0, $args
 	$trigger = apply_filters( 'badgeos_get_user_trigger_name', $trigger, $user_id, $site_id, $args );
 
 	// If we have any triggers, return the current count for the given trigger
-	if ( ! empty( $user_triggers ) && isset( $user_triggers[$trigger] ) )
+	if ( ! empty( $user_triggers ) && isset( $user_triggers[$trigger] ) ) {
 		return absint( $user_triggers[$trigger] );
-
-	// Otherwise, they've never hit the trigger
-	else
+	} else {
+		// Otherwise, they've never hit the trigger
 		return 0;
-
+	}
 }
 
 /**
@@ -229,8 +233,9 @@ function badgeos_get_user_trigger_count( $user_id, $trigger, $site_id = 0, $args
 function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $args = array() ) {
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Grab the current count and increase it by 1
 	$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
@@ -258,8 +263,9 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $a
 function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 0 ) {
 
 	// Set to current site id
-	if ( ! $site_id )
+	if ( ! $site_id ) {
 		$site_id = get_current_blog_id();
+	}
 
 	// Grab the user's current triggers
 	$user_triggers = badgeos_get_user_triggers( $user_id, false );
@@ -267,11 +273,12 @@ function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 0 ) {
 	// If we're deleteing all triggers...
 	if ( 'all' == $trigger ) {
 		// For all sites
-		if ( 'all' == $site_id )
+		if ( 'all' == $site_id ) {
 			$user_triggers = array();
-		// For a specific site
-		else
+		} else {
+			// For a specific site
 			$user_triggers[$site_id] = array();
+		}
 	// Otherwise, reset the specific trigger back to zero
 	} else {
 		$user_triggers[$site_id][$trigger] = 0;
@@ -298,13 +305,15 @@ function badgeos_publish_listener( $post_id = 0 ) {
 	if (
 		defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE // If we're autosaving,
 		|| wp_is_post_revision( $post_id )            // or this is a revision
-	)
+	) {
 		return;
+	}
 
 	// Bail if we have more than the single, ititial revision
 	$revisions = wp_get_post_revisions( $post_id );
-	if ( count( $revisions ) > 1 )
+	if ( count( $revisions ) > 1 ) {
 		return;
+	}
 
 	// Trigger a badgeos_new_{$post_type} action
 	$post = get_post( $post_id );
