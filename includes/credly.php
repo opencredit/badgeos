@@ -1235,13 +1235,8 @@ function credly_get_api_key() {
  */
 function badgeos_achievement_has_been_sent_to_credly( $earned_achievement_instance = null ) {
 
-    // If instance has been sent to credly, return true
-    if ( isset( $earned_achievement_instance->sent_to_credly ) ) {
-        return true;
-    }
+    return isset( $earned_achievement_instance->sent_to_credly );
 
-    // Otherwise, return false
-    return false;
 }
 
 /**
