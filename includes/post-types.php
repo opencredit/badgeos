@@ -215,8 +215,12 @@ function badgeos_register_achievement_type_cpt() {
 		$achievement_name = $achievement_type->post_title;
 
 		// Update our post meta to use the achievement name, if it's empty
-		if ( $achievement_name != get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true ) ) update_post_meta( $achievement_type->ID, '_badgeos_singular_name', $achievement_name );
-		if ( ! get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true ) ) update_post_meta( $achievement_type->ID, '_badgeos_plural_name', $achievement_name );
+		if ( $achievement_name != get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true ) ) {
+			update_post_meta( $achievement_type->ID, '_badgeos_singular_name', $achievement_name );
+		}
+		if ( ! get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true ) ) {
+			update_post_meta( $achievement_type->ID, '_badgeos_plural_name', $achievement_name );
+		}
 
 		// Setup our singular and plural versions to use the corresponding meta
 		$achievement_name_singular = get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true );
