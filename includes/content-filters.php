@@ -19,49 +19,49 @@
 function badgeos_achievement_submissions( $content = '' ) {
 	global $post;
 
-	if ( is_single() ) {
-
-		// get achievement object for the current post type
-		$post_type = get_post_type( $post );
-		$achievement = get_page_by_title( $post_type, 'OBJECT', 'achievement-type' );
-		if ( !$achievement ) {
-			global $wp_post_types;
-
-			$labels = array( 'name', 'singular_name' );
-			// check for other variations
-			foreach ( $labels as $label ) {
-				$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
-				if ( $achievement )
-					break;
-			}
-		}
-
-		if ( !$achievement )
-			return $content;
-
-
-		// check if submission or nomination is set
-		$earned_by = get_post_meta( $post->ID, '_badgeos_earned_by', true );
-
-		if ( ( $earned_by == 'submission' || $earned_by == 'submission_auto' ) && is_user_logged_in() ) {
-
-			$submission = badgeos_submission_form();
-
-			//return the content with the submission shortcode data
-			return $content . $submission;
-
-		} elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
-
-			$nomination = badgeos_nomination_form();
-
-			//return the content with the nomination shortcode data
-			return $content . $nomination;
-
-		}
-
+	if ( ! is_single() ) {
+		return $content;
 	}
 
-	return $content;
+	// get achievement object for the current post type
+	$post_type = get_post_type( $post );
+	$achievement = get_page_by_title( $post_type, 'OBJECT', 'achievement-type' );
+	if ( !$achievement ) {
+		global $wp_post_types;
+
+		$labels = array( 'name', 'singular_name' );
+		// check for other variations
+		foreach ( $labels as $label ) {
+			$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
+			if ( $achievement ) {
+				break;
+			}
+		}
+	}
+
+	if ( !$achievement ) {
+		return $content;
+	}
+
+
+	// check if submission or nomination is set
+	$earned_by = get_post_meta( $post->ID, '_badgeos_earned_by', true );
+
+	if ( ( $earned_by == 'submission' || $earned_by == 'submission_auto' ) && is_user_logged_in() ) {
+
+		$submission = badgeos_submission_form();
+
+		//return the content with the submission shortcode data
+		return $content . $submission;
+
+	} elseif ( $earned_by == 'nomination' && is_user_logged_in() ) {
+
+		$nomination = badgeos_nomination_form();
+
+		//return the content with the nomination shortcode data
+		return $content . $nomination;
+
+	}
 
 }
 add_filter( 'the_content', 'badgeos_achievement_submissions' );
