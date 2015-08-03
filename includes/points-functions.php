@@ -19,8 +19,9 @@
 function badgeos_get_users_points( $user_id = 0 ) {
 
 	// Use current user's ID if none specified
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = wp_get_current_user()->ID;
+	}
 
 	// Return our user's points as an integer (sanely falls back to 0 if empty)
 	return absint( get_user_meta( $user_id, '_badgeos_points', true ) );
@@ -39,8 +40,9 @@ function badgeos_get_users_points( $user_id = 0 ) {
 function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id = 0, $achievement_id = null ) {
 
 	// Use current user's ID if none specified
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = get_current_user_id();
+	}
 
 	// Grab the user's current points
 	$current_points = badgeos_get_users_points( $user_id );
@@ -82,10 +84,11 @@ function badgeos_log_users_points( $user_id, $new_points, $total_points, $admin_
 	$admin = get_userdata( $admin_id );
 
 	// Alter our log message if this was an admin action
-	if ( $admin_id )
+	if ( $admin_id ) {
 		$log_message = sprintf( __( '%1$s awarded %2$s %3$s points for a new total of %4$s points', 'badgeos' ), $admin->user_login, $user->user_login, number_format( $new_points ), number_format( $total_points ) );
-	else
+	} else {
 		$log_message = sprintf( __( '%1$s earned %2$s points for a new total of %3$s points', 'badgeos' ), $user->user_login, number_format( $new_points ), number_format( $total_points ) );
+	}
 
 	// Create a log entry
 	$log_entry_id = badgeos_post_log_entry( $achievement_id, $user_id, 'points', $log_message );
@@ -93,8 +96,9 @@ function badgeos_log_users_points( $user_id, $new_points, $total_points, $admin_
 	// Add relevant meta to our log entry
 	update_post_meta( $log_entry_id, '_badgeos_awarded_points', $new_points );
 	update_post_meta( $log_entry_id, '_badgeos_total_user_points', $total_points );
-	if ( $admin_id )
+	if ( $admin_id ) {
 		update_post_meta( $log_entry_id, '_badgeos_admin_awarded', $admin_id );
+	}
 
 }
 add_action( 'badgeos_update_users_points', 'badgeos_log_users_points', 10, 5 );
@@ -112,7 +116,8 @@ function badgeos_award_user_points( $user_id = 0, $achievement_id = 0 ) {
 	// Grab our points from the provided post
 	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
 
-	if ( ! empty( $points ) )
+	if ( ! empty( $points ) ) {
 		return badgeos_update_users_points( $user_id, $points, false, $achievement_id );
+	}
 }
 add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
