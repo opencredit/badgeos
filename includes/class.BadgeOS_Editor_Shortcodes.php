@@ -9,7 +9,9 @@
  * @link https://credly.com
 */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 class BadgeOS_Editor_Shortcodes {
 
