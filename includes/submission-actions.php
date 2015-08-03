@@ -17,8 +17,9 @@
 function badgeos_save_nomination_data() {
 
 	// If the form hasn't been submitted, bail.
-	if ( ! isset( $_POST['badgeos_nomination_submit'] ) )
+	if ( ! isset( $_POST['badgeos_nomination_submit'] ) ) {
 		return false;
+	}
 
 	// Nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
@@ -317,8 +318,9 @@ add_action( 'save_post', 'badgeos_process_submission_review' );
 function badgeos_save_submission_data() {
 
 	// If form items don't exist, bail.
-	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) )
+	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) ) {
 		return;
+	}
 
 	// Nonce check for security
 	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
@@ -358,7 +360,9 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 		//process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
 
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
@@ -559,8 +563,7 @@ function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 			$args[ 'user_data' ]->display_name,
 			admin_url( 'edit.php?post_type=submission' )
 		);
-	}
-	else {
+	} else {
 		$subject = sprintf( __( 'Submission Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 		// set the email message
@@ -629,8 +632,7 @@ function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 		);
 
 		// @todo set $email based on nominee and nominated by
-	}
-	else {
+	} else {
 		$subject = sprintf( __( 'Nomination Approved: %s', 'badgeos' ), get_the_title( $args[ 'achievement_id' ] ) );
 
 		// set the email message
@@ -838,8 +840,9 @@ add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_su
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
 
-	if ( ! is_user_logged_in() )
+	if ( ! is_user_logged_in() ) {
 		return '';
+	}
 
 	$defaults = array(
 		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
@@ -890,12 +893,14 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 function badgeos_save_comment_data() {
 
 	// If our nonce data is empty, bail
-	if ( ! isset( $_POST['badgeos_comment_nonce'] ) )
+	if ( ! isset( $_POST['badgeos_comment_nonce'] ) ) {
 		return;
+	}
 
 	// If our nonce doesn't vaildate, bail
-	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
+	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) ) {
 		return;
+	}
 
 	// Process comment data
 	$comment_data = array(
@@ -909,7 +914,9 @@ function badgeos_save_comment_data() {
 		// Process attachment upload if a file was submitted
 		if( ! empty($_FILES['document_file'] ) ) {
 
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			if ( ! function_exists( 'wp_handle_upload' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/file.php' );
+			}
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
@@ -953,8 +960,9 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 	) );
 
 	// If we have no comments, bail
-	if ( empty( $comments ) )
+	if ( empty( $comments ) ) {
 		return;
+	}
 
 	// Concatenate our output
 	$output = '<div class="badgeos-submission-comments-wrap">';
@@ -1020,12 +1028,12 @@ function badgeos_check_if_user_has_feedback( $user_id = 0, $achievement_id = 0, 
 	$feedback = get_posts( $args );
 
 	// User DOES have a submission for this achievement
-	if ( ! empty( $feedback ) )
+	if ( ! empty( $feedback ) ) {
 		return true;
-
-	// User does NOT have a submission
-	else
+	} else {
+		// User does NOT have a submission
 		return false;
+	}
 }
 
 /**
