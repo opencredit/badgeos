@@ -58,15 +58,17 @@ function badgeos_ajax_get_achievements() {
 		$type = badgeos_get_achievement_types_slugs();
 		// Drop steps from our list of "all" achievements
 		$step_key = array_search( 'step', $type );
-		if ( $step_key )
+		if ( $step_key ) {
 			unset( $type[$step_key] );
+		}
 	} else {
 		$type = explode( ',', $type );
 	}
 
 	// Get the current user if one wasn't specified
-	if( ! $user_id )
+	if( ! $user_id ) {
 		$user_id = $user_ID;
+	}
 
 	// Build $include array
 	if ( !is_array( $include ) ) {
@@ -87,11 +89,12 @@ function badgeos_ajax_get_achievements() {
 	$hidden = badgeos_get_hidden_achievement_ids( $type );
 
 	// If we're polling all sites, grab an array of site IDs
-	if( $wpms && $wpms != 'false' )
+	if ( $wpms && $wpms != 'false' ) {
 		$sites = badgeos_get_network_site_ids();
-	// Otherwise, use only the current site
-	else
+	} else {
+		// Otherwise, use only the current site
 		$sites = array( $blog_id );
+	}
 
 	// Loop through each site (default is current site only)
 	foreach( $sites as $site_blog_id ) {
@@ -118,7 +121,7 @@ function badgeos_ajax_get_achievements() {
 		// Filter - query completed or non completed achievements
 		if ( $filter == 'completed' ) {
 			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
-		}elseif( $filter == 'not-completed' ) {
+		} elseif ( $filter == 'not-completed' ) {
 			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
 		}
 
@@ -172,7 +175,7 @@ function badgeos_ajax_get_achievements() {
 			$achievements .= '<div class="badgeos-no-results">';
 			if ( 'completed' == $filter ) {
 				$achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-			}else{
+			} else {
 				$achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
 			}
 			$achievements .= '</div><!-- .badgeos-no-results -->';
