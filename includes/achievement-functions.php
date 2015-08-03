@@ -101,11 +101,13 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  */
 function badgeos_get_achievements_children_where( $where = '', $query_object ) {
 	global $wpdb;
-	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
+	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' ) {
 		$where .= " AND p2pm1.meta_key ='Required'";
+	}
 
-	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'optional' )
+	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'optional' ) {
 		$where .= " AND p2pm1.meta_key ='Optional'";
+	}
 	// ^^ TODO, add required and optional. right now just returns all achievemnts.
 	$where .= " AND p2pm2.meta_key ='order'";
 	$where .= $wpdb->prepare( ' AND p2p.p2p_to = %d', $query_object->query_vars['children_of'] );
@@ -176,8 +178,9 @@ function badgeos_get_achievement_types_slugs() {
 
 	// If we do have any achievement types, loop through each and add their slug to our array
 	if ( isset( $GLOBALS['badgeos']->achievement_types ) && ! empty( $GLOBALS['badgeos']->achievement_types ) ) {
-		foreach ( $GLOBALS['badgeos']->achievement_types as $slug => $data )
+		foreach ( $GLOBALS['badgeos']->achievement_types as $slug => $data ) {
 			$achievement_type_slugs[] = $slug;
+		}
 	}
 
 	// Finally, return our data
@@ -203,10 +206,11 @@ function badgeos_get_parent_of_achievement( $achievement_id = 0 ) {
 	$parents = badgeos_get_achievements( array( 'parent_of' => $achievement_id ) );
 
 	// If it has a parent, return it, otherwise return false
-	if ( ! empty( $parents ) )
+	if ( ! empty( $parents ) ) {
 		return $parents[0];
-	else
-		return false;
+	}
+
+	return false;
 }
 
 /**
@@ -244,10 +248,11 @@ function badgeos_is_achievement_sequential( $achievement_id = 0 ) {
 	}
 
 	// If our achievement requires sequential steps, return true, otherwise false
-	if ( get_post_meta( $achievement_id, '_badgeos_sequential', true ) )
+	if ( get_post_meta( $achievement_id, '_badgeos_sequential', true ) ) {
 		return true;
-	else
-		return false;
+	}
+
+	return false;
 }
 
 /**
@@ -287,8 +292,9 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
-	if ( is_null( $achievement ) )
+	if ( is_null( $achievement ) ) {
 		return false;
+	}
 
 	// Setup a new object for the achievement
 	$achievement_object            = new stdClass;
@@ -329,8 +335,9 @@ function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 		'meta_value'     => 'hidden'
 	) );
 
-	foreach ( $hidden_achievements as $achievement )
+	foreach ( $hidden_achievements as $achievement ) {
 		$hidden_ids[] = $achievement->ID;
+	}
 
 	// Return our results
 	return $hidden_ids;
@@ -355,8 +362,9 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 		'achievement_type' => $achievement_type
 	) );
 
-	foreach ( $earned_achievements as $achievement )
+	foreach ( $earned_achievements as $achievement ) {
 		$earned_ids[] = $achievement->ID;
+	}
 
 	return $earned_ids;
 
@@ -444,8 +452,9 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 	}
 
 	// Don't retrieve requirements if achievement is not earned by steps
-	if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) != 'triggers' )
+	if ( get_post_meta( $achievement_id, '_badgeos_earned_by', true ) != 'triggers' ) {
 		return false;
+	}
 
 	// Grab our requirements for this achievement
 	$requirements = $wpdb->get_results( $wpdb->prepare(
@@ -560,8 +569,9 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 			// Otherwise, attempt to grab the width/height from our specified image size
 			} else {
 				global $_wp_additional_image_sizes;
-				if ( isset( $_wp_additional_image_sizes[$image_size] ) )
+				if ( isset( $_wp_additional_image_sizes[$image_size] ) ) {
 					$image_sizes = $_wp_additional_image_sizes[$image_size];
+				}
 			}
 
 			// If we can't get the defined width/height, set our own
@@ -667,8 +677,9 @@ function badgeos_ms_show_all_achievements(){
 	if ( is_multisite() ) {
     	$badgeos_settings = get_option( 'badgeos_settings' );
     	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
-    	if( 'enabled' == $ms_show_all_achievements )
+    	if( 'enabled' == $ms_show_all_achievements ) {
     		return true;
+    	}
     }
     return false;
 }
@@ -681,7 +692,7 @@ function badgeos_ms_show_all_achievements(){
  */
 function badgeos_get_network_site_ids() {
 	global $wpdb;
-    if( badgeos_ms_show_all_achievements() ) {
+    if ( badgeos_ms_show_all_achievements() ) {
     	$blog_ids = $wpdb->get_results($wpdb->prepare( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs", NULL ) );
 		foreach ($blog_ids as $key => $value ) {
             $sites[] = $value->blog_id;
