@@ -10,8 +10,9 @@
  */
 
 //Check if we've defined our url elsewhere, if not, set it here.
-if ( !defined( 'BADGEOS_CREDLY_API_URL' ) )
+if ( !defined( 'BADGEOS_CREDLY_API_URL' ) ) {
     define( 'BADGEOS_CREDLY_API_URL', 'https://api.credly.com/v0.2/' );
+}
 
 /**
  * Build our Credly object
@@ -131,8 +132,9 @@ class BadgeOS_Credly {
     public function credly_admin_notice() {
 
         // Check if Credly is enabled and if an API key exists
-        if ( 'false' === $this->credly_settings['credly_enable'] || !empty( $this->credly_settings['api_key'] ) )
+        if ( 'false' === $this->credly_settings['credly_enable'] || !empty( $this->credly_settings['api_key'] ) ) {
             return;
+        }
 
         //display the admin notice
         printf( __( '<div class="updated"><p>Note: Credly Integration is turned on, but you must first <a href="%s">enter your Credly credentials</a> to allow earned badges to be shared by recipients (or Disable Credly Integration to hide this notice).</p></div>', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) );
@@ -348,19 +350,17 @@ class BadgeOS_Credly {
      */
     private function process_api_response_badge( $response = array() ) {
 
-        if( is_wp_error( $response ) || empty( $response ) ) {
+        if ( is_wp_error( $response ) || empty( $response ) ) {
 
             return false;
 
-        } else {
-
-           $response_body = json_decode( $response['body'] );
-
-           $credly_badge_id = $response_body->data;
-
-           return $credly_badge_id;
-
         }
+
+        $response_body = json_decode( $response['body'] );
+
+        $credly_badge_id = $response_body->data;
+
+        return $credly_badge_id;
 
     }
 
@@ -422,27 +422,25 @@ class BadgeOS_Credly {
      */
     private function process_api_response_category( $response = array() ) {
 
-        if( is_wp_error( $response ) || empty( $response ) ) {
+        if ( is_wp_error( $response ) || empty( $response ) ) {
 
             return false;
 
-        } else {
+        }
 
-            $response_body = json_decode( $response['body'] );
+        $response_body = json_decode( $response['body'] );
 
-            $categories = $response_body->data;
+        $categories = $response_body->data;
 
-            $markup = '';
+        $markup = '';
 
-            foreach ( $categories as $category ) {
+        foreach ( $categories as $category ) {
 
-                $markup .= '<label for="' . esc_attr( $category->name ) . '"><input type="checkbox" name="_badgeos_credly_categories[' . $category->name . ']" id="'. esc_attr( $category->name ) . '" value="' . esc_attr( $category->id ) . '" /> ' . ucwords( $category->name ) . '</label><br />';
-
-            }
-
-            return $markup;
+            $markup .= '<label for="' . esc_attr( $category->name ) . '"><input type="checkbox" name="_badgeos_credly_categories[' . $category->name . ']" id="'. esc_attr( $category->name ) . '" value="' . esc_attr( $category->id ) . '" /> ' . ucwords( $category->name ) . '</label><br />';
 
         }
+
+        return $markup;
 
     }
 
@@ -457,8 +455,9 @@ class BadgeOS_Credly {
     private function credly_existing_category_output( $categories = array() ) {
 
         // Return if we don't have any categories saved in post meta
-        if ( ! is_array( $categories ) )
+        if ( ! is_array( $categories ) ) {
             return;
+        }
 
         $markup = '';
 
@@ -541,8 +540,9 @@ class BadgeOS_Credly {
 
         $enabled = get_user_meta( $this->user_id, 'credly_user_enable', true );
 
-        if ( empty( $enabled ) )
+        if ( empty( $enabled ) ) {
             $this->credly_profile_setting_update_meta();
+        }
 
     }
 
@@ -567,8 +567,9 @@ class BadgeOS_Credly {
         $credly_id = $this->credly_user_email_search( $user_email );
 
         // If we didn't return a numeric id, set it to the user email
-        if ( ! is_numeric( $credly_id ) )
+        if ( ! is_numeric( $credly_id ) ) {
             $credly_id = $user_email;
+        }
 
         // Set our local meta
         $this->credly_user_set_id( $user_id, $credly_id );
@@ -634,19 +635,17 @@ class BadgeOS_Credly {
      */
     private function process_api_response_email_search( $response = array() ) {
 
-        if( is_wp_error( $response ) || empty( $response ) ) {
+        if ( is_wp_error( $response ) || empty( $response ) ) {
 
             return false;
 
-        } else {
-
-            $response_body = json_decode( $response['body'] );
-
-            $email = ( ! empty( $response_body->data[0]->id ) ? $response_body->data[0]->id : false );
-
-            return $email;
-
         }
+
+        $response_body = json_decode( $response['body'] );
+
+        $email = ( ! empty( $response_body->data[0]->id ) ? $response_body->data[0]->id : false );
+
+        return $email;
 
     }
 
@@ -660,8 +659,9 @@ class BadgeOS_Credly {
      */
     private function credly_user_set_id( $id = '' ) {
 
-        if ( ! empty( $id ) )
+        if ( ! empty( $id ) ) {
             update_user_meta( $this->user_id, 'credly_user_id', $id );
+        }
 
     }
 
@@ -677,11 +677,13 @@ class BadgeOS_Credly {
     public function post_credly_user_badge( $user_id = 0, $badge_id = 0 ) {
 
         // Bail if the badge isn't in Credly
-        if ( ! credly_is_achievement_giveable( $badge_id, $user_id ) )
+        if ( ! credly_is_achievement_giveable( $badge_id, $user_id ) ) {
             return false;
+        }
 
-        if ( empty( $user_id ) )
+        if ( empty( $user_id ) ) {
             $user_id = $this->user_id;
+        }
 
         // Generate our API URL endpoint
         $url = $this->api_url_with_token( $this->api_url_user_badge() );
@@ -772,19 +774,17 @@ class BadgeOS_Credly {
      */
     private function process_api_response_user_badge( $response = array() ) {
 
-        if( is_wp_error( $response ) || empty( $response ) ) {
+        if ( is_wp_error( $response ) || empty( $response ) ) {
 
             return false;
 
-        } else {
-
-           $response_body = json_decode( $response['body'] );
-
-           $results = ( ! empty( $response_body->data->hash ) ? $response_body->data->hash : false );
-
-           return $results;
-
         }
+
+        $response_body = json_decode( $response['body'] );
+
+        $results = ( ! empty( $response_body->data->hash ) ? $response_body->data->hash : false );
+
+        return $results;
 
     }
 
@@ -799,14 +799,16 @@ class BadgeOS_Credly {
     private function encoded_image( $image_id = '' ) {
 
         // If we don't have a valid image ID, bail here
-        if ( ! is_numeric( $image_id ) )
+        if ( ! is_numeric( $image_id ) ) {
             return null;
+        }
 
         $image_file = get_attached_file( $image_id );
 
         // If we don't have a valid file, bail here
-        if ( ! file_exists( $image_file ) )
+        if ( ! file_exists( $image_file ) ) {
             return null;
+        }
 
         // Open and encode our image file
         $handle        = fopen( $image_file, 'r' );
@@ -936,34 +938,40 @@ class BadgeOS_Credly {
     public function badge_metabox_save( $post_id = 0 ) {
 
         // Verify nonce
-        if ( ! isset( $_POST['credly_details_nonce'] ) || ! wp_verify_nonce( $_POST['credly_details_nonce'], 'credly_details' ) )
+        if ( ! isset( $_POST['credly_details_nonce'] ) || ! wp_verify_nonce( $_POST['credly_details_nonce'], 'credly_details' ) ) {
             return $post_id;
+        }
 
         // Make sure we're not doing an autosave
-        if ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        if ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return $post_id;
+        }
 
         // Make sure this isn't a post revision
-        if ( wp_is_post_revision( $post_id ) )
+        if ( wp_is_post_revision( $post_id ) ) {
             return $post_id;
+        }
 
         // Check user permissions
-        if ( !current_user_can( 'edit_post', $post_id ) )
+        if ( !current_user_can( 'edit_post', $post_id ) ) {
             return $post_id;
+        }
 
         // Sanitize our fields
         $fields = $this->badge_metabox_sanitize_fields();
 
         // If enabled and we have a credly badge ID lets update
-        if ( 'true' == $fields['send_to_credly'] )
+        if ( 'true' == $fields['send_to_credly'] ) {
             $credly_badge = $this->post_credly_badge( $post_id, $fields );
+        }
 
         // Save our meta
         $meta = $this->badge_metabox_save_meta( $post_id, $fields );
 
         // Update our meta value with our returned Credly badge ID
-        if ( isset( $credly_badge ) )
+        if ( isset( $credly_badge ) ) {
             update_post_meta( $post_id, '_badgeos_credly_badge_id', $credly_badge );
+        }
 
         return $post_id;
 
@@ -1175,7 +1183,7 @@ function credly_is_achievement_giveable( $achievement_id = 0, $user_id = 0 ) {
     $credly_badge_id = get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
 
     // If send to credly is ON, and badge ID is set, badge is givable
-    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) ){
+    if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) ) {
         $is_giveable = true;
     } else {
         $is_giveable = false;
@@ -1208,8 +1216,9 @@ function credly_get_api_key() {
 	$credly_settings = $badgeos_credly->credly_settings;
 
     // If we have no settings, no key, or credly is not enabled, return false
-    if ( empty( $credly_settings['api_key'] ) || 'false' === $credly_settings['credly_enable'] )
+    if ( empty( $credly_settings['api_key'] ) || 'false' === $credly_settings['credly_enable'] ) {
         return false;
+    }
 
     // Otherwise, return our stored key
 	return $credly_settings['api_key'];
@@ -1247,12 +1256,14 @@ function badgeos_achievement_has_been_sent_to_credly( $earned_achievement_instan
 function badgeos_can_user_send_achievement_to_credly( $user_id = 0, $achievement_id = 0 ) {
 
     // If passed ID is not an achievement, bail here
-    if ( ! badgeos_is_achievement( $achievement_id ) )
+    if ( ! badgeos_is_achievement( $achievement_id ) ) {
         return false;
+    }
 
     // If no user was specified, get the current user
-    if ( ! $user_id )
+    if ( ! $user_id ) {
         $user_id = get_current_user_id();
+    }
 
     // Get all earned instances of this achievement
     $earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) );
@@ -1290,8 +1301,9 @@ function badgeos_user_sent_achievement_to_credly( $user_id, $achievement_id ) {
         foreach ( $earned_achievements as $key => $achievement ) {
 
             // If acheivement doesn't match our ID, skip it
-            if ( $achievement_id !== $achievement->ID )
+            if ( $achievement_id !== $achievement->ID ) {
                 continue;
+            }
 
             // If this instance has not been sent to credly, mark it as sent and exit
             if ( ! badgeos_achievement_has_been_sent_to_credly( $achievement ) ) {
@@ -1319,8 +1331,9 @@ function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id 
     $user = get_userdata( $user_id );
 
     // Sanity check, if user doesnt exist, bail
-    if ( ! is_object( $user ) || is_wp_error( $user ) )
+    if ( ! is_object( $user ) || is_wp_error( $user ) ) {
         return;
+    }
 
     // Log the action
     $title = sprintf( __( '%1$s sent %2$s to Credly', 'badgeos' ),
