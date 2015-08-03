@@ -191,8 +191,9 @@ function badgeos_user_profile_data( $user = null ) {
 			echo __( 'DEBUG MODE ENABLED', 'badgeos' ) . '<br />';
 			echo __( 'Metadata value for:', 'badgeos' ) . ' _badgeos_achievements<br />';
 
+			echo '<pre>';
 			var_dump ( $achievements );
-
+			echo '</pre>';
 		}
 
 		echo '<br/>';
