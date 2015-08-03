@@ -66,6 +66,8 @@ add_filter( 'admin_post_thumbnail_html', 'badgeos_badge_builder_filter_thumbnail
  */
 function badgeos_badge_builder_get_icon_credit( $attachment_id = 0 ) {
 
+	$credit = '';
+
 	// If image has badge builder icon meta
 	if ( $icon_meta = get_post_meta( $attachment_id, '_credly_icon_meta', true ) ) {
 		$icon_meta = (array) maybe_unserialize( $icon_meta );
@@ -76,10 +78,6 @@ function badgeos_badge_builder_get_icon_credit( $attachment_id = 0 ) {
 			$icon_meta['attribute'],
 			$icon_meta['license']
 		);
-
-	// Otherwise, there is no one to credit
-	} else {
-		$credit = '';
 	}
 
 	// Return the icon credit
