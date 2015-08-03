@@ -26,8 +26,9 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
 	}
 
 	// Get the current user if no ID specified
-	if ( empty( $user_id ) )
+	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
+	}
 
 	// Setup our args to easily pass through a filter
 	$args = array(
