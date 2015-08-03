@@ -30,8 +30,9 @@ function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id =
 	// Otherwise, attempt to grab the achievement date from earned achievement meta
 	} elseif ( $achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) ) ) {
 		$achievement = array_pop( $achievements );
-		if ( is_object( $achievement ) )
+		if ( is_object( $achievement ) ) {
 			$since = $achievement->date_earned + 1;
+		}
 	}
 
 	// Finally, return our time
@@ -53,8 +54,9 @@ function badgeos_user_get_active_achievements( $user_id ) {
 	$achievements = get_user_meta( $user_id, '_badgeos_active_achievements', true );
 
 	// If there are no achievements
-	if ( empty( $achievements ) )
+	if ( empty( $achievements ) ) {
 		return array();
+	}
 
 	// Otherwise, we DO have achievements and should return them cast as an array
 	return (array) $achievements;
@@ -115,8 +117,9 @@ function badgeos_user_get_active_achievement( $user_id = 0, $achievement_id = 0 
 function badgeos_user_add_active_achievement( $user_id = 0, $achievement_id = 0 ) {
 
 	// If achievement is a step, bail here
-	if ( 'step' == get_post_type( $achievement_id ) )
+	if ( 'step' == get_post_type( $achievement_id ) ) {
 		return false;
+	}
 
 	// Get the user's active achievements
 	$achievements = badgeos_user_get_active_achievements( $user_id );
@@ -144,16 +147,19 @@ function badgeos_user_add_active_achievement( $user_id = 0, $achievement_id = 0 
 function badgeos_user_update_active_achievement( $user_id = 0, $achievement_id = 0, $achievement = null ) {
 
 	// If achievement is a step, bail here
-	if ( 'step' == get_post_type( $achievement_id ) )
+	if ( 'step' == get_post_type( $achievement_id ) ) {
 		return false;
+	}
 
 	// If we weren't passed an object, get the latest version from meta
-	if ( ! is_object( $achievement ) )
+	if ( ! is_object( $achievement ) ) {
 		$achievement = badgeos_user_get_active_achievement( $user_id, $achievement_id );
+	}
 
 	// If we still don't have an object, build one
-	if ( ! is_object( $achievement ) )
+	if ( ! is_object( $achievement ) ) {
 		$achievement = badgeos_build_achievement_object( $achievement_id, 'started' );
+	}
 
 	// Update our last activity date
 	$achievement->last_activity_date = time();
@@ -183,8 +189,9 @@ function badgeos_user_delete_active_achievement( $user_id = 0, $achievement_id =
 	$achievements = badgeos_user_get_active_achievements( $user_id );
 
 	// If the achievement exists, unset it
-	if ( isset( $achievements[$achievement_id] ) )
-		unset( $achievements[$achievement_id] );
+	if ( isset( $achievements[ $achievement_id ] ) ) {
+		unset( $achievements[ $achievement_id ] );
+	}
 
 	// Update the user's active achievements
 	return badgeos_user_update_active_achievements( $user_id, $achievements );
