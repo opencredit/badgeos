@@ -121,7 +121,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			<option value=""></option>
 			<?php
 				foreach ( $achievement_types as $achievement_type ) {
-					if ( 'step' == $achievement_type ){
+					if ( 'step' == $achievement_type ) {
 						continue;
 					}
 					echo '<option value="' . $achievement_type . '" ' . selected( $requirements['achievement_type'], $achievement_type, false ) . '>' . ucfirst( $achievement_type ) . '</option>';
@@ -176,8 +176,9 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 			'connected_type'   => $requirements['achievement_type'] . '-to-step',
 			'connected_to'     => $step_id
 		));
-		if ( ! empty( $connected_activities ) )
+		if ( ! empty( $connected_activities ) ) {
 			$requirements['achievement_post'] = $connected_activities[0]->ID;
+		}
 	} elseif ( 'badgeos_specific_new_comment' === $requirements['trigger_type'] ) {
 		$achievement_post = absint( get_post_meta( $step_id, '_badgeos_achievement_post', true ) );
 		if ( 0 < $achievement_post ) {
@@ -401,7 +402,10 @@ function get_step_menu_order( $step_id = 0 ) {
 	global $wpdb;
 	$p2p_id = $wpdb->get_var( $wpdb->prepare( "SELECT p2p_id FROM $wpdb->p2p WHERE p2p_from = %d", $step_id ) );
 	$menu_order = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->p2pmeta WHERE p2p_id=%d AND meta_key='order'", $p2p_id ) );
-	if ( ! $menu_order || $menu_order == 'NaN' ) $menu_order = '0';
+	if ( ! $menu_order || $menu_order == 'NaN' ) {
+		$menu_order = '0';
+	}
+
 	return $menu_order;
 }
 
@@ -414,6 +418,9 @@ function get_step_menu_order( $step_id = 0 ) {
  * @return integer        0 if the order matches, -1 if it's lower, 1 if it's higher
  */
 function badgeos_compare_step_order( $step1 = 0, $step2 = 0 ) {
-	if ( $step1->order == $step2->order ) return 0;
+	if ( $step1->order == $step2->order ) {
+		return 0;
+	}
+
 	return ( $step1->order < $step2->order ) ? -1 : 1;
 }
