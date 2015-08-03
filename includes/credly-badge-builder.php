@@ -43,8 +43,9 @@ function badgeos_badge_builder_filter_thumbnail_metabox( $content, $post_id ) {
 		} else {
 			$attachment_id = get_post_thumbnail_id( $post_id );
 			$continue = get_post_meta( $attachment_id, '_credly_badge_meta', true );
-			if ( $continue )
+			if ( $continue ) {
 				$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'attachment_id' => $attachment_id, 'link_text' => __( 'Edit in Credly Badge Builder', 'badgeos' ), 'continue' => $continue ) ) . '</p>';
+			}
 		}
 
 	}
