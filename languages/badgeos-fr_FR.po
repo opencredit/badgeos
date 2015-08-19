@@ -1077,7 +1077,7 @@ msgstr "Accomplissement : "
 #: ../includes/content-filters.php:726
 #, php-format
 msgid "%1$s - uploaded %2$s by %3$s"
-msgstr "%1$s - %2$s uploadé par %3$s"
+msgstr "%1$s - %2$s téléversé par %3$s"
 
 # @ badgeos
 #: ../includes/content-filters.php:752
