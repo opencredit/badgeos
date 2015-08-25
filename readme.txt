@@ -220,6 +220,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.6 =
+* Fixed PHP variable typo introduced in 1.4.5.
+* Fixed + marks introduced in Earned User Achievement Widget form output.
+
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
 * Fixed: Prevent potential empty array of achievements.
@@ -386,6 +390,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.6 =
+* Fixed PHP variable typo introduced in 1.4.5.
+* Fixed + marks introduced in Earned User Achievement Widget form output.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
