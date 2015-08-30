@@ -1,7 +1,8 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
-"POT-Creation-Date: 2015-01-13 10:09-0600\n"
+"POT-Creation-Date: 2015-08-29 20:44-0500\n"
 "PO-Revision-Date: 2015-01-13 10:09-0600\n"
 "Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: BadgeOS\n"
@@ -9,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.8.2\n"
 "X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_attr_x;_n;_x;_ex;_nx;"
 "esc_html__;esc_html_e;esc_html_x\n"
 "X-Poedit-Basepath: .\n"
@@ -80,15 +81,15 @@ msgstr ""
 msgid "Error: Timed out"
 msgstr ""
 
-#: ../includes/achievement-functions.php:640
+#: ../includes/achievement-functions.php:646
 msgid "People who have earned this:"
 msgstr ""
 
-#: ../includes/achievement-functions.php:1041
+#: ../includes/achievement-functions.php:1061
 msgid "Achievement Type saved successfully."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1042
+#: ../includes/achievement-functions.php:1062
 #, php-format
 msgid ""
 "Achievement Type renamed successfully. <p>All achievements of this type, and "
@@ -98,7 +99,7 @@ msgid ""
 "strong>."
 msgstr ""
 
-#: ../includes/achievement-functions.php:1042
+#: ../includes/achievement-functions.php:1062
 msgid "widgets"
 msgstr ""
 
@@ -445,27 +446,28 @@ msgstr ""
 msgid "Set default achievement image"
 msgstr ""
 
-#: ../includes/ajax-functions.php:160
+#: ../includes/ajax-functions.php:161
 #: ../includes/shortcodes/badgeos_achievements_list.php:159
 #: ../includes/shortcodes/badgeos_achievements_list.php:162
+#, fuzzy
 msgid "achievements"
-msgstr ""
+msgstr "Accomplissements"
 
-#: ../includes/ajax-functions.php:165
+#: ../includes/ajax-functions.php:166
 #, php-format
 msgid "No completed %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:167
+#: ../includes/ajax-functions.php:168
 #, php-format
 msgid "No %s to display at this time."
 msgstr ""
 
-#: ../includes/ajax-functions.php:236
+#: ../includes/ajax-functions.php:237
 msgid "Status Updated!"
 msgstr ""
 
-#: ../includes/ajax-functions.php:320 ../includes/content-filters.php:524
+#: ../includes/ajax-functions.php:321 ../includes/content-filters.php:524
 #: ../includes/shortcodes/badgeos_nominations.php:26
 #: ../includes/shortcodes/badgeos_submissions.php:26
 msgid "All"
@@ -860,7 +862,7 @@ msgstr ""
 #: ../includes/content-filters.php:525
 #: ../includes/shortcodes/badgeos_nominations.php:29
 #: ../includes/shortcodes/badgeos_submissions.php:29
-#: ../includes/submission-actions.php:227
+#: ../includes/submission-actions.php:232
 msgid "Pending"
 msgstr ""
 
@@ -912,13 +914,13 @@ msgstr ""
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: ../includes/content-filters.php:737 ../includes/submission-actions.php:184
-#: ../includes/submission-actions.php:225
+#: ../includes/content-filters.php:737 ../includes/submission-actions.php:189
+#: ../includes/submission-actions.php:230
 msgid "Approve"
 msgstr ""
 
-#: ../includes/content-filters.php:738 ../includes/submission-actions.php:185
-#: ../includes/submission-actions.php:226
+#: ../includes/content-filters.php:738 ../includes/submission-actions.php:190
+#: ../includes/submission-actions.php:231
 msgid "Deny"
 msgstr ""
 
@@ -1800,7 +1802,7 @@ msgid "Load More"
 msgstr ""
 
 #: ../includes/shortcodes/badgeos_nomination.php:10
-#: ../includes/submission-actions.php:1112
+#: ../includes/submission-actions.php:1117
 msgid "Nomination Form"
 msgstr ""
 
@@ -1957,39 +1959,39 @@ msgstr ""
 msgid "Require"
 msgstr ""
 
-#: ../includes/steps-ui.php:135
+#: ../includes/steps-ui.php:138
 msgid "Post ID"
 msgstr ""
 
-#: ../includes/steps-ui.php:140
+#: ../includes/steps-ui.php:143
 msgid "time(s)."
 msgstr ""
 
-#: ../includes/steps-ui.php:144
+#: ../includes/steps-ui.php:147
 msgid "Label"
-msgstr ""
-
-#: ../includes/steps-ui.php:277
-#, php-format
-msgid "any %s"
 msgstr ""
 
 #: ../includes/steps-ui.php:280
 #, php-format
+msgid "any %s"
+msgstr ""
+
+#: ../includes/steps-ui.php:283
+#, php-format
 msgid "all %s"
 msgstr ""
 
-#: ../includes/steps-ui.php:297
+#: ../includes/steps-ui.php:300
 #, php-format
 msgid "comment on post %d"
 msgstr ""
 
-#: ../includes/steps-ui.php:315
+#: ../includes/steps-ui.php:318
 #, php-format
 msgid "Earn %1$s %2$s."
 msgstr ""
 
-#: ../includes/steps-ui.php:315
+#: ../includes/steps-ui.php:318
 #, php-format
 msgid "%d time"
 msgstr ""
@@ -2003,20 +2005,20 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: ../includes/submission-actions.php:196
+#: ../includes/submission-actions.php:201
 msgid "pending"
 msgstr ""
 
-#: ../includes/submission-actions.php:234
+#: ../includes/submission-actions.php:239
 msgid "Show All Statuses"
 msgstr ""
 
-#: ../includes/submission-actions.php:544
+#: ../includes/submission-actions.php:549
 #, php-format
 msgid "Approved Submission: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:547
+#: ../includes/submission-actions.php:552
 #, php-format
 msgid ""
 "A new submission has been received and auto-approved:\n"
@@ -2027,12 +2029,12 @@ msgid ""
 "\t\t\tTo view all submissions, including this one, visit: %3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:559
+#: ../includes/submission-actions.php:564
 #, php-format
 msgid "Submission Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:562
+#: ../includes/submission-actions.php:567
 #, php-format
 msgid ""
 "Your submission has been approved:\n"
@@ -2042,12 +2044,12 @@ msgid ""
 "\t\t\t%3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:610
+#: ../includes/submission-actions.php:615
 #, php-format
 msgid "Approved Nomination: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:613
+#: ../includes/submission-actions.php:618
 #, php-format
 msgid ""
 "A new nomination has been received and auto-approved:\n"
@@ -2059,12 +2061,12 @@ msgid ""
 "\t\t\tTo view all nominations, including this one, visit: %4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:629
+#: ../includes/submission-actions.php:634
 #, php-format
 msgid "Nomination Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:632
+#: ../includes/submission-actions.php:637
 #, php-format
 msgid ""
 "Your nomination has been approved:\n"
@@ -2075,12 +2077,12 @@ msgid ""
 "\t\t\t%4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:675
+#: ../includes/submission-actions.php:680
 #, php-format
 msgid "Submission Not Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:678
+#: ../includes/submission-actions.php:683
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2090,12 +2092,12 @@ msgid ""
 "\t\t%3$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:716
+#: ../includes/submission-actions.php:721
 #, php-format
 msgid "Nomination Not Approved: %s"
 msgstr ""
 
-#: ../includes/submission-actions.php:719
+#: ../includes/submission-actions.php:724
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2106,12 +2108,12 @@ msgid ""
 "\t\t%4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:755
+#: ../includes/submission-actions.php:760
 #, php-format
 msgid "Submission: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:758
+#: ../includes/submission-actions.php:763
 #, php-format
 msgid ""
 "A new submission has been received:\n"
@@ -2125,12 +2127,12 @@ msgid ""
 "\t\t\tTo view all submissions, visit: %4$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:796
+#: ../includes/submission-actions.php:801
 #, php-format
 msgid "Nomination: %1$s from %2$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:799
+#: ../includes/submission-actions.php:804
 #, php-format
 msgid ""
 "A new nomination has been received:\n"
@@ -2145,54 +2147,54 @@ msgid ""
 "\t\t\tTo view all nominations, visit: %5$s"
 msgstr ""
 
-#: ../includes/submission-actions.php:840
+#: ../includes/submission-actions.php:845
 #, php-format
 msgid "Comment on Submission (#%1$d):"
 msgstr ""
 
-#: ../includes/submission-actions.php:841
-#: ../includes/submission-actions.php:1159
+#: ../includes/submission-actions.php:846
+#: ../includes/submission-actions.php:1164
 msgid "Attachment:"
 msgstr ""
 
-#: ../includes/submission-actions.php:842
+#: ../includes/submission-actions.php:847
 msgid "Submit Comment"
 msgstr ""
 
-#: ../includes/submission-actions.php:843
+#: ../includes/submission-actions.php:848
 msgid "Show/Add Comments"
 msgstr ""
 
-#: ../includes/submission-actions.php:956
+#: ../includes/submission-actions.php:961
 msgid "Comments:"
 msgstr ""
 
-#: ../includes/submission-actions.php:1113
-#: ../includes/submission-actions.php:1160
+#: ../includes/submission-actions.php:1118
+#: ../includes/submission-actions.php:1165
 msgid "Submit"
 msgstr ""
 
-#: ../includes/submission-actions.php:1130
+#: ../includes/submission-actions.php:1135
 msgid "User to nominate"
 msgstr ""
 
-#: ../includes/submission-actions.php:1133
+#: ../includes/submission-actions.php:1138
 msgid "Reason for nomination"
 msgstr ""
 
-#: ../includes/submission-actions.php:1158
+#: ../includes/submission-actions.php:1163
 msgid "Create a New Submission"
 msgstr ""
 
-#: ../includes/submission-actions.php:1205
+#: ../includes/submission-actions.php:1210
 msgid "You must be logged in to see results."
 msgstr ""
 
-#: ../includes/submission-actions.php:1212
+#: ../includes/submission-actions.php:1217
 msgid "Sorry, no results to display"
 msgstr ""
 
-#: ../includes/submission-actions.php:1412
+#: ../includes/submission-actions.php:1417
 msgid "Submitted Attachments:"
 msgstr ""
 
@@ -2355,23 +2357,23 @@ msgstr ""
 msgid "Display only the following Achievement Types:"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:81
+#: ../includes/widgets/earned-user-achievements-widget.php:80
 #, php-format
 msgid "My Total Points: %s"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:143
+#: ../includes/widgets/earned-user-achievements-widget.php:144
 msgid "You must be logged in to view earned achievements"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:160
+#: ../includes/widgets/earned-user-achievements-widget.php:161
 msgid "Error: Sorry, nothing found."
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:168
+#: ../includes/widgets/earned-user-achievements-widget.php:169
 msgid "Success: Sent to Credly!"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:173
+#: ../includes/widgets/earned-user-achievements-widget.php:174
 msgid "Error: Sorry, Send to Credly Failed."
 msgstr ""
