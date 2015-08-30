@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -220,6 +220,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.6 =
+* Fixed: PHP variable typo introduced in 1.4.5.
+* Fixed: + marks introduced in Earned User Achievement Widget form output.
+* Fixed: Amended query statement preparation for multisite-based functionality.
+* Fixed: Minor code cleanup in Earned User Achievement Widget.
+
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
 * Fixed: Prevent potential empty array of achievements.
@@ -386,6 +392,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.6 =
+* Fixed: PHP variable typo introduced in 1.4.5.
+* Fixed: + marks introduced in Earned User Achievement Widget form output.
+* Fixed: Amended query statement preparation for multisite-based functionality.
+* Fixed: Minor code cleanup in Earned User Achievement Widget.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.

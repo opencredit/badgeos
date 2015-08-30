@@ -21,8 +21,8 @@ class earned_user_achievements_widget extends WP_Widget {
 		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? (array) $instance['set_achievements'] : array();
 		?>
             <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
-+			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
-+			<p><label><input type="checkbox" id="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
+			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
+			<p><label><input type="checkbox" id="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
 			<p><?php _e( 'Display only the following Achievement Types:', 'badgeos' ); ?><br />
 				<?php
 				//get all registered achievements
@@ -32,8 +32,9 @@ class earned_user_achievements_widget extends WP_Widget {
 				foreach ( $achievements as $achievement_slug => $achievement ) {
 
 					//hide the step CPT
-					if ( $achievement['single_name'] == 'step' )
-						continue;
+					if ( $achievement['single_name'] == 'step' ) {
+					    continue;
+					}
 
 					//if achievement displaying exists in the saved array it is enabled for display
 					$checked = checked( in_array( $achievement_slug, $set_achievements ), true, false );
@@ -65,20 +66,19 @@ class earned_user_achievements_widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		global $user_ID;
 
-		extract( $args );
-
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
 
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
+		if ( !empty( $title ) ) { echo $args['before_title'] . $title . $args['after_title']; };
 
 		//user must be logged in to view earned badges and points
 		if ( is_user_logged_in() ) {
 
 			//display user's points if widget option is enabled
-			if ( $instance['point_total'] == 'on' )
+			if ( $instance['point_total'] == 'on' ) {
 				echo '<p class="badgeos-total-points">' . sprintf( __( 'My Total Points: %s', 'badgeos' ), '<strong>' . number_format( badgeos_get_users_points() ) . '</strong>' ) . '</p>';
+			}
 
 			$achievements = badgeos_get_user_achievements();
 
@@ -125,8 +125,9 @@ class earned_user_achievements_widget extends WP_Widget {
 
 							$thecount++;
 
-							if ( $thecount == $number_to_show && $number_to_show != 0 )
-								break;
+							if ( $thecount == $number_to_show && $number_to_show != 0 ) {
+							    break;
+							}
 
 						}
 
@@ -144,7 +145,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		}
 
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 }
