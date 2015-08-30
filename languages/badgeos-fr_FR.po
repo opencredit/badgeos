@@ -2,71 +2,71 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS v1.4.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-14 03:09+0100\n"
-"Last-Translator: X-Raym <extremraym@yahoo.fr>\n"
+"POT-Creation-Date: 2015-08-29 20:43-0500\n"
+"PO-Revision-Date: 2015-08-29 20:43-0500\n"
+"Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: Raymond Radet, Marie Bandiera <http://extremraym.com>\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.8.2\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yesPlural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
 # @ badgeos
-#: badgeos.php:149 badgeos.php:165
+#: badgeos.php:150 badgeos.php:166
 #: includes/shortcodes/badgeos_achievements_list.php:69
 msgid "Order"
 msgstr "Ordre"
 
 # @ badgeos
-#: badgeos.php:195
+#: badgeos.php:196
 msgid "Badges"
 msgstr "Badges"
 
 # @ badgeos
-#: badgeos.php:196
+#: badgeos.php:197
 msgid "Badges badge type"
 msgstr "Type de Badge"
 
 # @ badgeos
-#: badgeos.php:201
+#: badgeos.php:202
 msgid "Badge"
 msgstr "Badge"
 
 # @ badgeos
-#: badgeos.php:247 includes/admin-settings.php:198
+#: badgeos.php:248 includes/admin-settings.php:198
 msgid "BadgeOS Settings"
 msgstr "Paramètres de BadgeOS"
 
 # @ badgeos
-#: badgeos.php:247 includes/p2p/scb/AdminPage.php:467
+#: badgeos.php:248 includes/p2p/scb/AdminPage.php:467
 msgid "Settings"
 msgstr "Paramètres"
 
 # @ badgeos
-#: badgeos.php:248
+#: badgeos.php:249
 msgid "Credly Integration"
 msgstr "Intégration avec Credly"
 
 # @ badgeos
-#: badgeos.php:249
+#: badgeos.php:250
 msgid "Add-Ons"
 msgstr "Extensions"
 
 # @ badgeos
-#: badgeos.php:250 includes/admin-settings.php:392
+#: badgeos.php:251 includes/admin-settings.php:392
 msgid "Help / Support"
 msgstr "Aide / Support"
 
 # @ badgeos
-#: badgeos.php:275
+#: badgeos.php:276
 msgid ""
 "Would you like to display this badge on social networks and add it to your "
 "lifelong badge collection?"
@@ -75,42 +75,42 @@ msgstr ""
 "collection de badge ?"
 
 # @ badgeos
-#: badgeos.php:276
+#: badgeos.php:277
 msgid "Yes, send to Credly"
 msgstr "Oui, envoyer à Credly"
 
 # @ badgeos
-#: badgeos.php:277 includes/class.BadgeOS_Editor_Shortcodes.php:81
+#: badgeos.php:278
 msgid "Cancel"
 msgstr "Annuler"
 
 # @ badgeos
-#: badgeos.php:278
+#: badgeos.php:279
 msgid "Share on Credly!"
 msgstr "Partager sur Credly !"
 
 # @ badgeos
-#: badgeos.php:279
+#: badgeos.php:280
 msgid "Error:"
 msgstr "Erreur :"
 
 # @ badgeos
-#: badgeos.php:280
+#: badgeos.php:281
 msgid "Error: Timed out"
 msgstr "Erreur : Temps épuisé"
 
 # @ badgeos
-#: includes/achievement-functions.php:640
+#: includes/achievement-functions.php:646
 msgid "People who have earned this:"
 msgstr "Liste de Personnes ayant reçu cet Accomplissement :"
 
 # @ badgeos
-#: includes/achievement-functions.php:1024
+#: includes/achievement-functions.php:1061
 msgid "Achievement Type saved successfully."
 msgstr "Type d'Accomplissement sauvegardé avec succès."
 
 # @ badgeos
-#: includes/achievement-functions.php:1025
+#: includes/achievement-functions.php:1062
 #, php-format
 msgid ""
 "Achievement Type renamed successfully. <p>All achievements of this type, and "
@@ -126,7 +126,7 @@ msgstr ""
 "jour <strong>manuellement</strong>."
 
 # @ badgeos
-#: includes/achievement-functions.php:1025
+#: includes/achievement-functions.php:1062
 msgid "widgets"
 msgstr "widgets"
 
@@ -440,7 +440,8 @@ msgstr "Nom d'utilisateur et mot de passe Credly"
 
 # @ badgeos
 #: includes/admin-settings.php:509
-msgid "Username"
+#, fuzzy
+msgid "Username: "
 msgstr "Nom d'utilisateur : "
 
 # @ badgeos
@@ -597,22 +598,37 @@ msgstr "Définir l'Image par Défaut des Accomplissements"
 msgid "Set default achievement image"
 msgstr "Définir l'image par défaut des accomplissements"
 
+# @ default
+#: includes/ajax-functions.php:161
+#: includes/shortcodes/badgeos_achievements_list.php:159
+#: includes/shortcodes/badgeos_achievements_list.php:162
+#, fuzzy
+msgid "achievements"
+msgstr "Mes Accomplissements"
+
 # @ badgeos
-#: includes/ajax-functions.php:164
+#: includes/ajax-functions.php:166
 #, php-format
 msgid "No completed %s to display at this time."
 msgstr "Aucun %s complété à afficher pour le moment."
 
 # @ badgeos
-#: includes/ajax-functions.php:166
+#: includes/ajax-functions.php:168
 #, php-format
 msgid "No %s to display at this time."
 msgstr "Aucun %s à afficher pour le moment."
 
 # @ badgeos
-#: includes/ajax-functions.php:229
+#: includes/ajax-functions.php:237
 msgid "Status Updated!"
 msgstr "Statut Mis à Jour !"
+
+# @ badgeos
+#: includes/ajax-functions.php:321 includes/content-filters.php:524
+#: includes/shortcodes/badgeos_nominations.php:26
+#: includes/shortcodes/badgeos_submissions.php:26
+msgid "All"
+msgstr "Tous"
 
 # @ badgeos
 #: includes/class.BadgeOS_Editor_Shortcodes.php:50
@@ -656,21 +672,10 @@ msgid "Help/Support"
 msgstr "Aide/Soutien"
 
 # @ badgeos
-#: includes/class.BadgeOS_Editor_Shortcodes.php:80
-msgid "Insert Shortcode"
-msgstr "Insérer le Shortcode"
-
-# @ badgeos
 #: includes/class.Credly_Badge_Builder.php:132
 #: includes/credly-badge-builder.php:40
 msgid "Use Credly Badge Builder"
 msgstr "Utiliser le créateur de Badge Credly (Credly Badge Builder)"
-
-# @ badgeos
-#: includes/class.Credly_Badge_Builder.php:145
-msgid "Enable Credly Integration to use the Badge Builder"
-msgstr ""
-"Activer l'intégration avec Credly pour utiliser le Credly Badge Builder"
 
 # @ badgeos
 #: includes/class.Credly_Badge_Builder.php:193
@@ -1083,17 +1088,10 @@ msgid "Status:"
 msgstr "Statut : "
 
 # @ badgeos
-#: includes/content-filters.php:524
-#: includes/shortcodes/badgeos_nominations.php:26
-#: includes/shortcodes/badgeos_submissions.php:26
-msgid "All"
-msgstr "Tous"
-
-# @ badgeos
 #: includes/content-filters.php:525
 #: includes/shortcodes/badgeos_nominations.php:29
 #: includes/shortcodes/badgeos_submissions.php:29
-#: includes/submission-actions.php:227
+#: includes/submission-actions.php:232
 msgid "Pending"
 msgstr "En Attente"
 
@@ -1156,14 +1154,14 @@ msgid "%1$s on %2$s"
 msgstr "%1$s sur %2$s"
 
 # @ badgeos
-#: includes/content-filters.php:737 includes/submission-actions.php:184
-#: includes/submission-actions.php:225
+#: includes/content-filters.php:737 includes/submission-actions.php:189
+#: includes/submission-actions.php:230
 msgid "Approve"
 msgstr "Approuver"
 
 # @ badgeos
-#: includes/content-filters.php:738 includes/submission-actions.php:185
-#: includes/submission-actions.php:226
+#: includes/content-filters.php:738 includes/submission-actions.php:190
+#: includes/submission-actions.php:231
 msgid "Deny"
 msgstr "Refuser"
 
@@ -1273,6 +1271,12 @@ msgid "Credly Category Search"
 msgstr "Recherche de Catégorie Credly"
 
 # @ badgeos
+#: includes/credly.php:907
+#, fuzzy
+msgid "Search Categories"
+msgstr "Rechercher Utilisateurs"
+
+# @ badgeos
 #: includes/credly.php:910
 msgid "Credly Badge Category"
 msgstr "Catégorie de Badge Credly"
@@ -1354,13 +1358,13 @@ msgstr "Uploader l'Image du Badge"
 
 # @ badgeos
 #: includes/meta-boxes.php:75
-#, php-format
+#, fuzzy, php-format
 msgid ""
 "<p>To set an image use the <strong>Achievement Image</strong> metabox to the "
 "right. For best results, use a square .png file with a transparent "
 "background, at least 200x200 pixels. Or, design a badge using the %1$s.</"
 "p><p>If no image is specified, this achievement will default to the %2$s "
-"featurmeed image.</p>"
+"featured image.</p>"
 msgstr ""
 "<p> Pour définir une image, utiliser la metabox <strong>Image "
 "d'Accomplissement</strong> vers la droite. Pour de meilleurs résultats, "
@@ -1649,7 +1653,6 @@ msgstr "Convertir vers le type de connexion enregistré :"
 
 # @ badgeos
 #: includes/p2p/p2p-admin/tools-page.php:129
-#: includes/shortcodes/badgeos_achievements_list.php:206
 msgid "Go"
 msgstr "Allez à"
 
@@ -2012,6 +2015,29 @@ msgid "No %s found in Trash"
 msgstr "Aucun %s trouvé dans la Corbeille"
 
 # @ badgeos
+#: includes/shortcodes.php:77
+msgid "Attributes:"
+msgstr "Caractéristiques : "
+
+# @ badgeos
+#: includes/shortcodes.php:95
+#, php-format
+msgid "Accepts: %s"
+msgstr "Accepte : %s"
+
+# @ badgeos
+#: includes/shortcodes.php:96
+#, php-format
+msgid "Default: %s"
+msgstr "Défaut : %s"
+
+# @ badgeos
+#: includes/shortcodes.php:122
+#, php-format
+msgid "Example: %s"
+msgstr "Exemple : %s"
+
+# @ badgeos
 #: includes/shortcodes/badgeos_achievement.php:10
 msgid "Single Achievement"
 msgstr "Accomplissement Seul"
@@ -2252,13 +2278,8 @@ msgid "Search: %s"
 msgstr "Recherche : %s"
 
 # @ badgeos
-#: includes/shortcodes/badgeos_achievements_list.php:220
-msgid "Load More"
-msgstr "Charger Plus"
-
-# @ badgeos
 #: includes/shortcodes/badgeos_nomination.php:10
-#: includes/submission-actions.php:1112
+#: includes/submission-actions.php:1117
 msgid "Nomination Form"
 msgstr "Forme de la Nomination"
 
@@ -2429,29 +2450,6 @@ msgid "Optional Credly Badge ID to display instead of dynamically passed ID."
 msgstr "ID de Badge Credly Optionnel à afficher à la place de l'ID dynamique."
 
 # @ badgeos
-#: includes/shortcodes.php:77
-msgid "Attributes:"
-msgstr "Caractéristiques : "
-
-# @ badgeos
-#: includes/shortcodes.php:95
-#, php-format
-msgid "Accepts: %s"
-msgstr "Accepte : %s"
-
-# @ badgeos
-#: includes/shortcodes.php:96
-#, php-format
-msgid "Default: %s"
-msgstr "Défaut : %s"
-
-# @ badgeos
-#: includes/shortcodes.php:122
-#, php-format
-msgid "Example: %s"
-msgstr "Exemple : %s"
-
-# @ badgeos
 #: includes/steps-ui.php:36
 msgid "Required Steps"
 msgstr "Étapes Recommandées"
@@ -2483,46 +2481,45 @@ msgid "Require"
 msgstr "Recommander"
 
 # @ badgeos
-#: includes/steps-ui.php:135
+#: includes/steps-ui.php:138
 msgid "Post ID"
 msgstr "ID de l'article"
 
-# @ default
-#: includes/steps-ui.php:135
-msgid "achievement_post"
-msgstr "achievement_post"
-
 # @ badgeos
-#: includes/steps-ui.php:140
+#: includes/steps-ui.php:143
 msgid "time(s)."
 msgstr "fois"
 
+#: includes/steps-ui.php:147
+msgid "Label"
+msgstr ""
+
 # @ badgeos
-#: includes/steps-ui.php:277
+#: includes/steps-ui.php:280
 #, php-format
 msgid "any %s"
 msgstr "any %s"
 
 # @ badgeos
-#: includes/steps-ui.php:280
+#: includes/steps-ui.php:283
 #, php-format
 msgid "all %s"
 msgstr "toutes %s"
 
 # @ badgeos
-#: includes/steps-ui.php:297
+#: includes/steps-ui.php:300
 #, php-format
 msgid "comment on post %d"
 msgstr "commentaire sur l'article %d"
 
 # @ badgeos
-#: includes/steps-ui.php:315
+#: includes/steps-ui.php:318
 #, php-format
 msgid "Earn %1$s %2$s."
 msgstr "Gagné %1$s %2$s."
 
 # @ default
-#: includes/steps-ui.php:315
+#: includes/steps-ui.php:318
 #, php-format
 msgid "%d time"
 msgid_plural "%d times"
@@ -2540,23 +2537,23 @@ msgid "Content"
 msgstr "Contenu"
 
 # @ badgeos
-#: includes/submission-actions.php:196
+#: includes/submission-actions.php:201
 msgid "pending"
 msgstr "en attente"
 
 # @ badgeos
-#: includes/submission-actions.php:234
+#: includes/submission-actions.php:239
 msgid "Show All Statuses"
 msgstr "Montrer tous les Statuts"
 
 # @ badgeos
-#: includes/submission-actions.php:544
+#: includes/submission-actions.php:549
 #, php-format
 msgid "Approved Submission: %1$s from %2$s"
 msgstr "Soumission Approuvée : %1$s de %2$s"
 
 # @ badgeos
-#: includes/submission-actions.php:547
+#: includes/submission-actions.php:552
 #, php-format
 msgid ""
 "A new submission has been received and auto-approved:\n"
@@ -2574,13 +2571,13 @@ msgstr ""
 "\t\t\tPour voir toutes les soumissions, en incluant celle-ci, visitez : %3$s"
 
 # @ badgeos
-#: includes/submission-actions.php:559
+#: includes/submission-actions.php:564
 #, php-format
 msgid "Submission Approved: %s"
 msgstr "Soumission Approuvée : %s"
 
 # @ badgeos
-#: includes/submission-actions.php:562
+#: includes/submission-actions.php:567
 #, php-format
 msgid ""
 "Your submission has been approved:\n"
@@ -2596,13 +2593,13 @@ msgstr ""
 "\t\t\t%3$s"
 
 # @ badgeos
-#: includes/submission-actions.php:610
+#: includes/submission-actions.php:615
 #, php-format
 msgid "Approved Nomination: %1$s from %2$s"
 msgstr "Nomination Approuvée : %1$s de %2$s "
 
 # @ badgeos
-#: includes/submission-actions.php:613
+#: includes/submission-actions.php:618
 #, php-format
 msgid ""
 "A new nomination has been received and auto-approved:\n"
@@ -2622,13 +2619,13 @@ msgstr ""
 "\t\t\tPour voir toutes les nominations, en incluant celle-ci, visitez : %4$s"
 
 # @ badgeos
-#: includes/submission-actions.php:629
+#: includes/submission-actions.php:634
 #, php-format
 msgid "Nomination Approved: %s"
 msgstr "Nomination Approuvée : %s"
 
 # @ badgeos
-#: includes/submission-actions.php:632
+#: includes/submission-actions.php:637
 #, php-format
 msgid ""
 "Your nomination has been approved:\n"
@@ -2646,13 +2643,13 @@ msgstr ""
 "\t\t\t%4$s"
 
 # @ badgeos
-#: includes/submission-actions.php:675
+#: includes/submission-actions.php:680
 #, php-format
 msgid "Submission Not Approved: %s"
 msgstr "Soumission non Approuvée : %s"
 
 # @ badgeos
-#: includes/submission-actions.php:678
+#: includes/submission-actions.php:683
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2668,13 +2665,13 @@ msgstr ""
 "\t\t%3$s"
 
 # @ badgeos
-#: includes/submission-actions.php:716
+#: includes/submission-actions.php:721
 #, php-format
 msgid "Nomination Not Approved: %s"
 msgstr "Nomination Non Approuvée : %s"
 
 # @ badgeos
-#: includes/submission-actions.php:719
+#: includes/submission-actions.php:724
 #, php-format
 msgid ""
 "Your submission has not been approved:\n"
@@ -2692,13 +2689,13 @@ msgstr ""
 "\t\t%4$s"
 
 # @ badgeos
-#: includes/submission-actions.php:755
+#: includes/submission-actions.php:760
 #, php-format
 msgid "Submission: %1$s from %2$s"
 msgstr "Soumission : %1$s de %2$s"
 
 # @ badgeos
-#: includes/submission-actions.php:758
+#: includes/submission-actions.php:763
 #, php-format
 msgid ""
 "A new submission has been received:\n"
@@ -2722,13 +2719,13 @@ msgstr ""
 "\t\t\tPour voir toutes les soumissions, visitez : %4$s"
 
 # @ badgeos
-#: includes/submission-actions.php:796
+#: includes/submission-actions.php:801
 #, php-format
 msgid "Nomination: %1$s from %2$s"
 msgstr "Nomination : %1$s de %2$s"
 
 # @ badgeos
-#: includes/submission-actions.php:799
+#: includes/submission-actions.php:804
 #, php-format
 msgid ""
 "A new nomination has been received:\n"
@@ -2754,63 +2751,63 @@ msgstr ""
 "\t\t\tPour voir toutes les nominations, visitez : %5$s"
 
 # @ badgeos
-#: includes/submission-actions.php:840
+#: includes/submission-actions.php:845
 #, php-format
 msgid "Comment on Submission (#%1$d):"
 msgstr "Commentaire sur la Soumission (#%1$d) :"
 
 # @ badgeos
-#: includes/submission-actions.php:841 includes/submission-actions.php:1159
+#: includes/submission-actions.php:846 includes/submission-actions.php:1164
 msgid "Attachment:"
 msgstr "Pièce-Jointe : "
 
 # @ badgeos
-#: includes/submission-actions.php:842
+#: includes/submission-actions.php:847
 msgid "Submit Comment"
 msgstr "Soumettre un Commentaire"
 
 # @ badgeos
-#: includes/submission-actions.php:843
+#: includes/submission-actions.php:848
 msgid "Show/Add Comments"
 msgstr "Montrer/Ajouter des Commentaires"
 
 # @ badgeos
-#: includes/submission-actions.php:956
+#: includes/submission-actions.php:961
 msgid "Comments:"
 msgstr "Commentaires : "
 
 # @ badgeos
-#: includes/submission-actions.php:1113 includes/submission-actions.php:1160
+#: includes/submission-actions.php:1118 includes/submission-actions.php:1165
 msgid "Submit"
 msgstr "Soumettre"
 
 # @ badgeos
-#: includes/submission-actions.php:1130
+#: includes/submission-actions.php:1135
 msgid "User to nominate"
 msgstr "Utilisateur à nominer"
 
 # @ badgeos
-#: includes/submission-actions.php:1133
+#: includes/submission-actions.php:1138
 msgid "Reason for nomination"
 msgstr "Raison de la nomination"
 
 # @ badgeos
-#: includes/submission-actions.php:1158
+#: includes/submission-actions.php:1163
 msgid "Create a New Submission"
 msgstr "Créer une Nouvelle Soumission"
 
 # @ badgeos
-#: includes/submission-actions.php:1205
+#: includes/submission-actions.php:1210
 msgid "You must be logged in to see results."
 msgstr "Vous devez être connecté pour voir les résultats."
 
 # @ badgeos
-#: includes/submission-actions.php:1212
+#: includes/submission-actions.php:1217
 msgid "Sorry, no results to display"
 msgstr "Désolé, aucun résultat a afficher"
 
 # @ badgeos
-#: includes/submission-actions.php:1412
+#: includes/submission-actions.php:1417
 msgid "Submitted Attachments:"
 msgstr "Pièces-Jointes Soumises :"
 
@@ -2917,7 +2914,7 @@ msgid "Action"
 msgstr "Action"
 
 # @ badgeos
-#: includes/user.php:169 includes/user.php:301
+#: includes/user.php:169 includes/user.php:302
 msgid "Revoke Award"
 msgstr "Retirer la Récompense"
 
@@ -2947,13 +2944,13 @@ msgid "Awarded"
 msgstr "Récompensé"
 
 # @ badgeos
-#: includes/user.php:303
+#: includes/user.php:293
 #, php-format
 msgid "Award %s"
 msgstr "Récompenser %s"
 
 # @ badgeos
-#: includes/user.php:312
+#: includes/user.php:311
 #, php-format
 msgid "No %s found."
 msgstr "Aucun %s trouvé."
@@ -2973,11 +2970,6 @@ msgstr "Émetteur du BadgeOS Credly Credit"
 #: includes/widgets/credly-credit-issuer-widget.php:20
 msgid "Credly Profile URL"
 msgstr "URL du Profil Credly"
-
-# @ badgeos
-#: includes/widgets/credly-credit-issuer-widget.php:43
-msgid "Credly Credit Issuer"
-msgstr "Émetteur du Credly Credit (<a href="
 
 # " title="Traduction Approximative">≈</a>)"
 # @ badgeos
@@ -3016,27 +3008,44 @@ msgid "Display only the following Achievement Types:"
 msgstr "Afficher uniquement les Types d'Accomplissement suivants : "
 
 # @ badgeos
-#: includes/widgets/earned-user-achievements-widget.php:81
+#: includes/widgets/earned-user-achievements-widget.php:80
 #, php-format
 msgid "My Total Points: %s"
 msgstr "Mon Total de Points : %s"
 
 # @ badgeos
-#: includes/widgets/earned-user-achievements-widget.php:143
+#: includes/widgets/earned-user-achievements-widget.php:144
 msgid "You must be logged in to view earned achievements"
 msgstr "Vous devez être connecté pour voir les accomplissements gagnés"
 
 # @ badgeos
-#: includes/widgets/earned-user-achievements-widget.php:160
+#: includes/widgets/earned-user-achievements-widget.php:161
 msgid "Error: Sorry, nothing found."
 msgstr "Erreur : Désolé, rien de trouvé."
 
 # @ badgeos
-#: includes/widgets/earned-user-achievements-widget.php:168
+#: includes/widgets/earned-user-achievements-widget.php:169
 msgid "Success: Sent to Credly!"
 msgstr "Succès : Envoyé a Credly !"
 
 # @ badgeos
-#: includes/widgets/earned-user-achievements-widget.php:173
+#: includes/widgets/earned-user-achievements-widget.php:174
 msgid "Error: Sorry, Send to Credly Failed."
 msgstr "Erreur : Désolé, l'envoie à Credly a échoué."
+
+# @ badgeos
+#~ msgid "Insert Shortcode"
+#~ msgstr "Insérer le Shortcode"
+
+# @ badgeos
+#~ msgid "Enable Credly Integration to use the Badge Builder"
+#~ msgstr ""
+#~ "Activer l'intégration avec Credly pour utiliser le Credly Badge Builder"
+
+# @ badgeos
+#~ msgid "Load More"
+#~ msgstr "Charger Plus"
+
+# @ badgeos
+#~ msgid "Credly Credit Issuer"
+#~ msgstr "Émetteur du Credly Credit (<a href="
