@@ -2,7 +2,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BadgeOS\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2015-07-08 18:26-0500\n"
+=======
+"POT-Creation-Date: 2015-08-29 20:44-0500\n"
+>>>>>>> master
 "PO-Revision-Date: 2015-01-13 10:09-0600\n"
 "Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: BadgeOS\n"
@@ -464,27 +468,50 @@ msgstr ""
 msgid "Set default achievement image"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../includes/ajax-functions.php:169
 #: ../includes/shortcodes/badgeos_achievements_list.php:184
 #: ../includes/shortcodes/badgeos_achievements_list.php:187
+=======
+#: ../includes/ajax-functions.php:161
+#: ../includes/shortcodes/badgeos_achievements_list.php:159
+#: ../includes/shortcodes/badgeos_achievements_list.php:162
+#, fuzzy
+>>>>>>> master
 msgid "achievements"
-msgstr ""
+msgstr "Accomplissements"
 
+<<<<<<< HEAD
 #: ../includes/ajax-functions.php:174
+=======
+#: ../includes/ajax-functions.php:166
+>>>>>>> master
 #, php-format
 msgid "No completed %s to display at this time."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../includes/ajax-functions.php:176
+=======
+#: ../includes/ajax-functions.php:168
+>>>>>>> master
 #, php-format
 msgid "No %s to display at this time."
 msgstr ""
 
+<<<<<<< HEAD
 #: ../includes/ajax-functions.php:245
 msgid "Status Updated!"
 msgstr ""
 
 #: ../includes/ajax-functions.php:329 ../includes/content-filters.php:576
+=======
+#: ../includes/ajax-functions.php:237
+msgid "Status Updated!"
+msgstr ""
+
+#: ../includes/ajax-functions.php:321 ../includes/content-filters.php:524
+>>>>>>> master
 #: ../includes/shortcodes/badgeos_nominations.php:26
 #: ../includes/shortcodes/badgeos_submissions.php:26
 msgid "All"
@@ -927,12 +954,20 @@ msgstr ""
 msgid "%1$s on %2$s"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../includes/content-filters.php:789 ../includes/submission-actions.php:189
+=======
+#: ../includes/content-filters.php:737 ../includes/submission-actions.php:189
+>>>>>>> master
 #: ../includes/submission-actions.php:230
 msgid "Approve"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../includes/content-filters.php:790 ../includes/submission-actions.php:190
+=======
+#: ../includes/content-filters.php:738 ../includes/submission-actions.php:190
+>>>>>>> master
 #: ../includes/submission-actions.php:231
 msgid "Deny"
 msgstr ""
@@ -2394,23 +2429,23 @@ msgstr ""
 msgid "Display only the following Achievement Types:"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:81
+#: ../includes/widgets/earned-user-achievements-widget.php:80
 #, php-format
 msgid "My Total Points: %s"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:143
+#: ../includes/widgets/earned-user-achievements-widget.php:144
 msgid "You must be logged in to view earned achievements"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:160
+#: ../includes/widgets/earned-user-achievements-widget.php:161
 msgid "Error: Sorry, nothing found."
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:168
+#: ../includes/widgets/earned-user-achievements-widget.php:169
 msgid "Success: Sent to Credly!"
 msgstr ""
 
-#: ../includes/widgets/earned-user-achievements-widget.php:173
+#: ../includes/widgets/earned-user-achievements-widget.php:174
 msgid "Error: Sorry, Send to Credly Failed."
 msgstr ""
