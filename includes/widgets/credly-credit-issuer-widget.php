@@ -32,17 +32,15 @@ class credly_credit_issuer_widget extends WP_Widget {
 
 	//display the widget
 	function widget( $args, $instance ) {
-		extract( $args );
-
-		echo $before_widget;
+		echo $args['before_widget'];
 
 		//generate the URL
 		$url = ( ! empty( $instance['credly_profile_url'] ) ? esc_url( $instance['credly_profile_url'] ) : 'https://credly.com' );
 
 		//display the badge
-		echo '<p><a href="'. esc_url( $url ) .'" target="_blank"><img src="' .esc_url( $GLOBALS['badgeos']->directory_url .'images/credly-credit-issuer.png' ). '" alt="'.esc_attr_e( 'Credly Credit Issuer', 'badgeos' ) .'" /></a></p>';
+		echo '<p><a href="'. esc_url( $url ) .'" target="_blank"><img src="' . esc_url( $GLOBALS['badgeos']->directory_url . 'images/credly-credit-issuer.png' ) . '" alt="' . esc_attr_e( 'Credly Credit Issuer', 'badgeos' ) . '" /></a></p>';
 
-		echo $after_widget;
+		echo $args['after_widget'];
 	}
 
 }
