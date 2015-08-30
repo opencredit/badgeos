@@ -224,6 +224,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Fixed: PHP variable typo introduced in 1.4.5.
 * Fixed: + marks introduced in Earned User Achievement Widget form output.
 * Fixed: Amended query statement preparation for multisite-based functionality.
+* Fixed: Minor code cleanup in Earned User Achievement Widget.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
@@ -396,6 +397,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Fixed: PHP variable typo introduced in 1.4.5.
 * Fixed: + marks introduced in Earned User Achievement Widget form output.
 * Fixed: Amended query statement preparation for multisite-based functionality.
+* Fixed: Minor code cleanup in Earned User Achievement Widget.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
