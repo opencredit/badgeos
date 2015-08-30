@@ -233,8 +233,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Update: Provided PHP5 compatible widget constructors in preparation of WordPress 4.3 changes.
 
 = 1.4.6 =
-* Fixed PHP variable typo introduced in 1.4.5.
-* Fixed + marks introduced in Earned User Achievement Widget form output.
+* Fixed: PHP variable typo introduced in 1.4.5.
+* Fixed: + marks introduced in Earned User Achievement Widget form output.
+* Fixed: Amended query statement preparation for multisite-based functionality.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
@@ -404,8 +405,9 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Upgrade Notice ==
 
 = 1.4.6 =
-* Fixed PHP variable typo introduced in 1.4.5.
-* Fixed + marks introduced in Earned User Achievement Widget form output.
+* Fixed: PHP variable typo introduced in 1.4.5.
+* Fixed: + marks introduced in Earned User Achievement Widget form output.
+* Fixed: Amended query statement preparation for multisite-based functionality.
 
 = 1.4.5 =
 * Fixed: Prevent false positives on "users who have earned achievement" listings.
