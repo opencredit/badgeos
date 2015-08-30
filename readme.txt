@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 4.2
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
