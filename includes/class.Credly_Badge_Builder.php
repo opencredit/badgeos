@@ -133,7 +133,7 @@ class Credly_Badge_Builder {
 			'link_text'     => __( 'Use Credly Badge Builder', 'badgeos' ),
 		) );
 		$args = wp_parse_args( $args, $defaults );
-		$output = '';
+
 		// Build our link tag
 		if ( $this->credly_api_key ) {
 			$link = admin_url( 'admin-ajax.php?action=badge-builder-generate-link&attachment_id=' . $args['attachment_id'] . '&TB_iframe=true' );
