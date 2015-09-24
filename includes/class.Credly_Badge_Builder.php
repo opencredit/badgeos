@@ -139,8 +139,9 @@ class Credly_Badge_Builder {
 			$link = admin_url( 'admin-ajax.php?action=badge-builder-generate-link&attachment_id=' . $args['attachment_id'] . '&TB_iframe=true' );
 		} else {
 			$link = $link = '#TB_inline?width=' . $args['width'] . '&height=' . $args['width'] . '&inlineId=teaser';
-			$output = '<a href="' . $link . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '" data-attachment_id="' . $args['attachment_id'] . '">' . $args['link_text'] . '</a>';
 		}
+
+		$output = '<a href="' . $link . '" class="thickbox badge-builder-link" data-width="' . $args['width'] . '" data-height="' . $args['height'] . '" data-attachment_id="' . $args['attachment_id'] . '">' . $args['link_text'] . '</a>';
 		// Include teaser output if we have no API key
 		if ( ! $this->credly_api_key ) {
 			$output .= '<div id="teaser" style="display:none;"><a href="' . admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) . '"><img src="' . $GLOBALS['badgeos']->directory_url . 'images/badge-builder-teaser.png" alt="' . esc_attr__( 'Enable Credly Integration to use the Badge Builder', 'badgeos' ) . '"></a></div>';
