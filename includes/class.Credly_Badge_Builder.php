@@ -194,7 +194,7 @@ class Credly_Badge_Builder {
 		$attachment_id = $this->media_sideload_image( $image, $post_id );
 
 		// Set as featured image
-		set_post_thumbnail( $post_id, $attachment_id, __( 'Badge created with Credly Badge Builder', 'badgeos' ) );
+		set_post_thumbnail( $post_id, $attachment_id );
 
 		// Store badge builder meta
 		$this->update_badge_meta( $attachment_id, $badge_meta, $icon_meta );
