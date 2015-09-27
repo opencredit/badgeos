@@ -134,6 +134,7 @@ class BadgeOS {
 	 */
 	function include_cmb() {
 		require_once( $this->directory_path . 'includes/cmb/load.php' );
+		require_once( $this->directory_path . 'includes/cmb2/init.php' );
 	}
 
 	/**
