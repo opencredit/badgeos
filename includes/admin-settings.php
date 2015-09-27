@@ -66,6 +66,7 @@ function badgeos_settings_validate( $input = '' ) {
  */
 function badgeos_credly_settings_validate( $options = array() ) {
 
+    $clean_options = array();
 	// If attempting to retrieve an api key from credly
 	if (
 		empty( $options['api_key'] )
@@ -170,8 +171,8 @@ function badgeos_credly_get_api_key_error( $error = '' ) {
 	update_option( 'credly_api_key_error', $error );
 	return false;
 }
-
 add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
+
 /**
  * Displays error messages from Credly API key retrieval
  * @since  1.0.0
@@ -179,7 +180,7 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
  */
 function badgeos_credly_api_key_errors() {
 
-	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) ) {
+	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || ! ( $has_notice = get_option( 'credly_api_key_error' ) ) ) {
 		return;
 	}
 
@@ -429,7 +430,7 @@ function badgeos_help_support_page() { ?>
 function badgeos_credly_options_page() {
 
 	/**
-	 * @var $badgeos_credly BadgeOS_Credly
+	 * @var class $badgeos_credly BadgeOS_Credly
 	 */
 	global $badgeos_credly;
 
