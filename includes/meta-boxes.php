@@ -219,6 +219,51 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 }
 add_filter( 'cmb_meta_boxes', 'badgeos_custom_metaboxes' );
 
+function badgeos_custom_metaboxes_cmb2() {
+
+    // Start with an underscore to hide fields from custom fields list
+    $prefix = '_badgeos_';
+
+    // Grab our achievement types as an array
+    $achievement_types = badgeos_get_achievement_types_slugs();
+
+    // Setup our $post_id, if available
+    $post_id = isset( $_GET['post'] ) ? $_GET['post'] : 0;
+
+    $badgeos_achievement_types_metaboxes = new_cmb2_box( array(
+        'id'           => $prefix . 'achievement_type_data',
+        'title'        => __( 'Achievement Type Data', 'badgeos' ),
+        'object_types' => array( 'achievement-type', ),
+    ) );
+
+    $badgeos_achievement_types_metaboxes->add_field( array(
+        'name'       => __( 'Plural Name', 'badgeos' ),
+        'desc'       => __( 'The plural name for this achievement (Title is singular name).', 'badgeos' ),
+        'id'         => $prefix . 'plural_name',
+        'type'       => 'text_medium',
+    ) );
+
+    $badgeos_achievement_types_metaboxes->add_field( array(
+        'name' => __( 'Show in Menu?', 'badgeos' ),
+        'desc' => __( 'Yes, show this achievement in the BadgeOS menu.', 'badgeos' ),
+        'id'   => $prefix . 'show_in_menu',
+        'type' => 'checkbox',
+    ) );
+
+    $badgeos_achievement_types_metaboxes->add_field( array(
+        'name' => __( 'Default Badge Image', 'badgeos' ),
+        'desc' => sprintf(
+            __( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.',
+                'badgeos' ),
+            badgeos_get_badge_builder_link( [ 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ] )
+        ),
+        'id'   => $prefix . 'upload_badge_image_achievement',
+        'type' => 'title',
+    ) );
+}
+
+add_filter( 'cmb2_init', 'badgeos_custom_metaboxes_cmb2' );
+
 /**
  * Render a text-only field type for our CMB integration.
  *
