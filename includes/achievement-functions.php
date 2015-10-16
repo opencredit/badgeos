@@ -80,7 +80,7 @@ function badgeos_get_achievements( $args = array() ) {
  * @since  1.0.0
  * @param  string $join         The query "join" string
  * @param  object $query_object The complete query object
- * @return string 				The updated "join" string
+ * @return string               The updated "join" string
  */
 function badgeos_get_achievements_children_join( $join = '', $query_object = null ) {
 	global $wpdb;
@@ -97,7 +97,7 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  * @since  1.0.0
  * @param  string $where        The query "where" string
  * @param  object $query_object The complete query object
- * @return string 				The updated query "where" string
+ * @return string               The updated query "where" string
  */
 function badgeos_get_achievements_children_where( $where = '', $query_object ) {
 	global $wpdb;
@@ -119,7 +119,7 @@ function badgeos_get_achievements_children_where( $where = '', $query_object ) {
  *
  * @since  1.0.0
  * @param  string $orderby The query "orderby" string
- * @return string 		   The updated "orderby" string
+ * @return string          The updated "orderby" string
  */
 function badgeos_get_achievements_children_orderby( $orderby = '' ) {
 	return $orderby = 'p2pm2.meta_value ASC';
