@@ -4,7 +4,20 @@ jQuery(document).ready(function($) {
 	window.addEventListener( 'message', function(e) {
 		// Only continue if data is from credly.com
 		if ( "https://credly.com" === e.origin && "object" === typeof( data = e.data ) ) {
-			var win = window.dialogArguments || opener || parent || top;
+			var win;
+
+			// make sure WPSetThumbnailHTML is set on the object assigned to win
+			if ( window.dialogArguments && window.dialogArguments.WPSetThumbnailHTML ) {
+				win = window.dialogArguments;
+			} else if ( opener && opener.WPSetThumbnailHTML ) {
+				win = opener;
+			} else if ( parent && parent.WPSetThumbnailHTML ) {
+				win = parent;
+			} else if ( top && top.WPSetThumbnailHTML ) {
+				win = top;
+			} else {
+				// ruh roh!
+			}
 
 			// Remove the badge builder thickbox
 			tb_remove();
