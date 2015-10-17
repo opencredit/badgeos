@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 <<<<<<< HEAD
 "POT-Creation-Date: 2015-07-08 18:26-0500\n"
-"PO-Revision-Date: 2015-07-09 17:24-0500\n"
+"PO-Revision-Date: 2015-09-15 16:54-0500\n"
 "Last-Translator: Julien Lamarche <jlam@credil.org>\n"
 =======
 "POT-Creation-Date: 2015-08-29 20:44-0500\n"
