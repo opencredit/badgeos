@@ -21,10 +21,6 @@
  */
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
 
-	if ( empty( $object_id ) ) {
-		return;
-	}
-
 	// Get the current user if no ID specified
 	if ( empty( $user_id ) )
 		$user_id = get_current_user_id();
