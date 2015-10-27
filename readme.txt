@@ -232,6 +232,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * Fix: Prevent media library "litter" with default thumbs up graphic being added multiple times. Now will check for existing copy of graphic before downloading new.
 * Update: Provided PHP5 compatible widget constructors in preparation of WordPress 4.3 changes.
 * Fix: Corrected typo inside default parameters for badgeos_get_achievements(). Props X-Raym.
+* Fix: Remove empty() check that prevented point updates from being logged.
 
 = 1.4.6 =
 * Fixed: PHP variable typo introduced in 1.4.5.
