@@ -108,8 +108,10 @@ function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $
 
 		// If the user just earned the badge, though, don't let them earn it again
 		// This prevents an infinite loop if the badge has no maximum earnings limit
-		if ( $last_activity >= time('-2 seconds') )
-			$return = false;
+		$minimum_time = time() - 2;
+		if ( $last_activity >= $minimum_time ) {
+		    $return = false;
+		}
 	}
 
 	// Return our eligibility status
