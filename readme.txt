@@ -222,6 +222,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.7 =
 * Fixed: Remove empty() check that prevented point updates from being logged.
+* Fixed: Corrected incorrect usage of PHP time() function.
 
 = 1.4.6 =
 * Fixed: PHP variable typo introduced in 1.4.5.
@@ -398,6 +399,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 = 1.4.7 =
 * Fixed: Remove empty() check that prevented point updates from being logged.
+* Fixed: Corrected incorrect usage of PHP time() function.
 
 = 1.4.6 =
 * Fixed: PHP variable typo introduced in 1.4.5.
