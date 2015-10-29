@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, credly, webdevstudios, williamsba1, rzen, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 4.2
-Stable tag: 1.4.6
+Tested up to: 4.3.1
+Stable tag: 1.4.7
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -220,6 +220,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 1.4.7 =
+* Fixed: Remove empty() check that prevented point updates from being logged.
+* Fixed: Corrected incorrect usage of PHP time() function.
+
 = 1.4.6 =
 * Fixed: PHP variable typo introduced in 1.4.5.
 * Fixed: + marks introduced in Earned User Achievement Widget form output.
@@ -392,6 +396,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * BadgeOS says "hello world", earns "Hello World" badge.
 
 == Upgrade Notice ==
+
+= 1.4.7 =
+* Fixed: Remove empty() check that prevented point updates from being logged.
+* Fixed: Corrected incorrect usage of PHP time() function.
 
 = 1.4.6 =
 * Fixed: PHP variable typo introduced in 1.4.5.
