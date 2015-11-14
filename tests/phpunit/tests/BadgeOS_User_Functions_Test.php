@@ -119,7 +119,19 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 	 * @covers ::badgeos_can_notify_user()
 	 */
 	public function test_badgeos_can_notify_user() {
+		// Nothing has been set yet.
+		$no_setting = get_user_meta( $this->user_id, '_badgeos_can_notify_user', true );
+		$this->assertEmpty( $no_setting );
 
+		// Can notify
+		update_user_meta( $this->user_id, '_badgeos_can_notify_user', 'true' );
+		$can_notify = badgeos_can_notify_user( $this->user_id );
+		$this->assertTrue( $can_notify );
+
+		// Can not notify
+		update_user_meta( $this->user_id, '_badgeos_can_notify_user', 'false' );
+		$can_notify = badgeos_can_notify_user( $this->user_id );
+		$this->assertFalse( $can_notify );
 	}
 
 	/**
