@@ -16,7 +16,6 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for single site installs.
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create_non_ms() {
@@ -28,7 +27,6 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for multisite installs
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create_ms() {
@@ -46,7 +44,7 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_get_user_achievements()
+	 * @covers ::badgeos_get_user_achievements()
 	 */
 	public function test_badgeos_get_user_achievements() {
 
@@ -59,7 +57,7 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 		$this->assertTrue( badgeos_is_achievement( $achievement_id ) );
 
 		badgeos_award_achievement_to_user( $achievement_id, $this->user_id );
-		$args = array(
+		$args         = array(
 			'user_id' => $this->user_id,
 		);
 		$achievements = badgeos_get_user_achievements( $args );
@@ -69,7 +67,7 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_update_user_achievements()
+	 * @covers ::badgeos_update_user_achievements()
 	 */
 	public function test_badgeos_update_user_achievements() {
 
@@ -85,38 +83,40 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_user_profile_data()
+	 * @covers ::badgeos_user_profile_data()
 	 */
 	public function test_badgeos_user_profile_data() {
 
 	}
 
 	/**
-	 * @covers badgeos_save_uer_profile_data()
+	 * @covers ::badgeos_save_user_profile_fields()
 	 */
-	public function test_badgeos_save_user_profile_data() {
+	public function test_badgeos_save_user_profile_fields() {
 
 	}
 
 	/**
-	 * @covers badgeos_profile_award_achievement()
+	 * @covers ::badgeos_profile_award_achievement()
 	 */
 	public function test_badgeos_profile_award_achievement() {
 
 	}
 
 	/**
-	 * @covers badgeos_process_user_data()
+	 * @covers ::badgeos_process_user_data()
 	 */
-	public function test_badgeos_process_user_data() {}
+	public function test_badgeos_process_user_data() {
+	}
 
 	/**
-	 * @covers badgeos_get_network_achievement_types_for_user()
+	 * @covers ::badgeos_get_network_achievement_types_for_user()
 	 */
-	public function test_badgeos_get_network_achievement_types_for_user() {}
+	public function test_badgeos_get_network_achievement_types_for_user() {
+	}
 
 	/**
-	 * @covers badgeos_can_notify_user()
+	 * @covers ::badgeos_can_notify_user()
 	 */
 	public function test_badgeos_can_notify_user() {
 
@@ -124,7 +124,6 @@ class BadgeOS_User_Functions_Test extends WP_UnitTestCase {
 
 	/**
 	 * Clean up our post types.
-	 *
 	 * @after
 	 */
 	public function test_badgeos_post_types_cleanup() {

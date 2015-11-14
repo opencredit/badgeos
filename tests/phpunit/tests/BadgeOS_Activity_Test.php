@@ -44,7 +44,7 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_achievement_last_user_activity()
+	 * @covers ::badgeos_achievement_last_user_activity()
 	 */
 	public function test_badgeos_achievement_last_user_activity_empty() {
 		$user_id = $this->factory->user->create();
@@ -60,7 +60,7 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_achievement_last_user_activity()
+	 * @covers ::badgeos_achievement_last_user_activity()
 	 */
 	public function test_badgeos_achievement_last_user_activity() {
 		$user_id = $this->factory->user->create();
@@ -76,7 +76,7 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_user_get_active_achievements()
+	 * @covers ::badgeos_user_get_active_achievements()
 	 */
 	public function test_badgeos_user_get_active_achievements_empty() {
 		$user_id = $this->factory->user->create();
@@ -88,7 +88,7 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 
 	}
 	/**
-	 * @covers badgeos_user_get_active_achievements()
+	 * @covers ::badgeos_user_get_active_achievements()
 	 */
 	public function test_badgeos_user_get_active_achievements() {
 
@@ -97,6 +97,13 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 		badgeos_register_post_types();
 
 		$achievement_id = $this->factory->post->create( array( 'post_title' => 'We are #1', 'post_type' => 'trophy' ) );
+
+		badgeos_user_add_active_achievement( $user_id, $achievement_id );
+
+		$activity = badgeos_achievement_last_user_activity( $achievement_id, $user_id );
+		$this->assertTrue( is_int( $activity ) );
+		$this->assertNotEquals ( 0, $activity );
+
 		# Used for equals assertion
 		$achievement_type = get_post_type( $achievement_id );
 
@@ -122,32 +129,32 @@ class BadgeOS_Activity_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_user_update_active_achievements()
+	 * @covers ::badgeos_user_update_active_achievements()
 	 */
 	public function test_badgeos_user_update_active_achievements() {}
 
 	/**
-	 * @covers badgeos_user_get_active_achievement()
+	 * @covers ::badgeos_user_get_active_achievement()
 	 */
 	public function test_badgeos_user_get_active_achievement() {}
 
 	/**
-	 * @covers badgeos_user_add_active_achievement()
+	 * @covers ::badgeos_user_add_active_achievement()
 	 */
 	public function test_badgeos_user_add_active_achievement() {}
 
 	/**
-	 * @covers badgeos_user_update_active_achievement()
+	 * @covers ::badgeos_user_update_active_achievement()
 	 */
 	public function test_badgeos_user_update_active_achievement() {}
 
 	/**
-	 * @covers badgeos_user_delete_active_achievement()
+	 * @covers ::badgeos_user_delete_active_achievement()
 	 */
 	public function test_badgeos_user_delete_active_achievement() {}
 
 	/**
-	 * @covers badgeos_user_update_active_achievement_on_earnings()
+	 * @covers ::badgeos_user_update_active_achievement_on_earnings()
 	 */
 	public function test_badgeos_user_update_active_achievement_on_earnings() {}
 }

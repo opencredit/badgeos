@@ -12,7 +12,6 @@ class BadgeOS_Post_Types_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for single site installs.
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create() {
@@ -26,7 +25,6 @@ class BadgeOS_Post_Types_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for multisite installs
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create_ms() {
@@ -44,7 +42,7 @@ class BadgeOS_Post_Types_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_register_achievement_type()
+	 * @covers ::badgeos_register_achievement_type()
 	 */
 	public function test_badgeos_register_achievement_type() {
 		global $badgeos;
@@ -61,14 +59,14 @@ class BadgeOS_Post_Types_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_register_achievement_type_cpt()
+	 * @covers ::badgeos_register_achievement_type_cpt()
 	 */
 	public function test_badgeos_register_achievement_type_cpt() {
 		#badgeos_register_achievement_type_cpt
 	}
 
 	/**
-	 * @covers badgeos_register_post_types()
+	 * @covers ::badgeos_register_post_types()
 	 */
 	public function test_badgeos_register_post_types() {
 
@@ -90,7 +88,6 @@ class BadgeOS_Post_Types_Test extends WP_UnitTestCase {
 
 	/**
 	 * Clean up our post types.
-	 *
 	 * @after
 	 */
 	public function test_badgeos_post_types_cleanup() {

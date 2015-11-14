@@ -12,7 +12,6 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for single site installs.
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create_non_ms() {
@@ -24,7 +23,6 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 
 	/**
 	 * Set up our default post type for multisite installs
-	 *
 	 * @before
 	 */
 	public function test_badgeos_achievement_type_create_ms() {
@@ -42,42 +40,49 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_save_nomination_data()
+	 * @covers ::badgeos_save_nomination_data()
 	 */
-	public function test_badgeos_save_nomination_data() {}
+	public function test_badgeos_save_nomination_data() {
+	}
 
 	/**
-	 * @covers badgeos_create_nomination()
+	 * @covers ::badgeos_create_nomination()
 	 */
-	public function test_badgeos_create_nomination() {}
+	public function test_badgeos_create_nomination() {
+	}
 
 	/**
-	 * @covers badgeos_process_submission_review()
+	 * @covers ::badgeos_process_submission_review()
 	 */
-	public function test_badgeos_process_submission_review() {}
+	public function test_badgeos_process_submission_review() {
+	}
 
 	/**
-	 * @covers badgeos_save_submission_data()
+	 * @covers ::badgeos_save_submission_data()
 	 */
-	public function test_badgeos_save_submission_data() {}
+	public function test_badgeos_save_submission_data() {
+	}
 
 	/**
-	 * @covers badgeos_create_submission()
+	 * @covers ::badgeos_create_submission()
 	 */
-	public function test_badgeos_create_submission() {}
+	public function test_badgeos_create_submission() {
+	}
 
 	/**
-	 * @covers badgeos_save_comment_data()
+	 * @covers ::badgeos_save_comment_data()
 	 */
-	public function test_badgeos_save_comment_data() {}
+	public function test_badgeos_save_comment_data() {
+	}
 
 	/**
-	 * @covers badgeos_get_comments_for_submission()
+	 * @covers ::badgeos_get_comments_for_submission()
 	 */
-	public function test_badgeos_get_comments_for_submission() {}
+	public function test_badgeos_get_comments_for_submission() {
+	}
 
 	/**
-	 * @covers badgeos_is_submission_auto_approved()
+	 * @covers ::badgeos_is_submission_auto_approved()
 	 */
 	public function test_badgeos_is_submission_auto_approved() {
 
@@ -106,7 +111,7 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_check_if_user_has_feedback()
+	 * @covers ::badgeos_check_if_user_has_feedback()
 	 */
 	public function test_badgeos_check_if_user_has_feedback() {
 
@@ -116,7 +121,7 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_check_if_user_has_submission()
+	 * @covers ::badgeos_check_if_user_has_submission()
 	 */
 	public function test_badgeos_check_if_user_has_submission() {
 
@@ -126,7 +131,7 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_check_if_user_has_nomination()
+	 * @covers ::badgeos_check_if_user_has_nomination()
 	 */
 	public function test_badgeos_check_if_user_has_nomination() {
 
@@ -136,7 +141,7 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_user_has_access_to_submission_form()
+	 * @covers ::badgeos_user_has_access_to_submission_form()
 	 */
 	public function test_badgeos_user_has_access_to_submission_form() {
 		# Check logged out, check exceeded max earnings, check without pending submissions, check with pending submissions
@@ -146,7 +151,7 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_get_feedback()
+	 * @covers ::badgeos_get_feedback()
 	 */
 	public function test_badgeos_get_feedback() {
 		# Check if string, we're getting html potentially
@@ -156,46 +161,47 @@ class BadgeOS_Feedback_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_get_submissions()
+	 * @covers ::badgeos_get_submissions()
 	 */
 	public function test_badgeos_get_submissions() {
 		#follow test_badgeos_get_feedback with "submissions" specifically set.
 	}
 
 	/**
-	 * @covers badgeos_get_user_submissions()
+	 * @covers ::badgeos_get_user_submissions()
 	 */
 	public function test_badgeos_get_user_submissions() {
 		# Check not empty.
 	}
 
 	/**
-	 * @covers badgeos_get_user_nominations()
+	 * @covers ::badgeos_get_user_nominations()
 	 */
 	public function test_badgeos_get_user_nominations() {
 		# Check not empty.
 	}
 
 	/**
-	 * @covers badgeos_get_submission_attachments()
+	 * @covers ::badgeos_get_submission_attachments()
 	 */
 	public function test_badgeos_get_submission_attachments() {
 		# check contains '<h4>' . sprintf( __( 'Submitted Attachments:', 'badgeos' ), $submission_id ) . '</h4>' . '<ul class="badgeos-attachments-list">';
 	}
 
 	/**
-	 * @covers badgeos_set_submission_status()
+	 * @covers ::badgeos_set_submission_status()
 	 */
-	public function test_badgeos_set_submission_status() {}
+	public function test_badgeos_set_submission_status() {
+	}
 
 	/**
-	 * @covers badgeos_parse_feedback_args()
+	 * @covers ::badgeos_parse_feedback_args()
 	 */
-	public function test_badgeos_parse_feedback_args() {}
+	public function test_badgeos_parse_feedback_args() {
+	}
 
 	/**
 	 * Clean up our post types.
-	 *
 	 * @after
 	 */
 	public function test_badgeos_post_types_cleanup() {
