@@ -14,7 +14,7 @@ class BadgeOS_Triggers_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @cover badgeos_get_activity_triggers()
+	 * @covers ::badgeos_get_activity_triggers()
 	 */
 	public function test_badgeos_get_activity_triggers() {
 
@@ -39,47 +39,49 @@ class BadgeOS_Triggers_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @cover badgeos_load_activity_triggers()
+	 * @covers ::badgeos_load_activity_triggers()
 	 */
 	public function test_badgeos_load_activity_triggers() {}
 
 	/**
-	 * @cover badgeos_trigger_event()
+	 * @covers ::badgeos_trigger_event()
 	 */
 	public function test_badgeos_trigger_event() {}
 
 	/**
-	 * @covers badgeos_trigger_get_user_id()
+	 * @covers ::badgeos_trigger_get_user_id()
 	 */
 	public function test_badgeos_trigger_get_user_id() {}
 
 	/**
-	 * @cover badgeos_get_user_triggers()
+	 * @covers ::badgeos_get_user_triggers()
 	 */
 	public function test_badgeos_get_user_triggers() {
 		$triggers = get_user_meta( $this->user_id, '_badgeos_triggered_triggers', true );
 	}
 
 	/**
-	 * @cover badgeos_get_user_trigger_count()
+	 * @covers ::badgeos_get_user_trigger_count()
 	 */
 	public function test_badgeos_get_user_trigger_count() {}
 
 	/**
-	 * @cover badgeos_update_user_trigger_count()
+	 * @covers ::badgeos_update_user_trigger_count()
 	 */
 	public function test_badgeos_update_user_trigger_count() {}
 
 	/**
-	 * @cover badgeos_reset_user_trigger_count()
+	 * @covers ::badgeos_reset_user_trigger_count()
 	 */
 	public function test_badgeos_reset_user_trigger_count() {}
 
 	/**
-	 * @cover badgeos_publish_listener()
+	 * @covers ::badgeos_publish_listener()
 	 */
 	public function test_badgeos_publish_listener() {}
 
-	/** @covers badgeos_approved_comment_listener */
+	/**
+	 * @covers ::badgeos_approved_comment_listener
+	 */
 	public function test_badgeos_approved_comment_listener() {}
 }

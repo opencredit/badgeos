@@ -45,23 +45,23 @@ class BadgeOS_Credly_Integration_Test extends WP_UnitTestCase {
 	 */
 	public function test_BadgeOS_Credly_credly_existing_category_output() {}
 
-	/**
-	 * @covers BadgeOS_Credly::credly_check_api_key()
+	/*
+	 * No cover annotation because these would not be actual methods.
 	 */
 	public function test_BadgeOS_Credly_credly_check_api_key() {}
 
-	/**
-	 * @covers BadgeOS_Credly::ajax_credly_check_api_key()
+	/*
+	 * No cover annotation because these would not be actual methods.
 	 */
 	public function test_BadgeOS_Credly_ajax_credly_check_api_key() {}
 
-	/**
-	 * @covers BadgeOS_Credly::credly_check_user()
+	/*
+	 * No cover annotation because these would not be actual methods.
 	 */
 	public function test_BadgeOS_Credly_credly_check_user() {}
 
-	/**
-	 * @covers BadgeOS_Credly::ajax_credly_check_credly_user()
+	/*
+	 * No cover annotation because these would not be actual methods.
 	 */
 	public function test_BadgeOS_Credly_ajax_credly_check_credly_user() {}
 

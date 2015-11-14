@@ -11,7 +11,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_get_users_points()
+	 * @covers ::badgeos_get_users_points()
 	 */
 	public function test_badgeos_get_users_points() {
 
@@ -25,7 +25,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_update_users_points()
+	 * @covers ::badgeos_update_users_points()
 	 */
 	public function test_badgeos_update_users_points_increase() {
 
@@ -41,7 +41,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_update_users_points()
+	 * @covers ::badgeos_update_users_points()
 	 */
 	public function test_badgeos_update_users_points_decrease() {
 
@@ -57,7 +57,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_update_users_points()
+	 * @covers ::badgeos_update_users_points()
 	 */
 	public function test_badgeos_update_users_points_decrease_to_nonnegative() {
 
@@ -73,7 +73,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_update_users_points()
+	 * @covers ::badgeos_update_users_points()
 	 */
 	public function test_badgeos_update_users_points_as_admin() {
 
@@ -88,7 +88,7 @@ class BadgeOS_Points_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_award_user_points()
+	 * @covers ::badgeos_award_user_points()
 	 */
 	public function test_badgeos_award_user_points() {
 
