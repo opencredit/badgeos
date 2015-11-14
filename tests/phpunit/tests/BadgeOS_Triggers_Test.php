@@ -41,7 +41,24 @@ class BadgeOS_Triggers_Test extends WP_UnitTestCase {
 	/**
 	 * @covers ::badgeos_load_activity_triggers()
 	 */
-	public function test_badgeos_load_activity_triggers() {}
+	public function test_badgeos_load_activity_triggers() {
+		$this->markTestIncomplete(
+				'Needs further work with unlock hooks.'
+		);
+
+		global $wp_filter;
+		$triggers = badgeos_get_activity_triggers();
+		badgeos_load_activity_triggers();
+
+		foreach ( $triggers as $trigger => $label ) {
+			$this->assertEquals( '10', has_action( $trigger, 'badgeos_trigger_event' ) );
+		}
+
+		foreach( badgeos_get_achievement_types_slugs() as $achievement_type ) {
+			$this->assertArrayHasKey( 'badgeos_unlock_' . $achievement_type, $wp_filter );
+			$this->assertArrayHasKey( 'badgeos_unlock_all_' . $achievement_type, $wp_filter );
+		}
+	}
 
 	/**
 	 * @covers ::badgeos_trigger_event()
