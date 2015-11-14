@@ -105,21 +105,21 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_get_directory_path()
+	 * @covers ::badgeos_get_directory_path()
 	 */
 	public function test_badgeos_get_directory_path_matches() {
 		$this->assertSame( BOS_DIRECTORY_PATH, badgeos_get_directory_path() );
 	}
 
 	/**
-	 * @covers badgeos_get_directory_url()
+	 * @covers ::badgeos_get_directory_url()
 	 */
 	public function test_badgeos_get_directory_url_matches() {
 		$this->assertSame( plugins_url( BOS_DIRECTORY_PATH ), badgeos_get_directory_url() );
 	}
 
 	/**
-	 * @covers badgeos_is_debug_mode()
+	 * @covers ::badgeos_is_debug_mode()
 	 */
 	public function test_badgeos_is_debug_mode_true() {
 
@@ -132,7 +132,7 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers badgeos_is_debug_mode()
+	 * @covers ::badgeos_is_debug_mode()
 	 */
 	public function test_badgeos_is_debug_mode_false() {
 
