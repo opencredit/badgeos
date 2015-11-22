@@ -655,10 +655,14 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 /**
  * Render a given submission
  *
- * @since  1.1.0
- * @param  object $submission A submission post object
- * @param  array  $args       Additional args for content options
- * @return string             Concatenated output
+ * Used in submission-filters.php by way of badgeos_render_{$feedback->post_type}
+ * Not called by function name directly if trying to search codebase via ack/grep.
+ *
+ * @since 1.1.0
+ *
+ * @param object $submission A submission post object.
+ * @param array  $args       Additional args for content options.
+ * @return string Concatenated output.
  */
 function badgeos_render_submission( $submission = null, $args = array() ) {
 	global $post;
