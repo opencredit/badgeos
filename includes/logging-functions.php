@@ -86,3 +86,39 @@ function badgeos_log_achievement_id( $log_post_id, $object_id ) {
 	update_post_meta( $log_post_id, '_badgeos_log_achievement_id', $object_id );
 }
 add_action( 'badgeos_create_log_entry', 'badgeos_log_achievement_id', 10, 2 );
+
+function badgeos_get_log_dir_path() {
+	$upload_dir = wp_upload_dir();
+
+	return $upload_dir['basedir'] . '/badgeos-logs/';
+}
+
+function badgeos_get_log_file_path( $handle ) {
+	$log_dir = badgeos_get_log_dir_path();
+
+	return trailingslashit( $log_dir ) . $handle . '-' . sanitize_file_name( wp_hash( $handle ) ) . '.log';
+}
+
+/**
+ * Create files/directories
+ */
+function badgeos_create_folders() {
+	$log_dir = badgeos_get_log_dir_path();
+
+	$files = array(
+		array(
+			'base'    => $log_dir,
+			'file'    => 'index.html',
+			'content' => ''
+		)
+	);
+
+	foreach ( $files as $file ) {
+		if ( wp_mkdir_p( $file['base'] ) && ! file_exists( trailingslashit( $file['base'] ) . $file['file'] ) ) {
+			if ( $file_handle = @fopen( trailingslashit( $file['base'] ) . $file['file'], 'w' ) ) {
+				fwrite( $file_handle, $file['content'] );
+				fclose( $file_handle );
+			}
+		}
+	}
+}
