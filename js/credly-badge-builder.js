@@ -15,8 +15,6 @@ jQuery(document).ready(function($) {
 				win = parent;
 			} else if ( top && top.WPSetThumbnailHTML ) {
 				win = top;
-			} else {
-				// ruh roh!
 			}
 
 			// Remove the badge builder thickbox.
