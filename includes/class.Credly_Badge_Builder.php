@@ -92,10 +92,15 @@ class Credly_Badge_Builder {
 	 */
 	public function generate_link( $args = array() ) {
 
-		// Setup and parse our default args
+		/**
+		 * Filters the Badge Builder generate link defaults.
+		 *
+		 * @param array $value Array of default values for link.
+		 */
 		$defaults = apply_filters( 'credly_badge_builder_generate_link_defaults', array(
 			'continue'  => null,
 		) );
+		// Setup and parse our default args
 		$args = wp_parse_args( $args, $defaults );
 
 		if ( $this->credly_api_key ) {
@@ -124,7 +129,11 @@ class Credly_Badge_Builder {
 	public function render_link( $args = array() ) {
 		global $post;
 
-		// Setup and parse our default args
+		/**
+		 * Filters the Badge Builder render link defaults.
+		 *
+		 * @param array $value Array of render link defaults.
+		 */
 		$defaults = apply_filters( 'credly_badge_builder_render_link_defaults', array(
 			'attachment_id' => $post ? get_post_thumbnail_id() : 0,
 			'width'         => '960',
@@ -132,6 +141,7 @@ class Credly_Badge_Builder {
 			'continue'      => null,
 			'link_text'     => __( 'Use Credly Badge Builder', 'badgeos' ),
 		) );
+		// Setup and parse our default args
 		$args = wp_parse_args( $args, $defaults );
 
 		// Build our link tag
