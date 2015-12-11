@@ -1,12 +1,12 @@
 jQuery(document).ready(function($) {
 
-	// Listen for Credly Badge Builder events
+	// Listen for Credly Badge Builder events.
 	window.addEventListener( 'message', function(e) {
-		// Only continue if data is from credly.com
+		// Only continue if data is from credly.com.
 		if ( "https://credly.com" === e.origin && "object" === typeof( data = e.data ) ) {
 			var win;
 
-			// make sure WPSetThumbnailHTML is set on the object assigned to win
+			// Make sure WPSetThumbnailHTML is set on the object assigned to win.
 			if ( window.dialogArguments && window.dialogArguments.WPSetThumbnailHTML ) {
 				win = window.dialogArguments;
 			} else if ( opener && opener.WPSetThumbnailHTML ) {
@@ -19,12 +19,12 @@ jQuery(document).ready(function($) {
 				// ruh roh!
 			}
 
-			// Remove the badge builder thickbox
+			// Remove the badge builder thickbox.
 			tb_remove();
 
 			win.WPSetThumbnailHTML('<p>'+credlyBadgeBuilder.updating_image+'</p>');
 
-			// Send the badge data along for uploading
+			// Send the badge data along for uploading.
 			$.ajax({
 				url: ajaxurl,
 				data: {
@@ -37,25 +37,25 @@ jQuery(document).ready(function($) {
 				},
 				dataType: 'json',
 				success: function( response ) {
-					// Update the featured image metabox
+					// Update the featured image metabox.
 					win.WPSetThumbnailHTML(response.data.metabox_html);
 				}
 			});
 		}
 	});
 
-	// Resize ThickBox when a badge builder link is clicked
+	// Resize ThickBox when a badge builder link is clicked.
 	$('body').on( 'click', '.badge-builder-link', function(e) {
 		e.preventDefault();
 		badge_builder_setup_thickbox( $(this) );
 	});
 
-	// Resize badge builder thickbox on window resize
+	// Resize badge builder thickbox on window resize.
 	$(window).resize(function() {
 		badge_builder_resize_tb( $('.badge-builder-link') );
 	});
 
-	// Add a custom class to our badge builder thickbox, then resize
+	// Add a custom class to our badge builder thickbox, then resize.
 	function badge_builder_setup_thickbox( link ) {
 		setTimeout( function() {
 			$('#TB_window').addClass('badge-builder-thickbox');
@@ -63,7 +63,7 @@ jQuery(document).ready(function($) {
 		}, 0 );
 	}
 
-	// Force badge builder thickboxes to our specified width/height
+	// Force badge builder thickboxes to our specified width/height.
 	function badge_builder_resize_tb( link ) {
 		setTimeout( function() {
 
