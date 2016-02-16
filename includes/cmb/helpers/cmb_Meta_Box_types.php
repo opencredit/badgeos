@@ -231,7 +231,8 @@ class cmb_Meta_Box_types {
 
 		// escaping function passed in?
 		$func       = is_string( $func ) && ! empty( $func ) ? $func : 'esc_attr';
-		$meta_value = ! empty( $meta_value ) ? $meta_value : $field['default'];
+		// do not treat '0' as empty
+		$meta_value = ! empty( $meta_value ) || '0' == $meta_value  ? $meta_value : $field['default'];
 
 		return call_user_func( $func, $meta_value );
 	}

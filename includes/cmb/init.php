@@ -581,7 +581,8 @@ class cmb_Meta_Box {
 						self::update_data( $add_new, $name, true );
 					}
 				}
-			} elseif ( ! empty( $new ) && $new != $old  ) {
+			// do not treat '0' as empty
+			} elseif ( ( ! empty( $new ) || '0' == $new ) && $new != $old  ) {
 				$updated[] = $name;
 				self::update_data( $new );
 			} elseif ( empty( $new ) ) {
