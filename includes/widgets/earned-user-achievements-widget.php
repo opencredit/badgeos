@@ -134,7 +134,7 @@ class earned_user_achievements_widget extends WP_Widget {
 					}
 				}
 
-				echo '</ul><!-- widget-achievements-listing -->';
+				echo '<p class="widget-badgeos-non-logged-user"></ul><!-- widget-achievements-listing --></p>';
 
 			}
 
