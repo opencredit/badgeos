@@ -141,7 +141,9 @@ class earned_user_achievements_widget extends WP_Widget {
 		} else {
 
 			//user is not logged in so display a message
-			_e( 'You must be logged in to view earned achievements', 'badgeos' );
+			echo '<p class="badgeos-widget-non-logged-message">';
+				_e( 'You must be logged in to view earned achievements', 'badgeos' );
+			echo '</p>';
 
 		}
 
