@@ -327,8 +327,8 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 		$return = false;
 	}
 
-	// If we have access, and the achievement has a parent...
-	if ( $return && $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id ) ) {
+	// If we have access, and the achievement has a non-step parent...
+	if ( $return && ($parent_achievement = badgeos_get_parent_of_achievement( $achievement_id )) && $parent_achievement->post_type != "step") {
 
 		// If we don't have access to the parent, we do not have access to this
 		if ( ! badgeos_user_has_access_to_achievement( $user_id, $parent_achievement->ID, $this_trigger, $site_id, $args ) ) {
