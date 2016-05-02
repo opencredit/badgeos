@@ -83,7 +83,7 @@ jQuery( function( $ ) {
 				$( response.data.message ).appendTo( $button.parent() ).fadeOut( 3000 );
 				$( '.badgeos-feedback-' + $button.data( 'feedback-id' ) + ' .badgeos-feedback-status' ).html( response.data.status );
 				$( '.cmb_id__badgeos_submission_current td, .cmb_id__badgeos_nomination_current td' ).html( response.data.status );
-				$( '.badgeos-comment-date-by' ).html( '<span class="badgeos-status-label">Status:</span> '+ response.data.status );
+				$('.badgeos-feedback-' + $button.data('feedback-id') + ' .badgeos-comment-date-by').html('<span class="badgeos-status-label">Status:</span> ' + response.data.status);
 			}
 		} );
 	} );
