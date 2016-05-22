@@ -125,7 +125,7 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 			),
 			array(
 				'name' => __( 'Maximum Earnings', 'badgeos' ),
-				'desc' => ' '.__( 'Number of times a user can earn this badge (set to 0 for no maximum).', 'badgeos' ),
+				'desc' => ' '.__( 'Number of times a user can earn this badge (set to -1 for no maximum).', 'badgeos' ),
 				'id'   => $prefix . 'maximum_earnings',
 				'type' => 'text_small',
 				'std' => '1',
@@ -140,6 +140,18 @@ function badgeos_custom_metaboxes( array $meta_boxes ) {
 					array( 'name' => __( 'Hidden to User', 'badgeos' ), 'value' => 'hidden', ),
 				),
 			),
+            array(
+                'name' => __( 'Allow Attachment for Submission', 'badgeos' ),
+                'desc' => ' '.__( 'Yes, allow to display submission attachment.', 'badgeos' ),
+                'id'   => $prefix . 'all_attachment_submission',
+                'type' => 'checkbox',
+            ),
+            array(
+                'name' => __( 'Allow Attachment for Submission Comment', 'badgeos' ),
+                'desc' => ' '.__( 'Yes, allow to display submission comment attachment.', 'badgeos' ),
+                'id'   => $prefix . 'all_attachment_submission_comment',
+                'type' => 'checkbox',
+            ),
 		), $prefix, $achievement_types )
 	), $achievement_types );
 

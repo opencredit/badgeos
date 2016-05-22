@@ -225,6 +225,14 @@ function badgeos_register_achievement_type_cpt() {
 		// Determine whether this achievement type should be visible in the menu
 		$show_in_menu = get_post_meta( $achievement_type->ID, '_badgeos_show_in_menu', true ) ? 'badgeos_badgeos' : false;
 
+        //filter school admin menu badgeOS start
+        if(class_exists("BadgeOS_Group_Management") && function_exists('badgeos_get_user_role')){
+            $role = badgeos_get_user_role(get_current_user_id());
+            if(!empty($role) && ($role =="school_admin" || $role =="author")){
+                $show_in_menu=false;
+            }
+        }
+
 		// Register the post type
 		register_post_type( sanitize_title( substr( strtolower( $achievement_name_singular ), 0, 20 ) ), array(
 			'labels'             => array(

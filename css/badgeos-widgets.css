@@ -8,19 +8,22 @@
 	min-height: 25px;
 }
 .widget-achievements-listing li.has-thumb {
-	min-height: 55px;
+    width: 100%;
+    float: left;
+    display: table;
 }
 .widget-achievements-listing .badgeos-item-thumb {
-	position: absolute;
-	top: 50%;
-	left: 0;
+    float: left;
+    display: table-cell;
+    vertical-align: middle;
 }
 .widget-achievements-listing .widget-badgeos-item-title {
 	font-weight: bold;
 }
 .widget-achievements-listing .has-thumb .widget-badgeos-item-title {
-	display: block;
-	text-indent: 60px;
+    width: 75%;
+    display: table-cell;
+    vertical-align: middle;
 }
 .share-credly {
 	position: relative;
@@ -111,4 +114,8 @@
 }
 .credly-wrap .success {
 	color: green;
+}
+.widget{
+    float:left;
+    width:100%;
 }

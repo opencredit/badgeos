@@ -33,7 +33,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 					//hide the step CPT
 					if ( $achievement['single_name'] == 'step' ) {
-					    continue;
+						continue;
 					}
 
 					//if achievement displaying exists in the saved array it is enabled for display
@@ -109,7 +109,7 @@ class earned_user_achievements_widget extends WP_Widget {
 							$permalink  = get_permalink( $achievement->ID );
 							$title      = get_the_title( $achievement->ID );
 							$img        = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
-							$thumb      = $img ? '<a style="margin-top: -25px;" class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>' : '';
+							$thumb      = $img ? '<a class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>' : '';
 							$class      = 'widget-badgeos-item-title';
 							$item_class = $thumb ? ' has-thumb' : '';
 
@@ -126,7 +126,7 @@ class earned_user_achievements_widget extends WP_Widget {
 							$thecount++;
 
 							if ( $thecount == $number_to_show && $number_to_show != 0 ) {
-							    break;
+								break;
 							}
 
 						}

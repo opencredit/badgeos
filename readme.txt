@@ -1,5 +1,5 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, credly
+Contributors: badgeos, learningtimes, credly, asahitechnologies
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6

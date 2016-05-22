@@ -201,11 +201,19 @@ ul.badgeos-achievement-earners-list li {
 	border-radius: 5px;
 	margin-bottom:15px;
 }
+
+.badgeos-submission-comment-form{
+    width:100%;
+}
+.badgeos-submission-comment-form .badgeos-submission-comment {
+    width:100% !important;
+}
 .badgeos-submission-comment {
 	padding: 1em 1em 0;
 	margin-bottom: .5em;
 	overflow: hidden;
 	border-bottom: 1px dotted #aaa;
+    width: 600px !important;
 }
 .badgeos-submission-comment:last-child {
 	border-bottom:0;
@@ -232,4 +240,22 @@ ul.badgeos-achievement-earners-list li {
 }
 .badgeos-submission-comment-entry:last-child:after {
 	border: 0;
+}
+
+.badgeos-file-submission, .badgeos-submission-file{
+    margin: 8px 0;
+}
+
+.badgeos-feedback-filter select#group_id{
+    max-width:26% !important;
+    word-wrap: normal;
+}
+
+.badgeos_submission_message p{
+    background: #ffff00;
+    color: #333;
+    border-radius: 5px;
+    padding: 3px 10px;
+    text-align: center;
+
 }

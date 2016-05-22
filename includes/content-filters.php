@@ -613,7 +613,7 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 	$output = '<div class="badgeos-submission badgeos-feedback badgeos-feedback-' . $submission->ID . '">';
 
 		// Submission Title
-		$output .= '<h2>' . sprintf( __( 'Submission: "%1$s" (#%2$d)', 'badgeos' ), get_the_title( $achievement_id ), $submission->ID ) . '</h2>';
+		$output .= '<h2>' . sprintf( __( 'Submission: "%1$s"', 'badgeos' ), get_the_title( $achievement_id )) . '</h2>';
 		// Submission Meta
 		$output .= '<p class="badgeos-submission-meta">';
 			$output .= sprintf( '<strong class="label">%1$s</strong> <span class="badgeos-feedback-author">%2$s</span><br/>', __( 'Author:', 'badgeos' ), $display_name );
@@ -626,7 +626,7 @@ function badgeos_render_submission( $submission = null, $args = array() ) {
 
 		// Submission Content
 		$output .= '<div class="badgeos-submission-content">';
-		$output .= wpautop( $submission->post_content );
+		$output .= html_entity_decode(  $submission->post_content , ENT_QUOTES, 'UTF-8' );
 		$output .= '</div>';
 
 		// Include any attachments
@@ -705,7 +705,7 @@ function badgeos_render_submission_comment( $comment = null, $odd_even = 'odd' )
 
 		// Content
 		$output .= '<div class="badgeos-comment-text">';
-		$output .= wpautop( $comment->comment_content );
+		$output .= html_entity_decode( wpautop( $comment->comment_content ), ENT_QUOTES, 'UTF-8' );
 		$output .= '</div>';
 
 	$output .= '</li><!-- badgeos-submission-comment -->';
