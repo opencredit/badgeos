@@ -12,11 +12,17 @@ jQuery( function( $ ) {
 	function badgeos_hide_submission_comments( submissions_wrapper ) {
 		submissions_wrapper.find( '.badgeos-submission-comments-wrap' ).hide();
 		submissions_wrapper.find( '.badgeos-comment-form' ).hide();
-		submissions_wrapper.find( '.submission-comment-toggle' ).show();
+		//submissions_wrapper.find( '.submission-comment-toggle' ).show();
 	}
 
 	// Hide comment form on feedback posts with toggle
 	var $submissions_wrapper = $('.badgeos-feedback-container');
+    if($('div.badgeos-feedback-container .badgeos-submissions').length){
+        $submissions_wrapper = $('.badgeos-feedback-container');
+    }else{
+        $submissions_wrapper = $('.badgeos-submissions');
+    }
+
 	badgeos_hide_submission_comments( $submissions_wrapper );
 	$submissions_wrapper.on( 'click', '.submission-comment-toggle', function( event ) {
 		event.preventDefault();
@@ -25,7 +31,12 @@ jQuery( function( $ ) {
 		$button.siblings( '.badgeos-submission-comments-wrap' ).fadeIn('fast');
 		$button.siblings( '.badgeos-comment-form' ).fadeIn('fast');
 		$button.hide();
-	} );
+
+        var value = $button.siblings('.badgeos-comment-form').find('.badgeos_comment').val();
+        if(value){
+            alert('Comment is saved in draft mode.');
+        }
+	});
 
 	// Get feedback posts
 	function badgeos_get_feedback() {
@@ -84,6 +95,14 @@ jQuery( function( $ ) {
 				$( '.badgeos-feedback-' + $button.data( 'feedback-id' ) + ' .badgeos-feedback-status' ).html( response.data.status );
 				$( '.cmb_id__badgeos_submission_current td, .cmb_id__badgeos_nomination_current td' ).html( response.data.status );
 				$( '.badgeos-comment-date-by' ).html( '<span class="badgeos-status-label">Status:</span> '+ response.data.status );
+
+                var feed_back_id = $button.data( 'feedback-id' );
+
+                if(response.data.status != 'Approved'){
+                    $('.comment-toggle-'+feed_back_id+'').show();
+                }else{
+                    $('.comment-toggle-'+feed_back_id+'').hide();
+                }
 			}
 		} );
 	} );

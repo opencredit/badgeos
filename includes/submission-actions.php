@@ -192,7 +192,8 @@ function badgeos_submission_column_action( $column = '' ) {
 
 		case 'content':
 
-			echo substr( $post->post_content, 0, 250 ) .'...';
+			$content = substr( $post->post_content, 0, 250 ) .'...';
+            echo html_entity_decode( wpautop( $content ), ENT_QUOTES, 'UTF-8' );
 			break;
 
 		case 'status':
@@ -227,7 +228,7 @@ function badgeos_add_submission_dropdown_filters() {
 	if ( $typenow == 'submission' ) {
 		//array of current status values available
 		$submission_statuses = array(
-			'approve' => __( 'Approve', 'badgeos' ),
+			'approved' => __( 'Approve', 'badgeos' ),
 			'denied'  => __( 'Deny', 'badgeos' ),
 			'pending' => __( 'Pending', 'badgeos' ),
 		);
@@ -317,18 +318,21 @@ add_action( 'save_post', 'badgeos_process_submission_review' );
 function badgeos_save_submission_data() {
 
 	// If form items don't exist, bail.
-	if ( ! isset( $_POST['badgeos_submission_submit'] ) || ! isset( $_POST['badgeos_submission_content'] ) )
+	if ( ( ! isset( $_POST['badgeos_submission_submit'] ) && ! isset($_POST['badgeos_submission_draft']) ) || ! isset( $_POST['badgeos_submission_content'] ) )
 		return;
 
 	// Nonce check for security
 	check_admin_referer( 'badgeos_submission_form', 'submit_submission' );
+
+    $action =  isset( $_POST['badgeos_submission_submit'] ) ? $_POST['badgeos_submission_submit'] : $_POST['badgeos_submission_draft'];
 
 	// Publish the submission
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
 		esc_textarea( $_POST['badgeos_submission_content'] ),
-		absint( $_POST['user_id'] )
+		absint( $_POST['user_id'] ),
+        $action
 	);
 }
 /**
@@ -340,48 +344,78 @@ function badgeos_save_submission_data() {
  * @param  integer $user_id        The user ID
  * @return boolean                 Returns true if able to create form
  */
-function badgeos_create_submission( $achievement_id  = 0, $title = '', $content = '', $user_id = 0  ) {
+function badgeos_create_submission( $achievement_id  = 0, $title = '', $content = '', $user_id = 0 , $action = '' ) {
+
+    global $wpdb;
+
+    $post_status = 'publish';
+
+    if(!empty($action) && $action == 'Save Draft'){
+        $post_status = 'draft';
+    }
 
 	$submission_data = array(
 		'post_title'	=>	$title,
 		'post_content'	=>	$content,
-		'post_status'	=>	'publish',
+		'post_status'	=>	$post_status,
 		'post_author'	=>	$user_id,
 		'post_type'		=>	'submission',
 	);
 
-	//insert the post into the database
-	if ( $submission_id = wp_insert_post( $submission_data ) ) {
-		// save the achievement ID related to the submission
-		add_post_meta( $submission_id, '_badgeos_submission_achievement_id', $achievement_id );
+    $submission_data_draft = '';
 
-		//process attachment upload if a file was submitted
-		if( ! empty($_FILES['document_file'] ) ) {
+    //Check exists submission data
+    if(isset($_POST['post_id']) && ($_POST['post_id'] != 0)){
 
-			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+        $submission_data_draft = get_post(absint( $_POST['post_id'] ));
+    }
 
-			$file   = $_FILES['document_file'];
-			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
+    if(!empty($submission_data_draft)){
 
-			if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
+        $update_submission_data = array(
+            'ID'           => absint( $_POST['post_id'] ),
+            'post_content' => $content,
+            'post_status'  => $post_status
+        );
 
-				$filetype   = wp_check_filetype( basename( $upload['file'] ), null );
-				$title      = $file['name'];
-				$ext        = strrchr( $title, '.' );
-				$title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
+        if($title){
+            $update_submission_data['post_title'] = $title;
+        }
 
-				$attachment = array(
-					'post_mime_type'    => $filetype['type'],
-					'post_title'        => addslashes( $title ),
-					'post_content'      => '',
-					'post_status'       => 'inherit',
-					'post_parent'       => $submission_id
-				);
+        // Update the submission data into the database
+        wp_update_post( $update_submission_data );
 
-				$attach_id  = wp_insert_attachment( $attachment, $upload['file'] );
+        if($post_status == 'publish'){
+            // save the achievement ID related to the submission
+            add_post_meta( absint( $_POST['post_id'] ), '_badgeos_submission_achievement_id', $achievement_id );
 
-			}
+            // Available action for other processes
+            do_action( 'badgeos_save_submission', absint( $_POST['post_id'] )  );
+
+            // Submission status workflow
+            $status_args = array(
+                'achievement_id' => $achievement_id,
+                'user_id' => $user_id
+            );
+
+            $status = 'pending';
+
+            // Check if submission is auto approved or not
+            if ( badgeos_is_submission_auto_approved( absint( $_POST['post_id'] ) ) ) {
+                $status = 'approved';
+                $status_args[ 'auto' ] = true;
+            }
+
+            badgeos_set_submission_status( absint( $_POST['post_id'] ) , $status, $status_args );
+
 		}
+
+    }else if ( $submission_id = wp_insert_post( $submission_data ) ) {
+
+        if($post_status == 'publish'){
+            // save the achievement ID related to the submission
+            add_post_meta( $submission_id, '_badgeos_submission_achievement_id', $achievement_id );
+        }
 
 		// Available action for other processes
 		do_action( 'badgeos_save_submission', $submission_id );
@@ -403,13 +437,97 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
 		badgeos_set_submission_status( $submission_id, $status, $status_args );
 
-		return true;
+    }
+    //Check this submission already has file attachment
+    $args = array(
+        'post_type'        => 'attachment',
+        'post_parent'      => absint( $_POST['post_id'] ),
+        'post_status'      => 'draft',
+        'post_author'      => $user_id,
+        'suppress_filters' => true
+    );
 
-	} else {
+    $draft_file = get_posts( $args );
 
-		return false;
+    //process attachment upload if a file was submitted
+    if( ! empty($_FILES['document_file'] ) && !empty($_FILES['document_file']['name'])) {
 
+        if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
+
+        $file   = $_FILES['document_file'];
+        $upload = wp_handle_upload( $file, array( 'test_form' => false ) );
+
+        if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
+
+            $filetype   = wp_check_filetype( basename( $upload['file'] ), null );
+            $title      = $file['name'];
+            $ext        = strrchr( $title, '.' );
+            $title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
+
+            $post_status = ($post_status == 'draft')?$post_status:'inherit';
+
+            $attachment = array(
+                'post_mime_type'    => $filetype['type'],
+                'post_title'        => addslashes( $title ),
+                'post_content'      => '',
+                'post_status'       => $post_status,
+                'post_parent'       => absint( $_POST['post_id'] )
+            );
+
+            if($draft_file){
+
+                $attachment_file = get_post_meta( $draft_file[0]->ID, '_wp_attached_file', true );
+
+                //Delete file from directory for new file attachment with same submission
+                $upload_dir = wp_upload_dir();
+                $path = $upload_dir['basedir'].'/'.$attachment_file;
+                unlink($path);
+
+                //Update post meta to exists value
+                update_attached_file(absint(  $draft_file[0]->ID ), $upload['file']);
+
+                //Update post attachment
+                $attachment['ID'] = absint(  $draft_file[0]->ID );
+                wp_update_post($attachment);
+
+
+                $data_array = array('post_status' => $post_status);
+                $where = array('ID' => absint(  $draft_file[0]->ID ));
+                $wpdb->update( $wpdb->posts , $data_array, $where );
+
+            }else{
+
+                $attachment['post_parent'] = absint($submission_id);
+                //Insert file attachment to draft submission
+                $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
+
+                $data_array = array('post_status' => $post_status);
+                $where = array('ID' => absint(  $attach_id ));
+                $wpdb->update( $wpdb->posts , $data_array, $where );
 	}
+}
+    }else{
+
+        if($draft_file){
+
+            $post_status = ($post_status == 'draft')?$post_status:'inherit';
+
+            $data_array = array('post_status' => $post_status);
+            $where = array('ID' => absint(  $draft_file[0]->ID ));
+            $wpdb->update( $wpdb->posts , $data_array, $where );
+        }
+
+    }
+
+    if(isset($_POST['post_id']) && ($_POST['post_id'] != 0)){
+         $new_submission_id = $_POST['post_id'];
+    }else{
+        $new_submission_id = $submission_id;
+    }
+
+    $_SESSION['new_added_submission_id'] = $new_submission_id;
+
+    return true;
 }
 
 /**
@@ -838,16 +956,70 @@ add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_su
  */
 function badgeos_get_comment_form( $post_id = 0 ) {
 
+    global $post;
+
 	if ( ! is_user_logged_in() )
 		return '';
 
 	$defaults = array(
-		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission (#%1$d):', 'badgeos' ), $post_id ) . '</h4>',
+		'heading'    => '<h4>' . sprintf( __( 'Comment on Submission:', 'badgeos' )) . '</h4>',
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit Comment', 'badgeos' ),
 		'toggle'     => __( 'Show/Add Comments', 'badgeos' ),
 	);
 	$language = wp_parse_args( apply_filters( 'badgeos_comment_form_language', $defaults ), $defaults );
+
+
+    //check draft comment
+    $comment_filter = array(
+        'type' => 'draft',
+        'user_id' => get_current_user_id(),
+        'post_id' => absint( $post_id ),
+        'orderby' => 'comment_ID',
+        'order' => 'DESC',
+        'offset' => 1
+    );
+
+    $comments = get_comments($comment_filter);
+
+    $comment_data = null;
+
+    if($comments){
+
+        foreach($comments as $comment){
+            $comment_data = $comment;
+        }
+    }
+
+    //Check enable/disable attachment for submission comment
+    $id = $post->ID;
+
+    if($post->post_type == 'page'){
+
+        $post_data = get_post($post_id);
+
+        $pos = strpos($post_data->post_title,":");
+        $post_type = trim(substr($post_data->post_title,0,$pos));
+        $post_title = trim(substr(strstr($post_data->post_title,':'),1));
+
+        global $wpdb;
+
+        $table = $wpdb->posts;
+
+        $query = "SELECT ID FROM ".$table." WHERE post_title LIKE '$post_title%' AND post_type LIKE '$post_type%' ORDER BY ID LIMIT 1";
+
+        $id = $wpdb->get_var($query);
+
+    }
+
+    //check attachment in draft comment submission data
+    $attachment_data = get_attachment_from_draft_submission($comment_data->comment_post_ID, get_current_user_id());
+
+    $attachment = null;
+
+    if(!empty($attachment_data)){
+        $attachment = render_attachment_from_draft_submission($attachment_data);
+    }
 
 	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
 
@@ -856,26 +1028,37 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
-		$sub_form .= '<p><textarea name="badgeos_comment"></textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_comment" id="badgeos_comment' . absint( $post_id ) . '" class="badgeos_comment">'.$comment_data->comment_content.'</textarea></p>';
 		$sub_form .= '</fieldset>';
 
+        if(get_post_meta($id, '_badgeos_all_attachment_submission_comment', true)){
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-submission-file">';
 		$sub_form .= '<p><label>'. esc_html( $language['attachment'] ) . ' <input type="file" name="document_file" id="document_file" /></label></p>';
+		if($attachment){
+            $sub_form .= $attachment;
+        }
 		$sub_form .= '</fieldset>';
 
+        }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" /></p>';
+		$sub_form .= '<p class="badgeos-submission-submit" style="margin-top:10px;"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" />
+		<input type="submit" name="badgeos_comment_draft" value="Save Draft" />
+		</p>';
 
 		// Hidden Fields
 		$sub_form .= wp_nonce_field( 'submit_comment', 'badgeos_comment_nonce', true, false );
 		$sub_form .= '<input type="hidden" name="user_id" value="' . get_current_user_id() . '">';
 		$sub_form .= '<input type="hidden" name="submission_id" value="' . absint( $post_id ) . '">';
 
+        if($comments){
+        $sub_form .= '<input type="hidden" name="comment_id" value="' . absint( $comment_data->comment_ID ) . '">';
+        }
+
 	$sub_form .= '</form>';
 
 	// Toggle button for showing comment form
-	$sub_form .= '<a href="" class="button submission-comment-toggle" style="display:none">' . esc_html( $language['toggle'] ) . '</a>';
+    $sub_form .= '<a href="" class="button submission-comment-toggle comment-toggle-' . absint( $post_id ) . '">' . esc_html( $language['toggle'] ) . '</a>';
 
 	return apply_filters( 'badgeos_get_comment_form', $sub_form, $post_id );
 
@@ -897,41 +1080,141 @@ function badgeos_save_comment_data() {
 	if ( ! wp_verify_nonce( $_POST['badgeos_comment_nonce'], 'submit_comment' ) )
 		return;
 
+    global $wpdb;
+
+    //Check comment type
+    $comment_type = '';
+    $comment_approved = 1; //Approve
+
+    if(isset($_POST['badgeos_comment_draft'])){
+
+        $comment_type = 'draft';
+        $comment_approved = 0; //Unapprove
+
+    }
+
 	// Process comment data
 	$comment_data = array(
 		'user_id'         => absint( $_POST['user_id'] ),
 		'comment_post_ID' => absint( $_POST['submission_id'] ),
 		'comment_content' => esc_textarea( $_POST['badgeos_comment'] ),
+        'comment_type' => $comment_type,
+        'comment_approved' => $comment_approved
 	);
 
-	if ( $comment_id = wp_insert_comment( $comment_data ) ) {
+    $comment_count = '';
 
-		// Process attachment upload if a file was submitted
-		if( ! empty($_FILES['document_file'] ) ) {
+    //Check exists comment data
+    if(isset($_POST['comment_id']) && ($_POST['comment_id'] != 0)){
+
+        $comment_filter = array(
+            'ID' => absint( $_POST['comment_id'] )
+        );
+
+        $comment_count = get_comments($comment_filter);
+    }
+
+    if(!empty($comment_count)){
+
+        //update comment data
+        $where = array( 'comment_ID' => absint( $_POST['comment_id'] ) );
+
+        $wpdb->update( $wpdb->comments, $comment_data, $where );
+
+    }else if( $comment_id = wp_insert_comment( $comment_data ) ){
+    }
+
+    //Check this submission already has file attachment
+    $args = array(
+        'post_type'        => 'attachment',
+        'post_parent'      => absint( $_POST['submission_id'] ),
+        'post_status'      => 'draft',
+        'post_author'      => absint( $_POST['user_id'] ),
+        'suppress_filters' => true
+    );
+
+    $draft_file = get_posts( $args );
+
+    //process attachment upload if a file was submitted
+    if( ! empty($_FILES['document_file'] ) && !empty($_FILES['document_file']['name'])) {
 
 			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-			if( ! isset( $upload['error'] ) && isset( $upload['file'] ) ) {
+        if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
 
-				$filetype = wp_check_filetype( basename( $upload['file'] ), null );
-				$title    = $file['name'];
-				$ext      = strrchr( $title, '.' );
-				$title    = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
+            $filetype   = wp_check_filetype( basename( $upload['file'] ), null );
+            $title      = $file['name'];
+            $ext        = strrchr( $title, '.' );
+            $title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
+
+            $comment_type = ($comment_type == 'draft')?$comment_type:'inherit';
 
 				$attachment = array(
 					'post_mime_type' => $filetype['type'],
 					'post_title'     => addslashes( $title ),
 					'post_content'   => '',
-					'post_status'    => 'inherit',
+                'post_status'    =>  'draft',
+                /*'post_status'    => ! isset ($comment_type) ? 'inherit' : $comment_type ,*/
 					'post_parent'    => absint( $_REQUEST['submission_id'] ),
 					'post_author'    => absint( $_REQUEST['user_id'] )
 				);
-				wp_insert_attachment( $attachment, $upload['file'] );
+
+            if(!empty($draft_file) && !empty($comment_count)){
+
+                $attachment_file = get_post_meta( $draft_file[0]->ID, '_wp_attached_file', true );
+
+                //Delete file from directory for new file attachment with same submission
+                $upload_dir = wp_upload_dir();
+                $path = $upload_dir['basedir'].'/'.$attachment_file;
+                unlink($path);
+
+                //Update post meta to exists value
+                update_attached_file(absint(  $draft_file[0]->ID ), $upload['file']);
+
+
+                //Update post attachment
+                $attachment['ID'] = absint(  $draft_file[0]->ID );
+                wp_update_post($attachment);
+
+                $data_array = array('post_status' => $comment_type);
+                $where = array('ID' => absint(  $draft_file[0]->ID ));
+                $wpdb->update( $wpdb->posts , $data_array, $where );
+
+            }else{
+                //Insert file attachment to draft submission
+                $attachment_id = wp_insert_attachment( $attachment, $upload['file'] );
+
+                $data_array = array('post_status' => $comment_type);
+                $where = array('ID' => absint(  $attachment_id ));
+                $wpdb->update( $wpdb->posts , $data_array, $where );
+
 			}
 		}
+    }else{
+
+        if($draft_file){
+
+            $comment_type = ($comment_type == 'draft')?$comment_type:'inherit';
+
+            $data_array = array('post_status' => $comment_type);
+            $where = array('ID' => absint(  $draft_file[0]->ID ));
+            $wpdb->update( $wpdb->posts , $data_array, $where );
+	    }
+
+    }
+
+	if ( isset( $_POST['badgeos_comment_nonce'] ) ) {
+		global $wp;
+		if(empty($wp->request)){
+			$url = array_filter(explode('/', $_SERVER['REQUEST_URI']));
+			$url = $url[count($url)-1].'/'.$url[count($url)];
+		}else{
+			$url = $wp->request;
+		}
+		wp_redirect( home_url($url) ); exit;
 	}
 }
 add_action( 'init', 'badgeos_save_comment_data' );
@@ -950,6 +1233,7 @@ function badgeos_get_comments_for_submission( $submission_id = 0 ) {
 		'post_id' => absint( $submission_id ),
 		'orderby' => 'date',
 		'order'   => 'ASC',
+        'type__not_in' => 'draft'
 	) );
 
 	// If we have no comments, bail
@@ -1137,7 +1421,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 		// nomination content
 		$sub_form .= '<label>'.__( 'Reason for nomination', 'badgeos' ).'</label>';
 		$sub_form .= '<fieldset class="badgeos-nomination-content">';
-		$sub_form .= '<p><textarea name="badgeos_nomination_content"></textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_nomination_content" id="badgeos_nomination_content"></textarea></p>';
 		$sub_form .= '</fieldset>';
 		// submit button
 		$sub_form .= '<p class="badgeos-nomination-submit"><input type="submit" name="badgeos_nomination_submit" value="'. esc_attr( $args['submit'] ) .'" /></p>';
@@ -1160,7 +1444,7 @@ function badgeos_get_submission_form( $args = array() ) {
 
 	// Setup our defaults
 	$defaults = array(
-		'heading'    => sprintf( '<h4>%s</h4>', __( 'Create a New Submission', 'badgeos' ) ),
+		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
 		'submit'     => __( 'Submit', 'badgeos' )
 	);
@@ -1175,23 +1459,51 @@ function badgeos_get_submission_form( $args = array() ) {
 	// Merge our defaults with the passed args
 	$args = wp_parse_args( $args, $defaults );
 
+
+    //check draft submission data
+    $submission_data = get_submission_data_from_draft();
+    //end check - draft submission data
+
+    //check attachment in draft submission data
+    $attachment_data = get_attachment_from_draft_submission($submission_data->ID, $user_ID);
+
+    $attachment = null;
+
+    if(!empty($attachment_data)){
+        $attachment = render_attachment_from_draft_submission($attachment_data);
+    }
+
 	$sub_form = '<form class="badgeos-submission-form" method="post" enctype="multipart/form-data">';
 		// submission form heading
 		$sub_form .= '<legend>'. $args['heading'] .'</legend>';
+
+		// submission comment
+		$sub_form .= '<fieldset class="badgeos-submission-comment">';
+		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">'.$submission_data->post_content.'</textarea></p>';
+		$sub_form .= '</fieldset>';
+
+        if(get_post_meta($post->ID, '_badgeos_all_attachment_submission', true)){
 		// submission file upload
 		$sub_form .= '<fieldset class="badgeos-file-submission">';
 		$sub_form .= '<p><label>'. $args['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+        if($attachment){
+        $sub_form .= $attachment;
+        }
 		$sub_form .= '</fieldset>';
-		// submission comment
-		$sub_form .= '<fieldset class="badgeos-submission-comment">';
-		$sub_form .= '<p><textarea name="badgeos_submission_content"></textarea></p>';
-		$sub_form .= '</fieldset>';
+        }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /></p>';
+		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" />
+		<input type="submit" name="badgeos_submission_draft" value="Save Draft" />
+		</p>';
 		// hidden fields
 		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );
 		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
 		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
+
+    if($submission_data){
+        $sub_form .= '<input type="hidden" name="post_id" value="' . absint( $submission_data->ID ) . '">';
+    }
+
 	$sub_form .= '</form>';
 
 	return apply_filters( 'badgeos_get_submission_form', $sub_form );
@@ -1425,3 +1737,85 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 	// Return out filterable output
 	return apply_filters( 'badgeos_get_submission_attachments', $output, $submission_id, $attachments );
 }
+
+/**
+ * Get the data saved from the draft
+ * @return array
+ */
+function get_submission_data_from_draft(){
+
+    global $post, $user_ID;
+
+    global $wpdb;
+
+    $post_title = sprintf( '%1$s: %2$s', get_post_type( absint( $post->ID ) ), get_the_title( absint( $post->ID ) ) );
+
+    $table = $wpdb->posts;
+
+    $query = "SELECT ID FROM ".$table." WHERE post_status='draft' AND post_type='submission' AND post_author = $user_ID AND post_title LIKE '%$post_title%' ORDER BY ID DESC LIMIT 1";
+
+    $post_id = $wpdb->get_var($query);
+
+    $submission_data = array();
+
+    if ( $post_id ){
+        $submission_data = get_post($post_id);
+    }
+
+    return $submission_data;
+
+}
+
+/**
+ * Get the data from the submission form to be saved as draft
+ * @param $post_id
+ * @param $user_ID
+ * @return array
+ */
+function get_attachment_from_draft_submission($post_id, $user_ID){
+
+    global $wpdb;
+
+    $table = $wpdb->posts;
+
+    $query = "SELECT ID FROM ".$table." WHERE post_status='draft' AND post_type='attachment' AND post_author = $user_ID AND post_parent = ".$post_id." ORDER BY ID DESC LIMIT 1";
+
+    $attachment_post_id = $wpdb->get_var($query);
+
+    $attachment_data = array();
+
+    if ( $attachment_post_id ){
+        $attachment_data = get_post($attachment_post_id);
+    }
+
+    return $attachment_data;
+}
+
+/**
+ * Function to render the attachment that is saved in draft
+ * @param array $attachment
+ * @return null|string
+ */
+function render_attachment_from_draft_submission($attachment = array()){
+
+    $sub_form = null;
+
+    if(!empty($attachment)){
+
+        $userdata = get_userdata( $attachment->post_author );
+        $display_name = is_object( $userdata ) ? $userdata->display_name : '';
+
+        // Concatenate the markup
+        $sub_form .= '<h6>' . sprintf( __( 'Submitted Draft Attachment:', 'badgeos' )) . '</h6>';
+        $sub_form .= sprintf( __( '%1$s - uploaded %2$s by %3$s', 'badgeos' ),
+            wp_get_attachment_link( $attachment->ID, 'full', false, null, $attachment->post_title ),
+            get_the_time( 'F j, Y g:i a', $attachment ),
+            $display_name
+        );
+    }
+
+    return $sub_form;
+}
+
+
+
