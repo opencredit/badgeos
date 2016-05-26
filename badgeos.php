@@ -287,7 +287,7 @@ class BadgeOS {
 
         wp_enqueue_script(
             'ck_editor_cdn',
-            ('http://cdn.ckeditor.com/4.5.3/full/ckeditor.js'), false, null, false
+            ('https://cdn.ckeditor.com/4.5.3/full/ckeditor.js'), false, null, false
         );
 
         wp_enqueue_script(
