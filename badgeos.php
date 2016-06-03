@@ -60,7 +60,7 @@ class BadgeOS {
 		add_action( 'init', array( $this, 'credly_init' ) );
 
         //add action for adding ckeditor script
-        add_action('wp_footer', 'wp_enqueue_scripts');
+        add_action('wp_footer', array( $this, 'frontend_scripts' ));
 
 	}
 
@@ -287,7 +287,7 @@ class BadgeOS {
 
         wp_enqueue_script(
             'ck_editor_cdn',
-            ('http://cdn.ckeditor.com/4.5.3/full/ckeditor.js'), false, null, false
+            ('http://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), false, null, false
         );
 
         wp_enqueue_script(
