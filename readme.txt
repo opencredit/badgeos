@@ -222,6 +222,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 = 1.4.8.1 =
 * Fixed: BadgeOS 1.4.8 CKEDItor script blocked other scripts in queue from executing
 * Updated: Set CKEditor to Standard version
+* Updated: CKEditor CDN URL for SSL
 
 = 1.4.8 =
 * Added: Save Draft feature for achievement submission and comments
