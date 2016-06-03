@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
 Tested up to: 4.3.1
-Stable tag: 1.4.7
+Stable tag: 1.4.8.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -219,6 +219,10 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+= 1.4.8.1 =
+* Fixed: BadgeOS 1.4.8 CKEDItor script blocked other scripts in queue from executing
+* Updated: Set CKEditor to Standard version
+* Updated: CKEditor CDN URL for SSL
 
 = 1.4.7 =
 * Fixed: Remove empty() check that prevented point updates from being logged.
