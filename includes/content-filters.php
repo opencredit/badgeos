@@ -751,3 +751,210 @@ function badgeos_render_feedback_buttons( $feedback_id = 0 ) {
 	// Return our filterable output
 	return apply_filters( 'badgeos_render_feedback_buttons', $output, $feedback_id );
 }
+
+/*
+ * Get current page post id
+ *
+ * @param null
+ * @return integer
+ */
+function badgeos_get_current_page_post_id() {
+
+	global $posts;
+
+	$current_post_id = null;
+
+	foreach($posts as $post){
+		if($post->post_type != 'page') {
+			//Get current page achievement id
+			$current_post_id = $post->ID;
+		}
+	}
+
+	//Return current post id
+    return $current_post_id;
+}
+
+
+/**
+ * Hide the hidden achievement post link from next post link
+ *
+ * @param $link
+ * @return string
+ */
+function badgeos_hide_next_hidden_achievement_link($link) {
+
+	if($link) {
+
+		//Get current achievement id
+		$achievement_id = badgeos_get_current_page_post_id();
+
+		//Get post link , without hidden achievement
+		$link = badgeos_get_post_link_without_hidden_achievement($achievement_id, 'next');
+
+	}
+
+	return $link;
+
+}
+add_filter('next_post_link', 'badgeos_hide_next_hidden_achievement_link');
+
+/**
+ * Hide the hidden achievement post link from previous post link
+ *
+ * @param $link
+ * @return string
+ */
+function badgeos_hide_previous_hidden_achievement_link($link) {
+
+
+	if($link) {
+
+		//Get current achievement id
+		$achievement_id = badgeos_get_current_page_post_id();
+
+		//Get post link , without hidden achievement
+		$link = badgeos_get_post_link_without_hidden_achievement($achievement_id, 'prev');
+
+	}
+
+	return $link;
+
+}
+
+add_filter('previous_post_link', 'badgeos_hide_previous_hidden_achievement_link');
+
+
+/*
+ * Get post link without hidden achievement link
+ *
+ * @param $achievement_id
+ * @param $rel
+ * @return string
+ */
+function badgeos_get_post_link_without_hidden_achievement($achievement_id, $rel) {
+
+
+	$link = null;
+
+	$post = get_post($achievement_id);
+
+	//Check the ahievement
+	$achievement_id = ( badgeos_is_achievement($post) )? $post->ID : "";
+
+	//Get next post id without hidden achievement id
+	$next_post_id = badgeos_get_next_previous_achievement_id($achievement_id, $rel);
+
+	if ($next_post_id)
+		//Generate post link
+		$link = badgeos_generate_post_link_by_post_id($next_post_id, $rel);
+
+
+	return $link;
+
+}
+
+/**
+ * Get next or previous post id , without hidden achievement id
+ *
+ * @param $current_achievement_id
+ * @param $flag
+ * @return integer
+ */
+function badgeos_get_next_previous_achievement_id($achievement_id , $rel ){
+
+
+	$nested_post_id = null;
+
+	$access = false;
+
+	// Redirecting user page based on achievements
+	$post = get_post( absint( $achievement_id ));
+
+	//Get hidden achievements ids
+	$hidden = badgeos_get_hidden_achievement_ids( $post->post_type );
+
+	// Fetching achievement types
+	$param = array(
+		'posts_per_page'   => -1, // All achievements
+		'offset'           => 0,  // Start from first achievement
+		'post_type'=> $post->post_type, // set post type as achievement to filter only achievements
+		'orderby' => 'ID',
+		'order' => 'ASC',
+	);
+
+	$param['order'] = ($rel == 'next') ? 'ASC' : 'DESC';
+
+
+	$achievement_types = get_posts($param);
+
+	foreach ($achievement_types as $achievement){
+
+		$check = false;
+
+		//Compare next achievement
+		if($achievement->ID > $achievement_id && $rel == 'next') {
+			$check = true;
+		}
+
+		//Compare previous achievement
+		if($achievement->ID < $achievement_id && $rel == 'prev') {
+			$check = true;
+		}
+
+		if($check){
+			//Checks achievement in hidden badges
+			if (in_array($achievement->ID, $hidden)) {
+				continue;
+			} else {
+				$access = true;
+			}
+		}
+
+		if($access) {
+			//Get next or previous achievement without hidden badges
+			if (!in_array($achievement->ID, $hidden) && !$nested_post_id) {
+				$nested_post_id = $achievement->ID;
+			}
+		}
+	}
+
+	//rerurn next or previous achievement without hidden badge id
+	return $nested_post_id;
+
+}
+
+/**
+ * Generate the post link based on custom post object
+ *
+ * @param $link
+ * @return string
+ */
+function badgeos_generate_post_link_by_post_id( $post_id , $rel) {
+
+	global $post;
+
+	if(!empty($post_id))
+		$post = get_post($post_id);
+
+    //Title of the post
+	$title = get_the_title( $post->ID );
+
+	if ( empty( $post->post_title ) && $rel == 'next')
+		$title = __( 'Next Post' );
+
+	if ( empty( $post->post_title ) && $rel == 'prev')
+		$title = __( 'Previous Post' );
+
+
+	$rel =  ($rel == 'prev') ? 'prev' : 'next';
+
+	$nav_prev = ($rel == 'prev') ? '<span class="meta-nav">←</span> ' : '';
+	$nav_next = ($rel == 'next') ? ' <span class="meta-nav">→</span>' : '';
+
+	//Build link
+	$link = '<a href="' . get_permalink( $post ) . '" rel="'.$rel.'">' . $nav_prev . $title . $nav_next. '</a>';
+
+	return $link;
+
+}
