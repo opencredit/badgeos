@@ -284,23 +284,17 @@ function badgeos_ajax_get_achievements_select2() {
 	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
 		? array( esc_sql( $_REQUEST['post_type'] ) )
 		: array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
-	$post_type = sprintf( 'AND p.post_type IN(\'%s\')', implode( "','", $achievement_types ) );
+	$post_type = sprintf( 'AND post_type IN(\'%s\')', implode( "','", $achievement_types ) );
 
 	$results = $wpdb->get_results( $wpdb->prepare(
 		"
-		SELECT p.ID, p.post_title
-		FROM   $wpdb->posts AS p 
-		JOIN $wpdb->postmeta AS pm
-		ON p.ID = pm.post_id
-		WHERE  p.post_title LIKE %s
+		SELECT ID, post_title
+		FROM   $wpdb->posts
+		WHERE  post_title LIKE %s
 		       {$post_type}
-		       AND p.post_status = 'publish'
-		       AND pm.meta_key LIKE %s
-		       AND pm.meta_value LIKE %s
+		       AND post_status = 'publish'
 		",
-		"%%{$search}%%",
-		"%%_badgeos_hidden%%",
-		"%%show%%"
+		"%%{$search}%%"
 	) );
 
 	// Return our results
