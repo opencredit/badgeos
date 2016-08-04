@@ -139,7 +139,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
-		<input class="required-count" type="text" size="2" maxlength="2" value="<?php echo $count; ?>" placeholder="1">
+		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
 
 		<?php do_action( 'badgeos_steps_ui_html_after_count_text', $step_id, $post_id ); ?>
