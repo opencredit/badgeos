@@ -44,7 +44,7 @@ function badgeos_get_achievements( $args = array() ) {
 	$defaults = array(
 		'post_type'                => badgeos_get_achievement_types_slugs(),
 		'suppress_filters'         => false,
-		'achievement_relationsihp' => 'any',
+		'achievement_relationship' => 'any',
 	);
 	$args = wp_parse_args( $args, $defaults );
 
