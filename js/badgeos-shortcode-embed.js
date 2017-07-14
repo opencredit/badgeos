@@ -18,17 +18,30 @@
 		var inputs = badgeos_get_shortcode_inputs( shortcode );
 		$.each( inputs, function( index, el ) {
 			if ( '' !== el.value && undefined !== el.value ) {
-				attrs.push( el.name + '="' + el.value + '"' );
+				if($(this).hasClass('select2-hidden-accessible')){
+					var selections = ($(el).select2('data'));
+					var terms=[];
+					$.each(selections,function(id,text){
+						terms.push(text.id);
+					});
+					attrs.push( el.name + '="' + terms+'"' );
+					return attrs;
+				}else{
+					attrs.push( el.name + '="' + el.value + '"' );
+					return attrs;
+				}
+
 			}
 		});
 		return attrs;
 	}
 
 	function badgeos_get_shortcode_inputs( shortcode ) {
-		return $( '.text, .select', '#' + shortcode + '_wrapper' );
+		return $( '.text, .select','#' + shortcode + '_wrapper' );
 	}
 
 	function badgeos_construct_shortcode( shortcode, attributes ) {
+
 		var output = '[';
 		output += shortcode;
 
@@ -79,64 +92,82 @@
 	});
 
 	var select2_post_defaults = {
+		dataType: "json",
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
 			data: function( term ) {
+				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
 				return {
 					q: term,
 					action: 'get-achievements-select2',
 				};
 			},
-			results: function( results, page ) {
-				console.log(results);
+			processResults: function (results) {
+				var res = results.data;
+				var terms=[];
+				if ( res ) {
+					$.each( res, function( id, text ) {
+						terms.push( { id: text.ID, text: text.post_title } );
+					});
+				}
 				return {
-					results: results.data
+					results: terms
 				};
 			}
 		},
-		id: function( item ) {
-			return item.ID;
-		},
-		formatResult: function ( item ) {
-			return item.post_title;
-		},
-		formatSelection: function ( item ) {
-			return item.post_title;
+		language :{
+			noResults: function(){
+			return "No Results";
+				},
+			errorLoading:function(){ return "Searching..."
+				}
+			},
+		escapeMarkup: function (markup) {
+			return markup;
 		},
 		placeholder: badgeos_shortcode_embed_messages.id_placeholder,
 		allowClear: true,
 		multiple: false
 	};
 	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { multiple: true } );
-
 	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id' ).select2( select2_post_defaults );
 	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).select2( select2_post_multiples );
-
 	$( '#badgeos_achievements_list_type' ).select2({
 		ajax: {
 			url: ajaxurl,
 			type: 'POST',
 			data: function ( term ) {
+				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
 				return {
 					q: term,
 					action: 'get-achievement-types'
 				};
 			},
-			results: function ( results, page ) {
+			processResults: function (results) {
+				var res = results.data;
+
+				var terms=[];
+				if ( res ) {
+					$.each( res, function( id, text ) {
+						terms.push( { id: text.name, text: text.label } );
+					});
+				}
 				return {
-					results: results.data
+					results: terms
+
 				};
 			}
 		},
-		id: function ( item ) {
-			return item.name;
+		language :{
+			noResults: function(){
+				return "No Results";
+			},
+			errorLoading:function(){ return "Searching..."
+			}
 		},
-		formatResult: function ( item ) {
-			return item.label;
-		},
-		formatSelection: function ( item ) {
-			return item.label;
+		escapeMarkup: function (markup) {
+			return markup;
 		},
 		placeholder: badgeos_shortcode_embed_messages.post_type_placeholder,
 		allowClear: true,
@@ -148,25 +179,35 @@
 			url: ajaxurl,
 			type: 'POST',
 			data: function( term ) {
+				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
 				return {
 					q: term,
 					action: 'get-users'
 				};
 			},
-			results: function( results, page ) {
+			processResults: function (results) {
+				var res = results.data;
+
+				var terms=[];
+				if ( res ) {
+					$.each( res, function( id, text ) {
+						terms.push( { id: text.ID, text: text.user_login } );
+					});
+				}
 				return {
-					results: results.data
+					results: terms
 				};
 			}
 		},
-		id: function( item ) {
-			return item.ID;
+		language :{
+			noResults: function(){
+				return "No Results";
+			},
+			errorLoading:function(){ return "Searching..."
+			}
 		},
-		formatResult: function ( item ) {
-			return item.user_login;
-		},
-		formatSelection: function ( item ) {
-			return item.user_login;
+		escapeMarkup: function (markup) {
+			return markup;
 		},
 		placeholder: badgeos_shortcode_embed_messages.user_placeholder,
 		allowClear: true

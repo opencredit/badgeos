@@ -31,7 +31,6 @@ class BadgeOS_Editor_Shortcodes {
 	 */
 	public function admin_scripts() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$min = '';
 		wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery', 'badgeos-select2' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
@@ -99,8 +98,11 @@ class BadgeOS_Editor_Shortcodes {
 
 	private function get_shortcode_sections() {
 		$output = '';
+
+
+
 		foreach( $this->shortcodes as $shortcode ) {
-			$output .= $this->get_shortcode_section( $shortcode );
+			$output .= $this->get_shortcode_section($shortcode);
 		}
 		return $output;
 	}
@@ -108,8 +110,19 @@ class BadgeOS_Editor_Shortcodes {
 	private function get_shortcode_section( $shortcode = array() ) {
 		$output = '<div class="shortcode-section alignleft" id="' . $shortcode->slug . '_wrapper">';
 		$output .= sprintf( '<p><strong>%1$s</strong> - %2$s</p>', "[{$shortcode->slug}]", $shortcode->description );
+
 		foreach( $shortcode->attributes as $slug => $attribute ) {
+
 			$attribute['slug'] = $slug;
+			if($slug == 'type'){
+				$attribute['default'] = '';
+				$attribute['values'] = '';
+			}
+			$element_slugs = array('type','user_id','include','exclude','achievement_id','id');
+			if(in_array($slug, $element_slugs)){
+				$attribute['type'] = ($attribute['type'] == 'text') ? 'select' : $attribute['type'];
+			}
+
 			$output .= $this->get_input( array( 'shortcode' => $shortcode, 'attribute' => $attribute ) );
 		}
 		$output .= '</div>';
@@ -171,7 +184,7 @@ class BadgeOS_Editor_Shortcodes {
 		$options = array();
 		if ( ! empty( $attribute['values'] ) ) {
 			foreach( $attribute['values'] as $value => $label ) {
-				$options[] = sprintf(
+				$options[] =sprintf(
 					'<option %1$s value="%2$s">%3$s</option>',
 					selected( $value, $attribute['default'], false ),
 					$value,
@@ -179,6 +192,7 @@ class BadgeOS_Editor_Shortcodes {
 				);
 			}
 		}
+
 		return implode( "\n", $options );
 	}
 }

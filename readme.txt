@@ -1,10 +1,10 @@
-﻿=== BadgeOS ===
-Contributors: badgeos, learningtimes, credly, asahitechnologies
+=== BadgeOS ===
+Contributors: badgeos, learningtimes, asahitechnologies
 Donate link: http://badgeos.org/contribute/donate/
-Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
+Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 4.5.2
-Stable tag: 1.4.8.2
+Tested up to: 4.8
+Stable tag: 1.4.8.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -219,6 +219,11 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 1.4.8.3 =
+* Fixed: Woocommerce compatibility issue fixed by upgrading to Select2 Version 4.
+* Updated: Upgraded Select2 from Version 2 to Version 4, modified Shortcode implementation accordingly.
+
 = 1.4.8.2 =
 * Fixed: Hidden Badges issue where hidden badges were getting displayed though they are set hidden
 * Fixed: Disabled filter button to fix the issue where multiple search results displayed when the filter submit button is clicked repeatedly
