@@ -182,6 +182,14 @@ jQuery( function( $ ) {
 
 		badgeos_ajax_achievement_list_reset();
 
+		//Disabled submit button
+		$('#achievements_list_search_go').attr('disabled','disabled');
+	});
+
+	//Enabled submit button
+	$('#achievements_list_search').focus(function (e) {
+
+		$('#achievements_list_search_go').removeAttr('disabled');
 	} );
 
 	// Listen for users clicking the "Load More" button

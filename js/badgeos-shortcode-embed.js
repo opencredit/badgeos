@@ -86,7 +86,7 @@
 	$( '#insert_badgeos_shortcodes' ).on( 'click', function(e) {
 		var inputs = $( '.select2-container' );
 		$.each( inputs, function( index, el ){
-			$( el ).select2( 'val', '' );
+			$( el ).val('');
 		});
 	});
 

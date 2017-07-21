@@ -57,6 +57,11 @@ function badgeos_get_user_achievements( $args = array() ) {
 			if ( ! empty( $args['achievement_type'] ) && ( $args['achievement_type'] != $achievement->post_type && ( !is_array( $args['achievement_type'] ) || !in_array( $achievement->post_type, $args['achievement_type'] ) ) ) )
 				unset($achievements[$key]);
 
+			//unset hidden achievements
+			$hidden = badgeos_get_hidden_achievement_by_id( $achievement->ID );
+			if( !empty( $hidden ) && isset($args['display']))
+				unset($achievements[$key]);
+
 		}
 	}
 
