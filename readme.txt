@@ -1,10 +1,10 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, credly, asahitechnologies
+Contributors: badgeos, learningtimes, asahitechnologies
 Donate link: http://badgeos.org/contribute/donate/
-Tags: badge, badges, openbadges, learningtimes, credly, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
+Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 3.6
-Tested up to: 4.3.1
-Stable tag: 1.4.8.1
+Tested up to: 4.8
+Stable tag: 1.4.8.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -219,10 +219,31 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 1.4.8.3 =
+* Fixed: Woocommerce compatibility issue fixed by upgrading to Select2 Version 4.
+* Updated: Upgraded Select2 from Version 2 to Version 4, modified Shortcode implementation accordingly.
+
+= 1.4.8.2 =
+* Fixed: Hidden Badges issue where hidden badges were getting displayed though they are set hidden
+* Fixed: Disabled filter button to fix the issue where multiple search results displayed when the filter submit button is clicked repeatedly
+* Fixed: Maximum earnings for Achievement earned through completing steps did not earn points more than once
+* Updated: Increased Max-length to 3 for the number of times an achievement step needs to be performed to earn an achievement by completing steps
+
 = 1.4.8.1 =
 * Fixed: BadgeOS 1.4.8 CKEDItor script blocked other scripts in queue from executing
 * Updated: Set CKEditor to Standard version
 * Updated: CKEditor CDN URL for SSL
+
+= 1.4.8 =
+* Added: Save Draft feature for achievement submission and comments
+* Added: CK Editor - Rich Text Editor for all front end text area
+* Added: Meta Box added for attachment on a specific submission
+* Added: Meta Box added for attachment in comments
+* Fixed: All Achievement Type auto submission success message not getting displayed properly
+* Fixed: Completion steps - All Achievement of Type Badges not getting updated as Achieved when the dependent achievements are completed
+* Fixed: Maximum Earned Achievment bug for unlimited earning
+* Fixed: Removed confirm submission popup on refresh while re-submitting achievement
 
 = 1.4.7 =
 * Fixed: Remove empty() check that prevented point updates from being logged.
