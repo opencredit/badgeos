@@ -23,11 +23,13 @@ function badgeos_save_nomination_data() {
 	// Nonce check for security
 	check_admin_referer( 'badgeos_nomination_form', 'submit_nomination' );
 
+    global $allowedposttags;
+
 	// Publish the nomination
 	return badgeos_create_nomination(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		esc_textarea( $_POST['badgeos_nomination_content'] ),
+		wp_kses_post( $_POST['badgeos_nomination_content'], $allowedposttags ),
 		absint( $_POST['badgeos_nomination_user_id'] ),
 		absint( absint( $_POST['user_id'] ) )
 	);
@@ -326,11 +328,13 @@ function badgeos_save_submission_data() {
 
     $action =  isset( $_POST['badgeos_submission_submit'] ) ? $_POST['badgeos_submission_submit'] : $_POST['badgeos_submission_draft'];
 
+    global $allowedposttags;
+
 	// Publish the submission
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
-		esc_textarea( $_POST['badgeos_submission_content'] ),
+        wp_kses_post( $_POST['badgeos_submission_content'], $allowedposttags ),
 		absint( $_POST['user_id'] ),
         $action
 	);
