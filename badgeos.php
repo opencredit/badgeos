@@ -213,6 +213,7 @@ class BadgeOS {
 			$badgeos_settings['submission_manager_role'] = 'manage_options';
 			$badgeos_settings['submission_email'] = 'enabled';
 			$badgeos_settings['debug_mode']       = 'disabled';
+			$badgeos_settings['remove_data_on_uninstall']   = null;
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
