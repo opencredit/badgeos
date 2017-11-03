@@ -24,6 +24,36 @@ function badgeos_register_submission_shortcode() {
 add_action( 'init', 'badgeos_register_submission_shortcode' );
 
 /**
+ * Redirect users to submission result page.
+ */
+function submission_redirections() {
+    if( !is_admin() ) {
+        if( isset( $_POST )
+            && ( isset( $_POST["badgeos_submission_submit"] )
+                || isset( $_POST["badgeos_submission_draft"] ) ) ) {
+            $achievement_id = isset( $_POST["achievement_id"] ) ? $_POST["achievement_id"] : get_the_ID();
+            $recently_earned = badgeos_get_user_achievements( array( 'user_id' => get_current_user_id(), 'achievement_id' => $achievement_id, 'since' => ( time() - 30 ) , 'display' => true ) );
+
+            global $wp;
+            if ( empty( $recently_earned )) {
+
+                if ( badgeos_save_submission_data() ) {
+                    $recent_submission_id = $_SESSION['new_added_submission_id'];
+                    unset($_SESSION['new_added_submission_id']);
+                    wp_redirect(home_url($wp->request.'?new_submission_id='.$recent_submission_id));
+                    exit;
+                }
+            } else{
+
+                wp_redirect(home_url($wp->request));
+                exit;
+            }
+        }
+    }
+}
+add_action( "wp", "submission_redirections" );
+
+/**
  * Submission Form Shortcode.
  *
  * @since  1.0.0
@@ -44,25 +74,9 @@ function badgeos_submission_form( $atts = array() ) {
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
 
-		// If submission data was submitted, output success message
-		if ( isset( $_REQUEST['achievement_id'] ) && $_REQUEST['achievement_id'] == $atts['achievement_id'] ) {
-			// Don't award if this achievement was earned in the past 30 seconds
-			$recently_earned = badgeos_get_user_achievements( array( 'user_id' => get_current_user_id(), 'achievement_id' => $_REQUEST['achievement_id'], 'since' => ( time() - 30 ) , 'display' => true ) );
-
-            global $wp;
-            if ( empty( $recently_earned )) {
-                if ( badgeos_save_submission_data() ) {
-                    $recent_submission_id = $_SESSION['new_added_submission_id'];
-                    unset($_SESSION['new_added_submission_id']);
-                    wp_redirect(home_url($wp->request.'?new_submission_id='.$recent_submission_id));
-				}
-			}else{
-                    wp_redirect(home_url($wp->request));
-            }
-		}
-
         if(!empty($_GET['new_submission_id']) && $new_submission_id = $_GET['new_submission_id']){
             $posts = get_post( absint($new_submission_id) );
+
             // Checking the type of submission and display the success message based on submission type
             if($posts->post_status == 'draft'){
                 $output .= sprintf( '<div class="badgeos_submission_message"><p>%s</p></div>', __( 'Thank you! Your draft has been saved.', 'badgeos' ) );
