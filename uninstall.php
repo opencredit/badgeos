@@ -82,7 +82,7 @@ if( is_array( $submissions ) && !empty( $submissions ) && !is_null( $submissions
 }
 
 /**
- * Delete submission post type data
+ * Delete nomination post type data
  */
 $nominations = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = 'nomination';" );
 if( is_array( $nominations ) && !empty( $nominations ) && !is_null( $nominations ) ) {
