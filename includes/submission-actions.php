@@ -1472,8 +1472,12 @@ function badgeos_get_submission_form( $args = array() ) {
     $submission_data = get_submission_data_from_draft();
     //end check - draft submission data
 
+	$attachment_data = null;
+
     //check attachment in draft submission data
-    $attachment_data = get_attachment_from_draft_submission($submission_data->ID, $user_ID);
+	if ( ! empty( $submission_data ) ) {
+		$attachment_data = get_attachment_from_draft_submission($submission_data->ID, $user_ID);
+	}
 
     $attachment = null;
 
@@ -1487,7 +1491,7 @@ function badgeos_get_submission_form( $args = array() ) {
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment">';
-		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">'.$submission_data->post_content.'</textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">' . ( ( $submission_data ) ? $submission_data->post_content : '' ) . '</textarea></p>';
 		$sub_form .= '</fieldset>';
 
         if(get_post_meta($post->ID, '_badgeos_all_attachment_submission', true)){
@@ -1748,7 +1752,7 @@ function badgeos_get_submission_attachments( $submission_id = 0 ) {
 
 /**
  * Get the data saved from the draft
- * @return array
+ * @return WP_Post
  */
 function get_submission_data_from_draft(){
 
