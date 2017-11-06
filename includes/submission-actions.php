@@ -1016,8 +1016,12 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
     }
 
+	$attachment_data = null;
+
     //check attachment in draft comment submission data
-    $attachment_data = get_attachment_from_draft_submission($comment_data->comment_post_ID, get_current_user_id());
+	if ( ! empty( $comment_data ) ) {
+		$attachment_data = get_attachment_from_draft_submission($comment_data->comment_post_ID, get_current_user_id());
+	}
 
     $attachment = null;
 
@@ -1032,7 +1036,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
 		// submission comment
 		$sub_form .= '<fieldset class="badgeos-submission-comment-entry">';
-		$sub_form .= '<p><textarea name="badgeos_comment" id="badgeos_comment' . absint( $post_id ) . '" class="badgeos_comment">'.$comment_data->comment_content.'</textarea></p>';
+		$sub_form .= '<p><textarea name="badgeos_comment" id="badgeos_comment' . absint( $post_id ) . '" class="badgeos_comment">' . ( ( $comment_data ) ? $comment_data->comment_content : '' ) . '</textarea></p>';
 		$sub_form .= '</fieldset>';
 
         if(get_post_meta($id, '_badgeos_all_attachment_submission_comment', true)){
@@ -1055,8 +1059,8 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 		$sub_form .= '<input type="hidden" name="user_id" value="' . get_current_user_id() . '">';
 		$sub_form .= '<input type="hidden" name="submission_id" value="' . absint( $post_id ) . '">';
 
-        if($comments){
-        $sub_form .= '<input type="hidden" name="comment_id" value="' . absint( $comment_data->comment_ID ) . '">';
+        if ( $comments && $comment_data ){
+            $sub_form .= '<input type="hidden" name="comment_id" value="' . absint( $comment_data->comment_ID ) . '">';
         }
 
 	$sub_form .= '</form>';
