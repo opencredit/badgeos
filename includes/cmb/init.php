@@ -204,8 +204,7 @@ class cmb_Meta_Box {
 		if ( class_exists( $class_name, false ) )
 			return;
 
-		// for PHP versions < 5.3
-		$dir = defined( '__DIR__' ) ? __DIR__ : dirname( __FILE__ );
+		$dir = dirname( __FILE__ );
 
 		$file = "$dir/helpers/$class_name.php";
 		if ( file_exists( $file ) )
