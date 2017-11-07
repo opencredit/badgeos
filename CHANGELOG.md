@@ -7,6 +7,7 @@
 - Tweak: Compatibility with PHP 7.x
 - Fix: Frontend submission html formatting
 - Fix: PHP warnings on frontend submission
+- Fix: Added Sanity check for $comment_data variable which prevent PHP notices and warnings
 
 #### 1.4.8.3
 
