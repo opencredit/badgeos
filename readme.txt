@@ -221,11 +221,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 == Changelog ==
 
 = 1.4.9 =
-* New: Configurable option to delete plugin data on uninstall
-* New: 50% Portuguese (Brazilian) translation
-* Tweak: Compatibility with PHP 7.x
+* Fix: Compatibility with PHP 7.x (Tested upto PHP v7.1)
 * Fix: Frontend submission html formatting
 * Fix: PHP warnings on frontend submission
+* Fix: Added Sanity check for $comment_data variable which prevents PHP notices and warnings
+* New: Configurable option to delete plugin data on uninstall
+* New: 50% Portuguese (Brazilian) translation
 
 = 1.4.8.3 =
 * Fixed: Woocommerce compatibility issue fixed by upgrading to Select2 Version 4.
