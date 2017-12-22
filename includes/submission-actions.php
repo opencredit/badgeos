@@ -414,7 +414,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
 		}
 
-    }else if ( $submission_id = wp_insert_post( $submission_data ) ) {
+    } else if ( $submission_id = wp_insert_post( $submission_data ) ) {
 
         if($post_status == 'publish'){
             // save the achievement ID related to the submission
@@ -442,6 +442,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 		badgeos_set_submission_status( $submission_id, $status, $status_args );
 
     }
+
     //Check this submission already has file attachment
     $args = array(
         'post_type'        => 'attachment',
@@ -475,7 +476,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
                 'post_title'        => addslashes( $title ),
                 'post_content'      => '',
                 'post_status'       => $post_status,
-                'post_parent'       => absint( $_POST['post_id'] )
+                'post_parent'       => absint( $submission_id )
             );
 
             if($draft_file){
@@ -499,18 +500,18 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
                 $where = array('ID' => absint(  $draft_file[0]->ID ));
                 $wpdb->update( $wpdb->posts , $data_array, $where );
 
-            }else{
-
+            } else {
                 $attachment['post_parent'] = absint($submission_id);
+
                 //Insert file attachment to draft submission
                 $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
 
                 $data_array = array('post_status' => $post_status);
                 $where = array('ID' => absint(  $attach_id ));
                 $wpdb->update( $wpdb->posts , $data_array, $where );
-	}
-}
-    }else{
+            }
+        }
+    } else {
 
         if($draft_file){
 
@@ -523,9 +524,9 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
     }
 
-    if(isset($_POST['post_id']) && ($_POST['post_id'] != 0)){
+    if( isset( $_POST['post_id'] ) && ( $_POST['post_id'] != 0 ) ) {
          $new_submission_id = $_POST['post_id'];
-    }else{
+    } else {
         $new_submission_id = $submission_id;
     }
 
@@ -1450,7 +1451,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 function badgeos_get_submission_form( $args = array() ) {
 	global $post, $user_ID;
 
-	// Setup our defaults
+    // Setup our defaults
 	$defaults = array(
 		'heading'    => sprintf( '<h4>%s</h4>', __( 'Submission', 'badgeos' ) ),
 		'attachment' => __( 'Attachment:', 'badgeos' ),
@@ -1461,7 +1462,7 @@ function badgeos_get_submission_form( $args = array() ) {
 	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
 
 	// Patch in our achievement and user IDs
-	$defaults['achievement_id'] = $post->ID;
+	$defaults['achievement_id'] = isset( $args["achievement_id"] ) ? absint( $args["achievement_id"] ) : "";
 	$defaults['user_id']        = $user_ID;
 
 	// Merge our defaults with the passed args
@@ -1482,7 +1483,7 @@ function badgeos_get_submission_form( $args = array() ) {
     $attachment = null;
 
     if(!empty($attachment_data)){
-        $attachment = render_attachment_from_draft_submission($attachment_data);
+        $attachment = render_attachment_from_draft_submission( $attachment_data );
     }
 
 	$sub_form = '<form class="badgeos-submission-form" method="post" enctype="multipart/form-data">';
@@ -1494,14 +1495,14 @@ function badgeos_get_submission_form( $args = array() ) {
 		$sub_form .= '<p><textarea name="badgeos_submission_content" id="badgeos_submission_content">' . ( ( $submission_data ) ? $submission_data->post_content : '' ) . '</textarea></p>';
 		$sub_form .= '</fieldset>';
 
-        if(get_post_meta($post->ID, '_badgeos_all_attachment_submission', true)){
-		// submission file upload
-		$sub_form .= '<fieldset class="badgeos-file-submission">';
-		$sub_form .= '<p><label>'. $args['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
-        if($attachment){
-        $sub_form .= $attachment;
-        }
-		$sub_form .= '</fieldset>';
+        if( "on" == get_post_meta( $defaults['achievement_id'], '_badgeos_all_attachment_submission', true ) ) {
+            // submission file upload
+            $sub_form .= '<fieldset class="badgeos-file-submission">';
+            $sub_form .= '<p><label>'. $args['attachment'] .' <input type="file" name="document_file" id="document_file" /></label></p>';
+            if($attachment){
+            $sub_form .= $attachment;
+            }
+            $sub_form .= '</fieldset>';
         }
 		// submit button
 		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" />
@@ -1512,7 +1513,7 @@ function badgeos_get_submission_form( $args = array() ) {
 		$sub_form .= '<input type="hidden" name="achievement_id" value="' . absint( $args['achievement_id'] ) . '">';
 		$sub_form .= '<input type="hidden" name="user_id" value="' . absint( $args['user_id'] ) . '">';
 
-    if($submission_data){
+    if( $submission_data ){
         $sub_form .= '<input type="hidden" name="post_id" value="' . absint( $submission_data->ID ) . '">';
     }
 
