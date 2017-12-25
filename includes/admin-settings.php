@@ -48,6 +48,7 @@ function badgeos_settings_validate( $input = '' ) {
 	$input['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
 	$input['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
 	$input['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
+	$input['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
 	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 	$input['remove_data_on_uninstall'] = ( isset( $input['remove_data_on_uninstall'] ) && "on" == $input['remove_data_on_uninstall'] ) ? "on" : null;
 
@@ -208,6 +209,7 @@ function badgeos_settings_page() {
 			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
 			$submission_email_addresses = ( isset( $badgeos_settings['submission_email_addresses'] ) ) ? $badgeos_settings['submission_email_addresses'] : '';
 			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
+			$log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
 			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
 			$remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
 
@@ -259,6 +261,14 @@ function badgeos_settings_page() {
 						<select id="debug_mode" name="badgeos_settings[debug_mode]">
 							<option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
 							<option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+						</select>
+					</td>
+				</tr>
+				<tr valign="top"><th scope="row"><label for="log_entries"><?php _e( 'Log Entries:', 'badgeos' ); ?></label></th>
+					<td>
+						<select id="log_entries" name="badgeos_settings[log_entries]">
+							<option value="disabled" <?php selected( $log_entries, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+							<option value="enabled" <?php selected( $log_entries, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
 						</select>
 					</td>
 				</tr>
