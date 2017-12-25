@@ -21,7 +21,7 @@ function badgeos_get_activity_triggers() {
 	$badgeos->activity_triggers = apply_filters( 'badgeos_activity_triggers',
 		array(
 			// WordPress-specific
-			'wp_login'             => __( 'Log in to Website', 'badgeos' ),
+			'badgeos_wp_login'             => __( 'Log in to Website', 'badgeos' ),
 			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
@@ -136,7 +136,7 @@ function badgeos_trigger_event() {
 function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 
 	switch ( $trigger ) {
-		case 'wp_login' :
+		case 'badgeos_wp_login' :
 			$user_data = get_user_by( 'login', $args[ 0 ] );
 			$user_id = $user_data->ID;
 			break;
@@ -343,3 +343,23 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
 add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );
+
+/**
+ * Listner function for login trigger
+ *
+ * @param $user_login
+ * @param $user
+ */
+function badgeos_login_trigger( $user_login, $user ) {
+
+    if( empty( $user_login ) ) {
+        return;
+    }
+
+    if( !is_object( $user ) || is_null( $user ) || empty( $user ) ) {
+        return;
+    }
+
+    do_action( 'badgeos_wp_login', $user_login, $user );
+}
+add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
