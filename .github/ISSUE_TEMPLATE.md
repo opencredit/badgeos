@@ -14,6 +14,7 @@ Before submitting this issue, please search for the issue: https://github.com/op
 **Actual result:**
 
 
+
 **Expected result:**
 
 
@@ -29,4 +30,5 @@ List WordPress, BadgeOS version and any addons used for BadgeOS should be listed
 
 ### Additional Information
 
+N/A
 
