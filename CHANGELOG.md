@@ -1,5 +1,9 @@
 ## Changelog
 
+#### 1.4.9.1
+
+- Typo: Updated version in the class property
+
 #### 1.4.9
 
 - Fix: Compatibility with PHP 7.x (Tested upto PHP v7.1)
