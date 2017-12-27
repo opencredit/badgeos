@@ -40,6 +40,9 @@ class Credly_Badge_Builder {
 		// Fetch the credly API key
 		$this->credly_api_key = credly_get_api_key();
 
+		// Exit if no api key, avoid link generation errors
+    	if ( !$this->credly_api_key ) { return; }
+
 		add_action( 'wp_ajax_badge-builder-save-badge', array( $this, 'ajax_save_badge' ) );
 		add_action( 'wp_ajax_badge-builder-generate-link', array( $this, 'ajax_generate_link' ) );
 
