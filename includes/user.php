@@ -40,6 +40,10 @@ function badgeos_get_user_achievements( $args = array() ) {
 		return $achievements;
 
 	// Otherwise, we only want the specific site's achievements
+
+	// To avoid errors when the achievements don't exist in the current multisite blog
+  	if ( !array_key_exists( $args['site_id'], $achievements ) ){ return; }
+
 	$achievements = $achievements[$args['site_id']];
 
 	if ( is_array( $achievements) && ! empty( $achievements ) ) {
