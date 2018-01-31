@@ -94,3 +94,16 @@ function badgeos_log_achievement_id( $log_post_id, $object_id ) {
 	update_post_meta( $log_post_id, '_badgeos_log_achievement_id', $object_id );
 }
 add_action( 'badgeos_create_log_entry', 'badgeos_log_achievement_id', 10, 2 );
+
+function add_clear_log_button( $which ) {
+    global $post_type;
+    if( 'badgeos-log-entry' == $post_type && $which == 'top' ) {
+        $query = new WP_Query(array(
+            'post_type' => $post_type
+        ));
+        if( $query->have_posts() ){
+            ?><input type="button" id="delete_log_entries" class="button" value="Delete All Log Entries" /><?php
+        }
+    }
+}
+add_action( 'manage_posts_extra_tablenav', 'add_clear_log_button' );

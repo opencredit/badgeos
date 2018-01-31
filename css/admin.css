@@ -137,3 +137,9 @@ Shortcode Embed styles
 #select2-drop {
 	z-index: 100051;
 }
+#delete_log_entries {
+	margin: 2px 8px 0 0;
+}
+.delete-log-entries.notice img {
+	vertical-align: middle;
+}

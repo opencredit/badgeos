@@ -329,3 +329,31 @@ function badgeos_ajax_get_achievement_types() {
 	// Return our results
 	wp_send_json_success( $found );
 }
+
+function delete_badgeos_log_entries() {
+
+    $action = ( isset( $_POST['action'] ) ? $_POST['action'] : '' );
+    if( $action !== 'delete_badgeos_log_entries' ) {
+        exit;
+    }
+    if ( ! wp_next_scheduled ( 'cron_delete_log_entries' ) ) {
+        wp_schedule_single_event( time(), 'cron_delete_log_entries' );
+    }
+}
+add_action( 'wp_ajax_delete_badgeos_log_entries', 'delete_badgeos_log_entries' );
+add_action( 'wp_ajax_nopriv_delete_badgeos_log_entries', 'delete_badgeos_log_entries' );
+
+function cron_delete_log_entries() {
+    @set_time_limit( 3600 );
+
+    global $wpdb;
+
+    $badgeos_log_entry = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = 'badgeos-log-entry';" );
+    if( is_array( $badgeos_log_entry ) && !empty( $badgeos_log_entry ) && !is_null( $badgeos_log_entry ) ) {
+        foreach( $badgeos_log_entry as $log_entry ) {
+            $wpdb->query( "DELETE FROM $wpdb->posts WHERE ID = '$log_entry->ID';" );
+            $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id = '$log_entry->ID';" );
+        }
+    }
+}
+add_action( 'cron_delete_log_entries', 'cron_delete_log_entries' );
