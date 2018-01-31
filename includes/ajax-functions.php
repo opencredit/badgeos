@@ -341,7 +341,6 @@ function delete_badgeos_log_entries() {
     }
 }
 add_action( 'wp_ajax_delete_badgeos_log_entries', 'delete_badgeos_log_entries' );
-add_action( 'wp_ajax_nopriv_delete_badgeos_log_entries', 'delete_badgeos_log_entries' );
 
 function cron_delete_log_entries() {
     @set_time_limit( 3600 );
