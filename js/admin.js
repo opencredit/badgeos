@@ -62,6 +62,10 @@ jQuery(document).ready(function($) {
             };
             $.post( admin_js.ajax_url, data, function(response) {
                 $( '#wpbody-content .wrap' ).prepend( '<div class="notice notice-warning delete-log-entries"><p><img src="'+ admin_js.loading_img +'" /> &nbsp;&nbsp;BadgeOS is deleting log entries as background process, you can continue exploring badgeos</p></div>' );
+
+                setTimeout( function() {
+                	$( '#wpbody-content .wrap .delete-log-entries' ).slideUp();
+				}, 10000 );
             } );
 		}
 	});
