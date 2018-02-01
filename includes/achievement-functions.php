@@ -196,6 +196,8 @@ function badgeos_get_parent_of_achievement( $achievement_id = 0 ) {
 	// Grab the current post ID if no achievement_id was specified
 	if ( ! $achievement_id ) {
 		global $post;
+
+		if ( !$post ) { return false; }
 		$achievement_id = $post->ID;
 	}
 
@@ -389,8 +391,11 @@ function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_typ
 		'display' => true
 	) );
 
-	foreach ( $earned_achievements as $achievement )
-		$earned_ids[] = $achievement->ID;
+	if ( $earned_achievements ) {
+		foreach ( $earned_achievements as $achievement ) {
+			$earned_ids[] = $achievement->ID;
+		}
+	}	
 
 	return $earned_ids;
 
@@ -408,9 +413,12 @@ function badgeos_get_user_earned_achievement_types( $user_id = 0 ){
 
 	$achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
 
-	$achievement_types = wp_list_pluck( $achievements, 'post_type' );
-
-	return array_unique( $achievement_types );
+	if ( $achievements ) {
+		$achievement_types = wp_list_pluck( $achievements, 'post_type' );
+		return array_unique( $achievement_types );
+	} else {
+		return false;
+	}
 }
 
 /**

@@ -134,6 +134,9 @@ class BadgeOS {
 	 * Initialize CMB.
 	 */
 	function include_cmb() {
+
+		// Don't load on frontend.
+		if ( !is_admin() ) { return; }
 		require_once( $this->directory_path . 'includes/cmb/load.php' );
 	}
 
