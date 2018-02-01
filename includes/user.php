@@ -39,6 +39,8 @@ function badgeos_get_user_achievements( $args = array() ) {
 	if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] )
 		return $achievements;
 
+	if ( !array_key_exists( $args['site_id'], $achievements ) ) { return; }
+	
 	// Otherwise, we only want the specific site's achievements
 	$achievements = $achievements[$args['site_id']];
 
