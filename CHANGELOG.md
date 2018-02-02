@@ -1,5 +1,14 @@
 ## Changelog
 
+#### 1.4.10
+
+- New: Option to toggle badgeos log entries. See the option at Settings page.
+- New: Option to "Delete All Log Entries" from database. See the option at Log Entries page.
+- Fix: Uploaded attachment not being saved
+- Fix: Compatibility with PHP 7.x (Tested upto PHP v7.2)
+- Fix: Retrieve uploaded attachment regardless of post type
+- Tweak: Defensive code checks (Thanks @jonmoore)
+
 #### 1.4.9.1
 
 - Typo: Updated version in the class property
