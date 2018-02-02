@@ -471,14 +471,14 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
             $ext        = strrchr( $title, '.' );
             $title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
 
-            $post_status = ( $post_status == 'draft' ) ? $post_status : 'inherit';
+            $post_status = ( $post_status == 'draft' ) ? $post_status : 'publish';
 
             $attachment = array(
                 'post_mime_type'    => $filetype['type'],
                 'post_title'        => addslashes( $title ),
                 'post_content'      => '',
                 'post_status'       => $post_status,
-                'post_parent'       => absint( $submission_id )
+                'post_parent'       => absint( isset( $_POST['post_id'] ) ? $_POST['post_id'] : $submission_id )
             );
 
             if( $draft_file ) {
@@ -494,6 +494,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
                 update_attached_file( absint(  $draft_file[0]->ID ), $upload['file'] );
 
                 //Update post attachment
+                $attachment['post_parent'] = absint( isset( $_POST['post_id'] ) ? $_POST['post_id'] : $submission_id );
                 $attachment['ID'] = absint( $draft_file[0]->ID );
                 wp_update_post( $attachment );
 
@@ -503,7 +504,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
                 $wpdb->update( $wpdb->posts , $data_array, $where );
 
             } else {
-                $attachment['post_parent'] = absint( $submission_id );
+                $attachment['post_parent'] = absint( isset( $_POST['post_id'] ) ? $_POST['post_id'] : $submission_id );
 
                 //Insert file attachment to draft submission
                 $attach_id = wp_insert_attachment( $attachment, $upload['file'] );
@@ -517,7 +518,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
 
         if( $draft_file ) {
 
-            $post_status = ( $post_status == 'draft' ) ? $post_status : 'inherit';
+            $post_status = ( $post_status == 'draft' ) ? $post_status : 'publish';
 
             $data_array = array( 'post_status' => $post_status );
             $where = array( 'ID' => absint(  $draft_file[0]->ID ) );
@@ -1097,11 +1098,9 @@ function badgeos_save_comment_data() {
     $comment_type = '';
     $comment_approved = 1; //Approve
 
-    if(isset($_POST['badgeos_comment_draft'])){
-
+    if( isset( $_POST['badgeos_comment_draft'] ) ) {
         $comment_type = 'draft';
         $comment_approved = 0; //Unapprove
-
     }
 
 	// Process comment data
@@ -1116,23 +1115,23 @@ function badgeos_save_comment_data() {
     $comment_count = '';
 
     //Check exists comment data
-    if(isset($_POST['comment_id']) && ($_POST['comment_id'] != 0)){
+    if( isset( $_POST['comment_id'] ) && ( $_POST['comment_id'] != 0 ) ) {
 
         $comment_filter = array(
             'ID' => absint( $_POST['comment_id'] )
         );
 
-        $comment_count = get_comments($comment_filter);
+        $comment_count = get_comments( $comment_filter );
     }
 
-    if(!empty($comment_count)){
+    if( ! empty( $comment_count ) ) {
 
         //update comment data
         $where = array( 'comment_ID' => absint( $_POST['comment_id'] ) );
 
         $wpdb->update( $wpdb->comments, $comment_data, $where );
 
-    }else if( $comment_id = wp_insert_comment( $comment_data ) ){
+    } else if( $comment_id = wp_insert_comment( $comment_data ) ) {
     }
 
     //Check this submission already has file attachment
@@ -1147,54 +1146,53 @@ function badgeos_save_comment_data() {
     $draft_file = get_posts( $args );
 
     //process attachment upload if a file was submitted
-    if( ! empty($_FILES['document_file'] ) && !empty($_FILES['document_file']['name'])) {
+    if( ! empty($_FILES['document_file'] ) && ! empty( $_FILES['document_file']['name'] ) ) {
 
 			if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
 			$file   = $_FILES['document_file'];
 			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-        if( ! isset( $upload['error'] ) && isset($upload['file'] ) ) {
+        if( ! isset( $upload['error'] ) && isset( $upload['file'] ) ) {
 
             $filetype   = wp_check_filetype( basename( $upload['file'] ), null );
             $title      = $file['name'];
             $ext        = strrchr( $title, '.' );
             $title      = ( $ext !== false ) ? substr( $title, 0, -strlen( $ext ) ) : $title;
 
-            $comment_type = ($comment_type == 'draft')?$comment_type:'inherit';
+            $comment_type = ( $comment_type == 'draft' ) ? $comment_type : 'publish';
 
 				$attachment = array(
 					'post_mime_type' => $filetype['type'],
 					'post_title'     => addslashes( $title ),
 					'post_content'   => '',
-                'post_status'    =>  'draft',
-                /*'post_status'    => ! isset ($comment_type) ? 'inherit' : $comment_type ,*/
+                    'post_status'    =>  'draft',
 					'post_parent'    => absint( $_REQUEST['submission_id'] ),
 					'post_author'    => absint( $_REQUEST['user_id'] )
 				);
 
-            if(!empty($draft_file) && !empty($comment_count)){
+            if( ! empty( $draft_file ) && ! empty( $comment_count ) ) {
 
                 $attachment_file = get_post_meta( $draft_file[0]->ID, '_wp_attached_file', true );
 
                 //Delete file from directory for new file attachment with same submission
                 $upload_dir = wp_upload_dir();
                 $path = $upload_dir['basedir'].'/'.$attachment_file;
-                unlink($path);
+                unlink( $path );
 
                 //Update post meta to exists value
-                update_attached_file(absint(  $draft_file[0]->ID ), $upload['file']);
+                update_attached_file( absint(  $draft_file[0]->ID ), $upload['file'] );
 
 
                 //Update post attachment
-                $attachment['ID'] = absint(  $draft_file[0]->ID );
-                wp_update_post($attachment);
+                $attachment['ID'] = absint( $draft_file[0]->ID );
+                wp_update_post( $attachment );
 
-                $data_array = array('post_status' => $comment_type);
-                $where = array('ID' => absint(  $draft_file[0]->ID ));
+                $data_array = array( 'post_status' => $comment_type );
+                $where = array( 'ID' => absint(  $draft_file[0]->ID ) );
                 $wpdb->update( $wpdb->posts , $data_array, $where );
 
-            }else{
+            } else {
                 //Insert file attachment to draft submission
                 $attachment_id = wp_insert_attachment( $attachment, $upload['file'] );
 
@@ -1204,14 +1202,14 @@ function badgeos_save_comment_data() {
 
 			}
 		}
-    }else{
+    } else {
 
         if($draft_file){
 
-            $comment_type = ($comment_type == 'draft')?$comment_type:'inherit';
+            $comment_type = ( $comment_type == 'draft' ) ? $comment_type : 'publish';
 
-            $data_array = array('post_status' => $comment_type);
-            $where = array('ID' => absint(  $draft_file[0]->ID ));
+            $data_array = array( 'post_status' => $comment_type );
+            $where = array( 'ID' => absint(  $draft_file[0]->ID ) );
             $wpdb->update( $wpdb->posts , $data_array, $where );
 	    }
 
@@ -1219,10 +1217,10 @@ function badgeos_save_comment_data() {
 
 	if ( isset( $_POST['badgeos_comment_nonce'] ) ) {
 		global $wp;
-		if(empty($wp->request)){
-			$url = array_filter(explode('/', $_SERVER['REQUEST_URI']));
+		if( empty( $wp->request ) ) {
+			$url = array_filter( explode('/', $_SERVER['REQUEST_URI'] ) );
 			$url = $url[count($url)-1].'/'.$url[count($url)];
-		}else{
+		} else {
 			$url = $wp->request;
 		}
 		wp_redirect( home_url($url) ); exit;
