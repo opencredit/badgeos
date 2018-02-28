@@ -330,13 +330,17 @@ function badgeos_save_submission_data() {
 
     global $allowedposttags;
 
+    // Available action for other purposes
+    do_action( 'before_badgeos_create_submission', $_POST );
+
 	// Publish the submission
 	return badgeos_create_submission(
 		absint( $_POST['achievement_id'] ),
 		sprintf( '%1$s: %2$s', get_post_type( absint( $_POST['achievement_id'] ) ), get_the_title( absint( $_POST['achievement_id'] ) ) ),
         wp_kses_post( $_POST['badgeos_submission_content'], $allowedposttags ),
 		absint( $_POST['user_id'] ),
-        $action
+        $action,
+        $_POST
 	);
 }
 /**
@@ -395,7 +399,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
             add_post_meta( $post_parent, '_badgeos_submission_achievement_id', $achievement_id );
 
             // Available action for other processes
-            do_action( 'badgeos_save_submission', $post_parent  );
+            do_action( 'badgeos_save_submission', $post_parent, $_POST );
 
             // Submission status workflow
             $status_args = array(
@@ -425,7 +429,7 @@ function badgeos_create_submission( $achievement_id  = 0, $title = '', $content 
         }
 
 		// Available action for other processes
-		do_action( 'badgeos_save_submission', $submission_id );
+		do_action( 'badgeos_save_submission', $submission_id, $_POST );
 
 		// Submission status workflow
 		$status_args = array(
