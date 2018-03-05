@@ -196,6 +196,7 @@ function badgeos_credly_api_key_errors() {
 function badgeos_settings_page() {
 	?>
 	<div class="wrap" >
+        <?php settings_errors(); ?>
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'BadgeOS Settings', 'badgeos' ); ?></h2>
 
