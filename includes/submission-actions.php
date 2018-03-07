@@ -919,7 +919,7 @@ add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_su
  * @param array $messages Messages to send
  * @param array $args Submission Args
  */
-function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
+function badgeos_set_nomination_status_nomination_pending( $messages, $args ) {
 
 	if ( $args[ 'badgeos_settings' ] && 'disabled' != $args[ 'badgeos_settings' ][ 'submission_email' ] ) {
 		$email = $args[ 'submission_email_addresses' ];
@@ -954,7 +954,7 @@ function badgeos_set_submission_status_nomination_pending( $messages, $args ) {
 	return $messages;
 
 }
-add_filter( 'badgeos_notifications_submission_pending_messages', 'badgeos_set_submission_status_submission_pending', 10, 2 );
+add_filter( 'badgeos_notifications_nomination_pending_messages', 'badgeos_set_nomination_status_nomination_pending', 10, 2 );
 
 /**
  * Returns the comment form for Submissions
