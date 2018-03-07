@@ -1,5 +1,11 @@
 ## Changelog
 
+#### 1.4.11
+
+- Fix: Attachment on post Submissions
+- Fix: Display notification on setting page
+- Fix: Nomination admin email notification
+
 #### 1.4.10
 
 - New: Option to toggle badgeos log entries. See the option at Settings page.
