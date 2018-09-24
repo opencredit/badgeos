@@ -112,9 +112,19 @@ add_action( 'init', 'badgeos_register_achievements_list_shortcode' );
  */
 function badgeos_achievements_list_shortcode( $atts = array () ){
 
-	// check if shortcode has already been run
-	if ( isset( $GLOBALS['badgeos_achievements_list'] ) )
-		return '';
+    $key = 'badgeos_achievements_list';
+    if( is_array( $atts ) && count( $atts ) > 0 ) {
+        foreach( $atts as $index => $value ) {
+            $key .= "_".strval( $value ) ;
+        }
+    }
+
+    /**
+     * check if shortcode has already been run
+     */
+	if ( isset( $GLOBALS[$key] ) ) {
+        return '';
+    }
 
 	global $user_ID;
 	extract( shortcode_atts( array(
@@ -122,7 +132,9 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'limit'       => '10',
 		'show_filter' => true,
 		'show_search' => true,
-		'group_id'    => '0',
+        'show_child' => true,
+        'show_parent' => true,
+        'group_id'    => '0',
 		'user_id'     => '0',
 		'wpms'        => false,
 		'orderby'     => 'menu_order',
@@ -142,7 +154,9 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'limit'       => $limit,
 		'show_filter' => $show_filter,
 		'show_search' => $show_search,
-		'group_id'    => $group_id,
+        'show_child'  => $show_child,
+        'show_parent' => $show_parent,
+        'group_id'    => $group_id,
 		'user_id'     => $user_id,
 		'wpms'        => $wpms,
 		'orderby'     => $orderby,
@@ -152,15 +166,24 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		'meta_key'    => $meta_key,
 		'meta_value'  => $meta_value
 	);
-	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
+//	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
 	// If we're dealing with multiple achievement types
 	if ( 'all' == $type ) {
 		$post_type_plural = __( 'achievements', 'badgeos' );
 	} else {
 		$types = explode( ',', $type );
-		$post_type_plural = ( 1 == count( $types ) && !empty( $types[0] ) ) ? get_post_type_object( $types[0] )->labels->name : __( 'achievements', 'badgeos' );
-	}
+        $badge_post_type = get_post_type_object( $types[0] );
+        $type_name = '';
+        if( $badge_post_type ) {
+            if( isset( $badge_post_type->labels ) ) {
+                if( isset( $badge_post_type->labels->name ) ) {
+                    $type_name = $badge_post_type->labels->name;
+                }
+            }
+        }
+        $post_type_plural = ( 1 == count( $types ) && !empty( $types[0] ) ) ? $type_name : __( 'achievements', 'badgeos' );
+    }
 
 	$badges = '';
 
@@ -169,21 +192,22 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 		if ( $show_filter == 'false' ) {
 
 			$filter_value = 'all';
-			if( $user_id ){
+			if( $user_id ) {
 				$filter_value = 'completed';
 				$badges .= '<input type="hidden" name="user_id" id="user_id" value="'.$user_id.'">';
 			}
-			$badges .= '<input type="hidden" name="achievements_list_filter" id="achievements_list_filter" value="'.$filter_value.'">';
+			$badges .= '<input type="hidden" name="achievements_list_filter" class="achievements_list_filter" id="achievements_list_filter" value="'.$filter_value.'">';
 
-		}else{
+		} else {
 
 			$badges .= '<div id="badgeos-achievements-filter">';
 
-				$badges .= __( 'Filter:', 'badgeos' ) . '<select name="achievements_list_filter" id="achievements_list_filter">';
+				$badges .= __( 'Filter:', 'badgeos' ) . '<select name="achievements_list_filter" class="achievements_list_filter" id="achievements_list_filter">';
 
 					$badges .= '<option value="all">' . sprintf( __( 'All %s', 'badgeos' ), $post_type_plural );
+
 					// If logged in
-					if ( $user_ID >0 ) {
+					if ( $user_ID > 0 ) {
 						$badges .= '<option value="completed">' . sprintf( __( 'Completed %s', 'badgeos' ), $post_type_plural );
 						$badges .= '<option value="not-completed">' . sprintf( __( 'Not Completed %s', 'badgeos' ), $post_type_plural );
 					}
@@ -201,10 +225,10 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 
 			$search = isset( $_POST['achievements_list_search'] ) ? $_POST['achievements_list_search'] : '';
 			$badges .= '<div id="badgeos-achievements-search">';
-				$badges .= '<form id="achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
-				$badges .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="achievements_list_search" name="achievements_list_search" value="'. $search .'">' );
-				$badges .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" value="' . esc_attr__( 'Go', 'badgeos' ) . '">';
-				$badges .= '</form>';
+            $badges .= '<form id="achievements_list_search_go_form" class="achievements_list_search_go_form" action="'. get_permalink( get_the_ID() ) .'" method="post">';
+            $badges .= sprintf( __( 'Search: %s', 'badgeos' ), '<input type="text" id="achievements_list_search" name="achievements_list_search" class="achievements_list_search" value="'. $search .'">' );
+            $badges .= '<input type="submit" id="achievements_list_search_go" name="achievements_list_search_go" class="achievements_list_search_go" value="' . esc_attr__( 'Go', 'badgeos' ) . '">';
+            $badges .= '</form>';
 			$badges .= '</div>';
 
 		}
@@ -217,14 +241,25 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 	// Hidden fields and Load More button
 	$badges .= '<input type="hidden" id="badgeos_achievements_offset" value="0">';
 	$badges .= '<input type="hidden" id="badgeos_achievements_count" value="0">';
-	$badges .= '<input type="button" id="achievements_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';
+	$badges .= '<input type="button" class="achievements_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';
 	$badges .= '<div class="badgeos-spinner"></div>';
 
-	// Reset Post Data
+    if( is_array( $include ) ){
+        $include = implode(',', $include);
+    }
+    if( is_array( $exclude ) ){
+        $exclude = implode(',', $exclude);
+    }
+
+    $maindiv = '<div class="badgeos_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_child="'.$show_child.'" data-show_parent="'.$show_parent.'" data-show_filter="'.$show_filter.'" data-show_search="'.$show_search.'" data-group_id="'.$group_id.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-meta_key="'.$meta_key.'" data-meta_value="'.$meta_value.'">';
+    $maindiv .= $badges;
+    $maindiv .= '</div>';
+
+
+    // Reset Post Data
 	wp_reset_postdata();
 
 	// Save a global to prohibit multiple shortcodes
-	$GLOBALS['badgeos_achievements_list'] = true;
-	return $badges;
-
+	$GLOBALS[$key] = true;
+	return $maindiv;
 }

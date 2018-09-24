@@ -23,13 +23,20 @@
 	display: block;
 	margin: 0 auto;
 	clear: both;
+	overflow: hidden;
+}
+.badgeos_achievement_main_container {
+	margin: 50px 0;
+}
+.achievements_list_search_go_form .achievements_list_search_go {
+	margin-top: 5px;
 }
 #badgeos-achievements-container {
 	border-top: 1px dotted #aaa;
 }
 #badgeos-achievements-filter select {
 	max-width: 100%;
-	margin-left: 5px;
+	display: block;
 }
 .badgeos-achievements-list-item {
 	clear: both;
