@@ -107,99 +107,127 @@ jQuery( function( $ ) {
 		} );
 	} );
 
-	// Our main achievement list AJAX call
-	function badgeos_ajax_achievement_list() {
-		$.ajax( {
-					url : badgeos.ajax_url,
-					data : {
-						'action' : 'get-achievements',
-						'type' : badgeos.type,
-						'limit' : badgeos.limit,
-						'show_parent' : badgeos.show_parent,
-						'show_child' : badgeos.show_child,
-						'group_id' : badgeos.group_id,
-						'user_id' : badgeos.user_id,
-						'wpms' : badgeos.wpms,
-						'offset' : $( '#badgeos_achievements_offset' ).val(),
-						'count' : $( '#badgeos_achievements_count' ).val(),
-						'filter' : $( '#achievements_list_filter' ).val(),
-						'search' : $( '#achievements_list_search' ).val(),
-						'orderby' : badgeos.orderby,
-						'order' : badgeos.order,
-						'include' : badgeos.include,
-						'exclude' : badgeos.exclude,
-						'meta_key' : badgeos.meta_key,
-						'meta_value' : badgeos.meta_value
-					},
-					dataType : 'json',
-					success : function( response ) {
-						$( '.badgeos-spinner' ).hide();
-						if ( response.data.message === null ) {
-							//alert("That's all folks!");
-						}
-						else {
-							$( '#badgeos-achievements-container' ).append( response.data.message );
-							$( '#badgeos_achievements_offset' ).val( response.data.offset );
-							$( '#badgeos_achievements_count' ).val( response.data.badge_count );
-							credlyize();
-							//hide/show load more button
-							if ( response.data.query_count <= response.data.badge_count ) {
-								$( '#achievements_list_load_more' ).hide();
-							}
-							else {
-								$( '#achievements_list_load_more' ).show();
-							}
-						}
-					}
-				} );
+    function show_list_html( $mainobj ) {
+        var data_ajaxurl = $mainobj.attr("data-url");
+        var data_type = $mainobj.attr("data-type");
+        var data_limit = $mainobj.attr("data-limit");
+        var data_show_child = $mainobj.attr("data-show_child");
+        var data_show_parent = $mainobj.attr("data-show_parent");
+        var data_show_filter = $mainobj.attr("data-show_filter");
+        var data_show_search = $mainobj.attr("data-show_search");
+        var data_group_id = $mainobj.attr("data-group_id");
+        var data_user_id = $mainobj.attr("data-user_id");
+        var data_wpms = $mainobj.attr("data-wpms");
+        var data_orderby = $mainobj.attr("data-orderby");
+        var data_order = $mainobj.attr("data-order");
+        var data_include = $mainobj.attr("data-include");
+        var data_exclude = $mainobj.attr("data-exclude");
+        var data_meta_key = $mainobj.attr("data-meta_key");
+        var data_meta_value = $mainobj.attr("data-meta_value");
 
-	}
+        $mainobj.find( 'div.badgeos-spinner' ).show();
 
-	// Reset all our base query vars and run an AJAX call
-	function badgeos_ajax_achievement_list_reset() {
+        $.ajax( {
+            url : data_ajaxurl,
+            data : {
+                'action' : 'get-achievements',
+                'type' : data_type,
+                'limit' : data_limit,
+                'show_parent' : data_show_child,
+                'show_child' : data_show_parent,
+                'group_id' : data_group_id,
+                'user_id' : data_user_id,
+                'wpms' : data_wpms,
+                'offset' : $mainobj.find( '#badgeos_achievements_offset' ).val(),
+                'count' : $mainobj.find( '#badgeos_achievements_count' ).val(),
+                'filter' : $mainobj.find( '#achievements_list_filter' ).val(),
+                'search' : $mainobj.find( '#achievements_list_search' ).val(),
+                'orderby' : data_orderby,
+                'order' : data_order,
+                'include' : data_include,
+                'exclude' : data_exclude,
+                'meta_key' : data_meta_key,
+                'meta_value' : data_meta_value
+            },
+            dataType : 'json',
+            success : function( response ) {
+                $mainobj.find( 'div.badgeos-spinner' ).hide();
+                if ( response.data.message === null ) {
+                    //alert("That's all folks!");
+                } else {
+                    $mainobj.find( 'div#badgeos-achievements-container' ).append( response.data.message );
+                    $mainobj.find( '#badgeos_achievements_offset' ).val( response.data.offset );
+                    $mainobj.find( '#badgeos_achievements_count' ).val( response.data.badge_count );
 
-		$( '#badgeos_achievements_offset' ).val( 0 );
-		$( '#badgeos_achievements_count' ).val( 0 );
+                    credlyize();
+                    //hide/show load more button
+                    if ( response.data.query_count <= response.data.badge_count ) {
+                        $mainobj.find( '.achievements_list_load_more' ).hide();
 
-		$( '#badgeos-achievements-container' ).html( '' );
-		$( '#achievements_list_load_more' ).hide();
+                    } else {
+                        $mainobj.find( '.achievements_list_load_more' ).show();
+                    }
+                }
+            }
+        } );
+    }
 
-		badgeos_ajax_achievement_list();
+    // Our main achievement list AJAX call
+    function badgeos_ajax_achievement_list() {
+        $( ".badgeos_achievement_main_container" ).each( function( index ) {
+            var $mainobj = $( this );
+            show_list_html($mainobj)
+        });
+    }
 
-	}
+
+    // Reset all our base query vars and run an AJAX call
+    function badgeos_ajax_achievement_list_reset( $parentdiv ) {
+
+        $parentdiv.find( '#badgeos_achievements_offset' ).val( 0 );
+        $parentdiv.find( '#badgeos_achievements_count' ).val( 0 );
+
+        $parentdiv.find( 'div#badgeos-achievements-container' ).html( '' );
+        $parentdiv.find( '.achievements_list_load_more' ).hide();
+        show_list_html( $parentdiv )
+
+    }
 
 	// Listen for changes to the achievement filter
-	$( '#achievements_list_filter' ).change(function() {
+    $( '.achievements_list_filter' ).change(function() {
+        var $div = $(this).parents('div[class^="badgeos_achievement_main_container"]').eq(0);
+        badgeos_ajax_achievement_list_reset($div);
 
-		badgeos_ajax_achievement_list_reset();
-
-	} ).change();
+    } ).change();
 
 	// Listen for search queries
-	$( '#achievements_list_search_go_form' ).submit( function( event ) {
+    $( '.achievements_list_search_go_form' ).submit( function( event ) {
 
-		event.preventDefault();
+    	event.preventDefault();
 
-		badgeos_ajax_achievement_list_reset();
+        var $div = $(this).parents('div[class^="badgeos_achievement_main_container"]').eq(0);
+
+        badgeos_ajax_achievement_list_reset( $div );
 
 		//Disabled submit button
-		$('#achievements_list_search_go').attr('disabled','disabled');
+        $div.find('.achievements_list_search_go').attr('disabled','disabled');
 	});
 
 	//Enabled submit button
-	$('#achievements_list_search').focus(function (e) {
+	$('.achievements_list_search').focus(function (e) {
 
-		$('#achievements_list_search_go').removeAttr('disabled');
-	} );
+        $(this).removeAttr('disabled');
+        $('.achievements_list_search_go').removeAttr('disabled');
+
+    } );
 
 	// Listen for users clicking the "Load More" button
-	$( '#achievements_list_load_more' ).click( function() {
+    $( '.achievements_list_load_more' ).click( function() {
+        var $loadmoreparent = $( this ).parent();
+        $loadmoreparent.find( '.badgeos-spinner' ).show();
+        show_list_html($loadmoreparent);
 
-		$( '.badgeos-spinner' ).show();
-
-		badgeos_ajax_achievement_list();
-
-	} );
+    } );
 
 	// Listen for users clicking the show/hide details link
 	$( '#badgeos-achievements-container,.badgeos-single-achievement' ).on( 'click', '.badgeos-open-close-switch a', function( event ) {
