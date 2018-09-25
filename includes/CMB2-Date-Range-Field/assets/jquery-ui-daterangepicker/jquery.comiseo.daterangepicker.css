@@ -1,0 +1,180 @@
+/*!
+ * Copyright (c) 2014 Tamble, Inc.
+ * Licensed under MIT (https://github.com/tamble/jquery-ui-daterangepicker/raw/master/LICENSE.txt)
+ */
+
+.comiseo-daterangepicker-triggerbutton.ui-button {
+	text-align: left;
+}
+
+.comiseo-daterangepicker {
+	position: absolute;
+	padding: 2.2em 5px 5px;
+	background: #fff;
+	outline: 2px solid #ccc;
+}
+
+.comiseo-daterangepicker-mask {
+	margin: 0;
+	padding: 0;
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	/* required for IE */
+	background-color: #fff;
+	opacity: 0;
+	filter: alpha(opacity = 0);
+}
+
+.comiseo-daterangepicker-presets,
+.comiseo-daterangepicker-calendar {
+	height: 230px;
+}
+
+.comiseo-daterangepicker-right .comiseo-daterangepicker-presets,
+.comiseo-daterangepicker-left .comiseo-daterangepicker-presets {
+	position: absolute;
+	top: 5px;
+	display: table;
+	width: 98.5%;
+	height: auto;
+	text-align: center;
+}
+
+.comiseo-daterangepicker-calendar {
+	display: table;
+}
+
+.comiseo-daterangepicker-calendar > div {
+	display: table-row;
+	width: auto !important;
+}
+
+.comiseo-daterangepicker .ui-datepicker-group {
+	display: table-cell;
+	border-right: 1px solid #fff;
+}
+
+.cmb2-element.comiseo-daterangepicker .ui-datepicker-group-first td.ui-datepicker-week-end,
+.cmb2-element.comiseo-daterangepicker .ui-datepicker-group-middle td.ui-datepicker-week-end {
+	border-right: 1px solid #FFF;
+}
+
+.comiseo-daterangepicker-presets > ul {
+	display: table-row;
+}
+
+.comiseo-daterangepicker-presets li {
+	display: table-cell;
+}
+
+.ui-menu {
+	white-space: nowrap;
+}
+
+.comiseo-daterangepicker > .comiseo-daterangepicker-main.ui-widget-content {
+	border-bottom-width: 1px;
+}
+
+.comiseo-daterangepicker .ui-datepicker .ui-datepicker-today .ui-state-highlight {
+	border-width: 1px;
+}
+
+.comiseo-daterangepicker-right .comiseo-daterangepicker-calendar {
+	border-left-width: 1px;
+}
+
+.comiseo-daterangepicker-left .comiseo-daterangepicker-calendar {
+	border-right-width: 1px;
+}
+
+.comiseo-daterangepicker-buttonpanel {
+	padding: .5em;
+}
+
+/* themeable styles */
+.comiseo-daterangepicker-calendar .ui-state-highlight a.ui-state-default {
+	background: #b0c4de;
+	color: #fff;
+}
+
+.cmb2-element.comiseo-daterangepicker .ui-datepicker-multi .ui-datepicker-group table {
+	width: 99%;
+}
+
+.cmb2-element .comiseo-daterangepicker-presets .ui-state-focus,
+.cmb2-element .comiseo-daterangepicker-presets .ui-state-hover,
+.cmb2-element .comiseo-daterangepicker-presets .ui-widget-content .ui-state-focus,
+.cmb2-element .comiseo-daterangepicker-presets .ui-widget-content .ui-state-hover,
+.cmb2-element .comiseo-daterangepicker-presets .ui-widget-header .ui-state-focus,
+.cmb2-element .comiseo-daterangepicker-presets .ui-widget-header .ui-state-hover {
+	border: none;
+	background: none;
+	font-weight: normal;
+	color: inherit;
+}
+
+
+.cmb2-element.comiseo-daterangepicker .ui-button-text-icon-secondary .ui-button-text,
+.cmb2-element.comiseo-daterangepicker .ui-button-text-icons .ui-button-text {
+	padding: .4em 2.1em .4em 1em;
+}
+
+.cmb2-element.comiseo-daterangepicker .ui-button .ui-button-text {
+	display: block;
+	line-height: normal;
+}
+
+.cmb-type-date-range .ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text {
+	padding: 0 1.1em 0 0;
+}
+
+.comiseo-daterangepicker-triggerbutton {
+	position: relative;
+}
+
+.cmb-type-date-range .ui-button-text-icon-secondary .ui-button-icon-secondary {
+	right: .5em;
+}
+
+.cmb-type-date-range .ui-button-text-icon-secondary .ui-icon {
+	position: absolute;
+	top: 50%;
+	margin-top: -8px;
+}
+
+.cmb2-element .ui-datepicker .ui-datepicker-group:not( .ui-datepicker-group-last ) tbody tr {
+	border-right: 1px solid #222;
+}
+
+.cmb2-element.comiseo-daterangepicker [type="button"] {
+	color: #555;
+	border-color: #cccccc;
+	background: #f7f7f7;
+	-webkit-box-shadow: 0 1px 0 #cccccc;
+	box-shadow: 0 1px 0 #cccccc;
+	vertical-align: top;
+	display: inline-block;
+	text-decoration: none;
+	font-size: 13px;
+	line-height: 26px;
+	height: 28px;
+	margin: 0;
+	padding: 0 10px 1px;
+	cursor: pointer;
+	border-width: 1px;
+	border-style: solid;
+	-webkit-appearance: none;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	white-space: nowrap;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.cmb2-element.comiseo-daterangepicker .comiseo-daterangepicker-buttonpanel button {
+	margin-right: 5px;
+}

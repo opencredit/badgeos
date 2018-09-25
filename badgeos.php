@@ -138,7 +138,9 @@ class BadgeOS {
 
 		// Don't load on frontend.
 		if ( !is_admin() ) { return; }
-		require_once( $this->directory_path . 'includes/cmb/load.php' );
+        require_once( $this->directory_path . 'includes/cmb2/init.php' );
+        require_once( $this->directory_path . 'includes/cmb2-custom-multiple-selectbox.php' );
+        require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
 	}
 
 	/**
