@@ -326,6 +326,8 @@ add_action( 'publish_page', 'badgeos_publish_listener', 0 );
  */
 function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
+    global $wpdb;
+
 	// Enforce array for both hooks (wp_insert_comment uses object, comment_{status}_comment uses array)
 	if ( is_object( $comment ) ) {
 		$comment = get_object_vars( $comment );
@@ -335,9 +337,20 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
 		return;
 	}
+	
+    $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_badgeos_trigger_type' AND meta_value = 'badgeos_specific_new_comment'" );
 
-	// Trigger a comment actions
-	do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+    if( $trigger_data ) {
+        foreach( $trigger_data as $data ) {
+            $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+            if( absint( $post_specific_id ) == absint($comment[ 'comment_post_ID' ]) ) {
+                do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+                break;
+            }
+        }
+    }
+
+    // Trigger a comment actions
 	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 
 }
