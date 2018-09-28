@@ -153,7 +153,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 		$site_id = get_current_blog_id();
 
 	// Setup our achievement object
-	$achievement_object = badgeos_build_achievement_object( $achievement_id );
+	$achievement_object = badgeos_build_achievement_object( $achievement_id, 'earned' , $this_trigger );
 
 	// Update user's earned achievements
 	badgeos_update_user_achievements( array( 'user_id' => $user_id, 'new_achievements' => array( $achievement_object ) ) );

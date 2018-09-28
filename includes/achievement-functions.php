@@ -290,7 +290,7 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
  * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned' ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned', $trigger='' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -303,7 +303,13 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
 	$achievement_object->post_type = $achievement->post_type;
 	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
 
-	// Store the current timestamp differently based on context
+    if( !empty( $trigger ) ) {
+        $achievement_object->trigger   = $trigger;
+    } else {
+        $achievement_object->trigger   = '';
+    }
+
+    // Store the current timestamp differently based on context
 	if ( 'earned' == $context ) {
 		$achievement_object->date_earned = time();
 	} elseif ( 'started' == $context ) {
