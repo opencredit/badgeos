@@ -337,7 +337,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
 		return;
 	}
-	
+
     $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_badgeos_trigger_type' AND meta_value = 'badgeos_specific_new_comment'" );
 
     if( $trigger_data ) {
