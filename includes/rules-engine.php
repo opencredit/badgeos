@@ -138,7 +138,13 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 	if ( ! badgeos_is_achievement( $achievement_id ) )
 		return false;
 
-	// Use the current user ID if none specified
+    //Break if achievement awards twice
+    if( in_array( $achievement_id, $GLOBALS['badgeos']->award_ids ) ) {
+        $GLOBALS['badgeos']->award_ids = array();
+        return false;
+    }
+
+    // Use the current user ID if none specified
 	if ( $user_id == 0 )
 		$user_id = wp_get_current_user()->ID;
 
@@ -231,17 +237,26 @@ function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0
  */
 function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $achievement_id = 0 ) {
 
-	// Get achievements that can be earned from completing this achievement
-	$dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
+    $dependent_achievements = array();
 
-    // See if a user has unlocked all achievements of a given type
-    badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
+    $time = strtotime(" -1 second ");
+    $totals = badgeos_get_user_achievements( array("user_id"=>$user_id,"achievement_id"=>$achievement_id, 'since'=>$time) );
 
-	// Loop through each dependent achievement and see if it can be awarded
-	foreach ( $dependent_achievements as $achievement )
-		badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+    if( count($totals) < 2 ) {
+        if( ! in_array( $achievement_id, $GLOBALS['badgeos']->award_ids ) ) {
+            $GLOBALS['badgeos']->award_ids[] = $achievement_id;
+            $dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
 
+            // See if a user has unlocked all achievements of a given type
+            badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
 
+            // Loop through each dependent achievement and see if it can be awarded
+            foreach ( $dependent_achievements as $achievement )
+                badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+        }
+    } else {
+        $GLOBALS['badgeos']->award_ids = array();
+    }
 }
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
@@ -391,6 +406,63 @@ function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_i
 	return $return;
 }
 add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_step', 10, 3 );
+
+/**
+ * Checks if a user is allowed to work on a given step
+ *
+ * @since  1.0.0
+ * @param  bool    $return   The default return value
+ * @param  integer $user_id  The given user's ID
+ * @param  integer $step_id  The given step's post ID
+ * @return bool              True if user has access to step, false otherwise
+ */
+function badgeos_check_if_all_enabled( $return = false, $user_id = 0, $step_id = 0 ) {
+
+    $trigger = get_post_meta($step_id, '_badgeos_trigger_type', true );
+    if( $trigger == 'all-achievements' ) {
+        $type = get_post_meta($step_id, '_badgeos_achievement_type', true );
+        if( !empty( $type ) )
+        {
+            $userachs = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $step_id ) ) );
+            $total_awarded = count( $userachs );
+            $req_count = get_post_meta( $step_id, '_badgeos_count', true );
+
+            $times_used = intval( $req_count ) * intval( $total_awarded );
+
+            $achivements = get_posts( array(
+                'post_type'         =>	$type,
+                'posts_per_page'    =>	-1,
+                'suppress_filters'  => false,
+            ) );
+
+            $total_achivements = count( $achivements );
+            if( $total_achivements > 0 ) {
+                $earned = 0;
+                foreach ( $achivements as $achievement ) {
+                    $userachs = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement->ID ) ) );
+                    $remainder = count( $userachs ) - $times_used;
+
+                    if ( intval( $req_count ) <= intval( $remainder ) && is_array( $userachs ) ) {
+                        $earned++;
+                    }
+                }
+                if ( $earned == $total_achivements ) {
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    // Send back our eligigbility
+    return $return;
+}
+add_filter( 'user_has_access_to_achievement', 'badgeos_check_if_all_enabled', 15, 3 );
 
 /**
  * Validate whether or not a user has completed all requirements for a step.

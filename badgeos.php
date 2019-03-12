@@ -41,6 +41,8 @@ class BadgeOS {
 		$this->directory_path = plugin_dir_path( __FILE__ );
 		$this->directory_url  = plugin_dir_url( __FILE__ );
 
+        $this->award_ids  = array();
+
 		// Load translations
 		load_plugin_textdomain( 'badgeos', false, 'badgeos/languages' );
 
