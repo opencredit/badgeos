@@ -184,7 +184,7 @@ function badgeos_ajax_get_achievements() {
 		'query_count' => $query_count,
 		'badge_count' => $achievement_count,
 		'type'        => $earned_ids,
-        'attr'        => $_REQUEST
+    'attr'        => $_REQUEST
 	) );
 }
 
