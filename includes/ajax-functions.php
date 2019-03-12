@@ -67,12 +67,12 @@ function badgeos_ajax_get_achievements() {
 		$user_id = $user_ID;
 
 	// Build $include array
-	if ( !is_array( $include ) ) {
+	if ( !is_array( $include ) && !empty($include) ) {
 		$include = explode( ',', $include );
 	}
 
 	// Build $exclude array
-	if ( !is_array( $exclude ) ) {
+	if ( !is_array( $exclude ) && !empty($exclude) ) {
 		$exclude = explode( ',', $exclude );
 	}
 
@@ -183,8 +183,8 @@ function badgeos_ajax_get_achievements() {
 		'offset'      => $offset + $limit,
 		'query_count' => $query_count,
 		'badge_count' => $achievement_count,
-		'type'        => $type,
-        'attr'        => $_REQUEST
+		'type'        => $earned_ids,
+    'attr'        => $_REQUEST
 	) );
 }
 
