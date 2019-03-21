@@ -143,3 +143,11 @@ Shortcode Embed styles
 .delete-log-entries.notice img {
 	vertical-align: middle;
 }
+#revoke-badges-loader {
+	width: 25px;
+	margin-left: 20px;
+	display: none;
+}
+.form-table td.bulk-delete-detail {
+	padding-left: 20px;
+}
