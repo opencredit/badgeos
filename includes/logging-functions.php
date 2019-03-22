@@ -23,23 +23,29 @@
 
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
 
-	// Get the current user if no ID specified
-	if ( empty( $user_id ) )
-		$user_id = get_current_user_id();
 
-	// Setup our args to easily pass through a filter
-	$args = array(
-		'user_id'   => $user_id,
-		'action'    => $action,
-		'object_id' => $object_id,
-		'title'     => $title
-	);
+    $plugin_setts = get_option( 'badgeos_settings' );
+    $log_post_id = 0;
 
-	// Write log entry via filter so it can be modified by third-parties
-	$log_post_id = apply_filters( 'badgeos_post_log_entry', 0, $args );
+    if( 'enabled' == $plugin_setts['log_entries'] ) {
+        // Get the current user if no ID specified
+        if (empty($user_id))
+            $user_id = get_current_user_id();
 
-	// Available action for other processes
-	do_action( 'badgeos_create_log_entry', $log_post_id, $object_id, $user_id, $action );
+        // Setup our args to easily pass through a filter
+        $args = array(
+            'user_id' => $user_id,
+            'action' => $action,
+            'object_id' => $object_id,
+            'title' => $title
+        );
+
+        // Write log entry via filter so it can be modified by third-parties
+        $log_post_id = apply_filters('badgeos_post_log_entry', 0, $args);
+
+        // Available action for other processes
+        do_action('badgeos_create_log_entry', $log_post_id, $object_id, $user_id, $action);
+    }
 
 	return $log_post_id;
 }
