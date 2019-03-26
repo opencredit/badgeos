@@ -793,5 +793,5 @@ function badgeos_user_can_manage_submissions( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-	return ( user_can( $user_id, badgeos_get_submission_manager_capability() ) || user_can( $user_id, badgeos_get_manager_capability() ) );
+    return ( user_can( $user_id, badgeos_get_submission_manager_capability() ) );
 }
