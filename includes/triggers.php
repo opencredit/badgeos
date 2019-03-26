@@ -99,16 +99,18 @@ function badgeos_trigger_event() {
 	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
 		return $args[ 0 ];
 
-	// Update hook count for this user
-	$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
-
-	// Mark the count in the log entry
-	badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
-
 	// Now determine if any badges are earned based on this trigger event
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
-	foreach ( $triggered_achievements as $achievement ) {
+    if( count( $triggered_achievements ) > 0 ) {
+        // Update hook count for this user
+        $new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
+
+        // Mark the count in the log entry
+        badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+    }
+
+    foreach ( $triggered_achievements as $achievement ) {
         $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
         if( count( $parents ) > 0 ) {
             if( $parents[0]->post_status == 'publish' ) {

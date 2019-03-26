@@ -35,8 +35,9 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
 		return false;
 
 	// If the user has completed the achievement, award it
-	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id, $this_trigger, $site_id, $args ) )
-		badgeos_award_achievement_to_user( $achievement_id, $user_id, $this_trigger, $site_id, $args );
+	if ( badgeos_check_achievement_completion_for_user( $achievement_id, $user_id, $this_trigger, $site_id, $args ) ) {
+        badgeos_award_achievement_to_user( $achievement_id, $user_id, $this_trigger, $site_id, $args );
+    }
 }
 
 /**
@@ -239,10 +240,20 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 
     $dependent_achievements = array();
 
-    $time = strtotime(" -1 second ");
-    $totals = badgeos_get_user_achievements( array("user_id"=>$user_id,"achievement_id"=>$achievement_id, 'since'=>$time) );
+    $since = strtotime(" -1 second ");
+    if ( $achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) ) ) {
+        $achievement = array_pop( $achievements );
+        if ( is_object( $achievement ) )
+            $since = $achievement->date_earned+1;
+    }
 
-    if( count($totals) < 2 ) {
+    $totals = badgeos_get_user_achievements( array("user_id"=>$user_id,"achievement_id"=>$achievement_id, 'since'=>$since) );
+
+    if( count($totals) <= 1 ) {
+        foreach( $totals as $t ) {
+            $GLOBALS['badgeos']->award_ids[] = $t->ID;
+        }
+
         if( ! in_array( $achievement_id, $GLOBALS['badgeos']->award_ids ) ) {
             $GLOBALS['badgeos']->award_ids[] = $achievement_id;
             $dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
@@ -484,8 +495,19 @@ function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0
 		// Grab the relevent activity for this step
 		$relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
 
-		// If we meet or exceed the required number of checkins, they deserve the step
-		if ( $relevant_count >= $minimum_activity_count )
+        $achievements = badgeos_get_user_achievements(
+            array(
+                'user_id' => absint( $user_id ),
+                'achievement_id' => $step_id
+            )
+        );
+
+        $total_achievments = count( $achievements );
+        $used_points = intval( $minimum_activity_count ) * intval( $total_achievments );
+        $remainder = intval( $relevant_count ) - $used_points;
+
+        // If we meet or exceed the required number of checkins, they deserve the step
+        if ( absint( $remainder ) >= $minimum_activity_count )
 			$return = true;
 		else
 			$return = false;
