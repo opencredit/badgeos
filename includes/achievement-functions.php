@@ -298,10 +298,12 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
 		return false;
 
 	// Setup a new object for the achievement
-	$achievement_object            = new stdClass;
-	$achievement_object->ID        = $achievement_id;
-	$achievement_object->post_type = $achievement->post_type;
-	$achievement_object->points    = get_post_meta( $achievement_id, '_badgeos_points', true );
+    $achievement_object            		= new stdClass;
+    $achievement_object->ID        		= $achievement_id;
+    $achievement_object->title        	= $achievement->post_title;
+    $achievement_object->the_trigger  	= $trigger;
+    $achievement_object->post_type 		= $achievement->post_type;
+    $achievement_object->points    		= get_post_meta( $achievement_id, '_badgeos_points', true );
 
     if( !empty( $trigger ) ) {
         $achievement_object->trigger   = $trigger;
