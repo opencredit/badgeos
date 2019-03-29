@@ -23,7 +23,7 @@ function badgeos_get_users_points( $user_id = 0 ) {
 		$user_id = wp_get_current_user()->ID;
 
 	// Return our user's points as an integer (sanely falls back to 0 if empty)
-	return absint( get_user_meta( $user_id, '_badgeos_points', true ) );
+	return intval( get_user_meta( $user_id, '_badgeos_points', true ) );
 }
 
 /**
@@ -51,7 +51,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 	}
 
 	// Update our user's total
-	$total_points = max( $current_points + $new_points, 0 );
+	$total_points = intval( $current_points + $new_points );
 	update_user_meta( $user_id, '_badgeos_points', $total_points );
 
 	// Available action for triggering other processes
@@ -110,7 +110,7 @@ add_action( 'badgeos_update_users_points', 'badgeos_log_users_points', 10, 5 );
 function badgeos_award_user_points( $user_id = 0, $achievement_id = 0 ) {
 
 	// Grab our points from the provided post
-	$points = absint( get_post_meta( $achievement_id, '_badgeos_points', true ) );
+	$points = intval( get_post_meta( $achievement_id, '_badgeos_points', true ) );
 
 	if ( ! empty( $points ) )
 		return badgeos_update_users_points( $user_id, $points, false, $achievement_id );

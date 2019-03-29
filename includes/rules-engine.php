@@ -98,8 +98,8 @@ function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $
 	if ( 'points' == get_post_meta( $achievement_id, '_badgeos_earned_by', true ) ) {
 
 		// Grab our user's points and see if they at least as many as required
-		$user_points     = absint( badgeos_get_users_points( $user_id ) );
-		$points_required = absint( get_post_meta( $achievement_id, '_badgeos_points_required', true ) );
+		$user_points     = intval( badgeos_get_users_points( $user_id ) );
+		$points_required = intval( get_post_meta( $achievement_id, '_badgeos_points_required', true ) );
 		$last_activity   = badgeos_achievement_last_user_activity( $achievement_id );
 
 		if ( $user_points >= $points_required )
