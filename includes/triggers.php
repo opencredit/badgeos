@@ -22,6 +22,7 @@ function badgeos_get_activity_triggers() {
 		array(
 			// WordPress-specific
 			'badgeos_wp_login'             => __( 'Log in to Website', 'badgeos' ),
+            'badgeos_wp_not_login'         => __( 'Not Login for X days', 'badgeos' ),
 			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
@@ -136,6 +137,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 
 	switch ( $trigger ) {
 		case 'badgeos_wp_login' :
+        case 'badgeos_wp_not_login':
 			$user_data = get_user_by( 'login', $args[ 0 ] );
 			$user_id = $user_data->ID;
 			break;
@@ -382,7 +384,11 @@ function badgeos_login_trigger( $user_login, $user ) {
     if( !is_object( $user ) || is_null( $user ) || empty( $user ) ) {
         return;
     }
-
+    $user_id = intval( $user->ID );
+    do_action( 'badgeos_wp_not_login', $user_login, $user );
     do_action( 'badgeos_wp_login', $user_login, $user );
+
+    update_user_meta( $user_id, '_badgeos_last_login', time() );
+
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );

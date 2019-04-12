@@ -136,7 +136,10 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
-		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
+        <input type="number" size="5" placeholder="<?php _e( 'days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
+        <?php do_action( 'badgeos_steps_ui_html_after_num_of_days', $step_id, $post_id ); ?>
+
+        <input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
 
 		<?php do_action( 'badgeos_steps_ui_html_after_count_text', $step_id, $post_id ); ?>
@@ -161,6 +164,7 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		'count'            => absint( get_post_meta( $step_id, '_badgeos_count', true ) ),
 		'trigger_type'     => get_post_meta( $step_id, '_badgeos_trigger_type', true ),
 		'achievement_type' => get_post_meta( $step_id, '_badgeos_achievement_type', true ),
+        'num_of_days'      => get_post_meta( $step_id, '_badgeos_num_of_days', true ),
 		'achievement_post' => ''
 	);
 
@@ -268,6 +272,7 @@ function badgeos_update_steps_ajax_handler() {
 			// Clear all relation data
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
 			delete_post_meta( $step_id, '_badgeos_achievement_post' );
+            delete_post_meta( $step_id, '_badgeos_num_of_days' );
 
 			// Flip between our requirement types and make an appropriate connection
 			switch ( $trigger_type ) {
@@ -296,7 +301,11 @@ function badgeos_update_steps_ajax_handler() {
 					update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
 					$title = sprintf( __( 'comment on post %d', 'badgeos' ),  $step['achievement_post'] );
 					break;
-				default :
+                case 'badgeos_wp_not_login':
+                    update_post_meta( $step_id, '_badgeos_num_of_days', absint( $step['num_of_days'] ) );
+                    $title = sprintf( __( 'Not login for %d days', 'badgeos' ),  $step['num_of_days'] );
+                    break;
+                default :
 					$triggers = badgeos_get_activity_triggers();
 					$title = $triggers[$trigger_type];
 				break;
