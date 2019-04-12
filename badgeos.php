@@ -41,6 +41,8 @@ class BadgeOS {
 		$this->directory_path = plugin_dir_path( __FILE__ );
 		$this->directory_url  = plugin_dir_url( __FILE__ );
 
+        $this->start_time	  = strtotime(" -1 second ");
+
         $this->award_ids  = array();
 
 		// Load translations
@@ -351,6 +353,15 @@ $GLOBALS['badgeos'] = new BadgeOS();
  */
 function badgeos_get_directory_path() {
 	return $GLOBALS['badgeos']->directory_path;
+}
+
+/**
+ * Get our current start time
+ *
+ * @return timestamp
+ */
+function badgeos_get_start_time() {
+    return $GLOBALS['badgeos']->start_time;
 }
 
 /**

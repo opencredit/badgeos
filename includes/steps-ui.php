@@ -136,7 +136,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 
-        <input type="number" size="5" placeholder="<?php _e( 'days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
+        <input type="number" size="5" min="0" placeholder="<?php _e( 'days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) > 0 ? intval( $requirements['num_of_days'] ): "0" ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
         <?php do_action( 'badgeos_steps_ui_html_after_num_of_days', $step_id, $post_id ); ?>
 
         <input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
