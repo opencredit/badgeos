@@ -285,6 +285,7 @@ function delete_badgeos_bulk_achievements_records( ){
                     if( $child->ID == $item->ID ) {
                         unset( $new_achievements[ $index ] );
                         $new_achievements = array_values( $new_achievements );
+                        badgeos_decrement_user_trigger_count( $user_id, $child->ID, $del_ach_id );
                         break;
                     }
                 }

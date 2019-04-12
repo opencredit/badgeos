@@ -394,10 +394,6 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
  */
 function badgeos_user_has_access_to_not_login_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger='', $site_id=0, $args=array() ) {
 
-    // If we're not working with a step, bail here
-    if ( 'step' != get_post_type( $step_id ) )
-        return $return;
-
     // Prevent user from earning steps with no parents
     if( $this_trigger == 'badgeos_wp_not_login' ) {
 
@@ -449,7 +445,7 @@ function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_i
 	if ( $return && $parent_achievement && badgeos_get_user_achievements( array(
 			'user_id'        => absint( $user_id ),
 			'achievement_id' => absint( $step_id ),
-			'since'          => absint( badgeos_achievement_last_user_activity( $parent_achievement->ID, $user_id ) )
+			'since'          => absint( badgeos_get_start_time() )
 		) )
 	)
 		$return = false;
