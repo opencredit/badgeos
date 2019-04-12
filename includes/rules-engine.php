@@ -225,7 +225,64 @@ function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0
 			break;
 		}
 	}
+}
 
+/**
+ * if current sequential achievement is ready for award.
+ *
+ * @param  $user_id
+ * @param  $achievement_id
+ * @return $return
+ */
+function all_sequential_condition_met( $user_id, $achievement_id ) {
+
+    $return = false;
+
+    $children = badgeos_get_achievements( array( 'children_of' => $achievement_id, 'fields'=>'ids'  ) );
+    $user_achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ) ) );
+
+    $current_sequence = array();
+    foreach( $user_achievements as $ach ) {
+
+        if( in_array( $ach->ID, $children ) ) {
+            $current_sequence[] = $ach->ID;
+        }
+    }
+
+    $total_found = 0;
+    if( count( $current_sequence ) > 0) {
+        for( $i = 0; $i < count( $user_achievements ); $i++ ) {
+            for( $j = 0; $j < count( $children ); $j++ ) {
+                if( $current_sequence[ $i+$j ] == $children[ $j ] ) {
+                    if( $j+1 == count( $children ) ) {
+                        $total_found += 1;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    if( $total_found > 0 ) {
+
+        $achievements = badgeos_get_user_achievements(
+            array(
+                'user_id' => absint( $user_id ),
+                'achievement_id' => $achievement_id
+            )
+        );
+        $total_count = count( $achievements );
+        if( $total_count < $total_found ) {
+            $return = true;
+        } else {
+            $return = false;
+        }
+    } else {
+        $return = false;
+    }
+
+    return $return;
 }
 
 /**
@@ -262,8 +319,15 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
             badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
 
             // Loop through each dependent achievement and see if it can be awarded
-            foreach ( $dependent_achievements as $achievement )
-                badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+            foreach ( $dependent_achievements as $achievement ) {
+                if ( badgeos_is_achievement_sequential( $achievement->ID ) ) {
+                    if( all_sequential_condition_met( $user_id, $achievement->ID ) ) {
+                        badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+                    }
+                } else {
+                    badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+                }
+            }
         }
     } else {
         $GLOBALS['badgeos']->award_ids = array();
@@ -364,8 +428,10 @@ function badgeos_user_has_access_to_achievement( $user_id = 0, $achievement_id =
 
 		// If the parent requires sequential steps, confirm we've earned all previous steps
 		if ( $return && badgeos_is_achievement_sequential( $parent_achievement->ID ) ) {
-			foreach ( badgeos_get_children_of_achievement( $parent_achievement->ID ) as $sibling ) {
-				// If this is the current step, we're good to go
+            $children = badgeos_get_children_of_achievement( $parent_achievement->ID );
+            foreach ( $children as $sibling ) {
+
+                // If this is the current step, we're good to go
 				if ( $sibling->ID == $achievement_id ) {
 					break;
 				}
