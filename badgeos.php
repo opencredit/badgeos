@@ -257,10 +257,20 @@ class BadgeOS {
 	function plugin_menu() {
 
 		// Set minimum role setting for menus
-		$minimum_role = badgeos_get_manager_capability();
+        $caps = array( 'manage_options', 'delete_others_posts', 'publish_posts' );
+        $minimum_role 				= badgeos_get_manager_capability();
+        $minimum_submission_role 	= badgeos_get_submission_manager_capability();
 
-		// Create main menu
-		add_menu_page( 'BadgeOS', 'BadgeOS', $minimum_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
+        $admin_role_num = array_search ( $minimum_role, $caps );
+        $submission_role_num = array_search ( $minimum_submission_role, $caps );
+        $main_item_role = $minimum_role;
+        if( $submission_role_num > $admin_role_num ) {
+            $main_item_role = $minimum_submission_role;
+        }
+
+
+        // Create main menu
+        add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
