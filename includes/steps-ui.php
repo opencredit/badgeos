@@ -118,7 +118,6 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 		<?php do_action( 'badgeos_steps_ui_html_after_trigger_type', $step_id, $post_id ); ?>
 
 		<select class="select-achievement-type select-achievement-type-<?php echo $step_id; ?>">
-			<option value=""></option>
 			<?php
 				foreach ( $achievement_types as $achievement_type ) {
 					if ( 'step' == $achievement_type ){
@@ -131,9 +130,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 
 		<?php do_action( 'badgeos_steps_ui_html_after_achievement_type', $step_id, $post_id ); ?>
 
-		<select class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
-			<option value=""></option>
-		</select>
+		<select class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>"></select>
 
 		<input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
 
@@ -366,7 +363,7 @@ function badgeos_activity_trigger_post_select_ajax_handler() {
 	));
 
 	// Setup our output
-	$output = '<option></option>';
+	$output = '';
 	foreach ( $achievements as $achievement ) {
 		$output .= '<option value="' . $achievement->ID . '" ' . selected( $requirements['achievement_post'], $achievement->ID, false ) . '>' . $achievement->post_title . '</option>';
 	}

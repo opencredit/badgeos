@@ -106,19 +106,16 @@ function badgeos_trigger_event() {
 	badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
 
 	// Now determine if any badges are earned based on this trigger event
-	$triggered_achievements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT post_id
-		FROM   $wpdb->postmeta
-		WHERE  meta_key = '_badgeos_trigger_type'
-		       AND meta_value = %s
-		",
-		$this_trigger
-	) );
+    $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
 	foreach ( $triggered_achievements as $achievement ) {
-		badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
-	}
+        $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
+        if( count( $parents ) > 0 ) {
+            if( $parents[0]->post_status == 'publish' ) {
+                badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
+            }
+        }
+    }
 
 	return $args[ 0 ];
 
