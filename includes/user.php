@@ -200,10 +200,10 @@ function badgeos_user_profile_data( $user = null ) {
 
             if( $achievement_exists ) {
                 echo '<tr>';
-                echo '<td colspan="5" class="bulk-delete-detail">'.__( 'Select record before clicking on delete button', 'badgeos' ).'</td>';
+                echo '<td colspan="5" class="bulk-delete-detail">'.__( 'Select achievement(s) before clicking on revoke selected button', 'badgeos' ).'</td>';
                 echo '</tr>';
                 echo '<tr>';
-                echo '<td colspan="5" class="bulk-delete-detail"><button type="button" id="badgeos_btn_revoke_bulk_achievements" class="button button-primary">'.__( 'Delete Selected', 'badgeos' ).'</button><img id="revoke-badges-loader" src="'. admin_url( '/images/spinner-2x.gif' ) .'" /></td>';
+                echo '<td colspan="5" class="bulk-delete-detail"><button type="button" id="badgeos_btn_revoke_bulk_achievements" class="button button-primary">'.__( 'Revoke Selected', 'badgeos' ).'</button><img id="revoke-badges-loader" src="'. admin_url( '/images/spinner-2x.gif' ) .'" /></td>';
                 echo '</tr>';
             } else {
 			    echo '<tr>';
@@ -324,7 +324,7 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
 
 	// Update our user's points total, but only if edited
 	if ( isset( $_POST['user_points'] ) && $_POST['user_points'] != badgeos_get_users_points( $user_id ) ) {
-		badgeos_update_users_points( $user_id, absint( $_POST['user_points'] ), get_current_user_id() );
+		badgeos_update_users_points( $user_id, intval( $_POST['user_points'] ), get_current_user_id() );
 	}
 
 }
