@@ -177,17 +177,19 @@ function badgeos_user_profile_data( $user = null ) {
                         'achievement_id' => absint( $achievement->ID ),
                     ) );
 
-                    $achievement_title      = get_the_title( $achievement->ID );
-                    if( empty( $achievement_title ) ) {
-                        $achievement_title      = $achievement->title;
-                    } else {
-                        $achievement_title = edit_post_link( $achievement_title, '', '', $achievement->ID );
-                    }
 
                     echo '<tr>';
                     echo '<td width="5%" style="text-align:center;"><input type="checkbox" id="badgeos_ach_check_indi_'.$achievement->ID.'" value="'.$achievement->ID.'_'.$ach_index.'" name="badgeos_ach_check_indis[]" /></td>';
                     echo '<td width="20%">'. badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
-                    echo '<td width="55%"><a href="">'.$achievement_title. '</a></td>';
+                    echo '<td width="55%">';
+                    $achievement_title = get_the_title( $achievement->ID );
+                    if( empty( $achievement_title ) ) {
+                        echo '<a class="post-edit-link" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
+                    } else {
+                        $achievement_title = edit_post_link( $achievement_title, '', '', $achievement->ID );
+                    }
+                    echo '</td>';
+
                     echo '<td width="20%">'.intval( $achievement->points ).' </td>';
                     echo '</tr>';
                     $ach_index += 1;

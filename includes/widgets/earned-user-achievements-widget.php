@@ -106,25 +106,29 @@ class earned_user_achievements_widget extends WP_Widget {
 						//exclude step CPT entries from displaying in the widget
 						if ( get_post_type( $achievement->ID ) != 'step' ) {
 
-							$permalink  = get_permalink( $achievement->ID );
-                            $achievement_title      = get_the_title( $achievement->ID );
-                            if( empty( $achievement_title ) ) {
-                                $achievement_title      = $achievement->title;
-                            }
+
 
                             $img        = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
 							$thumb      = $img ? '<a class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>' : '';
 							$class      = 'widget-badgeos-item-title';
 							$item_class = $thumb ? ' has-thumb' : '';
 
-							// Setup credly data if giveable
+                            $achievement_title = get_the_title( $achievement->ID );
+                            if( empty( $achievement_title ) ) {
+                                $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
+                            } else {
+                                $permalink  = get_permalink( $achievement->ID );
+                                $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $achievement_title ) .'</a>';
+                            }
+
+                            // Setup credly data if giveable
 							$giveable   = credly_is_achievement_giveable( $achievement->ID, $user_ID );
 							$item_class .= $giveable ? ' share-credly addCredly' : '';
 							$credly_ID  = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
 
 							echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
 							echo $thumb;
-							echo '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $achievement_title ) .'</a>';
+                            echo $achievement_title;
 							echo '</li>';
 
 							$thecount++;
