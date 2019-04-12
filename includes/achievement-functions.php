@@ -471,8 +471,19 @@ function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 	// Merge our dependent achievements together
 	$achievements = array_merge( $specific_achievements, $type_achievements );
 
-	// Available filter to modify an achievement's dependents
-	return apply_filters( 'badgeos_dependent_achievements', $achievements, $achievement_id );
+    if( !is_array( $GLOBALS['badgeos']->award_ids ) || count( $GLOBALS['badgeos']->award_ids ) == 0 ) {
+        $GLOBALS['badgeos']->award_ids = [];
+    }
+
+    $new_list = array();
+    foreach($achievements as $achievement ) {
+        if( ! in_array( $achievement->ID, $GLOBALS['badgeos']->award_ids ) ) {
+            $new_list[] = $achievement;
+        }
+    }
+
+    // Available filter to modify an achievement's dependents
+	return apply_filters( 'badgeos_dependent_achievements', $new_list, $achievement_id );
 }
 
 /**
