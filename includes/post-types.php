@@ -142,7 +142,8 @@ function badgeos_register_post_types() {
 		'has_archive'        => apply_filters( 'badgeos_public_nominations', false ),
 		'hierarchical'       => false,
 		'menu_position'      => null,
-		'supports'           => array( 'title', 'editor', 'author', 'comments' )
+		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
+        'map_meta_cap' 		 => true
 	) );
 
 	// Register Log Entries CPT
@@ -173,7 +174,8 @@ function badgeos_register_post_types() {
 		'has_archive'        => false,
 		'hierarchical'       => false,
 		'menu_position'      => null,
-		'supports'           => array( 'title', 'editor', 'author', 'comments' )
+		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
+        'map_meta_cap' 		 => true
 	) );
 
 }
