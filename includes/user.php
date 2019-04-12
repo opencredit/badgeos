@@ -125,20 +125,22 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
-		echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
-		echo '<table class="form-table">';
-		echo '<tr>';
-			echo '<th scope="row">' . __( 'Email Preference', 'badgeos' ) . '</th>';
-			echo '<td>';
-				echo '<label for="_badgeos_can_notify_user"><input type="checkbox" name="_badgeos_can_notify_user" id="_badgeos_can_notify_user" value="1" ' . checked( badgeos_can_notify_user( $user->ID ), true, false ) . '/>' . __( 'Enable BadgeOS Email Notifications', 'badgeos' ) . '</label>';
-			echo '</td>';
-		echo '</tr>';
-		echo '</table>';
+    echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
+    echo '<table class="form-table">';
+    echo '<tr>';
+        echo '<th scope="row">' . __( 'Email Preference', 'badgeos' ) . '</th>';
+        echo '<td>';
+            echo '<label for="_badgeos_can_notify_user"><input type="checkbox" name="_badgeos_can_notify_user" id="_badgeos_can_notify_user" value="1" ' . checked( badgeos_can_notify_user( $user->ID ), true, false ) . '/>' . __( 'Enable BadgeOS Email Notifications', 'badgeos' ) . '</label>';
+        echo '</td>';
+    echo '</tr>';
+    echo '</table>';
+
+    echo '<input id="badgeos_user_id" name="badgeos_user_id" value="'.$user->ID.'" type="hidden" />';
 
 	//verify uesr meets minimum role to view earned badges
 	if ( current_user_can( badgeos_get_manager_capability() ) ) {
 
-		$achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
+	    $achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
 
 		echo '<h2>' . __( 'Earned Achievements', 'badgeos' ) . '</h2>';
 
@@ -156,30 +158,51 @@ function badgeos_user_profile_data( $user = null ) {
 		if ( $achievements ) {
 			echo '<table class="widefat badgeos-table">';
 			echo '<thead><tr>';
+            echo '<th width="5%"><input type="checkbox" id="badgeos_ach_check_all" name="badgeos_ach_check_all" /></th>';
 				echo '<th>'. __( 'Image', 'badgeos' ) .'</th>';
 				echo '<th>'. __( 'Name', 'badgeos' ) .'</th>';
-				echo '<th>'. __( 'Action', 'badgeos' ) .'</th>';
+				echo '<th>'. __( 'Points', 'badgeos' ) .'</th>';
 			echo '</tr></thead>';
+
+            $ach_index = 0;
+            $achievement_exists = false;
 
 			foreach ( $achievements as $achievement ) {
 
-				// Setup our revoke URL
-				$revoke_url = add_query_arg( array(
-					'action'         => 'revoke',
-					'user_id'        => absint( $user->ID ),
-					'achievement_id' => absint( $achievement->ID ),
-				) );
+                if( $achievement->post_type != 'step' ) {
+                    $achievement_exists = true;
+                    $revoke_url = add_query_arg( array(
+                        'action'         => 'revoke',
+                        'user_id'        => absint( $user->ID ),
+                        'achievement_id' => absint( $achievement->ID ),
+                    ) );
 
-				echo '<tr>';
-					echo '<td>'. badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
-					echo '<td>', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
-					echo '<td> <span class="delete"><a class="error" href="'.esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ).'">' . __( 'Revoke Award', 'badgeos' ) . '</a></span></td>';
-				echo '</tr>';
+                    echo '<tr>';
+                    echo '<td width="5%" style="text-align:center;"><input type="checkbox" id="badgeos_ach_check_indi_'.$achievement->ID.'" value="'.$achievement->ID.'_'.$ach_index.'" name="badgeos_ach_check_indis[]" /></td>';
+                    echo '<td width="20%">'. badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) ) .'</td>';
+                    echo '<td width="55%">', edit_post_link( get_the_title( $achievement->ID ), '', '', $achievement->ID ), ' </td>';
+                    echo '<td width="20%">'.( intval( $achievement->points ) > 0 ? $achievement->points : 0 ).' </td>';
+                    echo '</tr>';
+                    $ach_index += 1;
+                    $achievement_ids[] = $achievement->ID;
+                }
 
-				$achievement_ids[] = $achievement->ID;
+            }
 
-			}
-			echo '</table>';
+            if( $achievement_exists ) {
+                echo '<tr>';
+                echo '<td colspan="5" class="bulk-delete-detail">'.__( 'Select record before clicking on delete button', 'badgeos' ).'</td>';
+                echo '</tr>';
+                echo '<tr>';
+                echo '<td colspan="5" class="bulk-delete-detail"><button type="button" id="badgeos_btn_revoke_bulk_achievements" class="button button-primary">'.__( 'Delete Selected', 'badgeos' ).'</button><img id="revoke-badges-loader" src="'. admin_url( '/images/spinner-2x.gif' ) .'" /></td>';
+                echo '</tr>';
+            } else {
+			    echo '<tr>';
+			    echo '<td>'. __( 'No Achievement Found.', 'badgeos' ) .'</td>';
+			    echo '</tr>';
+            }
+
+            echo '</table>';
 		}
 
 		echo '</td></tr>';
@@ -206,6 +229,73 @@ function badgeos_user_profile_data( $user = null ) {
 add_action( 'show_user_profile', 'badgeos_user_profile_data' );
 add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
 
+/**
+ * revokes achivements
+ *
+ * @since  1.0.0
+ * @param  int  $user_id      User ID being saved
+ * @return none
+ */
+function delete_badgeos_bulk_achievements_records( ){
+
+    $user_recs = $_POST['achievements'];
+    $user_id = $_POST['user_id'];
+    if( is_array( $user_recs ) && count( $user_recs ) > 0 ) {
+        $achievements = array();
+        $indexes = array();
+        foreach( $user_recs as $rec ) {
+
+            $params = explode("_", $rec);
+
+            $achievements[] = $params[0];
+            $indexes[] = $params[1];
+        }
+        $my_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
+
+        $index = 0;
+        $new_achievements = array();
+        $delete_achievement = array();
+        foreach( $my_achievements as $my_achs ) {
+            if( $my_achs->post_type != 'step' ) {
+                if( in_array( $index, $indexes ) && in_array( $my_achs->ID, $achievements ) ) {
+                    $delete_achievement[] = $my_achs->ID;
+                } else {
+                    $new_achievements[] = $my_achs;
+                }
+                $index += 1;
+            } else {
+                $new_achievements[] = $my_achs;
+            }
+        }
+
+        foreach( $delete_achievement as $del_ach_id ) {
+            $children = badgeos_get_achievements( array( 'children_of' => $del_ach_id) );
+            foreach( $children as $child ) {
+                foreach( $new_achievements as $index => $item ) {
+
+                    if( $child->ID == $item->ID ) {
+                        unset( $new_achievements[ $index ] );
+                        $new_achievements = array_values( $new_achievements );
+                        break;
+                    }
+                }
+            }
+        }
+        $new_achievements = array_values( $new_achievements );
+
+
+        // Update user's earned achievements
+        badgeos_update_user_achievements( array( 'user_id' => $user_id, 'all_achievements' => $new_achievements ) );
+
+        // Available hook for taking further action when an achievement is revoked
+        do_action( 'badgeos_revoke_bulk_achievement', $user_id, $delete_achievement );
+        echo 'success';
+    } else {
+        echo __( 'Please, select some achievement(s) to delete', 'badgeos' );
+    }
+    exit;
+}
+add_action( 'wp_ajax_delete_badgeos_bulk_achievements', 'delete_badgeos_bulk_achievements_records' );
 
 /**
  * Save extra user meta fields to the Edit Profile screen
@@ -265,13 +355,15 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 		<tr><td id="boxes" colspan="2">
 			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) : ?>
 				<table id="<?php echo esc_attr( $achievement_slug ); ?>" class="widefat badgeos-table">
-					<thead><tr>
-						<th><?php _e( 'Image', 'badgeos' ); ?></th>
-						<th><?php echo ucwords( $achievement_type['single_name'] ); ?></th>
-						<th><?php _e( 'Action', 'badgeos' ); ?></th>
-						<th><?php _e( 'Awarded', 'badgeos' ); ?></th>
-					</tr></thead>
-					<tbody>
+                    <thead>
+                    <tr>
+                        <th><?php _e( 'Image', 'badgeos' ); ?></th>
+                        <th><?php echo ucwords( $achievement_type['single_name'] ); ?></th>
+                        <th><?php _e( 'Action', 'badgeos' ); ?></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
 					<?php
 					// Load achievement type entries
 					$the_query = new WP_Query( array(
@@ -298,7 +390,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 								</td>
 								<td>
 									<a href="<?php echo esc_url( wp_nonce_url( $award_url, 'badgeos_award_achievement' ) ); ?>"><?php printf( __( 'Award %s', 'badgeos' ), ucwords( $achievement_type['single_name'] ) ); ?></a>
-									<?php if ( in_array( get_the_ID(), (array) $achievement_ids ) ) :
+    <!-- <?php if ( in_array( get_the_ID(), (array) $achievement_ids ) ) :
 										// Setup our revoke URL
 										$revoke_url = add_query_arg( array(
 											'action'         => 'revoke',
@@ -307,7 +399,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 										) );
 										?>
 										<span class="delete"><a class="error" href="<?php echo esc_url( wp_nonce_url( $revoke_url, 'badgeos_revoke_achievement' ) ); ?>"><?php _e( 'Revoke Award', 'badgeos' ); ?></a></span>
-									<?php endif; ?>
+									<?php endif; ?> -->
 
 								</td>
 							</tr>

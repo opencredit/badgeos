@@ -1,6 +1,38 @@
 jQuery(document).ready(function($) {
 
-	// Dynamically show/hide achievement meta inputs based on "Award By" selection
+    $('#badgeos_ach_check_all').click( function( event ) {
+
+    	//event.preventDefault();
+        $('input[name="badgeos_ach_check_indis[]"]').not(this).prop('checked', this.checked);
+    });
+    $('#badgeos_btn_revoke_bulk_achievements').click( function( event ) {
+
+    	var self = $(this);
+        var chkArray = [];
+        var badgeos_user_id = $('#badgeos_user_id').val();
+        $('input[name="badgeos_ach_check_indis[]"]:checked').each(function() {
+            chkArray.push($(this).val());
+        });
+        var data = {
+            action: 'delete_badgeos_bulk_achievements', achievements: chkArray, user_id: badgeos_user_id
+        };
+
+        self.siblings( '#revoke-badges-loader' ).show();
+        $.post( admin_js.ajax_url, data, function(response) {
+            self.siblings( '#revoke-badges-loader' ).hide();
+        	if( response == 'success' ) {
+                window.location.reload();
+            } else {
+                $( '#wpbody-content .wrap' ).prepend( '<div class="notice notice-warning is-dismissible"><p>'+ response+'</p></div>' );
+            }
+        } );
+        console.log(chkArray);
+    });
+    function click_to_dismiss( div_id ){
+        $( "#".div_id ).remove();
+    }
+
+    // Dynamically show/hide achievement meta inputs based on "Award By" selection
 	$("#_badgeos_earned_by").change( function() {
 
 		// Define our potentially unnecessary inputs

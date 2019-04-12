@@ -497,8 +497,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 
 	// Grab our requirements for this achievement
 	$requirements = $wpdb->get_results( $wpdb->prepare(
-		"
-		SELECT   *
+		"SELECT   *
 		FROM     $wpdb->posts as posts
 		         LEFT JOIN $wpdb->p2p as p2p
 		                   ON p2p.p2p_from = posts.ID
@@ -506,8 +505,7 @@ function badgeos_get_required_achievements_for_achievement( $achievement_id = 0 
 		                   ON p2p.p2p_id = p2pmeta.p2p_id
 		WHERE    p2p.p2p_to = %d
 		         AND p2pmeta.meta_key = %s
-		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC
-		",
+		ORDER BY CAST( p2pmeta.meta_value as SIGNED ) ASC",
 		$achievement_id,
 		'order'
 	) );
@@ -641,9 +639,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 function credly_issue_badge( $user_id, $achievement_id ) {
 
 	if ( 'true' === $GLOBALS['badgeos_credly']->user_enabled ) {
-
 		$GLOBALS['badgeos_credly']->post_credly_user_badge( $user_id, $achievement_id );
-
 	}
 
 }
