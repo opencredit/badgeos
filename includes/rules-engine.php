@@ -253,7 +253,7 @@ function all_sequential_condition_met( $user_id, $achievement_id ) {
     if( count( $current_sequence ) > 0) {
         for( $i = 0; $i < count( $user_achievements ); $i++ ) {
             for( $j = 0; $j < count( $children ); $j++ ) {
-                if( $current_sequence[ $i+$j ] == $children[ $j ] ) {
+                if( isset( $current_sequence[ $i+$j ] ) && isset( $children[ $j ] ) && $current_sequence[ $i+$j ] == $children[ $j ] ) {
                     if( $j+1 == count( $children ) ) {
                         $total_found += 1;
                     }
