@@ -6,6 +6,15 @@ Easily create badges and set up the steps and achievements users complete to ear
 Description
 ------------
 
+**Major Release:**
+This is a major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+* [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
+* [BadgeOS Referring Link](https://badgeos.org/downloads/referring-link/ "BadgeOS Referring Link")
+* [BadgeOS Leaderboards](https://badgeos.org/downloads/leaderboards/ "BadgeOS Leaderboards")
+* [BadgeOS Activity Code](https://badgeos.org/downloads/activity-codes/ "BadgeOS Activity Code")
+* [BadgeOS Auto Messages](https://badgeos.org/downloads/auto-messages/ "BadgeOS Auto Message")
+* [BadgeOS Invite Codes](https://wordpress.org/plugins/badgeos-invite-codes-add-on/ "BadgeOS Invite Codes")
+
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.
