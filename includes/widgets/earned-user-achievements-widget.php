@@ -109,7 +109,15 @@ class earned_user_achievements_widget extends WP_Widget {
 
 
                             $img        = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
-							$thumb      = $img ? '<a class="badgeos-item-thumb" href="'. esc_url( $permalink ) .'">' . $img .'</a>' : '';
+                            $img_permalink = 'javascript:;';
+                            if ( ! function_exists( 'post_exists' ) ) {
+                                require_once( ABSPATH . 'wp-admin/includes/post.php' );
+                            }
+                            if( post_exists( get_the_title( $achievement->ID ) ) ) {
+                                $img_permalink = get_permalink( $achievement->ID );
+                            }
+
+                            $thumb      = $img ? '<a class="badgeos-item-thumb" href="'. $img_permalink .'">' . $img .'</a>' : '';
 							$class      = 'widget-badgeos-item-title';
 							$item_class = $thumb ? ' has-thumb' : '';
 
