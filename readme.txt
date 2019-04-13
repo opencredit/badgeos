@@ -2,15 +2,24 @@
 Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, farooqabdullah, adeelraza_786hotmailcom
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
-Requires at least: 3.6
-Tested up to: 4.9.4
-Stable tag: 1.4.11
+Requires at least: 4.0
+Tested up to: 5.1.1
+Stable tag: 2.0
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
 BadgeOS turns your site into an achievement and badging system. Easily create badges and set up the steps and achievements users complete to earn them.
 
 == Description ==
+
+**Major Release:**
+This is the major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+* [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
+* [BadgeOS Referring Link](https://badgeos.org/downloads/referring-link/ "BadgeOS Referring Link")
+* [BadgeOS Leaderboards](https://badgeos.org/downloads/leaderboards/ "BadgeOS Leaderboards")
+* [BadgeOS Activity Code](https://badgeos.org/downloads/activity-codes/ "BadgeOS Activity Code")
+* [BadgeOS Auto Messages](https://badgeos.org/downloads/auto-messages/ "BadgeOS Auto Message")
+* [BadgeOS Invite Codes](https://wordpress.org/plugins/badgeos-invite-codes-add-on/ "BadgeOS Invite Codes")
 
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
@@ -219,6 +228,22 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 2.0 =
+* Major Release: This is the major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. Please visit plugin's page first for guidance.
+* New: Multiple achievement listing shortcode on same page
+* New: Upgraded cmb script
+* New: Added trigger info in user achievement meta
+* New: Added option to delete earned badges in bulk from user profile page.
+* New: Added new trigger to delete/revoke user points when user is not logged to the site since X days.
+* New: Added option to add negative value to the points so that user points can be deducted too on completing the selected events.
+* Fix: Specific post comment trigger issue
+* Fix: Deleted related step post type on deleting badges
+* Fix: Dependant achievement loop issue
+* Fix: All achievement trigger badges is awarding as any achievement
+* Fix: Infinite loop issue for any achievement of type
+* Fix: Permalink issue on the user profile page when actual badge is deleted
+* Fix: Upgraded sequential step logic
 
 = 1.4.11 =
 * Fix: Attachment on post Submissions
