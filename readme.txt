@@ -13,7 +13,7 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 == Description ==
 
 **Major Release:**
-This is the major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+This is a major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
 * [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
 * [BadgeOS Referring Link](https://badgeos.org/downloads/referring-link/ "BadgeOS Referring Link")
 * [BadgeOS Leaderboards](https://badgeos.org/downloads/leaderboards/ "BadgeOS Leaderboards")
