@@ -132,7 +132,7 @@ function badgeos_register_post_types() {
 		),
 		'public'             => apply_filters( 'badgeos_public_nominations', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_nominations', false ),
-        'capabilities'       => array('manage_options'),
+		'capabilities'       => array('manage_options' => 'manage_options'),
 		'show_ui'            => badgeos_user_can_manage_submissions(),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'show_in_nav_menus'  => apply_filters( 'badgeos_public_nominations', false ),
