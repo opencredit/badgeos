@@ -132,7 +132,6 @@ function badgeos_register_post_types() {
 		),
 		'public'             => apply_filters( 'badgeos_public_nominations', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_nominations', false ),
-        'capabilities'       => array('manage_options'),
 		'show_ui'            => badgeos_user_can_manage_submissions(),
 		'show_in_menu'       => 'badgeos_badgeos',
 		'show_in_nav_menus'  => apply_filters( 'badgeos_public_nominations', false ),
@@ -143,7 +142,6 @@ function badgeos_register_post_types() {
 		'hierarchical'       => false,
 		'menu_position'      => null,
 		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
-        'map_meta_cap' 		 => true
 	) );
 
 	// Register Log Entries CPT
@@ -175,7 +173,6 @@ function badgeos_register_post_types() {
 		'hierarchical'       => false,
 		'menu_position'      => null,
 		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
-        'map_meta_cap' 		 => true
 	) );
 
 }
