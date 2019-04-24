@@ -1,5 +1,31 @@
 ## Changelog
 
+#### 2.3
+
+- Fix: Fixed BadgeOS user capalities issues
+- Fix: Improved meta box field value sanitization
+
+#### 2.2
+
+- Fix: Fixed CMB2 notification issue on plugin activation
+
+#### 2.0
+
+- Major Release: This is the major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. Please visit plugin's page first for guidance.
+- New: Multiple achievement listing shortcode on same page
+- New: Upgraded cmb script
+- New: Added trigger info in user achievement meta
+- New: Added option to delete earned badges in bulk from user profile page.
+- New: Added new trigger to delete/revoke user points when user is not logged to the site since X days.
+- New: Added option to add negative value to the points so that user points can be deducted too on completing the selected events.
+- Fix: Specific post comment trigger issue
+- Fix: Deleted related step post type on deleting badges
+- Fix: Dependant achievement loop issue
+- Fix: All achievement trigger badges is awarding as any achievement
+- Fix: Infinite loop issue for any achievement of type
+- Fix: Permalink issue on the user profile page when actual badge is deleted
+- Fix: Upgraded sequential step logic
+
 #### 1.4.11
 
 - Fix: Attachment on post Submissions

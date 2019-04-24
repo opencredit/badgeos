@@ -288,16 +288,29 @@ function badgeos_nominations_metaboxes( ) {
         'id'   => $prefix . 'nomination_update',
         'type' => 'text_only',
     ));
+
+    $user_data = get_userdata( absint( get_post_meta( $post_id, '_badgeos_nomination_user_id', true ) ) );
+    $display_name = '';
+    if( $user_data ) {
+        $display_name = $user_data->display_name;
+    }
+
     $cmb_obj->add_field(array(
         'name' => __( 'Nominee', 'badgeos' ),
         'id'   => $prefix . 'nomination_user_id',
-        'desc' => ( $post_id && get_post_type( $post_id ) == 'nomination' ) ? get_userdata( absint( get_post_meta( $post_id, '_badgeos_nomination_user_id', true ) ) )->display_name : '',
+        'desc' => ( $post_id && get_post_type( $post_id ) == 'nomination' ) ? $display_name : '',
         'type' => 'text_medium',
     ));
+
+    $user_data2 = get_userdata( absint( get_post_meta( $post_id, '_badgeos_nominating_user_id', true ) ) );
+    $display_name2 = '';
+    if( $user_data2 ) {
+        $display_name2 = $user_data2->display_name;
+    }
     $cmb_obj->add_field(array(
         'name' => __( 'Nominated By', 'badgeos' ),
         'id'   => $prefix . 'nominating_user_id',
-        'desc' => ( $post_id && get_post_type( $post_id ) == 'nomination' ) ? get_userdata( absint( get_post_meta( $post_id, '_badgeos_nominating_user_id', true ) ) )->display_name : '',
+        'desc' => ( $post_id && get_post_type( $post_id ) == 'nomination' ) ? $display_name2 : '',
         'type' => 'text_medium',
     ));
     $cmb_obj->add_field(array(
