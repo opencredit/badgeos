@@ -421,7 +421,7 @@ function badgeos_render_achievement( $achievement = 0 ) {
 			// Achievement Short Description
 			$output .= '<div class="badgeos-item-excerpt">';
 			$output .= badgeos_achievement_points_markup( $achievement->ID );
-			$excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
+			$excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : __( $achievement->post_content , 'badgeos' );
 			$output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
 			$output .= '</div><!-- .badgeos-item-excerpt -->';
 
