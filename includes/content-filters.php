@@ -548,7 +548,15 @@ function badgeos_render_feedback_filters( $atts = array() ) {
 function badgeos_render_nomination( $nomination = null, $args = array() ) {
 	global $post;
 
-	// If we weren't given a nomination, use the current post
+    $nomination_id = $nomination->ID;
+    $nomination_status = get_post_meta( $nomination_id, '_badgeos_nomination_status', true );
+
+    if( trim( $nomination_status ) != 'pending' ) {
+        return;
+    }
+
+
+    // If we weren't given a nomination, use the current post
 	if ( empty( $nomination ) ) {
 		$nomination = $post;
 	}
@@ -598,7 +606,15 @@ function badgeos_render_nomination( $nomination = null, $args = array() ) {
 function badgeos_render_submission( $submission = null, $args = array() ) {
 	global $post;
 
-	// If we weren't given a submission, use the current post
+    $submission_id = $submission->ID;
+    $submission_status = get_post_meta( $submission_id, '_badgeos_submission_status', true );
+
+    if( trim( $submission_status ) != 'pending' ) {
+        return;
+    }
+
+
+    // If we weren't given a submission, use the current post
 	if ( empty( $submission ) ) {
 		$submission = $post;
 	}
