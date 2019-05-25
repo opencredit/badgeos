@@ -109,8 +109,11 @@ function badgeos_hide_quick_edit( $actions = array() ) {
 		unset( $actions['view'] );
 
 		// Rewrtie edit text
-		$actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
-	}
+        if( isset( $actions['edit'] ) && !empty( $actions['edit'] ) ) {
+            $actions['edit'] = str_replace( 'Edit', __( 'Review', 'badgeos' ), $actions['edit'] );
+        }
+
+    }
 
 	return $actions;
 
