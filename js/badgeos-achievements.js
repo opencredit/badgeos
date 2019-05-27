@@ -161,7 +161,7 @@ jQuery( function( $ ) {
 
                     credlyize();
                     //hide/show load more button
-                    if ( response.data.query_count <= response.data.badge_count ) {
+                    if ( response.data.query_count <= response.data.offset ) {
                         $mainobj.find( '.achievements_list_load_more' ).hide();
 
                     } else {
