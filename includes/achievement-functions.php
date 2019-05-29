@@ -436,7 +436,7 @@ function badgeos_get_user_earned_achievement_types( $user_id = 0 ){
  * @param  integer $achievement_id The given achievement's post ID
  * @return array                   An array of achievements that are dependent on the given achievement
  */
-function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
+function badgeos_get_dependent_achievements( $achievement_id = 0, $user_id = 0 ) {
 	global $wpdb;
 
 	// Grab the current achievement ID if none specified
@@ -470,8 +470,58 @@ function badgeos_get_dependent_achievements( $achievement_id = 0 ) {
 		get_post_type( $achievement_id )
 	) );
 
-	// Merge our dependent achievements together
-	$achievements = array_merge( $specific_achievements, $type_achievements );
+    $new_type_achivements = array();
+    foreach( $type_achievements as $ach ) {
+        $post_id = $ach->ID;
+        $trigger = get_post_meta( $post_id, '_badgeos_trigger_type', true );
+        if( $trigger != 'specific-achievement' ) {
+            $new_type_achivements[] = $ach;
+        } else {
+
+            $achievement_post 	= get_post_meta( $post_id, '_badgeos_achievement_post', true );
+            $badgeos_count 		= get_post_meta( $post_id, '_badgeos_count', true );
+
+            $dest_achievements = badgeos_get_user_achievements(
+                array(
+                    'user_id' => absint( $user_id ),
+                    'achievement_id' => $achievement_post
+                )
+            );
+            $dest_total = count($dest_achievements);
+
+            $parent_post = $post_id;
+            $parents = badgeos_get_achievements( array( 'parent_of' => $post_id ) );
+            if( count( $parents ) > 0 ) {
+                if( $parents[0]->post_status == 'publish' ) {
+                    $parent_post = $parents[0]->ID;
+                }
+            }
+
+
+            $source_achievements = badgeos_get_user_achievements(
+                array(
+                    'user_id' => absint( $user_id ),
+                    'achievement_id' => $parent_post
+                )
+            );
+            $source_total = count( $source_achievements );
+
+            $dest_remaind_value = $dest_total * $badgeos_count;
+            $source_remaind_value = $source_total * $badgeos_count;
+
+            $allowed_limit = $dest_remaind_value - $source_remaind_value;
+
+            $dest_remaind_value.' - '.$source_remaind_value.'<br>';
+
+            $allowed_limit.' >= '.$badgeos_count;
+            if( $allowed_limit > 0 && $allowed_limit >= $badgeos_count ) {
+                $new_type_achivements[] = $ach;
+            }
+        }
+    }
+
+    // Merge our dependent achievements together
+	$achievements = array_merge( $specific_achievements, $new_type_achivements );
 
     if( !is_array( $GLOBALS['badgeos']->award_ids ) || count( $GLOBALS['badgeos']->award_ids ) == 0 ) {
         $GLOBALS['badgeos']->award_ids = [];

@@ -313,7 +313,7 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 
         if( ! in_array( $achievement_id, $GLOBALS['badgeos']->award_ids ) ) {
             $GLOBALS['badgeos']->award_ids[] = $achievement_id;
-            $dependent_achievements = badgeos_get_dependent_achievements( $achievement_id );
+            $dependent_achievements = badgeos_get_dependent_achievements( $achievement_id, $user_id );
 
             // See if a user has unlocked all achievements of a given type
             badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
@@ -596,39 +596,31 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_check_if_all_enabled', 15
  */
 function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = [] ) {
 
-    $badgeos_triggers = badgeos_get_activity_triggers();
-
-    // Only override the $return data if we're working on a step
     if( 'step' == get_post_type( $step_id ) ) {
+        // Get the required number of checkins for the step.
+        $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+        if( ! isset( $minimum_activity_count ) || empty( $minimum_activity_count ) )
+            $minimum_activity_count = 1;
 
-        if( array_key_exists( $this_trigger, $badgeos_triggers ) && !empty( $this_trigger ) ) {
+        // Grab the relevent activity for this step
+        $relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
 
-            // Get the required number of checkins for the step.
-            $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+        $achievements = badgeos_get_user_achievements(
+            array(
+                'user_id' => absint( $user_id ),
+                'achievement_id' => $step_id
+            )
+        );
 
-            if( ! isset( $minimum_activity_count ) || empty( $minimum_activity_count ) )
-                $minimum_activity_count = 1;
+        $total_achievments = count( $achievements );
+        $used_points = intval( $minimum_activity_count ) * intval( $total_achievments );
+        $remainder = intval( $relevant_count ) - $used_points;
 
-            // Grab the relevent activity for this step
-            $relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
-
-            $achievements = badgeos_get_user_achievements(
-                array(
-                    'user_id' => absint( $user_id ),
-                    'achievement_id' => $step_id
-                )
-            );
-
-            $total_achievments = count( $achievements );
-            $used_points = intval( $minimum_activity_count ) * intval( $total_achievments );
-            $remainder = intval( $relevant_count ) - $used_points;
-
-            // If we meet or exceed the required number of checkins, they deserve the step
-            if( absint( $remainder ) >= $minimum_activity_count ) {
-                $return = true;
-            } else {
-                $return = false;
-            }
+        // If we meet or exceed the required number of checkins, they deserve the step
+        if( absint( $remainder ) >= $minimum_activity_count ) {
+            $return = true;
+        } else {
+            $return = false;
         }
     }
     
