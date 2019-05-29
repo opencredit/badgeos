@@ -1,16 +1,22 @@
 ## Changelog
 
-#### 2.3
+#### 2.4 
+- New: Added action hook to run when revoking badges
+- Fix: Fixed any/all achievement trigger count issue
+- Fix: Improved logic for displaying load more button
+- Fix: Fixed the select2 js conflict
+- Fix: Sanitized nomination and submission posts action fields
+- Fix: Removed approved/denied submissions/nominations from frontend
+- Fix: Removed steps from user profile page
 
-- Fix: Fixed BadgeOS user capalities issues
+#### 2.3
+- Fix: Fixed BadgeOS user capabilities issues
 - Fix: Improved meta box field value sanitization
 
 #### 2.2
-
 - Fix: Fixed CMB2 notification issue on plugin activation
 
 #### 2.0
-
 - Major Release: This is the major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. Please visit plugin's page first for guidance.
 - New: Multiple achievement listing shortcode on same page
 - New: Upgraded cmb script

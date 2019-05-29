@@ -165,7 +165,7 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		'trigger_type'     => get_post_meta( $step_id, '_badgeos_trigger_type', true ),
 		'achievement_type' => get_post_meta( $step_id, '_badgeos_achievement_type', true ),
         'num_of_days'      => get_post_meta( $step_id, '_badgeos_num_of_days', true ),
-		'achievement_post' => ''
+		'achievement_post' => get_post_meta( $step_id, '_badgeos_achievement_post', true ),
 	);
 
 	// If the step requires a specific achievement
@@ -295,6 +295,8 @@ function badgeos_update_steps_ajax_handler() {
 							)
 						)
 					);
+
+                    update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
 					$title = '"' . get_the_title( $step['achievement_post'] ) . '"';
 					break;
 				case 'badgeos_specific_new_comment' :

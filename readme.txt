@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.1.1
-Stable tag: 2.3
+Tested up to: 5.2.1
+Stable tag: 2.4
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -228,6 +228,15 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 2.4 =
+* New: Added action hook to run when revoking badges
+* Fix: Fixed any/all achievement trigger count issue
+* Fix: Improved logic for displaying load more button
+* Fix: Fixed the select2 js conflict
+* Fix: Sanitized nomination and submission posts action fields
+* Fix: Removed approved/denied submissions/nominations from frontend
+* Fix: Removed steps from user profile page
 
 = 2.3 =
 * Fix: Fixed BadgeOS user capabilities issues
