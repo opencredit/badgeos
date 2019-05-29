@@ -350,7 +350,14 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
 	// Grab our user's (presumably updated) earned achievements
 	$earned_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id ) );
 
-	// Get the post type of the earned achievement
+    $parents = badgeos_get_achievements( array( 'parent_of' => $achievement_id ) );
+    $my_ach_id = $achievement_id;
+    if( count( $parents ) > 0 ) {
+        $my_ach_id = $parents[0]->ID;
+    }
+
+    // Get the post type of the earned achievement
+    $post_type = get_post_type( $my_ach_id );
 	$post_type = get_post_type( $achievement_id );
 
 	// Hook for unlocking all achievements of this achievement type

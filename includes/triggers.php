@@ -90,20 +90,34 @@ function badgeos_trigger_event() {
 
 	// Grab the user ID
 	$user_id = badgeos_trigger_get_user_id( $this_trigger, $args );
-	$user_data = get_user_by( 'id', $user_id );
+
+    if( 'all-achievements' == $this_trigger || 'any-achievement' == $this_trigger) {
+        $user_id = $args[ 0 ];
+    }
+
+    $user_data = get_user_by( 'id', $user_id );
 
 	// Sanity check, if we don't have a user object, bail here
-	if ( ! is_object( $user_data ) )
-		return $args[ 0 ];
+    if ( ! is_object( $user_data ) ) {
+        return $args[ 0 ];
+    }
 
-	// If the user doesn't satisfy the trigger requirements, bail here
-	if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
-		return $args[ 0 ];
+    // If the user doesn't satisfy the trigger requirements, bail here
+    if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+        return $args[ 0 ];
+    }
 
-	// Now determine if any badges are earned based on this trigger event
+    // If the user doesn't satisfy the trigger requirements, bail here
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
-    if( count( $triggered_achievements ) > 0 ) {
+    $is_any_or_all_trigger = false;
+    if ( 'badgeos_unlock_all_' == substr( $this_trigger, 0, 19 ) ) {
+        $is_any_or_all_trigger = true;
+    } else if ( 'badgeos_unlock_' == substr( $this_trigger, 0, 15 ) ) {
+        $is_any_or_all_trigger = true;
+    }
+    
+    if( count( $triggered_achievements ) > 0 || $is_any_or_all_trigger == true ) {
         // Update hook count for this user
         $new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
 
@@ -240,7 +254,13 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $a
 	// Update the triggers arary with the new count
 	$user_triggers = badgeos_get_user_triggers( $user_id, false );
 	$user_triggers[$site_id][$trigger] = $trigger_count;
-	update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+
+    if( ! isset( $user_triggers[$site_id]['all-achievements'] ) )
+        $user_triggers[$site_id]['all-achievements'] = 0;
+    if( ! isset( $user_triggers[$site_id]['any-achievement'] ) )
+        $user_triggers[$site_id]['any-achievement'] = 0;
+
+    update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
 	// Send back our trigger count for other purposes
 	return $trigger_count;
