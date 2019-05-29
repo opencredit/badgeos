@@ -31,10 +31,10 @@ class BadgeOS_Editor_Shortcodes {
 	 */
 	public function admin_scripts() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
+//		wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
 		wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery', 'badgeos-select2' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
-		wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
+//		wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
 	}
 
 	/**
@@ -59,7 +59,12 @@ class BadgeOS_Editor_Shortcodes {
 	 * @since 1.4.0
 	 */
 	public function render_button() {
-		echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=660&height=800&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" data-width="800">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
+
+        $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+        wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
+        wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
+
+        echo '<a id="insert_badgeos_shortcodes" href="#TB_inline?width=660&height=800&inlineId=select_badgeos_shortcode" class="thickbox button badgeos_media_link" data-width="800">' . __( 'Add BadgeOS Shortcode', 'badgeos' ) . '</a>';
 	}
 
 	/**
