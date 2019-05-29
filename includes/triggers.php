@@ -260,8 +260,8 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $a
 function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id ) {
 
     // Set to current site id
-    if ( ! $site_id )
-        $site_id = get_current_blog_id();
+    $site_id = get_current_blog_id();
+
 
     $args = array();
 
@@ -270,7 +270,7 @@ function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id )
 
     // Grab the current count and increase it by 1
     $trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
-    $trigger_count -= (int) apply_filters( 'badgeos_decrement_user_trigger_count', $times, $user_id, $trigger, $site_id, $args );
+    $trigger_count -= (int) apply_filters( 'badgeos_decrement_user_trigger_count', $times, $user_id, $step_id, $trigger, $site_id, $args );
 
     if( $trigger_count < 0 )
         $trigger_count = 0;
@@ -279,6 +279,8 @@ function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id )
     $user_triggers = badgeos_get_user_triggers( $user_id, false );
     $user_triggers[$site_id][$trigger] = $trigger_count;
     update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+
+    do_action( 'badgeos_decrement_user_trigger_count', $user_id, $step_id, $trigger, $del_ach_id, $site_id );
 
     // Send back our trigger count for other purposes
     return $trigger_count;
