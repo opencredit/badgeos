@@ -356,14 +356,17 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 				<option></option>
 				<?php
 				foreach ( $achievement_types as $achievement_slug => $achievement_type ) {
-					echo '<option value="'. $achievement_slug .'">' . ucwords( $achievement_type['single_name'] ) .'</option>';
-				}
+                    if( $achievement_slug != 'step' ) {
+                        echo '<option value="'. $achievement_slug .'">' . ucwords( $achievement_type['single_name'] ) .'</option>';
+                    }
+                }
 				?>
 				</select>
 			</td>
 		</tr>
 		<tr><td id="boxes" colspan="2">
 			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) : ?>
+                <?php if( $achievement_slug != 'step' ) { ?>
 				<table id="<?php echo esc_attr( $achievement_slug ); ?>" class="widefat badgeos-table">
                     <thead>
                     <tr>
@@ -423,6 +426,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 
 					</tbody>
 					</table><!-- #<?php echo esc_attr( $achievement_slug ); ?> -->
+                <?php } ?>
 			<?php endforeach; ?>
 		</td><!-- #boxes --></tr>
 	</table>
