@@ -606,6 +606,9 @@ function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0
             // Get the required number of checkins for the step.
             $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
 
+            if( ! isset( $minimum_activity_count ) || empty( $minimum_activity_count ) )
+                $minimum_activity_count = 1;
+
             // Grab the relevent activity for this step
             $relevant_count = absint( badgeos_get_step_activity_count( $user_id, $step_id ) );
 
@@ -627,9 +630,9 @@ function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0
                 $return = false;
             }
         }
-
-        return $return;
     }
+    
+    return $return;
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 6 );
 

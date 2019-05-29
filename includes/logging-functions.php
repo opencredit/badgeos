@@ -76,7 +76,11 @@ function badgeos_log_entry( $log_post_id, $args ) {
 		$args['title']     = ! empty( $title ) ? $title : apply_filters( 'badgeos_log_entry_title', "{$user->user_login} {$args['action']} the \"{$achievement->post_title}\" {$achievement_type}", $args );
 	}
 
-	// Insert our entry as a 'badgeos-log-entry' post
+    if( ! post_type_exists( 'badgeos-log-entry' ) ) {
+        badgeos_register_log_post_type();
+    }
+
+    // Insert our entry as a 'badgeos-log-entry' post
 	$log_post_id = wp_insert_post( array(
 		'post_title'  => $args['title'],
 		'post_author' => absint( $args['user_id'] ),

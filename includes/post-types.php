@@ -144,39 +144,47 @@ function badgeos_register_post_types() {
 		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
 	) );
 
-	// Register Log Entries CPT
-	register_post_type( 'badgeos-log-entry', array(
-		'labels'             => array(
-			'name'               => __( 'Log Entries', 'badgeos' ),
-			'singular_name'      => __( 'Log Entry', 'badgeos' ),
-			'add_new'            => __( 'Add New', 'badgeos' ),
-			'add_new_item'       => __( 'Add New Log Entry', 'badgeos' ),
-			'edit_item'          => __( 'Edit Log Entry', 'badgeos' ),
-			'new_item'           => __( 'New Log Entry', 'badgeos' ),
-			'all_items'          => __( 'Log Entries', 'badgeos' ),
-			'view_item'          => __( 'View Log Entries', 'badgeos' ),
-			'search_items'       => __( 'Search Log Entries', 'badgeos' ),
-			'not_found'          => __( 'No Log Entries found', 'badgeos' ),
-			'not_found_in_trash' => __( 'No Log Entries found in Trash', 'badgeos' ),
-			'parent_item_colon'  => '',
-			'menu_name'          => __( 'Log Entries', 'badgeos' )
-		),
-		'public'             => false,
-		'publicly_queryable' => false,
-		'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
-		'show_in_menu'       => 'badgeos_badgeos',
-		'show_in_nav_menus'  => false,
-		'query_var'          => true,
-		'rewrite'            => array( 'slug' => 'log' ),
-		'capability_type'    => 'post',
-		'has_archive'        => false,
-		'hierarchical'       => false,
-		'menu_position'      => null,
-		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
-	) );
+    badgeos_register_log_post_type();
 
 }
 add_action( 'init', 'badgeos_register_post_types' );
+
+/**
+ * Register Log Entries CPT
+ */
+function badgeos_register_log_post_type() {
+
+    // Register Log Entries CPT
+    register_post_type( 'badgeos-log-entry', array(
+        'labels'             => array(
+            'name'               => __( 'Log Entries', 'badgeos' ),
+            'singular_name'      => __( 'Log Entry', 'badgeos' ),
+            'add_new'            => __( 'Add New', 'badgeos' ),
+            'add_new_item'       => __( 'Add New Log Entry', 'badgeos' ),
+            'edit_item'          => __( 'Edit Log Entry', 'badgeos' ),
+            'new_item'           => __( 'New Log Entry', 'badgeos' ),
+            'all_items'          => __( 'Log Entries', 'badgeos' ),
+            'view_item'          => __( 'View Log Entries', 'badgeos' ),
+            'search_items'       => __( 'Search Log Entries', 'badgeos' ),
+            'not_found'          => __( 'No Log Entries found', 'badgeos' ),
+            'not_found_in_trash' => __( 'No Log Entries found in Trash', 'badgeos' ),
+            'parent_item_colon'  => '',
+            'menu_name'          => __( 'Log Entries', 'badgeos' )
+        ),
+        'public'             => false,
+        'publicly_queryable' => false,
+        'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
+        'show_in_menu'       => 'badgeos_badgeos',
+        'show_in_nav_menus'  => false,
+        'query_var'          => true,
+        'rewrite'            => array( 'slug' => 'log' ),
+        'capability_type'    => 'post',
+        'has_archive'        => false,
+        'hierarchical'       => false,
+        'menu_position'      => null,
+        'supports'           => array( 'title', 'editor', 'author', 'comments' ),
+    ) );
+}
 
 /**
  * Register our various achievement types for use in the rules engine
