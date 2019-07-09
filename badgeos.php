@@ -139,12 +139,18 @@ class BadgeOS {
 	 * Initialize CMB.
 	 */
 	function include_cmb() {
-
 		// Don't load on frontend.
 		if ( !is_admin() ) { return; }
-        require_once( $this->directory_path . 'includes/cmb2/init.php' );
-        require_once( $this->directory_path . 'includes/cmb2-custom-multiple-selectbox.php' );
-        require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
+		// CMB2 handles being included by multiple plugins cleanly
+		require_once( $this->directory_path . 'includes/cmb2/init.php' );
+		// Only load CMB2 multiple selectbox field if needed
+		if( ! function_exists( 'cmb2_render_select_multiple_field_type' ) && ! function_exists( 'cmb2_sanitize_select_multiple_callback' ) ) {
+			require_once( $this->directory_path . 'includes/cmb2-custom-multiple-selectbox.php' );
+		}
+		// Only load CMB2 date range field if needed
+		if( ! function_exists( 'cmb2_sanitize_select_date_range' ) && ! function_exists( 'cmb2_render_select_date_range' ) ) {
+			require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
+		}
 	}
 
 	/**
