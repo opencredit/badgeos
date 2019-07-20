@@ -94,7 +94,8 @@ function badgeos_points_award_trigger_event() {
 	$site_id = $blog_id;
 
 	$args = func_get_args();
-	
+	$comment_post_id = $args[3]['comment_post_ID'];
+
 	/**
      * Grab our current trigger
      */
@@ -118,19 +119,42 @@ function badgeos_points_award_trigger_event() {
 	if ( ! apply_filters( 'user_deserves_point_award_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
         return $args[ 0 ];
     }
-    
-	/**
-     * Now determine if any badges are earned based on this trigger event
-     */
-	$triggered_points = $wpdb->get_results( $wpdb->prepare(
-        "SELECT p.ID as post_id 
+
+    $triggered_points = '';
+	if( 'badgeos_specific_new_comment' == $this_trigger ) {
+        $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
+        if( $trigger_data ) {
+            foreach( $trigger_data as $data ) {
+                $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+                if( absint( $post_specific_id ) == absint($comment_post_id) ) {
+                    /**
+                     * Now determine if any badges are earned based on this trigger event
+                     */
+                    $triggered_points = $wpdb->get_results( $wpdb->prepare(
+                        "SELECT p.ID as post_id 
         FROM $wpdb->postmeta AS pm
         INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
         ",
-        $this_trigger
-     ) );
+                        $this_trigger
+                    ) );
+                    break;
+                }
+            }
+        }
+    } else {
 
-	
+        /**
+         * Now determine if any badges are earned based on this trigger event
+         */
+        $triggered_points = $wpdb->get_results( $wpdb->prepare(
+            "SELECT p.ID as post_id 
+        FROM $wpdb->postmeta AS pm
+        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+        ",
+            $this_trigger
+        ) );
+    }
+
 	if( !empty( $triggered_points ) ) {
 		foreach ( $triggered_points as $point ) { 
 
@@ -180,6 +204,7 @@ function badgeos_points_deduct_trigger_event() {
 	$site_id = $blog_id;
 
 	$args = func_get_args();
+    $comment_post_id = $args[3]['comment_post_ID'];
 
 	/**
      * Grab our current trigger
@@ -206,16 +231,40 @@ function badgeos_points_deduct_trigger_event() {
         return $args[ 0 ];
     }
 
-	/**
-     * Now determine if any Achievements are earned based on this trigger event
-     */
-	$triggered_deducts = $wpdb->get_results( $wpdb->prepare(
-        "SELECT p.ID as post_id 
+    $triggered_deducts = '';
+    if( 'badgeos_specific_new_comment' == $this_trigger ) {
+        $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_deduct_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
+        if( $trigger_data ) {
+            foreach( $trigger_data as $data ) {
+                $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+                if( absint( $post_specific_id ) == absint($comment_post_id) ) {
+                    /**
+                     * Now determine if any Achievements are earned based on this trigger event
+                     */
+                    $triggered_deducts = $wpdb->get_results( $wpdb->prepare(
+                        "SELECT p.ID as post_id 
         FROM $wpdb->postmeta AS pm
         INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_deduct_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
         ",
-        $this_trigger
-    ) );
+                        $this_trigger
+                    ) );
+                    break;
+                }
+            }
+        }
+    } else {
+
+        /**
+         * Now determine if any Achievements are earned based on this trigger event
+         */
+        $triggered_deducts = $wpdb->get_results( $wpdb->prepare(
+            "SELECT p.ID as post_id 
+        FROM $wpdb->postmeta AS pm
+        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_deduct_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+        ",
+            $this_trigger
+        ) );
+    }
 
 	if( !empty( $triggered_deducts ) ) {
 		foreach ( $triggered_deducts as $point ) { 

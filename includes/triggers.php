@@ -408,8 +408,8 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
 
     $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' or meta_key = '_deduct_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
-    
-    if( $trigger_data ) {
+
+	if( $trigger_data ) {
         foreach( $trigger_data as $data ) {
             $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
             if( absint( $post_specific_id ) == absint($comment[ 'comment_post_ID' ]) ) {
@@ -418,6 +418,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
             }
         }
     }
+
     // Trigger a comment actions
 	  do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 
