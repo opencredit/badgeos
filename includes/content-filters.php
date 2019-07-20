@@ -313,9 +313,19 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 		global $post;
 		$achievement_id = $post->ID;
 	}
+	
+	$points = get_post_meta( $achievement_id, '_badgeos_points', true );
+	
+	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
+		$point_value 	= $points['_badgeos_points'];
+		$points_type 	= $points['_badgeos_points_type'];
+		
+		$points_type_lbl = get_the_title( $points_type );
 
-	// Return our markup
-	return ( $points = get_post_meta( $achievement_id, '_badgeos_points', true ) ) ? '<div class="badgeos-item-points">' . sprintf( __( '%d Points', 'badgeos' ), $points ) . '</div>' : '';
+		return '<div class="badgeos-item-points">' . sprintf( __( '%d %s', 'badgeos' ), $point_value, $points_type_lbl) . '</div>';
+	} else { 
+		return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';	
+	}
 }
 
 /**

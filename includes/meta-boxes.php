@@ -120,7 +120,7 @@ function badgeos_achievment_metaboxes( ) {
         'name' => __( 'Points Awarded', 'badgeos' ),
         'desc' => ' '.__( 'Points awarded for earning this achievement (optional). Leave empty if no points are awarded.', 'badgeos' ),
         'id'   => $prefix . 'points',
-        'type' => 'text_small',
+        'type' => 'credit_field',
     ));
 
     $cmb_obj->add_field(array(
@@ -142,7 +142,7 @@ function badgeos_achievment_metaboxes( ) {
         'name' => __( 'Minimum Points Requried', 'badgeos' ),
         'desc' => ' '.__( 'Fewest number of points required for earning this achievement.', 'badgeos' ),
         'id'   => $prefix . 'points_required',
-        'type' => 'text_small',
+        'type' => 'credit_field',
     ));
 
     $cmb_obj->add_field(array(

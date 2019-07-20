@@ -1,4 +1,10 @@
 jQuery(document).ready(function($) {
+	$( '.badgeos-credits .badgeos-credit-edit' ).click( function() {
+
+        var self = $( this );
+        self.siblings( '.badgeos-edit-credit-wrapper' ).show();
+        self.siblings( '.badgeos-earned-credit' ).hide();
+    } );
 
     $('#badgeos_ach_check_all').click( function( event ) {
 
@@ -37,7 +43,7 @@ jQuery(document).ready(function($) {
 
 		// Define our potentially unnecessary inputs
 		var badgeos_sequential = $('#_badgeos_sequential').parent().parent();
-		var badgeos_points_required = $('#_badgeos_points_required').parent().parent();
+		var badgeos_points_required = $('#_badgeos_points_required_badgeos_points_required').parent().parent().parent();
 
 		// // Hide our potentially unnecessary inputs
 		badgeos_sequential.hide();

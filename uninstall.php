@@ -120,3 +120,4 @@ $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='p2p_storage';");
  */
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2p" );
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2pmeta" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_points");

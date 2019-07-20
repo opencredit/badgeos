@@ -303,7 +303,17 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
     $achievement_object->title        	= $achievement->post_title;
     $achievement_object->the_trigger  	= $trigger;
     $achievement_object->post_type 		= $achievement->post_type;
-    $achievement_object->points    		= get_post_meta( $achievement_id, '_badgeos_points', true );
+	
+	$points = get_post_meta( $achievement_id, '_badgeos_points', true );
+	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
+		$point_value 	= $points['_badgeos_points'];
+		$points_type 	= $points['_badgeos_points_type'];
+		$achievement_object->points   		= $point_value;
+		$achievement_object->point_type   	= $points_type;
+	} else {
+		$achievement_object->points    		= 0;
+		$achievement_object->point_type   	= '';
+	}
 
     if( !empty( $trigger ) ) {
         $achievement_object->trigger   = $trigger;

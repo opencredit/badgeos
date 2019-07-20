@@ -151,3 +151,53 @@ Shortcode Embed styles
 .form-table td.bulk-delete-detail {
 	padding-left: 20px;
 }
+.profile-php .earned-user-credits-wrapper,
+.user-edit-php .earned-user-credits-wrapper {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits {
+	border: 1px solid #e8e8e8;
+	position: relative;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	cursor: pointer;
+	color: #0073aa;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper {
+	padding: 9px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit {
+	padding: 15px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits h3,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits h3 {
+	margin: 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: left;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: right;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
