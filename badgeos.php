@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 2.4
+* Version: 3.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -33,7 +33,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '2.4';
+	public static $version = '3.0';
 
 	function __construct() {
 		// Define plugin constants
@@ -79,6 +79,26 @@ class BadgeOS {
 
 		$point_type = 'point_type';
 		
+		$table_name = $wpdb->prefix . "badgeos_achievements";
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+			$sql = "CREATE TABLE " . $table_name . " (
+				`entry_id` int(10) NOT NULL AUTO_INCREMENT,
+				`ID` int(10) DEFAULT '0',
+				`post_type` varchar(100) DEFAULT NULL,
+				`achievement_title` varchar(100) DEFAULT NULL,
+				`rec_type` varchar(10) DEFAULT '',
+				`points` int(10) DEFAULT '0',
+				`point_type` varchar(50) DEFAULT '',
+				`user_id` int(10) DEFAULT '0',
+				`this_trigger` varchar(100) DEFAULT NULL,
+				`image` varchar(50) DEFAULT NULL,
+				`site_id` int(10) DEFAULT '0',
+				`date_earned` timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,						
+				PRIMARY KEY (`entry_id`)
+			);";
+			$wpdb->query( $sql );
+		}
+
 		/**
          * Badgeos Points Table
          */
@@ -139,12 +159,12 @@ class BadgeOS {
 			if( !isset( $badgeos_settings['points_deduct_post_type'] ) && empty( $badgeos_settings['points_deduct_post_type'] ) )
 				$badgeos_settings['points_deduct_post_type']   = 'point_deduct';
 
-			if( ! isset( $badgeos_settings['default_point_type'] ) && empty( $badgeos_settings['default_point_type'] ) ) {
-				$default_point = get_page_by_title( 'Points', 'OBJECT', $point_type );
-				if( $default_point ) {
-					$badgeos_settings['default_point_type'] = $default_point->ID;
-				}
-			}
+			// if( ! isset( $badgeos_settings['default_point_type'] ) && empty( $badgeos_settings['default_point_type'] ) ) {
+			// 	$default_point = get_page_by_title( 'Points', 'OBJECT', $point_type );
+			// 	if( $default_point ) {
+			// 		$badgeos_settings['default_point_type'] = $default_point->ID;
+			// 	}
+			// }
 
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
@@ -167,6 +187,14 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/logging-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
 		
+		/**
+		 * Move achivements from meta to db
+		 */
+		require_once( $this->directory_path . 'includes/meta-to-db.php' );
+
+		/**
+		 * Point files
+		 */
 		require_once( $this->directory_path . 'includes/points/post-types.php' );
 		require_once( $this->directory_path . 'includes/points/meta-boxes.php' );
 		require_once( $this->directory_path . 'includes/points/award-steps-ui.php' );

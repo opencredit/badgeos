@@ -27,7 +27,8 @@ function badgeos_get_activity_triggers() {
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
-
+			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
+			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
 			// BadgeOS-specific
 			'specific-achievement' => __( 'Specific Achievement of Type', 'badgeos' ),
 			'any-achievement'      => __( 'Any Achievement of Type', 'badgeos' ),
@@ -107,7 +108,7 @@ function badgeos_trigger_event() {
         return $args[ 0 ];
     }
 
-    // If the user doesn't satisfy the trigger requirements, bail here
+    // Now determine if any badges are earned based on this trigger event
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
     $is_any_or_all_trigger = false;
@@ -405,11 +406,10 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
 		return;
 	}
+	
+	$trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' or meta_key = '_deduct_trigger_type' or meta_key = '_rank_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
 
-
-    $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' or meta_key = '_deduct_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
-
-	if( $trigger_data ) {
+    if( $trigger_data ) {
         foreach( $trigger_data as $data ) {
             $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
             if( absint( $post_specific_id ) == absint($comment[ 'comment_post_ID' ]) ) {
@@ -419,9 +419,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
         }
     }
 
-    // Trigger a comment actions
-	  do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
-
+	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
 add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );

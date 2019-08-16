@@ -59,9 +59,14 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 	// Set to current site id
 	if ( ! $site_id )
 		$site_id = get_current_blog_id();
-
+	
+	$timestamp = badgeos_achievement_last_user_activity( $achievement_id, $user_id );
+	if( intval( $timestamp ) < 1 ) {
+		$timestamp = $GLOBALS['badgeos']->start_time;
+	}
+	
 	// If the user has not already earned the achievement...
-	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => 1 + badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
+	if ( ! badgeos_get_user_achievements( array( 'user_id' => absint( $user_id ), 'achievement_id' => absint( $achievement_id ), 'since' => $timestamp ) ) ) {
 
 		// Grab our required achievements for this achievement
 		$required_achievements = badgeos_get_required_achievements_for_achievement( $achievement_id );
@@ -70,7 +75,7 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 		if ( is_array( $required_achievements ) && ! empty( $required_achievements ) ) {
 			foreach ( $required_achievements as $requirement ) {
 				// Has the user already earned the requirement?
-				if ( ! badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $requirement->ID, 'since' => badgeos_achievement_last_user_activity( $achievement_id, $user_id ) ) ) ) {
+				if ( ! badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $requirement->ID, 'since' => $timestamp-1 ) ) ) {
 					$return = false;
 					break;
 				}
@@ -232,7 +237,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 	$achievement_object = badgeos_build_achievement_object( $achievement_id, 'earned' , $this_trigger );
 
 	// Update user's earned achievements
-	badgeos_update_user_achievements( array( 'user_id' => $user_id, 'new_achievements' => array( $achievement_object ) ) );
+	$entry_id = badgeos_update_user_achievements( array( 'user_id' => $user_id, 'new_achievements' => array( $achievement_object ) ) );
 
 	// Log the earning of the award
 	badgeos_post_log_entry( $achievement_id, $user_id );
@@ -251,7 +256,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
 	}
 
 	// Available hook to do other things with each awarded achievement
-	do_action( 'badgeos_award_achievement', $user_id, $achievement_id, $this_trigger, $site_id, $args );
+	do_action( 'badgeos_award_achievement', $user_id, $achievement_id, $this_trigger, $site_id, $args, $entry_id );
 
 	if ( $is_recursed_filter ) {
 		reset( $wp_filter[ 'badgeos_award_achievement' ] );
@@ -271,7 +276,7 @@ function badgeos_award_achievement_to_user( $achievement_id = 0, $user_id = 0, $
  * @param  integer $user_id        The given user's ID
  * @return void
  */
-function badgeos_revoke_achievement_from_user( $achievement_id = 0, $user_id = 0 ) {
+function badgeos_revoke_achievement_from_user( $entry_id = 0, $achievement_id = 0, $user_id = 0 ) {
 
 	// Use the current user's ID if none specified
 	if ( ! $user_id )
@@ -371,28 +376,22 @@ function all_sequential_condition_met( $user_id, $achievement_id ) {
 function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $achievement_id = 0 ) {
 
     $dependent_achievements = array();
-
-    $since = strtotime(" -1 second ");
-    if ( $achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id' => $achievement_id ) ) ) {
-        $achievement = array_pop( $achievements );
-        if ( is_object( $achievement ) )
-            $since = $achievement->date_earned+1;
-    }
-
-    $totals = badgeos_get_user_achievements( array("user_id"=>$user_id,"achievement_id"=>$achievement_id, 'since'=>$since) );
-
+	$timestamp = 0;
+	if( intval( $timestamp ) < 1 ) {
+		$timestamp = $GLOBALS['badgeos']->start_time;
+	}
+	
+    $totals = badgeos_get_user_achievements( array("user_id"=>$user_id,"achievement_id"=>$achievement_id, 'since'=>$timestamp+1) );
+	
     if( count($totals) <= 1 ) {
-        foreach( $totals as $t ) {
-            $GLOBALS['badgeos']->award_ids[] = $t->ID;
-        }
-
         if( ! in_array( $achievement_id, $GLOBALS['badgeos']->award_ids ) ) {
+			
             $GLOBALS['badgeos']->award_ids[] = $achievement_id;
-            $dependent_achievements = badgeos_get_dependent_achievements( $achievement_id, $user_id );
-
+			$dependent_achievements = badgeos_get_dependent_achievements( $achievement_id, $user_id );
+			
             // See if a user has unlocked all achievements of a given type
             badgeos_maybe_trigger_unlock_all( $user_id, $achievement_id );
-
+			
             // Loop through each dependent achievement and see if it can be awarded
             foreach ( $dependent_achievements as $achievement ) {
                 if ( badgeos_is_achievement_sequential( $achievement->ID ) ) {
@@ -400,13 +399,13 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
                         badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
                     }
                 } else {
-                    badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
+					badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
                 }
             }
         }
     } else {
         $GLOBALS['badgeos']->award_ids = array();
-    }
+	}
 }
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
@@ -671,6 +670,7 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_check_if_all_enabled', 15
  */
 function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = [] ) {
 
+	// Only override the $return data if we're working on a step
     if( 'step' == get_post_type( $step_id ) ) {
         // Get the required number of checkins for the step.
         $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );

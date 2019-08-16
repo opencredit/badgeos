@@ -290,7 +290,7 @@ function badgeos_achievement_user_exceeded_max_earnings( $user_id = 0, $achievem
  * @param  string  $context        The context in which we're creating this object
  * @return object                  Our object containing only the relevant bits of information we want
  */
-function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned', $trigger='' ) {
+function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earned', $trigger='', $image='', $rec_type='normal' ) {
 
 	// Grab the new achievement's $post data, and bail if it doesn't exist
 	$achievement = get_post( $achievement_id );
@@ -303,7 +303,9 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
     $achievement_object->title        	= $achievement->post_title;
     $achievement_object->the_trigger  	= $trigger;
     $achievement_object->post_type 		= $achievement->post_type;
-	
+	$achievement_object->image 			= $image;
+	$achievement_object->rec_type 		= $rec_type;
+
 	$points = get_post_meta( $achievement_id, '_badgeos_points', true );
 	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
 		$point_value 	= $points['_badgeos_points'];
@@ -726,20 +728,33 @@ add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
  * @return array                   Array of user objects
  */
 function badgeos_get_achievement_earners( $achievement_id = 0 ) {
-
-	// Grab our earners
-	$earners = new WP_User_Query( array(
-		'meta_key'     => '_badgeos_achievements',
-		'meta_value'   => $achievement_id,
-		'meta_compare' => 'LIKE'
-	) );
-
+	
+	global $wpdb;
+	
 	$earned_users = array();
-	foreach( $earners->results as $earner ) {
-		if ( badgeos_has_user_earned_achievement( $achievement_id, $earner->ID ) ) {
-			$earned_users[] = $earner;
+	$table_name = $wpdb->prefix . 'badgeos_achievements';
+	if($wpdb->get_var("show tables like '$table_name'") == $table_name) {
+		$table_name = $wpdb->prefix . 'badgeos_achievements';
+		$user_ids = $wpdb->get_results( "SELECT distinct( user_id ) as user_id FROM $table_name WHERE  ID = '".$achievement_id."'" );
+		foreach( $user_ids as $rec ) {
+			$earned_users[] = get_user_by( 'ID', $rec->user_id );
 		}
+	} else {
+		
+		$earners = new WP_User_Query( array(
+			'meta_key'     => '_badgeos_achievements',
+			'meta_value'   => $achievement_id,
+			'meta_compare' => 'LIKE'
+		) );
+		
+		foreach( $earners->results as $earner ) {
+			if ( badgeos_has_user_earned_achievement( $achievement_id, $earner->ID ) ) {
+				$earned_users[] = $earner;
+			}
+		}
+		
 	}
+	
 	// Send back our query results
 	return $earned_users;
 }
@@ -1059,6 +1074,9 @@ function badgeos_update_p2p_achievement_types( $original_type = '', $new_type = 
  * @param string $new_type      New achievement type.
  */
 function badgeos_update_earned_meta_achievement_types( $original_type = '', $new_type = '' ) {
+	
+	global $wpdb;
+	
 	$metas = badgeos_get_unserialized_achievement_metas( '_badgeos_achievements', $original_type );
 	if ( ! empty( $metas ) ) {
 		foreach ( $metas as $meta ) {
@@ -1067,6 +1085,11 @@ function badgeos_update_earned_meta_achievement_types( $original_type = '', $new
 			}
 			update_user_meta( $meta->user_id, $meta->meta_key, $meta->meta_value );
 		}
+	}
+	
+	$table_name = $wpdb->prefix . "badgeos_achievements";
+	if($wpdb->get_var("show tables like '$table_name'") == $table_name) {
+		$wpdb->update( $table_name, array( "post_type"=> $new_type ), array( "post_type"=> $original_type ), array('%s'),array('%s'));
 	}
 }
 

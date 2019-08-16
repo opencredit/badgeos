@@ -64,10 +64,10 @@ jQuery(document).ready(function($) {
 		var excluded_posts       = [achievement_selector.siblings('input[name="post_id"]').val()];
 		var trigger_type         = achievement_selector.siblings('.select-trigger-type').val();
 
-        achievement_selector.siblings('select.select-achievement-post').hide();
-        achievement_selector.siblings('input.select-achievement-post').hide();
+		achievement_selector.siblings('select.select-achievement-post').hide();
+		achievement_selector.siblings('input.select-achievement-post').hide();
 
-        // If we've selected a *specific* achievement type, show our post selector
+		// If we've selected a *specific* achievement type, show our post selector
 		// and populate it w/ the corresponding achievement posts
 		if ( '' !== achievement_type && 'specific-achievement' == trigger_type ) {
 			$.post(
