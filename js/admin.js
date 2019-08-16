@@ -1,4 +1,153 @@
 jQuery(document).ready(function($) {
+
+	/**
+	 * For Tool Page
+     */
+
+    $( '#award-achievement, #award-credits, #award-ranks' ).change( function() {
+        if( $( '#award-achievement, #award-credits, #award-ranks' ).is(':checked') ) {
+            $( '#badgeos-award-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideUp( { duration: 500 } );
+        } else {
+            $( '#badgeos-award-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideDown( { duration: 500 } );
+        }
+    } );
+
+    $( '#revoke-achievement, #revoke-credits, #revoke-ranks' ).change( function() {
+        if( $( '#revoke-achievement, #revoke-credits, #revoke-ranks' ).is(':checked') ) {
+            $( '#badgeos-revoke-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideUp( { duration: 500 } );
+        } else {
+            $( '#badgeos-revoke-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideDown( { duration: 500 } );
+        }
+    } );
+
+    /**
+	 * For user profile page
+     * Revoke Ranks
+     */
+    $( 'body' ).on( 'click', 'table.badgeos-rank-table .revoke-rank', function() {
+		var self = $( this );
+
+		self.siblings( '.spinner-loader' ).find( '.revoke-rank-spinner' ).show();
+
+		var rankID = self.attr( 'data-rank_id' );
+		var userID = self.attr( 'data-user_id' );
+		var ajaxURL = self.attr( 'data-admin_ajax' );
+
+        var data = {
+            'action': 'user_profile_revoke_rank',
+            'rankID': rankID,
+            'userID': userID,
+        };
+
+        jQuery.post( ajaxURL, data, function( response ) {
+
+            self.siblings( '.spinner-loader' ).find( '.revoke-rank-spinner' ).hide();
+
+            if( 'true' == response ) {
+
+                self.parents( 'tr' ).find( 'td' ).slideUp( 800, function() {
+                    self.parents( 'tr' ).remove();
+
+                    if( ! $( 'table.badgeos-rank-revoke-table > tbody tr' ).length ) {
+                        $( 'table.badgeos-rank-revoke-table > tbody' ).append(
+                            '<tr class="no-awarded-rank">' +
+                            '<td colspan="5">' +
+                            '<span class="description">'+ admin_js.no_awarded_rank +'</span>' +
+                            '</td> </tr>'
+                        );
+                    }
+                } );
+			} else if( 'false' == response ) {
+                self.siblings( '.spinner-loader' ).append( $( 'Try Again' ) );
+			}
+        });
+    } );
+
+    /**
+     * For Profile Page
+     * Display Ranks to award
+     */
+    $( 'body' ).on( 'click', '.user-profile-award-ranks .display-ranks-to-award', function() {
+		var self = $( this );
+
+        self.parents( '.user-profile-award-ranks' ).find( '.revoke-rank-spinner' ).show();
+        var ajaxURL = self.attr( 'data-admin_ajax' );
+        var userID = self.attr( 'data-user-id' );
+        var rankType = self.attr( 'data-rank-filter' );
+
+        var data = {
+            'action': 'user_profile_display_award_list',
+            'user_id': userID,
+            'rank_filter': rankType
+        };
+
+        jQuery.post( ajaxURL, data, function( response ) {
+            self.parents( '.user-profile-award-ranks' ).find( '.revoke-rank-spinner' ).hide();
+
+            $( '.user-profile-award-ranks .badgeos-rank-table-to-award' ).remove();
+            self.parents( '.user-profile-award-ranks' ).append( $( response ) );
+
+        });
+    } );
+
+    /**
+     * For Profile Page
+     * Award rank
+     */
+    $( 'body' ).on( 'click', '.user-profile-award-ranks .badgeos-rank-table-to-award .award-rank', function() {
+		var self = $( this );
+
+        self.siblings( '.spinner-loader' ).find( '.award-rank-spinner' ).show();
+        var ajaxURL = self.attr( 'data-admin-ajax' );
+        var userID = self.attr( 'data-user-id' );
+        var rankID = self.attr( 'data-rank-id' );
+
+        var data = {
+            'action': 'user_profile_award_rank',
+            'user_id': userID,
+            'rank_id': rankID
+        };
+
+        jQuery.post( ajaxURL, data, function( response ) {
+            self.siblings( '.spinner-loader' ).find( '.award-rank-spinner' ).hide();
+
+            if( 'true' == response ) {
+                var rankID = self.attr( 'data-rank-id' );
+                var userID = self.attr( 'data-user-id' );
+                var ajaxURL = self.attr( 'data-admin-ajax' );
+                var rankType = self.parents( 'tr' ).attr( 'class' );
+                var defaultRank = self.parents( 'tr' ).attr( 'id' );
+                var cloned = self.parents( 'tr' ).clone( true );
+
+                var replaceWidth = '<td class="last-awarded"><i class="fa fa-check" aria-hidden="true"></i></td><td><span data-rank_id="' + rankID + '" data-user_id="' + userID + '" data-admin_ajax="'+ ajaxURL +'" class="revoke-rank">'+ admin_js.revoke_rank +'</span><span class="spinner-loader" ><img class="award-rank-spinner" src="'+ admin_js.loading_img +'" style="margin-left: 10px; display: none;" /></span></td>';
+
+                if( 'default-rank' == defaultRank ) {
+                    replaceWidth = '<td class="last-awarded"><i class="fa fa-check" aria-hidden="true"></i></td><td><span class="default-rank">'+ admin_js.default_rank +'</span></td>';
+                }
+                $( 'td.award-rank-column', cloned ).replaceWith( replaceWidth );
+
+                /**
+                 * Remove last awarded from siblings
+                 */
+                $.each( $( '.badgeos-rank-revoke-table > tbody > tr' ), function( index, value ) {
+                    if( $( value ).hasClass( rankType ) ) {
+                        $( value ).find( 'td.last-awarded' ).empty();
+                    }
+                } );
+
+                $( '.badgeos-rank-revoke-table > tbody' ).append( cloned );
+                $( '.badgeos-rank-revoke-table > tbody > tr.no-awarded-rank td, .badgeos-rank-revoke-table > tbody > tr.no-awarded-rank span' ).slideUp( 800,function() { $( '.badgeos-rank-revoke-table > tbody > tr.no-awarded-rank' ).remove() } );
+
+                self.parents( 'tr' ).find( 'td' ).slideUp( 800,function() { self.parents( 'tr' ).remove() } );
+            } else if( 'false' == response ) {
+                self.siblings( '.spinner-loader' ).append( $( 'Try Again' ) );
+            }
+
+            $( '.user-profile-award-ranks .badgeos-rank-table-to-award' ).remove();
+            self.parents( '.user-profile-award-ranks' ).append( $( response ) );
+        });
+    } );
+
 	$( '.badgeos-credits .badgeos-credit-edit' ).click( function() {
 
         var self = $( this );

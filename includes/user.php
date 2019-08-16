@@ -397,10 +397,204 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
                 }
             }
         }
-    }
+	}
+	
+	/**
+     * Update Rank Type Filter Field
+     */
+    $rank_type_filter = ( isset( $_POST['badgeos_ranks_filter'] ) ? $_POST['badgeos_ranks_filter'] : 'all' );
+    update_user_meta( $user_id, '_badgeos_ranks_filter', $rank_type_filter );
+
+    /**
+     * Update Achievement Type Filter Field
+     */
+    $rank_type_filter = ( isset( $_POST['badgeos_achievement_filter'] ) ? $_POST['badgeos_achievement_filter'] : 'all' );
+	update_user_meta( $user_id, '_badgeos_achievement_filter', $rank_type_filter );
+
 }
 add_action( 'personal_options_update', 'badgeos_save_user_profile_fields' );
 add_action( 'edit_user_profile_update', 'badgeos_save_user_profile_fields' );
+
+/**
+ * Generate markup to show user rank
+ *
+ * @param null $user
+ */
+function badgeos_profile_user_ranks( $user = null ) {
+
+	$rank_types = badgeos_get_rank_types_slugs_detailed();
+	$can_manage = current_user_can( badgeos_get_manager_capability() );
+	$selected = get_user_meta( $user->ID, '_badgeos_ranks_filter', true );
+	if( empty( $selected ) ) {
+        $selected = 'all';
+    }
+	?>
+	<hr />
+	<div class="badgeos-ranks-wrapper">
+		<h2><?php _e( 'BadgeOS Ranks', 'badgeos' ); ?></h2>
+		<div class="filter-wrapper">
+			<label for="badgeos_ranks_filter"><?php _e( 'Filter By Rank Type: ', 'badgeos' ); ?></label>
+			<select name="badgeos_ranks_filter" id="badgeos_ranks_filter">
+				<?php
+				if ( is_array( $rank_types ) && ! empty( $rank_types ) ) {
+					?>
+					<option value="all"><?php _e( 'All', 'badgeos' ); ?></option>
+					<?php
+					foreach ( $rank_types as $key => $rank_type ) {
+						$rank_type = ucwords( str_replace( '-', ' ', $key ) );
+						?>
+						<option value="<?php echo $key; ?>" <?php selected( $selected, $key ); ?>><?php echo $rank_type; ?></option>
+						<?php
+					}
+				}
+				?>
+			</select>
+		</div>
+	</div>
+	<table class="form-table badgeos-rank-table badgeos-rank-revoke-table">
+		<thead>
+			<tr>
+				<th><?php _e( 'Image', 'badgeos' ); ?></th>
+				<th><?php _e( 'Name', 'badgeos' ); ?></th>
+				<th><?php _e( 'Rank Type', 'badgeos' ); ?></th>
+				<th><?php _e( 'Last Awarded', 'badgeos' ); ?></th>
+				<?php
+				if( $can_manage ) {
+					?>
+					<th><?php _e( 'Action', 'badgeos' ); ?></th>
+					<?php
+				}
+				?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			if( empty( $rank_types ) && $can_manage ) {
+				?>
+				<tr>
+					<td colspan="5">
+						<span class="description">
+							<?php echo sprintf( __( 'No rank types configured, visit %s to configure some rank types.', 'badgeos' ), '<a href="' . admin_url( 'edit.php?post_type=rank-type' ) . '">' . __( 'this page', 'badgeos' ) . '</a>' ); ?>
+						</span>
+					</td>
+				</tr>
+				<?php
+			} else {
+				$user_ranks = badgeos_get_user_ranks( array(
+					'user_id' => absint( $user->ID ),
+					'rank_type' => $selected,
+				) );
+
+				if( $user_ranks ) {
+					foreach( $user_ranks as $rank ) {
+						?>
+						<tr class="<?php echo $rank->rank_type; ?> ">
+							<?php
+							$ranks_image = badgeos_get_rank_image( $rank->rank_id );
+							?>
+							<td><?php echo $ranks_image; ?></td>
+							<td><?php echo $rank->rank_title; ?></td>
+							<td><?php echo $rank->rank_type; ?></td>
+							<?php
+							$last_awarded = get_user_meta( $user->ID, '_badgeos_'.$rank->rank_type.'_rank', true );
+							?>
+							<td class="last-awarded">
+								<?php
+								if( !empty( $last_awarded ) && $last_awarded == $rank->id ) {
+									?><i class="fa fa-check" aria-hidden="true"></i><?php
+								}
+								?>
+							</td>
+							<?php
+							if ( $can_manage ) {
+								?>
+								<td>
+									<?php
+									$rank_post = get_post( $rank->rank_id );
+									if( $rank->priority > 0 ) {
+										$prev_rank_id = ( !is_null( badgeos_get_prev_rank_id( absint( $rank->rank_id ) ) ) ? badgeos_get_prev_rank_id( absint( $rank->rank_id ) ) : '' );
+										?>
+										<span data-rank_id="<?php echo $rank->rank_id; ?>"
+											data-user_id="<?php echo $user->ID; ?>"
+											data-previous_rank_id="<?php echo $prev_rank_id; ?>"
+											data-admin_ajax="<?php echo admin_url( 'admin-ajax.php' ); ?>"
+											class="revoke-rank">
+														<?php _e( 'Revoke Rank', 'badgeos' ); ?>
+													</span>
+													<span class="spinner-loader" >
+														<img class="revoke-rank-spinner" src="<?php echo admin_url( '/images/wpspin_light.gif' ); ?>" style="margin-left: 10px; display: none;" />
+													</span>
+
+										<?php
+									} else {
+										?>
+										<span class="default-rank"><?php _e( 'Default Rank', 'badgeos' ); ?></span>
+										<?php
+									}
+									?>
+								</td>
+								<?php
+							}
+							?>
+						</tr>
+						<?php
+					}
+				} else {
+					$colpan = ( $can_manage ) ? 5 : 4;
+					?>
+					<tr class="no-awarded-rank">
+						<td colspan="<?php echo $colpan; ?>">
+						<span class="description">
+							<?php _e( 'No Awarded Ranks', 'badgeos' ); ?>
+						</span>
+						</td>
+					</tr>
+					<?php
+				}
+			}
+			?>
+		</tbody>
+		<tfoot>
+		<tr>
+			<th><?php _e( 'Image', 'badgeos' ); ?></th>
+			<th><?php _e( 'Name', 'badgeos' ); ?></th>
+			<th><?php _e( 'Rank Type', 'badgeos' ); ?></th>
+			<th><?php _e( 'Last Awarded', 'badgeos' ); ?></th>
+			<?php
+			if( $can_manage ) {
+				?>
+				<th><?php _e( 'Action', 'badgeos' ); ?></th>
+				<?php
+			}
+			?>
+		</tr>
+		</tfoot>
+	</table>
+
+	<?php
+	if( $can_manage ) {
+		$selected_type = '';
+		if( 'all' != $selected ) {
+			$selected_type = ucwords( str_replace( '-', ' ', $selected ) );
+		}
+		?>
+		<div class="user-profile-award-ranks">
+			<h2>
+				<?php _e('Award Ranks:', 'badgeos'); ?> &nbsp;&nbsp;&nbsp;&nbsp;
+				<span data-rank-filter="<?php echo $selected; ?>" data-user-id="<?php echo $user->ID; ?>" data-admin_ajax="<?php echo admin_url( 'admin-ajax.php' ); ?>"
+						class="display-ranks-to-award button button-primary">
+					<?php _e( 'Display '. $selected_type .' Ranks to Award', 'badgeos' ); ?>
+				</span>
+			</h2>
+
+			<img class="revoke-rank-spinner" src="<?php echo admin_url( '/images/wpspin_light.gif' ); ?>" style="margin-left: 10px; display: none;" />
+		</div>
+		<?php
+	}
+}
+add_action( 'show_user_profile', 'badgeos_profile_user_ranks' );
+add_action( 'edit_user_profile', 'badgeos_profile_user_ranks' );
+
 
 /**
  * Generate markup for awarding an achievement to a user

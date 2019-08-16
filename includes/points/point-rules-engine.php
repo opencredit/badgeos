@@ -471,7 +471,7 @@ function badgeos_maybe_unlock_user_rank( $user_id, $type, $points_earned, $credi
 
 	$total_points = badgeos_get_points_by_type( $credit_parent_id, $user_id );
 
-	//$ranks = badgeos_get_ranks_by_unlock_points( $user_id, $total_points, $credit_parent_id );
+	$ranks = badgeos_get_ranks_by_unlock_points( $user_id, $total_points, $credit_parent_id );
 	
 	if( $ranks ) {
         foreach( $ranks as $rank ){
@@ -531,7 +531,7 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
 			'achievement_id' => $achievement_id,
 			'type' => $type,
 			'credit' => $new_points,
-			'dateadded' => date("Y-m-d h:i:s"),
+			'dateadded' => date("Y-m-d H:i:s"),
 			'this_trigger' =>  $this_trigger
 		));
 
@@ -597,7 +597,7 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
             'achievement_id' => $achievement_id,
             'type' => $type,
             'credit' => $points,
-            'dateadded' => date("Y-m-d h:i:s"),
+            'dateadded' => date("Y-m-d H:i:s"),
             'this_trigger' =>  $this_trigger
         ));
 
