@@ -125,7 +125,7 @@ function badgeos_reformat_entries( $content ) {
 	$GLOBALS['badgeos_reformat_content'] = true;
 
 	// do badge title markup
-	// $title = '<h1 class="badge-title">'. get_the_title() .'</h1>';
+	$title = '<h1 class="badge-title">'. get_the_title() .'</h1>';
 
 	// check if user has earned this Achievement, and add an 'earned' class
 	$class = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) ) ? ' earned' : '';
@@ -136,8 +136,18 @@ function badgeos_reformat_entries( $content ) {
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_render_earned_achievement_text( $badge_id, get_current_user_id() );
 
-	$newcontent .= '<div class="alignleft badgeos-item-image">'. badgeos_get_achievement_post_thumbnail( $badge_id ) .'</div>';
-	// $newcontent .= $title;
+	$badge_image = badgeos_get_achievement_post_thumbnail( $badge_id );
+	
+	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
+	$class = count( $achievements ) > 0 ? ' earned' : '';
+	
+	if( trim( $class ) == 'earned' ) {
+		$achievement = $achievements[ 0 ];
+		$badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement  );
+	}
+					
+	$newcontent .= '<div class="alignleft badgeos-item-image">'. $badge_image .'</div>';
+	$newcontent .= $title;
 
 	// Points for badge
 	$newcontent .= badgeos_achievement_points_markup();

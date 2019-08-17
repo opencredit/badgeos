@@ -144,7 +144,8 @@ function badgeos_register_post_types() {
 		'supports'           => array( 'title', 'editor', 'author', 'comments' ),
 	) );
 
-    badgeos_register_log_post_type();
+	// Register Log Entries CPT
+	badgeos_register_log_post_type();
 
 }
 add_action( 'init', 'badgeos_register_post_types' );

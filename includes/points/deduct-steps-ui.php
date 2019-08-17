@@ -62,7 +62,7 @@ function badgeos_deduct_steps_ui_meta_box($post  = null) {
      */
 	uasort( $required_steps, 'badgeos_compare_step_order');
 
-	echo '<p>' .__( 'Define the required "steps" for this points to be considered complete. Use the "Label" field to optionally customize the titles of each step.', 'badgeos' ). '</p>';
+	echo '<p>' .__( 'Define the required "steps" for this point type to be considered complete. Use the "Label" field to optionally customize the titles of each step.', 'badgeos' ). '</p>';
 
 	/**
      * Concatenate our step output

@@ -44,6 +44,8 @@ class earned_user_achievements_widget extends WP_Widget {
 					}
 				?>
 			</p>
+
+
 			<p><label><input type="checkbox" id="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
 			<p>
 				<?php _e( 'Select Point Type: ', 'badgeos' ); ?><br />
@@ -125,12 +127,11 @@ class earned_user_achievements_widget extends WP_Widget {
 
 			//display user's points if widget option is enabled
 			if ( $instance['point_total'] == 'on' && !empty( $instance['total_points_type'] ) ) {
-                $earned_points = badgeos_get_points_by_type( $instance['total_points_type'], get_current_user_id() );
+				$earned_points = badgeos_get_points_by_type( $instance['total_points_type'], get_current_user_id() );
 				$point_title = get_the_title( $instance['total_points_type'] );
-
 				?>
 			    <p class="badgeos-total-points">
-					<?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
+                    <?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
                 </p>
 			<?php }
 			
@@ -176,11 +177,11 @@ class earned_user_achievements_widget extends WP_Widget {
 					<?php
 				}
 			}
-			
+
 			$achievements = badgeos_get_user_achievements(array('display'=>true));
-
+			
 			if ( is_array( $achievements ) && ! empty( $achievements ) ) {
-
+				
 				$number_to_show = absint( $instance['number'] );
 				$thecount = 0;
 
@@ -195,6 +196,7 @@ class earned_user_achievements_widget extends WP_Widget {
 				echo '<p class="badgeos-user-achievements-main">';
 				echo '<h3>'.__( 'User Achievements', 'badgeos' ).'</h3>';
 				echo '<ul class="widget-achievements-listing">';
+				
 				foreach ( $achievements as $achievement ) {
 
 					//verify achievement type is set to display in the widget settings
@@ -203,8 +205,11 @@ class earned_user_achievements_widget extends WP_Widget {
 
 						//exclude step CPT entries from displaying in the widget
 						if ( get_post_type( $achievement->ID ) != 'step' ) {
-                            $img        = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
-                            $img_permalink = 'javascript:;';
+
+                            $img    = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
+							$img 	= apply_filters( 'badgeos_profile_achivement_image', $img, $achievement  );
+
+							$img_permalink = 'javascript:;';
                             if ( ! function_exists( 'post_exists' ) ) {
                                 require_once( ABSPATH . 'wp-admin/includes/post.php' );
                             }
@@ -218,7 +223,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
                             $achievement_title = get_the_title( $achievement->ID );
                             if( empty( $achievement_title ) ) {
-                                $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
+								$achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
                             } else {
                                 $permalink  = get_permalink( $achievement->ID );
                                 $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $achievement_title ) .'</a>';
