@@ -150,6 +150,25 @@ function badgeos_register_post_types() {
 add_action( 'init', 'badgeos_register_post_types' );
 
 /**
+ * Register our various achievement types for use in the rules engine
+ *
+ * @param  string $achievement_name_singular The singular name
+ * @param  string $achievement_name_plural  The plural name
+ * @return void
+ */
+function badgeos_register_ranks_type( $slug, $achievement_name_singular = '', $achievement_name_plural = '' ) {
+
+	$plural  = $achievement_name_plural;
+	if( empty( $plural ) )
+		$plural = $achievement_name_singular;
+
+    $GLOBALS['badgeos']->ranks_types[$slug] = array(
+        'single_name' => strtolower( $achievement_name_singular ),
+        'plural_name' => strtolower( $plural ),
+    );
+}
+
+/**
  * Register Log Entries CPT
  */
 function badgeos_register_log_post_type() {

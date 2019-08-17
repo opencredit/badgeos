@@ -131,9 +131,6 @@ Shortcode Embed styles
 .clear {
 	clear: both;
 }
-.select2-container {
-	width: 100%;
-}
 #select2-drop {
 	z-index: 100051;
 }
@@ -200,4 +197,74 @@ Shortcode Embed styles
 	padding: 1%;
 	box-shadow: 1px 1px 3px 2px #ccc;
 	background-color: #fff;
+}
+
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
+}
+
+
+.profile-php .badgeos-achievement-table,
+.profile-php .badgeos-rank-table,
+.user-edit-php .badgeos-achievement-table,
+.user-edit-php .badgeos-rank-table {
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	box-shadow: 0 0 1px 2px #e8e8e8;
+	margin-bottom: 30px;
+}
+.profile-php .badgeos-achievement-table thead,
+.profile-php .badgeos-rank-table thead,
+.user-edit-php .badgeos-achievement-table thead,
+.user-edit-php .badgeos-rank-table thead {
+	border-bottom: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tfoot,
+.profile-php .badgeos-rank-table tfoot,
+.user-edit-php .badgeos-achievement-table tfoot,
+.user-edit-php .badgeos-rank-table tfoot {
+	border-top: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table th,
+.profile-php .badgeos-rank-table th,
+.user-edit-php .badgeos-achievement-table th,
+.user-edit-php .badgeos-rank-table th {
+	padding: 10px;
+	background-color: #f6f6f6;
+}
+.profile-php .badgeos-achievement-table td,
+.profile-php .badgeos-rank-table td,
+.user-edit-php .badgeos-achievement-table td,
+.user-edit-php .badgeos-rank-table td {
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.profile-php .badgeos-rank-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-rank-table tbody tr:nth-child( odd ) {
+	background-color: #fff;
+}
+.profile-php .badgeos-achievement-table .revoke-achievement,
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-achievement-table .revoke-achievement,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+.profile-php .badgeos-achievement-table .award-achievement,
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-achievement-table .award-achievement,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
 }
