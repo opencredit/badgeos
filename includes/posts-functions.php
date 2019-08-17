@@ -59,3 +59,49 @@ function badgeos_delete_posts_permanently( $post_id ) {
     }
 }
 add_action( 'before_delete_post', 'badgeos_delete_posts_permanently' );
+
+
+/**
+ * Helper function to get a post field.
+ * Important: On network wide installs, this function will return the post field from main site, so use only for points, achievements and ranks posts fields
+ *
+ * @param string                $field      The post field.
+ * @param integer|WP_Post|null  $post_id    Post ID.
+ * @return false|string                     Post field on success, false on failure.
+ */
+function badgeos_get_post_field( $field, $post_id = null  ) {
+
+    if ( empty( $post_id ) && isset( $GLOBALS['post'] ) )
+        $post_id = $GLOBALS['post'];
+
+    /**
+     * if we got a post object, then return their field
+     */
+    if ( $post_id instanceof WP_Post ) {
+        return $post_id->$field;
+    } else if( is_object( $post_id ) ) {
+        return $post_id->$field;
+    }
+
+    return get_post_field( $field, $post_id );
+}
+
+/**
+ * Helper function to get a post.
+ * Important: On network wide installs, this function will return the post from main site, so use only for points, achievements and ranks posts
+ *
+ * @param int    $post_id       Post ID.
+ * @return false| WP_Post        Post object on success, false on failure.
+ */
+function badgeos_get_post( $post_id ) {
+
+    /**
+     * if we got a post object, then return their field
+     */
+    if ( $post_id instanceof WP_Post ) {
+        return $post_id;
+    }
+
+    global $wpdb;
+    return get_post( $post_id );
+}

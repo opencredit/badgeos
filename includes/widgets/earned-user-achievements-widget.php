@@ -13,16 +13,41 @@ class earned_user_achievements_widget extends WP_Widget {
 
 	//build the widget settings form
 	function form( $instance ) {
-		$defaults = array( 'title' => __( 'My Achievements', 'badgeos' ), 'number' => '10', 'point_total' => '', 'set_achievements' => '' );
+		$defaults = array( 'title' => __( 'My Achievements', 'badgeos' ), 'number' => '10', 'set_point_type' => '', 'point_total' => '', 'set_achievements' => '' );
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$title = $instance['title'];
 		$number = $instance['number'];
 		$point_total = $instance['point_total'];
+		$set_point_type = ( isset( $instance['total_points_type'] ) ) ? $instance['total_points_type'] : '';
 		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? (array) $instance['set_achievements'] : array();
 		?>
             <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
 			<p><label><input type="checkbox" id="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'point_total' ) ); ?>" <?php checked( $point_total, 'on' ); ?> /> <?php _e( 'Display user\'s total points', 'badgeos' ); ?></label></p>
+			<p>
+				<?php _e( 'Select Point Type: ', 'badgeos' ); ?><br />
+				<?php
+				/**
+				 * get all credit types
+				 */
+				$point_types = badgeos_get_point_types();
+				if ( is_array( $point_types ) && ! empty( $point_types ) ) { 
+					?>
+					<select id="total_points_type" name="<?php echo esc_attr( $this->get_field_name( 'total_points_type' ) ); ?>" class="widget-total-points-type">
+						<option value=""><?php _e( 'Select Points Type' ); ?></option>
+						<?php
+
+							foreach ( $point_types as $key => $point_type ) {
+								?>
+									<option value="<?php echo $point_type->ID; ?>" <?php echo selected( $set_point_type, $point_type->ID ); ?> ><?php echo $point_type->post_title; ?></option>
+								<?php
+							}
+						?>
+					</select>
+					<br />
+					<span class="tool-hint"><?php _e( 'Total points of selected type will be displayed on frontend.', 'badgeos' ); ?></span>
+				<?php } ?>
+			</p>
 			<p><?php _e( 'Display only the following Achievement Types:', 'badgeos' ); ?><br />
 				<?php
 				//get all registered achievements
@@ -56,6 +81,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
 		$instance['number'] = absint( $new_instance['number'] );
+		$instance['total_points_type'] = sanitize_text_field( $new_instance['total_points_type'] );
 		$instance['point_total'] = ( ! empty( $new_instance['point_total'] ) ) ? sanitize_text_field( $new_instance['point_total'] ) : '';
 		$instance['set_achievements'] = array_map( 'sanitize_text_field', $new_instance['set_achievements'] );
 
@@ -76,9 +102,16 @@ class earned_user_achievements_widget extends WP_Widget {
 		if ( is_user_logged_in() ) {
 
 			//display user's points if widget option is enabled
-			if ( $instance['point_total'] == 'on' ) {
-				echo '<p class="badgeos-total-points">' . sprintf( __( 'My Total Points: %s', 'badgeos' ), '<strong>' . number_format( badgeos_get_users_points() ) . '</strong>' ) . '</p>';
-			}
+			if ( $instance['point_total'] == 'on' && !empty( $instance['total_points_type'] ) ) {
+                $earned_points = badgeos_get_points_by_type( $instance['total_points_type'], get_current_user_id() );
+				$point_title = get_the_title( $instance['total_points_type'] );
+
+				?>
+			    <p class="badgeos-total-points">
+					<?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
+                </p>
+			<?php }
+
 
 			$achievements = badgeos_get_user_achievements(array('display'=>true));
 

@@ -62,10 +62,83 @@ class BadgeOS {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'init', array( $this, 'credly_init' ) );
+		
+		$this->db_upgrade();
 
         //add action for adding ckeditor script
         add_action('wp_footer', array( $this, 'frontend_scripts' ));
 
+	}
+
+/**
+	 * This function will made the necessary changes on existing database to accomodate the points work
+	 */
+	function db_upgrade() {
+		
+		global $wpdb;
+
+		$point_type = 'point_type';
+		
+		/**
+         * Badgeos Points Table
+         */
+		$table_name = $wpdb->prefix . 'badgeos_points';
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+			$sql = "CREATE TABLE " . $table_name . " (
+				`id` int(10) NOT NULL AUTO_INCREMENT,
+				`achievement_id` int(10) DEFAULT '0',
+				`credit_id` int(10) DEFAULT '0',
+				`step_id` int(10) DEFAULT '0',
+				`user_id` int(10) DEFAULT NULL,
+				`admin_id` int(10) DEFAULT '0',
+				`type` enum('Award','Deduct','Utilized') DEFAULT NULL,
+				`this_trigger` varchar(100) DEFAULT NULL,
+				`credit` int(10) DEFAULT NULL,
+				`dateadded` timestamp NULL DEFAULT NULL,							
+				PRIMARY KEY (`id`)
+			);";
+			$wpdb->query( $sql );
+		}
+
+		/**
+         * Create default point
+         */
+		// if ( ! get_page_by_title( 'Points', 'OBJECT', $point_type ) ) {
+		// 	$point_post_id = wp_insert_post( array(
+		// 		'post_title'   => __( 'Points', 'badgeos'),
+		// 		'post_content' => __( 'Point with Test Content', 'badgeos' ),
+		// 		'post_status'  => 'publish',
+		// 		'post_author'  => 1,
+		// 		'post_type'    => $point_type,
+		// 	) );
+		// 	update_post_meta( $point_post_id, '_points_plural_name', __( 'Points', 'badgeos' ) );
+		// }
+
+		
+
+		// Setup default BadgeOS options
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+		
+		if ( $badgeos_settings ) {
+			
+			if(  !isset( $badgeos_settings['points_main_post_type'] ) && empty( $badgeos_settings['points_main_post_type'] ) )
+				$badgeos_settings['points_main_post_type']     = $point_type;
+
+			if( !isset( $badgeos_settings['points_award_post_type'] ) && empty( $badgeos_settings['points_award_post_type'] ) )
+				$badgeos_settings['points_award_post_type']    = 'point_award';
+
+			if( !isset( $badgeos_settings['points_deduct_post_type'] ) && empty( $badgeos_settings['points_deduct_post_type'] ) )
+				$badgeos_settings['points_deduct_post_type']   = 'point_deduct';
+
+			if( ! isset( $badgeos_settings['default_point_type'] ) && empty( $badgeos_settings['default_point_type'] ) ) {
+				$default_point = get_page_by_title( 'Points', 'OBJECT', $point_type );
+				if( $default_point ) {
+					$badgeos_settings['default_point_type'] = $default_point->ID;
+				}
+			}
+
+			update_option( 'badgeos_settings', $badgeos_settings );
+		}
 	}
 
 	/**
@@ -84,7 +157,15 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/ajax-functions.php' );
 		require_once( $this->directory_path . 'includes/logging-functions.php' );
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
-		require_once( $this->directory_path . 'includes/points-functions.php' );
+		
+		require_once( $this->directory_path . 'includes/points/post-types.php' );
+		require_once( $this->directory_path . 'includes/points/meta-boxes.php' );
+		require_once( $this->directory_path . 'includes/points/award-steps-ui.php' );
+		require_once( $this->directory_path . 'includes/points/deduct-steps-ui.php' ); 
+		require_once( $this->directory_path . 'includes/points/point-rules-engine.php' );
+		require_once( $this->directory_path . 'includes/points/triggers.php' );
+		require_once( $this->directory_path . 'includes/points/point-functions.php' );
+		
 		require_once( $this->directory_path . 'includes/triggers.php' );
 		require_once( $this->directory_path . 'includes/steps-ui.php' );
 		require_once( $this->directory_path . 'includes/shortcodes.php' );
@@ -144,7 +225,8 @@ class BadgeOS {
 		if ( !is_admin() ) { return; }
         require_once( $this->directory_path . 'includes/cmb2/init.php' );
         require_once( $this->directory_path . 'includes/cmb2-custom-multiple-selectbox.php' );
-        require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
+		require_once( $this->directory_path . 'includes/CMB2-Date-Range-Field/wds-cmb2-date-range-field.php' );
+		require_once( $this->directory_path . 'includes/points/cmb2-custom-credit-field.php' );
 	}
 
 	/**
@@ -248,7 +330,8 @@ class BadgeOS {
 			$credly_settings['credly_badge_sendemail_add_message'] = 'false';
 			update_option( 'credly_settings', $credly_settings );
 		}
-
+		
+		$this->db_upgrade();
 		// Register our post types and flush rewrite rules
 		badgeos_flush_rewrite_rules();
 	}
