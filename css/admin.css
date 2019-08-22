@@ -131,9 +131,6 @@ Shortcode Embed styles
 .clear {
 	clear: both;
 }
-.select2-container {
-	width: 100%;
-}
 #select2-drop {
 	z-index: 100051;
 }
@@ -150,4 +147,128 @@ Shortcode Embed styles
 }
 .form-table td.bulk-delete-detail {
 	padding-left: 20px;
+}
+.profile-php .earned-user-credits-wrapper,
+.user-edit-php .earned-user-credits-wrapper {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits {
+	border: 1px solid #e8e8e8;
+	position: relative;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-credit-edit {
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	cursor: pointer;
+	color: #0073aa;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-edit-credit-wrapper {
+	padding: 9px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits .badgeos-earned-credit {
+	padding: 15px 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits h3,
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits h3 {
+	margin: 0;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( odd ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: left;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+.profile-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ),
+.user-edit-php .earned-user-credits-wrapper .badgeos-credits:nth-child( even ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: right;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
+}
+
+
+.profile-php .badgeos-achievement-table,
+.profile-php .badgeos-rank-table,
+.user-edit-php .badgeos-achievement-table,
+.user-edit-php .badgeos-rank-table {
+	border-top: 1px solid #e8e8e8;
+	border-bottom: 1px solid #e8e8e8;
+	box-shadow: 0 0 1px 2px #e8e8e8;
+	margin-bottom: 30px;
+}
+.profile-php .badgeos-achievement-table thead,
+.profile-php .badgeos-rank-table thead,
+.user-edit-php .badgeos-achievement-table thead,
+.user-edit-php .badgeos-rank-table thead {
+	border-bottom: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tfoot,
+.profile-php .badgeos-rank-table tfoot,
+.user-edit-php .badgeos-achievement-table tfoot,
+.user-edit-php .badgeos-rank-table tfoot {
+	border-top: 1px solid #e8e8e8;
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table th,
+.profile-php .badgeos-rank-table th,
+.user-edit-php .badgeos-achievement-table th,
+.user-edit-php .badgeos-rank-table th {
+	padding: 10px;
+	background-color: #f6f6f6;
+}
+.profile-php .badgeos-achievement-table td,
+.profile-php .badgeos-rank-table td,
+.user-edit-php .badgeos-achievement-table td,
+.user-edit-php .badgeos-rank-table td {
+	padding: 10px;
+}
+.profile-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.profile-php .badgeos-rank-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-achievement-table tbody tr:nth-child( odd ),
+.user-edit-php .badgeos-rank-table tbody tr:nth-child( odd ) {
+	background-color: #fff;
+}
+.profile-php .badgeos-achievement-table .revoke-achievement,
+.profile-php .badgeos-rank-table .revoke-rank,
+.user-edit-php .badgeos-achievement-table .revoke-achievement,
+.user-edit-php .badgeos-rank-table .revoke-rank {
+	cursor: pointer;
+	color: #a00;
+}
+.profile-php .badgeos-achievement-table .award-achievement,
+.profile-php .badgeos-rank-table .award-rank,
+.user-edit-php .badgeos-achievement-table .award-achievement,
+.user-edit-php .badgeos-rank-table .award-rank {
+	cursor: pointer;
+	color: #0073aa;
+}
+.profile_ranks_last_award_field{
+	font-size: 20px !important;
+	font-weight: bolder;
 }

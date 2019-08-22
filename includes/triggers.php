@@ -27,7 +27,8 @@ function badgeos_get_activity_triggers() {
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
 			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
-
+			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
+			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
 			// BadgeOS-specific
 			'specific-achievement' => __( 'Specific Achievement of Type', 'badgeos' ),
 			'any-achievement'      => __( 'Any Achievement of Type', 'badgeos' ),
@@ -107,7 +108,7 @@ function badgeos_trigger_event() {
         return $args[ 0 ];
     }
 
-    // If the user doesn't satisfy the trigger requirements, bail here
+    // Now determine if any badges are earned based on this trigger event
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
 
     $is_any_or_all_trigger = false;
@@ -158,6 +159,13 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 		case 'badgeos_unlock_' == substr( $trigger, 0, 15 ) :
 			$user_id = $args[0];
 			break;
+		case 'badgeos_daily_visit':
+			$user_data = get_user_by( 'login', $args[ 0 ] );
+			$user_id = $user_data->ID;
+			break;
+		case 'user_register':
+			$user_id = $args[0]; 
+			break;	
 		case 'badgeos_new_post' :
 		case 'badgeos_new_page' :
 		case 'badgeos_new_comment' :
@@ -398,9 +406,8 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
 		return;
 	}
-
-
-    $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE meta_key = '_badgeos_trigger_type' AND meta_value = 'badgeos_specific_new_comment'" );
+	
+	$trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' or meta_key = '_deduct_trigger_type' or meta_key = '_rank_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
 
     if( $trigger_data ) {
         foreach( $trigger_data as $data ) {
@@ -411,9 +418,8 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
             }
         }
     }
-    // Trigger a comment actions
-	  do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 
+	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
 add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );
@@ -441,3 +447,79 @@ function badgeos_login_trigger( $user_login, $user ) {
 
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
+
+/**
+ * Listner function for login trigger
+ *
+ * @param $user_login
+ * @param $user
+*/
+function badgeos_daily_visit_trigger( $user_login, $user ) {
+	
+	if( empty( $user_login ) ) {
+		return;
+	}
+
+	if( !is_object( $user ) || is_null( $user ) || empty( $user ) ) {
+		return;
+	}
+	$user_id = $user->ID;
+	$current_visit_date = get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
+	$today = date("Y-m-d");
+	
+	if( !empty( $current_visit_date ) ) {
+		if( strtotime( $current_visit_date ) == strtotime($today) ) {
+			$daily_visits = get_user_meta( $user_id, 'badgeos_daily_visits', true );
+			update_user_meta( $user_id, 'badgeos_daily_visits', intval( $daily_visits ) + 1 );
+		} else {
+			update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
+			update_user_meta( $user_id,'badgeos_daily_visits', 1 );
+			badgeos_daily_visit_steps_reset( $user_id );
+		}
+	} else {
+		update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
+		update_user_meta( $user_id,'badgeos_daily_visits', 1 );
+		badgeos_daily_visit_steps_reset( $user_id );
+	}
+	
+	do_action( 'badgeos_daily_visit', $user_login, $user );
+}
+add_action( 'wp_login', 'badgeos_daily_visit_trigger', 20, 2 );
+
+
+/**
+ * update daily visit step's meta key
+ *
+ * @param $user_id
+ * @return none
+*/
+function badgeos_daily_visit_steps_reset( $user_id ) {
+	
+	global $wpdb;
+	$recs = $wpdb->get_results(  "SELECT * FROM {$wpdb->usermeta} where meta_key like 'badgeos_daily_visit_step_%' and user_id=".intval($user_id) );
+	if( count( $recs ) > 0 ) {
+		foreach( $recs  as $rec ){
+			update_user_meta( intval($user_id), trim( $rec->meta_key), 'No' );
+		}
+	}
+}
+
+/**
+ * Check if trigger count don't needs to be update
+ *
+ * @param  integer $user_id        	The given user's ID
+ * @param  string $step_id   		The step id
+ * @param  integer $type        	Type of step
+ * @return string  $key 			The meta key of current item    
+ */
+function badgeos_daily_visit_add_step_status( $user_id, $step_id, $type='achievement' ) {
+
+	$key = 'badgeos_daily_visit_step_'.$step_id.'_'.$type;
+
+	$badgeos_visit = get_user_meta( $user_id, $key, true );
+	
+	if( empty( $badgeos_visit ) ) {
+		update_user_meta( $user_id, $key, 'No' );
+	}
+	return $key;
+}

@@ -51,6 +51,11 @@ function badgeos_settings_validate( $input = '' ) {
 	$input['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
 	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 	$input['remove_data_on_uninstall'] = ( isset( $input['remove_data_on_uninstall'] ) && "on" == $input['remove_data_on_uninstall'] ) ? "on" : null;
+    $input['ranks_main_post_type'] 			= !empty( $input[ 'ranks_main_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_main_post_type' ] ) ) ) : 	'ranks';
+    $input['ranks_step_post_type']       	= !empty( $input[ 'ranks_step_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_step_post_type' ] ) ) ) : 	'rank_requirement';
+	$input['points_main_post_type']     	= !empty( $input[ 'points_main_post_type' ] ) 	? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_main_post_type' ] ) ) ) : 	'point_type';
+	$input['points_award_post_type']    	= !empty( $input[ 'points_award_post_type' ] ) 	? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_award_post_type' ] ) ) ) : 	'point_award';
+	$input['points_deduct_post_type']   	= !empty( $input[ 'points_deduct_post_type' ] ) ? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_deduct_post_type' ] ) ) ) : 'point_deduct';
 
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
@@ -213,7 +218,12 @@ function badgeos_settings_page() {
 			$log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
 			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
 			$remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
-
+            $ranks_main_post_type 		= ( ! empty ( $badgeos_settings['ranks_main_post_type'] ) ) ? $badgeos_settings['ranks_main_post_type'] : '';
+            $ranks_step_post_type 		= ( ! empty ( $badgeos_settings['ranks_step_post_type'] ) ) ? $badgeos_settings['ranks_step_post_type'] : '';
+            $points_main_post_type 	= ( ! empty ( $badgeos_settings['points_main_post_type'] ) ) ? $badgeos_settings['points_main_post_type'] : 'point_type';
+			$points_award_post_type 	= ( ! empty ( $badgeos_settings['points_award_post_type'] ) ) ? $badgeos_settings['points_award_post_type'] : 'point_award';
+			$points_deduct_post_type 	= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
+			$default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
 			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
@@ -273,6 +283,59 @@ function badgeos_settings_page() {
 						</select>
 					</td>
 				</tr>
+                <tr valign="top">
+                    <th scope="row"><label for="log_entries"></th>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="ranks_main_post_type"><?php _e( 'Rank Post Type:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <input id="ranks_main_post_type" name="badgeos_settings[ranks_main_post_type]" type="text" value="<?php echo esc_attr( $ranks_main_post_type ); ?>" class="regular-text" />
+                        <p class="description"><?php _e( 'Ranks Type Slug.', 'badgeos' ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="ranks_step_post_type"><?php _e( 'Rank Step Post Type:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <input id="ranks_step_post_type" name="badgeos_settings[ranks_step_post_type]" type="text" value="<?php echo esc_attr( $ranks_step_post_type ); ?>" class="regular-text" />
+                        <p class="description"><?php _e( 'Ranks Step Type Slug.', 'badgeos' ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+					<th scope="row"><label for="points_main_post_type"><?php _e( 'Point Type:', 'badgeos' ); ?></label></th>
+					<td>
+						<input id="points_main_post_type" name="badgeos_settings[points_main_post_type]" type="text" value="<?php echo esc_attr( $points_main_post_type ); ?>" class="regular-text" />
+						<p class="description"><?php _e( 'Point Type Slug.', 'badgeos' ); ?></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="points_award_post_type"><?php _e( 'Point Award:', 'badgeos' ); ?></label></th>
+					<td>
+						<input id="points_award_post_type" name="badgeos_settings[points_award_post_type]" type="text" value="<?php echo esc_attr( $points_award_post_type ); ?>" class="regular-text" />
+						<p class="description"><?php _e( 'Point Award Type Slug.', 'badgeos' ); ?></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="points_deduct_post_type"><?php _e( 'Point Deduct:', 'badgeos' ); ?></label></th>
+					<td>
+						<input id="points_deduct_post_type" name="badgeos_settings[points_deduct_post_type]" type="text" value="<?php echo esc_attr( $points_deduct_post_type ); ?>" class="regular-text" />
+						<p class="description"><?php _e( 'Point Deduct Type Slug.', 'badgeos' ); ?></p>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="points_default_point_type"><?php _e( 'Default Point Type:', 'badgeos' ); ?></label></th>
+					<td>
+						<?php
+							$points = badgeos_get_point_types();
+						?>
+						<select id="points_default_point_type" name="badgeos_settings[default_point_type]">
+							<?php foreach( $points as $point ) {?>
+								<option value="<?php echo $point->ID;?>" <?php selected( $default_point_type, $point->ID ); ?>><?php echo $point->post_title;?></option>
+							<?php } ?>
+						</select>
+					</td>
+				</tr>
+
 				<?php
 				// check if multisite is enabled & if plugin is network activated
 				if ( is_super_admin() ){

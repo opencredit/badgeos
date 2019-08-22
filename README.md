@@ -7,13 +7,14 @@ Description
 ------------
 
 **Major Release:**
-This is a major release of BadgeOS in which we have upgraded the Custom Meta boxes script in the plugin along with other new features and bug fixes. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+This is a major release of BadgeOS in which we have added separate point type options so that you can create multiple point types to award/deduct points. We have also added ranks in this version so you can awards ranks to your users on completing the events. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
+Note: You may have to update all the existing badges too in order to sync the point types data.
 * [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
-* [BadgeOS Referring Link](https://badgeos.org/downloads/referring-link/ "BadgeOS Referring Link")
 * [BadgeOS Leaderboards](https://badgeos.org/downloads/leaderboards/ "BadgeOS Leaderboards")
-* [BadgeOS Activity Code](https://badgeos.org/downloads/activity-codes/ "BadgeOS Activity Code")
-* [BadgeOS Auto Messages](https://badgeos.org/downloads/auto-messages/ "BadgeOS Auto Message")
-* [BadgeOS Invite Codes](https://wordpress.org/plugins/badgeos-invite-codes-add-on/ "BadgeOS Invite Codes")
+* [BadgeOS Congratulation](https://badgeos.org/downloads/congratulations/ "BadgeOS Congratulation")
+* [BadgeOS Reports add-on](https://badgeos.org/downloads/reports/ "BadgeOS Reports add-on")
+* [BadgeOS Community add-on](https://wordpress.org/plugins/badgeos-community-add-on/ "BadgeOS Community add-on")
+* [BadgeOS LearnDash](https://wordpress.org/plugins/badgeos-learndash-add-on/ "BadgeOS Auto LearnDash")
 
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 

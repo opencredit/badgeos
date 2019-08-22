@@ -1,5 +1,19 @@
 ## Changelog
 
+#### 3.0
+- New: Added option to create multiple point types
+- New: Added option to award/deduct points on completing steps
+- New: Display users' earned points with types on user profile page
+- New: Added option to create multiple rank types
+- New: Displayed users' earned ranks on user profile page
+- New: Added option to select point type when awarding points with achievements/ranks
+- New: Saved users' earned achievement to custom db table rather than saving in meta data
+- New: Added option to transfer users' earned badges meta data to custom db table by clicking on a button
+- New: Added new actions hooks to extend the user achievement section
+- New: Added two new triggers. "Daily Visit" and "Register to the website"
+- Fix: Fixed conflict of BadgeOS with WooCommerce Membership add-on
+- Fix: Improved log entry message texts
+
 #### 2.4 
 - New: Added action hook to run when revoking badges
 - Fix: Fixed any/all achievement trigger count issue
