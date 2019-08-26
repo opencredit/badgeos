@@ -357,9 +357,36 @@ function badgeos_settings_page() {
 			<p class="submit">
 				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
 			</p>
-			<!-- TODO: Add settings to select WP page for archives of each achievement type.
-				See BuddyPress' implementation of this idea.  -->
-		</form>
+
+            <table class="form-table badgeos-migration-form-table">
+
+                <tr valign="top">
+                    <td>
+                        <h3><?php _e( 'BadgeOS DB Upgrade', 'badgeos' ); ?></h3>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>
+                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to shift data from the old meta based structure to new database structure.', 'badgeos' ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>
+                        <?php
+                        $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db_updated', 'No' );
+                        if( $is_badgeos_all_achievement_db_updated!='Yes' ) {
+                            ?>
+                            <input type="button" id="badgeos_migrate_meta_to_db" class="button-primary" value="<?php _e( 'Upgrade 3.0 DB', 'badgeos' ); ?>" />
+                        <?php } else { ?>
+                            <input type="button" id="badgeos_migrate_meta_to_db" class="button-primary" value="<?php _e( 'Upgrade 3.0 DB', 'badgeos' ); ?>" />
+                        <?php } ?>
+
+                        <div class="badgeos_migrate_meta_to_db_message"></div>
+                    </td>
+                </tr>
+            </table>
+
+        </form>
 	</div>
 	<?php
 }
