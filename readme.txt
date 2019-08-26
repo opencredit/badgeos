@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
 Tested up to: 5.2.2
-Stable tag: 3.0
+Stable tag: 3.1
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -242,6 +242,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
 
 == Changelog ==
+
+= 3.1 =
+* New: Added option to upgrade db from plugin setting page
+* New: An email will be sent to admin on completing the db upgrade
+* Fix: Changed db upgrade query to work as background process
+* Fix: Fixed the BadgeOS shortcodes popup layout issues
 
 = 3.0 =
 * New: Added option to create multiple point types

@@ -241,11 +241,9 @@
 
 		var containerheight = $('.badgeos-shortcode-thickbox').height();
 
-		$(
-			'.badgeos-shortcode-thickbox #TB_ajaxContent,' +
-			'.badgeos-shortcode-thickbox .wrap'
-		).width( ( width - 50 ) )
-		 .height( ( containerheight - 50 ) );
+			$('.badgeos-shortcode-thickbox #TB_ajaxContent').width( ( width - 30 ) ).height( ( containerheight - 50 ) );
+			$('.badgeos-shortcode-thickbox .wrap').width( ( width - 50 ) ) .height( ( containerheight - 50 ) );
+
 
 		}, 0 );
 	}
