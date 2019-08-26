@@ -1,5 +1,11 @@
 ## Changelog
 
+#### 3.1
+- New: Added option to upgrade db from plugin setting page
+- New: An email will be sent to admin on completing the db upgrade
+- Fix: Changed db upgrade query to work as background process
+- Fix: Fixed the BadgeOS shortcodes popup layout issues
+
 #### 3.0
 - New: Added option to create multiple point types
 - New: Added option to award/deduct points on completing steps
