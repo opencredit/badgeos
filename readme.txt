@@ -193,6 +193,21 @@ There is NO WARRANTY for this software, express or implied, including the implie
 
 == Frequently Asked Questions ==
 
+= How many point types can be created? =
+
+Unlimited point types can be created
+
+= How many rank types can be created? =
+
+Unlimited rank types can be created
+
+= What is the default rank? =
+
+Default rank is the one with the "0" priority. It will automatically be rewarded to all the users. If you don't want to create a default rank then set its priority more than "0" like 1,2 etc.
+
+= What is the difference between rank and achievement? =
+
+An achievement can be earned multiple times but the rank will only be earned once. Achievement is like a step while rank is like a level.
 
 = Any ideas for making badge images? =
 
@@ -240,6 +255,18 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 8. BadgeOS shortcodes make it easy to turn any WordPress page into an achievements page, regardless of the theme you are using.
 
 9. Use the "BadgeOS Shortcode" button available in any WordPress content area to easily configure and insert a shortcode for any BadgeOS component. With just a click or two, you can add custom, dynamic achievement elements (such as lists of badges or other achievements, submission review pages, submission forms, or individual achievements) anywhere on your site.
+
+10. Daily visit Trigger
+
+11. Register to the website trigger
+
+12. Point types on achievements
+
+13. Earned point types on Profile
+
+14. Rank requirement
+
+15. Ranks data
 
 == Changelog ==
 

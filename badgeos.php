@@ -474,13 +474,13 @@ class BadgeOS {
 
         wp_enqueue_script(
             'ck_editor_cdn',
-            ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), false, null, false
+            ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), array( 'jquery' ), 'v3', true
         );
 
         wp_enqueue_script(
            'custom_script',
             plugins_url( '/js/ckeditor.js' , __FILE__ ),
-            false,null,true
+            array( 'jquery' ),'v3',true
         );
 	}
 
