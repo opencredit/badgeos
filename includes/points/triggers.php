@@ -94,7 +94,6 @@ function badgeos_points_award_trigger_event() {
 	$site_id = $blog_id;
 
 	$args = func_get_args();
-	$comment_post_id = $args[3]['comment_post_ID'];
 
 	/**
      * Grab our current trigger
@@ -124,6 +123,7 @@ function badgeos_points_award_trigger_event() {
 	if( 'badgeos_specific_new_comment' == $this_trigger ) {
         $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
         if( $trigger_data ) {
+            $comment_post_id = $args[3]['comment_post_ID'];
             foreach( $trigger_data as $data ) {
                 $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
                 if( absint( $post_specific_id ) == absint($comment_post_id) ) {
@@ -204,7 +204,6 @@ function badgeos_points_deduct_trigger_event() {
 	$site_id = $blog_id;
 
 	$args = func_get_args();
-    $comment_post_id = $args[3]['comment_post_ID'];
 
 	/**
      * Grab our current trigger
@@ -235,6 +234,7 @@ function badgeos_points_deduct_trigger_event() {
     if( 'badgeos_specific_new_comment' == $this_trigger ) {
         $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_deduct_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
         if( $trigger_data ) {
+            $comment_post_id = $args[3]['comment_post_ID'];
             foreach( $trigger_data as $data ) {
                 $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
                 if( absint( $post_specific_id ) == absint($comment_post_id) ) {

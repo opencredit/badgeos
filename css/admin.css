@@ -272,3 +272,11 @@ Shortcode Embed styles
 	font-size: 20px !important;
 	font-weight: bolder;
 }
+.badgeos-migration-form-table td {
+	margin-left: 3px;
+	padding:7px;
+}
+.badgeos-migration-form-table h3 {
+	margin: 0px;
+	padding:0px;
+}

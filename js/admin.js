@@ -256,4 +256,33 @@ jQuery(document).ready(function($) {
             } );
 		}
 	});
+
+    $( '#badgeos_migrate_meta_to_db' ).click( function() {
+        var confirmation = confirm( 'It will delete the old shifted data and shift data again from scratch.' );
+        if( confirmation ) {
+            var data = {
+                'action': 'badgeos_migrate_data_from_meta_to_db'
+            };
+            $.post( admin_js.ajax_url, data, function(response) {
+                $( '.badgeos_migrate_meta_to_db_message' ).html( '<div class="notice notice-warning delete-log-entries"><p><img src="'+ admin_js.loading_img +'" /> &nbsp;&nbsp;BadgeOS is shifting data as a background process. You will receive a confirmation email upon successful completion. You can continue exploring badgeos.</p></div>' );
+            } );
+        }
+    });
+
+    $( '#badgeos_notice_update_from_meta_to_db' ).click( function() {
+        var confirmation = confirm( 'It will delete the old shifted data and shift data again from scratch.' );
+        if( confirmation ) {
+            var data = {
+                'action': 'badgeos_migrate_data_from_meta_to_db_notice'
+            };
+            $.post( admin_js.ajax_url, data, function(response) {
+                $( '#wpbody-content .wrap' ).prepend( '<div class="notice notice-warning"><p><img src="'+ admin_js.loading_img +'" /> &nbsp;&nbsp;BadgeOS is shifting data as a background process. You will receive a confirmation email upon successful completion. You can continue exploring badgeos.</p></div>' );
+
+                setTimeout( function() {
+                    $( '#wpbody-content .wrap .migrate-meta-to-db' ).slideUp();
+                }, 1000 );
+            } );
+        }
+    });
+
 });
