@@ -1,5 +1,11 @@
 ## Changelog
 
+#### 3.2
+- New: Added option to update the existing achievements with regards the point types
+- New: Added default thumbnail for the rank post
+- Fix: Fixed conflict with scormcloud plugin
+- Fix: Fixed the point and rank type pages 404 issue
+
 #### 3.1
 - New: Added option to upgrade db from plugin setting page
 - New: An email will be sent to admin on completing the db upgrade

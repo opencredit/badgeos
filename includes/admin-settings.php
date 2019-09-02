@@ -367,7 +367,7 @@ function badgeos_settings_page() {
                 </tr>
                 <tr valign="top">
                     <td>
-                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to shift data from the old meta based structure to new database structure.', 'badgeos' ); ?></p>
+                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to update the users\' existing achievements and points in the badgeos table.', 'badgeos' ); ?></p>
                     </td>
                 </tr>
                 <tr valign="top">
@@ -382,6 +382,25 @@ function badgeos_settings_page() {
                         <?php } ?>
 
                         <div class="badgeos_migrate_meta_to_db_message"></div>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="form-table badgeos-migration-form-table">
+                <tr valign="top">
+                    <td>
+                        <h3><?php _e( 'BadgeOS Upgrade Achievement', 'badgeos' ); ?></h3>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>
+                        <p><?php _e( 'Please click on "Upgrade Achievements" button below to update the existing achievement points with the point types.', 'badgeos' ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td>
+                        <input type="button" id="badgeos_migrate_fields_single_to_multi" class="button-primary" value="<?php _e( 'Upgrade Achievements', 'badgeos' ); ?>" />
+                        <div class="badgeos_migrate_fields_single_to_multi_message"></div>
                     </td>
                 </tr>
             </table>

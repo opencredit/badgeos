@@ -1129,6 +1129,16 @@ function badgeos_flush_rewrite_on_published_rank( $new_status, $old_status, $pos
     if ( trim( $settings['ranks_main_post_type'] ) === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
         badgeos_flush_rewrite_rules();
     }
+
+    $rank_types = get_posts( array(
+        'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
+        'posts_per_page' =>	-1,
+    ) );
+    foreach ( $rank_types as $rank_type ) {
+        if ( trim( $rank_type->post_name ) === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
+            badgeos_flush_rewrite_rules();
+        }
+    }
 }
 add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_rank', 10, 3 );
 
@@ -1869,3 +1879,80 @@ function badgeos_get_rank_image( $rank_id = 0, $rank_width = '50', $rank_height 
 
     return $ranks_image;
 }
+
+/**
+ * Set default ranks image on achievement post save
+ *
+ * @param integer $post_id The post ID of the post being saved
+ * @return mixed    post ID if nothing to do, void otherwise.
+ */
+function badgeos_ranks_set_default_thumbnail( $post_id ) {
+
+    global $pagenow;
+
+    $badgeos_settings = get_option( 'badgeos_settings' );
+    if (
+        ! (
+            badgeos_is_rank( $post_id )
+            || $badgeos_settings['ranks_main_post_type'] == get_post_type( $post_id )
+        )
+        || ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+        || ! current_user_can( 'edit_post', $post_id )
+        || has_post_thumbnail( $post_id )
+        || 'post-new.php' == $pagenow
+    ) {
+        return $post_id;
+    }
+
+    $thumbnail_id = 0;
+
+    // If there is no thumbnail set, load in our default image
+    if ( empty( $thumbnail_id ) ) {
+        global $wpdb;
+
+        // Grab the default image
+        $file = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url().'images/rank-main.png' );
+
+        // Download file to temp location
+        $tmp = download_url( $file );
+
+        // Set variables for storage
+        // fix file filename for query strings
+        preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
+        $file_array['name']     = basename( $matches[0] );
+        $file_array['tmp_name'] = $tmp;
+
+        // If error storing temporarily, unlink
+        if ( is_wp_error( $tmp ) ) {
+            @unlink( $file_array['tmp_name'] );
+            $file_array['tmp_name'] = '';
+        }
+
+        // Upload the image
+        $thumbnail_id = media_handle_sideload( $file_array, $post_id );
+
+        // If upload errored, unlink the image file
+        if ( empty( $thumbnail_id ) || is_wp_error( $thumbnail_id ) ) {
+            @unlink( $file_array['tmp_name'] );
+
+            // Otherwise, if the achievement type truly doesn't have
+            // a thumbnail already, set this as its thumbnail, too.
+            // We do this so that WP won't upload a duplicate version
+            // of this image for every single achievement of this type.
+        } elseif (
+            badgeos_is_rank( $post_id )
+            && is_object( $achievement_type )
+            && ! get_post_thumbnail_id( $achievement_type->ID )
+        ) {
+            set_post_thumbnail( $achievement_type->ID, $thumbnail_id );
+            badgeos_flush_rewrite_rules();
+        }
+    }
+
+    // Finally, if we have an image, set the thumbnail for our achievement
+    if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) ) {
+        set_post_thumbnail( $post_id, $thumbnail_id );
+        badgeos_flush_rewrite_rules();
+    }
+}
+add_action( 'save_post', 'badgeos_ranks_set_default_thumbnail' );

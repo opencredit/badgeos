@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 3.1
+* Version: 3.2
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -33,7 +33,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '3.1';
+	public static $version = '3.2';
 
 	function __construct() {
 		// Define plugin constants
@@ -184,6 +184,7 @@ class BadgeOS {
 		 * Move achivements from meta to db
 		 */
 		require_once( $this->directory_path . 'includes/meta-to-db.php' );
+        require_once( $this->directory_path . 'includes/achievement-upgrade.php' );
 
 		/**
 		 * Point files
@@ -227,6 +228,7 @@ class BadgeOS {
 	function register_scripts_and_styles() {
 		// Register scripts
 		wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ) );
+        wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ), '3.2', true );
 		wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
 		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
 		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), '1.3.0', true );
@@ -554,8 +556,8 @@ function badgeos_is_debug_mode() {
 
 }
 
-if ( ! function_exists('write_log')) {
-    function write_log ( $log )  {
+if ( ! function_exists('badgeos_write_log')) {
+    function badgeos_write_log ( $log )  {
         if ( is_array( $log ) || is_object( $log ) ) {
             error_log( print_r( $log, true ) );
         } else {

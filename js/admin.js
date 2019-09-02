@@ -258,7 +258,7 @@ jQuery(document).ready(function($) {
 	});
 
     $( '#badgeos_migrate_meta_to_db' ).click( function() {
-        var confirmation = confirm( 'It will delete the old shifted data and shift data again from scratch.' );
+        var confirmation = confirm( "It will update the users' existing achievements and points in the badgeos table." );
         if( confirmation ) {
             var data = {
                 'action': 'badgeos_migrate_data_from_meta_to_db'
@@ -269,8 +269,24 @@ jQuery(document).ready(function($) {
         }
     });
 
+    $( '#badgeos_migrate_fields_single_to_multi' ).click( function() {
+        var confirmation = confirm( 'It will update the existing achievement points with the point types.' );
+        if( confirmation ) {
+            var data = {
+                'action': 'badgeos_migrate_fields_points_to_point_types'
+            };
+            $.post( admin_js.ajax_url, data, function(response) {
+                $( '.badgeos_migrate_fields_single_to_multi_message' ).html( '<div class="notice notice-warning migrage-point-fields-entries"><p>'+response+'</p></div>' ).slideDown();
+
+                /*setTimeout( function() {
+                    $( '.badgeos_migrate_fields_single_to_multi_message' ).slideUp();
+                }, 3000 );*/
+            } );
+        }
+    });
+
     $( '#badgeos_notice_update_from_meta_to_db' ).click( function() {
-        var confirmation = confirm( 'It will delete the old shifted data and shift data again from scratch.' );
+        var confirmation = confirm( "It will update the users' existing achievements and points in the badgeos table" );
         if( confirmation ) {
             var data = {
                 'action': 'badgeos_migrate_data_from_meta_to_db_notice'

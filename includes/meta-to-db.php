@@ -133,7 +133,7 @@ $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db
         $body .= '<tr valign="top">';
         $body .= '<td>';
         $body .= '<p>'.__( 'Hi', 'badgeos' ).' '.$from_title.'</p>';
-        $body .= '<p>'.__( "Your site points and achievements has been transferred from users' meta to points and achievement tables.", 'badgeos' ).'</p>';
+        $body .= '<p>'.__( "Your site users' existing achievements and points have been updated to the BadgeOS table.", 'badgeos' ).'</p>';
         $body .= '</td></tr>';
         $body .= '<tr valign="top"><td></td></tr>';
         $body .= '<tr valign="top"><td>'.__( 'Thanks', 'badgeos' ).'</td></tr>';

@@ -16,6 +16,26 @@ Note: You may have to update all the existing badges too in order to sync the po
 * [BadgeOS Community add-on](https://wordpress.org/plugins/badgeos-community-add-on/ "BadgeOS Community add-on")
 * [BadgeOS LearnDash](https://wordpress.org/plugins/badgeos-learndash-add-on/ "BadgeOS Auto LearnDash")
 
+After updating the plugin to 3.0, You will need to update the users' earning and achievements. Follow the steps below to update them.
+
+**Note: please clear the cache of the site before updating the user's earning and existing achievements.**
+
+**Update users' earned achievements and points:**
+- Update the BadgeOS to 3.1 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade 3.0 DB" button
+
+**Update existing achievements:**
+- Update the BadgeOS to 3.2 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade Achievements" button
+
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement and badging system. Your site's users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
 Create badges and set up the achievements to earn them. Badges are Mozilla OBI compatible and sharable via [Credly](https://credly.com/ "Credly.com"), the free web service for managing and displaying lifelong credentials.

@@ -834,12 +834,6 @@ function badgeos_get_network_site_ids() {
 function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	global $pagenow;
 
-	// Bail early if:
-	// this IS NOT an achievement or achievement-type post
-	// OR this IS an autosave
-	// OR current user CAN NOT edit this post
-	// OR the post already has a thumbnail
-	// OR we've just loaded the new post page
 	if (
 		! (
 			badgeos_is_achievement( $post_id )
@@ -950,7 +944,10 @@ add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achiev
 function badgeos_flush_rewrite_rules() {
 	badgeos_register_post_types();
 	badgeos_register_achievement_type_cpt();
-	flush_rewrite_rules();
+    badgeos_register_ranks_post_types();
+    badgeos_register_ranks_type_cpt();
+    badgeos_register_points_post_types();
+    flush_rewrite_rules();
 }
 
 /**

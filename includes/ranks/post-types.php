@@ -124,7 +124,7 @@ function badgeos_register_ranks_type_cpt() {
 			/**
              * Determine whether this achievement type should be visible in the menu
              */
-			$show_in_menu = get_post_meta( $rank_type->ID, '_badgeos_show_in_menu', true ) ? 'badgeos_ranks' : false;
+            $show_in_menu = get_post_meta( strtolower( $rank_type->ID ), '_badgeos_show_in_menu', true ) ? 'badgeos_ranks' : false;
 
 			/**
              * Register the post type
@@ -150,7 +150,7 @@ function badgeos_register_ranks_type_cpt() {
 				'show_ui'            => current_user_can( badgeos_get_manager_capability() ),
 				'show_in_menu'       => $show_in_menu,
 				'query_var'          => true,
-				'rewrite'            => array( 'slug' => $rank_type->post_name ),
+				'rewrite'            => array( 'slug' => strtolower( $rank_type->post_name ) ),
 				'capability_type'    => 'post',
 				'has_archive'        => true,
 				'hierarchical'       => true,
