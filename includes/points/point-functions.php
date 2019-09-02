@@ -35,6 +35,22 @@ function badgeos_get_users_points( $user_id = 0, $achievement_id = 0 ) {
 }
 
 /**
+ * Flush rewrite rules on publishing a rank
+ *
+ * @param $new_status
+ * @param $old_status
+ * @param $post
+ */
+function badgeos_flush_rewrite_on_published_poings( $new_status, $old_status, $post ) {
+
+    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $settings['points_main_post_type'] ) === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
+        badgeos_flush_rewrite_rules();
+    }
+}
+add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_poings', 10, 3 );
+
+/**
  * Return credit types
  *
  * @return array

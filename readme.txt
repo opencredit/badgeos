@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
 Tested up to: 5.2.2
-Stable tag: 3.1
+Stable tag: 3.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -21,6 +21,26 @@ Note: You may have to update all the existing badges too in order to sync the po
 * [BadgeOS Reports add-on](https://badgeos.org/downloads/reports/ "BadgeOS Reports add-on")
 * [BadgeOS Community add-on](https://wordpress.org/plugins/badgeos-community-add-on/ "BadgeOS Community add-on")
 * [BadgeOS LearnDash](https://wordpress.org/plugins/badgeos-learndash-add-on/ "BadgeOS Auto LearnDash")
+
+After updating the plugin to 3.0, You will need to update the users' earning and achievements. Follow the steps below to update them.
+
+**Note: please clear the cache of the site before updating the user's earning and existing achievements.**
+
+**Update users' earned achievements and points:**
+- Update the BadgeOS to 3.1 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade 3.0 DB" button
+
+**Update existing achievements:**
+- Update the BadgeOS to 3.2 or greater
+- Go to Dashboard -> BadgeOS -> Point Type
+- Create a new point type (if not created already)
+- Go to Dashboard -> BadgeOS -> Settings
+- Select the default point type and click on save settings button
+- Click on the "Upgrade Achievements" button
 
 [BadgeOS](http://badgeos.org "BadgeOS")&trade; turns your WordPress site into an achievement, badging and engagement management system. Your users complete steps, demonstrate skills and knowledge, and earn digital badges. Easily define the achievements, organize the badge requirements any way you like, and choose from and combine a range of assessment options to determine whether each task or requirement has been achieved.
 
@@ -269,6 +289,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.2 =
+* New: Added option to update the existing achievements with regards the point types
+* New: Added default thumbnail for the rank post
+* Fix: Fixed conflict with scormcloud plugin
+* Fix: Fixed the point and rank type pages 404 issue
 
 = 3.1 =
 * New: Added option to upgrade db from plugin setting page
