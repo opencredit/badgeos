@@ -49,7 +49,7 @@ function badgeos_maybe_deduct_points_to_user( $credit_step_id = 0, $credit_paren
 		/**
          * Available action for triggering other processes
          */
-		do_action( 'badgeos_unlock_user_rank', $user_id, 'Deduct', $new_points, $credit_step_id, $credit_parent_id, $this_trigger, 0 );
+		do_action( 'badgeos_unlock_user_rank', $user_id, 'Deduct', $new_points, $credit_step_id, $credit_parent_id, $this_trigger, 0, 0 );
 
 		/**
          * Maybe award some points-based Achievements
@@ -265,7 +265,7 @@ function badgeos_maybe_award_points_to_user( $credit_step_id = 0, $credit_parent
 		/**
 		 * Available action for triggering other processes
 		 */
-		do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $new_points, $credit_step_id, $credit_parent_id, $this_trigger, 0 );
+		do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $new_points, $credit_step_id, $credit_parent_id, $this_trigger, 0, 0 );
         
 		/**
 		 * Maybe award point based Achievements
@@ -444,7 +444,7 @@ function badgeos_award_credit( $credit_post_id, $user_id, $target, $points, $thi
     /**
      * Available action for triggering other processes
      */
-    do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $points, $credit_step_id, $credit_post_id, $this_trigger, $admin_id );
+    do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $points, $credit_step_id, $credit_post_id, $this_trigger, 0, $admin_id );
 
     /**
      * Maybe award point based Achievements
@@ -467,7 +467,7 @@ function badgeos_award_credit( $credit_post_id, $user_id, $target, $points, $thi
  * @param $this_trigger
  * @param int $achievement_id
  */
-function badgeos_maybe_unlock_user_rank( $user_id, $type, $points_earned, $credit_step_id, $credit_parent_id, $this_trigger, $achievement_id = 0 ) {
+function badgeos_maybe_unlock_user_rank( $user_id, $type, $points_earned, $credit_step_id, $credit_parent_id, $this_trigger, $achievement_id = 0, $admin_id = 0 ) {
 
 	$total_points = badgeos_get_points_by_type( $credit_parent_id, $user_id );
 
@@ -482,12 +482,12 @@ function badgeos_maybe_unlock_user_rank( $user_id, $type, $points_earned, $credi
                 'this_trigger'      => $this_trigger,
                 'credit_id'         => 0,
                 'credit_amount'     => 0,
-                'admin_id'          => ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ),
+                'admin_id'          => $admin_id,
             )  );
         }
 	}
 }
-add_action( 'badgeos_unlock_user_rank', 'badgeos_maybe_unlock_user_rank',10, 7 );
+add_action( 'badgeos_unlock_user_rank', 'badgeos_maybe_unlock_user_rank',10, 8 );
 
 /**
  * Add points to user balance and in db.

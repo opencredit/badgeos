@@ -18,7 +18,7 @@
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    Our possibly updated earning status
  */
-function badgeos_user_deserves_rank_award( $completed, $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args=array() ) {
+function badgeos_user_deserves_rank_step_count_callback( $completed, $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args=array() ) {
 
 	/**
      * Only override the $return data if we're working on a step
@@ -34,9 +34,10 @@ function badgeos_user_deserves_rank_award( $completed, $step_id = 0, $rank_id = 
 		/**
          * Grab the relevent activity for this step
          */
-		$relevant_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $this_trigger, $site_id, $args ) );
+        $current_trigger = get_post_meta( $step_id, '_rank_trigger_type', true );
+        $relevant_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $current_trigger, $site_id, $args ) );
 
-		/**
+        /**
          * If we meet or exceed the required number of checkins, they deserve the step
          */
 		if ( $relevant_count >= $minimum_activity_count ) {
@@ -48,7 +49,7 @@ function badgeos_user_deserves_rank_award( $completed, $step_id = 0, $rank_id = 
 
 	return $return;
 }
-add_filter( 'badgeos_user_deserves_rank_award', 'badgeos_user_deserves_rank_award', 10, 7 );
+add_filter( 'badgeos_user_deserves_rank_step_count', 'badgeos_user_deserves_rank_step_count_callback', 10, 7 );
 
 
 /**
@@ -178,12 +179,32 @@ add_filter( 'badgeos_user_has_access_to_rank', 'badgeos_user_has_access_to_rank_
  * @return bool|void
  */
 function badgeos_maybe_award_rank( $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args = array() ) {
+    global $wpdb;
 
     $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-	if( get_post_type( $step_id ) !== trim( $settings['ranks_step_post_type'] ) ) {
-        return;
+    if( get_post_type( $step_id ) == trim( $settings['ranks_step_post_type'] ) ) {
+        if ( apply_filters( 'badgeos_user_deserves_rank_step', $return_val=true, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args ) ) {
+
+            $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+            $recs = $wpdb->get_results( $wpdb->prepare("SELECT id FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d", $step_id	) );
+            if ( count( $recs ) <= $minimum_activity_count ) {
+                badgeos_update_user_rank( array(
+                    'user_id'           => $user_id,
+                    'site_id'           => get_current_blog_id(),
+                    'rank_id'           => $step_id,
+                    'this_trigger'      => $this_trigger,
+                    'credit_id'         => 0,
+                    'credit_amount'     => 0,
+                    'admin_id'          => ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ),
+                )  );
+            }
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
     }
-	 
+
     /**
      * Get the requirement rank
      */
@@ -210,13 +231,8 @@ function badgeos_maybe_award_rank( $step_id = 0, $rank_id = 0, $user_id = 0, $th
 	    /**
          * Check if rank requirement has been earned
          */
-		if( ! badgeos_get_user_achievements( array(
-			'user_id' => $user_id,
-			'achievement_id' => $requirement->ID,
-			'since' => strtotime( $rank->post_date )
-		) ) ) {
-			$completed = false; 
-			break;
+        if( ! apply_filters( 'badgeos_user_deserves_rank_step_count', $completed, $requirement->ID, $rank_id, $user_id, $this_trigger, $site_id, $args ) ) {
+			$completed = false;
 		}
 	}
 	

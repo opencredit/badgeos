@@ -609,8 +609,9 @@ function badgeos_update_user_rank( $args = array() ) {
     if( 0 == $args['rank_id'] ) {
         return false;
     }
-    
-    if( badgeos_user_has_a_rank( $args['rank_id'], $args['user_id'] ) ) {
+
+    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( badgeos_user_has_a_rank( $args['rank_id'], $args['user_id'] ) && get_post_type( $args['rank_id'] ) != trim( $settings['ranks_step_post_type'] ) ) {
         return false;
     }
 
@@ -762,7 +763,8 @@ function badgeos_get_user_ranks( $args = array() ) {
         'rank_type'         => false,
         'start_date'        => false, // A specific achievement type
 		'end_date'          => false, // A specific achievement type
-        'since'             => 0
+        'since'             => 0,
+        'no_steps'          => true
     );
     $args = wp_parse_args( $args, $defaults );
 
@@ -811,6 +813,11 @@ function badgeos_get_user_ranks( $args = array() ) {
 
     if( $args['end_date'] ) {
         $where .= " AND dateadded <= '". $args['end_date']. "'";
+    }
+
+    if( $args['no_steps'] == true ) {
+        $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $where .= " AND ( rank_type != '" .trim( $settings['ranks_step_post_type'] ). "')";
     }
 
     global $wpdb;
@@ -885,6 +892,8 @@ function badgeos_get_rank_earned_time( $user_id = 0, $rank_type = '' ) {
  */
 function badgeos_get_rank_requirements( $rank_id = 0, $post_status = 'publish' ) {
 
+    global $wpdb;
+
     /**
      * Grab the current post ID if no rank_id was specified
      */
@@ -894,15 +903,7 @@ function badgeos_get_rank_requirements( $rank_id = 0, $post_status = 'publish' )
     }
 
     $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    $requirements = get_posts( array(
-        'post_type'         => trim( $settings['ranks_step_post_type'] ),
-        'post_parent'       => $rank_id,
-        'post_status'       => $post_status,
-        'orderby'			=> 'menu_order',
-        'order'				=> 'ASC',
-        'posts_per_page'    => -1,
-        'suppress_filters'  => false,
-    ));
+    $requirements = $wpdb->get_results( $wpdb->prepare( "SELECT p.*, pp.* FROM $wpdb->p2p as pp inner join $wpdb->posts as p on(pp.p2p_from = p.ID) WHERE pp.p2p_to = %d and p.post_type = %s", $rank_id, trim( $settings['ranks_step_post_type'] )  ) );
 
     /**
      * Return rank requirements array
@@ -1910,8 +1911,10 @@ function badgeos_ranks_set_default_thumbnail( $post_id ) {
     if ( empty( $thumbnail_id ) ) {
         global $wpdb;
 
+        $rank = get_page_by_path( badgeos_get_post_type( $post_id ), OBJECT, trim( $badgeos_settings['ranks_main_post_type'] ) );
+
         // Grab the default image
-        $file = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url().'images/rank-main.png' );
+        $file = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url().'images/rank-main.png', $rank, array() );
 
         // Download file to temp location
         $tmp = download_url( $file );

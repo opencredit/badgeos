@@ -119,10 +119,10 @@ jQuery(document).ready(function($) {
                 var defaultRank = self.parents( 'tr' ).attr( 'id' );
                 var cloned = self.parents( 'tr' ).clone( true );
 
-                var replaceWidth = '<td class="last-awarded"><i class="fa fa-check" aria-hidden="true"></i></td><td><span data-rank_id="' + rankID + '" data-user_id="' + userID + '" data-admin_ajax="'+ ajaxURL +'" class="revoke-rank">'+ admin_js.revoke_rank +'</span><span class="spinner-loader" ><img class="award-rank-spinner" src="'+ admin_js.loading_img +'" style="margin-left: 10px; display: none;" /></span></td>';
+                var replaceWidth = '<td class="last-awarded" align="center"><span class="profile_ranks_last_award_field">&#10003;</span></td><td><span data-rank_id="' + rankID + '" data-user_id="' + userID + '" data-admin_ajax="'+ ajaxURL +'" class="revoke-rank">'+ admin_js.revoke_rank +'</span><span class="spinner-loader" ><img class="award-rank-spinner" src="'+ admin_js.loading_img +'" style="margin-left: 10px; display: none;" /></span></td>';
 
                 if( 'default-rank' == defaultRank ) {
-                    replaceWidth = '<td class="last-awarded"><i class="fa fa-check" aria-hidden="true"></i></td><td><span class="default-rank">'+ admin_js.default_rank +'</span></td>';
+                    replaceWidth = '<td class="last-awarded" align="center"><span class="profile_ranks_last_award_field">&#10003;</span></td><td><span class="default-rank">'+ admin_js.default_rank +'</span></td>';
                 }
                 $( 'td.award-rank-column', cloned ).replaceWith( replaceWidth );
 
