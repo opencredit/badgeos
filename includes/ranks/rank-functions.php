@@ -1751,6 +1751,8 @@ function badgeos_add_rank( $args = array() ) {
  */
 function badgeos_remove_rank( $ranks = array() ) {
 
+    $site_id = get_current_blog_id();
+
     /**
      * Setup our default args
      */
@@ -1760,6 +1762,7 @@ function badgeos_remove_rank( $ranks = array() ) {
         'user_id'        => wp_get_current_user()->ID,
     );
     $args = wp_parse_args( $ranks, $defaults );
+    $rank_id = $args['rank_id'];
 
     /**
      * Bail here
@@ -1772,6 +1775,8 @@ function badgeos_remove_rank( $ranks = array() ) {
      * Revoke Rank
      */
     global $wpdb;
+
+    $requirements = badgeos_get_rank_requirements( $rank_id );
 
     $where = array( 'user_id' => $args['user_id'] );
 
@@ -1792,6 +1797,24 @@ function badgeos_remove_rank( $ranks = array() ) {
         $args['rank_id'],
         $args['entry_id']
     );
+
+    foreach( $requirements as $req ) {
+        $recs = $wpdb->get_results( $wpdb->prepare("SELECT id, this_trigger FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d and user_id=%d", $req->ID, $args['user_id']	) );
+        if( count( $recs ) > 0 ) {
+            $trigger = $recs[0]->this_trigger;
+
+            $user_triggers = badgeos_ranks_get_user_triggers( $req->ID, $args['user_id'], false  );
+            $user_triggers[ $site_id ][ $trigger . "_" . $req->ID ] = 0;
+
+            update_user_meta( $args['user_id'], '_badgeos_ranks_triggers', $user_triggers );
+        }
+
+        $where_req = array( 'user_id' => $args['user_id'] );
+        $where_req['rank_id'] = $req->ID;
+
+        $wpdb->delete( $wpdb->prefix.'badgeos_ranks', $where_req );
+    }
+
 
     $wpdb->delete($wpdb->prefix.'badgeos_ranks', $where );
 
