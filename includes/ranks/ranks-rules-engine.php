@@ -18,34 +18,37 @@
  * @param  integer $achievement_id The given achievement's post ID
  * @return bool                    Our possibly updated earning status
  */
-function badgeos_user_deserves_rank_step_count_callback( $completed, $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args=array() ) {
+function badgeos_user_deserves_rank_step_count_callback( $return, $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args=array() ) {
 
 	/**
      * Only override the $return data if we're working on a step
      */
 	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( trim( $settings['ranks_step_post_type'] ) == get_post_type( $step_id ) ) {
-		
-		/**
-         * Get the required number of checkins for the step.
-         */
-		$minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
 
-		/**
-         * Grab the relevent activity for this step
-         */
-        $current_trigger = get_post_meta( $step_id, '_rank_trigger_type', true );
-        $relevant_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $current_trigger, $site_id, $args ) );
+        if( ! empty( $this_trigger ) && in_array( $this_trigger, get_badgeos_ranks_req_activity_triggers() ) ) {
 
-        /**
-         * If we meet or exceed the required number of checkins, they deserve the step
-         */
-		if ( $relevant_count >= $minimum_activity_count ) {
-            $return = true;
-        } else {
-            $return = false;
+            /**
+             * Get the required number of checkins for the step.
+             */
+            $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+
+            /**
+             * Grab the relevent activity for this step
+             */
+            $current_trigger = get_post_meta( $step_id, '_rank_trigger_type', true );
+            $relevant_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $current_trigger, $site_id, $args ) );
+
+            /**
+             * If we meet or exceed the required number of checkins, they deserve the step
+             */
+            if ( $relevant_count >= $minimum_activity_count ) {
+                $return = true;
+            } else {
+                $return = false;
+            }
         }
-	}
+    }
 
 	return $return;
 }
