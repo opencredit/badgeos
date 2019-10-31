@@ -43,13 +43,6 @@ function badgeos_ranks_type_metaboxes( ) {
 		'type' => 'text_medium',
 	));
 	$cmb_obj->add_field(array(
-		'name'    => __( 'Slug', 'badgeos' ),
-		'desc' 	 => ' '.__( 'URL Slug.', 'badgeos' ),
-		'id'      => $prefix . 'slug',
-		'type'	 => 'text_medium',
-		'default' => badgeos_get_post_field( 'post_name', $post_id )
-	));
-	$cmb_obj->add_field(array(
 		'name'    => __( 'Show in Menu?', 'badgeos' ),
 		'desc' 	 => ' '.__( 'Yes, show this achievement in the badgeos menu.', 'badgeos' ),
 		'id'      => $prefix . 'show_in_menu',
@@ -84,38 +77,6 @@ function badgeos_point_plural_name_save_meta( $updated, $action, $cmb )
 		update_post_meta( $object_id, '_point_plural_name', $page_title );
 }
 add_action( 'cmb2_save_field__point_plural_name', 'badgeos_point_plural_name_save_meta', 10, 3 );
-
-/**
- * If slug is empty then add post title in slug
- */
-function badgeos_slug_save_meta( $updated, $action, $cmb )
- {
-	$value 		= $cmb->value;
-	$object_id 	= $cmb->object_id;
-	if( empty( $value ) )
-		$value = get_the_title( $object_id );
-	
-	$value = str_replace( ' ', '-', $value );
-	update_post_meta( $object_id, '_badgeos_slug', strtolower($value) );
-}
-add_action( 'cmb2_save_field__badgeos_slug', 'badgeos_slug_save_meta', 10, 3 );
-
-/**
- * If slug is empty then add post title in slug
- */
-function badgeos_points_slug_save_meta( $updated, $action, $cmb )
- {
-	$value 		= $cmb->value;
-	$object_id 	= $cmb->object_id;
-	if( empty( $value ) )
-		$value = get_the_title( $object_id );
-	
-	$value = str_replace( ' ', '-', $value );
-	update_post_meta( $object_id, '_point_slug', strtolower($value) );
-}
-add_action( 'cmb2_save_field__point_slug', 'badgeos_points_slug_save_meta', 10, 3 );
-
-
 
 /**
  * Register custom meta box for badgeos WP ranks type Data

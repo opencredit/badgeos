@@ -1225,56 +1225,6 @@ function badgeos_get_rank_types_slugs_detailed() {
 }
 
 /**
- * Update slug
- *
- * @param $post_id
- * @return mixed
- */
-function badgeos_maybe_update_slug( $post_id ) {
-
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if( !empty($_POST['_badgeos_slug']) ) {
-        $post_slug      = sanitize_text_field( $_POST['_badgeos_slug'] );
-    } else if( !empty($_POST['_credits_slug']) ) {
-        $post_slug      = sanitize_text_field( $_POST['_credits_slug'] );
-    }
-
-    $post = get_post( $post_id );
-    if( ! $post )
-        return $post_id;
-
-    if( $post->post_type !== trim( $settings['ranks_main_post_type'] ) && $post->post_type !== trim( $settings['points_main_post_type'] ) ) {
-        return $post_id;
-    }
-
-    if( empty( $post_slug ) ) {
-        $post_slug = $post->post_title;
-    }
-
-    if ( isset( $post_slug ) ) {
-        $post_slug = wp_unique_post_slug(
-            sanitize_title( $post_slug ),
-            $post->ID,
-            $post->post_status,
-            $post->post_type,
-            $post->post_parent
-        );
-
-        remove_action( 'save_post', 'badgeos_maybe_update_slug',10,1 );
-
-        wp_update_post(
-            array (
-                'ID'        => $post_id,
-                'post_name' => $post_slug
-            )
-        );
-
-        add_action( 'save_post', 'badgeos_maybe_update_slug',10,1 );
-    }
-}
-add_filter( 'save_post' , 'badgeos_maybe_update_slug' , 10, 1 );
-
-/**
  * Update rank type
  *
  * @param array $post_args
