@@ -203,50 +203,51 @@ class earned_user_achievements_widget extends WP_Widget {
 					//if $set_achievements is not an array it means nothing is set so show all achievements
 					if ( is_array( $set_achievements ) && in_array( $achievement->post_type, $set_achievements ) ) {
 
-						//exclude step CPT entries from displaying in the widget
-						if ( get_post_type( $achievement->ID ) != 'step' ) {
+                        $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
 
-                            $img    = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ), 'wp-post-image' );
-							$img 	= apply_filters( 'badgeos_profile_achivement_image', $img, $achievement  );
+                        if( $is_hidden != 'hidden' ) {
+                            if (get_post_type($achievement->ID) != 'step') {
 
-							$img_permalink = 'javascript:;';
-                            if ( ! function_exists( 'post_exists' ) ) {
-                                require_once( ABSPATH . 'wp-admin/includes/post.php' );
+                                $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array(50, 50), 'wp-post-image');
+                                $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement);
+
+                                $img_permalink = 'javascript:;';
+                                if (!function_exists('post_exists')) {
+                                    require_once(ABSPATH . 'wp-admin/includes/post.php');
+                                }
+                                if (post_exists(get_the_title($achievement->ID))) {
+                                    $img_permalink = get_permalink($achievement->ID);
+                                }
+
+                                $thumb = $img ? '<a class="badgeos-item-thumb" href="' . $img_permalink . '">' . $img . '</a>' : '';
+                                $class = 'widget-badgeos-item-title';
+                                $item_class = $thumb ? ' has-thumb' : '';
+
+                                $achievement_title = get_the_title($achievement->ID);
+                                if (empty($achievement_title)) {
+                                    $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="javascript:;">' . esc_html($achievement->title) . '</a>';
+                                } else {
+                                    $permalink = get_permalink($achievement->ID);
+                                    $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="' . esc_url($permalink) . '">' . esc_html($achievement_title) . '</a>';
+                                }
+
+                                // Setup credly data if giveable
+                                $giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
+                                $item_class .= $giveable ? ' share-credly addCredly' : '';
+                                $credly_ID = $giveable ? 'data-credlyid="' . absint($achievement->ID) . '"' : '';
+
+                                echo '<li id="widget-achievements-listing-item-' . absint($achievement->ID) . '" ' . $credly_ID . ' class="widget-achievements-listing-item' . esc_attr($item_class) . '">';
+                                echo $thumb;
+                                echo $achievement_title;
+                                echo '</li>';
+
+                                $thecount++;
+
+                                if ($thecount == $number_to_show && $number_to_show != 0) {
+                                    break;
+                                }
                             }
-                            if( post_exists( get_the_title( $achievement->ID ) ) ) {
-                                $img_permalink = get_permalink( $achievement->ID );
-                            }
-
-                            $thumb      = $img ? '<a class="badgeos-item-thumb" href="'. $img_permalink .'">' . $img .'</a>' : '';
-							$class      = 'widget-badgeos-item-title';
-							$item_class = $thumb ? ' has-thumb' : '';
-
-                            $achievement_title = get_the_title( $achievement->ID );
-                            if( empty( $achievement_title ) ) {
-								$achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
-                            } else {
-                                $permalink  = get_permalink( $achievement->ID );
-                                $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $achievement_title ) .'</a>';
-                            }
-
-                            // Setup credly data if giveable
-							$giveable   = credly_is_achievement_giveable( $achievement->ID, $user_ID );
-							$item_class .= $giveable ? ' share-credly addCredly' : '';
-							$credly_ID  = $giveable ? 'data-credlyid="'. absint( $achievement->ID ) .'"' : '';
-
-							echo '<li id="widget-achievements-listing-item-'. absint( $achievement->ID ) .'" '. $credly_ID .' class="widget-achievements-listing-item'. esc_attr( $item_class ) .'">';
-							echo $thumb;
-                            echo $achievement_title;
-							echo '</li>';
-
-							$thecount++;
-
-							if ( $thecount == $number_to_show && $number_to_show != 0 ) {
-								break;
-							}
-
-						}
-
+                        }
 					}
 				}
 
@@ -268,6 +269,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 add_action( 'wp_ajax_achievement_send_to_credly', 'badgeos_send_to_credly_handler' );
 add_action( 'wp_ajax_nopriv_achievement_send_to_credly', 'badgeos_send_to_credly_handler' );
+
 /**
  * hook in our credly ajax function
  */
