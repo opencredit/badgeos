@@ -210,7 +210,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 		
 		// Finally, update our user meta
 		$is_saved = update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements);
-		do_action( 'badgeos_achievements_new_added', $rec_type, $new_achievement->ID, absint( $args['user_id'] ), 0 );
+        do_action( 'badgeos_achievements_new_added', '', 0, absint( $args['user_id'] ), 0 );
 		return $is_saved;
 	}
 }

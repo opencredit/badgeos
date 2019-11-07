@@ -280,3 +280,267 @@ Shortcode Embed styles
 	margin: 0px;
 	padding:0px;
 }
+
+.ui-tabs-vertical {
+	width: 100%;
+}
+.ui-tabs-vertical .ui-tabs-nav {
+	float: left;
+	width: 25%;
+}
+
+.ui-tabs-vertical .ui-tabs-nav li {
+	clear: left;
+	width: 100%;
+	border-bottom-width: 1px !important;
+	border-right-width: 0 !important;
+	margin: 0 -1px .2em 0;
+	display: block;
+}
+.ui-tabs-vertical .ui-tabs-nav li a {
+	display:block;
+	width: 100%;
+	padding: 8px 0 !important;
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	padding-bottom: 0;
+	padding-right: .1em;
+	border-right-width: 1px;
+}
+.ui-tabs-vertical .ui-tabs-panel {
+	padding: 1em;
+	float: right;
+	width: calc(75% - 1px);
+}
+#system-tabs,
+#achievement-tabs,
+#rank-tabs,
+#credit-tabs {
+	margin-top: 20px;
+	background-color: #f6f6f6;
+	border-color: #ccc;
+	box-shadow: 0 0 1px 2px #e8e8e8;
+	padding: 0;
+}
+#system-tabs .tab-title,
+#achievement-tabs .tab-title,
+#rank-tabs .tab-title,
+#credit-tabs .tab-title {
+	padding: 10px;
+	font-size: 15px;
+	font-weight: bold;
+	border-bottom: 1px solid #ccc;
+	background-color: #f6f6f6;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav {
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li a {
+	padding: 8px 2% !important;
+	width: 96% !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li {
+	background-color: #f6f6f6;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 0;
+	margin-bottom: 0;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
+	background-color: #fff;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border-bottom: 1px solid #ccc;
+	padding: 0;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a {
+	color: #000;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li:focus {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+#system-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#credit-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+#badgeos_info,
+#wordpress_info,
+#php_config,
+#server_info,
+#rank_bulk_award,
+#rank_bulk_revoke,
+#credit_bulk_award,
+#credit_bulk_revoke,
+#achievement_bulk_award,
+#achievement_bulk_revoke {
+	background-color: #fff;
+	padding: 0 !important;
+	border-left: 1px solid #ccc;
+}
+#rank_bulk_award form,
+#rank_bulk_revoke form,
+#credit_bulk_award form,
+#credit_bulk_revoke form,
+#achievement_bulk_award form,
+#achievement_bulk_revoke form {
+	padding: 20px;
+}
+#badgeos_info table,
+#wordpress_info table,
+#php_config table,
+#server_info table {
+	padding: 20px;
+	width: 100%;
+	text-align: left;
+}
+#badgeos_info table tr:nth-child( even ),
+#wordpress_info table tr:nth-child( even ),
+#php_config table tr:nth-child( even ),
+#server_info table tr:nth-child( even ) {
+	text-align: left;
+	background: #fff;
+}
+#badgeos_info table tr:nth-child( odd ),
+#wordpress_info table tr:nth-child( odd ),
+#php_config table tr:nth-child( odd ),
+#server_info table tr:nth-child( odd ) {
+	text-align: left;
+	background: #f6f6f6;
+}
+#server_info table tr th,
+#php_config table tr th,
+#wordpress_info table tr th,
+#badgeos_info table tr th {
+	width: 35%;
+}
+
+#server_info table tr th,
+#server_info table tr td,
+#php_config table tr th,
+#php_config table tr td,
+#wordpress_info table tr th,
+#wordpress_info table tr td,
+#badgeos_info table tr th,
+#badgeos_info table tr td {
+	padding: 10px;
+}
+#rank_bulk_award form table,
+#rank_bulk_revoke form table,
+#credit_bulk_award form table,
+#credit_bulk_revoke form table,
+#achievement_bulk_award form table,
+#achievement_bulk_revoke form table {
+	width: 100%;
+}
+.badgeos-wp_page_badgeos_tools form table tr th {
+	width: 35% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td {
+	width: 65% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td span input,
+.badgeos-wp_page_badgeos_tools form table tr td span > span.selection {
+	width: 100% !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr td > select,
+.badgeos-wp_page_badgeos_tools form table tr td > input {
+	width: 80%;
+	padding: 20px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	height: 45px !important;
+}
+.badgeos-wp_page_badgeos_tools form table tr th,
+.badgeos-wp_page_badgeos_tools form table tr td {
+	border-bottom: 1pt solid #e5e5e5;
+	padding: 20px 0;
+}
+#rank-tabs .button,
+#achievement-tabs .button,
+#credit-tabs .button {
+	margin: 20px 0;
+	float: right;
+}
+#rank-tabs .tool-hint,
+#achievement-tabs .tool-hint,
+#credit-tabs .tool-hint {
+	display: block;
+	color: #aaa;
+	margin: 5px 0;
+}
+.badgeos-wp_page_badgeos_tools .select2-container .select2-search--inline .select2-search__field {
+	margin-top: 12px;
+}
+
+#credit_types_to_award,
+#credit_types_to_revoke {
+	padding: 12px;
+	line-height: normal;
+	height: auto;
+}
+
+#credit_bulk_award form table tr th,
+#credit_bulk_award form table tr td,
+#rank_bulk_award form table tr th,
+#rank_bulk_revoke form table tr td,
+#credit_bulk_revoke form table tr th,
+#achievement_bulk_award form table tr td,
+#achievement_bulk_revoke form table tr th,
+#credit_bulk_revoke form table tr td {
+	padding-bottom: 20px;
+}
+#credit_bulk_award form table tr th,
+#credit_bulk_revoke form table tr th,
+#rank_bulk_award form table tr th,
+#rank_bulk_revoke form table tr th,
+#achievement_bulk_award form table tr th,
+#achievement_bulk_revoke form table tr th {
+	vertical-align: top;
+	padding-right: 50px;
+}
+#credit_bulk_award form table tr td .select2-search__field,
+#credit_bulk_revoke form table tr td .select2-search__field,
+#rank_bulk_award form table tr td .select2-search__field,
+#rank_bulk_revoke form table tr td .select2-search__field,
+#achievement_bulk_award form table tr td .select2-search__field,
+#achievement_bulk_revoke form table tr td .select2-search__field {
+	border: 1px solid #ddd;
+	max-width: 70%;
+	padding: 6px 8px;
+}
