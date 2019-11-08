@@ -160,7 +160,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		
 									$rank_title = get_the_title( $rank->rank_id );
 									if( empty( $rank_title ) ) {
-										$rank_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->title ) .'</a>';
+                                        $rank_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $rank->rank_title ) .'</a>';
 									} else {
 										$permalink  = get_permalink( $rank->rank_id );
 										$rank_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'. esc_url( $permalink ) .'">'. esc_html( $rank_title ) .'</a>';
@@ -224,8 +224,8 @@ class earned_user_achievements_widget extends WP_Widget {
                                 $item_class = $thumb ? ' has-thumb' : '';
 
                                 $achievement_title = get_the_title($achievement->ID);
-                                if (empty($achievement_title)) {
-                                    $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="javascript:;">' . esc_html($achievement->title) . '</a>';
+                                if( empty( $achievement_title ) ) {
+                                    $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->achievement_title ) .'</a>';
                                 } else {
                                     $permalink = get_permalink($achievement->ID);
                                     $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="' . esc_url($permalink) . '">' . esc_html($achievement_title) . '</a>';
