@@ -32,6 +32,52 @@ function badgeos_is_achievement( $post = null ) {
 }
 
 /**
+ * Get an array of achievements i.e. id/title pair
+ *
+ * @since  1.0.0
+ * @param  array $args An array of our relevant arguments
+ * @return array       An array of the queried achievements
+ */
+function badgeos_get_achievements_id_title_pair( $args = array() ) {
+
+    // Setup our defaults
+    $defaults = array(
+        'post_type'                => badgeos_get_achievement_types_slugs(),
+        'suppress_filters'         => false,
+        'achievement_relationsihp' => 'any',
+    );
+    $args = wp_parse_args( $args, $defaults );
+
+    // Hook join functions for joining to P2P table to retrieve the parent of an acheivement
+    if ( isset( $args['parent_of'] ) ) {
+        add_filter( 'posts_join', 'badgeos_get_achievements_parents_join' );
+        add_filter( 'posts_where', 'badgeos_get_achievements_parents_where', 10, 2 );
+    }
+
+    // Hook join functions for joining to P2P table to retrieve the children of an acheivement
+    if ( isset( $args['children_of'] ) ) {
+        add_filter( 'posts_join', 'badgeos_get_achievements_children_join', 10, 2 );
+        add_filter( 'posts_where', 'badgeos_get_achievements_children_where', 10, 2 );
+        add_filter( 'posts_orderby', 'badgeos_get_achievements_children_orderby' );
+    }
+
+    // Get our achievement posts
+    $achievements = get_posts( $args );
+    $achs_array = array();
+    foreach( $achievements as $achievement ) {
+        $achs_array[ $achievement->ID ] = $achievement->post_title;
+    }
+    // Remove all our filters
+    remove_filter( 'posts_join', 'badgeos_get_achievements_parents_join' );
+    remove_filter( 'posts_where', 'badgeos_get_achievements_parents_where' );
+    remove_filter( 'posts_join', 'badgeos_get_achievements_children_join' );
+    remove_filter( 'posts_where', 'badgeos_get_achievements_children_where' );
+    remove_filter( 'posts_orderby', 'badgeos_get_achievements_children_orderby' );
+
+    return $achs_array;
+}
+
+/**
  * Get an array of achievements
  *
  * @since  1.0.0

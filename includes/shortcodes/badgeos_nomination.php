@@ -6,6 +6,8 @@
  * @since 1.4.0
  */
 function badgeos_register_nomination_shortcode() {
+
+    $achievements = badgeos_get_achievements_id_title_pair();
 	badgeos_register_shortcode( array(
 		'name'            => __( 'Nomination Form', 'badgeos' ),
 		'description'     => __( 'Render a nomination form for a specific achievement.', 'badgeos' ),
@@ -15,9 +17,11 @@ function badgeos_register_nomination_shortcode() {
 			'achievement_id' => array(
 				'name'        => __( 'Achievement ID', 'badgeos' ),
 				'description' => __( 'Achievement ID to award.', 'badgeos' ),
-				'type'        => 'text',
-				),
-		),
+                'type'        => 'select',
+                'values'      => $achievements,
+                'default'     => '',
+            ),
+        ),
 	) );
 }
 add_action( 'init', 'badgeos_register_nomination_shortcode' );

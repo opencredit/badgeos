@@ -8,10 +8,29 @@
 function badgeos_register_achievements_list_shortcode() {
 
 	// Setup a custom array of achievement types
-	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
-	array_unshift( $achievement_types, 'all' );
+    $achievement_types = get_posts( array(
+        'post_type'      =>	'achievement-type',
+        'posts_per_page' =>	-1,
+    ) );
 
-	badgeos_register_shortcode( array(
+    $types = array( 'all' => __( 'All', 'badgeos' ) );
+    foreach( $achievement_types as $type ) {
+        $types[ $type->post_name ] = $type->post_title;
+    }
+
+    $users = get_users();
+    $user_list = array();
+    foreach( $users as $user ) {
+        $user_list[ $user->ID ] = $user->user_login;
+    }
+
+    $posts = get_posts();
+    $post_list = array();
+    foreach( $posts as $post ) {
+        $post_list[ $post->ID ] = $post->post_title;
+    }
+
+    badgeos_register_shortcode( array(
 		'name'            => __( 'Achievement List', 'badgeos' ),
 		'description'     => __( 'Output a list of achievements.', 'badgeos' ),
 		'slug'            => 'badgeos_achievements_list',
@@ -20,10 +39,10 @@ function badgeos_register_achievements_list_shortcode() {
 			'type' => array(
 				'name'        => __( 'Achievement Type(s)', 'badgeos' ),
 				'description' => __( 'Single, or comma-separated list of, achievement type(s) to display.', 'badgeos' ),
-				'type'        => 'text',
-				'values'      => $achievement_types,
-				'default'     => 'all',
-				),
+                'type'        => 'select',
+                'values'      => $types,
+                'default'     => '',
+            ),
 			'limit' => array(
 				'name'        => __( 'Limit', 'badgeos' ),
 				'description' => __( 'Number of achievements to display.', 'badgeos' ),
@@ -73,20 +92,23 @@ function badgeos_register_achievements_list_shortcode() {
 				'default'     => 'ASC',
 				),
 			'user_id' => array(
-				'name'        => __( 'User ID', 'badgeos' ),
-				'description' => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
-				'type'        => 'text',
-				),
+				'name'          => __( 'User ID', 'badgeos' ),
+				'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+                'type'          => 'select',
+                'values'        => $user_list,
+            ),
 			'include' => array(
-				'name'        => __( 'Include', 'badgeos' ),
-				'description' => __( 'Comma-separated list of specific achievement IDs to include.', 'badgeos' ),
-				'type'        => 'text',
-				),
+				'name'          => __( 'Include', 'badgeos' ),
+				'description'   => __( 'Comma-separated list of specific achievement IDs to include.', 'badgeos' ),
+                'type'          => 'select',
+                'values'        => $post_list
+            ),
 			'exclude' => array(
-				'name'        => __( 'Exclude', 'badgeos' ),
-				'description' => __( 'Comma-separated list of specific achievement IDs to exclude.', 'badgeos' ),
-				'type'        => 'text',
-				),
+				'name'          => __( 'Exclude', 'badgeos' ),
+				'description'   => __( 'Comma-separated list of specific achievement IDs to exclude.', 'badgeos' ),
+                'type'          => 'select',
+                'values'        => $post_list
+            ),
 			'wpms' => array(
 				'name'        => __( 'Include Multisite Achievements', 'badgeos' ),
 				'description' => __( 'Show achievements from all network sites.', 'badgeos' ),

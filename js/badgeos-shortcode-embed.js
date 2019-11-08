@@ -91,30 +91,6 @@
 	});
 
 	var select2_post_defaults = {
-		dataType: "json",
-		ajax: {
-			url: ajaxurl,
-			type: 'POST',
-			data: function( term ) {
-				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
-				return {
-					q: term,
-					action: 'get-achievements-select2',
-				};
-			},
-			processResults: function (results) {
-				var res = results.data;
-				var terms=[];
-				if ( res ) {
-					$.each( res, function( id, text ) {
-						terms.push( { id: text.ID, text: text.post_title } );
-					});
-				}
-				return {
-					results: terms
-				};
-			}
-		},
 		language :{
 			noResults: function(){
 			return "No Results";
@@ -126,78 +102,22 @@
 			return markup;
 		},
 		placeholder: badgeos_shortcode_embed_messages.id_placeholder,
-		allowClear: true,
-		multiple: false
+		allowClear: true
 	};
-	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { multiple: true } );
+	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { } );
 	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id' ).select2( select2_post_defaults );
-	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).select2( select2_post_multiples );
-	$( '#badgeos_achievements_list_type' ).select2({
-		ajax: {
-			url: ajaxurl,
-			type: 'POST',
-			data: function ( term ) {
-				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
-				return {
-					q: term,
-					action: 'get-achievement-types'
-				};
-			},
-			processResults: function (results) {
-				var res = results.data;
-
-				var terms=[];
-				if ( res ) {
-					$.each( res, function( id, text ) {
-						terms.push( { id: text.name, text: text.label } );
-					});
-				}
-				return {
-					results: terms
-
-				};
-			}
-		},
+	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).attr('multiple', true).select2( select2_post_multiples );
+	$( '#badgeos_achievements_list_post_types' ).attr('multiple', true).select2({
 		language :{
-			noResults: function(){
-				return "No Results";
-			},
-			errorLoading:function(){ return "Searching..."
-			}
+			noResults: function(){ return "No Results"; },
+			errorLoading:function(){ return "Searching...";}
 		},
-		escapeMarkup: function (markup) {
-			return markup;
-		},
+		escapeMarkup: function (markup) { return markup; },
 		placeholder: badgeos_shortcode_embed_messages.post_type_placeholder,
-		allowClear: true,
-		multiple: true
+		allowClear: true
 	});
 
 	$( '#badgeos_achievements_list_user_id' ).select2({
-		ajax: {
-			url: ajaxurl,
-			type: 'POST',
-			data: function( term ) {
-				term = (term._type) ?  key  = (term.term) ? term.term : '' : term;
-				return {
-					q: term,
-					action: 'get-users'
-				};
-			},
-			processResults: function (results) {
-				var res = results.data;
-
-				var terms=[];
-				if ( res ) {
-					$.each( res, function( id, text ) {
-						terms.push( { id: text.ID, text: text.user_login } );
-					});
-				}
-				return {
-					results: terms
-				};
-			}
-		},
 		language :{
 			noResults: function(){
 				return "No Results";
