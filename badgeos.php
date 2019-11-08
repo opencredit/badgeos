@@ -85,7 +85,7 @@ class BadgeOS {
 				`entry_id` int(10) NOT NULL AUTO_INCREMENT,
 				`ID` int(10) DEFAULT '0',
 				`post_type` varchar(100) DEFAULT NULL,
-				`achievement_title` varchar(100) DEFAULT NULL,
+				`achievement_title` TEXT DEFAULT NULL,
 				`rec_type` varchar(10) DEFAULT '',
 				`points` int(10) DEFAULT '0',
 				`point_type` varchar(50) DEFAULT '',
@@ -126,7 +126,7 @@ class BadgeOS {
 				`id` int(10) NOT NULL AUTO_INCREMENT,
 				`rank_id` int(10) DEFAULT '0',
 				`rank_type` varchar(100) DEFAULT NULL,
-				`rank_title` varchar(100) DEFAULT NULL,
+				`rank_title` TEXT DEFAULT NULL,
 				`credit_id` int(10) DEFAULT '0',
 				`credit_amount` int(10) DEFAULT '0',
 				`user_id` int(10) DEFAULT '0',
@@ -141,8 +141,20 @@ class BadgeOS {
 
         // Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		
-		if ( $badgeos_settings ) {
+
+        $badgeos_rec_title_updated = ( $exists = get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
+        if( $badgeos_rec_title_updated == 'No' ) {
+
+            $strQuery = 'ALTER TABLE '.$wpdb->prefix . 'badgeos_achievements MODIFY achievement_title TEXT DEFAULT NULL;';
+            $wpdb->query( $strQuery );
+
+            $strQuery = 'ALTER TABLE '.$wpdb->prefix . 'badgeos_ranks MODIFY rank_title TEXT DEFAULT NULL;';
+            $wpdb->query( $strQuery );
+
+            update_option( 'badgeos_rec_title_updated', 'Yes' );
+        }
+
+        if ( $badgeos_settings ) {
 
             if( ! isset( $badgeos_settings['ranks_main_post_type'] ) && empty( $badgeos_settings['ranks_main_post_type'] )  )
                 $badgeos_settings['ranks_main_post_type']       = 'rank_types';
