@@ -504,7 +504,7 @@ add_action( 'badgeos_unlock_user_rank', 'badgeos_maybe_unlock_user_rank',10, 8 )
  */
 function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_trigger, $admin_id=0, $step_id=0, $achievement_id=0 ) {
 	global $wpdb;
-	if( intval( $new_points ) > 0 ) {
+    if( intval( $new_points ) != 0 ) {
 		if( absint( $credit_id ) == 0 || empty( $credit_id ) ) {
             $credit_id = 0;
         }
