@@ -47,13 +47,5 @@ function badgeos_credits_type_metaboxes( ) {
             'id'   => $prefix . 'plural_name',
             'type' => 'text_medium',
         ));
-    
-	$cmb_obj->add_field(array(
-            'name'    => __( 'Slug', 'badgeos' ),
-            'desc' 	 => ' '.__( 'URL Slug.', 'badgeos' ),
-            'id'      => $prefix . 'slug',
-            'type'	 => 'text_medium',
-            'default' => badgeos_get_post_field( 'post_name', $post_id )
-        ));
 }
 add_action( 'cmb2_admin_init', 'badgeos_credits_type_metaboxes' );
