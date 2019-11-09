@@ -105,7 +105,7 @@ function badgeos_ranks_req_trigger_event() {
 	
 	if( !empty( $triggered_ranks ) ) {
 		foreach ( $triggered_ranks as $rank ) { 
-			$parent_id = get_parent_id( $rank->post_id );
+			$parent_id = badgeos_get_parent_id( $rank->post_id );
 			if( absint($parent_id) > 0) { 
 				$new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
 				badgeos_maybe_award_rank( $rank->post_id,$parent_id,$user_id, $this_trigger, $site_id, $args );

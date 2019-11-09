@@ -845,7 +845,7 @@ function badgeos_get_rank_requirement_rank( $rank_requirement_id = 0 ) {
     /**
      * The rank requirement's rank is the post parent
      */
-    $rank_id = absint( get_parent_id( $rank_requirement_id ) );
+    $rank_id = absint( badgeos_get_parent_id( $rank_requirement_id ) );
 
     if( $rank_id !== 0 ) {
 

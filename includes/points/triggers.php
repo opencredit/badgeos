@@ -158,7 +158,7 @@ function badgeos_points_award_trigger_event() {
 	if( !empty( $triggered_points ) ) {
 		foreach ( $triggered_points as $point ) { 
 
-			$parent_point_id = get_parent_id( $point->post_id );
+			$parent_point_id = badgeos_get_parent_id( $point->post_id );
 
 			/**
 			 * Update hook count for this user
@@ -178,7 +178,7 @@ function badgeos_points_award_trigger_event() {
  * @param int $child_id  Child achivement.
  * @return int  $parent_id     parent id.
  */
-function get_parent_id( $child_id = 0 ) {
+function badgeos_get_parent_id( $child_id = 0 ) {
 
 	global $wpdb;
 	$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT p2p_to FROM $wpdb->p2p WHERE p2p_from = %d", $child_id  ) );
@@ -269,7 +269,7 @@ function badgeos_points_deduct_trigger_event() {
 	if( !empty( $triggered_deducts ) ) {
 		foreach ( $triggered_deducts as $point ) { 
 			
-			$parent_point_id = get_parent_id( $point->post_id );
+			$parent_point_id = badgeos_get_parent_id( $point->post_id );
 
 			/**
              * Update hook count for this user
