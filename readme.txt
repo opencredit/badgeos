@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, 
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.2.2
-Stable tag: 3.2
+Tested up to: 5.2.4
+Stable tag: 3.3
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -12,7 +12,7 @@ BadgeOS turns your site into an achievement and badging system. Easily create ba
 
 == Description ==
 
-**Major Release:**
+**Major Release (3.0):**
 This is a major release of BadgeOS in which we have added separate point type options so that you can create multiple point types to award/deduct points. We have also added ranks in this version so you can awards ranks to your users on completing the events. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
 Note: You may have to update all the existing badges too in order to sync the point types data.
 * [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")
@@ -289,6 +289,30 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.3 =
+* New: Set default point type as point type id parameter in badgeos_get_points_by_type()
+* New: Added post attributes for BadgeOS Rank Type posts
+* New: Added option to award/revoke achievements in bulk
+* New: Added option to award/delete points in bulk
+* New: Added option to award/revoke ranks in bulk
+* New: Added option to display the system information on tools page
+* New: Deleted user data on uninstall
+* Fix: Revamp rank award process
+* Fix: Updated rank count for users on revoking their earned rank
+* Fix: Updated labels for BadgeOS point types
+* Fix: Removed select2 js dependency from badgeos-shortcode-embed-js
+* Fix: Renamed BadgeOS get_parent_id function to avoid conflicts
+* Fix: Removed steps post type from metabox achievement array
+* Fix: Revamp function badgeos_user_deserves_rank_step_count_callback()
+* Fix: Removed slug fields from Points and Rank types
+* Fix: Fixed add-ons licensing issues
+* Fix: Hide earned achievements on front-end if show to users is not allowed
+* Fix: Revamp BadgeOS shortcode embeder code to avoid select2 version conflicts
+* Fix: Fixed widget notification issues for deleted ranks and achievements
+* Fix: Fixed deduct point trigger issue
+* Fix: Altered ranks and achievements table structure
+
 
 = 3.2 =
 * New: Added option to update the existing achievements with regards the point types
