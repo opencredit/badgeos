@@ -40,7 +40,7 @@ class BadgeOS_Plugin_Updater {
 
 		// Setup our add-on data
 		$this->api_data  = urlencode_deep( $_api_data );
-		$this->api_url   = 'http://badgeos.org/';
+		$this->api_url   = 'https://badgeos.org/';
 		$this->name      = plugin_basename( $_api_data['plugin_file'] );
 		$this->slug      = basename( $_api_data['plugin_file'], '.php' );
 		$this->version   = $_api_data['version'];
