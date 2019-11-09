@@ -88,8 +88,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 	$points 		= get_post_meta( $achievement_id, '_badgeos_points', true );
 	$point_value 	= $points['_badgeos_points'];
 	$points_type 	= $points['_badgeos_points_type'];
-	if( intval( $points_type ) > 0 ) 
-	{
+    if( $points_type != 0 ) {
 		$earned_credits = badgeos_get_points_by_type( $points_type, $user_id );
 
 		badgeos_add_credit( $points_type, $user_id, 'Award', $point_value, 'achivement_based', $admin_id , 0 , $achievement_id );
