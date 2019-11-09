@@ -104,7 +104,7 @@ function badgeos_update_users_points( $user_id = 0, $new_points = 0, $admin_id =
 		/**
 		 * Available action for triggering other processes
 		 */
-		do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $point_value, 0, $points_type, 'credit_based', $achievement_id );
+		do_action( 'badgeos_unlock_user_rank', $user_id, 'Award', $point_value, 0, $points_type, 'credit_based', $achievement_id, 0 );
 	
 	
 		// Maybe award some points-based badges
