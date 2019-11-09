@@ -6,7 +6,7 @@ Easily create badges and set up the steps and achievements users complete to ear
 Description
 ------------
 
-**Major Release:**
+**Major Release (3.0):**
 This is a major release of BadgeOS in which we have added separate point type options so that you can create multiple point types to award/deduct points. We have also added ranks in this version so you can awards ranks to your users on completing the events. We strongly recommend you to update below add-ons too as older versions of these add-ons won't work with this major release.
 Note: You may have to update all the existing badges too in order to sync the point types data.
 * [BadgeOS Interactive Progress Map](https://badgeos.org/downloads/interactive-progress-map/ "BadgeOS Interactive Progress Map")

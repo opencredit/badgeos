@@ -1,5 +1,28 @@
 ## Changelog
 
+#### 3.3
+- New: Set default point type as point type id parameter in badgeos_get_points_by_type()
+- New: Added post attributes for BadgeOS Rank Type posts
+- New: Added option to award/revoke achievements in bulk
+- New: Added option to award/delete points in bulk
+- New: Added option to award/revoke ranks in bulk
+- New: Added option to display the system information on tools page
+- New: Deleted user data on uninstall
+- Fix: Revamp rank award process
+- Fix: Updated rank count for users on revoking their earned rank
+- Fix: Updated labels for BadgeOS point types
+- Fix: Removed select2 js dependency from badgeos-shortcode-embed-js
+- Fix: Renamed BadgeOS get_parent_id function to avoid conflicts
+- Fix: Removed steps post type from metabox achievement array
+- Fix: Revamp function badgeos_user_deserves_rank_step_count_callback()
+- Fix: Removed slug fields from Points and Rank types
+- Fix: Fixed add-ons licensing issues
+- Fix: Hide earned achievements on front-end if show to users is not allowed
+- Fix: Revamp BadgeOS shortcode embeder code to avoid select2 version conflicts
+- Fix: Fixed widget notification issues for deleted ranks and achievements
+- Fix: Fixed deduct point trigger issue
+- Fix: Altered ranks and achievements table structure
+
 #### 3.2
 - New: Added option to update the existing achievements with regards the point types
 - New: Added default thumbnail for the rank post

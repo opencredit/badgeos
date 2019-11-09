@@ -30,7 +30,15 @@ function badgeos_get_users_points( $user_id = 0, $achievement_id = 0 ) {
 		
 		return badgeos_get_points_by_type( $points_type, $user_id );
 	} else {
-		return 0;
+
+        $badgeos_settings = get_option( 'badgeos_settings' );
+        $point_id = ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : 0;
+
+        if( intval( $point_id ) > 0 ) {
+            return badgeos_get_points_by_type( $point_id, $user_id );
+        }
+
+        return 0;
 	}
 }
 

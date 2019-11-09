@@ -532,21 +532,22 @@ Shortcode Embed styles
 #achievement_bulk_award form table tr th,
 #achievement_bulk_revoke form table tr th {
 	vertical-align: top;
-	padding-right: 50px;
+	text-align: left;
+	width: 40%;
 }
-#credit_bulk_award form table tr td .select2-search__field,
-#credit_bulk_revoke form table tr td .select2-search__field,
-#rank_bulk_award form table tr td .select2-search__field,
-#rank_bulk_revoke form table tr td .select2-search__field,
-#achievement_bulk_award form table tr td .select2-search__field,
-#achievement_bulk_revoke form table tr td .select2-search__field {
+#credit_bulk_award form table tr td .select2-selection,
+#credit_bulk_revoke form table tr td .select2-selection,
+#rank_bulk_award form table tr td .select2-selection,
+#rank_bulk_revoke form table tr td .select2-selection,
+#achievement_bulk_award form table tr td .select2-selection,
+#achievement_bulk_revoke form table tr td .select2-selection {
 	border: 1px solid #ddd;
 	max-width: 70%;
 	padding: 6px 8px;
 }
 #TB_window.badgeos-shortcode-thickbox #TB_ajaxContent {
-	overflow: auto !important;
-	padding: 10px 0;
+	overflow-y: auto !important;
+	overflow-x: hidden;
 }
 #TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap {
 	padding: 10px;
