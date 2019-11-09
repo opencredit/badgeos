@@ -544,3 +544,22 @@ Shortcode Embed styles
 	max-width: 70%;
 	padding: 6px 8px;
 }
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent {
+	overflow: auto !important;
+	padding: 10px 0;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap {
+	padding: 10px;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap .select2-selection__rendered {
+	border: 1px solid #ddd;
+	box-shadow: 0 0 5px 0 #ddd;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent .wrap .badgeos_input:nth-child(even) {
+	clear: left;
+}
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent #shortcode_options > div,
+#TB_window.badgeos-shortcode-thickbox #TB_ajaxContent #shortcode_options {
+	clear: left;
+	width: 100%;
+}

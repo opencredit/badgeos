@@ -6,6 +6,8 @@
  * @since 1.4.0
  */
 function badgeos_register_submission_shortcode() {
+
+    $achievements = badgeos_get_achievements_id_title_pair();
 	badgeos_register_shortcode( array(
 		'name'            => __( 'Submission Form', 'badgeos' ),
 		'description'     => __( 'Render a submission form.', 'badgeos' ),
@@ -15,9 +17,11 @@ function badgeos_register_submission_shortcode() {
 			'achievement_id' => array(
 				'name'        => __( 'Achievement ID', 'badgeos' ),
 				'description' => __( 'Achievement ID to award.', 'badgeos' ),
-				'type'        => 'text',
-				),
-		),
+                'type'        => 'select',
+                'values'      => $achievements,
+                'default'     => '',
+            ),
+        ),
 
 	) );
 }

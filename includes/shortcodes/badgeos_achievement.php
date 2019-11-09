@@ -6,6 +6,8 @@
  * @since 1.4.0
  */
 function badgeos_register_achievement_shortcode() {
+
+    $achievements = badgeos_get_achievements_id_title_pair();
 	badgeos_register_shortcode( array(
 		'name'            => __( 'Single Achievement', 'badgeos' ),
 		'slug'            => 'badgeos_achievement',
@@ -15,9 +17,11 @@ function badgeos_register_achievement_shortcode() {
 			'id' => array(
 				'name'        => __( 'Achievement ID', 'badgeos' ),
 				'description' => __( 'The ID of the achievement to render.', 'badgeos' ),
-				'type'        => 'text',
-				),
-		),
+                'type'        => 'select',
+                'values'      => $achievements,
+                'default'     => '',
+            ),
+        ),
 	) );
 }
 add_action( 'init', 'badgeos_register_achievement_shortcode' );
