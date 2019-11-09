@@ -48,6 +48,22 @@ if( is_array( $achievement_types ) && !empty( $achievement_types ) && !is_null( 
     }
 }
 
+if( !empty( $badgeos_settings ) ) {
+    if( is_array( $badgeos_settings ) && count( $badgeos_settings ) > 0 ) {
+        $rank_types = $wpdb->get_results( "SELECT ID, post_name FROM $wpdb->posts WHERE post_type = '".$badgeos_settings['ranks_main_post_type']."';" );
+        if( is_array( $rank_types ) && !empty( $rank_types ) && !is_null( $rank_types ) ) {
+            foreach( $rank_types as $rank_type ) {
+                $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$rank_type->post_name."';" );
+            }
+        }
+        $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$badgeos_settings['ranks_main_post_type']."';" );
+        $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$badgeos_settings['ranks_step_post_type']."';" );
+        $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$badgeos_settings['points_main_post_type']."';" );
+        $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$badgeos_settings['points_award_post_type']."';" );
+        $wpdb->get_results( "DELETE FROM $wpdb->posts WHERE post_type='".$badgeos_settings['points_deduct_post_type']."';" );
+    }
+}
+
 /**
  * Delete Step post type data
  */
@@ -121,3 +137,5 @@ $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='p2p_storage';");
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2p" );
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2pmeta" );
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_points");
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_ranks");
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_achievements");
