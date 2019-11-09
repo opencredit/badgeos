@@ -31,10 +31,21 @@ add_action( 'admin_print_scripts-post.php', 'badgeos_steps_ui_admin_scripts', 11
  * @return void
  */
 function badgeos_add_steps_ui_meta_box() {
-	$achievement_types = badgeos_get_achievement_types_slugs();
-	foreach ( $achievement_types as $achievement_type ) {
-		add_meta_box( 'badgeos_steps_ui', apply_filters( 'badgeos_steps_ui_title', __( 'Required Steps', 'badgeos' ) ), 'badgeos_steps_ui_meta_box', $achievement_type, 'advanced', 'high' );
-	}
+    $achievement_types_temp = badgeos_get_achievement_types_slugs();
+    $achievement_types = array();
+    if( $achievement_types_temp ) {
+        foreach( $achievement_types_temp as $key=>$ach ) {
+            if( ! empty( $ach ) && $ach != 'step' ) {
+                $achievement_types[] = $ach;
+            }
+        }
+    }
+
+    if( $achievement_types ) {
+        foreach ( $achievement_types as $achievement_type ) {
+            add_meta_box( 'badgeos_steps_ui', apply_filters( 'badgeos_steps_ui_title', __( 'Required Steps', 'badgeos' ) ), 'badgeos_steps_ui_meta_box', $achievement_type, 'advanced', 'high' );
+        }
+    }
 }
 add_action( 'add_meta_boxes', 'badgeos_add_steps_ui_meta_box' );
 
