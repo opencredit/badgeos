@@ -174,6 +174,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
+        require_once( $this->directory_path . 'includes/admin-tools.php' );
 		require_once( $this->directory_path . 'includes/achievement-functions.php' );
 		require_once( $this->directory_path . 'includes/activity-functions.php' );
 		require_once( $this->directory_path . 'includes/ajax-functions.php' );
@@ -227,11 +228,11 @@ class BadgeOS {
 	 */
 	function register_scripts_and_styles() {
 		// Register scripts
-		wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ) );
-        wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery' ), '3.2', true );
-		wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), '1.1.0', true );
-		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), '1.3.0', true );
+        wp_register_script( 'badgeos-admin-tools-js', $this->directory_url . 'js/tools.js', array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
+        wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
+        wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
+		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), $this::$version, true );
+		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), $this::$version, true );
 
         $admin_js_translation_array = array(
             'ajax_url' 					=> admin_url( 'admin-ajax.php' ),
@@ -247,22 +248,23 @@ class BadgeOS {
         wp_localize_script( 'badgeos-admin-js', 'admin_js', $admin_js_translation_array );
 
 		// Register styles
+        wp_register_style( 'jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
 		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
 
 		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
 			? get_stylesheet_directory_uri() .'/badgeos.css'
 			: $this->directory_url . 'css/badgeos-front.css';
-		wp_register_style( 'badgeos-front', $badgeos_front, null, '1.0.1' );
+		wp_register_style( 'badgeos-front', $badgeos_front, null, $this::$version );
 
 		$badgeos_single = file_exists( get_stylesheet_directory() .'/badgeos-single.css' )
 			? get_stylesheet_directory_uri() .'/badgeos-single.css'
 			: $this->directory_url . 'css/badgeos-single.css';
-		wp_register_style( 'badgeos-single', $badgeos_single, null, '1.0.1' );
+		wp_register_style( 'badgeos-single', $badgeos_single, null, $this::$version );
 
 		$badgeos_widget = file_exists( get_stylesheet_directory() .'/badgeos-widgets.css' )
 			? get_stylesheet_directory_uri() .'/badgeos-widgets.css'
 			: $this->directory_url . 'css/badgeos-widgets.css';
-		wp_register_style( 'badgeos-widget', $badgeos_widget, null, '1.0.1' );
+		wp_register_style( 'badgeos-widget', $badgeos_widget, null, $this::$version );
 	}
 
 	/**
@@ -449,11 +451,20 @@ class BadgeOS {
 	 */
 	function admin_scripts() {
 
-		// Load scripts
+        // Load scripts
+        $screen = get_current_screen();
+        if( $screen->id == 'badgeos_page_badgeos_tools' ) {
+            wp_enqueue_script( 'badgeos-admin-tools-js' );
+            $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+            wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
+            wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
+        }
+
 		wp_enqueue_script( 'badgeos-admin-js' );
 		wp_enqueue_script( 'badgeos-credly' );
 
 		// Load styles
+        wp_enqueue_style( 'jquery-ui-styles' );
 		wp_enqueue_style( 'badgeos-admin-styles' );
 
 	}
@@ -482,7 +493,7 @@ class BadgeOS {
         wp_enqueue_script(
            'custom_script',
             plugins_url( '/js/ckeditor.js' , __FILE__ ),
-            array( 'jquery' ),'v3',true
+            array( 'jquery' ),$this::$version,true
         );
 	}
 
