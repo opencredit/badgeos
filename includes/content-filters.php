@@ -425,39 +425,44 @@ function badgeos_render_achievement( $achievement = 0 ) {
 
 	// Each Achievement
 	$output = '';
-	$output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+    //exclude step CPT entries from displaying in the widget
+    $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
+    if( $is_hidden != 'hidden' ) {
 
-		// Achievement Image
-		$output .= '<div class="badgeos-item-image">';
-		$output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
-		$output .= '</div><!-- .badgeos-item-image -->';
+        $output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
-		// Achievement Content
-		$output .= '<div class="badgeos-item-description">';
+        // Achievement Image
+        $output .= '<div class="badgeos-item-image">';
+        $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+        $output .= '</div><!-- .badgeos-item-image -->';
 
-			// Achievement Title
-			$output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
 
-			// Achievement Short Description
-			$output .= '<div class="badgeos-item-excerpt">';
-			$output .= badgeos_achievement_points_markup( $achievement->ID );
-			$excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
-			$output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
-			$output .= '</div><!-- .badgeos-item-excerpt -->';
+        // Achievement Content
+        $output .= '<div class="badgeos-item-description">';
 
-			// Render our Steps
-			if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
-				$output.='<div class="badgeos-item-attached">';
-					$output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
-					$output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
-				$output.= '</div><!-- .badgeos-item-attached -->';
-			}
+        // Achievement Title
+        $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
 
-		$output .= '</div><!-- .badgeos-item-description -->';
+        // Achievement Short Description
+        $output .= '<div class="badgeos-item-excerpt">';
+        $output .= badgeos_achievement_points_markup( $achievement->ID );
+        $excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
+        $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+        $output .= '</div><!-- .badgeos-item-excerpt -->';
 
-	$output .= '</div><!-- .badgeos-achievements-list-item -->';
+        // Render our Steps
+        if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
+            $output.='<div class="badgeos-item-attached">';
+            $output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
+            $output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
+            $output.= '</div><!-- .badgeos-item-attached -->';
+        }
 
-	// Return our filterable markup
+        $output .= '</div><!-- .badgeos-item-description -->';
+        $output .= '</div><!-- .badgeos-achievements-list-item -->';
+    }
+
+    // Return our filterable markup
 	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 
 }

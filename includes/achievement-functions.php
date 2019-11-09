@@ -347,16 +347,21 @@ function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 	// Assume we have no hidden achievements
 	$hidden_ids = array();
 
-	// Grab our hidden achievements
-	$hidden_achievements = get_posts( array(
-		'post_type'      => $achievement_type,
+    $args = array(
 		'post_status'    => 'publish',
 		'posts_per_page' => -1,
 		'meta_key'       => '_badgeos_hidden',
 		'meta_value'     => 'hidden'
-	) );
+	);
 
-	foreach ( $hidden_achievements as $achievement )
+    if( !empty( $achievement_type ) ) {
+        $args['post_type'] = $achievement_type;
+    }
+
+    // Grab our hidden achievements
+    $hidden_achievements = get_posts( $args );
+
+    foreach ( $hidden_achievements as $achievement )
 		$hidden_ids[] = $achievement->ID;
 
 	// Return our results

@@ -110,7 +110,7 @@ function badgeos_ajax_get_achievements() {
 			'posts_per_page' =>	$limit,
 			'offset'         => $offset,
 			'post_status'    => 'publish',
-			'post__not_in'   => array_diff( $hidden, $earned_ids )
+			'post__not_in'   => $hidden
 		);
 
 		// Filter - query completed or non completed achievements
