@@ -821,17 +821,25 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
 	// AND the text is "Featured Image"
 	// ...replace the string
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-	if (
-		(
+    if (
+        (
+            ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], badgeos_get_achievement_types_slugs() ) )
+            || ( isset( $_GET['post'] ) && badgeos_is_achievement( $_GET['post'] ) )
+        ) && 'Featured Image' == $string
+
+    )
+        $string = __( 'Achievement Image', 'badgeos' );
+    elseif (
+        (
             ( isset( $_GET['post_type'] ) && $badgeos_settings['achievement_main_post_type'] == $_GET['post_type'] )
             || ( isset( $_GET['post'] ) && $badgeos_settings['achievement_main_post_type'] == get_post_type( $_GET['post'] ) )
-
         ) && 'Featured Image' == $string
-	)
-		$string = __( 'Default Achievement Image', 'badgeos' );
+    )
+        $string = __( 'Default Achievement Image', 'badgeos' );
 
-	return $string;
+    return $string;
 }
+
 add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
 
 /**

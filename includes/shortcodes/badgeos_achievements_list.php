@@ -7,6 +7,8 @@
  */
 function badgeos_register_achievements_list_shortcode() {
 
+    global $wpdb;
+
 	// Setup a custom array of achievement types
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
@@ -19,10 +21,12 @@ function badgeos_register_achievements_list_shortcode() {
         $types[ $type->post_name ] = $type->post_title;
     }
 
-    $users = get_users();
     $user_list = array();
-    foreach( $users as $user ) {
-        $user_list[ $user->ID ] = $user->user_login;
+    $users = $wpdb->get_results( "SELECT ID, user_login FROM {$wpdb->users}" );
+    if( $users ) {
+        foreach ( $users as $user ) {
+            $user_list[ $user->ID ] = $user->user_login;
+        }
     }
 
     $posts = get_posts();

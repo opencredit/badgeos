@@ -412,6 +412,29 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
 /**
+ * Update user meta to limit the repeated award process
+ *
+ * @since  1.0.0
+ * @param  integer $user_id
+ * @param  integer $achievement_id
+ * @param  integer $this_trigger
+ * @param  integer $site_id
+ * @param  integer $args
+ * @param  integer $user_id
+ * @param  integer $entry_id
+ * @return void
+ */
+function badgeos_maybe_update_submission_nomination_meta_of_user( $user_id = 0, $achievement_id = 0, $this_trigger = '', $site_id = 0, $args=array(), $entry_id = 0 ) {
+    global $wpdb;
+    if( isset( $args['submission_id'] ) && intval( $args['submission_id'] ) > 0 ) {
+
+        $strQuery = 'Update '.$wpdb->prefix."badgeos_achievements set sub_nom_id='".$args['submission_id']."' where entry_id='".$entry_id."'";
+        $wpdb->query( $strQuery );
+    }
+}
+add_action( 'badgeos_award_achievement', 'badgeos_maybe_update_submission_nomination_meta_of_user', 10, 6 );
+
+/**
  * Check if a user has unlocked all achievements of a given type
  *
  * Triggers hook badgeos_unlock_all_{$post_type}
