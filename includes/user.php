@@ -71,9 +71,10 @@ function badgeos_get_user_achievements( $args = array() ) {
 				$where .= " AND post_type = '".$args['achievement_type']."'";
 			}
 		}
-		
+
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if( $args['no_step'] ) {
-			$where .= " AND post_type != 'step'";
+            $where .= " AND post_type != '".trim( $badgeos_settings['achievement_step_post_type'] )."'";
 		}
 	
 		if( $args['since'] > 1 ) {
@@ -276,6 +277,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
     echo '<table class="form-table">';
     echo '<tr>';
@@ -318,7 +320,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 			foreach ( $achievements as $achievement ) {
 
-                if( $achievement->post_type != 'step' ) {
+                if( $achievement->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
                     $achievement_exists = true;
                     
 					echo '<tr>';
@@ -420,6 +422,7 @@ function delete_badgeos_bulk_achievements_records( ){
 
 	global $wpdb;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $user_recs = $_POST['achievements'];
     $user_id = $_POST['user_id'];
     if( is_array( $user_recs ) && count( $user_recs ) > 0 ) {
@@ -439,7 +442,7 @@ function delete_badgeos_bulk_achievements_records( ){
         $new_achievements = array();
         $delete_achievement = array();
         foreach( $my_achievements as $my_achs ) {
-            if( $my_achs->post_type != 'step' ) {
+            if( $my_achs->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
                 if( in_array( $index, $indexes ) && in_array( $my_achs->ID, $achievements ) ) {
                     $delete_achievement[] = $my_achs->ID;
                 } else {
@@ -747,6 +750,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	?>
 
 	<h2><?php _e( 'Award an Achievement', 'badgeos' ); ?></h2>
@@ -759,7 +763,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 				<option></option>
 				<?php
 				foreach ( $achievement_types as $achievement_slug => $achievement_type ) {
-                    if( $achievement_slug != 'step' ) {
+                    if( $achievement_slug != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
                         echo '<option value="'. $achievement_slug .'">' . ucwords( $achievement_type['single_name'] ) .'</option>';
                     }
                 }
@@ -769,7 +773,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 		</tr>
 		<tr><td id="boxes" colspan="2">
 			<?php foreach ( $achievement_types as $achievement_slug => $achievement_type ) : ?>
-                <?php if( $achievement_slug != 'step' ) { ?>
+                <?php if( $achievement_slug != trim( $badgeos_settings['achievement_step_post_type'] ) ) { ?>
 				<table id="<?php echo esc_attr( $achievement_slug ); ?>" class="widefat badgeos-table">
                     <thead>
                     <tr>

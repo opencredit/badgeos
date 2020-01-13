@@ -21,6 +21,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		$set_ranks = 	( isset( $instance['set_ranks'] ) ) ? (array) $instance['set_ranks'] : array();
 		$set_point_type = ( isset( $instance['total_points_type'] ) ) ? $instance['total_points_type'] : '';
 		$set_achievements = ( isset( $instance['set_achievements'] ) ) ? (array) $instance['set_achievements'] : array();
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		?>
             <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
@@ -80,7 +81,7 @@ class earned_user_achievements_widget extends WP_Widget {
 				foreach ( $achievements as $achievement_slug => $achievement ) {
 
 					//hide the step CPT
-					if ( $achievement['single_name'] == 'step' ) {
+                    if ( $achievement['single_name'] == trim( $badgeos_settings['achievement_step_post_type'] ) ) {
 						continue;
 					}
 
@@ -118,6 +119,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		echo $args['before_widget'];
 
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$title = apply_filters( 'widget_title', $instance['title'] );
 
 		if ( !empty( $title ) ) { echo $args['before_title'] . $title . $args['after_title']; };
@@ -206,7 +208,7 @@ class earned_user_achievements_widget extends WP_Widget {
                         $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
 
                         if( $is_hidden != 'hidden' ) {
-                            if (get_post_type($achievement->ID) != 'step') {
+                            if (get_post_type($achievement->ID) != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
 
                                 $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array(50, 50), 'wp-post-image');
                                 $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement);

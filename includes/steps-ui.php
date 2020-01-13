@@ -33,9 +33,10 @@ add_action( 'admin_print_scripts-post.php', 'badgeos_steps_ui_admin_scripts', 11
 function badgeos_add_steps_ui_meta_box() {
     $achievement_types_temp = badgeos_get_achievement_types_slugs();
     $achievement_types = array();
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     if( $achievement_types_temp ) {
         foreach( $achievement_types_temp as $key=>$ach ) {
-            if( ! empty( $ach ) && $ach != 'step' ) {
+            if( ! empty( $ach ) && $ach != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
                 $achievement_types[] = $ach;
             }
         }
@@ -59,12 +60,13 @@ add_action( 'add_meta_boxes', 'badgeos_add_steps_ui_meta_box' );
 function badgeos_steps_ui_meta_box( $post  = null) {
 
 	// Grab our Badge's required steps
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	$required_steps = get_posts( array(
-		'post_type'           => 'step',
+		'post_type'           => trim( $badgeos_settings['achievement_step_post_type'] ),
 		'posts_per_page'      => -1,
 		'suppress_filters'    => false,
 		'connected_direction' => 'to',
-		'connected_type'      => 'step-to-' . $post->post_type,
+		'connected_type'      => trim( $badgeos_settings['achievement_step_post_type'] ).'-to-' . $post->post_type,
 		'connected_items'     => $post->ID,
 	));
 
@@ -106,6 +108,7 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 	$requirements      = badgeos_get_step_requirements( $step_id );
 	$count             = !empty( $requirements['count'] ) ? $requirements['count'] : 1;
 	$achievement_types = badgeos_get_achievement_types_slugs();
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 ?>
 
 	<li class="step-row step-<?php echo $step_id; ?>" data-step-id="<?php echo $step_id; ?>">
@@ -131,8 +134,8 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 		<select class="select-achievement-type select-achievement-type-<?php echo $step_id; ?>">
 			<?php
 				foreach ( $achievement_types as $achievement_type ) {
-					if ( 'step' == $achievement_type ){
-						continue;
+                    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == $achievement_type ){
+                        continue;
 					}
 					echo '<option value="' . $achievement_type . '" ' . selected( $requirements['achievement_type'], $achievement_type, false ) . '>' . ucfirst( $achievement_type ) . '</option>';
 				}
@@ -171,7 +174,8 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 function badgeos_get_step_requirements( $step_id = 0 ) {
 
 	// Setup our default requirements array, assume we require nothing
-	$requirements = array(
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $requirements = array(
 		'count'            => absint( get_post_meta( $step_id, '_badgeos_count', true ) ),
 		'trigger_type'     => get_post_meta( $step_id, '_badgeos_trigger_type', true ),
 		'achievement_type' => get_post_meta( $step_id, '_badgeos_achievement_type', true ),
@@ -185,7 +189,7 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 			'post_type'        => $requirements['achievement_type'],
 			'posts_per_page'   => 1,
 			'suppress_filters' => false,
-			'connected_type'   => $requirements['achievement_type'] . '-to-step',
+            'connected_type'   => $requirements['achievement_type'] . '-to-'.trim( $badgeos_settings['achievement_step_post_type'] ),
 			'connected_to'     => $step_id
 		));
 		if ( ! empty( $connected_activities ) )
@@ -210,8 +214,9 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 function badgeos_add_step_ajax_handler() {
 
 	// Create a new Step post and grab it's ID
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	$step_id = wp_insert_post( array(
-		'post_type'   => 'step',
+		'post_type'   => trim( $badgeos_settings['achievement_step_post_type'] ),
 		'post_status' => 'publish'
 	) );
 
@@ -223,7 +228,7 @@ function badgeos_add_step_ajax_handler() {
 
 	// Create the P2P connection from the step to the badge
 	$p2p_id = p2p_create_connection(
-		'step-to-' . $achievement->post_type,
+        trim( $badgeos_settings['achievement_step_post_type'] ).'-to-' . $achievement->post_type,
 		array(
 			'from' => $step_id,
 			'to'   => $_POST['achievement_id'],
@@ -262,6 +267,7 @@ add_action( 'wp_ajax_delete_step', 'badgeos_delete_step_ajax_handler' );
 function badgeos_update_steps_ajax_handler() {
 
 	// Only continue if we have any steps
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( isset( $_POST['steps'] ) ) {
 
 		// Grab our $wpdb global
@@ -297,7 +303,7 @@ function badgeos_update_steps_ajax_handler() {
 					break;
 				case 'specific-achievement' :
 					p2p_create_connection(
-						$step['achievement_type'] . '-to-step',
+                        $step['achievement_type'] . '-to-'.trim( $badgeos_settings['achievement_step_post_type'] ),
 						array(
 							'from' => absint( $step['achievement_post'] ),
 							'to'   => $step_id,

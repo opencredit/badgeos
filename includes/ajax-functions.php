@@ -52,10 +52,11 @@ function badgeos_ajax_get_achievements() {
 	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
 
 	// Convert $type to properly support multiple achievement types
-	if ( 'all' == $type ) {
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( 'all' == $type ) {
 		$type = badgeos_get_achievement_types_slugs();
 		// Drop steps from our list of "all" achievements
-		$step_key = array_search( 'step', $type );
+		$step_key = array_search( trim( $badgeos_settings['achievement_step_post_type'] ), $type );
 		if ( $step_key )
 			unset( $type[$step_key] );
 	} else {
@@ -280,11 +281,12 @@ function badgeos_ajax_get_users() {
 function badgeos_ajax_get_achievements_select2() {
 	global $wpdb;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Pull back the search string
 	$search = isset( $_REQUEST['q'] ) ? like_escape( $_REQUEST['q'] ) : '';
 	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
 		? array( esc_sql( $_REQUEST['post_type'] ) )
-		: array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
+		: array_diff( badgeos_get_achievement_types_slugs(), array( trim( $badgeos_settings['achievement_step_post_type'] ) ) );
 	$post_type = sprintf( 'AND p.post_type IN(\'%s\')', implode( "','", $achievement_types ) );
 
 	$results = $wpdb->get_results( $wpdb->prepare(
@@ -320,8 +322,9 @@ function badgeos_ajax_get_achievement_types() {
 		die();
 	}
 
-	$achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( 'step' ) );
-	$matches = preg_grep( "/{$_REQUEST['q']}/", $achievement_types );
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( trim( $badgeos_settings['achievement_step_post_type'] ) ) ); 
+    $matches = preg_grep( "/{$_REQUEST['q']}/", $achievement_types );
 	$found = array_map( 'get_post_type_object', $matches );
 
 	// Include an "all" option as the first option

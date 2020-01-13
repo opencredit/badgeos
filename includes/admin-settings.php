@@ -51,6 +51,8 @@ function badgeos_settings_validate( $input = '' ) {
 	$input['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
 	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
 	$input['remove_data_on_uninstall'] = ( isset( $input['remove_data_on_uninstall'] ) && "on" == $input['remove_data_on_uninstall'] ) ? "on" : null;
+    $input['achievement_step_post_type'] 	= !empty( $input[ 'achievement_step_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_step_post_type' ] ) ) ) : 	'step';
+    $input['achievement_main_post_type'] 	= !empty( $input[ 'achievement_main_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_main_post_type' ] ) ) ) : 	'achievement-type';
     $input['ranks_main_post_type'] 			= !empty( $input[ 'ranks_main_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_main_post_type' ] ) ) ) : 	'ranks';
     $input['ranks_step_post_type']       	= !empty( $input[ 'ranks_step_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_step_post_type' ] ) ) ) : 	'rank_requirement';
 	$input['points_main_post_type']     	= !empty( $input[ 'points_main_post_type' ] ) 	? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_main_post_type' ] ) ) ) : 	'point_type';
@@ -218,13 +220,16 @@ function badgeos_settings_page() {
 			$log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
 			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
 			$remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
-            $ranks_main_post_type 		= ( ! empty ( $badgeos_settings['ranks_main_post_type'] ) ) ? $badgeos_settings['ranks_main_post_type'] : '';
-            $ranks_step_post_type 		= ( ! empty ( $badgeos_settings['ranks_step_post_type'] ) ) ? $badgeos_settings['ranks_step_post_type'] : '';
-            $points_main_post_type 	= ( ! empty ( $badgeos_settings['points_main_post_type'] ) ) ? $badgeos_settings['points_main_post_type'] : 'point_type';
-			$points_award_post_type 	= ( ! empty ( $badgeos_settings['points_award_post_type'] ) ) ? $badgeos_settings['points_award_post_type'] : 'point_award';
-			$points_deduct_post_type 	= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
-			$default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
-			wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
+            $achievement_step_post_type 	= ( ! empty ( $badgeos_settings['achievement_step_post_type'] ) ) ? $badgeos_settings['achievement_step_post_type'] : 'step';
+            $achievement_main_post_type 	= ( ! empty ( $badgeos_settings['achievement_main_post_type'] ) ) ? $badgeos_settings['achievement_main_post_type'] : 'achievement-type';
+            $ranks_main_post_type 			= ( ! empty ( $badgeos_settings['ranks_main_post_type'] ) ) ? $badgeos_settings['ranks_main_post_type'] : 'rank_types';
+            $ranks_step_post_type 			= ( ! empty ( $badgeos_settings['ranks_step_post_type'] ) ) ? $badgeos_settings['ranks_step_post_type'] : 'rank_requirement';
+            $points_main_post_type 			= ( ! empty ( $badgeos_settings['points_main_post_type'] ) ) ? $badgeos_settings['points_main_post_type'] : 'point_type';
+            $points_award_post_type 		= ( ! empty ( $badgeos_settings['points_award_post_type'] ) ) ? $badgeos_settings['points_award_post_type'] : 'point_award';
+            $points_deduct_post_type 		= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
+            $default_point_type 			= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
+
+            wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
 				<?php if ( current_user_can( 'manage_options' ) ) { ?>
@@ -286,6 +291,20 @@ function badgeos_settings_page() {
                 <tr valign="top">
                     <th scope="row"><label for="log_entries"></th>
                     <td>&nbsp;</td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="achievement_main_post_type"><?php _e( 'Achievement Post Type:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <input id="achievement_main_post_type" name="badgeos_settings[achievement_main_post_type]" type="text" value="<?php echo esc_attr( $achievement_main_post_type ); ?>" class="regular-text" />
+                        <p class="description"><?php _e( 'Achievement Type Slug.', 'badgeos' ); ?></p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="achievement_step_post_type"><?php _e( 'Achievement Step Post Type:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <input id="achievement_step_post_type" name="badgeos_settings[achievement_step_post_type]" type="text" value="<?php echo esc_attr( $achievement_step_post_type ); ?>" class="regular-text" />
+                        <p class="description"><?php _e( 'Achievement Step Type Slug.', 'badgeos' ); ?></p>
+                    </td>
                 </tr>
                 <tr valign="top">
                     <th scope="row"><label for="ranks_main_post_type"><?php _e( 'Rank Post Type:', 'badgeos' ); ?></label></th>
@@ -801,19 +820,13 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
 	// OR this is an existing achievement type post
 	// AND the text is "Featured Image"
 	// ...replace the string
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if (
 		(
-			( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], badgeos_get_achievement_types_slugs() ) )
-			|| ( isset( $_GET['post'] ) && badgeos_is_achievement( $_GET['post'] ) )
-		) && 'Featured Image' == $string
+            ( isset( $_GET['post_type'] ) && $badgeos_settings['achievement_main_post_type'] == $_GET['post_type'] )
+            || ( isset( $_GET['post'] ) && $badgeos_settings['achievement_main_post_type'] == get_post_type( $_GET['post'] ) )
 
-	)
-		$string = __( 'Achievement Image', 'badgeos' );
-	elseif (
-		(
-			( isset( $_GET['post_type'] ) && 'achievement-type' == $_GET['post_type'] )
-			|| ( isset( $_GET['post'] ) && 'achievement-type' == get_post_type( $_GET['post'] ) )
-		) && 'Featured Image' == $string
+        ) && 'Featured Image' == $string
 	)
 		$string = __( 'Default Achievement Image', 'badgeos' );
 
@@ -831,9 +844,10 @@ add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
  * @return string           Potentially modified output.
  */
 function badgeos_featured_image_metabox_text( $content = '', $ID = 0 ) {
-	if ( badgeos_is_achievement( $ID ) )
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( badgeos_is_achievement( $ID ) )
 		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
-	elseif ( 'achievement-type' == get_post_type( $ID ) )
+    elseif ( $badgeos_settings['achievement_main_post_type'] == get_post_type( $ID ) )
 		$content = str_replace( 'featured image', __( 'default achievement image', 'badgeos' ), $content );
 
 	return $content;
@@ -852,10 +866,11 @@ add_filter( 'admin_post_thumbnail_html', 'badgeos_featured_image_metabox_text', 
 function badgeos_media_modal_featured_image_text( $strings = array(), $post = null ) {
 
 	if ( is_object( $post ) ) {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( badgeos_is_achievement( $post->ID ) ) {
 			$strings['setFeaturedImageTitle'] = __( 'Set Achievement Image', 'badgeos' );
 			$strings['setFeaturedImage'] = __( 'Set achievement image', 'badgeos' );
-		} elseif ( 'achievement-type' == $post->post_type ) {
+		} elseif ( $badgeos_settings['achievement_main_post_type'] == $post->post_type ) {
 			$strings['setFeaturedImageTitle'] = __( 'Set Default Achievement Image', 'badgeos' );
 			$strings['setFeaturedImage'] = __( 'Set default achievement image', 'badgeos' );
 		}

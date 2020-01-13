@@ -142,6 +142,19 @@ class BadgeOS {
         // Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 
+        if( !isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) || !isset( $badgeos_settings['achievement_main_post_type'] ) || empty( $badgeos_settings['achievement_main_post_type'] ) ) {
+
+            if( ! isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) ) {
+                $badgeos_settings['achievement_step_post_type']     = 'step';
+            }
+
+            if( ! isset( $badgeos_settings['achievement_main_post_type'] ) || empty( $badgeos_settings['achievement_main_post_type'] ) ) {
+                $badgeos_settings['achievement_main_post_type']     = 'achievement-type';
+            }
+
+            update_option( 'badgeos_settings', $badgeos_settings );
+        }
+
         $badgeos_rec_title_updated = ( $exists = get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
         if( $badgeos_rec_title_updated == 'No' ) {
 
@@ -246,6 +259,8 @@ class BadgeOS {
 		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), $this::$version, true );
 		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), $this::$version, true );
 
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
         $admin_js_translation_array = array(
             'ajax_url' 					=> admin_url( 'admin-ajax.php' ),
 			'loading_img' 				=> admin_url( 'images/spinner.gif' ),
@@ -255,6 +270,8 @@ class BadgeOS {
             'revoke_achievements'       => __( 'Revoke Achievements', 'badgeos' ),
             'no_available_achievements' => __( 'No Available Achievements', 'badgeos' ),
             'default_rank'              => __( 'Default Rank', 'badgeos' ),
+            'achievement_post_type'     => $badgeos_settings['achievement_main_post_type'],
+            'achievement_step_type'     => $badgeos_settings['achievement_step_post_type'],
 
         );
         wp_localize_script( 'badgeos-admin-js', 'admin_js', $admin_js_translation_array );
@@ -299,14 +316,16 @@ class BadgeOS {
 
 		// Grab all our registered achievement types and loop through them
 		$achievement_types = badgeos_get_achievement_types_slugs();
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
 		if ( is_array( $achievement_types ) && ! empty( $achievement_types ) ) {
 			foreach ( $achievement_types as $achievement_type ) {
 
 				// Connect steps to each achievement type
 				// Used to get an achievement's required steps (e.g. This badge requires these 3 steps)
 				p2p_register_connection_type( array(
-					'name'      => 'step-to-' . $achievement_type,
-					'from'      => 'step',
+					'name'      => $badgeos_settings['achievement_step_post_type'].'-to-' . $achievement_type,
+					'from'      => $badgeos_settings['achievement_step_post_type'],
 					'to'        => $achievement_type,
 					'admin_box' => false,
 					'fields'    => array(
@@ -321,9 +340,9 @@ class BadgeOS {
 				// Connect each achievement type to a step
 				// Used to get a step's required achievement (e.g. this step requires earning Level 1)
 				p2p_register_connection_type( array(
-					'name'      => $achievement_type . '-to-step',
+					'name'      => $achievement_type . '-to-'.$badgeos_settings['achievement_step_post_type'],
 					'from'      => $achievement_type,
-					'to'        => 'step',
+					'to'        => $badgeos_settings['achievement_step_post_type'],
 					'admin_box' => false,
 					'fields'    => array(
 						'order'   => array(
@@ -355,14 +374,16 @@ class BadgeOS {
 		$this->includes();
         $point_type = 'point_type';
 
+        $achievement_type = 'achievement-type';
+
 		// Create Badges achievement type
-		if ( !get_page_by_title( 'Badges', 'OBJECT', 'achievement-type' ) ) {
+		if ( !get_page_by_title( 'Badges', 'OBJECT', $achievement_type ) ) {
 			$badge_post_id = wp_insert_post( array(
 				'post_title'   => __( 'Badges', 'badgeos'),
 				'post_content' => __( 'Badges badge type', 'badgeos' ),
 				'post_status'  => 'publish',
 				'post_author'  => 1,
-				'post_type'    => 'achievement-type',
+				'post_type'    => $achievement_type,
 			) );
 			update_post_meta( $badge_post_id, '_badgeos_singular_name', __( 'Badge', 'badgeos' ) );
 			update_post_meta( $badge_post_id, '_badgeos_show_in_menu', true );
@@ -372,18 +393,21 @@ class BadgeOS {
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
 			$badgeos_settings['minimum_role']     = 'manage_options';
-			$badgeos_settings['submission_manager_role'] = 'manage_options';
-			$badgeos_settings['submission_email'] = 'enabled';
-			$badgeos_settings['debug_mode']       			= 'disabled';
-            $badgeos_settings['ranks_main_post_type']       = 'rank_types';
-            $badgeos_settings['ranks_step_post_type']       = 'rank_requirement';
+            $badgeos_settings['submission_manager_role'] 		= 'manage_options';
+            $badgeos_settings['submission_email'] 				= 'enabled';
+            $badgeos_settings['debug_mode']       				= 'disabled';
+            $badgeos_settings['achievement_main_post_type']     = $achievement_type;
+            $badgeos_settings['achievement_step_post_type']     = 'step';
+            $badgeos_settings['ranks_main_post_type']       	= 'rank_types';
+            $badgeos_settings['ranks_step_post_type']       	= 'rank_requirement';
 
-            $badgeos_settings['points_main_post_type']     = $point_type;
-            $badgeos_settings['points_award_post_type']    = 'point_award';
-            $badgeos_settings['points_deduct_post_type']   = 'point_deduct';
+            $badgeos_settings['points_main_post_type']     		= $point_type;
+            $badgeos_settings['points_award_post_type']    		= 'point_award';
+            $badgeos_settings['points_deduct_post_type']   		= 'point_deduct';
 
-            $badgeos_settings['remove_data_on_uninstall']   = null;
-			update_option( 'badgeos_settings', $badgeos_settings );
+            $badgeos_settings['remove_data_on_uninstall']   	= null;
+
+            update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
 		// Setup default Credly options
