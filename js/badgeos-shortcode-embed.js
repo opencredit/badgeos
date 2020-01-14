@@ -93,31 +93,22 @@
 	var select2_post_defaults = {
 		language :{
 			noResults: function(){
-			return "No Results";
-				},
-			errorLoading:function(){ return "Searching..."
-				}
+				return "No Results";
 			},
+			errorLoading:function(){ return "Searching..."
+			}
+		},
 		escapeMarkup: function (markup) {
 			return markup;
 		},
 		placeholder: badgeos_shortcode_embed_messages.id_placeholder,
 		allowClear: true
 	};
+
 	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { } );
 	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id' ).select2( select2_post_defaults );
 	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).attr('multiple', true).select2( select2_post_multiples );
-	$( '#badgeos_achievements_list_post_types' ).attr('multiple', true).select2({
-		language :{
-			noResults: function(){ return "No Results"; },
-			errorLoading:function(){ return "Searching...";}
-		},
-		escapeMarkup: function (markup) { return markup; },
-		placeholder: badgeos_shortcode_embed_messages.post_type_placeholder,
-		allowClear: true
-	});
-
-	$( '#badgeos_achievements_list_user_id' ).select2({
+	$( '#badgeos_achievements_list_type' ).html(badgeos_shortcode_embed_messages.achievements_select_options).attr('multiple', true).select2({
 		language :{
 			noResults: function(){
 				return "No Results";
@@ -132,10 +123,42 @@
 		allowClear: true
 	});
 
+
+
+	var availableTags = [
+		"ActionScript",
+		"AppleScript",
+		"Asp",
+		"BASIC",
+		"C",
+		"C++",
+		"Clojure",
+		"COBOL",
+		"ColdFusion",
+		"Erlang",
+		"Fortran",
+		"Groovy",
+		"Haskell",
+		"Java",
+		"JavaScript",
+		"Lisp",
+		"Perl",
+		"PHP",
+		"Python",
+		"Ruby",
+		"Scala",
+		"Scheme"
+	];
+	$('#badgeos_achievements_list_user_id').autocomplete({
+		source: availableTags,
+		multiselect: true
+	});
+
 	// Resize ThickBox when "Add BadgeOS Shortcode" link is clicked
 	$('body').on( 'click', '#insert_badgeos_shortcodes', function(e) {
 		e.preventDefault();
 		badgeos_shortcode_setup_thickbox( $(this) );
+		$('.ui-autocomplete-multiselect').css( 'width', '90%' );
 	});
 
 	// Resize shortcode thickbox on window resize
@@ -146,7 +169,7 @@
 	// Add a custom class to our shortcode thickbox, then resize
 	function badgeos_shortcode_setup_thickbox( link ) {
 		setTimeout( function() {
-		$('#TB_window').addClass('badgeos-shortcode-thickbox');
+			$('#TB_window').addClass('badgeos-shortcode-thickbox');
 			badgeos_shortcode_resize_tb( link );
 		}, 0 );
 	}
@@ -155,11 +178,11 @@
 	function badgeos_shortcode_resize_tb( link ) {
 		setTimeout( function() {
 
-		var width = link.attr('data-width');
+			var width = link.attr('data-width');
 
-		$('.badgeos-shortcode-thickbox').width( width );
+			$('.badgeos-shortcode-thickbox').width( width );
 
-		var containerheight = $('.badgeos-shortcode-thickbox').height();
+			var containerheight = $('.badgeos-shortcode-thickbox').height();
 
 			$('.badgeos-shortcode-thickbox #TB_ajaxContent').width( ( width - 30 ) ).height( ( containerheight - 50 ) );
 			$('.badgeos-shortcode-thickbox .wrap').width( ( width - 50 ) ) .height( ( containerheight - 50 ) );
