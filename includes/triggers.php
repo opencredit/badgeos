@@ -36,7 +36,7 @@ function badgeos_get_activity_triggers() {
 		)
 	);
 
-	return $badgeos->activity_triggers;
+    return apply_filters( 'badgeos_activity_triggers_for_all', $badgeos->activity_triggers );
 }
 
 /**
@@ -522,4 +522,18 @@ function badgeos_daily_visit_add_step_status( $user_id, $step_id, $type='achieve
 		update_user_meta( $user_id, $key, 'No' );
 	}
 	return $key;
+}
+
+/**
+ * Fires a badgeos trigger
+ *
+ * @param  $trigger
+ * @param  $args
+ */
+function badgeos_perform_event( $trigger, $user_id = 0) {
+    if( ! empty( $trigger ) ) {
+        if( has_action( $trigger ) )
+            if( $user_id > 0 )
+                do_action( $trigger, $user_id);
+    }
 }

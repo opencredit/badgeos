@@ -27,7 +27,7 @@ function get_badgeos_ranks_req_activity_triggers() {
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)
 	);
-	return $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers;
+    return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );
 }
 
 /**

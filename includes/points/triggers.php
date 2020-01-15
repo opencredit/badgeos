@@ -26,7 +26,7 @@ function get_badgeos_points_award_activity_triggers() {
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)
 	);
-	return $GLOBALS['badgeos']->award_points_activity_triggers;
+    return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->award_points_activity_triggers );
 }
 
 /**
@@ -47,7 +47,7 @@ function get_badgeos_points_deduct_activity_triggers() {
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)
 	);
-	return $GLOBALS['badgeos']->deduct_points_activity_triggers;
+    return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->deduct_points_activity_triggers );
 }
 
 /**

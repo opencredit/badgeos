@@ -240,8 +240,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/ranks/ranks-rules-engine.php' );
 		
 		require_once( $this->directory_path . 'includes/triggers.php' );
-        require_once( $this->directory_path . 'includes/trigger-for-all.php' );
-		require_once( $this->directory_path . 'includes/steps-ui.php' );
+        require_once( $this->directory_path . 'includes/steps-ui.php' );
 		require_once( $this->directory_path . 'includes/shortcodes.php' );
 		require_once( $this->directory_path . 'includes/content-filters.php' );
 		require_once( $this->directory_path . 'includes/submission-actions.php' );
