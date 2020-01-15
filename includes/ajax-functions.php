@@ -536,7 +536,7 @@ function badgeos_ajax_update_feedback() {
 	// Status workflow
 	$status_args = array(
 		'achievement_id' => $_REQUEST[ 'achievement_id' ],
-		'user_id' => $_REQUEST[ 'user_id' ],
+        'user_id' => $_REQUEST[ 'user_id' ],
 		'submission_type' => $_REQUEST[ 'feedback_type' ]
 	);
 

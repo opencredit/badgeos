@@ -249,7 +249,7 @@ function badgeos_user_points_section( $user = null ) {
 
                     <?php if( $can_manage ) {
                         ?>
-                        <div class="hidden badgeos-edit-credit-wrapper">
+                        <div class="badgeos-edit-credit-wrapper" style="display:none">
                             <?php echo __( 'Earned Credit: ' ); ?>
                             <input type="number" class="badgeos-edit-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
                         </div>
