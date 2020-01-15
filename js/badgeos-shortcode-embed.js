@@ -2,6 +2,7 @@
 
 	function badgeos_insert_shortcode() {
 
+		$( '.ui-autocomplete-input' ).val('');
 		var shortcode = badgeos_get_selected_shortcode();
 		var attributes = badgeos_get_attributes( shortcode );
 		var constructed = badgeos_construct_shortcode( shortcode, attributes );
@@ -106,9 +107,9 @@
 	};
 
 	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { } );
-	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id' ).select2( select2_post_defaults );
-	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude' ).attr('multiple', true).select2( select2_post_multiples );
-	$( '#badgeos_achievements_list_type' ).html(badgeos_shortcode_embed_messages.achievements_select_options).attr('multiple', true).select2({
+	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id, #badgeos_user_earned_points_point_type' ).select2( select2_post_defaults );
+	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude, #badgeos_user_earned_achievements_include, #badgeos_user_earned_achievements_exclude,#badgeos_user_earned_ranks_rank_type' ).attr('multiple', true).select2( select2_post_multiples );
+	$( '#badgeos_achievements_list_type, #badgeos_user_earned_achievements_type' ).html(badgeos_shortcode_embed_messages.achievements_select_options).attr('multiple', true).select2({
 		language :{
 			noResults: function(){
 				return "No Results";
@@ -119,39 +120,63 @@
 		escapeMarkup: function (markup) {
 			return markup;
 		},
-		placeholder: badgeos_shortcode_embed_messages.user_placeholder,
+		placeholder: badgeos_shortcode_embed_messages.id_multiple_placeholder,
 		allowClear: true
 	});
 
 
+	function split( val ) {
+		return val.split( /,\s*/ );
+	}
+	function extractLast( term ) {
+		return split( term ).pop();
+	}
 
-	var availableTags = [
-		"ActionScript",
-		"AppleScript",
-		"Asp",
-		"BASIC",
-		"C",
-		"C++",
-		"Clojure",
-		"COBOL",
-		"ColdFusion",
-		"Erlang",
-		"Fortran",
-		"Groovy",
-		"Haskell",
-		"Java",
-		"JavaScript",
-		"Lisp",
-		"Perl",
-		"PHP",
-		"Python",
-		"Ruby",
-		"Scala",
-		"Scheme"
-	];
-	$('#badgeos_achievements_list_user_id').autocomplete({
-		source: availableTags,
-		multiselect: true
+	$('#badgeos_achievements_list_user_id1').autocomplete({
+		source: function( request, response ) {
+			$.getJSON( ajaxurl, {
+				q: extractLast( request.term ), action: 'get-users'
+			}, response );
+		},
+		multiselect: false,
+		search: function() {
+			// custom minLength
+			var term = extractLast( this.value );
+			if ( term.length < 3 ) {
+				return false;
+			}
+		},
+		focus: function() {
+			// prevent value inserted on focus
+			return false;
+		},
+		change: function( event, ui ) {
+			var auto_field = jQuery(this);
+			if( auto_field.val() == '' ) {
+				var dep_field = auto_field.data('fieldname');
+				var dep_field_type = auto_field.data('type');
+				if( dep_field_type == 'autocomplete' ) {
+					jQuery( '#'+dep_field ).val('');
+				}
+			}
+		},
+		select: function( event, ui ) {
+
+			var auto_field = jQuery(this);
+
+			var dep_field = auto_field.data('fieldname');
+			var dep_field_type = auto_field.data('type');
+			if( dep_field_type == 'autocomplete' ) {
+
+				if( ui.item.value != '' )
+					jQuery( '#'+dep_field ).val(ui.item.value);
+				else
+					jQuery( '#'+dep_field ).val(ui.item.id);
+			}
+
+			this.value = ui.item.label;
+			return false;
+		}
 	});
 
 	// Resize ThickBox when "Add BadgeOS Shortcode" link is clicked
