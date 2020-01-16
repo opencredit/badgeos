@@ -280,3 +280,6 @@ a, a:hover{
     padding: 10px;
     width: 70%;
 }
+.badgeos-tools-page .ui-widget-content {
+    z-index: 0 !important;
+}
