@@ -945,5 +945,38 @@ function badgeos_can_notify_user( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-	return 'false' !== get_user_meta( $user_id, '_badgeos_can_notify_user', true );
+    return get_user_meta( $user_id, '_badgeos_can_notify_user', true )? true:false;
 }
+
+/**
+ * Update the meta information.
+ *
+ * @since  3.5
+ *
+ * @param  int
+ * @return none
+ */
+function badgeos_update_can_notify_user_field( $user_id ){
+
+    update_user_meta( $user_id, '_badgeos_can_notify_user', 1 );
+}
+add_action( 'user_register', 'badgeos_update_can_notify_user_field', 10, 1 );
+
+/**
+ * Update the meta information.
+ *
+ * @since  3.5
+ *
+ * @param  int
+ * @return none
+ */
+function badgeos_save_email_notify_field( $user_id ) {
+
+    if ( !current_user_can( 'edit_user', $user_id ) ) {
+        return false;
+    }
+
+    update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
+}
+add_action( 'personal_options_update', 'badgeos_save_email_notify_field' );
+add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );
