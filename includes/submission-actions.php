@@ -658,10 +658,19 @@ function badgeos_set_submission_status( $submission_id, $status, $args = array()
  */
 function badgeos_set_submission_status_submission_approved( $messages, $args ) {
 
-	// Award achievement
-	badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+    global $wpdb;
 
-	// Check if user can be notified
+	// Award achievement
+    if ( ! badgeos_achievement_user_exceeded_max_earnings( $args[ 'user_id' ], $args[ 'achievement_id' ] ) ) {
+
+        $strQuery = 'select * from '.$wpdb->prefix."badgeos_achievements where sub_nom_id='".$args['submission_id']."' and ID='".$args[ 'achievement_id' ]."' and user_id='".$args[ 'user_id' ]."'";
+        $records = $wpdb->get_results( $strQuery );
+        if( count( $records ) == 0 ) {
+            badgeos_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ], '', 0, $args );
+        }
+    }
+
+    // Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
 		return $messages;
 	}
@@ -724,10 +733,19 @@ add_filter( 'badgeos_notifications_submission_approved_messages', 'badgeos_set_s
  */
 function badgeos_set_submission_status_nomination_approved( $messages, $args ) {
 
-	// Award achievement
-	badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ] );
+    global $wpdb;
 
-	// Check if user can be notified
+	// Award achievement
+    if ( ! badgeos_achievement_user_exceeded_max_earnings( $args[ 'user_id' ], $args[ 'achievement_id' ] ) ) {
+
+        $strQuery = 'select * from '.$wpdb->prefix."badgeos_achievements where sub_nom_id='".$args['submission_id']."' and ID='".$args[ 'achievement_id' ]."' and user_id='".$args[ 'user_id' ]."'";
+        $records = $wpdb->get_results( $strQuery );
+        if( count( $records ) == 0 ) {
+            badgeos_maybe_award_achievement_to_user( $args[ 'achievement_id' ], $args[ 'user_id' ], '', 0, $args );
+        }
+    }
+
+    // Check if user can be notified
 	if ( !badgeos_can_notify_user( $args[ 'user_data' ]->ID ) ) {
 		return $messages;
 	}

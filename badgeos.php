@@ -84,6 +84,7 @@ class BadgeOS {
 			$sql = "CREATE TABLE " . $table_name . " (
 				`entry_id` int(10) NOT NULL AUTO_INCREMENT,
 				`ID` int(10) DEFAULT '0',
+				`sub_nom_id` int(10) DEFAULT '0',
 				`post_type` varchar(100) DEFAULT NULL,
 				`achievement_title` TEXT DEFAULT NULL,
 				`rec_type` varchar(10) DEFAULT '',
@@ -153,6 +154,11 @@ class BadgeOS {
             }
 
             update_option( 'badgeos_settings', $badgeos_settings );
+        }
+
+        $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix . "badgeos_achievements' AND column_name = 'sub_nom_id'"  );
+        if(empty($row)){
+            $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_achievements ADD sub_nom_id int(10) DEFAULT '0'");
         }
 
         $badgeos_rec_title_updated = ( $exists = get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
