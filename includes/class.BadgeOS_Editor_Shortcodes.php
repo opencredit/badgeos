@@ -30,7 +30,8 @@ class BadgeOS_Editor_Shortcodes {
 	 * @since  1.4.0
 	 */
 	public function admin_scripts() {
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+        global $pagenow;
+	    $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
         wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
         wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
 
@@ -38,9 +39,11 @@ class BadgeOS_Editor_Shortcodes {
         wp_enqueue_style( 'badgeos-juqery-ui-css', $this->directory_url . 'css/jquery-ui.css' );
         wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . 'css/autocomplete.css' );
 
-        wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
-		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
-	}
+        if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
+            wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
+            wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
+        }
+    }
 
 	/**
 	 * Get localized JS text.

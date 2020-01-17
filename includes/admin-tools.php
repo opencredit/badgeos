@@ -48,7 +48,7 @@ class Badgeos_Tools {
      */
     public function register_badgeos_tool() { ?>
 
-        <div class="wrap" >
+        <div class="wrap badgeos-tools-page">
             <div id="icon-options-general" class="icon32"></div>
             <h2><?php _e( 'Tools', 'gamify' ); ?></h2>
 

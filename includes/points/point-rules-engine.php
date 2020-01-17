@@ -584,7 +584,7 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
         }
 
         if( $check_if_allowed ) {
-            if( ! apply_filters( 'badgeos_allow_remove_points', true, $user_id, $credit_id, $achievement_id, $type, $new_points, $this_trigger, $step_id ) ) {
+            if( ! apply_filters( 'badgeos_allow_remove_points', true, $user_id, $credit_id, $achievement_id, $type, $points, $this_trigger, $step_id ) ) {
                 return 0;
             }
         }
@@ -603,7 +603,7 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
             $step_id
         );
 
-        $wpdb->insert($wpdb->prefix.' x ,.', array(
+        $wpdb->insert($wpdb->prefix.'badgeos_points', array(
             'credit_id' => $credit_id,
             'step_id' => $step_id,
             'admin_id' => $admin_id,

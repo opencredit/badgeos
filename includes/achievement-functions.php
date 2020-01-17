@@ -273,7 +273,7 @@ function badgeos_get_children_of_achievement( $achievement_id = 0 ) {
 	}
 
 	// Grab and return our achievement's children
-	return badgeos_get_achievements( array( 'children_of' => $achievement_id, 'achievement_relationship' => 'required' ) );
+    return badgeos_get_achievements( array( 'children_of' => $achievement_id ) );
 }
 
 /**
