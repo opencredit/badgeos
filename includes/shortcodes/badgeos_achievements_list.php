@@ -89,7 +89,7 @@ function badgeos_register_achievements_list_shortcode() {
 				'default'     => 'ASC',
             ),
             'user_id1' => array(
-                'name'          => __( 'User ID', 'badgeos' ),
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
 				'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
                 'type'          => 'text',
                 'autocomplete_name' => 'user_id',

@@ -267,7 +267,7 @@ function badgeos_ajax_get_users() {
 	}
 
 	// Fetch our results (store as associative array)
-	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
+    $results = $wpdb->get_results( $sql." limit 100 ", 'ARRAY_A' );
 
 	// Return our results
     wp_send_json( $results );

@@ -276,3 +276,7 @@ a, a:hover{
 .ui-widget.ui-widget-content {
     z-index: 999999;
 }
+.ui-autocomplete-input{
+    padding: 10px;
+    width: 70%;
+}
