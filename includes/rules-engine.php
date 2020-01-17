@@ -150,8 +150,10 @@ add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement'
 function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_trigger, $site_id = 0, $args = array() ) {
 		
 	if( trim( $this_trigger ) == 'badgeos_daily_visit' ) {
-		
-		if ( 'step' != get_post_type( $achievement_id ) ) {
+
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        if ( trim( $badgeos_settings['achievement_step_post_type'] ) != get_post_type( $achievement_id ) ) {
             return false;
         }
 		
@@ -579,8 +581,9 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_not_lo
 function badgeos_user_has_access_to_step( $return = false, $user_id = 0, $step_id = 0 ) {
 
 	// If we're not working with a step, bail here
-	if ( 'step' != get_post_type( $step_id ) )
-		return $return;
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) != get_post_type( $step_id ) )
+        return $return;
 
 	// Prevent user from earning steps with no parents
 	$parent_achievement = badgeos_get_parent_of_achievement( $step_id );
@@ -671,7 +674,8 @@ add_filter( 'user_has_access_to_achievement', 'badgeos_check_if_all_enabled', 15
 function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = [] ) {
 
 	// Only override the $return data if we're working on a step
-    if( 'step' == get_post_type( $step_id ) ) {
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $step_id ) ) {
         // Get the required number of checkins for the step.
         $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
         if( ! isset( $minimum_activity_count ) || empty( $minimum_activity_count ) )

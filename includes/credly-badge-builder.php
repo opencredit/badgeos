@@ -33,9 +33,10 @@ function badgeos_get_badge_builder_link( $args ) {
  */
 function badgeos_badge_builder_filter_thumbnail_metabox( $content, $post_id ) {
 
-	// Only add a link to achievement and achievement-type posts
-	if ( badgeos_is_achievement( $post_id ) || 'achievement-type' == get_post_type( $post_id ) ) {
-		// If no thumbnail, output standard badge builder link
+    // Only add a link to achievement and achievement type posts
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( badgeos_is_achievement( $post_id ) || $badgeos_settings['achievement_main_post_type'] == get_post_type( $post_id ) ) {
+        // If no thumbnail, output standard badge builder link
 		if ( ! has_post_thumbnail( $post_id ) ) {
 			$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'link_text' => __( 'Use Credly Badge Builder', 'badgeos' ) ) ) . '</p>';
 		// Otherwise, if thumbnail is a badge builder badge,`

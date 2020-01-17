@@ -8,8 +8,9 @@
 function badgeos_register_achievements_list_shortcode() {
 
 	// Setup a custom array of achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
-        'post_type'      =>	'achievement-type',
+        'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
     ) );
 

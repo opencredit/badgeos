@@ -44,7 +44,7 @@ function badgeos_update_old_points_to_point_types() {
     if( ! empty( $default_point_type ) ) {
         // Grab all of our achievement type posts
         $achievement_types = get_posts( array(
-            'post_type'      =>	'achievement-type',
+            'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
             'posts_per_page' =>	-1,
         ) );
 

@@ -46,8 +46,10 @@ class BadgeOS_Editor_Shortcodes {
 	 * @return array Array of translated text
 	 */
 	public function get_localized_text() {
+
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $achievement_types = get_posts( array(
-            'post_type'      =>	'achievement-type',
+            'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
             'posts_per_page' =>	-1,
         ) );
 

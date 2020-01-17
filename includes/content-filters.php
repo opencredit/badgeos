@@ -23,14 +23,15 @@ function badgeos_achievement_submissions( $content = '' ) {
 
 		// get achievement object for the current post type
 		$post_type = get_post_type( $post );
-		$achievement = get_page_by_title( $post_type, 'OBJECT', 'achievement-type' );
-		if ( !$achievement ) {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $achievement = get_page_by_title( $post_type, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
+        if ( !$achievement ) {
 			global $wp_post_types;
 
 			$labels = array( 'name', 'singular_name' );
 			// check for other variations
 			foreach ( $labels as $label ) {
-				$achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', 'achievement-type' );
+                $achievement = get_page_by_title( $wp_post_types[$post_type]->labels->$label, 'OBJECT', $badgeos_settings['achievement_main_post_type'] );
 				if ( $achievement )
 					break;
 			}

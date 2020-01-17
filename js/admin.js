@@ -215,7 +215,7 @@ jQuery(document).ready(function($) {
 	$('#titlewrap').on( 'keyup', 'input[name=post_title]', function() {
 
 		// Make sure we're editing an achievement type
-		if ( 'achievement-type' == $('#post_type').val() ) {
+		if ( admin_js.achievement_post_type == $('#post_type').val() ) {
 			// Cache the title input selector
 			var $title = $(this);
 			if ( $title.val().length > 20 ) {

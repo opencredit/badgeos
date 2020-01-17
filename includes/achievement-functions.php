@@ -717,8 +717,10 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size = 'ba
 	if ( ! $image ) {
 
 		// Grab our achievement type's post thumbnail
-		$achievement = get_page_by_path( get_post_type(), OBJECT, 'achievement-type' );
-		$image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $achievement = get_page_by_path( get_post_type(), OBJECT, $badgeos_settings['achievement_main_post_type'] );
+
+        $image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
 		if ( ! $image ) {
@@ -885,10 +887,11 @@ function badgeos_get_network_site_ids() {
 function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	global $pagenow;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if (
 		! (
 			badgeos_is_achievement( $post_id )
-			|| 'achievement-type' == get_post_type( $post_id )
+			|| $badgeos_settings['achievement_main_post_type'] == get_post_type( $post_id )
 		)
 		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 		|| ! current_user_can( 'edit_post', $post_id )
@@ -902,8 +905,8 @@ function badgeos_achievement_set_default_thumbnail( $post_id ) {
 	$achievement_type = '';
 
 	// Get the thumbnail of our parent achievement
-	if ( 'achievement-type' !== get_post_type( $post_id ) ) {
-		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, 'achievement-type' );
+	if ( $badgeos_settings['achievement_main_post_type'] !== get_post_type( $post_id ) ) {
+		$achievement_type = get_page_by_path( get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
 
 		if ( $achievement_type ) {
 			$thumbnail_id = get_post_thumbnail_id( $achievement_type->ID );
@@ -981,8 +984,10 @@ add_action( 'save_post', 'badgeos_achievement_set_default_thumbnail' );
  * @param object $post       Post object.
  */
 function badgeos_flush_rewrite_on_published_achievement( $new_status, $old_status, $post ) {
-	if ( 'achievement-type' === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
-		badgeos_flush_rewrite_rules();
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( $badgeos_settings['achievement_main_post_type'] === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
+
+        badgeos_flush_rewrite_rules();
 	}
 }
 add_action( 'transition_post_status', 'badgeos_flush_rewrite_on_published_achievement', 10, 3 );
@@ -1037,8 +1042,9 @@ function badgeos_achievement_type_changed( $post_args = array() ) {
 	$original_post = ( !empty( $post_args['ID'] ) && isset( $post_args['ID'] ) ) ? get_post( $post_args['ID'] ) : null;
 	$status = false;
 	if ( is_object( $original_post ) ) {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if (
-			'achievement-type' === $post_args['post_type']
+            $badgeos_settings['achievement_main_post_type'] === $post_args['post_type']
 			&& $original_post->post_status !== 'auto-draft'
 			&& ! empty( $original_post->post_name )
 			&& $original_post->post_title !== $post_args['post_title']
@@ -1104,10 +1110,11 @@ function badgeos_update_achievements_achievement_types( $original_type = '', $ne
  */
 function badgeos_update_p2p_achievement_types( $original_type = '', $new_type = '' ) {
 	global $wpdb;
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	$p2p_relationships = array(
-		"step-to-{$original_type}" => "step-to-{$new_type}",
-		"{$original_type}-to-step" => "{$new_type}-to-step",
-	);
+        trim( $badgeos_settings['achievement_step_post_type'] )."-to-{$original_type}" => trim( $badgeos_settings['achievement_step_post_type'] )."-to-{$new_type}",
+        "{$original_type}-to-".trim( $badgeos_settings['achievement_step_post_type'] ) => "{$new_type}-to-".trim( $badgeos_settings['achievement_step_post_type'] )
+    );
 	foreach ( $p2p_relationships as $old => $new ) {
 		$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->p2p SET p2p_type = %s WHERE p2p_type = %s", $new, $old ) );
 	}
@@ -1246,8 +1253,9 @@ function badgeos_achievement_type_rename_redirect( $location = '' ) {
  * @return array $messages Compiled list of messages.
  */
 function badgeos_achievement_type_update_messages( $messages ) {
-	$messages['achievement-type'] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );
-	$messages['achievement-type']['99'] = sprintf( __('Achievement Type renamed successfully. <p>All achievements of this type, and all active and earned user achievements, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old achievement type slug must be updated <strong>manually</strong>.', 'badgeos'), '<a href="' . esc_url( admin_url( 'widgets.php' ) ) . '">' . __( 'widgets', 'badgeos' ) . '</a>' );
-	return $messages;
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $messages[ trim( $badgeos_settings['achievement_main_post_type'] ) ] = array_fill( 1, 10, __( 'Achievement Type saved successfully.', 'badgeos' ) );
+    $messages[ trim( $badgeos_settings['achievement_main_post_type'] ) ]['99'] = sprintf( __('Achievement Type renamed successfully. <p>All achievements of this type, and all active and earned user achievements, have been updated <strong>automatically</strong>.</p> All shortcodes, %s, and URIs that reference the old achievement type slug must be updated <strong>manually</strong>.', 'badgeos'), '<a href="' . esc_url( admin_url( 'widgets.php' ) ) . '">' . __( 'widgets', 'badgeos' ) . '</a>' );
+    return $messages;
 }
 add_filter( 'post_updated_messages', 'badgeos_achievement_type_update_messages' );
