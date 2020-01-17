@@ -502,11 +502,18 @@ add_action( 'badgeos_unlock_user_rank', 'badgeos_maybe_unlock_user_rank',10, 8 )
  * @param  integer $achievement_id  The achievement ID if points are awarded due to an achievement.
  * @return integer record id if inserted successfully.
  */
-function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_trigger, $admin_id=0, $step_id=0, $achievement_id=0 ) {
-	global $wpdb;
+function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_trigger, $admin_id=0, $step_id=0, $achievement_id=0, $check_if_allowed = true ) {
+    global $wpdb;
+
     if( intval( $new_points ) != 0 ) {
 		if( absint( $credit_id ) == 0 || empty( $credit_id ) ) {
             $credit_id = 0;
+        }
+
+        if( $check_if_allowed ) {
+            if( ! apply_filters( 'badgeos_allow_award_points', true, $user_id, $credit_id, $achievement_id, $type, $new_points, $this_trigger, $step_id ) ) {
+                return 0;
+            }
         }
 
         /**
@@ -523,17 +530,17 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
             $step_id
         );
 
-		$wpdb->insert($wpdb->prefix.'badgeos_points', array(
-			'credit_id' => $credit_id,
-			'step_id' => $step_id,
-			'admin_id' => $admin_id,
-			'user_id' => $user_id,
-			'achievement_id' => $achievement_id,
-			'type' => $type,
-			'credit' => $new_points,
-			'dateadded' => date("Y-m-d H:i:s"),
-			'this_trigger' =>  $this_trigger
-		));
+        $wpdb->insert($wpdb->prefix.'badgeos_points', array(
+            'credit_id' => $credit_id,
+            'step_id' => $step_id,
+            'admin_id' => $admin_id,
+            'user_id' => $user_id,
+            'achievement_id' => $achievement_id,
+            'type' => $type,
+            'credit' => $new_points,
+            'dateadded' => date("Y-m-d H:i:s"),
+            'this_trigger' =>  $this_trigger
+        ));
 
         /**
          * Available action to trigger
@@ -546,7 +553,8 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
             $type,
             $new_points,
             $this_trigger,
-            $step_id
+            $step_id,
+            $wpdb->insert_id
         );
 
 		return $wpdb->insert_id;
@@ -567,12 +575,18 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
  * @param  integer $achievement_id  The achievement ID if points are awarded due to an achievement.
  * @return integer record id if inserted successfully.
  */
-function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigger, $admin_id=0, $step_id=0, $achievement_id=0 ) {
+function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigger, $admin_id=0, $step_id=0, $achievement_id=0, $check_if_allowed=true ) {
 	global $wpdb;
 	if( intval( $points ) ) {
 
         if( absint($credit_id) == 0 || empty( $credit_id ) ) {
             $credit_id = 0;
+        }
+
+        if( $check_if_allowed ) {
+            if( ! apply_filters( 'badgeos_allow_remove_points', true, $user_id, $credit_id, $achievement_id, $type, $new_points, $this_trigger, $step_id ) ) {
+                return 0;
+            }
         }
 
         /**
@@ -589,7 +603,7 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
             $step_id
         );
 
-        $wpdb->insert($wpdb->prefix.'badgeos_points', array(
+        $wpdb->insert($wpdb->prefix.' x ,.', array(
             'credit_id' => $credit_id,
             'step_id' => $step_id,
             'admin_id' => $admin_id,
