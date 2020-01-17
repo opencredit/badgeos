@@ -21,14 +21,6 @@ function badgeos_register_achievements_list_shortcode() {
         $types[ $type->post_name ] = $type->post_title;
     }
 
-    $user_list = array();
-    $users = $wpdb->get_results( "SELECT ID, user_login FROM {$wpdb->users}" );
-    if( $users ) {
-        foreach ( $users as $user ) {
-            $user_list[ $user->ID ] = $user->user_login;
-        }
-    }
-
     $posts = get_posts();
     $post_list = array();
     foreach( $posts as $post ) {
@@ -95,12 +87,12 @@ function badgeos_register_achievements_list_shortcode() {
 				'type'        => 'select',
 				'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
 				'default'     => 'ASC',
-				),
-			'user_id' => array(
-				'name'          => __( 'User ID', 'badgeos' ),
+            ),
+            'user_id1' => array(
+                'name'          => __( 'User ID', 'badgeos' ),
 				'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
-                'type'          => 'select',
-                'values'        => $user_list,
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
             ),
 			'include' => array(
 				'name'          => __( 'Include', 'badgeos' ),

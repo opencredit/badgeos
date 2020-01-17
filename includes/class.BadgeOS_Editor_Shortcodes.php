@@ -34,6 +34,10 @@ class BadgeOS_Editor_Shortcodes {
         wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
         wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
 
+        wp_enqueue_script( 'badgeos-autocomplete-multiselect', $this->directory_url . "js/jquery.autocomplete.multiselect.js", array( ), '', true );
+        wp_enqueue_style( 'badgeos-juqery-ui-css', $this->directory_url . 'css/jquery-ui.css' );
+        wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . 'css/autocomplete.css' );
+
         wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
 		wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
 	}
@@ -154,12 +158,28 @@ class BadgeOS_Editor_Shortcodes {
 	}
 
 	private function get_text_input( $args = array() ) {
-		return sprintf(
-			'
-			<div class="badgeos_input alignleft">
+        $name_field = $args['attribute']['slug'];
+        $name_field_type = 'normal';
+        $hidden_field = '';
+        if( isset( $args['attribute']['autocomplete_name'] ) && !empty( $args['attribute']['autocomplete_name'] ) ) {
+            $name_field = $args['attribute']['autocomplete_name'];
+            $name_field_type = 'autocomplete';
+            $hidden_field = sprintf(
+                '<input class="%1$s %2$s" id="%1$s" name="%3$s" type="hidden" data-slug="%3$s" data-shortcode="%4$s" value="%5$s" />',
+                $args['shortcode']->slug . '_' . $name_field,
+                $args['attribute']['type'],
+                $name_field,
+                $args['shortcode']->slug,
+                $args['attribute']['default']
+            );
+        }
+
+        return $hidden_field.sprintf(
+                '<div class="badgeos_input alignleft">
+
 				<label for="%1$s">%2$s</label>
 				<br/>
-				<input class="%1$s %4$s" id="%1$s" name="%5$s" type="text" data-slug="%5$s" data-shortcode="%6$s" value="%7$s" />
+				<input class="%1$s %4$s" id="%1$s" name="%5$s" type="text" data-fieldname="%8$s" data-type="%9$s" data-slug="%5$s" data-shortcode="%6$s" value="%7$s" />
 				<p class="description">%3$s</p>
 			</div>
 			',
@@ -169,8 +189,10 @@ class BadgeOS_Editor_Shortcodes {
 			$args['attribute']['type'],
 			$args['attribute']['slug'],
 			$args['shortcode']->slug,
-			$args['attribute']['default']
-		);
+            $args['attribute']['default'],
+            $args['shortcode']->slug . '_' . $name_field,
+            $name_field_type
+            );
 	}
 
 	private function get_select_input( $args = array() ) {

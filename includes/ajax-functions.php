@@ -259,18 +259,18 @@ function badgeos_ajax_get_users() {
 	// Pull back the search string
 	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
 
-	$sql = "SELECT ID, user_login FROM {$wpdb->users}";
+    $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
 
 	// Build our query
 	if ( !empty( $search ) ) {
-		$sql .= " WHERE user_login LIKE '%{$search}%'";
+        $sql .= " WHERE user_login LIKE '%".$_REQUEST['q']."%'";
 	}
 
 	// Fetch our results (store as associative array)
 	$results = $wpdb->get_results( $sql, 'ARRAY_A' );
 
 	// Return our results
-	wp_send_json_success( $results );
+    wp_send_json( $results );
 }
 
 /**
