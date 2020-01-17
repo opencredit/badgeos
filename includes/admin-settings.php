@@ -398,6 +398,10 @@ function badgeos_settings_page() {
                     <td>&nbsp;</td>
                 </tr>
                 <tr valign="top">
+                    <th scope="row"><label for="notice"><?php echo __( 'Note' . ': ', 'badgeos' ); ?></th>
+                    <td><?php echo __( 'We strongly recommend you to take back up of database first when updating the post_types slugs. Also make sure that slugs should not exceeded than 18 characters.', 'badgeos'  ); ?></td>
+                </tr>
+                <tr valign="top">
                     <th scope="row"><label for="achievement_main_post_type"><?php _e( 'Achievement Post Type:', 'badgeos' ); ?></label></th>
                     <td>
                         <input id="achievement_main_post_type" name="badgeos_settings[achievement_main_post_type]" type="text" value="<?php echo esc_attr( $achievement_main_post_type ); ?>" class="regular-text" />

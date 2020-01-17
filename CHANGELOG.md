@@ -1,5 +1,17 @@
 ## Changelog
 
+#### 3.4
+- New: Added option to update achievement post type and steps slugs
+- New: Added option to approve/deny nominations/submissions in bulk
+- New: Added new shortcode to display earned achievements for logged in user
+- New: Added new shortcode to display earned points for logged in user
+- New: Added new shortcode to display earned ranks for logged in user
+- New: Added new filters
+- Fix: Fixed site loading issue
+- Fix: Displayed approved/denied submissions/nominations on front-end
+- Fix: Fixed duplicate submission/nomination awarding issue
+- Fix: Fixed email notification issue
+
 #### 3.3
 - New: Set default point type as point type id parameter in badgeos_get_points_by_type()
 - New: Added post attributes for BadgeOS Rank Type posts
