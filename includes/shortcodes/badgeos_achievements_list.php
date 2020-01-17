@@ -16,15 +16,15 @@ function badgeos_register_achievements_list_shortcode() {
         'posts_per_page' =>	-1,
     ) );
 
+    $post_list = array();
     $types = array( 'all' => __( 'All', 'badgeos' ) );
     foreach( $achievement_types as $type ) {
         $types[ $type->post_name ] = $type->post_title;
-    }
 
-    $posts = get_posts();
-    $post_list = array();
-    foreach( $posts as $post ) {
-        $post_list[ $post->ID ] = $post->post_title;
+        $posts = get_posts( array( 'post_type' => $type->post_name ) );
+        foreach( $posts as $post ) {
+            $post_list[ $post->ID ] = $post->post_title;
+        }
     }
 
     badgeos_register_shortcode( array(

@@ -12,6 +12,8 @@
 // Setup our badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
+    'get-earned-achievements',
+    'get-earned-ranks',
 	'get-feedback',
 	'get-achievements-select2',
 	'get-achievement-types',
@@ -25,6 +27,315 @@ foreach ( $badgeos_ajax_actions as $action ) {
 	add_action( 'wp_ajax_nopriv_' . $action, 'badgeos_ajax_' . str_replace( '-', '_', $action ), 1 );
 }
 
+/**
+ * AJAX Helper for returning earned ranks
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function badgeos_ajax_get_earned_ranks() {
+    global $user_ID, $blog_id, $wpdb;
+
+    // Setup our AJAX query vars
+    $type       = isset( $_REQUEST['rank_type'] )  ? $_REQUEST['rank_type']  : false;
+    $limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
+    $offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
+    $count      = isset( $_REQUEST['count'] )      ? $_REQUEST['count']      : false;
+    $search     = isset( $_REQUEST['search'] )     ? $_REQUEST['search']     : false;
+    $user_id    = isset( $_REQUEST['user_id'] )    ? $_REQUEST['user_id']    : get_current_user_id();
+    $orderby    = isset( $_REQUEST['orderby'] )    ? $_REQUEST['orderby']    : 'rank_id';
+    $order      = isset( $_REQUEST['order'] )      ? $_REQUEST['order']      : 'ASC';
+
+    // Convert $type to properly support multiple rank types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( 'all' == $type ) {
+        $type = badgeos_get_rank_types_slugs();
+        // Drop steps from our list of "all" achievements
+        $step_key = array_search( trim( $badgeos_settings['ranks_step_post_type'] ), $type );
+        if ( $step_key )
+            unset( $type[$step_key] );
+    } else {
+        $type = explode( ',', $type );
+    }
+
+    // Get the current user if one wasn't specified
+    if( ! $user_id )
+        $user_id = get_current_user_id();
+
+    // Initialize our output and counters
+    $ranks = '';
+    $ranks_count = 0;
+
+    // If we're polling all sites, grab an array of site IDs
+    if( $wpms && $wpms != 'false' )
+        $sites = badgeos_get_network_site_ids();
+    else
+        $sites = array( $blog_id );
+
+    // Loop through each site (default is current site only)
+    $query_count = 0;
+    foreach( $sites as $site_blog_id ) {
+
+        $qry = "SELECT * FROM ".$wpdb->prefix."badgeos_ranks WHERE user_id='".$user_id."'";
+        $total_qry = "SELECT count(ID) as total FROM ".$wpdb->prefix."badgeos_ranks WHERE user_id='".$user_id."'";
+
+        if( is_array( $type ) && count( $type ) > 0 ) {
+            $qry .= " and rank_type in ('".implode( "', '", $type )."') ";
+            $total_qry .= " and rank_type in ('".implode( "', '", $type )."') ";
+        }
+
+        if ( $search ) {
+            $qry .= " and rank_title like '%".$search."%' ";
+            $total_qry .= " and rank_title like '%".$search."%' ";
+        }
+
+        $query_count += intval( $wpdb->get_var( $total_qry ) );
+        if( !empty( $orderby ) ) {
+            if( !empty( $order ) ) {
+                $qry .= " ORDER BY ".$orderby." ".$order;
+            } else {
+                $qry .= " ORDER BY ".$orderby." ASC";
+            }
+        }
+
+        $qry .= " limit ".$offset.", ".$limit;
+        $user_ranks = $wpdb->get_results( $qry );
+
+        // Loop ranks
+        foreach ( $user_ranks as $rank ) {
+
+            $output = '<div id="badgeos-achievements-list-item-' . $rank->rank_id . '" class="badgeos-achievements-list-item">';
+
+            // Achievement Image
+            $output .= '<div class="badgeos-item-image">';
+            $output .= '<a href="' . get_permalink( $rank->rank_id ) . '">' . badgeos_get_rank_image( $rank->rank_id ) . '</a>';
+            $output .= '</div><!-- .badgeos-item-image -->';
+
+
+            // Achievement Content
+            $output .= '<div class="badgeos-item-detail">';
+
+            $title = get_the_title( $rank->ID );
+            if( empty( $title ) )
+                $title = $rank->rank_title;
+
+            // Achievement Title
+            $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $rank->rank_id ).'">'.$title.'</a></h2>';
+
+            // Achievement Short Description
+            $post = get_post( $rank->rank_id );
+            if( $post ) {
+                $output .= '<div class="badgeos-item-excerpt">';
+                $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
+                $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+                $output .= '</div><!-- .badgeos-item-excerpt -->';
+            }
+
+            $output .= '</div><!-- .badgeos-item-description -->';
+            $output .= '</div><!-- .badgeos-achievements-list-item -->';
+
+            $ranks .= $output;
+            $ranks_count++;
+        }
+
+        // Display a message for no results
+        if ( empty( $ranks ) ) {
+            $current = current( $type );
+            // If we have exactly one achivement type, get its plural name, otherwise use "ranks"
+            $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
+
+            // Setup our completion message
+            $ranks .= '<div class="badgeos-no-results">';
+            if ( 'completed' == $filter ) {
+                $ranks .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+            }else{
+                $ranks .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+            }
+            $ranks .= '</div><!-- .badgeos-no-results -->';
+        }
+
+        if ( $blog_id != $site_blog_id ) {
+            // Come back to current blog
+            restore_current_blog();
+        }
+
+    }
+
+    // Send back our successful response
+    wp_send_json_success( array(
+        'message'     => $ranks,
+        'offset'      => $offset + $limit,
+        'query_count' => $query_count,
+        'badge_count' => $ranks_count,
+        'type'        => $earned_ids,
+        'attr'        => $_REQUEST,
+        'qry'		  =>$qry
+    ) );
+
+}
+
+/**
+ * AJAX Helper for returning earned achievements
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function badgeos_ajax_get_earned_achievements() {
+    global $user_ID, $blog_id, $wpdb;
+
+    // Setup our AJAX query vars
+    $type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
+    $limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
+    $offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
+    $count      = isset( $_REQUEST['count'] )      ? $_REQUEST['count']      : false;
+    $search     = isset( $_REQUEST['search'] )     ? $_REQUEST['search']     : false;
+    $user_id    = isset( $_REQUEST['user_id'] )    ? $_REQUEST['user_id']    : get_current_user_id();
+    $orderby    = isset( $_REQUEST['orderby'] )    ? $_REQUEST['orderby']    : 'ID';
+    $order      = isset( $_REQUEST['order'] )      ? $_REQUEST['order']      : 'ASC';
+    $wpms       = isset( $_REQUEST['wpms'] )       ? $_REQUEST['wpms']       : false;
+    $include    = isset( $_REQUEST['include'] )    ? $_REQUEST['include']    : array();
+    $exclude    = isset( $_REQUEST['exclude'] )    ? $_REQUEST['exclude']    : array();
+
+    // Convert $type to properly support multiple achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( 'all' == $type ) {
+        $type = badgeos_get_achievement_types_slugs();
+        // Drop steps from our list of "all" achievements
+        $step_key = array_search( trim( $badgeos_settings['achievement_step_post_type'] ), $type );
+        if ( $step_key )
+            unset( $type[$step_key] );
+    } else {
+        $type = explode( ',', $type );
+    }
+
+    // Get the current user if one wasn't specified
+    if( ! $user_id )
+        $user_id = $user_ID;
+
+    // Initialize our output and counters
+    $achievements = '';
+    $achievement_count = 0;
+
+    // If we're polling all sites, grab an array of site IDs
+    if( $wpms && $wpms != 'false' )
+        $sites = badgeos_get_network_site_ids();
+    else
+        $sites = array( $blog_id );
+
+    // Loop through each site (default is current site only)
+    $query_count = 0;
+    foreach( $sites as $site_blog_id ) {
+
+        $qry = "SELECT * FROM ".$wpdb->prefix."badgeos_achievements WHERE site_id='".$site_blog_id."'";
+        $total_qry = "SELECT count(ID) as total FROM ".$wpdb->prefix."badgeos_achievements WHERE site_id='".$site_blog_id."'";
+
+        if( is_array( $type ) && count( $type ) > 0 ) {
+            $qry .= " and post_type in ('".implode( "', '", $type )."') ";
+            $total_qry .= " and post_type in ('".implode( "', '", $type )."') ";
+        }
+
+        $qry .= " and user_id = '".get_current_user_id()."' ";
+        $total_qry .= " and user_id = '".get_current_user_id()."' ";
+
+        if ( $search ) {
+            $qry .= " and achievement_title like '%".$search."%' ";
+            $total_qry .= " and achievement_title like '%".$search."%' ";
+        }
+
+        // Build $include array
+        if ( !empty( $include ) ) {
+            $qry .= " and ID not in (".$exclude.") ";
+            $total_qry .= " and ID not in (".$exclude.") ";
+        }
+
+        // Build $exclude array
+        if ( !empty( $exclude ) ) {
+            $qry .= " and ach.ID not in (".$exclude.") ";
+            $total_qry .= " and ach.ID not in (".$exclude.") ";
+        }
+        $query_count += intval( $wpdb->get_var( $total_qry ) );
+        if( !empty( $orderby ) ) {
+            if( !empty( $order ) ) {
+                $qry .= " ORDER BY ".$orderby." ".$order;
+            } else {
+                $qry .= " ORDER BY ".$orderby." ASC";
+            }
+        }
+
+        $qry .= " limit ".$offset.", ".$limit;
+        $user_achievements = $wpdb->get_results( $qry );
+
+        // Loop Achievements
+        //$query_count += count( $user_achievements );
+        foreach ( $user_achievements as $achievement ) {
+            $output = '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item">';
+
+            // Achievement Image
+            $output .= '<div class="badgeos-item-image">';
+            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+            $output .= '</div><!-- .badgeos-item-image -->';
+
+
+            // Achievement Content
+            $output .= '<div class="badgeos-item-detail">';
+
+            // Achievement Title
+            $title = get_the_title( $achievement->ID );
+            if( empty( $title ) )
+                $title = $achievement->achievement_title;
+
+            $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $achievement->ID ).'">'.$title.'</a></h2>';
+
+            // Achievement Short Description
+            $post = get_post( $achievement->ID );
+            if( $post ) {
+                $output .= '<div class="badgeos-item-excerpt">';
+                $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
+                $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+                $output .= '</div>';
+            }
+
+            $output .= '</div>';
+            $output .= '</div>';
+
+            $achievements .= $output;
+            $achievement_count++;
+        }
+
+        // Display a message for no results
+        if ( empty( $achievements ) ) {
+            $current = current( $type );
+            // If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+            $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
+
+            // Setup our completion message
+            $achievements .= '<div class="badgeos-no-results">';
+            if ( 'completed' == $filter ) {
+                $achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+            }else{
+                $achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
+            }
+            $achievements .= '</div><!-- .badgeos-no-results -->';
+        }
+
+        if ( $blog_id != $site_blog_id ) {
+            // Come back to current blog
+            restore_current_blog();
+        }
+
+    }
+
+    // Send back our successful response
+    wp_send_json_success( array(
+        'message'     => $achievements,
+        'offset'      => $offset + $limit,
+        'query_count' => $query_count,
+        'badge_count' => $achievement_count,
+        'type'        => $earned_ids,
+        'attr'        => $_REQUEST,
+        'qry'		  =>$qry
+    ) );
+}
 
 /**
  * AJAX Helper for returning achievements

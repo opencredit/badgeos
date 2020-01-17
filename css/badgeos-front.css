@@ -60,6 +60,10 @@
 	width: 80%;
 	float: right;
 }
+.badgeos-achievements-list-item .badgeos-item-detail {
+	width: 80%;
+	float: right;
+}
 .badgeos-item-points {
 	font-weight: bold;
 }
@@ -264,5 +268,35 @@ ul.badgeos-achievement-earners-list li {
     border-radius: 5px;
     padding: 3px 10px;
     text-align: center;
+}
 
+.badgeos_earned_point_main{
+	border: 1px solid #e8e8e8;
+	position: relative;
+}
+
+.badgeos_earned_point_main .badgeos_earned_point_title {
+	margin: 0;
+	color: black;
+	font-size: 1.3em;
+}
+.badgeos_earned_point_main .badgeos_earned_point_detail {
+	margin: 0;
+	font-size: 12px;
+}
+.badgeos_earned_point_main:nth-child( odd ) {
+	width: 30%;
+	margin: 20px 2%;
+	float: left;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
+}
+.badgeos_earned_point_main:nth-child( even ) {
+	width: 40%;
+	margin: 20px 2%;
+	float: right;
+	padding: 1%;
+	box-shadow: 1px 1px 3px 2px #ccc;
+	background-color: #fff;
 }
