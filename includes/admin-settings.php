@@ -41,6 +41,7 @@ add_filter( 'option_page_capability_credly_settings_group', 'badgeos_edit_settin
  */
 function badgeos_settings_validate( $input = '' ) {
 
+    global $wpdb;
 	// Fetch existing settings
 	$original_settings = get_option( 'badgeos_settings' );
 
@@ -62,9 +63,113 @@ function badgeos_settings_validate( $input = '' ) {
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
 
-	// Return sanitized inputs
+    if( ! empty( $input['achievement_step_post_type'] ) && trim( $original_settings['achievement_step_post_type'] ) != trim( $input['achievement_step_post_type'] )  ) {
+
+        $strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $input['achievement_step_post_type'] )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['achievement_step_post_type'] )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['achievement_step_post_type'], trim( $original_settings['achievement_step_post_type'] ), 'step' );
+    } else {
+        $input['achievement_step_post_type'] = trim( $original_settings['achievement_step_post_type'] );
+    }
+
+    if( ! empty( $input['achievement_main_post_type'] ) && trim( $original_settings['achievement_main_post_type'] ) != trim( $input['achievement_main_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $input['achievement_main_post_type'] )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['achievement_main_post_type'] )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
+        $wpdb->query( $strQuery );
+        badgeos_settings_update_p2p( $input['achievement_main_post_type'], trim( $original_settings['achievement_main_post_type'] ), 'main' );
+    } else {
+        $input['achievement_main_post_type'] = trim( $original_settings['achievement_main_post_type'] );
+    }
+
+    if( ! empty( $input['points_main_post_type'] ) && trim( $original_settings['points_main_post_type'] ) != trim( $input['points_main_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_main_post_type'] )."' where post_type='".trim( $original_settings['points_main_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['points_main_post_type'], trim( $original_settings['points_main_post_type'] ), 'main' );
+    } else {
+        $input['points_main_post_type'] = trim( $original_settings['points_main_post_type'] );
+    }
+    if( ! empty( $input['points_award_post_type'] ) && trim( $original_settings['points_award_post_type'] ) != trim( $input['points_award_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_award_post_type'] )."' where post_type='".trim( $original_settings['points_award_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['points_award_post_type'], trim( $original_settings['points_award_post_type'] ), 'step' );
+    } else {
+        $input['points_award_post_type'] = trim( $original_settings['points_award_post_type'] );
+    }
+    if( ! empty( $input['points_deduct_post_type'] ) && trim( $original_settings['points_deduct_post_type'] ) != trim( $input['points_deduct_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_deduct_post_type'] )."' where post_type='".trim( $original_settings['points_deduct_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['points_deduct_post_type'], trim( $original_settings['points_deduct_post_type'] ), 'step' );
+    } else {
+        $input['points_deduct_post_type'] = trim( $original_settings['points_deduct_post_type'] );
+    }
+
+    if( ! empty( $input['ranks_main_post_type'] ) && trim( $original_settings['ranks_main_post_type'] ) != trim( $input['ranks_main_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $input['ranks_main_post_type'] )."' where rank_type='".trim( $original_settings['ranks_main_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['ranks_main_post_type'] )."' where post_type='".trim( $original_settings['ranks_main_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['ranks_main_post_type'], trim( $original_settings['ranks_main_post_type'] ), 'main' );
+    } else {
+        $input['ranks_main_post_type'] = trim( $original_settings['ranks_main_post_type'] );
+    }
+
+    if( ! empty( $input['ranks_step_post_type'] ) && trim( $original_settings['ranks_step_post_type'] ) != trim( $input['ranks_step_post_type'] )  ) {
+        $strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $input['ranks_step_post_type'] )."' where rank_type='".trim( $original_settings['ranks_step_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['ranks_step_post_type'] )."' where post_type='".trim( $original_settings['ranks_step_post_type'] )."'";
+        $wpdb->query( $strQuery );
+
+        badgeos_settings_update_p2p( $input['ranks_step_post_type'], trim( $original_settings['ranks_step_post_type'] ), 'step' );
+    } else {
+        $input['ranks_step_post_type'] = trim( $original_settings['ranks_step_post_type'] );
+    }
+
+    // Return sanitized inputs
 	return $input;
 
+}
+
+/**
+ * Credly API Settings validation
+ * @since  1.0.0
+ * @param  array $options Form inputs data
+ * @return array          Sanitized form input data
+ */
+function badgeos_settings_update_p2p( $new_post_type, $old_post_type, $type ) {
+    global $wpdb;
+
+    if( $type == 'main' ) {
+        $strQuery = "select * from ".$wpdb->prefix . "p2p where p2p_type like '%-to-".trim( $old_post_type )."'";
+    } elseif( $type == 'step' ) {
+        $strQuery = "select * from ".$wpdb->prefix . "p2p where p2p_type like '".trim( $old_post_type )."-to-%'";
+    }
+
+    $records = $wpdb->get_results( $strQuery );
+    foreach( $records as $rec ) {
+        $new_value = '';
+        if( $type == 'main' ) {
+            $new_value = str_replace( "-to-".trim( $old_post_type ), "-to-".trim( $new_post_type ), $rec->p2p_type );
+        } elseif( $type == 'step' ) {
+            $new_value = str_replace( trim( $old_post_type )."-to-", trim( $new_post_type )."-to-", $rec->p2p_type );
+        }
+        if( !empty( $new_value ) ) {
+            $strQuery = "update ".$wpdb->prefix . "p2p set p2p_type='".trim( $new_value )."' where p2p_id='".trim( $rec->p2p_id )."'";
+
+            $wpdb->query( $strQuery );
+        }
+    }
 }
 
 /**
