@@ -1471,6 +1471,8 @@ function badgeos_get_nomination_form( $args = array() ) {
  */
 function badgeos_get_submission_form( $args = array() ) {
 	global $post, $user_ID;
+	
+	$achievement_id = isset( $args["achievement_id"] ) ? absint( $args["achievement_id"] ) : "";
 
     // Setup our defaults
 	$defaults = array(
@@ -1480,10 +1482,10 @@ function badgeos_get_submission_form( $args = array() ) {
 	);
 
 	// Available filter for changing the language
-	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults , $achievement_id , $user_ID );
 
 	// Patch in our achievement and user IDs
-	$defaults['achievement_id'] = isset( $args["achievement_id"] ) ? absint( $args["achievement_id"] ) : "";
+	$defaults['achievement_id'] = $achievement_id;
 	$defaults['user_id']        = $user_ID;
 
 	// Merge our defaults with the passed args
