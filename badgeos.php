@@ -376,7 +376,7 @@ class BadgeOS {
 	 * Register custom WordPress image size(s)
 	 */
 	function register_image_sizes() {
-		add_image_size( 'badgeos-achievement', 100, 100 );
+        add_image_size( 'boswp-badgeos-achievement', 100, 100 );
 	}
 
 	/**

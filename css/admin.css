@@ -10,6 +10,12 @@ li.step-row {
 	border: 1px solid #DDD;
 	padding: 5px 10px;
 }
+.badgeos-user-earned-ranks-admin-block, .badgeos-user-earned-achievements-admin-block{
+	color: #444;
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+	font-size: 13px;
+	line-height: 1.4em;
+}
 li.step-row .step-handle {
 	display: block;
 	background:url( '../images/ui_handle.png' );
