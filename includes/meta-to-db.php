@@ -3,9 +3,6 @@
 function badgeos_migrate_data_from_meta_to_db_callback() {
 
     $action = ( isset( $_POST['action'] ) ? $_POST['action'] : '' );
-    // if( $action !== 'badgeos_migrate_data_from_meta_to_db' &&  $action !== 'badgeos_migrate_data_from_meta_to_db_notice' ) {
-    //     exit;
-    // }
 
     if( $action == 'badgeos_migrate_data_from_meta_to_db' ) {
         $users = get_users( 'fields=ids' );
@@ -34,7 +31,7 @@ add_action( 'cron_migrate_data_from_meta_to_db', 'cron_migrate_data_from_meta_to
 $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db_updated', 'No' );
     if( $is_badgeos_all_achievement_db_updated!='Yes' ) {
         add_action( 'wp_ajax_badgeos_migrate_data_from_meta_to_db_notice', 'badgeos_migrate_data_from_meta_to_db_callback' );
-        add_action( 'admin_notices', 'badgeos_update_achievement_from_meta_to_db' );
+//        add_action( 'admin_notices', 'badgeos_update_achievement_from_meta_to_db' );
     }
 
     function badgeos_update_achievement_from_meta_to_db() {
@@ -120,7 +117,7 @@ $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db
             $updated_count += 1;
         }
 
-        if( count( $users ) == $updated_count && $updated_count > 0 ) {
+        if( count( $users ) == $updated_count) {
             update_option( 'badgeos_all_achievement_db_updated', 'Yes' );
         }
 

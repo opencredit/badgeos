@@ -95,6 +95,36 @@ function badgeos_user_earned_achievements_shortcode() {
                 ),
                 'default'     => 'false',
             ),
+            'show_title' => array(
+                'name'        => __( 'Show Rank Title', 'badgeos' ),
+                'description' => __( 'Display Rank Title.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_thumb' => array(
+                'name'        => __( 'Show Thumbnail', 'badgeos' ),
+                'description' => __( 'Display Thumbnail Image.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_description' => array(
+                'name'        => __( 'Show Description', 'badgeos' ),
+                'description' => __( 'Display Short Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
         ),
     ) );
 }
@@ -134,7 +164,10 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'orderby'     => 'menu_order',
         'order'       => 'ASC',
         'include'     => array(),
-        'exclude'     => array()
+        'exclude'     => array(),
+        'show_title'  => 'true',
+        'show_thumb'  => 'true',
+        'show_description'  => 'true'
     ), $atts, 'badgeos_user_earned_achievements' ) );
 
     wp_enqueue_style( 'badgeos-front' );
@@ -150,7 +183,10 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'orderby'     => $orderby,
         'order'       => $order,
         'include'     => $include,
-        'exclude'     => $exclude
+        'exclude'     => $exclude,
+        'show_title'  => $show_title,
+        'show_thumb'  => $show_thumb,
+        'show_description'  => $show_description,
     );
     // wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -204,7 +240,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         $exclude = implode(',', $exclude);
     }
 
-    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'">';
+    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'">';
     $maindiv .= $badges;
     $maindiv .= '</div>';
 
