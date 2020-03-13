@@ -49,8 +49,6 @@
 	padding-right: 4%;
 	display: block;
 	float: left;
-	/*margin: 0 10px 10px 0;*/
-	opacity: .4;
 }
 .badgeos-achievements-list-item .badgeos-item-image img {
 	width: 100%;
@@ -328,5 +326,26 @@ ul.badgeos-achievement-earners-list li {
 	float: right;
 }
 
-#badgeos-earned-achievements-container .list li, #badgeos-achievements-container .list li, #badgeos-earned-ranks-container .list li  { width: 100%; border-bottom: 1px dotted #CCC; margin-bottom: 10px; padding-bottom: 10px; }
-#badgeos-earned-achievements-container .grid li, #badgeos-achievements-container .grid li, #badgeos-earned-ranks-container .grid li  { float: left; width: 50%; border-right: 1px dotted #CCC; border-bottom: 1px dotted #CCC; padding: 20px; }
+#badgeos-earned-achievements-container .list > li,
+#badgeos-achievements-container .list > li,
+#badgeos-earned-ranks-container .list > li {
+	width: 100%;
+	border-bottom: 1px dotted #CCC;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+#badgeos-earned-achievements-container .grid > li,
+#badgeos-achievements-container .grid > li,
+#badgeos-earned-ranks-container .grid > li  {
+	float: left;
+	width: 50%;
+	border-right: 1px dotted #CCC;
+	border-bottom: 1px dotted #CCC;
+	padding: 20px;
+}
+
+#badgeos-earned-achievements-container .grid > li:nth-child(odd),
+#badgeos-achievements-container .grid > li:nth-child(odd),
+#badgeos-earned-ranks-container .grid > li:nth-child(odd)  {
+	clear: both; 
+}

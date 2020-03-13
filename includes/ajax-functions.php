@@ -124,10 +124,9 @@ function badgeos_ajax_get_earned_ranks() {
             // Achievement Content
             $output .= '<div class="badgeos-item-detail">';
 
-            $title = get_the_title( $rank->ID );
             if( $show_title == 'true' ) {
-                $title = get_the_title($rank->ID);
-                $title = $rank->rank_title;
+	       $title = get_the_title($rank->ID);                
+	       $title = $rank->rank_title;
                 // Achievement Title
                 $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $rank->rank_id ).'">'.$title.'</a></h2>';
             }
@@ -144,6 +143,7 @@ function badgeos_ajax_get_earned_ranks() {
             }
 
             $output .= '</div><!-- .badgeos-item-description -->';
+            $output .= apply_filters( 'badgeos_after_earned_ranks', '', $rank );
             $output .= '</div></li><!-- .badgeos-achievements-list-item -->';
 
             $ranks .= $output;
@@ -266,14 +266,14 @@ function badgeos_ajax_get_earned_achievements() {
 
         // Build $include array
         if ( !empty( $include ) ) {
-            $qry .= " and ID not in (".$exclude.") ";
-            $total_qry .= " and ID not in (".$exclude.") ";
+            $qry .= " and ID in (".$include.") ";
+            $total_qry .= " and ID in (".$include.") ";
         }
 
         // Build $exclude array
         if ( !empty( $exclude ) ) {
-            $qry .= " and ach.ID not in (".$exclude.") ";
-            $total_qry .= " and ach.ID not in (".$exclude.") ";
+            $qry .= " and ID not in (".$exclude.") ";
+            $total_qry .= " and ID not in (".$exclude.") ";
         }
         $query_count += intval( $wpdb->get_var( $total_qry ) );
         if( !empty( $orderby ) ) {
@@ -323,6 +323,7 @@ function badgeos_ajax_get_earned_achievements() {
             }
 
             $output .= '</div>';
+            $output .= apply_filters( 'badgeos_after_earned_achievement', '', $achievement );
             $output .= '</div></li>';
 
             $achievements .= $output;
@@ -364,6 +365,7 @@ function badgeos_ajax_get_earned_achievements() {
         'badge_count' => $achievement_count,
         'type'        => $earned_ids,
         'attr'        => $_REQUEST
+	
     ) );
 }
 
@@ -413,7 +415,7 @@ function badgeos_ajax_get_achievements() {
 		$user_id = $user_ID;
 
 	// Build $include array
-	if ( !is_array( $include ) && !empty($include) ) {
+    if ( !is_array( $include ) && !empty( $include ) ) {
 		$include = explode( ',', $include );
 	}
 
@@ -464,7 +466,11 @@ function badgeos_ajax_get_achievements() {
 			'post__not_in'   => $hidden
 		);
 
-		// Filter - query completed or non completed achievements
+        if( ! is_array( $args[ 'post__not_in' ] ) ) {
+            $args[ 'post__not_in' ] = [];
+        }
+
+        // Filter - query completed or non completed achievements
 		if ( $filter == 'completed' ) {
 			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
 		}elseif( $filter == 'not-completed' ) {
@@ -476,11 +482,15 @@ function badgeos_ajax_get_achievements() {
 			$args[ 'meta_value' ] = $meta_value;
 		}
 
-		// Include certain achievements
-		if ( !empty( $include ) ) {
-			$args[ 'post__not_in' ] = array_diff( $args[ 'post__not_in' ], $include );
-			$args[ 'post__in' ] = array_merge( array( 0 ), array_diff( $include, $args[ 'post__in' ] ) );
-		}
+        // Include certain achievements
+        if ( ! empty( $include ) ) {
+            $args[ 'post__not_in' ] = array_diff( $args[ 'post__not_in' ], $include );
+            if( ! is_array( $args[ 'post__in' ] ) ) {
+                $args[ 'post__in' ] = [];
+            }
+
+            $args[ 'post__in' ] = array_merge( array( 0 ), array_diff( $include, $args[ 'post__in' ] ) );
+        }
 
 		// Exclude certain achievements
 		if ( !empty( $exclude ) ) {

@@ -14,6 +14,7 @@ function badgeos_register_achievements_list_shortcode() {
     $achievement_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
+        'post_status'=> 'publish'
     ) );
 
     $post_list = array();
@@ -21,7 +22,7 @@ function badgeos_register_achievements_list_shortcode() {
     foreach( $achievement_types as $type ) {
         $types[ $type->post_name ] = $type->post_title;
 
-        $posts = get_posts( array( 'post_type' => $type->post_name ) );
+        $posts = get_posts( array( 'post_type' => $type->post_name, 'posts_per_page' =>	-1 ) );
         foreach( $posts as $post ) {
             $post_list[ $post->ID ] = $post->post_title;
         }
@@ -211,30 +212,6 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
-
-	$data = array(
-		'ajax_url'    => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-		'type'        => $type,
-		'limit'       => $limit,
-		'show_filter' => $show_filter,
-		'show_search' => $show_search,
-        'show_child'  => $show_child,
-        'show_parent' => $show_parent,
-        'group_id'    => $group_id,
-		'user_id'     => $user_id,
-		'wpms'        => $wpms,
-		'orderby'     => $orderby,
-		'order'       => $order,
-		'include'     => $include,
-		'exclude'     => $exclude,
-		'meta_key'    => $meta_key,
-        'meta_value'  => $meta_value,
-        'show_title'  => $show_title,
-        'show_thumb'  => $show_thumb,
-        'show_description'  => $show_description,
-        'show_steps'  => $show_steps
-    );
-//	wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
 	// If we're dealing with multiple achievement types
 	if ( 'all' == $type ) {
