@@ -35,7 +35,6 @@ class BadgeOS_Editor_Shortcodes {
         wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
         wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
 
-        wp_enqueue_script( 'badgeos-autocomplete-multiselect', $this->directory_url . "js/jquery.autocomplete.multiselect.js", array( ), '', true );
         wp_enqueue_style( 'badgeos-juqery-ui-css', $this->directory_url . 'css/jquery-ui.css' );
         wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . 'css/autocomplete.css' );
 
