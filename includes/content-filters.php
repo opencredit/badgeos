@@ -401,6 +401,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
  * @return string               Concatenated markup
  */
 function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true' ) {
+
     global $user_ID;
 
     // If we were given an ID, get the post

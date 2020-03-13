@@ -45,6 +45,9 @@ function badgeos_ajax_get_earned_ranks() {
     $user_id    = isset( $_REQUEST['user_id'] )    ? $_REQUEST['user_id']    : get_current_user_id();
     $orderby    = isset( $_REQUEST['orderby'] )    ? $_REQUEST['orderby']    : 'rank_id';
     $order      = isset( $_REQUEST['order'] )      ? $_REQUEST['order']      : 'ASC';
+    $show_title = isset( $_REQUEST['show_title'] ) ? $_REQUEST['show_title'] : 'true';
+    $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
+    $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
 
     // Convert $type to properly support multiple rank types
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
@@ -63,7 +66,12 @@ function badgeos_ajax_get_earned_ranks() {
         $user_id = get_current_user_id();
 
     // Initialize our output and counters
-    $ranks = '';
+    if( $offset > 0 ) {
+        $ranks = '';
+    } else {
+        $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+    }
+
     $ranks_count = 0;
 
     // If we're polling all sites, grab an array of site IDs
@@ -104,39 +112,45 @@ function badgeos_ajax_get_earned_ranks() {
         // Loop ranks
         foreach ( $user_ranks as $rank ) {
 
-            $output = '<div id="badgeos-achievements-list-item-' . $rank->rank_id . '" class="badgeos-achievements-list-item">';
+            $output = '<li><div id="badgeos-achievements-list-item-' . $rank->rank_id . '" class="badgeos-achievements-list-item">';
 
             // Achievement Image
-            $output .= '<div class="badgeos-item-image">';
-            $output .= '<a href="' . get_permalink( $rank->rank_id ) . '">' . badgeos_get_rank_image( $rank->rank_id ) . '</a>';
-            $output .= '</div><!-- .badgeos-item-image -->';
-
+            if( $show_thumb == 'true' ) {
+                $output .= '<div class="badgeos-item-image">';
+                $output .= '<a href="' . get_permalink( $rank->rank_id ) . '">' . badgeos_get_rank_image( $rank->rank_id ) . '</a>';
+                $output .= '</div><!-- .badgeos-item-image -->';
+            }
 
             // Achievement Content
             $output .= '<div class="badgeos-item-detail">';
 
             $title = get_the_title( $rank->ID );
-            if( empty( $title ) )
+            if( $show_title == 'true' ) {
+                $title = get_the_title($rank->ID);
                 $title = $rank->rank_title;
-
-            // Achievement Title
-            $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $rank->rank_id ).'">'.$title.'</a></h2>';
+                // Achievement Title
+                $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $rank->rank_id ).'">'.$title.'</a></h2>';
+            }
 
             // Achievement Short Description
-            $post = get_post( $rank->rank_id );
-            if( $post ) {
-                $output .= '<div class="badgeos-item-excerpt">';
-                $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
-                $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
-                $output .= '</div><!-- .badgeos-item-excerpt -->';
+            if( $show_description == 'true' ) {
+                $post = get_post( $rank->rank_id );
+                if( $post ) {
+                    $output .= '<div class="badgeos-item-excerpt">';
+                    $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
+                    $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+                    $output .= '</div><!-- .badgeos-item-excerpt -->';
+                }
             }
 
             $output .= '</div><!-- .badgeos-item-description -->';
-            $output .= '</div><!-- .badgeos-achievements-list-item -->';
+            $output .= '</div></li><!-- .badgeos-achievements-list-item -->';
 
             $ranks .= $output;
             $ranks_count++;
         }
+
+        $ranks .= '</ul>';
 
         // Display a message for no results
         if ( empty( $ranks ) ) {
@@ -195,6 +209,10 @@ function badgeos_ajax_get_earned_achievements() {
     $include    = isset( $_REQUEST['include'] )    ? $_REQUEST['include']    : array();
     $exclude    = isset( $_REQUEST['exclude'] )    ? $_REQUEST['exclude']    : array();
 
+    $show_title = isset( $_REQUEST['show_title'] ) ? $_REQUEST['show_title'] : 'true';
+    $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
+    $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
+
     // Convert $type to properly support multiple achievement types
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     if ( 'all' == $type ) {
@@ -212,7 +230,12 @@ function badgeos_ajax_get_earned_achievements() {
         $user_id = $user_ID;
 
     // Initialize our output and counters
-    $achievements = '';
+    if( $offset > 0 ) {
+        $achievements = '';
+    } else {
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+    }
+
     $achievement_count = 0;
 
     // If we're polling all sites, grab an array of site IDs
@@ -267,38 +290,47 @@ function badgeos_ajax_get_earned_achievements() {
         // Loop Achievements
         //$query_count += count( $user_achievements );
         foreach ( $user_achievements as $achievement ) {
-            $output = '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item">';
+            $output = '<li><div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item">';
 
             // Achievement Image
-            $output .= '<div class="badgeos-item-image">';
-            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
-            $output .= '</div><!-- .badgeos-item-image -->';
-
+            if( $show_thumb=='true' ) {
+                $output .= '<div class="badgeos-item-image">';
+                $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
+                $output .= '</div><!-- .badgeos-item-image -->';
+            }
 
             // Achievement Content
             $output .= '<div class="badgeos-item-detail">';
 
             // Achievement Title
-            $title = get_the_title( $achievement->ID );
-            if( empty( $title ) )
-                $title = $achievement->achievement_title;
+            if( $show_title == 'true' ) {
+                $title = get_the_title( $achievement->ID );
+                if( empty( $title ) )
+                    $title = $achievement->achievement_title;
 
-            $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $achievement->ID ).'">'.$title.'</a></h2>';
+                $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $achievement->ID ).'">'.$title.'</a></h2>';
+            }
 
             // Achievement Short Description
-            $post = get_post( $achievement->ID );
-            if( $post ) {
-                $output .= '<div class="badgeos-item-excerpt">';
-                $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
-                $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
-                $output .= '</div>';
+            if( $show_description=='true' ) {
+                $post = get_post( $achievement->ID );
+                if( $post ) {
+                    $output .= '<div class="badgeos-item-excerpt">';
+                    $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;
+                    $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+                    $output .= '</div>';
+                }
             }
 
             $output .= '</div>';
-            $output .= '</div>';
+            $output .= '</div></li>';
 
             $achievements .= $output;
             $achievement_count++;
+        }
+
+        if( $offset == 0 ) {
+            $achievements .= '</ul>';
         }
 
         // Display a message for no results
@@ -358,9 +390,13 @@ function badgeos_ajax_get_achievements() {
 	$include    = isset( $_REQUEST['include'] )    ? $_REQUEST['include']    : array();
 	$exclude    = isset( $_REQUEST['exclude'] )    ? $_REQUEST['exclude']    : array();
 	$meta_key   = isset( $_REQUEST['meta_key'] )   ? $_REQUEST['meta_key']   : '';
-	$meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
+    $meta_value = isset( $_REQUEST['meta_value'] ) ? $_REQUEST['meta_value'] : '';
+    $show_title = isset( $_REQUEST['show_title'] ) ? $_REQUEST['show_title'] : 'true';
+    $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
+    $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
+    $show_steps = isset( $_REQUEST['show_steps'] ) ? $_REQUEST['show_steps'] : 'true';
 
-	// Convert $type to properly support multiple achievement types
+    // Convert $type to properly support multiple achievement types
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     if ( 'all' == $type ) {
 		$type = badgeos_get_achievement_types_slugs();
@@ -387,7 +423,12 @@ function badgeos_ajax_get_achievements() {
 	}
 
     // Initialize our output and counters
-    $achievements = '';
+    if( $offset > 0 ) {
+        $achievements = '';
+    } else {
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> '. __( 'List', 'badgeos' ) .'</button><button class="grid buttons"><i class="fa fa-th-large"></i> '. __( 'Grid', 'badgeos' ) .'</button></div><ul class="ls_grid_container list">';
+    }
+
     $achievement_count = 0;
     $query_count = 0;
 
@@ -455,7 +496,7 @@ function badgeos_ajax_get_achievements() {
 		$achievement_posts = new WP_Query( $args );
 		$query_count += $achievement_posts->found_posts;
 		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-			$achievements .= badgeos_render_achievement( get_the_ID() );
+            $achievements .= '<li>'.badgeos_render_achievement( get_the_ID(), $show_title, $show_thumb, $show_description, $show_steps ).'</li>';
 			$achievement_count++;
 		endwhile;
 
@@ -484,10 +525,13 @@ function badgeos_ajax_get_achievements() {
 			// Come back to current blog
 			restore_current_blog();
 		}
-
 	}
 
-	// Send back our successful response
+    if( $offset == 0 ) {
+        $achievements .= '</ul>';
+    }
+
+    // Send back our successful response
 	wp_send_json_success( array(
 		'message'     => $achievements,
 		'offset'      => $offset + $limit,

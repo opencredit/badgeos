@@ -144,7 +144,13 @@ jQuery( function( $ ) {
 				if ( response.data.message === null ) {
 					//alert("That's all folks!");
 				} else {
-					$mainobj.find( 'div#badgeos-earned-ranks-container' ).append( response.data.message );
+					var offset_val = $mainobj.find( '#badgeos_earned_ranks_offset' ).val();
+					if( parseInt( offset_val ) > 0 ) {
+						$mainobj.find( 'div#badgeos-earned-ranks-container .ls_grid_container' ).append( response.data.message );
+					} else {
+						$mainobj.find( 'div#badgeos-earned-ranks-container' ).append( response.data.message );
+					}
+
 					$mainobj.find( '#badgeos_earned_ranks_offset' ).val( response.data.offset );
 					$mainobj.find( '#badgeos_ranks_count' ).val( response.data.badge_count );
 
@@ -155,6 +161,17 @@ jQuery( function( $ ) {
 					} else {
 						$mainobj.find( '.earned_ranks_list_load_more' ).show();
 					}
+
+					$('.badgeos-arrange-buttons button').on( 'click', function() {
+						$('.badgeos-arrange-buttons button').removeClass( 'selected' );
+						$(this).addClass( 'selected' );
+						if ($(this).hasClass('grid')) {
+							$('#badgeos-earned-ranks-container ul').removeClass('list').addClass('grid');
+						}
+						else if($(this).hasClass('list')) {
+							$('#badgeos-earned-ranks-container ul').removeClass('grid').addClass('list');
+						}
+					} );
 				}
 			}
 		} );
@@ -202,7 +219,13 @@ jQuery( function( $ ) {
 				if ( response.data.message === null ) {
 					//alert("That's all folks!");
 				} else {
-					$mainobj.find( 'div#badgeos-earned-achievements-container' ).append( response.data.message );
+					var offset_val = $mainobj.find( '#badgeos_achievements_offset' ).val();
+					if( parseInt( offset_val ) > 0 ) {
+						$mainobj.find( 'div#badgeos-earned-achievements-container .ls_grid_container' ).append( response.data.message );
+					} else {
+						$mainobj.find( 'div#badgeos-earned-achievements-container' ).append( response.data.message );
+					}
+
 					$mainobj.find( '#badgeos_achievements_offset' ).val( response.data.offset );
 					$mainobj.find( '#badgeos_achievements_count' ).val( response.data.badge_count );
 
@@ -214,17 +237,17 @@ jQuery( function( $ ) {
 						$mainobj.find( '.earned_achievements_list_load_more' ).show();
 					}
 				}
-                $('.badgeos-arrange-buttons button').on( 'click', function() {
-                    $('.badgeos-arrange-buttons button').removeClass( 'selected' );
-                    $(this).addClass( 'selected' );
-                    if ($(this).hasClass('grid')) {
-                        $('#badgeos-achievements-container ul').removeClass('list').addClass('grid');
-                    }
-                    else if($(this).hasClass('list')) {
-                        $('#badgeos-achievements-container ul').removeClass('grid').addClass('list');
-                    }
-                } );
-            }
+				$('.badgeos-arrange-buttons button').on( 'click', function() {
+					$('.badgeos-arrange-buttons button').removeClass( 'selected' );
+					$(this).addClass( 'selected' );
+					if ($(this).hasClass('grid')) {
+						$('#badgeos-earned-achievements-container ul').removeClass('list').addClass('grid');
+					}
+					else if($(this).hasClass('list')) {
+						$('#badgeos-earned-achievements-container ul').removeClass('grid').addClass('list');
+					}
+				} );
+			}
 		} );
 	}
 
@@ -285,16 +308,16 @@ jQuery( function( $ ) {
                 if ( response.data.message === null ) {
                     //alert("That's all folks!");
                 } else {
-                    var offset_val = $mainobj.find( '#badgeos_achievements_offset' ).val();
-                    if( parseInt( offset_val ) > 0 ) {
-                        $mainobj.find( 'div#badgeos-achievements-container .ls_grid_container' ).append( response.data.message );
-                    }
-                    else {
-                        $mainobj.find( 'div#badgeos-achievements-container' ).append( response.data.message );
-                    }
+					var offset_val = $mainobj.find( '#badgeos_achievements_offset' ).val();
+					if( parseInt( offset_val ) > 0 ) {
+						$mainobj.find( 'div#badgeos-achievements-container .ls_grid_container' ).append( response.data.message );
+					} else {
+						$mainobj.find( 'div#badgeos-achievements-container' ).append( response.data.message );
+					}
 
-                    $mainobj.find( '#badgeos_achievements_offset' ).val( response.data.offset );
-                    $mainobj.find( '#badgeos_achievements_count' ).val( response.data.badge_count );
+					$mainobj.find( '#badgeos_achievements_offset' ).val( response.data.offset );
+
+					$mainobj.find( '#badgeos_achievements_count' ).val( response.data.badge_count );
 
                     credlyize();
                     //hide/show load more button
@@ -304,8 +327,19 @@ jQuery( function( $ ) {
                     } else {
                         $mainobj.find( '.achievements_list_load_more' ).show();
                     }
-                }
-            }
+				}
+
+				$('.badgeos-arrange-buttons button').on( 'click', function() {
+					$('.badgeos-arrange-buttons button').removeClass( 'selected' );
+					$(this).addClass( 'selected' );
+					if ($(this).hasClass('grid')) {
+						$('#badgeos-achievements-container ul').removeClass('list').addClass('grid');
+					}
+					else if($(this).hasClass('list')) {
+						$('#badgeos-achievements-container ul').removeClass('grid').addClass('list');
+					}
+				} );
+			}
         } );
     }
 
@@ -426,7 +460,7 @@ jQuery( function( $ ) {
 
 	// Listen for users clicking the "Load More" button
     $( '.achievements_list_load_more' ).click( function() {
-        var $loadmoreparent = $( this ).parent();
+		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_achievement_main_container"]').eq(0);
         $loadmoreparent.find( '.badgeos-spinner' ).show();
         show_list_html($loadmoreparent);
 
@@ -434,7 +468,7 @@ jQuery( function( $ ) {
 
 	// Listen for users clicking the "Load More" button
 	$( '.earned_achievements_list_load_more' ).click( function() {
-		var $loadmoreparent = $( this ).parent();
+		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_rank_main_container"]').eq(0);
 		$loadmoreparent.find( '.badgeos-earned-spinner' ).show();
 		show_earned_achievement_list_html($loadmoreparent);
 
