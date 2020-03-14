@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
 Tested up to: 5.3.2
-Stable tag: 3.4
+Stable tag: 3.5
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -244,6 +244,16 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.5 =
+* New: Added support for Gutenburg
+* New: Added option to display earned points/achievement/ranks with list/grid view
+* New: Added option to disable credly email
+* New: Added option to display titles from earned achievement widgets
+* New: Added new filters
+* Fix: Fixed Woocommerce and screen options CSS conflict
+* Fix: Fixed multiselect script conflict
+* Fix: UI Tweaks
 
 = 3.4 =
 * New: Added option to update achievement post type and steps slugs
