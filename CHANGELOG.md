@@ -1,5 +1,15 @@
 ## Changelog
 
+#### 3.5
+- New: Added support for Gutenburg
+- New: Added option to display earned points/achievement/ranks with list/grid view
+- New: Added option to disable credly email
+- New: Added option to display titles from earned achievement widgets
+- New: Added new filters
+- Fix: Fixed Woocommerce and screen options CSS conflict
+- Fix: Fixed multiselect script conflict
+- Fix: UI Tweaks
+
 #### 3.4
 - New: Added option to update achievement post type and steps slugs
 - New: Added option to approve/deny nominations/submissions in bulk

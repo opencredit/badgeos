@@ -338,7 +338,7 @@ ul.badgeos-achievement-earners-list li {
 #badgeos-achievements-container .grid > li,
 #badgeos-earned-ranks-container .grid > li  {
 	float: left;
-	width: 50%;
+	width: 45%;
 	border-right: 1px dotted #CCC;
 	border-bottom: 1px dotted #CCC;
 	padding: 20px;
@@ -347,5 +347,5 @@ ul.badgeos-achievement-earners-list li {
 #badgeos-earned-achievements-container .grid > li:nth-child(odd),
 #badgeos-achievements-container .grid > li:nth-child(odd),
 #badgeos-earned-ranks-container .grid > li:nth-child(odd)  {
-	clear: both; 
+	clear: both;
 }
