@@ -64,7 +64,7 @@ function badgeos_user_earned_achievements_shortcode() {
                     'date_earned'  		=> __( 'Award Date', 'badgeos' ),
                     'rand()'       		=> __( 'Random', 'badgeos' ),
                 ),
-                'default'     => 'menu_order',
+                'default'     => 'ID',
             ),
             'order' => array(
                 'name'        => __( 'Order', 'badgeos' ),
@@ -96,8 +96,9 @@ function badgeos_user_earned_achievements_shortcode() {
                 'default'     => 'false',
             ),
             'show_title' => array(
-                'name'        => __( 'Show Rank Title', 'badgeos' ),
-                'description' => __( 'Display Rank Title.', 'badgeos' ),
+                'name'        => __( 'Show Title', 'badgeos' ),
+                'description' => __( 'Display Achievement Title.', 'badgeos' ),
+
                 'type'        => 'select',
                 'values'      => array(
                     'true'  => __( 'True', 'badgeos' ),
@@ -161,7 +162,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'show_search' => true,
         'user_id'     => get_current_user_id(),
         'wpms'        => false,
-        'orderby'     => 'menu_order',
+        'orderby'     => 'ID',
         'order'       => 'ASC',
         'include'     => array(),
         'exclude'     => array(),

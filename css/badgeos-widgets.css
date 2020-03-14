@@ -9,7 +9,6 @@
 }
 .widget-achievements-listing li.has-thumb, .widget-ranks-listing li.has-thumb {
     width: 100%;
-    float: left;
     display: table;
 }
 .widget-achievements-listing .badgeos-item-thumb, .widget-ranks-listing .badgeos-item-thumb  {

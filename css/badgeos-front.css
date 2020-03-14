@@ -300,3 +300,33 @@ ul.badgeos-achievement-earners-list li {
 	box-shadow: 1px 1px 3px 2px #ccc;
 	background-color: #fff;
 }
+#badgeos-earned-achievements-container,
+#badgeos-earned-ranks-container,
+#badgeos-achievements-container {
+	overflow: hidden;
+}
+#badgeos-earned-achievements-container .badgeos-arrange-buttons,
+#badgeos-earned-ranks-container .badgeos-arrange-buttons,
+#badgeos-achievements-container .badgeos-arrange-buttons {
+	overflow: hidden;
+	margin-bottom: 50px;
+}
+#badgeos-earned-achievements-container ul, #badgeos-achievements-container ul, #badgeos-earned-ranks-container ul { list-style: none; }
+#badgeos-earned-achievements-container .buttons, #badgeos-achievements-container .buttons, #badgeos-earned-ranks-container .buttons  {
+	/* margin-bottom: 20px;  */
+	border: none;
+	outline: none;
+	padding: 12px 16px;
+	background-color: #f1f1f1;
+	cursor: pointer;
+	color: #999;
+	float: right;
+}
+#badgeos-earned-achievements-container .selected, #badgeos-achievements-container .selected, #badgeos-earned-ranks-container .selected  {
+	background-color: #999;
+	color: #fff;
+	float: right;
+}
+
+#badgeos-earned-achievements-container .list li, #badgeos-achievements-container .list li, #badgeos-earned-ranks-container .list li  { width: 100%; border-bottom: 1px dotted #CCC; margin-bottom: 10px; padding-bottom: 10px; }
+#badgeos-earned-achievements-container .grid li, #badgeos-achievements-container .grid li, #badgeos-earned-ranks-container .grid li  { float: left; width: 50%; border-right: 1px dotted #CCC; border-bottom: 1px dotted #CCC; padding: 20px; }

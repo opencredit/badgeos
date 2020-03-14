@@ -63,7 +63,7 @@ function badgeos_user_earned_ranks_shortcode() {
                     'dateadded'       => __( 'Award Date', 'badgeos' ),
                     'rand()'       => __( 'Random', 'badgeos' ),
                 ),
-                'default'     => 'menu_order',
+                'default'     => 'rank_id',
             ),
             'order' => array(
                 'name'        => __( 'Order', 'badgeos' ),
