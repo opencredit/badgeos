@@ -137,7 +137,7 @@ function badgeos_reformat_entries( $content ) {
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_render_earned_achievement_text( $badge_id, get_current_user_id() );
 
-	$badge_image = badgeos_get_achievement_post_thumbnail( $badge_id );
+    $badge_image = badgeos_get_achievement_post_thumbnail( $badge_id, 'boswp-badgeos-achievement' );
 	
 	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
 	$class = count( $achievements ) > 0 ? ' earned' : '';

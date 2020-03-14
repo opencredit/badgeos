@@ -271,7 +271,7 @@ function badgeos_ajax_get_earned_achievements() {
 
             // Achievement Image
             $output .= '<div class="badgeos-item-image">';
-            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
+            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
             $output .= '</div><!-- .badgeos-item-image -->';
 
 
