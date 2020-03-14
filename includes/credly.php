@@ -726,6 +726,9 @@ class BadgeOS_Credly {
         $testimonial = credly_fieldmap_get_field_value( $badge_id, $this->field_testimonial );
         $testimonial = ( strlen( $testimonial ) > 1000 ? ( substr( $testimonial, 0, 996 ) . '...' ) : $testimonial );
 
+        $credly_enable_notification = get_post_meta( $badge_id, '_badgeos_credly_enable_notification', true );
+        $this->send_email = $credly_enable_notification == 'false'? 0 : 1 ;
+
         if ( is_numeric( $credly_user_id ) ) {
 
             $args = array(
@@ -733,7 +736,7 @@ class BadgeOS_Credly {
                 'badge_id'      => $credly_badge_id,
                 'evidence_file' => credly_fieldmap_get_field_value( $badge_id, $this->field_evidence ),
                 'testimonial'   => $testimonial,
-                'notify'        => (bool) $this->send_email,
+                'notify'        => $this->send_email,
                 'custom_message' => $this->custom_message,
             );
 
@@ -749,7 +752,7 @@ class BadgeOS_Credly {
                 'badge_id'      => $credly_badge_id,
                 'evidence_file' => credly_fieldmap_get_field_value( $badge_id, $this->field_evidence ),
                 'testimonial'   => $testimonial,
-                'notify'        => (bool) $this->send_email,
+                'notify'        => $this->send_email,
                 'custom_message' => $this->custom_message,
             );
 
@@ -866,6 +869,8 @@ class BadgeOS_Credly {
         $credly_categories          = maybe_unserialize( get_post_meta( $post->ID, '_badgeos_credly_categories', true ) );
         $credly_badge_id            = get_post_meta( $post->ID, '_badgeos_credly_badge_id', true );
 
+
+        $credly_enable_notification = get_post_meta( $post->ID, '_badgeos_credly_enable_notification', true );
     ?>
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
         <table class="form-table">
@@ -892,13 +897,22 @@ class BadgeOS_Credly {
                     </select>
                 </td>
             </tr>
-            <tr valign="top"><th scope="row"><label for="_badgeos_credly_include_testimonial"><?php _e( 'Include Testimonial', 'badgeos' ); ?></label></th>
+            <tr valign="top">
+                <th scope="row"><label for="_badgeos_credly_enable_notification"><?php _e( 'Enable Notification', 'badgeos' ); ?></label></th>
                 <td>
-                    <select id="_badgeos_credly_include_testimonial" name="_badgeos_credly_include_testimonial">
-                        <option value="1" <?php selected( $credly_include_testimonial, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
-                        <option value="0" <?php selected( $credly_include_testimonial, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+                    <select id="_badgeos_credly_enable_notification" name="_badgeos_credly_enable_notification">
+                        <option value="1" <?php selected( $credly_enable_notification, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+                        <option value="0" <?php selected( $credly_enable_notification, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
                     </select>
                 </td>
+            </tr>
+            <tr valign="top"><th scope="row"><label for="_badgeos_credly_include_testimonial"><?php _e( 'Include Testimonial', 'badgeos' ); ?></label></th>
+            <td>
+                <select id="_badgeos_credly_include_testimonial" name="_badgeos_credly_include_testimonial">
+                    <option value="1" <?php selected( $credly_include_testimonial, 'true' ); ?>><?php _e( 'Yes', 'badgeos' ) ?></option>
+                    <option value="0" <?php selected( $credly_include_testimonial, 'false' ); ?>><?php _e( 'No', 'badgeos' ) ?></option>
+                </select>
+            </td>
             </tr>
             <tr valign="top"><th scope="row"><label for="_badgeos_credly_expiration"><?php _e( 'Expiration ( In days; 0 = never )', 'badgeos' ); ?></label></th>
                 <td>
@@ -995,6 +1009,7 @@ class BadgeOS_Credly {
         // Sanitize our input fields
         $fields['send_to_credly']             = ( $_POST['_badgeos_send_to_credly'] ? 'true' : 'false' );
         $fields['credly_include_evidence']    = ( $_POST['_badgeos_credly_include_evidence'] ? 'true' : 'false' );
+        $fields['credly_enable_notification']    = ( $_POST['_badgeos_credly_enable_notification'] ? 'true' : 'false' );
         $fields['credly_include_testimonial'] = ( $_POST['_badgeos_credly_include_testimonial'] ? 'true' : 'false' );
         $fields['credly_expiration']          = ( $_POST['_badgeos_credly_expiration'] ? sanitize_text_field( $_POST['_badgeos_credly_expiration'] ) : '0' );
         $fields['credly_is_giveable']         = ( $_POST['_badgeos_credly_is_giveable'] ? 'true' : 'false' );
@@ -1018,6 +1033,7 @@ class BadgeOS_Credly {
 
         update_post_meta( $post_id, '_badgeos_send_to_credly', $fields['send_to_credly'] );
         update_post_meta( $post_id, '_badgeos_credly_include_evidence', $fields['credly_include_evidence'] );
+        update_post_meta( $post_id, '_badgeos_credly_enable_notification', $fields['credly_enable_notification'] );
         update_post_meta( $post_id, '_badgeos_credly_include_testimonial', $fields['credly_include_testimonial'] );
         update_post_meta( $post_id, '_badgeos_credly_expiration', $fields['credly_expiration'] );
         update_post_meta( $post_id, '_badgeos_credly_is_giveable', $fields['credly_is_giveable'] );
