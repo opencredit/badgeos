@@ -400,32 +400,32 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
  * @param  integer $achievement The achievement's post ID
  * @return string               Concatenated markup
  */
-function badgeos_render_achievement( $achievement = 0 ) {
-	global $user_ID;
+function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true' ) {
+    global $user_ID;
 
-	// If we were given an ID, get the post
-	if ( is_numeric( $achievement ) )
-		$achievement = get_post( $achievement );
+    // If we were given an ID, get the post
+    if ( is_numeric( $achievement ) )
+        $achievement = get_post( $achievement );
 
-	// make sure our JS and CSS is enqueued
-	wp_enqueue_script( 'badgeos-achievements' );
-	wp_enqueue_style( 'badgeos-widget' );
+    // make sure our JS and CSS is enqueued
+    wp_enqueue_script( 'badgeos-achievements' );
+    wp_enqueue_style( 'badgeos-widget' );
 
-	// check if user has earned this Achievement, and add an 'earned' class
-	$earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
+    // check if user has earned this Achievement, and add an 'earned' class
+    $earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
-	// Setup our credly classes
-	$credly_class = '';
-	$credly_ID = '';
+    // Setup our credly classes
+    $credly_class = '';
+    $credly_ID = '';
 
-	// If the achievement is earned and givable, override our credly classes
-	if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
-		$credly_class = ' share-credly addCredly';
-		$credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
-	}
+    // If the achievement is earned and givable, override our credly classes
+    if ( 'user-has-earned' == $earned_status && $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID ) ) {
+        $credly_class = ' share-credly addCredly';
+        $credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
+    }
 
-	// Each Achievement
-	$output = '';
+    // Each Achievement
+    $output = '';
     //exclude step CPT entries from displaying in the widget
     $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
     if( $is_hidden != 'hidden' ) {
@@ -433,38 +433,44 @@ function badgeos_render_achievement( $achievement = 0 ) {
         $output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
         // Achievement Image
-        $output .= '<div class="badgeos-item-image">';
-        $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID ) . '</a>';
-        $output .= '</div><!-- .badgeos-item-image -->';
-
+        if( $show_thumb == 'true' ) {
+            $output .= '<div class="badgeos-item-image">';
+            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
+            $output .= '</div><!-- .badgeos-item-image -->';
+        }
 
         // Achievement Content
         $output .= '<div class="badgeos-item-description">';
 
         // Achievement Title
-        $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
-
-        // Achievement Short Description
-        $output .= '<div class="badgeos-item-excerpt">';
-        $output .= badgeos_achievement_points_markup( $achievement->ID );
-        $excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
-        $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
-        $output .= '</div><!-- .badgeos-item-excerpt -->';
-
-        // Render our Steps
-        if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
-            $output.='<div class="badgeos-item-attached">';
-            $output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
-            $output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
-            $output.= '</div><!-- .badgeos-item-attached -->';
+        if( $show_title == 'true' ) {
+            $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
         }
 
+        // Achievement Short Description
+        if( $show_description == 'true' ) {
+            $output .= '<div class="badgeos-item-excerpt">';
+            $output .= badgeos_achievement_points_markup( $achievement->ID );
+            $excerpt = !empty( $achievement->post_excerpt ) ? $achievement->post_excerpt : $achievement->post_content;
+            $output .= wpautop( apply_filters( 'get_the_excerpt', $excerpt ) );
+            $output .= '</div><!-- .badgeos-item-excerpt -->';
+        }
+
+        // Render our Steps
+        if( $show_steps == 'true' ) {
+            if ( $steps = badgeos_get_required_achievements_for_achievement( $achievement->ID ) ) {
+                $output.='<div class="badgeos-item-attached">';
+                $output.='<div id="show-more-'.$achievement->ID.'" class="badgeos-open-close-switch"><a class="show-hide-open" data-badgeid="'. $achievement->ID .'" data-action="open" href="#">' . __( 'Show Details', 'badgeos' ) . '</a></div>';
+                $output.='<div id="badgeos_toggle_more_window_'.$achievement->ID.'" class="badgeos-extras-window">'. badgeos_get_required_achievements_for_achievement_list_markup( $steps, $achievement->ID ) .'</div><!-- .badgeos-extras-window -->';
+                $output.= '</div><!-- .badgeos-item-attached -->';
+            }
+        }
         $output .= '</div><!-- .badgeos-item-description -->';
         $output .= '</div><!-- .badgeos-achievements-list-item -->';
     }
 
     // Return our filterable markup
-	return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
+    return apply_filters( 'badgeos_render_achievement', $output, $achievement->ID );
 
 }
 

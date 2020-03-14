@@ -72,6 +72,36 @@ function badgeos_user_earned_ranks_shortcode() {
                 'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
                 'default'     => 'ASC',
             ),
+            'show_title' => array(
+                'name'        => __( 'Show Rank Title', 'badgeos' ),
+                'description' => __( 'Display Rank Title.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_thumb' => array(
+                'name'        => __( 'Show Thumbnail', 'badgeos' ),
+                'description' => __( 'Display Thumbnail Image.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_description' => array(
+                'name'        => __( 'Show Description', 'badgeos' ),
+                'description' => __( 'Display Short Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
         ),
     ) );
 }
@@ -101,7 +131,10 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
         'show_search' => true,
         'user_id'     => get_current_user_id(),
         'orderby'     => 'ID',
-        'order'       => 'ASC'
+        'order'       => 'ASC',
+        'show_title'  => 'true',
+        'show_thumb'  => 'true',
+        'show_description'  => 'true',
     ), $atts, 'badgeos_user_earned_ranks' ) );
 
     wp_enqueue_style( 'badgeos-front' );
@@ -149,7 +182,7 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
     $ranks_html .= '<input type="button" class="earned_ranks_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';
     $ranks_html .= '<div class="badgeos-earned-ranks-spinner"></div>';
 
-    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'">';
+    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'">';
     $maindiv .= $ranks_html;
     $maindiv .= '</div>';
 

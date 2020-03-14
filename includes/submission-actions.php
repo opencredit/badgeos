@@ -1075,8 +1075,7 @@ function badgeos_get_comment_form( $post_id = 0 ) {
 
         }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit" style="margin-top:10px;"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" />
-		<input type="submit" name="badgeos_comment_draft" value="Save Draft" />
+		$sub_form .= '<p class="badgeos-submission-submit" style="margin-top:10px;"><input type="submit" name="badgeos_comment_submit" value="'. $language['submit'] .'" /> <input type="submit" name="badgeos_comment_draft" value="Save Draft" />
 		</p>';
 
 		// Hidden Fields
@@ -1526,8 +1525,7 @@ function badgeos_get_submission_form( $args = array() ) {
             $sub_form .= '</fieldset>';
         }
 		// submit button
-		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" />
-		<input type="submit" name="badgeos_submission_draft" value="Save Draft" />
+		$sub_form .= '<p class="badgeos-submission-submit"><input type="submit" name="badgeos_submission_submit" value="'. $args['submit'] .'" /> <input type="submit" name="badgeos_submission_draft" value="Save Draft" />
 		</p>';
 		// hidden fields
 		$sub_form .= wp_nonce_field( 'badgeos_submission_form', 'submit_submission', true, false );

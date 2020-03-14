@@ -116,6 +116,9 @@ jQuery( function( $ ) {
 		var data_user_id = $mainobj.attr("data-user_id");
 		var data_orderby = $mainobj.attr("data-orderby");
 		var data_order = $mainobj.attr("data-order");
+		var data_show_title = $mainobj.attr("data-show_title");
+		var data_show_thumb = $mainobj.attr("data-show_thumb");
+		var data_show_description = $mainobj.attr("data-show_description");
 
 		$mainobj.find( 'div.badgeos-earned-spinner' ).show();
 
@@ -130,7 +133,10 @@ jQuery( function( $ ) {
 				'count' : $mainobj.find( '#badgeos_ranks_count' ).val(),
 				'search' : $mainobj.find( '#earned_ranks_list_search' ).val(),
 				'orderby' : data_orderby,
-				'order' : data_order
+				'order' : data_order,
+				'show_title' : data_show_title,
+				'show_thumb' : data_show_thumb,
+				'show_description' : data_show_description
 			},
 			dataType : 'json',
 			success : function( response ) {
@@ -165,6 +171,9 @@ jQuery( function( $ ) {
 		var data_order = $mainobj.attr("data-order");
 		var data_include = $mainobj.attr("data-include");
 		var data_exclude = $mainobj.attr("data-exclude");
+		var data_show_title = $mainobj.attr("data-show_title");
+		var data_show_thumb = $mainobj.attr("data-show_thumb");
+		var data_show_description = $mainobj.attr("data-show_description");
 
 		$mainobj.find( 'div.badgeos-earned-spinner' ).show();
 
@@ -182,7 +191,10 @@ jQuery( function( $ ) {
 				'orderby' : data_orderby,
 				'order' : data_order,
 				'include' : data_include,
-				'exclude' : data_exclude
+				'exclude' : data_exclude,
+				'show_title' : data_show_title,
+				'show_thumb' : data_show_thumb,
+				'show_description' : data_show_description,
 			},
 			dataType : 'json',
 			success : function( response ) {
@@ -202,7 +214,17 @@ jQuery( function( $ ) {
 						$mainobj.find( '.earned_achievements_list_load_more' ).show();
 					}
 				}
-			}
+                $('.badgeos-arrange-buttons button').on( 'click', function() {
+                    $('.badgeos-arrange-buttons button').removeClass( 'selected' );
+                    $(this).addClass( 'selected' );
+                    if ($(this).hasClass('grid')) {
+                        $('#badgeos-achievements-container ul').removeClass('list').addClass('grid');
+                    }
+                    else if($(this).hasClass('list')) {
+                        $('#badgeos-achievements-container ul').removeClass('grid').addClass('list');
+                    }
+                } );
+            }
 		} );
 	}
 
@@ -223,6 +245,10 @@ jQuery( function( $ ) {
         var data_exclude = $mainobj.attr("data-exclude");
         var data_meta_key = $mainobj.attr("data-meta_key");
         var data_meta_value = $mainobj.attr("data-meta_value");
+        var data_show_title = $mainobj.attr("data-show_title");
+        var data_show_thumb = $mainobj.attr("data-show_thumb");
+        var data_show_description = $mainobj.attr("data-show_description");
+        var data_show_steps = $mainobj.attr("data-show_steps");
 
         $mainobj.find( 'div.badgeos-spinner' ).show();
 
@@ -246,7 +272,12 @@ jQuery( function( $ ) {
                 'include' : data_include,
                 'exclude' : data_exclude,
                 'meta_key' : data_meta_key,
-                'meta_value' : data_meta_value
+                'meta_value' : data_meta_value,
+                'show_title' : data_show_title,
+                'show_thumb' : data_show_thumb,
+                'show_description' : data_show_description,
+                'show_steps' : data_show_steps,
+
             },
             dataType : 'json',
             success : function( response ) {
@@ -254,7 +285,14 @@ jQuery( function( $ ) {
                 if ( response.data.message === null ) {
                     //alert("That's all folks!");
                 } else {
-                    $mainobj.find( 'div#badgeos-achievements-container' ).append( response.data.message );
+                    var offset_val = $mainobj.find( '#badgeos_achievements_offset' ).val();
+                    if( parseInt( offset_val ) > 0 ) {
+                        $mainobj.find( 'div#badgeos-achievements-container .ls_grid_container' ).append( response.data.message );
+                    }
+                    else {
+                        $mainobj.find( 'div#badgeos-achievements-container' ).append( response.data.message );
+                    }
+
                     $mainobj.find( '#badgeos_achievements_offset' ).val( response.data.offset );
                     $mainobj.find( '#badgeos_achievements_count' ).val( response.data.badge_count );
 
