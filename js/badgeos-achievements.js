@@ -460,7 +460,7 @@ jQuery( function( $ ) {
 
 	// Listen for users clicking the "Load More" button
     $( '.achievements_list_load_more' ).click( function() {
-		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_achievement_main_container"]').eq(0);
+        var $loadmoreparent = $( this ).parents('div[class^="badgeos_achievement_main_container"]').eq(0);
         $loadmoreparent.find( '.badgeos-spinner' ).show();
         show_list_html($loadmoreparent);
 
@@ -468,7 +468,7 @@ jQuery( function( $ ) {
 
 	// Listen for users clicking the "Load More" button
 	$( '.earned_achievements_list_load_more' ).click( function() {
-		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_rank_main_container"]').eq(0);
+		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_achievement_main_container"]').eq(0);
 		$loadmoreparent.find( '.badgeos-earned-spinner' ).show();
 		show_earned_achievement_list_html($loadmoreparent);
 
@@ -476,7 +476,7 @@ jQuery( function( $ ) {
 
 	// Listen for users clicking the "Load More" button
 	$( '.earned_ranks_list_load_more' ).click( function() {
-		var $loadmoreparent = $( this ).parent();
+		var $loadmoreparent = $( this ).parents('div[class^="badgeos_earned_rank_main_container"]').eq(0);
 		$loadmoreparent.find( '.badgeos-earned-ranks-spinner' ).show();
 		show_earned_rank_list_html($loadmoreparent);
 

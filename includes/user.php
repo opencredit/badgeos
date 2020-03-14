@@ -290,122 +290,116 @@ function badgeos_user_profile_data( $user = null ) {
 
     echo '<input id="badgeos_user_id" name="badgeos_user_id" value="'.$user->ID.'" type="hidden" />';
 
-	//verify uesr meets minimum role to view earned badges
-	//if ( current_user_can( badgeos_get_manager_capability() ) ) 
-	{
+    $achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
 
-	    $achievements = badgeos_get_user_achievements( array( 'user_id' => absint( $user->ID ) ) );
+    // List all of a user's earned achievements
+    echo '<h2>' . __( 'Earned Achievements', 'badgeos' ) . '</h2>';
 
-		// List all of a user's earned achievements
-		if ( $achievements ) {
-			echo '<h2>' . __( 'Earned Achievements', 'badgeos' ) . '</h2>';
+    echo '<table class="form-table">';
 
-			echo '<table class="form-table">';
+    echo '<tr><td colspan="2">';
 
-			echo '<tr><td colspan="2">';
+    echo '<table class="widefat badgeos-table">';
+    echo '<thead><tr>';
+    if ( current_user_can( badgeos_get_manager_capability() ) ) {
+        echo '<th width="5%"><input type="checkbox" id="badgeos_ach_check_all" name="badgeos_ach_check_all" /></th>';
+    }
+    echo '<th>'. __( 'Image', 'badgeos' ) .'</th>';
+    echo '<th>'. __( 'Name', 'badgeos' ) .'</th>';
+    echo '<th>'. __( 'Points', 'badgeos' ) .'</th>';
+    do_action( 'badgeos_profile_achivement_add_column_heading' );
+    echo '</tr></thead>';
 
-			echo '<table class="widefat badgeos-table">';
-			echo '<thead><tr>';
-			if ( current_user_can( badgeos_get_manager_capability() ) ) {
-				echo '<th width="5%"><input type="checkbox" id="badgeos_ach_check_all" name="badgeos_ach_check_all" /></th>';
-			}
-			echo '<th>'. __( 'Image', 'badgeos' ) .'</th>';
-			echo '<th>'. __( 'Name', 'badgeos' ) .'</th>';
-			echo '<th>'. __( 'Points', 'badgeos' ) .'</th>';
-			do_action( 'badgeos_profile_achivement_add_column_heading' );
-			echo '</tr></thead>';
+    $ach_index = 0;
+    $achievement_exists = false;
 
-            $ach_index = 0;
-            $achievement_exists = false;
+    foreach ( $achievements as $achievement ) {
 
-			foreach ( $achievements as $achievement ) {
+        if( $achievement->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+            $achievement_exists = true;
 
-                if( $achievement->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
-                    $achievement_exists = true;
-                    
-					echo '<tr>';
-					if ( current_user_can( badgeos_get_manager_capability() ) ) {
-						$ent_id = 0;
-						if( isset( $achievement->entry_id ) && intval( $achievement->entry_id ) ) {
-							$ent_id = $achievement->entry_id;
-						}
-						echo '<td width="5%" style="text-align:center;"><input type="checkbox" id="badgeos_ach_check_indi_'.$achievement->ID.'" value="'.$achievement->ID.'_'.$ach_index.'_'.$ent_id.'" name="badgeos_ach_check_indis[]" /></td>';
-					}
-					$badge_image = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) );
-					$badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement  );
-					
-                    echo '<td width="20%">'.$badge_image.'</td>';
-                    echo '<td width="55%">';
-                    $achievement_title = get_the_title( $achievement->ID );
-                    if( empty( $achievement_title ) ) {
-						if ( current_user_can( badgeos_get_manager_capability() ) ) {
-							echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
-						} else {
-							echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
-						}
-                    } else {
-						if ( current_user_can( badgeos_get_manager_capability() ) ) {
-							$achievement_title = edit_post_link( $achievement_title, '', '', $achievement->ID );
-						} else {
-							echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
-						}
-                    }
-                    echo '</td>';
-					$point_type = '';
-					
-					if( property_exists ( $achievement, 'point_type' ) ) {
-						$post_id = intval( $achievement->point_type );
-						$point_type = ' '.get_the_title( $post_id );
-					} else if( property_exists ( $achievement, 'points_type' ) ) {
-						$post_id = intval( $achievement->points_type );
-						$point_type = ' '.get_the_title( $post_id );
-					}
-                    echo '<td width="20%">'.intval( $achievement->points ).$point_type.'</td>';
-					
-					do_action( 'badgeos_profile_achivement_add_column_data', $achievement );
-                    echo '</tr>';
-                    $ach_index += 1;
-                    $achievement_ids[] = $achievement->ID;
+            echo '<tr>';
+            if ( current_user_can( badgeos_get_manager_capability() ) ) {
+                $ent_id = 0;
+                if( isset( $achievement->entry_id ) && intval( $achievement->entry_id ) ) {
+                    $ent_id = $achievement->entry_id;
+                }
+                echo '<td width="5%" style="text-align:center;"><input type="checkbox" id="badgeos_ach_check_indi_'.$achievement->ID.'" value="'.$achievement->ID.'_'.$ach_index.'_'.$ent_id.'" name="badgeos_ach_check_indis[]" /></td>';
+            }
+            $badge_image = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) );
+            $badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement  );
+
+            echo '<td width="20%">'.$badge_image.'</td>';
+            echo '<td width="55%">';
+            $achievement_title = get_the_title( $achievement->ID );
+            if( empty( $achievement_title ) ) {
+                if ( current_user_can( badgeos_get_manager_capability() ) ) {
+                    echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
+                } else {
+                    echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
+                }
+            } else {
+                if ( current_user_can( badgeos_get_manager_capability() ) ) {
+                    $achievement_title = edit_post_link( $achievement_title, '', '', $achievement->ID );
+                } else {
+                    echo '<a class="post-edit-link" href="'.get_permalink($achievement->ID).'">'. esc_html( $achievement->achievement_title ) .'</a>';
                 }
             }
+            echo '</td>';
+            $point_type = '';
 
-            if( $achievement_exists ) {
-				if ( current_user_can( badgeos_get_manager_capability() ) ) {
-					echo '<tr>';
-					echo '<td colspan="5" class="bulk-delete-detail">'.__( 'Select achievement(s) before clicking on revoke selected button', 'badgeos' ).'</td>';
-					echo '</tr>';
-					echo '<tr>';
-					echo '<td colspan="5" class="bulk-delete-detail"><button type="button" id="badgeos_btn_revoke_bulk_achievements" class="button button-primary">'.__( 'Revoke Selected', 'badgeos' ).'</button><img id="revoke-badges-loader" src="'. admin_url( '/images/spinner-2x.gif' ) .'" /></td>';
-					echo '</tr>';
-				}
-            } else {
-			    echo '<tr>';
-			    echo '<td>'. __( 'No Achievement Found.', 'badgeos' ) .'</td>';
-			    echo '</tr>';
+            if( property_exists ( $achievement, 'point_type' ) ) {
+                $post_id = intval( $achievement->point_type );
+                $point_type = ' '.get_the_title( $post_id );
+            } else if( property_exists ( $achievement, 'points_type' ) ) {
+                $post_id = intval( $achievement->points_type );
+                $point_type = ' '.get_the_title( $post_id );
             }
+            echo '<td width="20%">'.intval( $achievement->points ).$point_type.'</td>';
 
-			echo '</table>';
-			
-			echo '</td></tr>';
-			echo '</table>';
-		}
-		
-		// If debug mode is on, output our achievements array
-		if ( badgeos_is_debug_mode() ) {
+            do_action( 'badgeos_profile_achivement_add_column_data', $achievement );
+            echo '</tr>';
+            $ach_index += 1;
+            $achievement_ids[] = $achievement->ID;
+        }
+    }
 
-			echo __( 'DEBUG MODE ENABLED', 'badgeos' ) . '<br />';
-			echo __( 'Metadata value for:', 'badgeos' ) . ' _badgeos_achievements<br />';
+    if( $achievement_exists ) {
+        if ( current_user_can( badgeos_get_manager_capability() ) ) {
+            echo '<tr>';
+            echo '<td colspan="5" class="bulk-delete-detail">'.__( 'Select achievement(s) before clicking on revoke selected button', 'badgeos' ).'</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td colspan="5" class="bulk-delete-detail"><button type="button" id="badgeos_btn_revoke_bulk_achievements" class="button button-primary">'.__( 'Revoke Selected', 'badgeos' ).'</button><img id="revoke-badges-loader" src="'. admin_url( '/images/spinner-2x.gif' ) .'" /></td>';
+            echo '</tr>';
+        }
+    } else {
+        echo '<tr>';
+        echo '<td>'. __( 'No Achievement Found.', 'badgeos' ) .'</td>';
+        echo '</tr>';
+    }
 
-			var_dump ( $achievements );
+    echo '</table>';
 
-		}
+    echo '</td></tr>';
+    echo '</table>';
 
-		echo '<br/>';
+    // If debug mode is on, output our achievements array
+    if ( badgeos_is_debug_mode() ) {
 
-		// Output markup for awarding achievement for user
-		badgeos_profile_award_achievement( $user, $achievement_ids );
+        echo __( 'DEBUG MODE ENABLED', 'badgeos' ) . '<br />';
+        echo __( 'Metadata value for:', 'badgeos' ) . ' _badgeos_achievements<br />';
 
-	}
+        var_dump ( $achievements );
+
+    }
+
+    echo '<br/>';
+
+    // Output markup for awarding achievement for user
+    if ( current_user_can( badgeos_get_manager_capability() ) ) {
+        badgeos_profile_award_achievement( $user, $achievement_ids );
+    }
 
 }
 add_action( 'show_user_profile', 'badgeos_user_profile_data' );

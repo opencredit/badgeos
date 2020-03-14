@@ -12,6 +12,7 @@ function badgeos_user_earned_achievements_shortcode() {
     $achievement_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
+        'post_status'=> 'publish'
     ) );
 
     $post_list = array();
