@@ -36,6 +36,9 @@ foreach ( $badgeos_ajax_actions as $action ) {
 function badgeos_ajax_get_earned_ranks() {
     global $user_ID, $blog_id, $wpdb;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
+
     // Setup our AJAX query vars
     $type       = isset( $_REQUEST['rank_type'] )  ? $_REQUEST['rank_type']  : false;
     $limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
@@ -50,7 +53,8 @@ function badgeos_ajax_get_earned_ranks() {
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
 
     // Convert $type to properly support multiple rank types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_ranks_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_ranks_shortcode_default_view;
+
     if ( 'all' == $type ) {
         $type = badgeos_get_rank_types_slugs();
         // Drop steps from our list of "all" achievements
@@ -69,7 +73,7 @@ function badgeos_ajax_get_earned_ranks() {
     if( $offset > 0 ) {
         $ranks = '';
     } else {
-        $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+        $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($earned_ranks_shortcode_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($earned_ranks_shortcode_default_view=='grid'?'selected':'').'"><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$earned_ranks_shortcode_default_view.'">';
     }
 
     $ranks_count = 0;
@@ -196,6 +200,10 @@ function badgeos_ajax_get_earned_ranks() {
 function badgeos_ajax_get_earned_achievements() {
     global $user_ID, $blog_id, $wpdb;
 
+    // Convert $type to properly support multiple achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
+
     // Setup our AJAX query vars
     $type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
     $limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
@@ -213,8 +221,8 @@ function badgeos_ajax_get_earned_achievements() {
     $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
 
-    // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_achievements_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_achievements_shortcode_default_view;
+
     if ( 'all' == $type ) {
         $type = badgeos_get_achievement_types_slugs();
         // Drop steps from our list of "all" achievements
@@ -233,7 +241,7 @@ function badgeos_ajax_get_earned_achievements() {
     if( $offset > 0 ) {
         $achievements = '';
     } else {
-        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($earned_achievements_shortcode_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($earned_achievements_shortcode_default_view=='grid'?'selected':'').'"><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$earned_achievements_shortcode_default_view.'">';
     }
 
     $achievement_count = 0;
@@ -378,7 +386,11 @@ function badgeos_ajax_get_earned_achievements() {
 function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
-	// Setup our AJAX query vars
+    // Convert $type to properly support multiple achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
+
+    // Setup our AJAX query vars
 	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
 	$limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
 	$offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
@@ -398,8 +410,8 @@ function badgeos_ajax_get_achievements() {
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
     $show_steps = isset( $_REQUEST['show_steps'] ) ? $_REQUEST['show_steps'] : 'true';
 
-    // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $achievement_list_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $achievement_list_default_view;
+
     if ( 'all' == $type ) {
 		$type = badgeos_get_achievement_types_slugs();
 		// Drop steps from our list of "all" achievements
@@ -428,7 +440,7 @@ function badgeos_ajax_get_achievements() {
     if( $offset > 0 ) {
         $achievements = '';
     } else {
-        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> '. __( 'List', 'badgeos' ) .'</button><button class="grid buttons"><i class="fa fa-th-large"></i> '. __( 'Grid', 'badgeos' ) .'</button></div><ul class="ls_grid_container list">';
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($achievement_list_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($achievement_list_default_view=='grid'?'selected':'').'""><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$achievement_list_default_view.'">';
     }
 
     $achievement_count = 0;

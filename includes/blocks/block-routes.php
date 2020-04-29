@@ -82,7 +82,7 @@ function badgeos_ranks_list( $data ) {
 }
 
 /**
- * Returns the list of achivements..
+ * Returns the list of achievements..
  *
  * @return $posts
  */
@@ -104,7 +104,7 @@ function badgeos_block_point_types_list( $data ) {
 }
 
 /**
- * Returns the list of achivements..
+ * Returns the list of achievements..
  *
  * @return $posts
  */
@@ -136,7 +136,7 @@ function badgeos_achievements_list( $data ) {
 }
 
 /**
- * Returns the list of achivements..
+ * Returns the list of achievements..
  *
  * @return $posts
  */

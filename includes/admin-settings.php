@@ -334,6 +334,9 @@ function badgeos_settings_page() {
             $points_deduct_post_type 		= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
             $default_point_type 			= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
 
+            $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
+            $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
+            $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
             wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
 			?>
 			<table class="form-table">
@@ -464,7 +467,37 @@ function badgeos_settings_page() {
 					</td>
 				</tr>
 
-				<?php
+                <tr valign="top">
+                    <th scope="row"><label for="achievement_list_shortcode_default_view"><?php _e( 'Achievement List Shortcode Default View:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <select id="achievement_list_shortcode_default_view" name="badgeos_settings[achievement_list_shortcode_default_view]">
+                            <option value="list" <?php selected( $achievement_list_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
+                            <option value="grid" <?php selected( $achievement_list_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row"><label for="earned_achievements_shortcode_default_view"><?php _e( 'Earned Achievements Shortcode Default View:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <select id="earned_achievements_shortcode_default_view" name="badgeos_settings[earned_achievements_shortcode_default_view]">
+                            <option value="list" <?php selected( $earned_achievements_shortcode_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
+                            <option value="grid" <?php selected( $earned_achievements_shortcode_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row"><label for="earned_ranks_shortcode_default_view"><?php _e( 'Earned Ranks List Shortcode Default View:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <select id="earned_ranks_shortcode_default_view" name="badgeos_settings[earned_ranks_shortcode_default_view]">
+                            <option value="list" <?php selected( $earned_ranks_shortcode_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
+                            <option value="grid" <?php selected( $earned_ranks_shortcode_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+
+                <?php
 				// check if multisite is enabled & if plugin is network activated
 				if ( is_super_admin() ){
 					if ( is_multisite() ) {

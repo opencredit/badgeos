@@ -127,6 +127,17 @@ function badgeos_user_earned_achievements_shortcode() {
                 ),
                 'default'     => 'true',
             ),
+            'default_view' => array (
+                'name'        => __( 'Default View', 'badgeos' ),
+                'description' => __( 'Default Listing i.e. List or Grid.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    ''  => '',
+                    'list'  => __( 'List', 'badgeos' ),
+                    'grid' => __( 'Grid', 'badgeos' )
+                ),
+                'default'     => '',
+            ),
         ),
     ) );
 }
@@ -169,7 +180,9 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'exclude'     => array(),
         'show_title'  => 'true',
         'show_thumb'  => 'true',
-        'show_description'  => 'true'
+        'show_description'  => 'true',
+        'default_view'  => '',
+
     ), $atts, 'badgeos_user_earned_achievements' ) );
 
     wp_enqueue_style( 'badgeos-front' );
@@ -188,6 +201,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'exclude'     => $exclude,
         'show_title'  => $show_title,
         'show_thumb'  => $show_thumb,
+        'default_view'  => $default_view,
         'show_description'  => $show_description,
     );
     // wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
@@ -242,7 +256,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         $exclude = implode(',', $exclude);
     }
 
-    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'">';
+    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'">';
     $maindiv .= $badges;
     $maindiv .= '</div>';
 
