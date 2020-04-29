@@ -72,6 +72,17 @@ function badgeos_user_earned_ranks_shortcode() {
                 'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
                 'default'     => 'ASC',
             ),
+            'default_view' => array (
+                'name'        => __( 'Default View', 'badgeos' ),
+                'description' => __( 'Default Listing i.e. List or Grid.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    ''  => '',
+                    'list'  => __( 'List', 'badgeos' ),
+                    'grid' => __( 'Grid', 'badgeos' )
+                ),
+                'default'     => '',
+            ),
             'show_title' => array(
                 'name'        => __( 'Show Rank Title', 'badgeos' ),
                 'description' => __( 'Display Rank Title.', 'badgeos' ),
@@ -135,6 +146,7 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
         'show_title'  => 'true',
         'show_thumb'  => 'true',
         'show_description'  => 'true',
+        'default_view'  => '',
     ), $atts, 'badgeos_user_earned_ranks' ) );
 
     wp_enqueue_style( 'badgeos-front' );
@@ -182,7 +194,7 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
     $ranks_html .= '<input type="button" class="earned_ranks_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';
     $ranks_html .= '<div class="badgeos-earned-ranks-spinner"></div>';
 
-    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'">';
+    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'">';
     $maindiv .= $ranks_html;
     $maindiv .= '</div>';
 

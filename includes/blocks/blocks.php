@@ -66,7 +66,7 @@ function badgeos_render_achievement_block( $attributes ) {
 		if( ! empty( $data->value  ) ) {
 			return do_shortcode( '[badgeos_achievement id="'.$data->value.'"]' );
 		} else {
-			return '<div class="inner-content">'.__( 'No achivement found.', 'badgeos' ).'</div>';
+			return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
 		}
 	} else {
     return '<div class="inner-content">'.__( 'Select an achievement from the right side.', 'badgeos' ).'</div>';
@@ -190,6 +190,10 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
   
   if( !empty( $attributes['show_title'] ) ) {
     $param .= ' show_title="'.sanitize_text_field( $attributes['show_title'] ).'"';
+  }
+
+  if( ! empty( $attributes['default_view'] ) ) {
+    $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
   }
 
   return do_shortcode( '[badgeos_user_earned_achievements '.$param.']' );
@@ -334,11 +338,15 @@ function badgeos_render_earned_ranks_blocks( $attributes ) {
       $param .= ' rank_type="'.$types.'"';
   }
   
+  if( ! empty( $attributes['default_view'] ) ) {
+    $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
+  }
+
 	return do_shortcode( '[badgeos_user_earned_ranks '.$param.']' );
 }
 
 /**
- * Renders the achivements list block
+ * Renders the achievements list block
  *
  * @param $attributes
   *
@@ -439,6 +447,11 @@ function badgeos_render_achivements_list_blocks( $attributes ) {
     if( ! empty( $exclude ) )
       $param .= ' exclude="'.$exclude.'"';
   }
+
+  if( ! empty( $attributes['default_view'] ) ) {
+    $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
+  }
+
 	return do_shortcode( '[badgeos_achievements_list '.$param.']' );
 }
 
