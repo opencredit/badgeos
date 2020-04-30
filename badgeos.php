@@ -543,16 +543,6 @@ class BadgeOS {
 		wp_localize_script( 'badgeos-achievements', 'BadgeosCredlyData', $data );
 
         wp_enqueue_style( 'badgeos-font-awesome' );
-        wp_enqueue_script(
-            'ck_editor_cdn',
-            ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), array( 'jquery' ), 'v3', true
-        );
-
-        wp_enqueue_script(
-           'custom_script',
-            plugins_url( '/js/ckeditor.js' , __FILE__ ),
-            array( 'jquery' ),$this::$version,true
-        );
 	}
 
 	/**
