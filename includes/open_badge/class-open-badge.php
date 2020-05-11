@@ -33,64 +33,8 @@ class BadgeOS_Open_Badge {
         add_action( 'wp_ajax_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
         add_action( 'cron_convert_badges_to_open_standards', array( $this,'cron_convert_badges_to_open_standards_cb' ), 10, 2 ); //Scheduler
 
-        $this->add_bulk_option();
+        //$this->add_bulk_option();
     }
-
-    function add_bulk_option() {
-
-		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
-
-	    $achievement_types = get_posts(array('post_type' => trim( $badgeos_settings['achievement_main_post_type'] ), 'post_status' => 'publish'));
-
-	    foreach ($achievement_types as $achievement_type) {
-
-            //Display enable/disable badge baking bulk options on achievements listings page
-            add_filter("bulk_actions-edit-{$achievement_type->post_name}", [$this, 'register_badge_baking_bulk_action']);
-            add_filter("handle_bulk_actions-edit-{$achievement_type->post_name}", [$this, 'badge_baking_bulk_action_handler'], 10, 3);
-        }
-    }
-
-    function register_badge_baking_bulk_action($bulk_actions) {
-        $bulk_actions['enable_badge_baking'] = __( 'Enable Badge Baking', 'badgeos');
-        $bulk_actions['disable_badge_baking'] = __( 'Disable Badge Baking', 'badgeos');
-        return $bulk_actions;
-    }
-
-    function badge_baking_bulk_action_handler( $redirect_to, $doaction, $post_ids ) {
-
-        if ( !in_array( $doaction, array('enable_badge_baking','disable_badge_baking') ) ) {
-            return $redirect_to;
-        }
-
-        $this->enable_bulk_badge_baking($post_ids, $doaction);
-
-        return $redirect_to;
-    }
-
-    function enable_bulk_badge_baking($post_ids, $doaction) {
-
-	    foreach($post_ids as $post_id) {
-
-            $badge_baking_option = get_post_meta($post_id, '_open_badge_enable_baking', true);
-
-            if ( $doaction == 'enable_badge_baking' ) {
-                $badge_baking_val = 'true';
-            } else {
-                $badge_baking_val = 'false';
-            }
-
-            update_post_meta( $post_id, '_open_badge_enable_baking', $badge_baking_val );
-
-            if( $badge_baking_option == '' ) { //If badge baking option previously not exists for the post, set default values
-                update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
-                update_post_meta( $post_id, '_open_badge_include_evidence', 'false' );
-                update_post_meta( $post_id, '_open_badge_expiration', '0' );
-                update_post_meta( $post_id, '_open_badge_expiration_type', 'Day' );
-            }
-        }
-
-    }
-
 
     function cron_convert_badges_to_open_standards_cb($non_os_badgeos_achievements, $is_last) {
 

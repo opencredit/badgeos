@@ -76,24 +76,46 @@ function badgeos_ob_integration_page() {
         $non_ob_conversion_progress = get_transient('non_ob_conversion_progress'); //check if background conversion process is running
         $non_os_badgeos_achievements = badgeos_ob_get_all_non_achievements();
 
-        $message = __('Please click on "Convert Achievements" button below to convert existing non-open standard user\'s achievements into open standards.', 'badgeos');
+        $message = 'Please click on "Convert Achievements" button below to convert existing non-open standard user\'s achievements into open standards.';
+        ?>
+        <div class="open_badge_convert_wrapper">
+            <h3><?php _e( 'Convert non-open standard achievements', 'badgeos'); ?></h3>
+            <?php if( !$non_ob_conversion_progress && !empty($non_os_badgeos_achievements) ): ?>
+                <div id="non_ob_button_message">
+                    <p><?php _e( $message, 'badgeos'); ?></p>
+                    <input type="button" id="convert_non_open_achievements" class="button-primary" value="<?php _e( 'Convert Achievements', 'badgeos'); ?>" />
+                </div>
+            <?php elseif( ! $non_ob_conversion_progress ): ?>
+                <div id="no-non-ob"><p><?php _e('All user\'s achievements are in open-standards, no non-open standard achievements found.'); ?></p></div>
+            <?php endif; ?>
+            <div id="open_badge_conversion_in_progress" style="<?php echo !$non_ob_conversion_progress ? 'display: none;' : ''; ?> padding: 10px; margin-top: 10px;">
+                <div style="float: left; margin-right:10px;"><img src="<?php echo admin_url( 'images/spinner.gif' ); ?>"></div>
+                <div style="float: left;"><?php _e('Non open standards achievements conversion is processing in background, you will receive an email after conversion is completed.', 'badgeos'); ?></div>
+                <div style="clear: both;"></div>
+            </div> 
+        </div>
+        <?php
+            $message = 'Please click on "Migrate Credly Achievements" button below to migrate existing credly achievements to open badge achievements.';
         ?>
             <div class="open_badge_convert_wrapper">
-                <h3><?php _e( 'Convert non-open standard achievements', 'badgeos'); ?></h3>
-                <?php if( !$non_ob_conversion_progress && !empty($non_os_badgeos_achievements) ): ?>
-                    <div id="non_ob_button_message">
-                        <p><?php _e( $message, 'badgeos'); ?></p>
-                        <input type="button" id="convert_non_open_achievements" class="button-primary" value="<?php _e( 'Convert Achievements', 'badgeos'); ?>" />
-                    </div>
-                <?php elseif( ! $non_ob_conversion_progress ): ?>
-                    <div id="no-non-ob"><p><?php _e('All user\'s achievements are in open-standards, no non-open standard achievements found.'); ?></p></div>
-                <?php endif; ?>
-                <div id="open_badge_conversion_in_progress" style="<?php echo !$non_ob_conversion_progress ? 'display: none;' : ''; ?> padding: 10px; margin-top: 10px;">
-                    <div style="float: left; margin-right:10px;"><img src="<?php echo admin_url( 'images/spinner.gif' ); ?>"></div>
-                    <div style="float: left;"><?php _e('Non open standards achievements conversion is processing in background, you will receive an email after conversion is completed.', 'badgeos'); ?></div>
-                    <div style="clear: both;"></div>
+                <h3><?php _e( 'Migrate Credly Achievements', 'badgeos'); ?></h3>
+                <div id="convert_credly_to_ob_button_message">
+                    <p><?php _e( $message, 'badgeos'); ?></p>
+                    <p><input type="checkbox" id="badgeos_disable_send_credly_option" name="badgeos_disable_send_credly_option" value="yes" > <?php _e('Disable Credly.', 'badgeos'); ?></p>
+                    <input type="button" id="badgeos_convert_credly_achievements" class="button-primary" value="<?php _e( 'Migrate Credly Achievements', 'badgeos'); ?>" />
+                </div>
+                <div id="conversion_credly_to_open_badge_in_progress" style="display: none;">
+                    <div style="float: left; margin-right:10px;"><img src="<?php echo admin_url( 'images/spinner.gif' ); ?>"> <?php _e( 'Loading..', 'badgeos'); ?></div>
                 </div> 
-            </div>
+                <div id="conversion_credly_to_open_badge_no_rec_found" style="display: none;">
+                    <p><?php _e('No achievements found that needs to be converted from credly to open badge.', 'badgeos'); ?></p>
+                </div>
+                <div class='box box-wide' id='badgeos_ob_import_processing_box' style='display:none'>
+                    <div id='badgeos_ob_normal_progress_bar' style='display:none'>
+                        <div id='progressbar'><div class='progress-label'><?php _e('Loading...', 'badgeos'); ?></div></div>
+                    </div>
+                </div>
+            </div>    
         </div>
     <?php
 }
@@ -117,8 +139,7 @@ function badgeos_ob_save_settings() {
         if( isset( $_POST[ 'badgeos_evidence_url' ] ) && ! empty( $_POST[ 'badgeos_evidence_url' ] ) ) {
             update_option( 'badgeos_evidence_url', sanitize_text_field( $_POST[ 'badgeos_evidence_url' ] ) );
         }
-
-        
+       
         add_action('admin_notices', 'badgeos_ob_save_settings_notification' );
     }
 }
