@@ -9,7 +9,7 @@
  * @link https://credly.com
  */
 
-// Setup our badgeos AJAX actions
+// Setup our Badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
     'get-earned-achievements',
@@ -80,10 +80,7 @@ function badgeos_ajax_get_earned_ranks() {
     $ranks_count = 0;
 
     // If we're polling all sites, grab an array of site IDs
-    if( $wpms && $wpms != 'false' )
-        $sites = badgeos_get_network_site_ids();
-    else
-        $sites = array( $blog_id );
+    $sites = array( $blog_id );
 
     // Loop through each site (default is current site only)
     $query_count = 0;
@@ -158,18 +155,14 @@ function badgeos_ajax_get_earned_ranks() {
         $ranks .= '</ul>';
 
         // Display a message for no results
-        if ( empty( $ranks ) ) {
+        if ( count( $user_ranks ) == 0 ) {
             $current = current( $type );
             // If we have exactly one achievement type, get its plural name, otherwise use "ranks"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
             $ranks .= '<div class="badgeos-no-results">';
-            if ( 'completed' == $filter ) {
-                $ranks .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }else{
-                $ranks .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }
+            $ranks .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
             $ranks .= '</div><!-- .badgeos-no-results -->';
         }
 
@@ -186,7 +179,6 @@ function badgeos_ajax_get_earned_ranks() {
         'offset'      => $offset + $limit,
         'query_count' => $query_count,
         'badge_count' => $ranks_count,
-        'type'        => $earned_ids,
         'attr'        => $_REQUEST
     ) );
 
@@ -344,18 +336,14 @@ function badgeos_ajax_get_earned_achievements() {
         }
 
         // Display a message for no results
-        if ( empty( $achievements ) ) {
+        if ( count( $user_achievements ) == 0 ) {
             $current = current( $type );
             // If we have exactly one achievement type, get its plural name, otherwise use "achievements"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
             $achievements .= '<div class="badgeos-no-results">';
-            if ( 'completed' == $filter ) {
-                $achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }else{
-                $achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }
+            $achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
             $achievements .= '</div><!-- .badgeos-no-results -->';
         }
 
@@ -372,7 +360,6 @@ function badgeos_ajax_get_earned_achievements() {
         'offset'      => $offset + $limit,
         'query_count' => $query_count,
         'badge_count' => $achievement_count,
-        'type'        => $earned_ids,
         'attr'        => $_REQUEST
 	
     ) );
@@ -391,6 +378,7 @@ function badgeos_ajax_get_achievements() {
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
 
+    $earned_ids = [];
     // Setup our AJAX query vars
 	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
 	$limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
@@ -529,7 +517,7 @@ function badgeos_ajax_get_achievements() {
 			$achievements = '';*/
 
 		// Display a message for no results
-		if ( empty( $achievements ) ) {
+        if ( $achievement_posts->found_posts() == 0 ) {
 			$current = current( $type );
 			// If we have exactly one achievement type, get its plural name, otherwise use "achievements"
 			$post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );

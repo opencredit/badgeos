@@ -6,8 +6,6 @@
  * @since 3.2
  */
 function badgeos_migrate_fields_points_to_point_types_callback() {
-    ini_set( 'display_errors', 'On' );
-    error_reporting( E_ALL );
     $action = ( isset( $_POST['action'] ) ? $_POST['action'] : '' );
     if( $action !== 'badgeos_migrate_fields_points_to_point_types' &&  $action !== 'badgeos_migrate_fields_points_to_point_types' ) {
         exit;

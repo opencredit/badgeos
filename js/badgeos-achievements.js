@@ -653,4 +653,106 @@ jQuery( function( $ ) {
 	badgeos_ajax_earned_achievement_list();
 	badgeos_ajax_earned_ranks_list();
 
+	$(document).on('click', '.bos_ob_convert_to_ob_btn', function (e) {
+		e.preventDefault();
+		var button = $(this);
+		var entry_id = button.val();
+
+		return $.ajax({
+			url: BadgeosCredlyData.ajax_url,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'bos_ob_convert_to_open_badge',
+				entry_id: entry_id
+			},
+			beforeSend: function (response) {
+				button.attr('disabled', true).find('.bos_ob_btn_fa').show();
+			},
+			success: function (response) {
+				if (response.status == 'success') {
+					button.text(response.message).delay(200).fadeOut();
+				}
+			},
+			error: function (error) {
+
+			},
+			complete: function () {
+				button.attr('disabled', false).find('.bos_ob_btn_fa').hide();
+			}
+		});
+	});
+
+	$('#open_badge_enable_baking').change(function () {
+		if ('0' == $(this).val())
+			$('#open-badge-setting-section').hide();
+		else
+			$('#open-badge-setting-section').show();
+	}).change();
+
+	$('#open-badgeos-verification').on('click', function () {
+
+		$('#verification-res-list').html('');
+
+		var achievement_id = $(this).data('bg');
+
+		var entry_id = $(this).data('eid');
+		var user_id = $(this).data('uid');
+
+		tb_show('Verification', '#TB_inline?width=250&height=150&inlineId=open-badge-id');
+		$.ajax({
+			url: BadgeosCredlyData.ajax_url,
+			type: 'POST',
+			data: {
+				action: 'badgeos_validate_open_badge',
+				bg: achievement_id,
+				eid: entry_id,
+				uid: user_id,
+			},
+			dataType: 'json',
+			success: function (returndata1) {
+				if (returndata1.type == 'success')
+					$('#verification-res-list').html('<li class="success">' + returndata1.message + '</li>');
+				else
+					$('#verification-res-list').html('<li class="error">' + returndata1.message + '</li>');
+				$.ajax({
+					url: BadgeosCredlyData.ajax_url,
+					type: 'POST',
+					data: {
+						action: 'badgeos_validate_revoked',
+						bg: achievement_id,
+						eid: entry_id,
+						uid: user_id,
+					},
+					dataType: 'json',
+					success: function (returndata2) {
+
+						if (returndata2.type == 'success')
+							$('#verification-res-list').append('<li class="success">' + returndata2.message + '</li>');
+						else
+							$('#verification-res-list').append('<li class="error">' + returndata2.message + '</li>');
+						$.ajax({
+							url: BadgeosCredlyData.ajax_url,
+							type: 'POST',
+							data: {
+								action: 'badgeos_validate_expiry',
+								bg: achievement_id,
+								eid: entry_id,
+								uid: user_id,
+							},
+							dataType: 'json',
+							success: function (returndata3) {
+								if (returndata3.type == 'success')
+									$('#verification-res-list').append('<li class="success">' + returndata3.message + '</li>');
+								else
+									$('#verification-res-list').append('<li class="error">' + returndata3.message + '</li>');
+							}
+						});
+					}
+				});
+			}
+		});
+
+	});
+
 } );

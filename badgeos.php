@@ -101,7 +101,7 @@ class BadgeOS {
 		}
 
 		/**
-         * Badgeos Points Table
+         * BadgeOS Points Table
          */
 		$table_name = $wpdb->prefix . 'badgeos_points';
 		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
@@ -311,7 +311,14 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/ranks/rank-functions.php' );
 		require_once( $this->directory_path . 'includes/ranks/post-types.php' );
 		require_once( $this->directory_path . 'includes/ranks/meta-boxes.php' );
-		require_once( $this->directory_path . 'includes/ranks/rank-steps-ui.php' );
+
+        require_once( $this->directory_path . 'includes/open_badge/install-default-pages.php' );
+        require_once( $this->directory_path . 'includes/open_badge/functions.php' );
+        require_once( $this->directory_path . 'includes/open_badge/evidence-shortcode.php' );
+        require_once( $this->directory_path . 'includes/open_badge/class-open-badge.php' );
+        require_once( $this->directory_path . 'includes/open_badge/ob-metabox.php' );
+
+        require_once( $this->directory_path . 'includes/ranks/rank-steps-ui.php' );
 		require_once( $this->directory_path . 'includes/ranks/triggers.php' );
 		require_once( $this->directory_path . 'includes/ranks/ranks-rules-engine.php' );
 		
@@ -324,6 +331,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/user.php' );
 		require_once( $this->directory_path . 'includes/credly.php' );
 		require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
+        require_once( $this->directory_path . 'includes/open_badge/ob-integrations.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
         require_once( $this->directory_path . 'includes/badgeos-emails.php' );
@@ -343,6 +351,7 @@ class BadgeOS {
         wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
         wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), $this::$version, true );
 		wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), $this::$version, true );
+        wp_register_script( 'badgeos-ob-integrations', $this->directory_url . 'js/ob-integrations.js', array( 'jquery' ), $this::$version, true );
 
         $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 
@@ -368,8 +377,10 @@ class BadgeOS {
         wp_localize_script( 'badgeos-admin-js', 'admin_js', $admin_js_translation_array );
 
 		// Register styles
-        wp_register_style( 'jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
-		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
+        wp_register_style( 'badgeos-jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
+        wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
+
+        wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
 
 		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
 			? get_stylesheet_directory_uri() .'/badgeos.css'
@@ -547,6 +558,7 @@ class BadgeOS {
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Credly Integration', 'badgeos' ), __( 'Credly Integration', 'badgeos' ), $minimum_role, 'badgeos_sub_credly_integration', 'badgeos_credly_options_page' );
+        add_submenu_page( 'badgeos_badgeos', __( 'OB Integration', 'badgeos' ), __( 'OB Integration', 'badgeos' ), $minimum_role, 'badgeos-ob-integration', 'badgeos_ob_integration_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Add-Ons', 'badgeos' ), __( 'Add-Ons', 'badgeos' ), $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Help / Support', 'badgeos' ), __( 'Help / Support', 'badgeos' ), $minimum_role, 'badgeos_sub_help_support', 'badgeos_help_support_page' );
 
@@ -590,10 +602,12 @@ class BadgeOS {
         wp_enqueue_style( 'badgeos-font-awesome' );
 		wp_enqueue_script( 'badgeos-admin-js' );
 		wp_enqueue_script( 'badgeos-credly' );
+        wp_enqueue_script( 'badgeos-ob-integrations' );
 
 		// Load styles
-        wp_enqueue_style( 'jquery-ui-styles' );
-		wp_enqueue_style( 'badgeos-admin-styles' );
+        wp_enqueue_script('badgeos-jquery-ui-js');
+        wp_enqueue_style( 'badgeos-jquery-ui-styles' );
+        wp_enqueue_style( 'badgeos-admin-styles' );
 
 	}
 

@@ -2,7 +2,7 @@
 /**
  * Admin Tools Page
  *
- * @package badgeOS WP
+ * @package BadgeOS WP
  * @subpackage Admin
  * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0

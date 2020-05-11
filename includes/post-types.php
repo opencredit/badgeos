@@ -85,19 +85,19 @@ function badgeos_register_post_types() {
 	// Register Submissions CPT
 	register_post_type( 'submission', array(
 		'labels'             => array(
-			'name'               => __( 'Submissions', 'badgeos' ),
-			'singular_name'      => __( 'Submission', 'badgeos' ),
-			'add_new'            => __( 'Add New', 'badgeos' ),
-			'add_new_item'       => __( 'Add New Submission', 'badgeos' ),
-			'edit_item'          => __( 'Edit Submission', 'badgeos' ),
-			'new_item'           => __( 'New Submission', 'badgeos' ),
-			'all_items'          => __( 'Submissions', 'badgeos' ),
-			'view_item'          => __( 'View Submission', 'badgeos' ),
-			'search_items'       => __( 'Search Submissions', 'badgeos' ),
-			'not_found'          => __( 'No submissions found', 'badgeos' ),
-			'not_found_in_trash' => __( 'No submissions found in Trash', 'badgeos' ),
+			'name'               => __( 'Submission Reviews', 'badgeos' ),
+            'singular_name'      => __( 'Submission Review', 'badgeos' ),
+            'add_new'            => __( 'Add New', 'badgeos' ),
+            'add_new_item'       => __( 'Add New Submission Review', 'badgeos' ),
+            'edit_item'          => __( 'Edit Submission Review', 'badgeos' ),
+            'new_item'           => __( 'New Submission Review', 'badgeos' ),
+            'all_items'          => __( 'Submission Reviews', 'badgeos' ),
+            'view_item'          => __( 'View SubmissionReview', 'badgeos' ),
+            'search_items'       => __( 'Search Submission Reviews', 'badgeos' ),
+            'not_found'          => __( 'No submission Reviews found', 'badgeos' ),
+            'not_found_in_trash' => __( 'No submission Reviews found in Trash', 'badgeos' ),
 			'parent_item_colon'  => '',
-			'menu_name'          => __( 'Submissions', 'badgeos' )
+            'menu_name'          => __( 'Submission Reviews', 'badgeos' )
 		),
 		'public'             => apply_filters( 'badgeos_public_submissions', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_submissions', false ),
@@ -117,19 +117,19 @@ function badgeos_register_post_types() {
 	// Register Nominations CPT
 	register_post_type( 'nomination', array(
 		'labels'             => array(
-			'name'               => __( 'Nominations', 'badgeos' ),
-			'singular_name'      => __( 'Nomination', 'badgeos' ),
-			'add_new'            => __( 'Add New', 'badgeos' ),
-			'add_new_item'       => __( 'Add New Nomination', 'badgeos' ),
-			'edit_item'          => __( 'Edit Nomination', 'badgeos' ),
-			'new_item'           => __( 'New Nomination', 'badgeos' ),
-			'all_items'          => __( 'Nominations', 'badgeos' ),
-			'view_item'          => __( 'View Nomination', 'badgeos' ),
-			'search_items'       => __( 'Search Nominations', 'badgeos' ),
-			'not_found'          => __( 'No nominations found', 'badgeos' ),
-			'not_found_in_trash' => __( 'No nominations found in Trash', 'badgeos' ),
+            'name'               => __( 'Nomination Reviews', 'badgeos' ),
+            'singular_name'      => __( 'Nomination Review', 'badgeos' ),
+            'add_new'            => __( 'Add New', 'badgeos' ),
+            'add_new_item'       => __( 'Add New Nomination Review', 'badgeos' ),
+            'edit_item'          => __( 'Edit Nomination Review', 'badgeos' ),
+            'new_item'           => __( 'New Nomination Review', 'badgeos' ),
+            'all_items'          => __( 'Nomination Reviews', 'badgeos' ),
+            'view_item'          => __( 'View Nomination Reviews', 'badgeos' ),
+            'search_items'       => __( 'Search Nomination Reviews', 'badgeos' ),
+            'not_found'          => __( 'No nomination Reviews found', 'badgeos' ),
+            'not_found_in_trash' => __( 'No nomination Reviews found in Trash', 'badgeos' ),
 			'parent_item_colon'  => '',
-			'menu_name'          => __( 'Nominations', 'badgeos' )
+            'menu_name'          => __( 'Nomination Reviews', 'badgeos' )
 		),
 		'public'             => apply_filters( 'badgeos_public_nominations', false ),
 		'publicly_queryable' => apply_filters( 'badgeos_public_nominations', false ),
