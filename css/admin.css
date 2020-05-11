@@ -321,6 +321,7 @@ Shortcode Embed styles
 #system-tabs,
 #achievement-tabs,
 #rank-tabs,
+#email-tabs,
 #credit-tabs {
 	margin-top: 20px;
 	background-color: #f6f6f6;
@@ -331,6 +332,7 @@ Shortcode Embed styles
 #system-tabs .tab-title,
 #achievement-tabs .tab-title,
 #rank-tabs .tab-title,
+#email-tabs .tab-title,
 #credit-tabs .tab-title {
 	padding: 10px;
 	font-size: 15px;
@@ -341,6 +343,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav {
 	padding: 0 !important;
 	margin: 0 !important;
@@ -352,6 +355,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li a {
 	padding: 8px 2% !important;
 	width: 96% !important;
@@ -359,6 +363,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li {
 	background-color: #f6f6f6;
 	border: none;
@@ -372,6 +377,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
 	background-color: #fff;
 	border: none;
@@ -384,12 +390,13 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a {
 	color: #000;
 }
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
-#rank-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li:focus {
 	border: none !important;
 	outline: none !important;
@@ -397,8 +404,8 @@ Shortcode Embed styles
 }
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
-#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus {
 	border: none !important;
 	outline: none !important;
@@ -412,12 +419,26 @@ Shortcode Embed styles
 #rank_bulk_revoke,
 #credit_bulk_award,
 #credit_bulk_revoke,
+#badgeos_tools_email_general,
+#badgeos_tools_email_achievements,
+#badgeos_tools_email_achievement_steps,
+#badgeos_tools_email_ranks,
+#badgeos_tools_email_rank_steps,
+#badgeos_tools_email_point_awards,
+#badgeos_tools_email_point_deducts,
 #achievement_bulk_award,
 #achievement_bulk_revoke {
 	background-color: #fff;
 	padding: 0 !important;
 	border-left: 1px solid #ccc;
 }
+#badgeos_tools_email_general,
+#badgeos_tools_email_achievements,
+#badgeos_tools_email_achievement_steps,
+#badgeos_tools_email_ranks,
+#badgeos_tools_email_rank_steps,
+#badgeos_tools_email_point_awards,
+#badgeos_tools_email_point_deducts,
 #rank_bulk_award form,
 #rank_bulk_revoke form,
 #credit_bulk_award form,
@@ -465,6 +486,7 @@ Shortcode Embed styles
 #badgeos_info table tr td {
 	padding: 10px;
 }
+
 #rank_bulk_award form table,
 #rank_bulk_revoke form table,
 #credit_bulk_award form table,
@@ -497,12 +519,14 @@ Shortcode Embed styles
 	border-bottom: 1pt solid #e5e5e5;
 	padding: 20px 0;
 }
+#email-tabs .button,
 #rank-tabs .button,
 #achievement-tabs .button,
 #credit-tabs .button {
 	margin: 20px 0;
 	float: right;
 }
+#email-tabs .tool-hint,
 #rank-tabs .tool-hint,
 #achievement-tabs .tool-hint,
 #credit-tabs .tool-hint {
@@ -521,6 +545,13 @@ Shortcode Embed styles
 	height: auto;
 }
 
+#badgeos_tools_email_general form table tr th,
+#badgeos_tools_email_achievements form table tr th,
+#badgeos_tools_email_achievement_steps form table tr th,
+#badgeos_tools_email_ranks form table tr th,
+#badgeos_tools_email_rank_steps form table tr th,
+#badgeos_tools_email_point_awards form table tr th,
+#badgeos_tools_email_point_deducts form table tr th,
 #credit_bulk_award form table tr th,
 #credit_bulk_award form table tr td,
 #rank_bulk_award form table tr th,
@@ -531,6 +562,13 @@ Shortcode Embed styles
 #credit_bulk_revoke form table tr td {
 	padding-bottom: 20px;
 }
+#badgeos_tools_email_general form table tr th,
+#badgeos_tools_email_achievements form table tr th,
+#badgeos_tools_email_achievement_steps form table tr th,
+#badgeos_tools_email_ranks form table tr th,
+#badgeos_tools_email_rank_steps form table tr th,
+#badgeos_tools_email_point_awards form table tr th,
+#badgeos_tools_email_point_deducts form table tr th,
 #credit_bulk_award form table tr th,
 #credit_bulk_revoke form table tr th,
 #rank_bulk_award form table tr th,
@@ -541,6 +579,13 @@ Shortcode Embed styles
 	text-align: left;
 	width: 40%;
 }
+#badgeos_tools_email_general form table tr td .select2-selection,
+#badgeos_tools_email_achievements form table tr td .select2-selection,
+#badgeos_tools_email_achievement_steps form table tr td .select2-selection,
+#badgeos_tools_email_ranks form table tr td .select2-selection,
+#badgeos_tools_email_rank_steps form table tr td .select2-selection,
+#badgeos_tools_email_point_awards form table tr td .select2-selection,
+#badgeos_tools_email_point_deducts form table tr td .select2-selection,
 #credit_bulk_award form table tr td .select2-selection,
 #credit_bulk_revoke form table tr td .select2-selection,
 #rank_bulk_award form table tr td .select2-selection,
@@ -550,6 +595,15 @@ Shortcode Embed styles
 	border: 1px solid #ddd;
 	max-width: 70%;
 	padding: 6px 8px;
+}
+#badgeos_tools_email_general form,
+#badgeos_tools_email_achievements form,
+#badgeos_tools_email_achievement_steps form,
+#badgeos_tools_email_ranks form,
+#badgeos_tools_email_rank_steps form,
+#badgeos_tools_email_point_awards form,
+#badgeos_tools_email_point_deducts form {
+	padding: 20px;
 }
 #TB_window.badgeos-shortcode-thickbox #TB_ajaxContent {
 	overflow-y: auto !important;

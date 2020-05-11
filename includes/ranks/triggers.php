@@ -45,12 +45,92 @@ function badgeos_ranks_load_activity_triggers() {
     /**
      * Loop through each trigger and add our trigger event to the hook
      */
-	foreach ( $activity_triggers as $trigger => $label ) {
-		add_action( $trigger, 'badgeos_ranks_req_trigger_event', 10, 20 );
+    foreach ( $activity_triggers as $trigger => $trigger_data ) {
+
+        if( is_array( $trigger_data ) ) {
+            if( count( $trigger_data['sub_triggers'] ) > 0 ) {
+                foreach( $trigger_data['sub_triggers'] as $tdata ) {
+                    add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_ranks_req_trigger_event', 10, 20 );
+                }
+            }
+        } else
+            add_action( $trigger, 'badgeos_ranks_req_trigger_event', 10, 20 );
     }
     
 }
 add_action( 'init', 'badgeos_ranks_load_activity_triggers' );
+
+/**
+ * Handle each of our dynamic activity triggers
+ *
+ * @since 1.0.0
+ * @return mixed
+ */
+function badgeos_dynamic_ranks_req_trigger_event( ) {
+    /**
+     * Setup all our globals
+     */
+    global $user_ID, $blog_id, $wpdb;
+
+    $site_id = $blog_id;
+
+    $args = func_get_args();
+
+    /**
+     * Grab our current trigger
+     */
+    $this_trigger = current_filter();
+
+
+    /**
+     * Grab the user ID
+     */
+    $user_id = $args[0];
+    if( intval( $user_id ) < 1 ) {
+        $user_id = get_current_user_id();
+    }
+
+    $user_data = get_user_by( 'id', $user_id );
+
+    /**
+     * Sanity check, if we don't have a user object, bail here
+     */
+    if ( ! is_object( $user_data ) )
+        return $args[ 0 ];
+
+    /**
+     * If the user doesn't satisfy the trigger requirements, bail here
+     */
+    if ( ! apply_filters( 'badgeos_user_rank_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) )
+        return $args[ 0 ];
+
+    /**
+     * Now determine if any Achievements are earned based on this trigger event
+     */
+    $triggered_ranks = $wpdb->get_results( $wpdb->prepare(
+        "SELECT p.ID as post_id 
+							FROM $wpdb->postmeta AS pm
+							INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_badgeos_rank_subtrigger_value' ) where p.post_status = 'publish' AND pm.meta_value = %s
+							",
+        $this_trigger
+    ) );
+
+    if( !empty( $triggered_ranks ) ) {
+        foreach ( $triggered_ranks as $rank ) {
+            $parent_id = badgeos_get_parent_id( $rank->post_id );
+            if( absint($parent_id) > 0) {
+                $step_params = get_post_meta( $rank->post_id, '_badgeos_fields_data', true );
+                $step_params = badgeos_extract_array_from_query_params( $step_params );
+                if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'ranks', $this_trigger, $step_params, $args[ 1 ]) ) {
+                    $new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
+                    badgeos_maybe_award_rank( $rank->post_id,$parent_id,$user_id, $this_trigger, $site_id, $args );
+                }
+            }
+        }
+    }
+
+    return $args[ 0 ];
+}
 
 /**
  * Handle each of our ranks activity triggers

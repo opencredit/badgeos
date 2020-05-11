@@ -1664,12 +1664,14 @@ function badgeos_add_rank( $args = array() ) {
             'credit_amount'         => $args['credit_amount'],
             'user_id'               => absint( $args['user_id'] ),
             'admin_id'              => $args['admin_id'],
-            'this_trigger'          =>  $args['this_trigger'],
-            'priority'              =>  $priority,
-            'dateadded'             => date("Y-m-d H:i:s")
+            'this_trigger'          => $args['this_trigger'],
+            'priority'              => $priority,
+            'dateadded'             => current_time( 'mysql' )
         ));
 
-        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $wpdb->insert_id );
+        $rank_entry_id = $wpdb->insert_id;
+
+        update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank', $rank_entry_id );
         update_user_meta( absint( $args['user_id'] ), '_badgeos_'. $new_rank->post_type .'_rank_earned_time', $new_rank->date_earned );
 
         /**
@@ -1683,7 +1685,8 @@ function badgeos_add_rank( $args = array() ) {
             $args['credit_id'],
             $args['credit_amount'],
             $args['admin_id'],
-            $args['this_trigger']
+            $args['this_trigger'],
+            $rank_entry_id
         );
 
         return $wpdb->insert_id;
