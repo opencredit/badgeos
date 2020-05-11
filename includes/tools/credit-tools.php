@@ -4,9 +4,9 @@
  *
  * @package badgeos
  * @subpackage Tools
- * @author Wooninjas
+ * @author LearningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
- * @link https://wooninjas.com
+ * @link https://badgeos.org
  */
 
 $credit_types = badgeos_get_point_types();

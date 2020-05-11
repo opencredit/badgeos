@@ -94,7 +94,7 @@ function badgeos_register_ranks_post_types() {
 add_action( 'init', 'badgeos_register_ranks_post_types' );
 
 /**
- * Register each of our Achivement Types as CPTs
+ * Register each of our achievement Types as CPTs
  */
 function badgeos_register_ranks_type_cpt() {
 

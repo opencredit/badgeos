@@ -194,7 +194,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 				'site_id'               => $args['site_id'],
 				'image'          		=> $new_achievement->image,
 				'rec_type'          	=> $rec_type,
-				'date_earned'           => date("Y-m-d H:i:s")
+                'date_earned'           => current_time( 'mysql' )
 			));
 			
 			do_action( 'badgeos_achievements_new_added', $rec_type, $new_achievement->ID, absint( $args['user_id'] ), $wpdb->insert_id );
@@ -348,6 +348,7 @@ function badgeos_user_profile_data( $user = null ) {
             echo '</td>';
             $point_type = '';
 
+            $post_id = 0;
             if( property_exists ( $achievement, 'point_type' ) ) {
                 $post_id = intval( $achievement->point_type );
                 $point_type = ' '.get_the_title( $post_id );
@@ -355,6 +356,11 @@ function badgeos_user_profile_data( $user = null ) {
                 $post_id = intval( $achievement->points_type );
                 $point_type = ' '.get_the_title( $post_id );
             }
+            $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
+            if( intval( $post_id ) == 0 ) {
+                $point_type = ' '.get_the_title( $default_point_type );
+            }
+
             echo '<td width="20%">'.intval( $achievement->points ).$point_type.'</td>';
 
             do_action( 'badgeos_profile_achivement_add_column_data', $achievement );
@@ -406,7 +412,7 @@ add_action( 'show_user_profile', 'badgeos_user_profile_data' );
 add_action( 'edit_user_profile', 'badgeos_user_profile_data' );
 
 /**
- * revokes achivements
+ * revokes achievements
  *
  * @since  1.0.0
  * @param  int  $user_id      User ID being saved

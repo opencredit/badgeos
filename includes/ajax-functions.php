@@ -9,7 +9,7 @@
  * @link https://credly.com
  */
 
-// Setup our badgeos AJAX actions
+// Setup our Badgeos AJAX actions
 $badgeos_ajax_actions = array(
 	'get-achievements',
     'get-earned-achievements',
@@ -17,8 +17,9 @@ $badgeos_ajax_actions = array(
 	'get-feedback',
 	'get-achievements-select2',
 	'get-achievement-types',
-	'get-users',
-	'update-feedback',
+    'get-users',
+    'badgeos-get-users-list',
+    'update-feedback',
 );
 
 // Register core Ajax calls.
@@ -36,6 +37,9 @@ foreach ( $badgeos_ajax_actions as $action ) {
 function badgeos_ajax_get_earned_ranks() {
     global $user_ID, $blog_id, $wpdb;
 
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
+
     // Setup our AJAX query vars
     $type       = isset( $_REQUEST['rank_type'] )  ? $_REQUEST['rank_type']  : false;
     $limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
@@ -50,7 +54,8 @@ function badgeos_ajax_get_earned_ranks() {
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
 
     // Convert $type to properly support multiple rank types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_ranks_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_ranks_shortcode_default_view;
+
     if ( 'all' == $type ) {
         $type = badgeos_get_rank_types_slugs();
         // Drop steps from our list of "all" achievements
@@ -69,16 +74,13 @@ function badgeos_ajax_get_earned_ranks() {
     if( $offset > 0 ) {
         $ranks = '';
     } else {
-        $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+        $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($earned_ranks_shortcode_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($earned_ranks_shortcode_default_view=='grid'?'selected':'').'"><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$earned_ranks_shortcode_default_view.'">';
     }
 
     $ranks_count = 0;
 
     // If we're polling all sites, grab an array of site IDs
-    if( $wpms && $wpms != 'false' )
-        $sites = badgeos_get_network_site_ids();
-    else
-        $sites = array( $blog_id );
+    $sites = array( $blog_id );
 
     // Loop through each site (default is current site only)
     $query_count = 0;
@@ -153,18 +155,14 @@ function badgeos_ajax_get_earned_ranks() {
         $ranks .= '</ul>';
 
         // Display a message for no results
-        if ( empty( $ranks ) ) {
+        if ( count( $user_ranks ) == 0 ) {
             $current = current( $type );
-            // If we have exactly one achivement type, get its plural name, otherwise use "ranks"
+            // If we have exactly one achievement type, get its plural name, otherwise use "ranks"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
             $ranks .= '<div class="badgeos-no-results">';
-            if ( 'completed' == $filter ) {
-                $ranks .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }else{
-                $ranks .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }
+            $ranks .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
             $ranks .= '</div><!-- .badgeos-no-results -->';
         }
 
@@ -181,7 +179,6 @@ function badgeos_ajax_get_earned_ranks() {
         'offset'      => $offset + $limit,
         'query_count' => $query_count,
         'badge_count' => $ranks_count,
-        'type'        => $earned_ids,
         'attr'        => $_REQUEST
     ) );
 
@@ -195,6 +192,10 @@ function badgeos_ajax_get_earned_ranks() {
  */
 function badgeos_ajax_get_earned_achievements() {
     global $user_ID, $blog_id, $wpdb;
+
+    // Convert $type to properly support multiple achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
 
     // Setup our AJAX query vars
     $type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
@@ -213,8 +214,8 @@ function badgeos_ajax_get_earned_achievements() {
     $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
 
-    // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $earned_achievements_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_achievements_shortcode_default_view;
+
     if ( 'all' == $type ) {
         $type = badgeos_get_achievement_types_slugs();
         // Drop steps from our list of "all" achievements
@@ -233,7 +234,7 @@ function badgeos_ajax_get_earned_achievements() {
     if( $offset > 0 ) {
         $achievements = '';
     } else {
-        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> ' . __( 'List', 'badgeos' ) . '</button><button class="grid buttons"><i class="fa fa-th-large"></i> ' . __( 'Grid', 'badgeos' ) . '</button></div><ul class="ls_grid_container list">';
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($earned_achievements_shortcode_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($earned_achievements_shortcode_default_view=='grid'?'selected':'').'"><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$earned_achievements_shortcode_default_view.'">';
     }
 
     $achievement_count = 0;
@@ -335,18 +336,14 @@ function badgeos_ajax_get_earned_achievements() {
         }
 
         // Display a message for no results
-        if ( empty( $achievements ) ) {
+        if ( count( $user_achievements ) == 0 ) {
             $current = current( $type );
-            // If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+            // If we have exactly one achievement type, get its plural name, otherwise use "achievements"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
             $achievements .= '<div class="badgeos-no-results">';
-            if ( 'completed' == $filter ) {
-                $achievements .= '<p>' . sprintf( __( 'No completed %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }else{
-                $achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
-            }
+            $achievements .= '<p>' . sprintf( __( 'No %s to display at this time.', 'badgeos' ), strtolower( $post_type_plural ) ) . '</p>';
             $achievements .= '</div><!-- .badgeos-no-results -->';
         }
 
@@ -363,7 +360,6 @@ function badgeos_ajax_get_earned_achievements() {
         'offset'      => $offset + $limit,
         'query_count' => $query_count,
         'badge_count' => $achievement_count,
-        'type'        => $earned_ids,
         'attr'        => $_REQUEST
 	
     ) );
@@ -378,7 +374,12 @@ function badgeos_ajax_get_earned_achievements() {
 function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
-	// Setup our AJAX query vars
+    // Convert $type to properly support multiple achievement types
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
+
+    $earned_ids = [];
+    // Setup our AJAX query vars
 	$type       = isset( $_REQUEST['type'] )       ? $_REQUEST['type']       : false;
 	$limit      = isset( $_REQUEST['limit'] )      ? $_REQUEST['limit']      : false;
 	$offset     = isset( $_REQUEST['offset'] )     ? $_REQUEST['offset']     : false;
@@ -398,8 +399,8 @@ function badgeos_ajax_get_achievements() {
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
     $show_steps = isset( $_REQUEST['show_steps'] ) ? $_REQUEST['show_steps'] : 'true';
 
-    // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $achievement_list_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $achievement_list_default_view;
+
     if ( 'all' == $type ) {
 		$type = badgeos_get_achievement_types_slugs();
 		// Drop steps from our list of "all" achievements
@@ -428,7 +429,7 @@ function badgeos_ajax_get_achievements() {
     if( $offset > 0 ) {
         $achievements = '';
     } else {
-        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons selected"><i class="fa fa-bars"></i> '. __( 'List', 'badgeos' ) .'</button><button class="grid buttons"><i class="fa fa-th-large"></i> '. __( 'Grid', 'badgeos' ) .'</button></div><ul class="ls_grid_container list">';
+        $achievements = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($achievement_list_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($achievement_list_default_view=='grid'?'selected':'').'""><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$achievement_list_default_view.'">';
     }
 
     $achievement_count = 0;
@@ -516,9 +517,9 @@ function badgeos_ajax_get_achievements() {
 			$achievements = '';*/
 
 		// Display a message for no results
-		if ( empty( $achievements ) ) {
+        if ( $achievement_posts->found_posts() == 0 ) {
 			$current = current( $type );
-			// If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+			// If we have exactly one achievement type, get its plural name, otherwise use "achievements"
 			$post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
 			// Setup our completion message
@@ -610,6 +611,37 @@ function badgeos_ajax_update_feedback() {
  *
  * @since 1.4.0
  */
+function badgeos_ajax_badgeos_get_users_list() {
+
+    // If no query was sent, die here
+    if ( ! isset( $_REQUEST['q'] ) ) {
+        die();
+    }
+
+    global $wpdb;
+
+    // Pull back the search string
+    $search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+    $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
+
+    // Build our query
+    if ( !empty( $search ) ) {
+        $sql .= " WHERE user_login LIKE '%".$_REQUEST['q']."%'";
+    }
+
+    // Fetch our results (store as associative array)
+    $results = $wpdb->get_results( $sql." limit 100 ", 'ARRAY_A' );
+
+    // Return our results
+    wp_send_json( $results );
+}
+
+/**
+ * AJAX Helper for selecting users in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
 function badgeos_ajax_get_users() {
 
 	// If no query was sent, die here
@@ -622,7 +654,7 @@ function badgeos_ajax_get_users() {
 	// Pull back the search string
 	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
 
-    $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
+    $sql = "SELECT ID as id, user_login as text FROM {$wpdb->users}";
 
 	// Build our query
 	if ( !empty( $search ) ) {
@@ -633,7 +665,7 @@ function badgeos_ajax_get_users() {
     $results = $wpdb->get_results( $sql." limit 100 ", 'ARRAY_A' );
 
 	// Return our results
-    wp_send_json( $results );
+    wp_send_json( array( "results"=> $results ) );
 }
 
 /**

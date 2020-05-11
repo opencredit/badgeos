@@ -1054,7 +1054,18 @@ function badgeos_get_comment_form( $post_id = 0 ) {
         $attachment = render_attachment_from_draft_submission($attachment_data);
     }
 
-	$sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
+    wp_enqueue_script(
+        'ck_editor_cdn',
+        ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), array( 'jquery' ), 'v3', true
+    );
+
+    wp_enqueue_script(
+        'custom_script',
+        badgeos_get_directory_url().'js/ckeditor.js',
+        array( 'jquery' ),	BadgeOS::$version,true
+    );
+
+    $sub_form = '<form class="badgeos-comment-form" method="post" enctype="multipart/form-data">';
 
 		// comment form heading
 		$sub_form .= '<legend>'. wp_kses_post( $language['heading'] ) .'</legend>';
@@ -1432,7 +1443,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 	);
 
 	// Available filter for changing the language
-	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+    $defaults = apply_filters( 'badgeos_nomination_form_language', $defaults );
 
 	// Patch in our achievement and user IDs
 	$defaults['achievement_id'] = $post->ID;

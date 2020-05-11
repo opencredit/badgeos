@@ -139,3 +139,8 @@ $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "p2pmeta" );
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_points");
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_ranks");
 $wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "badgeos_achievements");
+
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'badgeos_assertion_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'badgeos_issuer_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='badgeos_json_url';");
+$wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='badgeos_evidence_url';");
