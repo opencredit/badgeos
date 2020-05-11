@@ -349,3 +349,88 @@ ul.badgeos-achievement-earners-list li {
 #badgeos-earned-ranks-container .grid > li:nth-child(odd)  {
 	clear: both;
 }
+
+.evidence_main {
+	display: block;
+	width: 100% !important;
+	height: auto;
+	overflow: hidden;
+}
+.left_col{
+	float: left;
+	width: 28%;
+	height: auto;
+	overflow: hidden;
+	padding: 3px 3px;
+	min-height: 36px;
+}
+.right_col{
+	float: left;
+	width: 68%;
+	height: auto;
+	overflow: hidden;
+	padding: 3px 3px;
+	min-height: 36px;
+}
+.right_col .title{
+	display: block;
+	font-family: sans-serif;
+	font-size: 20px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+
+.right_col .issue_date{
+	display: block;
+	font-size: 12px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+.right_col p{
+	display: block;
+	font-size: 13px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+.right_col .evidence{
+	display: block;
+	font-size: 12px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+
+.verify-open-badge {
+	padding:5px 15px !important;
+}
+.verify-open-badge{
+	border:1px solid !important;
+	margin: 0px auto !important;
+}
+
+#verification-res-list{
+	list-style: none;
+	color:red;
+	font-family: sans-serif;
+	font-size: 15px;
+	margin: auto;
+}
+#verification-res-list li.success{
+	color: green;
+}
+#verification-res-list li.error{
+	color: red;
+}
+#verification-res-list li.success:before {
+	content:"\2713\0020";
+	width:32px;
+	font-size: 25px;
+	font-weight: bold;
+	color: green;
+}
+#verification-res-list li.error:before {
+	content:"\00d7\0020";
+	width:32px;
+	font-size: 32px;
+	font-weight: bold;
+	color:red;
+}

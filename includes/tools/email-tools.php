@@ -125,7 +125,7 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td colspan="2">
                             <div class="form-switcher form-switcher-lg">
                                 <input type="checkbox" class="badgeos_tools_disable_email_checkboxes" name="badgeos_tools[email_disable_earned_achievement_email]" <?php echo (isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) && $badgeos_admin_tools['email_disable_earned_achievement_email']=="yes" ) ?'checked':''; ?> id="badgeos_tools_disable_earned_achievement_email" data-com.bitwarden.browser.user-edited="yes">
-                                <?php _e( 'Disable earned achievement email', 'badgeos' ); ?>
+                                <?php _e( 'Disable Earned Achievement Email', 'badgeos' ); ?>
                             </div>
                             <span class="tool-hint"><?php _e( 'Select the checkbox to stop sending the emails.', 'badgeos' ); ?></span>
                         </td>
@@ -162,7 +162,7 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td colspan="2">
                             <div class="form-switcher form-switcher-lg">
                                 <input type="checkbox" class="badgeos_tools_disable_email_checkboxes" name="badgeos_tools[email_disable_achievement_steps_email]" <?php echo (isset( $badgeos_admin_tools['email_disable_achievement_steps_email'] ) && $badgeos_admin_tools['email_disable_achievement_steps_email']=="yes" ) ?'checked':''; ?> id="badgeos_tools_email_disable_achievement_steps_email" data-com.bitwarden.browser.user-edited="yes">
-                                <?php _e( 'Disable Achievement Steps email', 'badgeos' ); ?>
+                                <?php _e( 'Disable Achievement Steps Email', 'badgeos' ); ?>
                             </div>
                             <span class="tool-hint"><?php _e( 'Select the checkbox to stop sending the emails.', 'badgeos' ); ?></span>
                         </td>
@@ -199,7 +199,7 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td colspan="2">
                             <div class="form-switcher form-switcher-lg">
                                 <input type="checkbox" class="badgeos_tools_disable_email_checkboxes" name="badgeos_tools[email_disable_ranks_email]" <?php echo (isset( $badgeos_admin_tools['email_disable_ranks_email'] ) && $badgeos_admin_tools['email_disable_ranks_email']=="yes" ) ?'checked':''; ?> id="badgeos_tools_email_disable_ranks_email" data-com.bitwarden.browser.user-edited="yes">
-                                <?php _e( 'Disable ranks email', 'badgeos' ); ?>
+                                <?php _e( 'Disable Ranks Email', 'badgeos' ); ?>
                             </div>
                             <span class="tool-hint"><?php _e( 'Select the checkbox to stop sending the emails.', 'badgeos' ); ?></span>
                         </td>
@@ -273,7 +273,7 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td colspan="2">
                             <div class="form-switcher form-switcher-lg">
                                 <input type="checkbox" class="badgeos_tools_disable_email_checkboxes" name="badgeos_tools[email_disable_point_awards_email]" <?php echo (isset( $badgeos_admin_tools['email_disable_point_awards_email'] ) && $badgeos_admin_tools['email_disable_point_awards_email']=="yes" ) ?'checked':''; ?> id="badgeos_tools_email_disable_point_awards_email" data-com.bitwarden.browser.user-edited="yes">
-                                <?php _e( 'Disable Achievement Steps email', 'badgeos' ); ?>
+                                <?php _e( 'Disable Point Award Email', 'badgeos' ); ?>
                             </div>
                             <span class="tool-hint"><?php _e( 'Select the checkbox to stop sending the emails.', 'badgeos' ); ?></span>
                         </td>
@@ -310,7 +310,7 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td colspan="2">
                             <div class="form-switcher form-switcher-lg">
                                 <input type="checkbox" class="badgeos_tools_disable_email_checkboxes" name="badgeos_tools[email_disable_point_deducts_email]" <?php echo (isset( $badgeos_admin_tools['email_disable_point_deducts_email'] ) && $badgeos_admin_tools['email_disable_point_deducts_email']=="yes" ) ?'checked':''; ?> id="badgeos_tools_email_disable_point_deducts_email" data-com.bitwarden.browser.user-edited="yes">
-                                <?php _e( 'Disable Achievement Steps email', 'badgeos' ); ?>
+                                <?php _e( 'Disable Point Deduct Email', 'badgeos' ); ?>
                             </div>
                             <span class="tool-hint"><?php _e( 'Select the checkbox to stop sending the emails.', 'badgeos' ); ?></span>
                         </td>
