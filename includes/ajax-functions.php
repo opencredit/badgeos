@@ -17,8 +17,9 @@ $badgeos_ajax_actions = array(
 	'get-feedback',
 	'get-achievements-select2',
 	'get-achievement-types',
-	'get-users',
-	'update-feedback',
+    'get-users',
+    'badgeos-get-users-list',
+    'update-feedback',
 );
 
 // Register core Ajax calls.
@@ -159,7 +160,7 @@ function badgeos_ajax_get_earned_ranks() {
         // Display a message for no results
         if ( empty( $ranks ) ) {
             $current = current( $type );
-            // If we have exactly one achivement type, get its plural name, otherwise use "ranks"
+            // If we have exactly one achievement type, get its plural name, otherwise use "ranks"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
@@ -345,7 +346,7 @@ function badgeos_ajax_get_earned_achievements() {
         // Display a message for no results
         if ( empty( $achievements ) ) {
             $current = current( $type );
-            // If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+            // If we have exactly one achievement type, get its plural name, otherwise use "achievements"
             $post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
             // Setup our completion message
@@ -530,7 +531,7 @@ function badgeos_ajax_get_achievements() {
 		// Display a message for no results
 		if ( empty( $achievements ) ) {
 			$current = current( $type );
-			// If we have exactly one achivement type, get its plural name, otherwise use "achievements"
+			// If we have exactly one achievement type, get its plural name, otherwise use "achievements"
 			$post_type_plural = ( 1 == count( $type ) && ! empty( $current ) ) ? get_post_type_object( $current )->labels->name : __( 'achievements' , 'badgeos' );
 
 			// Setup our completion message
@@ -622,6 +623,37 @@ function badgeos_ajax_update_feedback() {
  *
  * @since 1.4.0
  */
+function badgeos_ajax_badgeos_get_users_list() {
+
+    // If no query was sent, die here
+    if ( ! isset( $_REQUEST['q'] ) ) {
+        die();
+    }
+
+    global $wpdb;
+
+    // Pull back the search string
+    $search = esc_sql( like_escape( $_REQUEST['q'] ) );
+
+    $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
+
+    // Build our query
+    if ( !empty( $search ) ) {
+        $sql .= " WHERE user_login LIKE '%".$_REQUEST['q']."%'";
+    }
+
+    // Fetch our results (store as associative array)
+    $results = $wpdb->get_results( $sql." limit 100 ", 'ARRAY_A' );
+
+    // Return our results
+    wp_send_json( $results );
+}
+
+/**
+ * AJAX Helper for selecting users in Shortcode Embedder
+ *
+ * @since 1.4.0
+ */
 function badgeos_ajax_get_users() {
 
 	// If no query was sent, die here
@@ -634,7 +666,7 @@ function badgeos_ajax_get_users() {
 	// Pull back the search string
 	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
 
-    $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
+    $sql = "SELECT ID as id, user_login as text FROM {$wpdb->users}";
 
 	// Build our query
 	if ( !empty( $search ) ) {
@@ -645,7 +677,7 @@ function badgeos_ajax_get_users() {
     $results = $wpdb->get_results( $sql." limit 100 ", 'ARRAY_A' );
 
 	// Return our results
-    wp_send_json( $results );
+    wp_send_json( array( "results"=> $results ) );
 }
 
 /**

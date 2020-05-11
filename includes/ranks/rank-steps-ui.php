@@ -112,6 +112,12 @@ function badgeos_rank_req_steps_ui_html($step_id = 0, $post_id = 0 ) {
 	$requirements      = badgeos_get_rank_req_step_requirements( $step_id );
 	$count             = !empty( $requirements['count'] ) ? $requirements['count'] : 1;
 	$achievement_types = badgeos_get_rank_types_slugs();
+
+    $dynamic_triggers = array();
+    $badgeos_subtrigger_value 	= $requirements['badgeos_subtrigger_value'];
+    $badgeos_subtrigger_id 		= $requirements['badgeos_subtrigger_id'];
+    $badgeos_fields_data 		= $requirements['badgeos_fields_data'];
+
     ?>
 
 	<li class="step-row step-<?php echo $step_id; ?>" data-step-id="<?php echo $step_id; ?>">
@@ -127,14 +133,68 @@ function badgeos_rank_req_steps_ui_html($step_id = 0, $post_id = 0 ) {
 		<select class="select-trigger-type" data-step-id="<?php echo $step_id; ?>">
 			<?php
 				foreach (get_badgeos_ranks_req_activity_triggers() as $value => $label ) {
-					echo '<option value="' . esc_attr( $value ) . '" ' . selected( $requirements['trigger_type'], $value, false ) . '>' . esc_html( $label ) . '</option>';
-				}
+                    if( is_array( $label ) ) {
+                        echo '<option value="' . esc_attr( $value ) . '" ' . selected( $requirements['trigger_type'], $value, false ) . '>' . esc_html( $label['label'] ) . '</option>';
+                        $dynamic_triggers[ $value ] = $label;
+                    } else {
+                        echo '<option value="' . esc_attr( $value ) . '" ' . selected( $requirements['trigger_type'], $value, false ) . '>' . esc_html( $label ) . '</option>';
+                    }
+                }
 			?>
 		</select>
 		
 		<?php do_action( 'badgeos_rank_req_steps_ui_html_after_trigger_type', $step_id, $post_id ); ?>
 
-		<input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
+        <?php if( count( $dynamic_triggers ) > 0 ) {
+
+        foreach ( $dynamic_triggers as $key => $data ) {
+        $fields_group = array();
+        ?>
+        <div id="badgeos_achievements_step_dynamic_section_<?php echo $key;?>" style="display:inline-block">
+            <select id="badgeos_achievements_step_ddl_dynamic_<?php echo $key;?>" data-trigger="<?php echo $key;?>" class="badgeos_achievements_step_fields badgeos_achievements_step_ddl_dynamic" name="badgeos_achievements_step_ddl_dynamic_<?php echo $key;?>">
+                <?php
+                foreach ( $data['sub_triggers'] as $key2 => $data2 ) {
+                    $sub_fields = array();
+                    echo '<option value="'.$data2[ 'trigger' ].'" '.selected( $data2[ 'trigger' ], $badgeos_subtrigger_value, false ) . ' >'.$data2[ 'label' ].'</option>';
+                    foreach ( $data2['fields'] as $fieldkey => $field ) {
+                        $sub_fields[] = $field;
+                    }
+
+                    $fields_group[$data2['trigger']] = $sub_fields;
+                }
+
+                echo '</select>';
+
+                foreach ( $fields_group as $fields_groupkey => $fields ) {
+                    foreach ( $fields as $fieldkey => $field ) {
+                        $sel_val = '';
+                        if( isset( $badgeos_fields_data[$field['id']] ) ) {
+                            $sel_val = $badgeos_fields_data[$field['id']];
+                        }
+
+                        switch( trim( $field['type'] ) ) {
+                            case "select":
+                                echo '<select id="'.$field['id'].'" class="badgeos_achievements_step_fields badgeos_achievements_step_subddl_dynamic badgeos_achievements_step_fields_'.$fields_groupkey.' badgeos_achievements_step_subddl_'.$fields_groupkey.'" name="'.$field['id'].'">';
+                                foreach ( $field['options'] as $ddlkey => $ddlval ) {
+                                    echo '<option value="'.$ddlkey.'" '.($ddlkey == $sel_val?'selected':'').'>'.$ddlval.'</option>';
+                                }
+                                echo '</select>';
+                                break;
+                            case "text":
+                                echo '<input value="'.$sel_val.'" type="'.$field['type'].'" size="4" id="'.$field['id'].'"  class="badgeos_achievements_step_fields badgeos_achievements_step_subtxt_dynamic badgeos_achievements_step_fields_'.$fields_groupkey.' badgeos_achievements_step_subtxt_'.$fields_groupkey.'" name="'.$field['id'].'" />';
+                                break;
+                            case "number":
+                                echo '<input value="'.$sel_val.'" type="'.$field['type'].'" size="4" step="1" min="0" id="'.$field['id'].'" class="badgeos_achievements_step_fields badgeos_achievements_step_subtxt_dynamic badgeos_achievements_step_fields_'.$fields_groupkey.' badgeos_achievements_step_subtxt_'.$fields_groupkey.'" name="'.$field['id'].'" />';
+                                break;
+                        }
+                    }
+                }
+                echo '</div>';
+                }
+                } ?>
+                <?php do_action( 'badgeos_rank_req_steps_ui_html_after_dynamic_trigger_type', $step_id, $post_id ); ?>
+
+                <input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
 
 		<?php do_action( 'badgeos_rank_req_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
@@ -160,13 +220,21 @@ function badgeos_get_rank_req_step_requirements($step_id = 0 ) {
      * Setup our default requirements array, assume we require nothing
      */
 	$requirements = array(
-		'count'            => absint( get_post_meta( $step_id, '_badgeos_count', true ) ),
-		'_credit_value'    => absint( get_post_meta( $step_id, '_credit_value', true ) ),
-		'trigger_type'     => get_post_meta( $step_id, '_rank_trigger_type', true ),
-		'achievement_post' => get_post_meta( $step_id, 'achievement_post', true ),
-	);
+        'count'            			=> absint( get_post_meta( $step_id, '_badgeos_count', true ) ),
+        '_credit_value'    			=> absint( get_post_meta( $step_id, '_credit_value', true ) ),
+        'trigger_type'     			=> get_post_meta( $step_id, '_rank_trigger_type', true ),
+        'achievement_post' 			=> get_post_meta( $step_id, 'achievement_post', true ),
+        'badgeos_subtrigger_id' 	=> get_post_meta( $step_id, '_badgeos_subtrigger_id', true ),
+        'badgeos_subtrigger_value' 	=> get_post_meta( $step_id, '_badgeos_rank_subtrigger_value', true ),
+        'badgeos_fields_data' 		=> get_post_meta( $step_id, '_badgeos_fields_data', true ),
+    );
 
-	/**
+    if( !empty( $requirements['badgeos_fields_data'] ) ) {
+
+        $requirements['badgeos_fields_data'] = badgeos_extract_array_from_query_params( $requirements['badgeos_fields_data'] );
+    }
+
+    /**
      * If the step requires a specific achievement
      */
 	if ( ! empty( $requirements['achievement_type'] ) ) {
@@ -290,9 +358,22 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
 			//$credit_value   = ( ! empty( $step['credit_value'] ) ) ? $step['credit_value'] : 0;
 			$trigger_type     = $step['trigger_type'];
-			$achievement_post = $step['achievement_post'];
-			
-			/**
+
+            $achievement_post = '';
+            if( array_key_exists( 'achievement_post', $step ) )
+                $achievement_post = $step['achievement_post'];
+
+            $badgeos_subtrigger_id = '';
+            $badgeos_subtrigger_value = '';
+            $badgeos_fields_data = '';
+            if( isset( $step['badgeos_subtrigger_id'] ) )
+                $badgeos_subtrigger_id 		= $step['badgeos_subtrigger_id'];
+            if( isset( $step['badgeos_subtrigger_value'] ) )
+                $badgeos_subtrigger_value 	= $step['badgeos_subtrigger_value'];
+            if( isset( $step['badgeos_fields_data'] ) )
+                $badgeos_fields_data 		= $step['badgeos_fields_data'];
+
+            /**
              * Clear all relation data
              */
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
@@ -310,7 +391,13 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 				default :
 					$triggers = get_badgeos_ranks_req_activity_triggers();
 					$title = $triggers[$trigger_type];
-					break;
+                    if( is_array( $title ) ) {
+                        if( !empty( $badgeos_subtrigger_value ) )
+                            $title = $badgeos_subtrigger_value;
+                        else
+                            $title = $title['label'];
+                    }
+                    break;
 
 			}
 
@@ -322,11 +409,14 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 			/**
              * Update our relevant meta
              */
-			update_post_meta( $step_id, '_badgeos_count', $required_count );
-			update_post_meta( $step_id, '_rank_trigger_type', $trigger_type );
-			update_post_meta( $step_id, 'achievement_post', $achievement_post );
+            update_post_meta( $step_id, '_badgeos_count', 				 $required_count );
+            update_post_meta( $step_id, '_rank_trigger_type', 			 $trigger_type );
+            update_post_meta( $step_id, 'achievement_post', 			 $achievement_post );
+            update_post_meta( $step_id, '_badgeos_subtrigger_id', 		 $badgeos_subtrigger_id );
+            update_post_meta( $step_id, '_badgeos_rank_subtrigger_value',$badgeos_subtrigger_value );
+            update_post_meta( $step_id, '_badgeos_fields_data', 		 $badgeos_fields_data );
 
-			/**
+            /**
              * Available hook for custom Activity Triggers
              */
 			$custom_title = sprintf( __( 'Earn %1$s %2$s.', 'badgeos' ), $title, sprintf( _n( '%d time', '%d times', $required_count ), $required_count ) );
