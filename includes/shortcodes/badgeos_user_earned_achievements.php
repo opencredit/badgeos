@@ -86,6 +86,12 @@ function badgeos_user_earned_achievements_shortcode() {
                 'type'          => 'select',
                 'values'        => $post_list
             ),
+            'user_id1' => array(
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
+                'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
+            ),
             'wpms' => array(
                 'name'        => __( 'Include Multisite Achievements', 'badgeos' ),
                 'description' => __( 'Show achievements from all network sites.', 'badgeos' ),
@@ -172,11 +178,17 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
     }
 
     global $user_ID;
+
+    $passed_user_id = get_current_user_id();
+    if( isset( $atts['user_id'] ) && ! empty( $atts['user_id'] ) ) {
+        $passed_user_id = $atts['user_id'];
+    }
+
     extract( shortcode_atts( array(
         'type'        => 'all',
         'limit'       => '10',
         'show_search' => true,
-        'user_id'     => get_current_user_id(),
+        'user_id'     => $passed_user_id,
         'wpms'        => false,
         'orderby'     => 'ID',
         'order'       => 'ASC',
@@ -189,6 +201,8 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
 
     ), $atts, 'badgeos_user_earned_achievements' ) );
 
+    wp_enqueue_script( 'thickbox' );
+    wp_enqueue_style( 'thickbox' );
     wp_enqueue_style( 'badgeos-front' );
     wp_enqueue_script( 'badgeos-achievements' );
 

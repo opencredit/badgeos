@@ -20,13 +20,18 @@
  */
 function badgeos_user_deserves_rank_step_count_callback( $return, $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args=array() ) {
 
-	/**
+    if( ! $return ) {
+        return $return;
+    }
+
+
+    /**
      * Only override the $return data if we're working on a step
      */
 	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( trim( $settings['ranks_step_post_type'] ) == get_post_type( $step_id ) ) {
 
-        if( ! empty( $this_trigger ) && in_array( $this_trigger, get_badgeos_ranks_req_activity_triggers() ) ) {
+        if( ! empty( $this_trigger ) && array_key_exists( $this_trigger, get_badgeos_ranks_req_activity_triggers() ) ) {
 
             /**
              * Get the required number of checkins for the step.
@@ -236,6 +241,7 @@ function badgeos_maybe_award_rank( $step_id = 0, $rank_id = 0, $user_id = 0, $th
          */
         if( ! apply_filters( 'badgeos_user_deserves_rank_step_count', $completed, $requirement->ID, $rank_id, $user_id, $this_trigger, $site_id, $args ) ) {
 			$completed = false;
+            return $completed;
 		}
 	}
 	

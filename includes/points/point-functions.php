@@ -43,6 +43,26 @@ function badgeos_get_users_points( $user_id = 0, $achievement_id = 0 ) {
 }
 
 /**
+ * Returns the points type title plural. If plural is empty then returns the point title.
+ *
+ * @param point_id
+ *
+ * @return point_title
+ */
+function badgeos_points_type_display_title( $point_id = 0 ) {
+
+    $plural_name = get_post_meta( $point_id, '_point_plural_name', true );
+    $point_title  = '';
+    if( !empty( $plural_name ) ) {
+        $point_title = $plural_name;
+    } else {
+        $point_title = get_the_title( $point_id );
+    }
+
+    return $point_title;
+}
+
+/**
  * Flush rewrite rules on publishing a rank
  *
  * @param $new_status

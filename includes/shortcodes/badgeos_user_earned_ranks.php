@@ -72,6 +72,12 @@ function badgeos_user_earned_ranks_shortcode() {
                 'values'      => array( 'ASC' => __( 'Ascending', 'badgeos' ), 'DESC' => __( 'Descending', 'badgeos' ) ),
                 'default'     => 'ASC',
             ),
+            'user_id1' => array(
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
+                'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
+            ),
             'default_view' => array (
                 'name'        => __( 'Default View', 'badgeos' ),
                 'description' => __( 'Default Listing i.e. List or Grid.', 'badgeos' ),

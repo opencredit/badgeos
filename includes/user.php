@@ -236,22 +236,26 @@ function badgeos_user_points_section( $user = null ) {
         if ( is_array( $credit_types ) && ! empty( $credit_types ) ) {
             foreach ( $credit_types as $credit_type ) {
                 $earned_credits = badgeos_get_points_by_type( $credit_type->ID, $user->ID );
+                $post_type_plural = badgeos_points_type_display_title( $credit_type->ID );
                 ?>
                 <div class="badgeos-credits">
-                    <h3><?php echo $credit_type->post_title; ?></h3>
+                    <h3><?php echo $post_type_plural; ?></h3>
                     <?php if( $can_manage ) {
                         ?>
                         <span class="badgeos-credit-edit"><?php echo _e( 'Edit', 'badgeos' ); ?></span>
                         <?php
-                    } ?>
+                    }
+                    ?>
 
-                    <div class="badgeos-earned-credit"><?php echo __( 'Earned Credit: ' ) . (int) $earned_credits; ?></div>
+                    <div class="badgeos-earned-credit"><?php echo __( 'Total: ' ) .'<span id="badgeos-'.$credit_type->ID.'-credit-profile-label">'.$earned_credits; ?></span></div>
 
                     <?php if( $can_manage ) {
                         ?>
                         <div class="badgeos-edit-credit-wrapper" style="display:none">
-                            <?php echo __( 'Earned Credit: ' ); ?>
-                            <input type="number" class="badgeos-edit-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
+                            <?php echo $post_type_plural; ?>
+                            <input type="number" class="badgeos-edit-credit" id="badgeos-<?php echo $credit_type->ID; ?>-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
+                            <input type="button" data-user_id="<?php echo $user->ID?>" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" data-admin_ajax="<?php echo admin_url( 'admin-ajax.php' ); ?>" data-points_id="<?php echo $credit_type->ID; ?>" class="badgeos-profile-points-update-button button button-primary" value="<?php echo _e( 'Update', 'badgeos' ); ?>" />
+                            <input type="button" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" class="badgeos-profile-points-cancel-button button button-primary" value="<?php echo _e( 'Cancel', 'badgeos' ); ?>" />
                         </div>
                         <?php
                     } ?>
@@ -265,6 +269,60 @@ function badgeos_user_points_section( $user = null ) {
 }
 add_action( 'show_user_profile', 'badgeos_user_points_section' );
 add_action( 'edit_user_profile', 'badgeos_user_points_section' );
+
+/**
+ * Save profile points
+ *
+ * @return none
+ */
+function badgeos_user_profile_update_points_callback() {
+
+    $points_id = sanitize_text_field($_POST['points_id'] );
+    $points = sanitize_text_field($_POST['points'] );
+    $user_id = sanitize_text_field($_POST['user_id'] );
+
+    $array_output = [];
+    $array_output[ 'new_points' ] 	= $points;
+    $array_output[ 'points_id' ] 	= $points_id;
+    $array_output[ 'user_id' ] 		= $user_id;
+
+    if ( ! current_user_can( 'edit_user', get_current_user_id() ) ) {
+        $array_output[ 'message' ] 		= __( 'Permission denied!', 'badgeos' );
+        wp_send_json_error( $array_output );
+    }
+
+    $old_points = badgeos_get_points_by_type( $points_id, $user_id );
+    $array_output[ 'old_points' ] 	= $old_points;
+
+    $updated_credit = $points;
+    if( (int) $points != $old_points ) {
+        if( (int) $points >= 0 ) {
+            if( (int) $points == 0 ) {
+                badgeos_revoke_credit( $points_id, $user_id, 'Deduct', $old_points, 'user_profile_credit_update', $user_id, '', '' );
+                $array_output[ 'action' ] = 'Deduct';
+            } elseif( (int) $points > $old_points ) {
+                $add_credit_amount = (int) $points - $old_points;
+                badgeos_award_credit( $points_id, $user_id, 'Award', $add_credit_amount, 'user_profile_credit_update', $user_id, '', '' );
+                $array_output[ 'action' ] = 'Award';
+            } else {
+                $deduct_credit_amount = $old_points - (int) $points;
+                badgeos_revoke_credit( $points_id, $user_id, 'Deduct', $deduct_credit_amount, 'user_profile_credit_update', $user_id, '', '' );
+                $array_output[ 'action' ] = 'Deduct';
+            }
+        } else {
+            $array_output[ 'action' ] = 'None';
+            $array_output[ 'message' ] = __( 'Updated points should be greater than zero!', 'badgeos' );
+            wp_send_json_error( $array_output );
+        }
+    } else {
+        $array_output[ 'action' ] = 'None';
+        $array_output[ 'message' ] = __( 'You can not update the same value!', 'badgeos' );
+        wp_send_json_error( $array_output );
+    }
+
+    wp_send_json_success( $array_output );
+}
+add_action( 'wp_ajax_badgeos_user_profile_update_points', 'badgeos_user_profile_update_points_callback' );
 
 /**
  * Display achievements for a user on their profile screen
@@ -351,17 +409,17 @@ function badgeos_user_profile_data( $user = null ) {
             $post_id = 0;
             if( property_exists ( $achievement, 'point_type' ) ) {
                 $post_id = intval( $achievement->point_type );
-                $point_type = ' '.get_the_title( $post_id );
             } else if( property_exists ( $achievement, 'points_type' ) ) {
                 $post_id = intval( $achievement->points_type );
-                $point_type = ' '.get_the_title( $post_id );
             }
             $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
             if( intval( $post_id ) == 0 ) {
-                $point_type = ' '.get_the_title( $default_point_type );
+                $point_type = badgeos_points_type_display_title( $default_point_type );
             }
 
-            echo '<td width="20%">'.intval( $achievement->points ).$point_type.'</td>';
+            $point_type = badgeos_points_type_display_title( $post_id );
+
+            echo '<td width="20%">'.intval( $achievement->points ).' '.$point_type.'</td>';
 
             do_action( 'badgeos_profile_achivement_add_column_data', $achievement );
             echo '</tr>';
@@ -516,31 +574,6 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
 		return false;
 	}
 
-	/**
-     * Update User Points
-     */
-    $credit_types = badgeos_get_point_types();
-    if ( is_array( $credit_types ) && ! empty( $credit_types ) ) {
-        foreach ( $credit_types as $credit_type ) {
-            $earned_credits = badgeos_get_points_by_type( $credit_type->ID, $user_id );
-
-            $updated_credit = ( isset( $_POST['badgeos-' . $credit_type->ID . '-credit'] ) ? $_POST['badgeos-' . $credit_type->ID . '-credit'] : '' );
-            if( (int) $updated_credit != $earned_credits ) {
-                if( (int) $updated_credit >= 0 ) {
-                    if( (int) $updated_credit == 0 ) {
-                        badgeos_revoke_credit( $credit_type->ID, $user_id, 'Deduct', $earned_credits, 'user_profile_credit_update', get_current_user_id(), '', '' );
-                    } elseif( (int) $updated_credit > $earned_credits ) {
-                        $add_credit_amount = (int) $updated_credit - $earned_credits;
-                        badgeos_award_credit( $credit_type->ID, $user_id, 'Award', $add_credit_amount, 'user_profile_credit_update', get_current_user_id(), '', '' );
-                    } else {
-                        $deduct_credit_amount = $earned_credits - (int) $updated_credit;
-                        badgeos_revoke_credit( $credit_type->ID, $user_id, 'Deduct', $deduct_credit_amount, 'user_profile_credit_update', get_current_user_id(), '', '' );
-                    }
-                }
-            }
-        }
-	}
-	
 	/**
      * Update Rank Type Filter Field
      */

@@ -11,14 +11,24 @@ function cmb2_get_state_options( $value = false ) {
 		'post_type'         =>	trim( $settings['points_main_post_type'] ),
 		'posts_per_page'    =>	-1,
 		'suppress_filters'  => false,
-	) );
+        'orderby' => 'ID',
+        'order' => 'ASC',
+    ) );
 	if( count( $credits ) > 0 )
 		$state_options = '';
 	else
 		$state_options = '<option value="0" selected>'.__( 'Point Type', 'badgeos' ).'</option>';
 	foreach ( $credits as $credit ) {
-		$state_options .= '<option value="'. $credit->ID .'" '. selected( $value, $credit->ID, false ) .'>'. $credit->post_title .'</option>';
-	}
+        $plural_name = get_post_meta( $credit->ID, '_point_plural_name', true );
+        $post_type_plural  = '';
+        if( ! empty( $plural_name ) ) {
+            $post_type_plural = $plural_name;
+        } else {
+            $post_type_plural = $credit->post_title;
+        }
+
+        $state_options .= '<option value="'. $credit->ID .'" '. selected( $value, $credit->ID, false ) .'>'. $post_type_plural .'</option>';
+    }
 
 	return $state_options;
 }

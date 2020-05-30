@@ -180,7 +180,12 @@ class earned_user_achievements_widget extends WP_Widget {
 			if ( $instance['point_total'] == 'on' && !empty( $instance['total_points_type'] ) ) {
 				$earned_points = badgeos_get_points_by_type( $instance['total_points_type'], get_current_user_id() );
                 if( $show_title ) {
-                    $point_title = get_the_title( $instance['total_points_type'] );
+                    $plural_name = get_post_meta( $instance['total_points_type'], '_point_plural_name', true );
+                    if( !empty( $plural_name ) ) {
+                        $point_title = $plural_name;
+                    } else {
+                        $point_title = get_the_title( $instance['total_points_type'] );
+                    }
                 } else {
                     $point_title = '';
                 }
