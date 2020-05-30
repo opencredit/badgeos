@@ -68,6 +68,10 @@ function get_post_by_name($post_name, $output = OBJECT) {
  */
 function badgeos_earned_points_shortcode( $atts = array () ){
 
+    if( ! is_user_logged_in() && ( ! isset( $atts['user_id'] ) || empty( $atts['user_id'] ) ) ) {
+        return '<div class="badgeos_earned_point_main">'.__( 'Please login to the site to view the earned points.', 'badgeos' ).'</div>';
+    }
+
     $key = 'badgeos_user_earned_points';
     if( is_array( $atts ) && count( $atts ) > 0 ) {
         foreach( $atts as $index => $value ) {

@@ -127,8 +127,8 @@ function badgeos_ajax_get_earned_ranks() {
             $output .= '<div class="badgeos-item-detail">';
 
             if( $show_title == 'true' ) {
-	       $title = get_the_title($rank->ID);                
-	       $title = $rank->rank_title;
+                $title = get_the_title($rank->rank_id);
+	            $title = $rank->rank_title;
                 // Achievement Title
                 $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $rank->rank_id ).'">'.$title.'</a></h2>';
             }
