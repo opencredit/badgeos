@@ -153,6 +153,10 @@ add_action( 'init', 'badgeos_user_earned_achievements_shortcode' );
  */
 function badgeos_earned_achievements_shortcode( $atts = array () ){
 
+    if( ! is_user_logged_in() && ( ! isset( $atts['user_id'] ) || empty( $atts['user_id'] ) ) ) {
+        return '<div id="badgeos-achievements-filters-wrap">'.__( 'Please login to the site to view the earned achievements.', 'badgeos' ).'</div>';
+    }
+
     $key = 'badgeos_user_earned_achievements';
     if( is_array( $atts ) && count( $atts ) > 0 ) {
         foreach( $atts as $index => $value ) {
