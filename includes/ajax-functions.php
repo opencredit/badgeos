@@ -257,8 +257,8 @@ function badgeos_ajax_get_earned_achievements() {
             $total_qry .= " and post_type in ('".implode( "', '", $type )."') ";
         }
 
-        $qry .= " and user_id = '".get_current_user_id()."' ";
-        $total_qry .= " and user_id = '".get_current_user_id()."' ";
+        $qry .= " and user_id = '".$user_id."' ";
+        $total_qry .= " and user_id = '".$user_id."' ";
 
         if ( $search ) {
             $qry .= " and achievement_title like '%".$search."%' ";
@@ -621,7 +621,7 @@ function badgeos_ajax_badgeos_get_users_list() {
     global $wpdb;
 
     // Pull back the search string
-    $search = esc_sql( like_escape( $_REQUEST['q'] ) );
+    $search = esc_sql( $wpdb->esc_like( $_REQUEST['q'] ) );
 
     $sql = "SELECT ID as id, user_login as label, ID as value FROM {$wpdb->users}";
 
@@ -652,7 +652,7 @@ function badgeos_ajax_get_users() {
 	global $wpdb;
 
 	// Pull back the search string
-	$search = esc_sql( like_escape( $_REQUEST['q'] ) );
+    $search = esc_sql( $wpdb->esc_like( $_REQUEST['q'] ) );
 
     $sql = "SELECT ID as id, user_login as text FROM {$wpdb->users}";
 
@@ -678,7 +678,7 @@ function badgeos_ajax_get_achievements_select2() {
 
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Pull back the search string
-	$search = isset( $_REQUEST['q'] ) ? like_escape( $_REQUEST['q'] ) : '';
+    $search = isset( $_REQUEST['q'] ) ? $wpdb->esc_like( $_REQUEST['q'] ) : '';
 	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
 		? array( esc_sql( $_REQUEST['post_type'] ) )
 		: array_diff( badgeos_get_achievement_types_slugs(), array( trim( $badgeos_settings['achievement_step_post_type'] ) ) );

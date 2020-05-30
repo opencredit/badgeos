@@ -32,6 +32,12 @@ function badgeos_user_earned_points_shortcode() {
                 'values'      => $types,
                 'default'     => '',
             ),
+            'user_id1' => array(
+                'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
+                'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+                'type'          => 'text',
+                'autocomplete_name' => 'user_id',
+            ),
             'show_title' => array(
                 'name'        => __( 'Show Point Title', 'badgeos' ),
                 'description' => __( 'Display Point Title.', 'badgeos' ),
@@ -82,7 +88,8 @@ function badgeos_earned_points_shortcode( $atts = array () ){
     global $user_ID;
     extract( shortcode_atts( array(
         'point_type'  => '',
-        'show_title'  => 'true'
+        'show_title'  => 'true',
+        'user_id'  => get_current_user_id()
 
     ), $atts, 'badgeos_user_earned_points' ) );
 
@@ -91,7 +98,6 @@ function badgeos_earned_points_shortcode( $atts = array () ){
 
     // If we're dealing with multiple achievement types
     $credit_id = 0;
-    $user_id = get_current_user_id();
     $point_unit = 0;
     if ( '' == $point_type ) {
         $post_type_plural = __( 'User Earned Points', 'badgeos' );

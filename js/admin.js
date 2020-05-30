@@ -12,6 +12,38 @@ jQuery(document).ready(function($) {
         }
     } ).trigger( "change" );
 
+    $('.badgeos-profile-points-update-button').click(function () {
+        var self = $(this);
+        var points_id = self.data('points_id');
+        var field_id = self.data('field_id');
+        var user_id = self.data('user_id');
+
+        var points = $("#" + field_id).val();
+        var ajaxURL = self.data('admin_ajax');
+
+        var data = {
+            'action': 'badgeos_user_profile_update_points',
+            'points_id': points_id,
+            'points': points,
+            'user_id': user_id
+        };
+
+        jQuery.post(ajaxURL, data, function (response) {
+            if (response.success) {
+                console.log(response.data.new_points);
+                $("#" + field_id + '-profile-label').html(response.data.new_points);
+            }
+
+            self.parents('.badgeos-credits').find('.badgeos-edit-credit-wrapper').hide();
+            self.parents('.badgeos-credits').find('.badgeos-earned-credit').show();
+        });
+    });
+    $('.badgeos-profile-points-cancel-button').click(function () {
+        var self = $(this);
+        self.parents('.badgeos-credits').find('.badgeos-edit-credit-wrapper').hide();
+        self.parents('.badgeos-credits').find('.badgeos-earned-credit').show();
+    });
+
     $( '#award-achievement, #award-credits, #award-ranks' ).change( function() {
         if( $( '#award-achievement, #award-credits, #award-ranks' ).is(':checked') ) {
             $( '#badgeos-award-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideUp( { duration: 500 } );

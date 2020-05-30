@@ -203,6 +203,48 @@ function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_t
 add_filter( 'badgeos_user_has_access_to_achievement', 'badgeos_daily_visit_access', 16, 6 );
 
 /**
+ * Check if user has earned the multisteps access/earn daily visit.
+ *
+ * @param  integer $return        	True / False
+ * @param  integer $user_id        	The given user's ID
+ * @param  integer $achievement_id 	The given achievement's post ID
+ * @param  string $this_trigger    	The trigger
+ * @param  integer $site_id        	The triggered site id
+ * @param  array $args        		The triggered args
+ * @return bool                    	True if user has access, false otherwise
+ */
+function badgeos_check_access_of_multi_steps( $return, $user_id, $achievement_id, $this_trigger, $site_id, $args=[] ) {
+
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $achievement_id ) )
+        return $return;
+
+    $earned_achievements = badgeos_get_user_achievements( array(
+        'user_id'          	=> $user_id,
+        'achievement_id' 	=> $achievement_id
+    ) );
+    $total_earned = count( $earned_achievements );
+
+    $children = badgeos_get_achievements( array( 'children_of' => $achievement_id, 'fields'=>'ids'  ) );
+    if( count( $children ) > 0 ) {
+        foreach( $children as $child_id ) {
+
+            $child_achievements = badgeos_get_user_achievements( array(
+                'user_id'          	=> $user_id,
+                'achievement_id' 	=> $child_id
+            ) );
+
+            if( count($child_achievements) <= $total_earned ) {
+                return false;
+            }
+        }
+    }
+
+    return $return;
+}
+add_filter( 'user_deserves_achievement', 'badgeos_check_access_of_multi_steps', 16, 6 );
+
+/**
  * Award an achievement to a user
  *
  * @since  1.0.0
