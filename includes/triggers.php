@@ -62,14 +62,117 @@ function badgeos_load_activity_triggers() {
 		$activity_triggers['badgeos_unlock_'.$achievement_type] = sprintf( __( 'Unlocked a %s', 'badgeos' ), $post_type_object->labels->singular_name );
 		$activity_triggers['badgeos_unlock_all_'.$achievement_type] = sprintf( __( 'Unlocked all %s', 'badgeos' ), $post_type_object->labels->name );
 
-	}
+    }
 
-	// Loop through each trigger and add our trigger event to the hook
-	foreach ( $activity_triggers as $trigger => $label )
-		add_action( $trigger, 'badgeos_trigger_event', 10, 20 );
-
+    // Loop through each trigger and add our trigger event to the hook
+    foreach ( $activity_triggers as $trigger => $trigger_data ) {
+        if( is_array( $trigger_data ) ) {
+            if( count( $trigger_data['sub_triggers'] ) > 0 ) {
+                foreach( $trigger_data['sub_triggers'] as $tdata ) {
+                    add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_trigger_event', 10, 20 );
+                }
+            }
+        } else {
+            add_action( $trigger, 'badgeos_trigger_event', 10, 20 );
+        }
+    }
 }
 add_action( 'init', 'badgeos_load_activity_triggers' );
+
+/**
+ * Handle each of our activity triggers
+ *
+ * @since 1.0.0
+ * @return mixed
+ */
+function badgeos_dynamic_trigger_event() {
+
+    // Setup all our globals
+    global $user_ID, $blog_id, $wpdb;
+
+    $site_id = $blog_id;
+
+    $args = func_get_args();
+
+    // Grab our current trigger
+    $this_trigger = current_filter();
+
+    // Grab the user ID
+    $user_id = $args[0];
+    if( intval( $user_id ) < 1 ) {
+        $user_id = get_current_user_id();
+    }
+    $user_data = get_user_by( 'id', $user_id );
+
+    // Sanity check, if we don't have a user object, bail here
+    if ( ! is_object( $user_data ) ) {
+        return $args[ 0 ];
+    }
+
+    // If the user doesn't satisfy the trigger requirements, bail here
+    if ( ! apply_filters( 'badgeos_user_deserves_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+        return $args[ 0 ];
+    }
+
+    // Now determine if any badges are earned based on this trigger event
+    $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_subtrigger_value' AND pm.meta_value = %s", $this_trigger) );
+    // echo $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger);
+    // print_r($triggered_achievements);
+    // exit;
+    $is_any_or_all_trigger = false;
+    if ( 'badgeos_unlock_all_' == substr( $this_trigger, 0, 19 ) ) {
+        $is_any_or_all_trigger = true;
+    } else if ( 'badgeos_unlock_' == substr( $this_trigger, 0, 15 ) ) {
+        $is_any_or_all_trigger = true;
+    }
+
+    if( count( $triggered_achievements ) > 0 || $is_any_or_all_trigger == true ) {
+        // Update hook count for this user
+        $new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
+
+        // Mark the count in the log entry
+        badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+    }
+
+    foreach ( $triggered_achievements as $achievement ) {
+
+        $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
+
+        if( count( $parents ) > 0 ) {
+
+            if( $parents[0]->post_status == 'publish' ) {
+
+                $step_params = get_post_meta( $achievement->post_id, '_badgeos_fields_data', true );
+                $step_params = badgeos_extract_array_from_query_params( $step_params );
+
+                if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'achivement', $this_trigger, $step_params, $args[ 1 ]) ) {
+                    badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
+                }
+            }
+        }
+    }
+
+return $args[ 0 ];
+
+}
+
+/**
+ * Converts query string parameter to array of key/value pair
+ *
+ * @since 1.0.0
+ * @return mixed
+ */
+function badgeos_extract_array_from_query_params( $params ) {
+
+    $final_data = array();
+    $raw_data = explode( '&', $params );
+    foreach( $raw_data as $item ) {
+        $data = explode( "=", $item );
+        $final_data[ $data[0] ] = $data[1];
+    }
+
+    return $final_data;
+}
 
 /**
  * Handle each of our activity triggers
@@ -530,10 +633,10 @@ function badgeos_daily_visit_add_step_status( $user_id, $step_id, $type='achieve
  * @param  $trigger
  * @param  $args
  */
-function badgeos_perform_event( $trigger, $user_id = 0) {
+function badgeos_perform_event( $trigger, $user_id = 0, $args = array()) {
     if( ! empty( $trigger ) ) {
         if( has_action( $trigger ) )
             if( $user_id > 0 )
-                do_action( $trigger, $user_id);
+                do_action( $trigger, $user_id, $args);
     }
 }

@@ -18,7 +18,7 @@
 function badgeos_register_post_types() {
 	global $badgeos;
 
-	// Register our Achivement Types CPT
+	// Register our achievement Types CPT
     $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
     register_post_type( $badgeos_settings['achievement_main_post_type'], array(
         'labels'             => array(
@@ -224,7 +224,7 @@ function badgeos_register_achievement_type( $achievement_name_singular = '', $ac
 }
 
 /**
- * Register each of our Achivement Types as CPTs
+ * Register each of our achievement Types as CPTs
  *
  * @since  1.0.0
  * @return void
