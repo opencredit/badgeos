@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
 * Author: LearningTimes
-* Version: 3.5
+* Version: 3.6
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -142,7 +142,7 @@ class BadgeOS {
 
         // Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-
+        $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
         if( !isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) || !isset( $badgeos_settings['achievement_main_post_type'] ) || empty( $badgeos_settings['achievement_main_post_type'] ) ) {
 
             if( ! isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) ) {
@@ -192,7 +192,70 @@ class BadgeOS {
 
 			update_option( 'badgeos_settings', $badgeos_settings );
 		}
-	}
+
+        if ( empty( $badgeos_admin_tools ) ) {
+            $badgeos_admin_tools['badgeos_tools_email_logo_url']   = '';
+            $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
+            $badgeos_admin_tools['email_general_footer_text']   = '';
+            $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
+            $badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+
+            $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'no';
+            $badgeos_admin_tools['email_achievement_subject']   = __( 'Congratulation for earning an achievement', 'badgeos' );
+
+            $email_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_achievement_content .= '<p>'.__( 'You have earned a new achievement i.e. "[achievement_title]". [points] points are also added in your point balance.', 'badgeos' ).'</p>';
+            $email_achievement_content .= '<p>[achievement_image]</p>';
+
+            $badgeos_admin_tools['email_achievement_content']   = $email_achievement_content;
+
+            $badgeos_admin_tools['email_disable_achievement_steps_email']   = 'no';
+            $badgeos_admin_tools['email_steps_achievement_subject']   = __( 'Congratulation for earning an achievement step', 'badgeos' );
+
+            $email_steps_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_steps_achievement_content .= '<p>'.__( 'You have earned a new achievement step i.e. "[step_title]".', 'badgeos' ).'</p>';
+            $email_steps_achievement_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
+            $badgeos_admin_tools['email_steps_achievement_content']   = $email_steps_achievement_content;
+
+
+            $badgeos_admin_tools['email_disable_ranks_email']   = 'no';
+            $badgeos_admin_tools['email_ranks_subject']   = __( 'Congratulation for earning a rank', 'badgeos' );
+
+            $email_ranks_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_ranks_content .= '<p>'.__( 'You have earned a new rank i.e. "[rank_title]".', 'badgeos' ).'</p>';
+            $email_ranks_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
+            $badgeos_admin_tools['email_ranks_content']   = $email_ranks_content;
+
+
+            $badgeos_admin_tools['email_disable_rank_steps_email']   = 'no';
+            $badgeos_admin_tools['email_steps_rank_subject']   = __( 'Congratulation for earning a rank step', 'badgeos' );
+
+            $email_steps_rank_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_steps_rank_content .= '<p>'.__( 'You have earned a new rank step i.e. "[rank_step_title]".', 'badgeos' ).'</p>';
+            $email_steps_rank_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
+            $badgeos_admin_tools['email_steps_rank_content']   = $email_steps_rank_content;
+
+
+            $badgeos_admin_tools['email_disable_point_awards_email']   = 'no';
+            $badgeos_admin_tools['email_point_awards_subject']   = __( 'Congratulation for earning new points', 'badgeos' );
+
+            $email_point_awards_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_point_awards_content .= '<p>'.__( 'You have earned [credit] [point_title] at [date_earned].', 'badgeos' ).'</p>';
+            $email_point_awards_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
+            $badgeos_admin_tools['email_point_awards_content']   = $email_point_awards_content;
+
+
+            $badgeos_admin_tools['email_disable_point_deducts_email']   = 'no';
+            $badgeos_admin_tools['email_point_deducts_subject']   = '[credit] [point_title] '.__( 'are deducted', 'badgeos' );
+
+            $email_point_deducts_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
+            $email_point_deducts_content .= '<p>[credit] [point_title] '.__( 'are deducted from your balace at', 'badgeos' ).' [date_earned].</p>';
+            $email_point_deducts_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
+            $badgeos_admin_tools['email_point_deducts_content']   = $email_point_deducts_content;
+
+            update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+        }
+    }
 
 	/**
 	 * Include all our important files.
@@ -226,7 +289,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/meta-boxes.php' );
 		
 		/**
-		 * Move achivements from meta to db
+		 * Move achievements from meta to db
 		 */
 		require_once( $this->directory_path . 'includes/meta-to-db.php' );
         require_once( $this->directory_path . 'includes/achievement-upgrade.php' );
@@ -263,6 +326,8 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
+        require_once( $this->directory_path . 'includes/badgeos-emails.php' );
+        require_once( $this->directory_path . 'includes/trigger-for-all.php' );
 	}
 
 	/**
@@ -281,6 +346,11 @@ class BadgeOS {
 
         $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 
+        $badgeos_tools_email_tab = '';
+        if( isset( $_REQUEST['badgeos_tools_email_tab'] ) && !empty( $_REQUEST['badgeos_tools_email_tab'] ) ) {
+            $badgeos_tools_email_tab = $_REQUEST['badgeos_tools_email_tab'];
+        }
+
         $admin_js_translation_array = array(
             'ajax_url' 					=> admin_url( 'admin-ajax.php' ),
 			'loading_img' 				=> admin_url( 'images/spinner.gif' ),
@@ -292,13 +362,14 @@ class BadgeOS {
             'default_rank'              => __( 'Default Rank', 'badgeos' ),
             'achievement_post_type'     => $badgeos_settings['achievement_main_post_type'],
             'achievement_step_type'     => $badgeos_settings['achievement_step_post_type'],
+            'badgeos_tools_email_tab'   => $badgeos_tools_email_tab
 
         );
         wp_localize_script( 'badgeos-admin-js', 'admin_js', $admin_js_translation_array );
 
 		// Register styles
         wp_register_style( 'jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
-		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css' );
+		wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
 
 		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
 			? get_stylesheet_directory_uri() .'/badgeos.css'

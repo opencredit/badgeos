@@ -386,7 +386,7 @@ function badgeos_build_achievement_object( $achievement_id = 0, $context = 'earn
  *
  * @since  1.0.0
  * @param  string $achievement_type Limit the array to a specific type of achievement
- * @return array                    An array of hidden achivement post IDs
+ * @return array                    An array of hidden achievement post IDs
  */
 function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
 
@@ -419,7 +419,7 @@ function badgeos_get_hidden_achievement_ids( $achievement_type = '' ) {
  *
  * @since  1.0.0
  * @param  integer $achievement_id Limit the array to a specific id of achievement
- * @return array  An array of hidden achivement post IDs
+ * @return array  An array of hidden achievement post IDs
  */
 
 function badgeos_get_hidden_achievement_by_id( $achievement_id ) {
@@ -448,7 +448,7 @@ function badgeos_get_hidden_achievement_by_id( $achievement_id ) {
  * @since  1.0.0
  * @param  integer $user_id          The given user's ID
  * @param  string  $achievement_type Limit the array to a specific type of achievement
- * @return array                     Our user's array of earned achivement post IDs
+ * @return array                     Our user's array of earned achievement post IDs
  */
 function badgeos_get_user_earned_achievement_ids( $user_id = 0, $achievement_type = '' ) {
 

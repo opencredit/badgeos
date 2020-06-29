@@ -66,18 +66,175 @@ function badgeos_points_load_activity_triggers() {
     /**
      * Loop through each trigger and add our trigger event to the hook
      */
-	foreach ( $award_activity_triggers as $trigger => $label ) {
-		add_action( $trigger, 'badgeos_points_award_trigger_event', 10, 20 );
-     }
-    
+    foreach ( $award_activity_triggers as $trigger => $trigger_data ) {
+
+        if( is_array( $trigger_data ) ) {
+            if( count( $trigger_data['sub_triggers'] ) > 0 ) {
+                foreach( $trigger_data['sub_triggers'] as $tdata ) {
+                    add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_points_award_trigger_event', 10, 20 );
+                }
+            }
+        } else
+            add_action( $trigger, 'badgeos_points_award_trigger_event', 10, 20 );
+    }
+
     /**
      * Loop through each trigger and add our trigger event to the hook
      */
-	foreach ( $deduct_activity_triggers as $trigger => $label ) {
-		add_action( $trigger, 'badgeos_points_deduct_trigger_event', 10, 20 );
-	}
+    foreach ( $deduct_activity_triggers as $trigger => $trigger_data ) {
+
+        if( is_array( $trigger_data ) ) {
+            if( count( $trigger_data['sub_triggers'] ) > 0 ) {
+                foreach( $trigger_data['sub_triggers'] as $tdata ) {
+                    add_action( trim( $tdata['trigger'] ), 'badgeos_dynamic_points_deduct_trigger_event', 10, 20 );
+                }
+            }
+        } else
+            add_action( $trigger, 'badgeos_points_deduct_trigger_event', 10, 20 );
+    }
 }
 add_action( 'init', 'badgeos_points_load_activity_triggers' );
+
+/**
+ * Handle each of our award point activity triggers
+ *
+ * @return mixed
+ */
+function badgeos_dynamic_points_award_trigger_event() {
+    /**
+     * Setup all our globals
+     */
+    global $user_ID, $blog_id, $wpdb;
+
+    $site_id = $blog_id;
+
+    $args = func_get_args();
+
+    /**
+     * Grab our current trigger
+     */
+    $this_trigger = current_filter();
+
+    /**
+     * Grab the user ID
+     */
+    $user_id = $args[0];
+    if( intval( $user_id ) < 1 ) {
+        $user_id = get_current_user_id();
+    }
+    $user_data = get_user_by( 'id', $user_id );
+
+    /**
+     * Sanity check, if we don't have a user object, bail here
+     */
+    if ( ! is_object( $user_data ) )
+        return $args[ 0 ];
+
+    /**
+     * If the user doesn't satisfy the trigger requirements, bail here\
+     */
+    if ( ! apply_filters( 'user_deserves_point_award_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+        return $args[ 0 ];
+    }
+
+    $triggered_points = $wpdb->get_results( $wpdb->prepare(
+        "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_badgeos_paward_subtrigger_value' ) where p.post_status = 'publish' AND pm.meta_value = %s",
+        $this_trigger
+    ) );
+
+    if( !empty( $triggered_points ) ) {
+        foreach ( $triggered_points as $point ) {
+
+            $parent_point_id = badgeos_get_parent_id( $point->post_id );
+
+            $step_params = get_post_meta( $point->post_id, '_badgeos_fields_data', true );
+            $step_params = badgeos_extract_array_from_query_params( $step_params );
+
+            /**
+             * Update hook count for this user
+             */
+            if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'point_award', $this_trigger, $step_params, $args[ 1 ]) ) {
+                $new_count = badgeos_points_update_user_trigger_count( $point->post_id, $parent_point_id, $user_id, $this_trigger, $site_id, 'Award', $args );
+                badgeos_maybe_award_points_to_user( $point->post_id, $parent_point_id , $user_id, $this_trigger, $site_id, $args );
+            }
+        }
+    }
+
+    return $args[ 0 ];
+}
+
+/**
+ * Handle each of our deduct point activity triggers
+ *
+ * @return mixed
+ */
+function badgeos_dynamic_points_deduct_trigger_event() {
+    /**
+     * Setup all our globals
+     */
+    global $user_ID, $blog_id, $wpdb;
+
+    $site_id = $blog_id;
+
+    $args = func_get_args();
+
+    /**
+     * Grab our current trigger
+     */
+    $this_trigger = current_filter();
+
+    /**
+     * Grab the user ID
+     */
+    $user_id = $args[0];
+    if( intval( $user_id ) < 1 ) {
+        $user_id = get_current_user_id();
+    }
+    $user_data = get_user_by( 'id', $user_id );
+
+    /**
+     * Sanity check, if we don't have a user object, bail here
+     */
+    if ( ! is_object( $user_data ) ) {
+        return $args[ 0 ];
+    }
+
+    /**
+     * If the user doesn't satisfy the trigger requirements, bail here
+     */
+    if ( ! apply_filters( 'user_deserves_point_deduct_trigger', true, $user_id, $this_trigger, $site_id, $args ) ) {
+        return $args[ 0 ];
+    }
+
+    /**
+     * Now determine if any Achievements are earned based on this trigger event
+     */
+    $triggered_deducts = $wpdb->get_results( $wpdb->prepare(
+        "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_badgeos_pdeduct_subtrigger_value' ) where p.post_status = 'publish' AND pm.meta_value = %s",
+        $this_trigger
+    ) );
+
+    if( !empty( $triggered_deducts ) ) {
+        foreach ( $triggered_deducts as $point ) {
+
+            $parent_point_id = badgeos_get_parent_id( $point->post_id );
+
+            $step_params = get_post_meta( $point->post_id, '_badgeos_fields_data', true );
+            $step_params = badgeos_extract_array_from_query_params( $step_params );
+
+            /**
+             * Update hook count for this user
+             */
+            if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'point_deduct', $this_trigger, $step_params, $args[ 1 ]) ) {
+                $new_count = badgeos_points_update_user_trigger_count( $point->post_id, $parent_point_id, $user_id, $this_trigger, $site_id, 'Deduct', $args );
+
+                badgeos_maybe_deduct_points_to_user( $point->post_id, $parent_point_id , $user_id, $this_trigger, $site_id, $args );
+            }
+        }
+    }
+
+    return $args[ 0 ];
+}
 
 /**
  * Handle each of our award point activity triggers
@@ -173,9 +330,9 @@ function badgeos_points_award_trigger_event() {
 }
 
 /**
- * Return parent achivement.
+ * Return parent achievement.
  *
- * @param int $child_id  Child achivement.
+ * @param int $child_id  Child achievement.
  * @return int  $parent_id     parent id.
  */
 function badgeos_get_parent_id( $child_id = 0 ) {

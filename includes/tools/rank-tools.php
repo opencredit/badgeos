@@ -4,9 +4,9 @@
  *
  * @package badgeos
  * @subpackage Tools
- * @author Wooninjas
+ * @author earningTimes, LLC
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
- * @link https://wooninjas.com
+ * @link https://badgeos.org
  */
 
 $rank_types = badgeos_get_ranks();

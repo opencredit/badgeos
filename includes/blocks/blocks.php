@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registers the badgeos block category
+ * Registers the badgeOS block category
  *
  * @param $categories
  * @param $post

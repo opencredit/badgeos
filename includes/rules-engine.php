@@ -471,7 +471,7 @@ function badgeos_maybe_trigger_unlock_all( $user_id = 0, $achievement_id = 0 ) {
 			// Assume the user hasn't earned this achievement
 			$found_achievement = false;
 
-			// Loop through each eacrned achivement and see if we've earned it
+			// Loop through each earned achievement and see if we've earned it
 			foreach ( $earned_achievements as $earned_achievement ) {
 				if ( $earned_achievement->ID == $achievement->ID ) {
 					$found_achievement = true;
@@ -746,8 +746,13 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 	// Grab the requirements for this step
 	$step_requirements = badgeos_get_step_requirements( $step_id );
 
-	// Determine which type of trigger we're using and return the corresponding activities
-	switch( $step_requirements['trigger_type'] ) {
+    $trigger_type = $step_requirements['trigger_type'];
+    if( !empty( $step_requirements['badgeos_subtrigger_id'] ) && !empty( $step_requirements['badgeos_subtrigger_value'] ) ) {
+        $trigger_type = $step_requirements['badgeos_subtrigger_value'];
+    }
+
+    // Determine which type of trigger we're using and return the corresponding activities
+    switch( $trigger_type ) {
 		case 'specific-achievement' :
 
 			// Get our parent achievement
@@ -774,7 +779,7 @@ function badgeos_get_step_activity_count( $user_id = 0, $step_id = 0 ) {
 			$activities = badgeos_get_user_trigger_count( $user_id, 'badgeos_unlock_all_' . $step_requirements['achievement_type'] );
 			break;
 		default :
-			$activities = badgeos_get_user_trigger_count( $user_id, $step_requirements['trigger_type'] );
+            $activities = badgeos_get_user_trigger_count( $user_id, $trigger_type );
 			break;
 	}
 

@@ -538,7 +538,7 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
             'achievement_id' => $achievement_id,
             'type' => $type,
             'credit' => $new_points,
-            'dateadded' => date("Y-m-d H:i:s"),
+            'dateadded' => current_time( 'mysql' ),
             'this_trigger' =>  $this_trigger
         ));
 
@@ -611,7 +611,7 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
             'achievement_id' => $achievement_id,
             'type' => $type,
             'credit' => $points,
-            'dateadded' => date("Y-m-d H:i:s"),
+            'dateadded' => current_time( 'mysql' ),
             'this_trigger' =>  $this_trigger
         ));
 
@@ -626,7 +626,8 @@ function badgeos_remove_credit($credit_id, $user_id, $type, $points, $this_trigg
             $type,
             $points,
             $this_trigger,
-            $step_id
+            $step_id,
+            $wpdb->insert_id
         );
 
         return $wpdb->insert_id;

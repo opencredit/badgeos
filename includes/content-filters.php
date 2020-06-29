@@ -192,7 +192,7 @@ function badgeos_is_main_loop( $id = false ) {
 }
 
 /**
- * Gets achivement's required steps and returns HTML markup for these steps
+ * Gets achievement's required steps and returns HTML markup for these steps
  *
  * @since  1.0.0
  * @param  integer $achievement_id The given achievement's post ID

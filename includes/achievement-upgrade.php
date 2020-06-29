@@ -96,4 +96,3 @@ function badgeos_update_old_points_to_point_types() {
 
     }
 }
-?>
