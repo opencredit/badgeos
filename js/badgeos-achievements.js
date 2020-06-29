@@ -255,6 +255,10 @@ jQuery(function ($) {
 						$('#badgeos-earned-achievements-container ul').removeClass('grid').addClass('list');
 					}
 				});
+
+				$('.badgeos-ob-verification-buttons').on('click', function () {
+					badgeos_ob_verification_process(this);
+				});
 			}
 		});
 	}
@@ -696,16 +700,15 @@ jQuery(function ($) {
 			$('#open-badge-setting-section').show();
 	}).change();
 
-	$('#open-badgeos-verification').on('click', function () {
 
-		$('#verification-res-list').html('');
+	function badgeos_ob_verification_process($this) {
+		$('#badgeos-ob-verification-res-list').html('');
 
-		var achievement_id = $(this).data('bg');
+		var achievement_id = $($this).data('bg');
+		var entry_id = $($this).data('eid');
+		var user_id = $($this).data('uid');
 
-		var entry_id = $(this).data('eid');
-		var user_id = $(this).data('uid');
-
-		tb_show('Verification', '#TB_inline?width=250&height=150&inlineId=open-badge-id');
+		tb_show('Verification', '#TB_inline?width=250&height=200&inlineId=badgeos-open-badge-verification-popup-box');
 		$.ajax({
 			url: BadgeosCredlyData.ajax_url,
 			type: 'POST',
@@ -718,9 +721,9 @@ jQuery(function ($) {
 			dataType: 'json',
 			success: function (returndata1) {
 				if (returndata1.type == 'success')
-					$('#verification-res-list').html('<li class="success">' + returndata1.message + '</li>');
+					$('#badgeos-ob-verification-res-list').html('<li class="success">' + returndata1.message + '</li>');
 				else
-					$('#verification-res-list').html('<li class="error">' + returndata1.message + '</li>');
+					$('#badgeos-ob-verification-res-list').html('<li class="error">' + returndata1.message + '</li>');
 				$.ajax({
 					url: BadgeosCredlyData.ajax_url,
 					type: 'POST',
@@ -734,9 +737,9 @@ jQuery(function ($) {
 					success: function (returndata2) {
 
 						if (returndata2.type == 'success')
-							$('#verification-res-list').append('<li class="success">' + returndata2.message + '</li>');
+							$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata2.message + '</li>');
 						else
-							$('#verification-res-list').append('<li class="error">' + returndata2.message + '</li>');
+							$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata2.message + '</li>');
 						$.ajax({
 							url: BadgeosCredlyData.ajax_url,
 							type: 'POST',
@@ -749,15 +752,18 @@ jQuery(function ($) {
 							dataType: 'json',
 							success: function (returndata3) {
 								if (returndata3.type == 'success')
-									$('#verification-res-list').append('<li class="success">' + returndata3.message + '</li>');
+									$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata3.message + '</li>');
 								else
-									$('#verification-res-list').append('<li class="error">' + returndata3.message + '</li>');
+									$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata3.message + '</li>');
 							}
 						});
 					}
 				});
 			}
 		});
+	}
 
+	$('#open-badgeos-verification').on('click', function () {
+		badgeos_ob_verification_process(this);
 	});
 });

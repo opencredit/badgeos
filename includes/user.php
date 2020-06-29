@@ -411,13 +411,13 @@ function badgeos_user_profile_data( $user = null ) {
                 $post_id = intval( $achievement->point_type );
             } else if( property_exists ( $achievement, 'points_type' ) ) {
                 $post_id = intval( $achievement->points_type );
-            }
+			}
+			
+			$point_type = badgeos_points_type_display_title( $post_id ); 
             $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
             if( intval( $post_id ) == 0 ) {
-                $point_type = badgeos_points_type_display_title( $default_point_type );
+				$point_type = badgeos_points_type_display_title( $default_point_type );
             }
-
-            $point_type = badgeos_points_type_display_title( $post_id );
 
             echo '<td width="20%">'.intval( $achievement->points ).' '.$point_type.'</td>';
 

@@ -28,7 +28,10 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
     $achievement_post_type = get_post_type( $achievement_id );
     $achievement_type = $badgeos_settings['achievement_main_post_type'];
     $post_obj = get_page_by_path( $achievement_post_type, OBJECT, $achievement_type );
-    $parent_post_type = $post_obj->post_type;
+    $parent_post_type = '';
+    if( $post_obj ) {
+        $parent_post_type = $post_obj->post_type;
+    }
     
     if ( trim( $achievement_type ) == trim( $parent_post_type ) ) {
         
