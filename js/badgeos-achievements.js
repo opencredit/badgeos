@@ -28,12 +28,13 @@ jQuery( function( $ ) {
 		event.preventDefault();
 
 		var $button = $(this);
-		$button.siblings( '.badgeos-submission-comments-wrap' ).fadeIn('fast');
-		$button.siblings( '.badgeos-comment-form' ).fadeIn('fast');
+		$button.parent().siblings('.badgeos-submission-comments-wrap').fadeIn('fast');
+		$button.parent().siblings('.badgeos-comment-form').fadeIn('fast');
 		$button.hide();
 
-        var value = $button.siblings('.badgeos-comment-form').find('.badgeos_comment').val();
-        if(value){
+		$button.parent().siblings('.badgeos-comment-form').fadeIn('fast');
+		var value = $button.parent().siblings('.badgeos-comment-form').find('.badgeos_comment').val();
+		if(value){
             alert('Comment is saved in draft mode.');
         }
 	});
