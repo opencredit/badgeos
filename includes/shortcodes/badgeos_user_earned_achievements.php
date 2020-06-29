@@ -276,7 +276,12 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
 
     $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'">';
     $maindiv .= $badges;
-    $maindiv .= '</div>';
+    $maindiv .= '</div><div id="badgeos-open-badge-verification-popup-box" style="display:none">
+    <div class="badgeos-ob-verification-results">
+        <ul id="badgeos-ob-verification-res-list">
+        </ul>
+    </div>
+</div>';
 
 
     // Reset Post Data

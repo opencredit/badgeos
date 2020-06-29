@@ -407,27 +407,27 @@ ul.badgeos-achievement-earners-list li {
 	margin: 0px auto !important;
 }
 
-#verification-res-list{
+#badgeos-ob-verification-res-list{
 	list-style: none;
 	color:red;
 	font-family: sans-serif;
 	font-size: 15px;
 	margin: auto;
 }
-#verification-res-list li.success{
+#badgeos-ob-verification-res-list li.success{
 	color: green;
 }
-#verification-res-list li.error{
+#badgeos-ob-verification-res-list li.error{
 	color: red;
 }
-#verification-res-list li.success:before {
+#badgeos-ob-verification-res-list li.success:before {
 	content:"\2713\0020";
 	width:32px;
 	font-size: 25px;
 	font-weight: bold;
 	color: green;
 }
-#verification-res-list li.error:before {
+#badgeos-ob-verification-res-list li.error:before {
 	content:"\00d7\0020";
 	width:32px;
 	font-size: 32px;

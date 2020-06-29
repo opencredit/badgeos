@@ -109,9 +109,9 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                     <?php } ?>
                 </div>
             </div>
-            <div id="open-badge-id" style="display:none">
-                <div class="verification-results">
-                    <ul id="verification-res-list">
+            <div id="badgeos-open-badge-verification-popup-box" style="display:none">
+                <div class="badgeos-ob-verification-results">
+                    <ul id="badgeos-ob-verification-res-list">
                     </ul>
                 </div>
             </div>
