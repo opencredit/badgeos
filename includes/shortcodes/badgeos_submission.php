@@ -78,6 +78,17 @@ function badgeos_submission_form( $atts = array() ) {
 	// Verify user is logged in to view any submission data
 	if ( is_user_logged_in() ) {
 
+        wp_enqueue_script(
+            'ck_editor_cdn',
+            ('https://cdn.ckeditor.com/4.5.3/standard/ckeditor.js'), array( 'jquery' ), 'v3', true
+        );
+
+        wp_enqueue_script(
+            'custom_script',
+            badgeos_get_directory_url().'js/ckeditor.js',
+            array( 'jquery' ),	BadgeOS::$version,true
+        );
+
         if(!empty($_GET['new_submission_id']) && $new_submission_id = $_GET['new_submission_id']){
             $posts = get_post( absint($new_submission_id) );
 
