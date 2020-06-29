@@ -198,6 +198,9 @@ class BadgeOS {
 	 * Include all our important files.
 	 */
 	function includes() {
+
+        global $wp_version;
+
 		require_once( $this->directory_path . 'includes/p2p/load.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Editor_Shortcodes.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
@@ -206,9 +209,11 @@ class BadgeOS {
         /**
          * WP blocks (page builder)
          */
-        require_once( $this->directory_path . 'includes/blocks/block-routes.php' );
-        require_once( $this->directory_path . 'includes/blocks/blocks.php' );
-        require_once( $this->directory_path . 'includes/blocks/src/init.php' );
+        if (version_compare($wp_version, '5.0.0') >= 0) {
+            require_once( $this->directory_path . 'includes/blocks/block-routes.php' );
+            require_once( $this->directory_path . 'includes/blocks/blocks.php' );
+            require_once( $this->directory_path . 'includes/blocks/src/init.php' );
+        }
 
         require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
 		require_once( $this->directory_path . 'includes/post-types.php' );
