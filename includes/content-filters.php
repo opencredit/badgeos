@@ -821,7 +821,13 @@ function badgeos_get_current_page_post_id() {
  */
 function badgeos_hide_next_hidden_achievement_link($link) {
 
-	if($link) {
+    $slugs = badgeos_get_achievement_types_slugs();
+    // only run our filters on the badgeos singular pages
+    if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) ) {
+        return $link;
+    }
+
+    if($link) {
 
 		//Get current achievement id
 		$achievement_id = badgeos_get_current_page_post_id();
@@ -845,7 +851,13 @@ add_filter('next_post_link', 'badgeos_hide_next_hidden_achievement_link');
 function badgeos_hide_previous_hidden_achievement_link($link) {
 
 
-	if($link) {
+    $slugs = badgeos_get_achievement_types_slugs();
+    // only run our filters on the badgeos singular pages
+    if ( is_admin() || empty( $slugs ) || !is_singular( $slugs ) ) {
+        return $link;
+    }
+
+    if($link) {
 
 		//Get current achievement id
 		$achievement_id = badgeos_get_current_page_post_id();
