@@ -330,13 +330,20 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
 		$point_value 	= $points['_badgeos_points'];
 		$points_type 	= $points['_badgeos_points_type'];
-		
-		$points_type_lbl = get_the_title( $points_type );
+
+        $points_type_lbl = badgeos_points_type_display_title( $points_type );
 
 		return '<div class="badgeos-item-points">' . sprintf( __( '%d %s', 'badgeos' ), $point_value, $points_type_lbl) . '</div>';
-	} else { 
-		return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';	
-	}
+	} else {
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
+        $point_type = badgeos_points_type_display_title( $default_point_type );
+        if( !empty( $point_type ) ) {
+            return '<div class="badgeos-item-points">0 '.$point_type.'</div>';
+        } else {
+            return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';
+        }
+    }
 }
 
 /**

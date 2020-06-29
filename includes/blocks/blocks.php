@@ -38,12 +38,20 @@ add_filter( 'block_categories', 'badgeos_register_block_category', 10000, 2);
  * @return output html
  */
 function badgeos_render_user_earned_points_block( $attributes ) {
+    
+    $user_param = '';
+    if( !empty( $attributes['user_id'] ) ) {
+        $user_id_obj = json_decode( sanitize_text_field( $attributes['user_id'] ) );
+        if( $user_id_obj ) {
+            $user_param = ' user_id="'.$user_id_obj->value.'"';
+        }
+    }
 
     if( isset( $attributes['point_type'] ) && !empty( $attributes['point_type'] ) ){
         $data = json_decode( $attributes['point_type'] );
         if( ! empty( $data->value  ) ) {
             $show_title = $attributes['show_title'];
-            return do_shortcode( '[badgeos_user_earned_points point_type="'.$data->value.'" show_title="'.$show_title.'"]' );
+            return do_shortcode( '[badgeos_user_earned_points point_type="'.$data->value.'" '.$user_param.' show_title="'.$show_title.'"]' );
         } else {
             return '<div class="inner-content">'.__( 'No point type found.', 'badgeos' ).'</div>';
         }
@@ -171,6 +179,14 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
     if( !empty( $attributes['order'] ) ) {
         $param .= ' order="'.sanitize_text_field( $attributes['order'] ).'"';
     }
+
+    if( !empty( $attributes['user_id'] ) ) {
+        $user_id_obj = json_decode( sanitize_text_field( $attributes['user_id'] ) );
+        if( $user_id_obj ) {
+            $param .= ' user_id="'.$user_id_obj->value.'"';
+        }
+    }
+
     if( !empty( $attributes['show_search'] ) ) {
         $param .= ' show_search="'.sanitize_text_field( $attributes['show_search'] ).'"';
     } else {
@@ -195,7 +211,7 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
     if( ! empty( $attributes['default_view'] ) ) {
         $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
     }
-
+    
     return do_shortcode( '[badgeos_user_earned_achievements '.$param.']' );
 }
 
@@ -323,6 +339,13 @@ function badgeos_render_earned_ranks_blocks( $attributes ) {
 
     if( !empty( $attributes['order'] ) ) {
         $param .= ' order="'.sanitize_text_field( $attributes['order'] ).'"';
+    }
+
+    if( !empty( $attributes['user_id'] ) ) {
+        $user_id_obj = json_decode( sanitize_text_field( $attributes['user_id'] ) );
+        if( $user_id_obj ) {
+            $param .= ' user_id="'.$user_id_obj->value.'"';
+        }
     }
 
     if( !empty( $attributes['rank_types'] ) ) {
@@ -476,11 +499,11 @@ function badgeos_render_my_php_block(  ) {
             ),
             'show_filter' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
             'show_search' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
             'order' => array(
                 'type' => 'string',
@@ -508,19 +531,19 @@ function badgeos_render_my_php_block(  ) {
             ),
             'show_description' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
             'show_thumb' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
             'show_title' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
             'show_steps' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'true'
             ),
         )
     ));
@@ -539,7 +562,7 @@ function badgeos_render_my_php_block(  ) {
             ),
             'show_search' => array(
                 'type' => 'string',
-                'default'=> ''
+                'default'=> 'false'
             ),
             'include' => array(
                 'type' => 'string',
@@ -554,6 +577,10 @@ function badgeos_render_my_php_block(  ) {
                 'default'=> ''
             ),
             'orderby' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'user_id' => array(
                 'type' => 'string',
                 'default'=> ''
             ),
@@ -584,9 +611,13 @@ function badgeos_render_my_php_block(  ) {
                 'type' => 'string',
                 'default'=> ''
             ),
-            'show_title' => array(
+            'user_id' => array(
                 'type' => 'string',
                 'default'=> ''
+            ),
+            'show_title' => array(
+                'type' => 'string',
+                'default'=> 'true'
             )
         )
     ));
@@ -644,9 +675,13 @@ function badgeos_render_my_php_block(  ) {
                 'type' => 'string',
                 'default'=> 'rank_id'
             ),
-            'show_search' => array(
+            'user_id' => array(
                 'type' => 'string',
                 'default'=> ''
+            ),
+            'show_search' => array(
+                'type' => 'string',
+                'default'=> 'false'
             ),
             'show_description' => array(
                 'type' => 'string',

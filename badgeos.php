@@ -335,7 +335,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
         require_once( $this->directory_path . 'includes/badgeos-emails.php' );
-        require_once( $this->directory_path . 'includes/trigger-for-all.php' );
+//        require_once( $this->directory_path . 'includes/trigger-for-all.php' );
 	}
 
 	/**
