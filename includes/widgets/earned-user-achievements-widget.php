@@ -122,7 +122,15 @@ class earned_user_achievements_widget extends WP_Widget {
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 
-		$instance['title'] = sanitize_text_field( $new_instance['title'] );
+        if( !isset( $new_instance['set_ranks'] ) || empty( $new_instance['set_ranks'] ) ) {
+            $new_instance['set_ranks'] = [];
+        }
+
+        if( !isset( $new_instance['set_achievements'] ) || empty( $new_instance['set_achievements'] ) ) {
+            $new_instance['set_achievements'] = [];
+        }
+
+        $instance['title'] = sanitize_text_field( $new_instance['title'] );
 		$instance['number'] = absint( $new_instance['number'] );
 		$instance['total_points_type'] = sanitize_text_field( $new_instance['total_points_type'] );
 		$instance['set_ranks'] = array_map( 'sanitize_text_field', $new_instance['set_ranks'] );

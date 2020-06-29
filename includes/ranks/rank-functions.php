@@ -1017,7 +1017,7 @@ function badgeos_get_rank_earners_list( $rank_id = 0 ) {
         $output .= '<ul class="badgeos-rank-earners-list rank-' . $rank_id . '-earners-list">';
         foreach ( $earners as $user ) {
             $user_content = '<li><a href="' . get_author_posts_url( $user->ID ) . '">' . get_avatar( $user->ID ) . '</a></li>';
-            $output .= apply_filters( 'badgeos_get_rank_earners_list_user', $user_content, $user->ID );
+            $output .= apply_filters( 'badgeos_get_rank_earners_list_user', $user_content, $rank_id, $user->ID );
         }
         $output .= '</ul>';
     }

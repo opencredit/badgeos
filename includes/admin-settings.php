@@ -528,7 +528,7 @@ function badgeos_settings_page() {
                 </tr>
                 <tr valign="top">
                     <td>
-                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to update the users\' existing achievements and points in the badgeos table.', 'badgeos' ); ?></p>
+                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to update the users\' existing achievements and points in the BadgeOS table.', 'badgeos' ); ?></p>
                     </td>
                 </tr>
                 <tr valign="top">

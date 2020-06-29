@@ -4,6 +4,14 @@ jQuery(document).ready(function($) {
 	 * For Tool Page
      */
 
+    $( '.open_badge_enable_baking_blk_field' ).change( function() {
+        if( $(this).val() == '1' ) {
+            $(this).parents( 'fieldset' ).find( '.sub_ob_badgeos_blk_fields' ).css( 'display', 'block' );
+        } else {
+            $(this).parents( 'fieldset' ).find( '.sub_ob_badgeos_blk_fields' ).css( 'display', 'none' );
+        }
+    } ).trigger( "change" );
+
     $( '#award-achievement, #award-credits, #award-ranks' ).change( function() {
         if( $( '#award-achievement, #award-credits, #award-ranks' ).is(':checked') ) {
             $( '#badgeos-award-users' ).parents( 'tr' ).find( 'th, th label, td, td select, td span' ).slideUp( { duration: 500 } );

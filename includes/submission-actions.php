@@ -1443,7 +1443,7 @@ function badgeos_get_nomination_form( $args = array() ) {
 	);
 
 	// Available filter for changing the language
-	$defaults = apply_filters( 'badgeos_submission_form_language', $defaults );
+    $defaults = apply_filters( 'badgeos_nomination_form_language', $defaults );
 
 	// Patch in our achievement and user IDs
 	$defaults['achievement_id'] = $post->ID;
