@@ -10,6 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function badgeos_ob_integration_page() {
     
+    if( badgeos_first_time_installed() ) {
+        wp_enqueue_style( 'badgeos-jquery-ui-styles' );
+        wp_enqueue_style( 'badgeos-admin-styles' );
+        wp_enqueue_script( 'badgeos-jquery-ui-js' );
+        wp_enqueue_script( 'badgeos-convert-credly-achievements' );
+    }
     $badgeos_assertion_url 		= get_option( 'badgeos_assertion_url' );
     $badgeos_json_url 			= get_option( 'badgeos_json_url' );
     $badgeos_issuer_url 		= get_option( 'badgeos_issuer_url' ); 
@@ -95,7 +101,8 @@ function badgeos_ob_integration_page() {
             </div> 
         </div>
         <?php
-            $message = 'Please click on "Migrate Credly Achievements" button below to migrate existing credly achievements to open badge achievements.';
+            if( badgeos_first_time_installed() ) {
+                $message = 'Please click on "Migrate Credly Achievements" button below to migrate existing credly achievements to open badge achievements.';
         ?>
             <div class="open_badge_convert_wrapper">
                 <h3><?php _e( 'Migrate Credly Achievements', 'badgeos'); ?></h3>
@@ -115,7 +122,8 @@ function badgeos_ob_integration_page() {
                         <div id='progressbar'><div class='progress-label'><?php _e('Loading...', 'badgeos'); ?></div></div>
                     </div>
                 </div>
-            </div>    
+            </div>   
+            <?php } ?>
         </div>
     <?php
 }

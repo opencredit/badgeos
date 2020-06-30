@@ -644,3 +644,24 @@ Shortcode Embed styles
 	font-weight: bold;
 	text-shadow: 1px 1px 0 #fff;
 }
+
+.box-credly-alert {
+	padding: 20px;
+	background-color: #f44336;
+	color: white;
+}
+
+.box-credly-alert .closebtn {
+	margin-left: 15px;
+	color: white;
+	font-weight: bold;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.3s;
+  }
+  
+  .box-credly-alert .closebtn:hover {
+	color: black;
+  }

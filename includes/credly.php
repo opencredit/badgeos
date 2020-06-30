@@ -873,6 +873,10 @@ class BadgeOS_Credly {
         $credly_enable_notification = get_post_meta( $post->ID, '_badgeos_credly_enable_notification', true );
     ?>
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
+        <div class="box-credly-alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            <?php _e( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ); ?>
+        </div>
         <table class="form-table">
             <tr valign="top">
                 <td colspan="2"><?php _e( "This setting makes the earned badge for this achievement sharable via Credly on social networks, such as Facebook, Twitter, LinkedIn, Mozilla Backpack, or the badge earner's own blog or site.", 'badgeos' ); ?> (<?php printf( __( '<a href="%s">Configure global settings</a> for Credly integration.', 'badgeos' ), admin_url( 'admin.php?page=badgeos_sub_credly_integration' ) ); ?> )</td>
@@ -1359,3 +1363,21 @@ function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id 
     badgeos_post_log_entry( $achievement_id, $user_id, null, $title );
 }
 add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_credly', 10, 2 );
+
+add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_credly', 10, 2 );
+
+function badgeos_credly_disconnection_notice() {
+    $badgeos_credly_update_disconnection_status = get_option( 'badgeos_credly_update_disconnection_status' );
+    if( $badgeos_credly_update_disconnection_status!='shown' ) {
+        echo '<div id="message" class="notice badgeos-credly-disconnection-notice is-dismissible error">';
+        echo '<p>' . __( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ). '</p>';
+        echo '</div>';
+    }
+}
+add_action( 'admin_notices', 'badgeos_credly_disconnection_notice' );
+
+function badgeos_credly_update_disconnection_status_notice() {
+    update_option( 'badgeos_credly_update_disconnection_status', 'shown' );
+
+}
+add_action( 'wp_ajax_badgeos_credly_update_disconnection_status', 'badgeos_credly_update_disconnection_status_notice' );
