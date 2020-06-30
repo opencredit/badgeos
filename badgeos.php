@@ -200,7 +200,7 @@ class BadgeOS {
             $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
             $badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
 
-            $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'no';
+            $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'yes';
             $badgeos_admin_tools['email_achievement_subject']   = __( 'Congratulation for earning an achievement', 'badgeos' );
 
             $email_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
@@ -209,7 +209,7 @@ class BadgeOS {
 
             $badgeos_admin_tools['email_achievement_content']   = $email_achievement_content;
 
-            $badgeos_admin_tools['email_disable_achievement_steps_email']   = 'no';
+            $badgeos_admin_tools['email_disable_achievement_steps_email']   = 'yes';
             $badgeos_admin_tools['email_steps_achievement_subject']   = __( 'Congratulation for earning an achievement step', 'badgeos' );
 
             $email_steps_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
@@ -218,7 +218,7 @@ class BadgeOS {
             $badgeos_admin_tools['email_steps_achievement_content']   = $email_steps_achievement_content;
 
 
-            $badgeos_admin_tools['email_disable_ranks_email']   = 'no';
+            $badgeos_admin_tools['email_disable_ranks_email']   = 'yes';
             $badgeos_admin_tools['email_ranks_subject']   = __( 'Congratulation for earning a rank', 'badgeos' );
 
             $email_ranks_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
@@ -227,7 +227,7 @@ class BadgeOS {
             $badgeos_admin_tools['email_ranks_content']   = $email_ranks_content;
 
 
-            $badgeos_admin_tools['email_disable_rank_steps_email']   = 'no';
+            $badgeos_admin_tools['email_disable_rank_steps_email']   = 'yes';
             $badgeos_admin_tools['email_steps_rank_subject']   = __( 'Congratulation for earning a rank step', 'badgeos' );
 
             $email_steps_rank_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
@@ -236,7 +236,7 @@ class BadgeOS {
             $badgeos_admin_tools['email_steps_rank_content']   = $email_steps_rank_content;
 
 
-            $badgeos_admin_tools['email_disable_point_awards_email']   = 'no';
+            $badgeos_admin_tools['email_disable_point_awards_email']   = 'yes';
             $badgeos_admin_tools['email_point_awards_subject']   = __( 'Congratulation for earning new points', 'badgeos' );
 
             $email_point_awards_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
@@ -245,7 +245,7 @@ class BadgeOS {
             $badgeos_admin_tools['email_point_awards_content']   = $email_point_awards_content;
 
 
-            $badgeos_admin_tools['email_disable_point_deducts_email']   = 'no';
+            $badgeos_admin_tools['email_disable_point_deducts_email']   = 'yes';
             $badgeos_admin_tools['email_point_deducts_subject']   = '[credit] [point_title] '.__( 'are deducted', 'badgeos' );
 
             $email_point_deducts_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
