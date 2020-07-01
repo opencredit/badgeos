@@ -47,7 +47,10 @@ class Badgeos_Tools {
     /**
      * Register BadgeOS Tools
      */
-    public function register_badgeos_tool() { ?>
+    public function register_badgeos_tool() { 
+        wp_enqueue_script( 'badgeos-jquery-ui-js' );
+        wp_enqueue_style( 'badgeos-admin-styles' );
+        ?>
 
         <div class="wrap badgeos-tools-page">
             <div id="icon-options-general" class="icon32"></div>

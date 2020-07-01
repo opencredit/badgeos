@@ -633,7 +633,6 @@ class BadgeOS {
         wp_enqueue_script( 'badgeos-ob-integrations' );
 
 		// Load styles
-        wp_enqueue_script('badgeos-jquery-ui-js');
         wp_enqueue_style( 'badgeos-jquery-ui-styles' );
         wp_enqueue_style( 'badgeos-admin-styles' );
 
