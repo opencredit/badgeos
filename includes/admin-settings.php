@@ -730,6 +730,10 @@ function badgeos_credly_options_page() {
 			<?php
 				settings_fields( 'credly_settings_group' );
 			?>
+			<div class="box-credly-alert">
+				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+				<?php _e( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ); ?>
+			</div>
 			<p><?php printf( __( '<a href="%1$s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%1$s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%1$s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com/#!/create-account' ); ?></p>
 
 			<table class="form-table">

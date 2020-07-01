@@ -771,7 +771,10 @@ function credly_issue_badge( $user_id, $achievement_id ) {
 	}
 
 }
-add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
+
+if( badgeos_first_time_installed() ) {
+	add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
+}
 
 /**
  * Added approve/disapprove in bulk actions
