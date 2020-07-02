@@ -425,8 +425,7 @@ class Badgeos_Tools {
                 $credit_amount = ( isset( $_POST['badgeos_tools']['credit_amount'] ) ? $_POST['badgeos_tools']['credit_amount'] : 0 );
 
                 if( ! empty( $credit_type_to_award ) && $credit_amount > 0 ) {
-                    $award_credits_to_all_users = ( ( isset( $_POST['badgeos_tools']['award_all_users'] ) &&
-                        $_POST['badgeos_tools']['award_all_users'] == 'on' ) ? $_POST['badgeos_tools']['award_all_users'] : '' );
+                    $award_credits_to_all_users = ( ( isset( $_POST['badgeos_tools']['award_all_users'] ) && $_POST['badgeos_tools']['award_all_users'] == 'on' ) ? $_POST['badgeos_tools']['award_all_users'] : '' );
                     $users_to_award = array();
                     if( 'on' == $award_credits_to_all_users ) {
                         $users = get_users();
