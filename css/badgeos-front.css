@@ -38,13 +38,40 @@
 	max-width: 100%;
 	display: block;
 }
-.badgeos-achievements-list-item {
+
+/**
+*  List view of BadgeOS Achievements List, Earned Achievements List, Rank List,
+**/
+
+.list .badgeos-achievements-list-item {
 	clear: both;
 	padding: 20px 0;
 	border-bottom: 1px dotted #aaa;
 	overflow: hidden;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+
 }
-.badgeos-achievements-list-item .badgeos-item-image {
+.list .badgeos-achievements-list-item .badgeos-item-description, .list .badgeos-achievements-list-item .badgeos-item-detail {
+	padding-left: 20px;
+}
+
+/**
+*  Grid view of BadgeOS Achievements List, Earned Achievements List, Rank List,
+**/
+
+.grid .badgeos-achievements-list-item .badgeos-item-image {
+	padding-bottom: 30px;
+}
+
+/**
+*  Classes no longer needed.
+**/
+
+/*.badgeos-achievements-list-item .badgeos-item-image {
 	width: 16%;
 	padding-right: 4%;
 	display: block;
@@ -61,6 +88,9 @@
 .badgeos-achievements-list-item .badgeos-item-detail {
 	width: 80%;
 	float: right;
+}*/
+.badgeos-no-results {
+	clear: both;
 }
 .badgeos-item-points {
 	font-weight: bold;
@@ -338,10 +368,10 @@ ul.badgeos-achievement-earners-list li {
 #badgeos-achievements-container .grid > li,
 #badgeos-earned-ranks-container .grid > li  {
 	float: left;
-	width: 45%;
-	border-right: 1px dotted #CCC;
-	border-bottom: 1px dotted #CCC;
-	padding: 20px;
+    width: 45%;
+    border: 1px dotted #CCC;
+    padding: 20px;
+    margin: 1px auto;
 }
 
 #badgeos-earned-achievements-container .grid > li:nth-child(odd),
@@ -433,4 +463,13 @@ ul.badgeos-achievement-earners-list li {
 	font-size: 32px;
 	font-weight: bold;
 	color:red;
+}
+
+@media screen and (min-width: 180px) and (max-width: 542px) {
+
+	#badgeos-earned-achievements-container .grid li,
+	#badgeos-achievements-container .grid li,
+	#badgeos-earned-ranks-container .grid li  {
+    	width: 100%;
+	}
 }

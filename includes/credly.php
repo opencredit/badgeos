@@ -1364,7 +1364,6 @@ function badgeos_log_user_sent_achievement_to_credly( $user_id, $achievement_id 
 }
 add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_credly', 10, 2 );
 
-add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_credly', 10, 2 );
 
 function badgeos_credly_disconnection_notice() {
     $badgeos_credly_update_disconnection_status = get_option( 'badgeos_credly_update_disconnection_status' );

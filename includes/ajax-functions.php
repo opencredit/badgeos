@@ -332,8 +332,8 @@ function badgeos_ajax_get_earned_achievements() {
                 }
             }
 
-            $output .= '</div>';
             $output .= apply_filters( 'badgeos_after_earned_achievement', '', $achievement );
+            $output .= '</div>';
             $output .= '</div></li>';
 
             $achievements .= $output;
