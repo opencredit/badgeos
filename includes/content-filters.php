@@ -407,7 +407,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
  * @param  integer $achievement The achievement's post ID
  * @return string               Concatenated markup
  */
-function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true' ) {
+function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true', $image_width = '', $image_height = '' ) {
 
     global $user_ID;
 
@@ -447,8 +447,12 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
 
         // Achievement Image
         if( $show_thumb == 'true' ) {
-            $output .= '<div class="badgeos-item-image">';
-            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
+			$output .= '<div class="badgeos-item-image">';
+			$image_size = 'boswp-badgeos-achievement';
+			if( !empty( $image_width ) || !empty( $image_height) ) {
+				$image_size = array( $image_width,  $image_height );
+			}
+            $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
             $output .= '</div><!-- .badgeos-item-image -->';
         }
 

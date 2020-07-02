@@ -1,0 +1,32 @@
+/**
+ * #.# Styles
+ *
+ * CSS for both Frontend+Backend.
+ */
+
+.wp-block-bos-block-blocks  {
+  background: $red; 
+  border: 0.2rem solid $black;
+  color: $black;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem;
+}
+.bos-block-inspector {
+	label.bos-block-inspector__label {
+		max-width: 100%;
+	}
+
+	.bos-block-inspector__control {
+		width: 100%;
+
+		> div > div {
+			margin-top: 0px;
+		}
+	}
+
+	.muted {
+		opacity: .6;
+	}
+}
+

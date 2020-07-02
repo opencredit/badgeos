@@ -144,6 +144,18 @@ function badgeos_user_earned_achievements_shortcode() {
                 ),
                 'default'     => '',
             ),
+            'image_width' => array (
+                'name'        => __( 'Thumnail Width', 'badgeos' ),
+                'description' => __( "Achievement's image width.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+			),
+			'image_height' => array (
+                'name'        => __( 'Thumnail Height', 'badgeos' ),
+                'description' => __( "Achievement's image height.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+            ),
         ),
     ) );
 }
@@ -198,7 +210,8 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'show_thumb'  => 'true',
         'show_description'  => 'true',
         'default_view'  => '',
-
+        'image_width'  => '',
+		'image_height'  => '',
     ), $atts, 'badgeos_user_earned_achievements' ) );
 
     wp_enqueue_script( 'thickbox' );
@@ -221,6 +234,8 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'show_thumb'  => $show_thumb,
         'default_view'  => $default_view,
         'show_description'  => $show_description,
+        'image_width'  => $image_width,
+        'image_height'  => $image_height,
     );
     // wp_localize_script( 'badgeos-achievements', 'badgeos', $data );
 
@@ -274,7 +289,7 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         $exclude = implode(',', $exclude);
     }
 
-    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'">';
+    $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $badges;
     $maindiv .= '</div><div id="badgeos-open-badge-verification-popup-box" style="display:none">
     <div class="badgeos-ob-verification-results">

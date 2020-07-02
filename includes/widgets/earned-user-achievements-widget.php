@@ -207,9 +207,19 @@ class earned_user_achievements_widget extends WP_Widget {
 
                         <?php
 								echo '<ul class="widget-ranks-listing">';
+								$rank_width = '50'; 
+								if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
+									$rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
+								}
+								
+								$rank_height = '50';
+								if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
+									$rank_height = intval( $badgeos_settings['badgeos_rank_global_image_height'] );
+								}
+
 								foreach ( $user_ranks as $rank ) {
 									
-									$img        = badgeos_get_rank_image( $rank->rank_id );
+									$img        = badgeos_get_rank_image( $rank->rank_id, $rank_width, $rank_height );
 									$img_permalink = 'javascript:;';
 									if ( ! function_exists( 'post_exists' ) ) {
 										require_once( ABSPATH . 'wp-admin/includes/post.php' );
@@ -286,7 +296,17 @@ class earned_user_achievements_widget extends WP_Widget {
                                     $is_title_show = true;
                                 }
 
-                                $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array(50, 50), 'wp-post-image');
+								$achievement_width = '50'; 
+								if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+									$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+								}
+								
+								$achievement_height = '50';
+								if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+									$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+								}
+
+                                $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array($achievement_width, $achievement_height), 'wp-post-image');
                                 $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement);
 
                                 $img_permalink = 'javascript:;';

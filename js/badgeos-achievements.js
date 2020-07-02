@@ -126,6 +126,8 @@ jQuery(function ($) {
 		var data_show_thumb = $mainobj.attr("data-show_thumb");
 		var data_show_description = $mainobj.attr("data-show_description");
 		var data_default_view = $mainobj.attr("data-default_view");
+		var data_image_width = $mainobj.attr("data-image_width");
+		var data_image_height = $mainobj.attr("data-image_height");
 		$mainobj.find('div.badgeos-earned-spinner').show();
 
 		$.ajax({
@@ -143,7 +145,9 @@ jQuery(function ($) {
 				'show_title': data_show_title,
 				'show_thumb': data_show_thumb,
 				'default_view': data_default_view,
-				'show_description': data_show_description
+				'show_description': data_show_description,
+				'image_width': data_image_width,
+				'image_height': data_image_height,
 			},
 			dataType: 'json',
 			success: function (response) {
@@ -199,6 +203,8 @@ jQuery(function ($) {
 		var data_show_thumb = $mainobj.attr("data-show_thumb");
 		var data_show_description = $mainobj.attr("data-show_description");
 		var data_default_view = $mainobj.attr("data-default_view");
+		var data_image_width = $mainobj.attr("data-image_width");
+		var data_image_height = $mainobj.attr("data-image_height");
 
 		$mainobj.find('div.badgeos-earned-spinner').show();
 
@@ -220,7 +226,9 @@ jQuery(function ($) {
 				'show_title': data_show_title,
 				'show_thumb': data_show_thumb,
 				'show_description': data_show_description,
-				'default_view': data_default_view
+				'default_view': data_default_view,
+				'image_width': data_image_width,
+				'image_height': data_image_height
 			},
 			dataType: 'json',
 			success: function (response) {
@@ -285,6 +293,8 @@ jQuery(function ($) {
 		var data_show_description = $mainobj.attr("data-show_description");
 		var data_show_steps = $mainobj.attr("data-show_steps");
 		var data_default_view = $mainobj.attr("data-default_view");
+		var data_image_width = $mainobj.attr("data-image_width");
+		var data_image_height = $mainobj.attr("data-image_height");
 
 		$mainobj.find('div.badgeos-spinner').show();
 
@@ -314,6 +324,8 @@ jQuery(function ($) {
 				'show_description': data_show_description,
 				'show_steps': data_show_steps,
 				'default_view': data_default_view,
+				'image_width': data_image_width,
+				'image_height': data_image_height,
 			},
 			dataType: 'json',
 			success: function (response) {
