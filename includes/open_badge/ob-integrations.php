@@ -73,6 +73,22 @@ function badgeos_ob_integration_page() {
             </table>
             <?php wp_nonce_field( 'bos_ob_settings', 'ob_settings_field' ); ?>
             <?php
+                $assertion_page = get_option( 'badgeos_assertion_url', false );
+                $json_page      = get_option( 'badgeos_json_url', false );
+                $issuer_page    = get_option( 'badgeos_issuer_url', false );
+                $evidence_page  = get_option( 'badgeos_evidence_url', false );
+                if( current_user_can('manage_options') && ( !badgeos_ob_is_page_exists( $assertion_page ) || !badgeos_ob_is_page_exists( $json_page ) || !badgeos_ob_is_page_exists( $issuer_page ) || !badgeos_ob_is_page_exists( $evidence_page ) ) ) { 
+                    $config_link = 'admin-post.php?action=badgeos_config_pages';
+                    $message = __( '<strong>Please, click <a href="'.$config_link.'">here</a> to configure/create missing open badge pages.</strong>', 'badgeos' );
+                    printf( '<p>%s</p>', $message );
+                } else {
+                    $message = __( '<strong>All of the open badge pages are configured.</strong>', 'badgeos' );
+                    printf( '<p>%s</p>', $message );
+
+                    
+                }
+            ?>
+            <?php
                 // We need to get our api key
                 submit_button( __( 'Save Settings', 'badgeos' ) );
             ?>
