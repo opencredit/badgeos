@@ -33,7 +33,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '3.5';
+	public static $version = '3.6.1';
 
 	function __construct() {
 		// Define plugin constants
@@ -744,6 +744,11 @@ function badgeos_is_debug_mode() {
 
 }
 
+/**
+ * Helper function for writing wordpress log entries
+ *
+ *@return none
+ */
 if ( ! function_exists('badgeos_write_log')) {
     function badgeos_write_log ( $log )  {
         if ( is_array( $log ) || is_object( $log ) ) {
@@ -754,6 +759,11 @@ if ( ! function_exists('badgeos_write_log')) {
     }
 }
 
+/**
+ * Check if credly is enabled
+ *
+ * @return bool
+ */
 function badgeos_first_time_installed() {
 	
 	$credly_settings = (array) get_option( 'credly_settings', array() );

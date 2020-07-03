@@ -40,105 +40,119 @@ add_filter( 'option_page_capability_credly_settings_group', 'badgeos_edit_settin
  * @return string        Our sanitized input
  */
 function badgeos_settings_validate( $input = '' ) {
-
+	
     global $wpdb;
 	// Fetch existing settings
 	$original_settings = get_option( 'badgeos_settings' );
-
-	// Sanitize the settings data submitted
-	$input['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
-	$input['submission_manager_role'] = isset( $input['submission_manager_role'] ) ? sanitize_text_field( $input['submission_manager_role'] ) : $original_settings['submission_manager_role'];
-	$input['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
-	$input['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
-	$input['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
-	$input['remove_data_on_uninstall'] = ( isset( $input['remove_data_on_uninstall'] ) && "on" == $input['remove_data_on_uninstall'] ) ? "on" : null;
-    $input['achievement_step_post_type'] 	= !empty( $input[ 'achievement_step_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_step_post_type' ] ) ) ) : 	'step';
-    $input['achievement_main_post_type'] 	= !empty( $input[ 'achievement_main_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_main_post_type' ] ) ) ) : 	'achievement-type';
-    $input['ranks_main_post_type'] 			= !empty( $input[ 'ranks_main_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_main_post_type' ] ) ) ) : 	'ranks';
-    $input['ranks_step_post_type']       	= !empty( $input[ 'ranks_step_post_type' ] ) 		? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_step_post_type' ] ) ) ) : 	'rank_requirement';
-	$input['points_main_post_type']     	= !empty( $input[ 'points_main_post_type' ] ) 	? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_main_post_type' ] ) ) ) : 	'point_type';
-	$input['points_award_post_type']    	= !empty( $input[ 'points_award_post_type' ] ) 	? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_award_post_type' ] ) ) ) : 	'point_award';
-	$input['points_deduct_post_type']   	= !empty( $input[ 'points_deduct_post_type' ] ) ? sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_deduct_post_type' ] ) ) ) : 'point_deduct';
-
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
+	
+	$original_settings = apply_filters( "badgeos_before_validate_external_settings", $original_settings, $input );
+	foreach( $input as $key=>$value ) {
+		$original_settings[ $key ] = $value;
+	}
+	$original_settings = apply_filters( "badgeos_after_validate_external_settings", $original_settings, $input );
 
-    if( ! empty( $input['achievement_step_post_type'] ) && trim( $original_settings['achievement_step_post_type'] ) != trim( $input['achievement_step_post_type'] )  ) {
+	switch( $input['tab_action'] ) {
+		case "general":
+			$original_settings['minimum_role'] = isset( $input['minimum_role'] ) ? sanitize_text_field( $input['minimum_role'] ) : $original_settings['minimum_role'];
+			$original_settings['debug_mode'] = isset( $input['debug_mode'] ) ? sanitize_text_field( $input['debug_mode'] ) : $original_settings['debug_mode'];
+			$original_settings['log_entries'] = isset( $input['log_entries'] ) ? sanitize_text_field( $input['log_entries'] ) : $original_settings['log_entries'];
+			$original_settings['ms_show_all_achievements'] = isset( $input['ms_show_all_achievements'] ) ? sanitize_text_field( $input['ms_show_all_achievements'] ) : $original_settings['ms_show_all_achievements'];
+			$original_settings['remove_data_on_uninstall'] = ( isset( $input['remove_data_on_uninstall'] ) && "on" == $input['remove_data_on_uninstall'] ) ? "on" : null;
+			$original_settings['achievement_list_shortcode_default_view'] = isset( $input['achievement_list_shortcode_default_view'] ) ? sanitize_text_field( $input['achievement_list_shortcode_default_view'] ) : $original_settings['achievement_list_shortcode_default_view'];
+			$original_settings['earned_achievements_shortcode_default_view'] = isset( $input['earned_achievements_shortcode_default_view'] ) ? sanitize_text_field( $input['earned_achievements_shortcode_default_view'] ) : $original_settings['earned_achievements_shortcode_default_view'];
+			$original_settings['earned_ranks_shortcode_default_view'] = isset( $input['earned_ranks_shortcode_default_view'] ) ? sanitize_text_field( $input['earned_ranks_shortcode_default_view'] ) : $original_settings['earned_ranks_shortcode_default_view'];
+			$original_settings['badgeos_achievement_global_image_width'] = isset( $input['badgeos_achievement_global_image_width'] ) ? sanitize_text_field( $input['badgeos_achievement_global_image_width'] ) : $original_settings['badgeos_achievement_global_image_width'];
+			$original_settings['badgeos_achievement_global_image_height'] = isset( $input['badgeos_achievement_global_image_height'] ) ? sanitize_text_field( $input['badgeos_achievement_global_image_height'] ) : $original_settings['badgeos_achievement_global_image_height'];
+			$original_settings['badgeos_rank_global_image_width'] = isset( $input['badgeos_rank_global_image_width'] ) ? sanitize_text_field( $input['badgeos_rank_global_image_width'] ) : $original_settings['badgeos_rank_global_image_width'];
+			$original_settings['badgeos_rank_global_image_height'] = isset( $input['badgeos_rank_global_image_height'] ) ? sanitize_text_field( $input['badgeos_rank_global_image_height'] ) : $original_settings['badgeos_rank_global_image_height'];
+			break;
+		case "ptypes":
+			
+			if( ! empty( $input['achievement_step_post_type'] ) && trim( $original_settings['achievement_step_post_type'] ) != trim( $input['achievement_step_post_type'] )  ) {
+				$achievement_step_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_step_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $achievement_step_post_type )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $achievement_step_post_type )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $achievement_step_post_type, trim( $original_settings['achievement_step_post_type'] ), 'step' );
+				$original_settings['achievement_step_post_type'] = !empty( $input[ 'achievement_step_post_type' ] ) ? $achievement_step_post_type : 	( isset( $original_settings['achievement_step_post_type'] )?$original_settings['achievement_step_post_type']:'step' );
+			}
+		
+			if( ! empty( $input['achievement_main_post_type'] ) && trim( $original_settings['achievement_main_post_type'] ) != trim( $input['achievement_main_post_type'] )  ) {
+				$achievement_main_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'achievement_main_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $achievement_main_post_type )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $achievement_main_post_type )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
+				$wpdb->query( $strQuery );
+				badgeos_settings_update_p2p( $input['achievement_main_post_type'], trim( $original_settings['achievement_main_post_type'] ), 'main' );
+				$original_settings['achievement_main_post_type'] = !empty( $achievement_main_post_type ) 		? $achievement_main_post_type : 	( isset( $original_settings['achievement_main_post_type'] )?$original_settings['achievement_main_post_type']:'achievement-type' );
+			}
+		
+			if( ! empty( $input['points_main_post_type'] ) && trim( $original_settings['points_main_post_type'] ) != trim( $input['points_main_post_type'] )  ) {
+				$points_main_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_main_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $points_main_post_type )."' where post_type='".trim( $original_settings['points_main_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $points_main_post_type, trim( $original_settings['points_main_post_type'] ), 'main' );
+				$original_settings['points_main_post_type'] = !empty( $points_main_post_type ) 	? $points_main_post_type : 	( isset( $original_settings['points_main_post_type'] )?$original_settings['points_main_post_type']:'point_type' );
+			}
 
-        $strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $input['achievement_step_post_type'] )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
-        $wpdb->query( $strQuery );
+			if( ! empty( $input['points_award_post_type'] ) && trim( $original_settings['points_award_post_type'] ) != trim( $input['points_award_post_type'] )  ) {
+				$points_award_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_award_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $points_award_post_type )."' where post_type='".trim( $original_settings['points_award_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $points_award_post_type, trim( $original_settings['points_award_post_type'] ), 'step' );
+				$original_settings['points_award_post_type'] = !empty( $points_award_post_type )	? $points_award_post_type :	( isset( $original_settings['points_award_post_type'] )?$original_settings['points_award_post_type']:'point_award' );
+			}
 
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['achievement_step_post_type'] )."' where post_type='".trim( $original_settings['achievement_step_post_type'] )."'";
-        $wpdb->query( $strQuery );
+			if( ! empty( $input['points_deduct_post_type'] ) && trim( $original_settings['points_deduct_post_type'] ) != trim( $input['points_deduct_post_type'] )  ) {
+				$points_deduct_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'points_deduct_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $points_deduct_post_type )."' where post_type='".trim( $original_settings['points_deduct_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $points_deduct_post_type, trim( $original_settings['points_deduct_post_type'] ), 'step' );
+				$original_settings['points_deduct_post_type'] = !empty( $points_deduct_post_type ) ? $points_deduct_post_type : ( isset( $original_settings['points_deduct_post_type'] )?$original_settings['points_deduct_post_type']:'point_deduct' );
+			}
+		
+			if( ! empty( $input['ranks_main_post_type'] ) && trim( $original_settings['ranks_main_post_type'] ) != trim( $input['ranks_main_post_type'] )  ) {
+				
+				$ranks_main_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_main_post_type' ] ) ) );
+				
+				$strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $ranks_main_post_type )."' where rank_type='".trim( $original_settings['ranks_main_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $ranks_main_post_type )."' where post_type='".trim( $original_settings['ranks_main_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $ranks_main_post_type, trim( $original_settings['ranks_main_post_type'] ), 'main' );
+				$original_settings['ranks_main_post_type'] 	= !empty( $ranks_main_post_type ) 		? $ranks_main_post_type : 	( isset( $original_settings['ranks_main_post_type'] )?$original_settings['ranks_main_post_type']:'ranks' );
+			}
+		
+			if( ! empty( $input['ranks_step_post_type'] ) && trim( $original_settings['ranks_step_post_type'] ) != trim( $input['ranks_step_post_type'] )  ) {
+				$ranks_step_post_type = sanitize_text_field( str_replace( ' ', '_', trim( $input[ 'ranks_step_post_type' ] ) ) );
+				$strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $ranks_step_post_type )."' where rank_type='".trim( $original_settings['ranks_step_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				$strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $ranks_step_post_type )."' where post_type='".trim( $original_settings['ranks_step_post_type'] )."'";
+				$wpdb->query( $strQuery );
+		
+				badgeos_settings_update_p2p( $ranks_step_post_type, trim( $original_settings['ranks_step_post_type'] ), 'step' );
+				$original_settings['ranks_step_post_type'] = !empty( $ranks_step_post_type ) 		? $ranks_step_post_type : 	( isset( $original_settings['ranks_step_post_type'] )?$original_settings['ranks_step_post_type']:'rank_requirement' );
+			
+			} 
+			break;
+	}
 
-        badgeos_settings_update_p2p( $input['achievement_step_post_type'], trim( $original_settings['achievement_step_post_type'] ), 'step' );
-    } else {
-        $input['achievement_step_post_type'] = trim( $original_settings['achievement_step_post_type'] );
-    }
-
-    if( ! empty( $input['achievement_main_post_type'] ) && trim( $original_settings['achievement_main_post_type'] ) != trim( $input['achievement_main_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "badgeos_achievements set post_type='".trim( $input['achievement_main_post_type'] )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['achievement_main_post_type'] )."' where post_type='".trim( $original_settings['achievement_main_post_type'] )."'";
-        $wpdb->query( $strQuery );
-        badgeos_settings_update_p2p( $input['achievement_main_post_type'], trim( $original_settings['achievement_main_post_type'] ), 'main' );
-    } else {
-        $input['achievement_main_post_type'] = trim( $original_settings['achievement_main_post_type'] );
-    }
-
-    if( ! empty( $input['points_main_post_type'] ) && trim( $original_settings['points_main_post_type'] ) != trim( $input['points_main_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_main_post_type'] )."' where post_type='".trim( $original_settings['points_main_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        badgeos_settings_update_p2p( $input['points_main_post_type'], trim( $original_settings['points_main_post_type'] ), 'main' );
-    } else {
-        $input['points_main_post_type'] = trim( $original_settings['points_main_post_type'] );
-    }
-    if( ! empty( $input['points_award_post_type'] ) && trim( $original_settings['points_award_post_type'] ) != trim( $input['points_award_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_award_post_type'] )."' where post_type='".trim( $original_settings['points_award_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        badgeos_settings_update_p2p( $input['points_award_post_type'], trim( $original_settings['points_award_post_type'] ), 'step' );
-    } else {
-        $input['points_award_post_type'] = trim( $original_settings['points_award_post_type'] );
-    }
-    if( ! empty( $input['points_deduct_post_type'] ) && trim( $original_settings['points_deduct_post_type'] ) != trim( $input['points_deduct_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['points_deduct_post_type'] )."' where post_type='".trim( $original_settings['points_deduct_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        badgeos_settings_update_p2p( $input['points_deduct_post_type'], trim( $original_settings['points_deduct_post_type'] ), 'step' );
-    } else {
-        $input['points_deduct_post_type'] = trim( $original_settings['points_deduct_post_type'] );
-    }
-
-    if( ! empty( $input['ranks_main_post_type'] ) && trim( $original_settings['ranks_main_post_type'] ) != trim( $input['ranks_main_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $input['ranks_main_post_type'] )."' where rank_type='".trim( $original_settings['ranks_main_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['ranks_main_post_type'] )."' where post_type='".trim( $original_settings['ranks_main_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        badgeos_settings_update_p2p( $input['ranks_main_post_type'], trim( $original_settings['ranks_main_post_type'] ), 'main' );
-    } else {
-        $input['ranks_main_post_type'] = trim( $original_settings['ranks_main_post_type'] );
-    }
-
-    if( ! empty( $input['ranks_step_post_type'] ) && trim( $original_settings['ranks_step_post_type'] ) != trim( $input['ranks_step_post_type'] )  ) {
-        $strQuery = "update ".$wpdb->prefix . "badgeos_ranks set rank_type='".trim( $input['ranks_step_post_type'] )."' where rank_type='".trim( $original_settings['ranks_step_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        $strQuery = "update ".$wpdb->prefix . "posts set post_type='".trim( $input['ranks_step_post_type'] )."' where post_type='".trim( $original_settings['ranks_step_post_type'] )."'";
-        $wpdb->query( $strQuery );
-
-        badgeos_settings_update_p2p( $input['ranks_step_post_type'], trim( $original_settings['ranks_step_post_type'] ), 'step' );
-    } else {
-        $input['ranks_step_post_type'] = trim( $original_settings['ranks_step_post_type'] );
-    }
-
-    // Return sanitized inputs
-	return $input;
-
+	
+	$original_settings = apply_filters( "badgeos_validate_setting_page_data", $original_settings, $input );
+	// Sanitize the settings data submitted
+	return $original_settings;
 }
 
 /**
@@ -306,297 +320,47 @@ function badgeos_credly_api_key_errors() {
  * @return void
  */
 function badgeos_settings_page() {
+	wp_enqueue_style( 'badgeos-jquery-ui-styles' );
+	wp_enqueue_style( 'badgeos-admin-styles' );
+	wp_enqueue_script( 'badgeos-jquery-ui-js' );
+	wp_enqueue_script( 'badgeos-admin-tools-js' );
+	$licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
+	$setting_page_tab = isset( $_GET['bos_s_tab'] ) ? $_GET['bos_s_tab'] : 'general';
+	if( !isset( $setting_page_tab ) || empty( $setting_page_tab ) ) {
+		$setting_page_tab = 'general';
+	}
+	$base_tabs = [ 'general', 'ptypes', 'dupgrades', 'licenses' ];
 	?>
-	<div class="wrap" >
-        <?php settings_errors(); ?>
+	<div class="wrap badgeos-tools-page">
 		<div id="icon-options-general" class="icon32"></div>
 		<h2><?php _e( 'BadgeOS Settings', 'badgeos' ); ?></h2>
 
-		<form method="post" action="options.php">
-			<?php settings_fields( 'badgeos_settings_group' ); ?>
-			<?php $badgeos_settings = get_option( 'badgeos_settings' ); ?>
-			<?php
-			//load settings
-			$minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-			$submission_manager_role = ( isset( $badgeos_settings['submission_manager_role'] ) ) ? $badgeos_settings['submission_manager_role'] : 'manage_options';
-			$submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
-			$submission_email_addresses = ( isset( $badgeos_settings['submission_email_addresses'] ) ) ? $badgeos_settings['submission_email_addresses'] : '';
-			$debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
-			$log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
-			$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
-			$remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
-            $achievement_step_post_type 	= ( ! empty ( $badgeos_settings['achievement_step_post_type'] ) ) ? $badgeos_settings['achievement_step_post_type'] : 'step';
-            $achievement_main_post_type 	= ( ! empty ( $badgeos_settings['achievement_main_post_type'] ) ) ? $badgeos_settings['achievement_main_post_type'] : 'achievement-type';
-            $ranks_main_post_type 			= ( ! empty ( $badgeos_settings['ranks_main_post_type'] ) ) ? $badgeos_settings['ranks_main_post_type'] : 'rank_types';
-            $ranks_step_post_type 			= ( ! empty ( $badgeos_settings['ranks_step_post_type'] ) ) ? $badgeos_settings['ranks_step_post_type'] : 'rank_requirement';
-            $points_main_post_type 			= ( ! empty ( $badgeos_settings['points_main_post_type'] ) ) ? $badgeos_settings['points_main_post_type'] : 'point_type';
-            $points_award_post_type 		= ( ! empty ( $badgeos_settings['points_award_post_type'] ) ) ? $badgeos_settings['points_award_post_type'] : 'point_award';
-            $points_deduct_post_type 		= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
-            $default_point_type 			= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
-
-			$badgeos_achievement_global_image_width 	= ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
-			$badgeos_achievement_global_image_height = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_height'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_height'] : '50';
-			$badgeos_rank_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
-			$badgeos_rank_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
-            $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
-            $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
-            $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
-            wp_nonce_field( 'badgeos_settings_nonce', 'badgeos_settings_nonce' );
-			?>
-			<table class="form-table">
-				<?php if ( current_user_can( 'manage_options' ) ) { ?>
-					<tr valign="top"><th scope="row"><label for="minimum_role"><?php _e( 'Minimum Role to Administer BadgeOS plugin: ', 'badgeos' ); ?></label></th>
-						<td>
-							<select id="minimum_role" name="badgeos_settings[minimum_role]">
-								<option value="manage_options" <?php selected( $minimum_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-								<option value="delete_others_posts" <?php selected( $minimum_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-								<option value="publish_posts" <?php selected( $minimum_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-							</select>
-						</td>
-					</tr>
-					<tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
-						<td>
-							<select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
-								<option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-								<option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-								<option value="publish_posts" <?php selected( $submission_manager_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-							</select>
-						</td>
-					</tr>
-				<?php } /* endif current_user_can( 'manage_options' ); */ ?>
-				<tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
-					<td>
-						<select id="submission_email" name="badgeos_settings[submission_email]">
-							<option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-							<option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-						</select>
-					</td>
-				</tr>
-				<tr valign="top"><th scope="row"><label for="submission_email_addresses"><?php _e( 'Notification email addresses:', 'badgeos' ); ?></label></th>
-					<td>
-						<input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
-						<p class="description"><?php _e( 'Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email.', 'badgeos' ); ?></p>
-					</td>
-				</tr>
-				<tr valign="top"><th scope="row"><label for="remove_data_on_uninstall"><?php _e( 'Delete Data on Uninstall:', 'badgeos' ); ?></label></th>
-					<td>
-						<input id="remove_data_on_uninstall" name="badgeos_settings[remove_data_on_uninstall]" type="checkbox" <?php echo ( $remove_data_on_uninstall == "on" ) ? "checked" : ""; ?> class="regular-text" />
-						<p class="description"><?php _e( 'It will delete all BadgeOS DB entries on uninstall including posts, setting options, usermeta', 'badgeos' ); ?></p>
-					</td>
-				</tr>
-				<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Debug Mode:', 'badgeos' ); ?></label></th>
-					<td>
-						<select id="debug_mode" name="badgeos_settings[debug_mode]">
-							<option value="disabled" <?php selected( $debug_mode, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-							<option value="enabled" <?php selected( $debug_mode, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-						</select>
-					</td>
-				</tr>
-				<tr valign="top"><th scope="row"><label for="log_entries"><?php _e( 'Log Entries:', 'badgeos' ); ?></label></th>
-					<td>
-						<select id="log_entries" name="badgeos_settings[log_entries]">
-							<option value="disabled" <?php selected( $log_entries, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-							<option value="enabled" <?php selected( $log_entries, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-						</select>
-					</td>
-				</tr>
-                <tr valign="top">
-                    <th scope="row"><label for="log_entries"></th>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><label for="notice"><?php echo __( 'Note' . ': ', 'badgeos' ); ?></th>
-                    <td><?php echo __( 'We strongly recommend you to take back up of database first when updating the post_types slugs. Also make sure that slugs should not exceeded than 18 characters.', 'badgeos'  ); ?></td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><label for="achievement_main_post_type"><?php _e( 'Achievement Post Type:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <input id="achievement_main_post_type" name="badgeos_settings[achievement_main_post_type]" type="text" value="<?php echo esc_attr( $achievement_main_post_type ); ?>" class="regular-text" />
-                        <p class="description"><?php _e( 'Achievement Type Slug.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><label for="achievement_step_post_type"><?php _e( 'Achievement Step Post Type:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <input id="achievement_step_post_type" name="badgeos_settings[achievement_step_post_type]" type="text" value="<?php echo esc_attr( $achievement_step_post_type ); ?>" class="regular-text" />
-                        <p class="description"><?php _e( 'Achievement Step Type Slug.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><label for="ranks_main_post_type"><?php _e( 'Rank Post Type:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <input id="ranks_main_post_type" name="badgeos_settings[ranks_main_post_type]" type="text" value="<?php echo esc_attr( $ranks_main_post_type ); ?>" class="regular-text" />
-                        <p class="description"><?php _e( 'Ranks Type Slug.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th scope="row"><label for="ranks_step_post_type"><?php _e( 'Rank Step Post Type:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <input id="ranks_step_post_type" name="badgeos_settings[ranks_step_post_type]" type="text" value="<?php echo esc_attr( $ranks_step_post_type ); ?>" class="regular-text" />
-                        <p class="description"><?php _e( 'Ranks Step Type Slug.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-					<th scope="row"><label for="points_main_post_type"><?php _e( 'Point Type:', 'badgeos' ); ?></label></th>
-					<td>
-						<input id="points_main_post_type" name="badgeos_settings[points_main_post_type]" type="text" value="<?php echo esc_attr( $points_main_post_type ); ?>" class="regular-text" />
-						<p class="description"><?php _e( 'Point Type Slug.', 'badgeos' ); ?></p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><label for="points_award_post_type"><?php _e( 'Point Award:', 'badgeos' ); ?></label></th>
-					<td>
-						<input id="points_award_post_type" name="badgeos_settings[points_award_post_type]" type="text" value="<?php echo esc_attr( $points_award_post_type ); ?>" class="regular-text" />
-						<p class="description"><?php _e( 'Point Award Type Slug.', 'badgeos' ); ?></p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><label for="points_deduct_post_type"><?php _e( 'Point Deduct:', 'badgeos' ); ?></label></th>
-					<td>
-						<input id="points_deduct_post_type" name="badgeos_settings[points_deduct_post_type]" type="text" value="<?php echo esc_attr( $points_deduct_post_type ); ?>" class="regular-text" />
-						<p class="description"><?php _e( 'Point Deduct Type Slug.', 'badgeos' ); ?></p>
-					</td>
-				</tr>
-				<tr valign="top">
-					<th scope="row"><label for="points_default_point_type"><?php _e( 'Default Point Type:', 'badgeos' ); ?></label></th>
-					<td>
-						<?php
-							$points = badgeos_get_point_types();
-						?>
-						<select id="points_default_point_type" name="badgeos_settings[default_point_type]">
-							<?php foreach( $points as $point ) {?>
-								<option value="<?php echo $point->ID;?>" <?php selected( $default_point_type, $point->ID ); ?>><?php echo $point->post_title;?></option>
-							<?php } ?>
-						</select>
-					</td>
-				</tr>
-
-                <tr valign="top">
-                    <th scope="row"><label for="achievement_list_shortcode_default_view"><?php _e( 'Achievement List Shortcode Default View:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <select id="achievement_list_shortcode_default_view" name="badgeos_settings[achievement_list_shortcode_default_view]">
-                            <option value="list" <?php selected( $achievement_list_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
-                            <option value="grid" <?php selected( $achievement_list_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><label for="earned_achievements_shortcode_default_view"><?php _e( 'Earned Achievements Shortcode Default View:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <select id="earned_achievements_shortcode_default_view" name="badgeos_settings[earned_achievements_shortcode_default_view]">
-                            <option value="list" <?php selected( $earned_achievements_shortcode_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
-                            <option value="grid" <?php selected( $earned_achievements_shortcode_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr valign="top">
-                    <th scope="row"><label for="earned_ranks_shortcode_default_view"><?php _e( 'Earned Ranks List Shortcode Default View:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <select id="earned_ranks_shortcode_default_view" name="badgeos_settings[earned_ranks_shortcode_default_view]">
-                            <option value="list" <?php selected( $earned_ranks_shortcode_default_view, "list" ); ?>><?php _e( 'List', 'badgeos' ); ?></option>
-                            <option value="grid" <?php selected( $earned_ranks_shortcode_default_view, "grid" ); ?>><?php _e( 'Grid', 'badgeos' ); ?></option>
-                        </select>
-                    </td>
-                </tr>
-				<tr><td colspan="2"><hr><h2>Thumbnail Sizes</h2></td></tr>
-				<tr valign="top">
-                    <th scope="row"><label for="badgeos_achievement_global_image_width"><?php _e( 'Achievement Image Size:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <label>
-							<?php _e( 'Width:', 'badgeos' ); ?>
-							<input type="number" id="badgeos_achievement_global_image_width" value="<?php echo $badgeos_achievement_global_image_width;?>" name="badgeos_settings[badgeos_achievement_global_image_width]" />
-						</label>
-						<label>
-							<?php _e( 'Height:', 'badgeos' ); ?>
-							<input type="number" id="badgeos_achievement_global_image_height" value="<?php echo $badgeos_achievement_global_image_height;?>" name="badgeos_settings[badgeos_achievement_global_image_height]" />
-						</label>
-                    </td>
-                </tr>
-				<tr valign="top">
-                    <th scope="row"><label for="badgeos_rank_global_image_width"><?php _e( 'Rank Image Size:', 'badgeos' ); ?></label></th>
-                    <td>
-                        <label>
-							<?php _e( 'Width:', 'badgeos' ); ?>
-							<input type="number" id="badgeos_rank_global_image_width" value="<?php echo $badgeos_rank_global_image_width;?>" name="badgeos_settings[badgeos_rank_global_image_width]" />
-						</label>
-						<label>
-							<?php _e( 'Height:', 'badgeos' ); ?>
-							<input type="number" id="badgeos_rank_global_image_height" value="<?php echo $badgeos_rank_global_image_height;?>" name="badgeos_settings[badgeos_rank_global_image_height]" />
-						</label>
-                    </td>
-                </tr>
-                <?php
-				// check if multisite is enabled & if plugin is network activated
-				if ( is_super_admin() ){
-					if ( is_multisite() ) {
-					?>
-						<tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-							<td>
-								<select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-									<option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-									<option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-								</select>
-							</td>
-						</tr>
-					<?php
-					}
-				}
-				do_action( 'badgeos_settings', $badgeos_settings ); ?>
-			</table>
-			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>" />
-			</p>
-
-            <table class="form-table badgeos-migration-form-table">
-
-                <tr valign="top">
-                    <td>
-                        <h3><?php _e( 'BadgeOS DB Upgrade', 'badgeos' ); ?></h3>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td>
-                        <p><?php _e( 'Please click on "Upgrade 3.0 DB" button below to update the users\' existing achievements and points in the BadgeOS table.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td>
-                        <?php
-                        $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db_updated', 'No' );
-                        if( $is_badgeos_all_achievement_db_updated!='Yes' ) {
-                            ?>
-                            <input type="button" id="badgeos_migrate_meta_to_db" class="button-primary" value="<?php _e( 'Upgrade 3.0 DB', 'badgeos' ); ?>" />
-                        <?php } else { ?>
-                            <input type="button" id="badgeos_migrate_meta_to_db" class="button-primary" value="<?php _e( 'Upgrade 3.0 DB', 'badgeos' ); ?>" />
-                        <?php } ?>
-
-                        <div class="badgeos_migrate_meta_to_db_message"></div>
-                    </td>
-                </tr>
-            </table>
-
-            <table class="form-table badgeos-migration-form-table">
-                <tr valign="top">
-                    <td>
-                        <h3><?php _e( 'BadgeOS Upgrade Achievement', 'badgeos' ); ?></h3>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td>
-                        <p><?php _e( 'Please click on "Upgrade Achievements" button below to update the existing achievement points with the point types.', 'badgeos' ); ?></p>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td>
-                        <input type="button" id="badgeos_migrate_fields_single_to_multi" class="button-primary" value="<?php _e( 'Upgrade Achievements', 'badgeos' ); ?>" />
-                        <div class="badgeos_migrate_fields_single_to_multi_message"></div>
-                    </td>
-                </tr>
-            </table>
-
-        </form>
+		<div class="nav-tab-wrapper">
+			<a href="admin.php?page=badgeos_settings&bos_s_tab=general" class="nav-tab <?php echo ( $setting_page_tab == 'general' || empty( $setting_page_tab ) ) ? 'nav-tab-active' : ''; ?>">
+				<i class="fa fa-shield" aria-hidden="true"></i>
+				<?php _e( 'General', 'badgeos' ); ?>
+			</a>
+			<a href="admin.php?page=badgeos_settings&bos_s_tab=ptypes" class="nav-tab <?php echo $setting_page_tab == 'ptypes'? 'nav-tab-active' : ''; ?>">
+				<i class="fa fa-shield" aria-hidden="true"></i>
+				<?php _e( 'Post Types', 'badgeos' ); ?>
+			</a>
+			<a href="admin.php?page=badgeos_settings&bos_s_tab=dupgrades" class="nav-tab <?php echo $setting_page_tab == 'dupgrades'? 'nav-tab-active' : ''; ?>">
+				<i class="fa fa-shield" aria-hidden="true"></i>
+				<?php _e( 'Data Upgrade', 'badgeos' ); ?>
+			</a>
+			<?php do_action( 'badgeos_settings_main_tab_header', $setting_page_tab ); ?>
+			<?php if( count( $licensed_addons ) ) { ?>
+				<a href="admin.php?page=badgeos_settings&bos_s_tab=licenses" class="nav-tab <?php echo $setting_page_tab == 'licenses'? 'nav-tab-active' : ''; ?>">
+					<i class="fa fa-shield" aria-hidden="true"></i>
+					<?php _e( 'Licenses', 'badgeos' ); ?>
+				</a>
+			<?php } ?>
+		</div>
+		<?php if( in_array( $setting_page_tab, $base_tabs ) ) {
+			include( 'settings/' . $setting_page_tab . '.php' );
+		} else { ?> 
+			<?php do_action( 'badgeos_settings_main_tab_content', $setting_page_tab ); ?>
+		<?php } ?>
 	</div>
 	<?php
 }
@@ -616,7 +380,7 @@ function badgeos_license_settings() {
 	if ( ! empty( $licensed_addons ) ) {
 
 		// Output the header for licenses
-		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
+		echo '<tr><td colspan="2"><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
 
 		// Sort our licenses alphabetially
 		ksort( $licensed_addons );
@@ -636,7 +400,7 @@ function badgeos_license_settings() {
 	}
 
 }
-add_action( 'badgeos_settings', 'badgeos_license_settings', 0 );
+add_action( 'badgeos_license_settings', 'badgeos_license_settings', 0 );
 
 /**
  * Add-ons settings page
@@ -760,11 +524,11 @@ function badgeos_credly_options_page() {
 			<?php
 				settings_fields( 'credly_settings_group' );
 			?>
-			<div class="box-credly-alert">
-				<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-				<?php _e( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ); ?>
-			</div>
-			<p><?php printf( __( '<a href="%1$s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%1$s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%1$s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com/#!/create-account' ); ?></p>
+            <div class="box-credly-alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <?php _e( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ); ?>
+            </div>
+            <p><?php printf( __( '<a href="%1$s" target="_blank">Credly</a> is a universal way for people to earn and showcase their achievements and badges. With Credly Integration enabled here, badges or achievements you create on this BadgeOS site can automatically be created on your Credly account. As select badges are earned using BadgeOS, the badge will automatically be issued via Credly to the earner so they can easily share it on Facebook, LinkedIn, Twitter, Mozilla Backpack, their web site, blog, Credly profile or other location. Credly makes badge issuing and sharing fun and easy! <a href="%1$s" target="_blank">Learn more</a>.  <br /><br />If you do not yet have a Credly account, <a href="%1$s" target="_blank">create one now</a>. It\'s free.', 'badgeos' ), 'https://credly.com/#!/create-account' ); ?></p>
 
 			<table class="form-table">
 				<tr valign="top">

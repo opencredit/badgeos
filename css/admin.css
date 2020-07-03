@@ -316,13 +316,23 @@ Shortcode Embed styles
 .ui-tabs-vertical .ui-tabs-panel {
 	padding: 1em;
 	float: right;
-	width: calc(75% - 1px);
+	width: calc(75% - 2px);
+}
+#badgeos-setting-tabs .ui-tabs-panel {
+	padding: 1em;
+	float: right;
+	width: calc(72% - 3px);
+}
+#badgeos-setting-tabs td, th{
+	font-size: 14px;
+	text-align: left;
+	vertical-align: top;
 }
 #system-tabs,
 #achievement-tabs,
 #rank-tabs,
-#email-tabs,
-#credit-tabs {
+#credit-tabs,
+#email-tabs, #badgeos-setting-tabs {
 	margin-top: 20px;
 	background-color: #f6f6f6;
 	border-color: #ccc;
@@ -332,7 +342,7 @@ Shortcode Embed styles
 #system-tabs .tab-title,
 #achievement-tabs .tab-title,
 #rank-tabs .tab-title,
-#email-tabs .tab-title,
+#email-tabs .tab-title, #badgeos-setting-tabs .tab-title, 
 #credit-tabs .tab-title {
 	padding: 10px;
 	font-size: 15px;
@@ -343,7 +353,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav {
 	padding: 0 !important;
 	margin: 0 !important;
@@ -355,7 +365,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li a,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li a,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li a, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav li a,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li a {
 	padding: 8px 2% !important;
 	width: 96% !important;
@@ -363,7 +373,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav li,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li {
 	background-color: #f6f6f6;
 	border: none;
@@ -377,7 +387,7 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active,#badgeos-setting-tabs.ui-tabs-nav li.ui-tabs-active,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
 	background-color: #fff;
 	border: none;
@@ -390,13 +400,14 @@ Shortcode Embed styles
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active a {
 	color: #000;
 }
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#rank-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li:focus, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav li:focus,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li:focus {
 	border: none !important;
 	outline: none !important;
@@ -404,8 +415,9 @@ Shortcode Embed styles
 }
 #system-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#achievement-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #rank-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
-#email-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
+#email-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus, #badgeos-setting-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus,
 #credit-tabs.ui-tabs-vertical .ui-tabs-nav li a:focus {
 	border: none !important;
 	outline: none !important;
@@ -519,14 +531,14 @@ Shortcode Embed styles
 	border-bottom: 1pt solid #e5e5e5;
 	padding: 20px 0;
 }
-#email-tabs .button,
+#email-tabs .button, #badgeos-setting-tabs .button,
 #rank-tabs .button,
 #achievement-tabs .button,
 #credit-tabs .button {
 	margin: 20px 0;
 	float: right;
 }
-#email-tabs .tool-hint,
+#email-tabs .tool-hint, #badgeos-setting-tabs .tool-hint,
 #rank-tabs .tool-hint,
 #achievement-tabs .tool-hint,
 #credit-tabs .tool-hint {
@@ -664,4 +676,12 @@ Shortcode Embed styles
   
   .box-credly-alert .closebtn:hover {
 	color: black;
-  }
+}
+.box-credly-alert a {
+	color: #fff;
+	text-decoration: underline;
+}
+.badgeos_settings_license_tab{
+	vertical-align: top;
+	padding: 10px;
+}

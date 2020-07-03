@@ -867,7 +867,7 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-tabs .ui-tabs-panel {
     display: block;
-    border-width: 0;
+    border-width: 1;
     padding: 1em 1.4em;
     background: none;
 }
