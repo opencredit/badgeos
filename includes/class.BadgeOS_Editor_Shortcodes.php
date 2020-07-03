@@ -39,7 +39,8 @@ class BadgeOS_Editor_Shortcodes {
         wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . 'css/autocomplete.css' );
 
         if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
-            wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
+			wp_enqueue_script( 'badgeos-jquery-ui-js' );
+			wp_enqueue_script( 'badgeos-shortcodes-embed', $this->directory_url . "js/badgeos-shortcode-embed$min.js", array( 'jquery' ), '', true );
             wp_localize_script( 'badgeos-shortcodes-embed', 'badgeos_shortcode_embed_messages', $this->get_localized_text() );
         }
     }
