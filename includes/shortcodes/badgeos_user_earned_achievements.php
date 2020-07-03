@@ -149,8 +149,8 @@ function badgeos_user_earned_achievements_shortcode() {
                 'description' => __( "Achievement's image width.", 'badgeos' ),
                 'type'        => 'text',
                 'default'     => '',
-			),
-			'image_height' => array (
+            ),
+            'image_height' => array (
                 'name'        => __( 'Thumnail Height', 'badgeos' ),
                 'description' => __( "Achievement's image height.", 'badgeos' ),
                 'type'        => 'text',
@@ -211,7 +211,8 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
         'show_description'  => 'true',
         'default_view'  => '',
         'image_width'  => '',
-		'image_height'  => '',
+        'image_height'  => '',
+
     ), $atts, 'badgeos_user_earned_achievements' ) );
 
     wp_enqueue_script( 'thickbox' );

@@ -170,7 +170,8 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
         'show_description'  => 'true',
         'default_view'  => '',
         'image_width'  => '',
-		'image_height'  => '',
+        'image_height'  => '',
+
     ), $atts, 'badgeos_user_earned_ranks' ) );
 
     wp_enqueue_style( 'badgeos-front' );

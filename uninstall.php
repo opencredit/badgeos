@@ -87,28 +87,6 @@ if( is_array( $badgeos_log_entry ) && !empty( $badgeos_log_entry ) && !is_null( 
 }
 
 /**
- * Delete submission post type data
- */
-$submissions = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = 'submission';" );
-if( is_array( $submissions ) && !empty( $submissions ) && !is_null( $submissions ) ) {
-    foreach( $submissions as $submission ) {
-        $wpdb->query( "DELETE FROM $wpdb->posts WHERE ID = '$submission->ID';" );
-        $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id = '$submission->ID';" );
-    }
-}
-
-/**
- * Delete nomination post type data
- */
-$nominations = $wpdb->get_results( "SELECT `ID` FROM $wpdb->posts WHERE post_type = 'nomination';" );
-if( is_array( $nominations ) && !empty( $nominations ) && !is_null( $nominations ) ) {
-    foreach( $nominations as $nomination ) {
-        $wpdb->query( "DELETE FROM $wpdb->posts WHERE ID = '$nomination->ID';" );
-        $wpdb->query( "DELETE FROM $wpdb->postmeta WHERE post_id = '$nomination->ID';" );
-    }
-}
-
-/**
  * Delete user BadgeOS meta
  */
 $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = 'credly_user_enable';");

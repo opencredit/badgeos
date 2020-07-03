@@ -245,6 +245,32 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 3.6 =
+* New: Added option to make the earned badges compatible with OB standards
+* New: Added option to set achievements/ranks image sizes globally
+* New: Added option to update image size from earned achievements/ranks shortcodes
+* New: Added option to update users points through ajax
+* New: Added user id parameter for earned achievements/ranks shortcodes
+* New: Removed Credly integration for new installations
+* Fix: Disable the BadgeOS emails by default
+* Fix: Fixed multiple required steps badge issue
+* Fix: Conflict with The7 theme
+* Fix: Replaced deprecated functions
+
+= 3.5.1 =
+* New: Added default (list/grid) view option for achievement list and user earned achievements/ranks shortcodes
+* New: Added option to send email on earning achievements/points/ranks
+* New: Added option to edit/update the header/footer and content of the email
+* Fix: Revamped achievement list shortcode
+* Fix: Revamped users earned points shortcode
+* Fix: Fixed WordPress  version ( below 5.0) compatibility issue
+* Fix: Enqueued CKEditor js code only on submission page to avoid conflicts
+* Fix: Revamped DB update script
+* Fix: Fixed WP deprecated function issue
+* Fix: Fixed Elementor plugin conflict
+* Fix: Revamped user achievement widgets
+
+
 = 3.5 =
 * New: Added support for Gutenburg
 * New: Added option to display earned points/achievement/ranks with list/grid view

@@ -9,13 +9,9 @@
  * Webpack is compiling as the input file.
  */
 
-import './single-achievement-block/block.js'; 
-import './submission-form-block/block.js';
-import './nomination-form-block/block.js';
+import './single-achievement-block/block.js';
 import './achievements-list-block/block.js';
 import './user-earned-achievement-block/block.js';
 import './user-earned-points-block/block.js';
 import './credly-assertion-page-block/block.js';
-import './nomination-list-block/block.js';
-import './submission-list-block/block.js';
 import './user-earned-ranks-block/block.js';

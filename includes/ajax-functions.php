@@ -14,12 +14,10 @@ $badgeos_ajax_actions = array(
 	'get-achievements',
     'get-earned-achievements',
     'get-earned-ranks',
-	'get-feedback',
 	'get-achievements-select2',
 	'get-achievement-types',
     'get-users',
-    'badgeos-get-users-list',
-    'update-feedback',
+    'badgeos-get-users-list'
 );
 
 // Register core Ajax calls.
@@ -561,59 +559,6 @@ function badgeos_ajax_get_achievements() {
 		'type'        => $earned_ids,
         'attr'        => $_REQUEST
 	) );
-}
-
-/**
- * AJAX Helper for returning feedback posts
- *
- * @since 1.1.0
- * @return void
- */
-function badgeos_ajax_get_feedback() {
-
-	$feedback = badgeos_get_feedback( array(
-		'post_type'        => isset( $_REQUEST['type'] ) ? esc_html( $_REQUEST['type'] ) : '',
-		'posts_per_page'   => isset( $_REQUEST['limit'] ) ? esc_html( $_REQUEST['limit'] ) : '',
-		'status'           => isset( $_REQUEST['status'] ) ? esc_html( $_REQUEST['status'] ) : '',
-		'show_attachments' => isset( $_REQUEST['show_attachments'] ) ? esc_html( $_REQUEST['show_attachments'] ) : '',
-		'show_comments'    => isset( $_REQUEST['show_comments'] ) ? esc_html( $_REQUEST['show_comments'] ) : '',
-		's'                => isset( $_REQUEST['search'] ) ? esc_html( $_REQUEST['search'] ) : '',
-	) );
-
-	wp_send_json_success( array(
-		'feedback' => $feedback
-	) );
-}
-
-/**
- * AJAX Helper for approving/denying feedback
- *
- * @since 1.1.0
- * @return void
- */
-function badgeos_ajax_update_feedback() {
-
-	// Verify our nonce
-	check_ajax_referer( 'review_feedback', 'nonce' );
-
-	// Status workflow
-	$status_args = array(
-		'achievement_id' => $_REQUEST[ 'achievement_id' ],
-        'user_id' => $_REQUEST[ 'user_id' ],
-		'submission_type' => $_REQUEST[ 'feedback_type' ]
-	);
-
-	// Setup status
-	$status = ( in_array( $_REQUEST[ 'status' ], array( 'approve', 'approved' ) ) ) ? 'approved' : 'denied';
-
-	badgeos_set_submission_status( $_REQUEST[ 'feedback_id' ], $status, $status_args );
-
-	// Send back our successful response
-	wp_send_json_success( array(
-		'message' => '<p class="badgeos-feedback-response success">' . __( 'Status Updated!', 'badgeos' ) . '</p>',
-		'status' => ucfirst( $status )
-	) );
-
 }
 
 /**
