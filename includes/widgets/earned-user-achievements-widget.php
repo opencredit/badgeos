@@ -310,7 +310,11 @@ class earned_user_achievements_widget extends WP_Widget {
                                 }
 
                                 // Setup credly data if giveable
-                                $giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
+								$giveable = false;
+								if( badgeos_first_time_installed() ) {
+									$giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
+								}
+
                                 $item_class .= $giveable ? ' share-credly addCredly' : '';
                                 $credly_ID = $giveable ? 'data-credlyid="' . absint($achievement->ID) . '"' : '';
 
