@@ -20,6 +20,11 @@ function badgeos_register_api_end_points() {
       'callback' => 'badgeos_block_point_types_list',
     ) );
 
+    register_rest_route( 'badgeos', '/ranks', array(
+      'methods' => 'GET',
+      'callback' => 'badgeos_block_ranks_list',
+    ) );
+
     register_rest_route( 'badgeos', '/achievement-types', array(
       'methods' => 'GET',
       'callback' => 'badgeos_achievement_types_list',
@@ -41,6 +46,34 @@ function badgeos_register_api_end_points() {
     ));
 }
 add_action( 'rest_api_init', 'badgeos_register_api_end_points' );
+
+/**
+ * Returns the list of ranks..
+ *
+ * @return $posts
+ */
+function badgeos_block_ranks_list( $data ) {
+  
+  $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+  $rank_types = get_posts( array(
+      'post_type'      =>	$badgeos_settings['ranks_main_post_type'],
+      'posts_per_page' =>	-1,
+  ) );
+
+  $ranks = array();
+  foreach( $rank_types as $rtype ) {
+      $records = get_posts( array(
+          'post_type'      =>	$rtype->post_name,
+          'posts_per_page' =>	-1,
+      ) );
+
+      foreach( $records as $record ) {
+          $ranks[] = [ 'value' => $record->ID, 'label' => $record->post_title ];
+      }
+  }
+
+ 	return $ranks;
+}
 
 /**
  * Returns the list of ranks..

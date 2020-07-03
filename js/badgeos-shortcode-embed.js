@@ -96,7 +96,8 @@
 			noResults: function(){
 				return "No Results";
 			},
-			errorLoading:function(){ return "Searching..."
+			errorLoading: function () {
+				return "Searching..."
 			}
 		},
 		escapeMarkup: function (markup) {
@@ -106,15 +107,16 @@
 		allowClear: true
 	};
 
-	var select2_post_multiples = $.extend( true, {}, select2_post_defaults, { } );
-	$( '#badgeos_achievement_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id, #badgeos_user_earned_points_point_type' ).select2( select2_post_defaults );
-	$( '#badgeos_achievements_list_include, #badgeos_achievements_list_exclude, #badgeos_user_earned_achievements_include, #badgeos_user_earned_achievements_exclude,#badgeos_user_earned_ranks_rank_type' ).attr('multiple', true).select2( select2_post_multiples );
-	$( '#badgeos_achievements_list_type, #badgeos_user_earned_achievements_type' ).html(badgeos_shortcode_embed_messages.achievements_select_options).attr('multiple', true).select2({
-		language :{
-			noResults: function(){
+	var select2_post_multiples = $.extend(true, {}, select2_post_defaults, {});
+	$('#badgeos_achievement_id,#badgeos_rank_id, #badgeos_nomination_achievement_id, #badgeos_submission_achievement_id, #badgeos_user_earned_points_point_type').select2(select2_post_defaults);
+	$('#badgeos_achievements_list_include, #badgeos_achievements_list_exclude, #badgeos_user_earned_achievements_include, #badgeos_user_earned_achievements_exclude,#badgeos_user_earned_ranks_rank_type').attr('multiple', true).select2(select2_post_multiples);
+	$('#badgeos_achievements_list_type, #badgeos_user_earned_achievements_type').html(badgeos_shortcode_embed_messages.achievements_select_options).attr('multiple', true).select2({
+		language: {
+			noResults: function () {
 				return "No Results";
 			},
-			errorLoading:function(){ return "Searching..."
+			errorLoading: function () {
+				return "Searching..."
 			}
 		},
 		escapeMarkup: function (markup) {
@@ -124,19 +126,33 @@
 		allowClear: true
 	});
 
-
-	function split( val ) {
-		return val.split( /,\s*/ );
+	$('#badgeos_ranks_list_types').attr('multiple', true).select2({
+		language: {
+			noResults: function () {
+				return "No Results";
+			},
+			errorLoading: function () {
+				return "Searching..."
+			}
+		},
+		escapeMarkup: function (markup) {
+			return markup;
+		},
+		placeholder: badgeos_shortcode_embed_messages.id_multiple_placeholder,
+		allowClear: true
+	});
+	function split(val) {
+		return val.split(/,\s*/);
 	}
 	function extractLast( term ) {
 		return split( term ).pop();
 	}
 
-	$('#badgeos_achievements_list_user_id1').autocomplete({
-		source: function( request, response ) {
-			$.getJSON( ajaxurl, {
-				q: extractLast( request.term ), action: 'get-users'
-			}, response );
+	$('#badgeos_achievements_list_user_id1, #badgeos_user_earned_achievements_user_id1, #badgeos_user_earned_ranks_user_id1, #badgeos_user_earned_points_user_id1, #badgeos_ranks_list_user_id1').autocomplete({
+		source: function (request, response) {
+			$.getJSON(ajaxurl, {
+				q: extractLast(request.term), action: 'badgeos-get-users-list'
+			}, response);
 		},
 		multiselect: false,
 		search: function() {
