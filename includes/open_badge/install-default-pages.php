@@ -13,7 +13,7 @@ function badgeos_ob_install_pages_if_not_installed(){
     if( current_user_can('manage_options') && ( !badgeos_ob_is_page_exists( $assertion_page ) || !badgeos_ob_is_page_exists( $json_page ) || !badgeos_ob_is_page_exists( $issuer_page ) || !badgeos_ob_is_page_exists( $evidence_page ) ) ) { 
         $class = 'notice is-dismissible error';
         $config_link = 'admin-post.php?action=badgeos_config_pages';
-        $message = __( 'Please, click <a href="'.$config_link.'">here</a> to configure/create new open badge pages.', 'ldbu_addon' );
+        $message = __( 'Please, click <a href="'.$config_link.'">here</a> to configure/create new open badge pages.', 'badgeos' );
         printf( '<div id="message" class="%s"> <p>%s</p></div>', $class, $message );
     }
     

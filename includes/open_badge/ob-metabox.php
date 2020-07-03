@@ -46,19 +46,18 @@ class open_badge_metabox {
         ?>
         <div class="bos_ob_achievement_details">
             <div class="cob-ss-wrap">
-                <?php if( badgeos_get_option_open_badge_enable_baking($achievement->ID) && $rec_type != 'open_badge' ): ?>
+                <?php if( badgeos_get_option_open_badge_enable_baking($achievement->ID) && $rec_type != 'open_badge' ) { ?>
                     <div class="bos_ob_convert_to_ob">
                         <button type="submit" class="bos_ob_convert_to_ob_btn" value="<?php echo $entry_id; ?>">
                             <?php echo apply_filters('bos_ob_convert_to_ob_label', __('Convert to OpenBadge', 'badgeos')); ?>
                         </button>
                     </div>
-                <?php endif; ?>
-                <?php if( $open_badge_enable_baking ): ?>
+                <?php } elseif( $open_badge_enable_baking ) { ?>
                     <div class="badgeos_ob_verifcation_wrapper_div">
                         <input class="badgeos-ob-verification-buttons" id="open-badgeos-verification" href="javascript:;" data-bg="<?php echo $achievement_id;?>" data-eid="<?php echo $entry_id;?>" data-uid="<?php echo $achievement->user_id;?>" class="verify-open-badge" value="<?php echo _e( 'Verify', 'badgeos' );?>" type="button" />
                     </div>
-                <?php endif;?>
-                
+                <?php } ?>
+
             </div>
         </div>
         <?php
