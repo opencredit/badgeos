@@ -1469,7 +1469,7 @@ function badgeos_display_ranks_to_award() {
                     $not_available = false;
                     while( $ranks_to_award->have_posts() ) {
                         $ranks_to_award->the_post();
-                        $ranks_image = badgeos_get_rank_image( get_the_ID() );
+                        $ranks_image = badgeos_get_rank_image( get_the_ID(), 50, 50 );
 
                         /**
                          * If not default rank, bail here
@@ -1846,8 +1846,24 @@ function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
  * 
  * @return $ranks_image
  */
-function badgeos_get_rank_image( $rank_id = 0, $rank_width = '50', $rank_height = '50' ) {
+function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = '' ) {
     
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+ 
+    if( intval( $rank_width ) == 0 ) {
+        $rank_width = '50';
+        if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
+            $rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
+        }
+    }
+    
+    if( intval( $rank_height ) == 0 ) {
+        $rank_height = '50';
+        if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
+            $rank_height = intval( $badgeos_settings['badgeos_rank_global_image_height'] );
+        }
+    }
+
     $ranks_image = wp_get_attachment_image( get_post_thumbnail_id( $rank_id ), array( $rank_width, $rank_height ) );
 
     if( empty( $ranks_image ) ) {

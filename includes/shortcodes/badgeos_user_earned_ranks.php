@@ -119,6 +119,18 @@ function badgeos_user_earned_ranks_shortcode() {
                 ),
                 'default'     => 'true',
             ),
+            'image_width' => array (
+                'name'        => __( 'Thumnail Width', 'badgeos' ),
+                'description' => __( "Achievement's image width.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+			),
+			'image_height' => array (
+                'name'        => __( 'Thumnail Height', 'badgeos' ),
+                'description' => __( "Achievement's image height.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+            ),
         ),
     ) );
 }
@@ -157,6 +169,8 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
         'show_thumb'  => 'true',
         'show_description'  => 'true',
         'default_view'  => '',
+        'image_width'  => '',
+		'image_height'  => '',
     ), $atts, 'badgeos_user_earned_ranks' ) );
 
     wp_enqueue_style( 'badgeos-front' );
@@ -204,7 +218,7 @@ function badgeos_earned_ranks_shortcode( $atts = array () ){
     $ranks_html .= '<input type="button" class="earned_ranks_list_load_more" value="' . esc_attr__( 'Load More', 'badgeos' ) . '" style="display:none;">';
     $ranks_html .= '<div class="badgeos-earned-ranks-spinner"></div>';
 
-    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'">';
+    $maindiv = '<div class="badgeos_earned_rank_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-rank_type="'.$rank_type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $ranks_html;
     $maindiv .= '</div>';
 

@@ -20,6 +20,58 @@ function badgeos_register_achievement_shortcode() {
                 'type'        => 'select',
                 'values'      => $achievements,
                 'default'     => '',
+			),
+			'show_title' => array (
+                'name'        => __( 'Show Title', 'badgeos' ),
+                'description' => __( 'Display Achievement Title.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array (
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_thumb' => array (
+                'name'        => __( 'Show Thumbnail', 'badgeos' ),
+                'description' => __( 'Display Thumbnail Image.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_description' => array (
+                'name'        => __( 'Show Description', 'badgeos' ),
+                'description' => __( 'Display Short Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+            ),
+            'show_steps' => array (
+                'name'        => __( 'Show Steps', 'badgeos' ),
+                'description' => __( 'Display Steps after the Description.', 'badgeos' ),
+                'type'        => 'select',
+                'values'      => array(
+                    'true'  => __( 'True', 'badgeos' ),
+                    'false' => __( 'False', 'badgeos' )
+                ),
+                'default'     => 'true',
+			),
+			'image_width' => array (
+                'name'        => __( 'Thumnail Width', 'badgeos' ),
+                'description' => __( "Achievement's image width.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
+			),
+			'image_height' => array (
+                'name'        => __( 'Thumnail Height', 'badgeos' ),
+                'description' => __( "Achievement's image height.", 'badgeos' ),
+                'type'        => 'text',
+                'default'     => '',
             ),
         ),
 	) );
@@ -38,7 +90,13 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 
 	// get the post id
 	$atts = shortcode_atts( array(
-	  'id' => get_the_ID(),
+		'id' => get_the_ID(),
+		'show_title'  => 'true',
+		'show_thumb'  => 'true',
+		'show_description'  => 'true',
+		'show_steps'  => 'true',
+		'image_width' => '',
+		'image_height' => '',
 	), $atts, 'badgeos_achievement' );
 
 	// return if post id not specified
@@ -55,7 +113,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 	// If we're dealing with an achievement post
 	if ( badgeos_is_achievement( $achievement ) ) {
 		$output .= '<div id="badgeos-single-achievement-container" class="badgeos-single-achievement">';  // necessary for the jquery click handler to be called
-		$output .= badgeos_render_achievement( $achievement );
+		$output .= badgeos_render_achievement( $achievement, $atts['show_title'], $atts['show_thumb'], $atts['show_description'], $atts['show_steps'], $atts['image_width'], $atts['image_height'] );
 		$output .= '</div>';
 	}
 

@@ -52,7 +52,9 @@ function badgeos_ajax_get_earned_ranks() {
     $show_title = isset( $_REQUEST['show_title'] ) ? $_REQUEST['show_title'] : 'true';
     $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
-
+    $image_width = isset( $_REQUEST['image_width'] ) ? $_REQUEST['image_width'] : '';
+    $image_height = isset( $_REQUEST['image_height'] ) ? $_REQUEST['image_height'] : '';
+    
     // Convert $type to properly support multiple rank types
     $earned_ranks_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_ranks_shortcode_default_view;
 
@@ -119,7 +121,7 @@ function badgeos_ajax_get_earned_ranks() {
             // Achievement Image
             if( $show_thumb == 'true' ) {
                 $output .= '<div class="badgeos-item-image">';
-                $output .= '<a href="' . get_permalink( $rank->rank_id ) . '">' . badgeos_get_rank_image( $rank->rank_id ) . '</a>';
+                $output .= '<a href="' . get_permalink( $rank->rank_id ) . '">' . badgeos_get_rank_image( $rank->rank_id, $image_width, $image_height ) . '</a>';
                 $output .= '</div><!-- .badgeos-item-image -->';
             }
 
@@ -213,7 +215,8 @@ function badgeos_ajax_get_earned_achievements() {
     $show_title = isset( $_REQUEST['show_title'] ) ? $_REQUEST['show_title'] : 'true';
     $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
-
+    $image_width = isset( $_REQUEST['image_width'] ) ? $_REQUEST['image_width'] : '';
+    $image_height = isset( $_REQUEST['image_height'] ) ? $_REQUEST['image_height'] : '';
     $earned_achievements_shortcode_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $earned_achievements_shortcode_default_view;
 
     if ( 'all' == $type ) {
@@ -296,7 +299,13 @@ function badgeos_ajax_get_earned_achievements() {
             // Achievement Image
             if( $show_thumb=='true' ) {
                 $output .= '<div class="badgeos-item-image">';
-                $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, 'boswp-badgeos-achievement' ) . '</a>';
+
+                $image_size = 'boswp-badgeos-achievement';
+                if( !empty( $image_width ) || !empty( $image_height) ) {
+                    $image_size = array( $image_width,  $image_height );
+                }
+
+                $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
                 $output .= '</div><!-- .badgeos-item-image -->';
             }
 
@@ -398,7 +407,8 @@ function badgeos_ajax_get_achievements() {
     $show_thumb = isset( $_REQUEST['show_thumb'] ) ? $_REQUEST['show_thumb'] : 'true';
     $show_description = isset( $_REQUEST['show_description'] ) ? $_REQUEST['show_description'] : 'true';
     $show_steps = isset( $_REQUEST['show_steps'] ) ? $_REQUEST['show_steps'] : 'true';
-
+    $image_width = isset( $_REQUEST['image_width'] ) ? $_REQUEST['image_width'] : '';
+    $image_height = isset( $_REQUEST['image_height'] ) ? $_REQUEST['image_height'] : '';
     $achievement_list_default_view = !empty( $_REQUEST['default_view'] ) ? $_REQUEST['default_view'] : $achievement_list_default_view;
 
     if ( 'all' == $type ) {
@@ -507,7 +517,7 @@ function badgeos_ajax_get_achievements() {
 		$achievement_posts = new WP_Query( $args );
 		$query_count += $achievement_posts->found_posts;
 		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-            $achievements .= '<li>'.badgeos_render_achievement( get_the_ID(), $show_title, $show_thumb, $show_description, $show_steps ).'</li>';
+            $achievements .= '<li>'.badgeos_render_achievement( get_the_ID(), $show_title, $show_thumb, $show_description, $show_steps, $image_width, $image_height ).'</li>';
 			$achievement_count++;
 		endwhile;
 

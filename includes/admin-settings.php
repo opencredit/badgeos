@@ -334,6 +334,10 @@ function badgeos_settings_page() {
             $points_deduct_post_type 		= ( ! empty ( $badgeos_settings['points_deduct_post_type'] ) ) ? $badgeos_settings['points_deduct_post_type'] : 'point_deduct';
             $default_point_type 			= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
 
+			$badgeos_achievement_global_image_width 	= ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
+			$badgeos_achievement_global_image_height = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_height'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_height'] : '50';
+			$badgeos_rank_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
+			$badgeos_rank_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
             $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
             $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
             $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
@@ -496,7 +500,33 @@ function badgeos_settings_page() {
                         </select>
                     </td>
                 </tr>
-
+				<tr><td colspan="2"><hr><h2>Thumbnail Sizes</h2></td></tr>
+				<tr valign="top">
+                    <th scope="row"><label for="badgeos_achievement_global_image_width"><?php _e( 'Achievement Image Size:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <label>
+							<?php _e( 'Width:', 'badgeos' ); ?>
+							<input type="number" id="badgeos_achievement_global_image_width" value="<?php echo $badgeos_achievement_global_image_width;?>" name="badgeos_settings[badgeos_achievement_global_image_width]" />
+						</label>
+						<label>
+							<?php _e( 'Height:', 'badgeos' ); ?>
+							<input type="number" id="badgeos_achievement_global_image_height" value="<?php echo $badgeos_achievement_global_image_height;?>" name="badgeos_settings[badgeos_achievement_global_image_height]" />
+						</label>
+                    </td>
+                </tr>
+				<tr valign="top">
+                    <th scope="row"><label for="badgeos_rank_global_image_width"><?php _e( 'Rank Image Size:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <label>
+							<?php _e( 'Width:', 'badgeos' ); ?>
+							<input type="number" id="badgeos_rank_global_image_width" value="<?php echo $badgeos_rank_global_image_width;?>" name="badgeos_settings[badgeos_rank_global_image_width]" />
+						</label>
+						<label>
+							<?php _e( 'Height:', 'badgeos' ); ?>
+							<input type="number" id="badgeos_rank_global_image_height" value="<?php echo $badgeos_rank_global_image_height;?>" name="badgeos_settings[badgeos_rank_global_image_height]" />
+						</label>
+                    </td>
+                </tr>
                 <?php
 				// check if multisite is enabled & if plugin is network activated
 				if ( is_super_admin() ){

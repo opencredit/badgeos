@@ -484,7 +484,20 @@ class BadgeOS {
 	 * Register custom WordPress image size(s)
 	 */
 	function register_image_sizes() {
-        add_image_size( 'boswp-badgeos-achievement', 100, 100 );
+		
+		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+ 
+		$achievement_width = '50';
+		if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+			$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+		}
+		
+		$achievement_height = '50';
+		if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+			$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+		}
+
+        add_image_size( 'boswp-badgeos-achievement', $achievement_width, $achievement_height );
 	}
 
 	/**
@@ -529,6 +542,10 @@ class BadgeOS {
 
             $badgeos_settings['remove_data_on_uninstall']   	= null;
 
+			$badgeos_settings['badgeos_achievement_global_image_width']    	= '50';
+			$badgeos_settings['badgeos_achievement_global_image_height']    = '50';
+			$badgeos_settings['badgeos_rank_global_image_width']    		= '50';
+			$badgeos_settings['badgeos_rank_global_image_height']    		= '50';
             update_option( 'badgeos_settings', $badgeos_settings );
 		}
 

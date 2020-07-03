@@ -72,7 +72,41 @@ function badgeos_render_achievement_block( $attributes ) {
     if( isset( $attributes['achievement'] ) && !empty( $attributes['achievement'] ) ){
         $data = json_decode( $attributes['achievement'] );
         if( ! empty( $data->value  ) ) {
-            return do_shortcode( '[badgeos_achievement id="'.$data->value.'"]' );
+            
+            $param = '';
+            if( !empty( $attributes['show_description'] ) ) {
+                $param .= ' show_description="'.sanitize_text_field( $attributes['show_description'] ).'"';
+            } else {
+                $param .= ' show_description="true"';
+            }
+        
+            if( !empty( $attributes['show_thumb'] ) ) {
+                $param .= ' show_thumb="'.sanitize_text_field( $attributes['show_thumb'] ).'"';
+            } else {
+                $param .= ' show_thumb="true"';
+            }
+        
+            if( !empty( $attributes['show_title'] ) ) {
+                $param .= ' show_title="'.sanitize_text_field( $attributes['show_title'] ).'"';
+            } else {
+                $param .= ' show_title="true"';
+            }
+        
+            if( !empty( $attributes['show_steps'] ) ) {
+                $param .= ' show_steps="'.sanitize_text_field( $attributes['show_steps'] ).'"';
+            } else {
+                $param .= ' show_steps="true"';
+            }
+            
+            if( !empty( $attributes['image_width'] ) ) {
+                $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+            }
+            
+            if( !empty( $attributes['image_height'] ) ) {
+                $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+            }
+
+            return do_shortcode( '[badgeos_achievement id="'.$data->value.'" '.$param.' ]' );
         } else {
             return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
         }
@@ -212,6 +246,14 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
         $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
     }
     
+    if( ! empty( $attributes['image_width'] ) ) {
+        $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+    }
+    
+    if( ! empty( $attributes['image_height'] ) ) {
+        $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+    }
+
     return do_shortcode( '[badgeos_user_earned_achievements '.$param.']' );
 }
 
@@ -365,6 +407,14 @@ function badgeos_render_earned_ranks_blocks( $attributes ) {
         $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
     }
 
+    if( ! empty( $attributes['image_width'] ) ) {
+        $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+    }
+    
+    if( ! empty( $attributes['image_height'] ) ) {
+        $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+    }
+
     return do_shortcode( '[badgeos_user_earned_ranks '.$param.']' );
 }
 
@@ -475,6 +525,14 @@ function badgeos_render_achivements_list_blocks( $attributes ) {
         $param .= ' default_view="' . sanitize_text_field( $attributes['default_view'] ) . '"';
     }
 
+    if( ! empty( $attributes['image_width'] ) ) {
+        $param .= ' image_width="'.sanitize_text_field( $attributes['image_width'] ).'"';
+    }
+    
+    if( ! empty( $attributes['image_height'] ) ) {
+        $param .= ' image_height="'.sanitize_text_field( $attributes['image_height'] ).'"';
+    }
+    
     return do_shortcode( '[badgeos_achievements_list '.$param.']' );
 }
 
@@ -545,6 +603,14 @@ function badgeos_render_my_php_block(  ) {
                 'type' => 'string',
                 'default'=> 'true'
             ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
         )
     ));
 
@@ -599,7 +665,15 @@ function badgeos_render_my_php_block(  ) {
             'show_title' => array(
                 'type' => 'string',
                 'default' => 'true'
-            )
+            ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
         )
     ));
 
@@ -629,7 +703,31 @@ function badgeos_render_my_php_block(  ) {
             'achievement' => array(
                 'type' => 'string',
                 'default'=> ''
-            )
+            ),
+            'show_description' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'show_thumb' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'show_title' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'show_steps' => array(
+                'type' => 'string',
+                'default'=> 'true'
+            ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
         )
     ));
 
@@ -694,7 +792,15 @@ function badgeos_render_my_php_block(  ) {
             'show_title' => array(
                 'type' => 'string',
                 'default' => 'true'
-            )
+            ),
+            'image_width' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'image_height' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
         )
     ));
 

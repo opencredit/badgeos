@@ -665,7 +665,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 						?>
 						<tr class="<?php echo $rank->rank_type; ?> ">
 							<?php
-							$ranks_image = badgeos_get_rank_image( $rank->rank_id );
+							$ranks_image = badgeos_get_rank_image( $rank->rank_id, 50, 50 );
 							?>
 							<td><?php echo $ranks_image; ?></td>
 							<td><?php echo $rank->rank_title; ?></td>

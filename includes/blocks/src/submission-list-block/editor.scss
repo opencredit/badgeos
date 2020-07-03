@@ -1,0 +1,36 @@
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+
+.wp-block-bos-block-blocks  {
+  background: $green;
+  border: 0.2rem solid $black;
+  color: $black;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem;
+}
+
+.secure-block-inspector {
+	.is-opened{
+		min-height: 100% !important;
+	}
+	label.secure-block-inspector__label {
+		max-width: 100%;
+	}
+
+	.secure-block-inspector__control {
+		width: 100%;
+
+		> div > div {
+			margin-top: 0px;
+		}
+	}
+
+	.muted {
+		opacity: .6;
+	}
+}

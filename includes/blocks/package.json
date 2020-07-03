@@ -1,0 +1,22 @@
+{
+  "name": "blocks-bos-guten-block",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cgb-scripts start",
+    "build": "cgb-scripts build",
+    "eject": "cgb-scripts eject"
+  },
+  "dependencies": {
+    "@wordpress/server-side-render": "^1.6.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "cgb-scripts": "1.22.0",
+    "cross-env": "^5.0.1",
+    "react-select": "^2.0.0",
+    "server-side-render-resource": "^1.1.0",
+    "webpack": "^3.1.0"
+  }
+}
