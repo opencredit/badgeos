@@ -3,9 +3,6 @@
 
     //load settings
     $minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
-    $submission_manager_role = ( isset( $badgeos_settings['submission_manager_role'] ) ) ? $badgeos_settings['submission_manager_role'] : 'manage_options';
-    $submission_email = ( isset( $badgeos_settings['submission_email'] ) ) ? $badgeos_settings['submission_email'] : '';
-    $submission_email_addresses = ( isset( $badgeos_settings['submission_email_addresses'] ) ) ? $badgeos_settings['submission_email_addresses'] : '';
     $debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
     $log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
     $ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
@@ -76,30 +73,7 @@
                                 </select>
                             </td>
                         </tr>
-                        <tr valign="top"><th scope="row"><label for="submission_manager_role"><?php _e( 'Minimum Role to Administer Submissions/Nominations: ', 'badgeos' ); ?></label></th>
-                            <td>
-                                <select id="submission_manager_role" name="badgeos_settings[submission_manager_role]">
-                                    <option value="manage_options" <?php selected( $submission_manager_role, 'manage_options' ); ?>><?php _e( 'Administrator', 'badgeos' ); ?></option>
-                                    <option value="delete_others_posts" <?php selected( $submission_manager_role, 'delete_others_posts' ); ?>><?php _e( 'Editor', 'badgeos' ); ?></option>
-                                    <option value="publish_posts" <?php selected( $submission_manager_role, 'publish_posts' ); ?>><?php _e( 'Author', 'badgeos' ); ?></option>
-                                </select>
-                            </td>
-                        </tr>
                     <?php } ?>
-                    <tr valign="top"><th scope="row"><label for="submission_email"><?php _e( 'Send email when submissions/nominations are received:', 'badgeos' ); ?></label></th>
-                        <td>
-                            <select id="submission_email" name="badgeos_settings[submission_email]">
-                                <option value="enabled" <?php selected( $submission_email, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                                <option value="disabled" <?php selected( $submission_email, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr valign="top"><th scope="row"><label for="submission_email_addresses"><?php _e( 'Notification email addresses:', 'badgeos' ); ?></label></th>
-                        <td>
-                            <input id="submission_email_addresses" name="badgeos_settings[submission_email_addresses]" type="text" value="<?php echo esc_attr( $submission_email_addresses ); ?>" class="regular-text" />
-                            <p class="description"><?php _e( 'Comma-separated list of email addresses to send submission/nomination notifications, in addition to the Site Admin email.', 'badgeos' ); ?></p>
-                        </td>
-                    </tr>
                     <tr valign="top"><th scope="row"><label for="remove_data_on_uninstall"><?php _e( 'Delete Data on Uninstall:', 'badgeos' ); ?></label></th>
                         <td>
                             <input id="remove_data_on_uninstall" name="badgeos_settings[remove_data_on_uninstall]" type="checkbox" <?php echo ( $remove_data_on_uninstall == "on" ) ? "checked" : ""; ?> class="regular-text" />

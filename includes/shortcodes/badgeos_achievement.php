@@ -20,8 +20,8 @@ function badgeos_register_achievement_shortcode() {
                 'type'        => 'select',
                 'values'      => $achievements,
                 'default'     => '',
-			),
-			'show_title' => array (
+            ),
+            'show_title' => array (
                 'name'        => __( 'Show Title', 'badgeos' ),
                 'description' => __( 'Display Achievement Title.', 'badgeos' ),
                 'type'        => 'select',
@@ -60,14 +60,14 @@ function badgeos_register_achievement_shortcode() {
                     'false' => __( 'False', 'badgeos' )
                 ),
                 'default'     => 'true',
-			),
-			'image_width' => array (
+            ),
+            'image_width' => array (
                 'name'        => __( 'Thumnail Width', 'badgeos' ),
                 'description' => __( "Achievement's image width.", 'badgeos' ),
                 'type'        => 'text',
                 'default'     => '',
-			),
-			'image_height' => array (
+            ),
+            'image_height' => array (
                 'name'        => __( 'Thumnail Height', 'badgeos' ),
                 'description' => __( "Achievement's image height.", 'badgeos' ),
                 'type'        => 'text',
@@ -90,14 +90,14 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 
 	// get the post id
 	$atts = shortcode_atts( array(
-		'id' => get_the_ID(),
-		'show_title'  => 'true',
-		'show_thumb'  => 'true',
-		'show_description'  => 'true',
-		'show_steps'  => 'true',
-		'image_width' => '',
-		'image_height' => '',
-	), $atts, 'badgeos_achievement' );
+        'id' => get_the_ID(),
+        'show_title'  => 'true',
+        'show_thumb'  => 'true',
+        'show_description'  => 'true',
+        'show_steps'  => 'true',
+        'image_width' => '',
+        'image_height' => '',
+    ), $atts, 'badgeos_achievement' );
 
 	// return if post id not specified
 	if ( empty($atts['id']) )

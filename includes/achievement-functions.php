@@ -427,7 +427,6 @@ function badgeos_get_hidden_achievement_by_id( $achievement_id ) {
 	// Grab our hidden achievements
 	global $wpdb;
 
-	//Get hidden submission posts.
 	$hidden_achievements = $wpdb->get_results( $wpdb->prepare(
 		"SELECT * FROM {$wpdb->posts} AS p
                                  JOIN {$wpdb->postmeta} AS pm
@@ -775,111 +774,6 @@ function credly_issue_badge( $user_id, $achievement_id ) {
 if( badgeos_first_time_installed() ) {
 	add_action( 'badgeos_award_achievement', 'credly_issue_badge', 10, 2 );
 }
-
-/**
- * Added approve/disapprove in bulk actions
- *
- * @since 1.0.0
- *
- * @param int $user_id        The ID of the user earning the achievement
- * @param int $achievement_id The ID of the achievement being earned
- */
-function badgeos_register_approve_submission_bulk_actions( $bulk_actions ) {
-
-    $bulk_actions['approve_submission'] = __( 'Approve', 'ldmqie' );
-    $bulk_actions['disapprove_submission'] = __( 'Deny', 'ldmqie' );
-    return $bulk_actions;
-}
-add_filter( 'bulk_actions-edit-submission', 'badgeos_register_approve_submission_bulk_actions' );
-
-/**
- * Added approve/disapprove in bulk actions
- *
- * @since 1.0.0
- *
- * @param int $user_id        The ID of the user earning the achievement
- * @param int $achievement_id The ID of the achievement being earned
- */
-function badgeos_register_approve_nomination_bulk_actions( $bulk_actions ) {
-
-    $bulk_actions['approve_nomination'] = __( 'Approve', 'ldmqie' );
-    $bulk_actions['disapprove_nomination'] = __( 'Deny', 'ldmqie' );
-    return $bulk_actions;
-}
-add_filter( 'bulk_actions-edit-nomination', 'badgeos_register_approve_nomination_bulk_actions' );
-
-/**
- * Handle approve/disapprove bulk actions
- *
- * @since 1.0.0
- *
- * @param int $user_id        The ID of the user earning the achievement
- * @param int $achievement_id The ID of the achievement being earned
- */
-function badgeos_register_approve_bulk_actions_handler( $redirect_to, $doaction, $post_ids ) {
-
-    if ( $doaction == 'approve_nomination' || $doaction == 'approve_submission' ) {
-        foreach( $post_ids as $post_id ) {
-            if( $doaction == 'approve_submission' ) {
-                $achievement_id = get_post_meta($post_id, '_badgeos_submission_achievement_id', true);
-                $status = get_post_meta($post_id, '_badgeos_submission_status', true);
-                $post_data = get_post($post_id);
-                $status_args = array(
-                    'achievement_id' => $achievement_id,
-                    'user_id' => $post_data->post_author,
-                    'submission_type' => 'submission'
-                );
-
-                badgeos_set_submission_status( $post_id, 'approved', $status_args );
-            } else if( $doaction == 'approve_nomination' ) {
-                $achievement_id = get_post_meta($post_id, '_badgeos_nomination_achievement_id', true);
-                $status = get_post_meta($post_id, '_badgeos_nomination_status', true);
-                $nomination_user_id = get_post_meta($post_id, '_badgeos_nomination_user_id', true);
-                $nominating_user_id = get_post_meta($post_id, '_badgeos_nominating_user_id', true);
-                $status_args = array(
-                    'achievement_id' => $achievement_id,
-                    'user_id' => $nomination_user_id,
-                    'from_user_id' => $nominating_user_id,
-                    'submission_type' => 'nomination'
-                );
-
-                badgeos_set_submission_status( $post_id, 'approved', $status_args );
-            }
-        }
-    } else if ( $doaction == 'disapprove_nomination' || $doaction == 'disapprove_submission' ) {
-        foreach( $post_ids as $post_id ) {
-            if( $doaction == 'disapprove_submission' ) {
-                $post_data = get_post( $post_id );
-                $achievement_id = get_post_meta($post_id, '_badgeos_submission_achievement_id', true);
-                $status = get_post_meta($post_id, '_badgeos_submission_status', true);
-                $status_args = array(
-                    'achievement_id' => $achievement_id,
-                    'user_id' => $post_data->post_author,
-                    'submission_type' => 'submission'
-                );
-
-                badgeos_set_submission_status( $post_id, 'denied', $status_args );
-            } else if( $doaction == 'disapprove_nomination' ) {
-                $achievement_id = get_post_meta($post_id, '_badgeos_nomination_achievement_id', true);
-                $status = get_post_meta($post_id, '_badgeos_nomination_status', true);
-                $nomination_user_id = get_post_meta($post_id, '_badgeos_nomination_user_id', true);
-                $nominating_user_id = get_post_meta($post_id, '_badgeos_nominating_user_id', true);
-                $status_args = array(
-                    'achievement_id' => $achievement_id,
-                    'user_id' => $nomination_user_id,
-                    'from_user_id' => $nominating_user_id,
-                    'submission_type' => 'nomination'
-                );
-
-                badgeos_set_submission_status( $post_id, 'denied', $status_args );
-            }
-        }
-    }
-
-    return $redirect_to;
-}
-add_filter( 'handle_bulk_actions-edit-submission', 'badgeos_register_approve_bulk_actions_handler', 10, 3 );
-add_filter( 'handle_bulk_actions-edit-nomination', 'badgeos_register_approve_bulk_actions_handler', 10, 3 );
 
 /**
  * Get an array of all users who have earned a given achievement

@@ -282,8 +282,8 @@ class BadgeOS {
         }
 
         if( badgeos_first_time_installed() ) {
-			require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
-		}
+            require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
+        }
 
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
@@ -332,15 +332,13 @@ class BadgeOS {
         require_once( $this->directory_path . 'includes/steps-ui.php' );
 		require_once( $this->directory_path . 'includes/shortcodes.php' );
 		require_once( $this->directory_path . 'includes/content-filters.php' );
-		require_once( $this->directory_path . 'includes/submission-actions.php' );
+		
 		require_once( $this->directory_path . 'includes/rules-engine.php' );
 		require_once( $this->directory_path . 'includes/user.php' );
-		
-		if( badgeos_first_time_installed() ) {
-			require_once( $this->directory_path . 'includes/credly.php' );
-			require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
-		}
-
+        if( badgeos_first_time_installed() ) {
+            require_once( $this->directory_path . 'includes/credly.php' );
+            require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
+        }
         require_once( $this->directory_path . 'includes/open_badge/ob-integrations.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
@@ -358,17 +356,16 @@ class BadgeOS {
         wp_register_script( 'badgeos-admin-tools-js', $this->directory_url . 'js/tools.js', array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
         wp_register_script( 'badgeos-admin-js', $this->directory_url . 'js/admin.js', array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
         wp_enqueue_style('badgeos-font-awesome', '//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-		
-		if( badgeos_first_time_installed() ) {
-			wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
-		}
-		
-		wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), $this::$version, true );
-		
-		if( badgeos_first_time_installed() ) {
-			wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), $this::$version, true );
-		}
+        if( badgeos_first_time_installed() ) {
+            wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
+        }
 
+        wp_register_script( 'badgeos-achievements', $this->directory_url . 'js/badgeos-achievements.js', array( 'jquery' ), $this::$version, true );
+
+        if( badgeos_first_time_installed() ) {
+            wp_register_script( 'credly-badge-builder', $this->directory_url . 'js/credly-badge-builder.js', array( 'jquery' ), $this::$version, true );
+		}
+		
         wp_register_script( 'badgeos-ob-integrations', $this->directory_url . 'js/ob-integrations.js', array( 'jquery' ), $this::$version, true );
 		if( badgeos_first_time_installed() ) {
 			wp_register_script( 'badgeos-convert-credly-achievements', $this->directory_url . 'js/convert-credly-achievements.js', array( 'jquery' ), $this::$version, true );
@@ -484,21 +481,20 @@ class BadgeOS {
 	 * Register custom WordPress image size(s)
 	 */
 	function register_image_sizes() {
-		
-		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
- 
-		$achievement_width = '50';
-		if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
-			$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
-		}
-		
-		$achievement_height = '50';
-		if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
-			$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
-		}
+        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        $achievement_width = '50';
+        if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+            $achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+        }
+
+        $achievement_height = '50';
+        if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+            $achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+        }
 
         add_image_size( 'boswp-badgeos-achievement', $achievement_width, $achievement_height );
-	}
+    }
 
 	/**
 	 * Activation hook for the plugin.
@@ -527,7 +523,7 @@ class BadgeOS {
 		// Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
-			$badgeos_settings['minimum_role']     = 'manage_options';
+			$badgeos_settings['minimum_role']     				= 'manage_options';
             $badgeos_settings['submission_manager_role'] 		= 'manage_options';
             $badgeos_settings['submission_email'] 				= 'enabled';
             $badgeos_settings['debug_mode']       				= 'disabled';
@@ -542,10 +538,11 @@ class BadgeOS {
 
             $badgeos_settings['remove_data_on_uninstall']   	= null;
 
-			$badgeos_settings['badgeos_achievement_global_image_width']    	= '50';
-			$badgeos_settings['badgeos_achievement_global_image_height']    = '50';
-			$badgeos_settings['badgeos_rank_global_image_width']    		= '50';
-			$badgeos_settings['badgeos_rank_global_image_height']    		= '50';
+            $badgeos_settings['badgeos_achievement_global_image_width']    	= '50';
+            $badgeos_settings['badgeos_achievement_global_image_height']    = '50';
+            $badgeos_settings['badgeos_rank_global_image_width']    		= '50';
+            $badgeos_settings['badgeos_rank_global_image_height']    		= '50';
+
             update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
@@ -577,19 +574,20 @@ class BadgeOS {
 
 		// Set minimum role setting for menus
         $caps = array( 'manage_options', 'delete_others_posts', 'publish_posts' );
-        $minimum_role 				= badgeos_get_manager_capability();
-        $minimum_submission_role 	= badgeos_get_submission_manager_capability();
-
-        $admin_role_num = array_search ( $minimum_role, $caps );
-        $submission_role_num = array_search ( $minimum_submission_role, $caps );
-        $main_item_role = $minimum_role;
-        if( $submission_role_num > $admin_role_num ) {
-            $main_item_role = $minimum_submission_role;
-        }
-        $main_item_role = trim( $main_item_role );
-
-
-        // Create main menu
+		$minimum_role 				= badgeos_get_manager_capability();
+		$main_item_role = trim( $minimum_role );
+			
+		if( class_exists( 'BOS_Nomination_Submission' ) ) {
+			$minimum_submission_role 	= badgeos_get_submission_manager_capability();
+			$admin_role_num = array_search ( $minimum_role, $caps );
+			$submission_role_num = array_search ( $minimum_submission_role, $caps );
+			if( $submission_role_num > $admin_role_num ) {
+				$main_item_role = $minimum_submission_role;
+			}
+			$main_item_role = trim( $main_item_role );
+		}
+		
+		// Create main menu
         add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 
 		// Create submenu items

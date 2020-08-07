@@ -11,12 +11,7 @@
 
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievements_list.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_achievement.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_nomination.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_nominations.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_submission.php' );
-include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_submissions.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/credly_assertion_page.php' );
-
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_achievements.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_ranks.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_points.php' );
@@ -137,55 +132,4 @@ function badgeos_shortcode_help_render_example( $shortcode = array() ) {
  */
 function badgeos_shortcode_help_attributes( $key, $value ) {
 	return "{$key}=\"$value\"";
-}
-
-
-/**
- * Handle Submissions/Nominations shortcode output
- *
- * @since  1.4.0
- *
- * @param array $atts Array of shortcode attributes.
- * @param string $type Submission type.
- * @param string $shortcode Shortcode name.
- * @param array $defaults_override Array of overrides to set for default attributes.
- *
- * @return string
- */
-function badgeos_shortcode_submissions_handler( $atts = array(), $shortcode = '' ) {
-
-	// Setup defaults and allow override
-	$defaults = array(
-		'type'             => 'submission',
-		'limit'            => '10',
-		'status'           => 'all',
-		'user_id'          => get_current_user_id(),
-		'show_filter'      => true,
-		'show_search'      => true,
-		'show_attachments' => true,
-		'show_comments'    => true,
-		'wpms'             => false,
-		'filters'          => array(
-			'status' => '.badgeos-feedback-filter select',
-			'search' => '.badgeos-feedback-search-input',
-		),
-	);
-
-	// Parse shortcode attributes
-	$atts = shortcode_atts( $defaults, $atts, $shortcode );
-
-	// Get initial feedback HTML
-	$feedback_html = badgeos_render_feedback( $atts );
-
-	// AJAX url
-	$atts[ 'ajax_url' ] = esc_url( admin_url( 'admin-ajax.php', 'relative' ) );
-	$atts[ 'action' ]   = 'get-feedback';
-
-	// Enqueue and localize our JS
-	wp_enqueue_script( 'badgeos-achievements' );
-	wp_localize_script( 'badgeos-achievements', 'badgeos_feedback', $atts );
-
-	// Return initial feedback HTML
-	return $feedback_html;
-
 }
