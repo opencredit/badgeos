@@ -15,7 +15,8 @@ include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/credly_as
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_achievements.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_ranks.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_points.php' );
-
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_rank.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_ranks.php' );
 /**
  * Register a new BadgeOS Shortcode
  *

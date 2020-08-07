@@ -387,7 +387,7 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
     $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
     if( $is_hidden != 'hidden' ) {
 
-        $output .= '<div id="badgeos-achievements-list-item-' . $achievement->ID . '" class="badgeos-achievements-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+        $output .= '<div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
 
         // Achievement Image
         if( $show_thumb == 'true' ) {
@@ -427,7 +427,7 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
             }
         }
         $output .= '</div><!-- .badgeos-item-description -->';
-        $output .= '</div><!-- .badgeos-achievements-list-item -->';
+        $output .= '</div><!-- .badgeos-list-item -->';
     }
 
     // Return our filterable markup
