@@ -41,7 +41,7 @@ class BadgeOS {
 		$this->directory_path = plugin_dir_path( __FILE__ );
 		$this->directory_url  = plugin_dir_url( __FILE__ );
 
-        $this->start_time	  = strtotime(" -1 second ");
+        $this->start_time	  = current_time( 'timestamp' ) - 5 ;
 
         $this->award_ids  = array();
 
