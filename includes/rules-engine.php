@@ -41,6 +41,33 @@ function badgeos_maybe_award_achievement_to_user( $achievement_id = 0, $user_id 
 }
 
 /**
+ * Return the current wordpress timezone string
+ *
+ * @return $tzstring
+ */
+function badgeos_timezone_string() {
+	$current_offset = get_option( 'gmt_offset' );
+	$tzstring       = get_option( 'timezone_string' );
+
+	// Remove old Etc mappings. Fallback to gmt_offset.
+	if ( false !== strpos( $tzstring, 'Etc/GMT' ) ) {
+		$tzstring = '';
+	}
+
+	if ( empty( $tzstring ) ) { // Create a UTC+- zone if no timezone string exists
+		if ( 0 == $current_offset ) {
+			$tzstring = 'UTC+0';
+		} elseif ( $current_offset < 0 ) {
+			$tzstring = 'UTC' . $current_offset;
+		} else {
+			$tzstring = 'UTC+' . $current_offset;
+		}
+	}
+
+	return $tzstring;
+}
+
+/**
  * Check if user has completed an achievement
  *
  * @since  1.0.0
@@ -60,7 +87,18 @@ function badgeos_check_achievement_completion_for_user( $achievement_id = 0, $us
 	if ( ! $site_id )
 		$site_id = get_current_blog_id();
 	
-	$timestamp = badgeos_achievement_last_user_activity( $achievement_id, $user_id );
+	$timestamp 		= badgeos_achievement_last_user_activity( $achievement_id, $user_id );
+	if( intval( $timestamp ) > 0 ) {
+		$current_offset = get_option( 'gmt_offset' );
+		$tzstring       = get_option( 'timezone_string' );
+		if( empty( $tzstring ) || strtolower( $tzstring ) == 'utc' ) {
+			$offset = get_option( 'gmt_offset' ) * HOUR_IN_SECONDS;
+			$timestamp =  $timestamp + $offset;
+		} else {
+			$timestamp = $GLOBALS['badgeos']->start_time;
+		}
+	}
+	
 	if( intval( $timestamp ) < 1 ) {
 		$timestamp = $GLOBALS['badgeos']->start_time;
 	}
