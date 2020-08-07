@@ -17,3 +17,4 @@ import './user-ranks-list-block/block.js';
 import './user-earned-ranks-block/block.js';
 import './user-earned-points-block/block.js';
 import './credly-assertion-page-block/block.js';
+import './evidence-block/block.js';

@@ -320,7 +320,6 @@ class BadgeOS {
 
         require_once( $this->directory_path . 'includes/open_badge/install-default-pages.php' );
         require_once( $this->directory_path . 'includes/open_badge/functions.php' );
-        require_once( $this->directory_path . 'includes/open_badge/evidence-shortcode.php' );
         require_once( $this->directory_path . 'includes/open_badge/class-open-badge.php' );
         require_once( $this->directory_path . 'includes/open_badge/ob-metabox.php' );
 
