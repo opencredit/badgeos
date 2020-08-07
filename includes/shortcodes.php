@@ -17,6 +17,7 @@ include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_u
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_user_earned_points.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_rank.php' );
 include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/badgeos_ranks.php' );
+include( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/shortcodes/evidence-shortcode.php' );
 /**
  * Register a new BadgeOS Shortcode
  *

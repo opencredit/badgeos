@@ -116,6 +116,51 @@ function badgeos_render_single_rank_block( $attributes ) {
  *
  * @return output html
  */
+function badgeos_render_evidence_blocks( $attributes ) {
+
+    if( isset( $attributes['award_id'] ) && !empty( $attributes['award_id'] ) ){
+
+        $data = json_decode( $attributes['award_id'] );
+        if( ! empty( $data->value  ) ) {
+            
+            $param = '';
+            if( !empty( $attributes['achievement'] ) ) {
+                $achi_data = json_decode( $attributes['achievement'] );
+                $param .= ' achievement="'.sanitize_text_field( $achi_data->value ).'"';
+            } else {
+                $param .= ' achievement="0"';
+            }
+        
+            $param = '';
+            if( !empty( $attributes['user_id'] ) ) {
+                $user_data = json_decode( $attributes['user_id'] );
+                $param .= ' user_id="'.sanitize_text_field( $user_data->value ).'"';
+            } else {
+                $param .= ' user_id="0"';
+            }
+
+            $body = do_shortcode( '[badgeos_evidence award_id="'.$data->value.'" '.$param.' ]' );
+            if( empty($body  ) ) {
+                return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
+            } else {
+                return do_shortcode( '[badgeos_evidence award_id="'.$data->value.'" '.$param.' ]' );
+            }
+            
+        } else {
+            return '<div class="inner-content">'.__( 'No achievement found.', 'badgeos' ).'</div>';
+        }
+    } else {
+        return '<div class="inner-content">'.__( 'Please, select an award id to display.', 'badgeos' ).'</div>';
+    }
+}
+
+/**
+ * Renders the achievement block
+ *
+ * @param $attributes
+ *
+ * @return output html
+ */
 function badgeos_render_achievement_block( $attributes ) {
 
     if( isset( $attributes['achievement'] ) && !empty( $attributes['achievement'] ) ){
@@ -892,6 +937,25 @@ function badgeos_render_my_php_block(  ) {
                 'default'=> '1000'
             ),
             'CID' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+        )
+    ));
+
+    register_block_type( 'bos/badgeos-evidence-block', array(
+        'render_callback' => 'badgeos_render_evidence_blocks',
+        'category' => 'badgeos-blocks',
+        'attributes' => array(
+            'achievement' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'user_id' => array(
+                'type' => 'string',
+                'default'=> ''
+            ),
+            'award_id' => array(
                 'type' => 'string',
                 'default'=> ''
             ),

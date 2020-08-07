@@ -16,8 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 function badgeos_register_api_end_points() {
 
     register_rest_route( 'badgeos', '/block-point-types', array(
-      'methods' => 'GET',
+      'methods' => 'GET', 
       'callback' => 'badgeos_block_point_types_list',
+    ) ); 
+
+    register_rest_route( 'badgeos', '/block-achievements-award-list/(?P<achievement>[a-zA-Z0-9_-]+)/(?P<user_id>[a-zA-Z0-9_-]+)', array(
+      'methods' => 'GET',
+      'callback' => 'badgeos_block_achievements_award_list',
     ) );
 
     register_rest_route( 'badgeos', '/ranks', array(
@@ -46,6 +51,45 @@ function badgeos_register_api_end_points() {
     ));
 }
 add_action( 'rest_api_init', 'badgeos_register_api_end_points' );
+
+/**
+ * Returns the list of achievements award.
+ *
+ * @return $posts
+ */
+function badgeos_block_achievements_award_list($request) {
+
+
+  global $wpdb;
+
+  $badgeos_settings   = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+  $achievement_id     = sanitize_text_field( $request['achievement'] );
+  $user_id            = sanitize_text_field( $request['user_id'] );
+  $q                  = sanitize_text_field( $request['q'] );
+
+  $sql = "SELECT entry_id as value, CONCAT(achievement_title, ' : ', entry_id) as label, entry_id as value FROM ".$wpdb->prefix."badgeos_achievements where post_type!='".$badgeos_settings['achievement_step_post_type']."'";
+
+  // Build our query
+  if ( !empty( $q ) ) {
+      $sql .= " and achievement_title LIKE '%". $q."%'";
+  }
+
+  // Build our query
+  if ( !empty( $achievement_id ) && intval( $achievement_id ) ) {
+      $sql .= " and ID = '". $achievement_id."'";
+  }
+  
+  // Build our query
+  if ( ! empty( $user_id ) && intval( $user_id ) ) {
+      $sql .= " and user_id = '". $user_id."'";
+  }
+
+  // Fetch our results (store as associative array)
+  $results = $wpdb->get_results( $sql, 'ARRAY_A' );
+
+  // Return our results
+  wp_send_json( $results );
+}
 
 /**
  * Returns the list of ranks..
