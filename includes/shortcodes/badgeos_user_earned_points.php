@@ -34,7 +34,7 @@ function badgeos_user_earned_points_shortcode() {
             ),
             'user_id1' => array(
                 'name'          => __( 'Select User (Type 3 chars)', 'badgeos' ),
-                'description'   => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+                'description'   => __( 'Show only points earned by a specific user.', 'badgeos' ),
                 'type'          => 'text',
                 'autocomplete_name' => 'user_id',
             ),

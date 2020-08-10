@@ -153,11 +153,11 @@ class open_badge_metabox {
         }
 
         $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
-        $msg = array( 'type' => 'failed', 'message' => __( 'In-valid data format.', 'badgeos' ) );
+        
         if( count( $recs ) > 0 ) {
             $msg = array( 'type' => 'success', 'message' => __( 'Valid data format.', 'badgeos' ) );
         }  else {
-            $msg = array( 'type' => 'notfound', 'message' => __( 'Badge is not found.', 'badgeos' ) );
+            $msg = array( 'type' => 'failed', 'message' => __( 'In-valid data format.', 'badgeos' ) );
         }
 
         wp_send_json( $msg );
@@ -170,25 +170,37 @@ class open_badge_metabox {
 
         $achievement_id = 0;
         if( ! empty( $_REQUEST['bg'] ) ) {
-            $achievement_id 	= sanitize_text_field( $_REQUEST['bg'] );
+            $achievement_id = sanitize_text_field( $_REQUEST['bg'] );
         }
 
         $entry_id = 0;
         if( ! empty( $_REQUEST['eid'] ) ) {
-            $entry_id  	        = sanitize_text_field( $_REQUEST['eid'] );
+            $entry_id  = sanitize_text_field( $_REQUEST['eid'] );
         }
 
         $user_id = 0;
         if( ! empty( $_REQUEST['uid'] ) ) {
-            $user_id  	        = sanitize_text_field( $_REQUEST['uid'] );
+            $user_id  = sanitize_text_field( $_REQUEST['uid'] );
         }
-
-        $mypost = get_post( $achievement_id );
-
-        if( $mypost ) {
-            wp_send_json(array( 'type' => 'success', 'message' => __( 'Badge is not revoked', 'badgeos' ) ));
+            
+        $earned_achievements = badgeos_get_user_achievements( array(
+            'user_id'          => $user_id,
+            'achievement_id' => $achievement_id,
+            'display' => true
+        ) );
+        
+        $has_achievement = false;
+        if ( $earned_achievements ) {
+            foreach ( $earned_achievements as $achievement ) {
+                if( $achievement->entry_id == $entry_id ) {
+                    $has_achievement = true;
+                }
+            }
+        }
+        if( $has_achievement ) {
+            wp_send_json( array( 'type' => 'success', 'message' => __( 'Badge is not revoked', 'badgeos' ) ) );
         } else {
-            wp_send_json(array( 'type' => 'error', 'message' => __( 'Badge is revoked', 'badgeos' ) ));
+            wp_send_json( array( 'type' => 'error', 'message' => __( 'Badge is revoked', 'badgeos' ) ) );
         }
     }
 
@@ -237,10 +249,15 @@ class open_badge_metabox {
 
             wp_send_json($msg);
         } else {
-            wp_send_json(array( 'type' => 'success', 'message' => __( 'Badge is not expired', 'badgeos' ) ));
-        }
-
+            $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
         
+            if( count( $recs ) > 0 ) {
+                $msg = array( 'type' => 'success', 'message' => __( 'Badge is not expired', 'badgeos' ) );
+            }  else {
+                $msg = array( 'type' => 'failed', 'message' => __( 'Badge is not found.', 'badgeos' ) );
+            }
+            wp_send_json($msg);
+        }
     }
 
     /**
