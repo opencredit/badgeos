@@ -123,8 +123,7 @@ function badgeos_earned_points_shortcode( $atts = array () ){
     }
     $point = badgeos_get_points_by_type( $credit_id, $user_id );
     if( $show_title != 'false' ) {
-        $maindiv = '<div class="badgeos_earned_point_main" data-point_type="'.$point_type.'">';
-        $maindiv = '<div id="badgeos_earned_point_'.$credit_id.'" class="badgeos_earned_point_main badgeos_earned_point badgeos_earned_point_'.$credit_id.' badgeos_earned_point_'.$credit_id.'_'.$user_id.'" data-point_type="'.$point_type.'">';
+        $maindiv = '<div id="badgeos_earned_point_'.$credit_id.'" class="badgeos_earned_point_main badgeos_earned_point_'.$credit_id.' badgeos_earned_point_'.$credit_id.'_'.$user_id.'" data-point_type="'.$point_type.'">';
         $maindiv .= '<div class="badgeos_earned_point_title">'.$post_type_plural.'</div>';
         $maindiv .= '<div class="badgeos_earned_point_detail">';
         $maindiv .= '<span class="point_value">'.$point.'</span> <span class="point_unit">'.$point_unit.'</span>';
