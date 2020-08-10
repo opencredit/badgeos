@@ -247,8 +247,9 @@ class earned_user_achievements_widget extends WP_Widget {
 
                                     if( $show_title ) {
                                         echo $rank_title;
-                                    }
-
+									}
+									
+									do_action('badgeos_widget_ranks_listing', $rank);
                                     echo '</li>';
 								}
 								echo '</ul>';
@@ -355,8 +356,9 @@ class earned_user_achievements_widget extends WP_Widget {
 
                                 if( $show_title ) {
                                     echo $achievement_title;
-                                }
-
+								}
+								
+								do_action('badgeos_widget_achievements_listing', $achievement);
                                 echo '</li>';
 
                                 $thecount++;
