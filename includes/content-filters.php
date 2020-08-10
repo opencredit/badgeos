@@ -8,9 +8,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
-
-
-
 /**
  * Add filters to remove stuff from our singular pages and add back in how we want it
  *
@@ -277,15 +274,15 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 
         $points_type_lbl = badgeos_points_type_display_title( $points_type );
 
-		return '<div class="badgeos-item-points">' . sprintf( __( '%d %s', 'badgeos' ), $point_value, $points_type_lbl) . '</div>';
+		return '<div class="badgeos-item-points badgeos-item-points-'.$points_type.' badgeos-item-points-'.$achievement_id.' badgeos-item-points-'.$points_type.'-'.$achievement_id.'">' . sprintf( __( '<span>%d</span> %s', 'badgeos' ), $point_value, $points_type_lbl) . '</div>';
 	} else {
         $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
         $point_type = badgeos_points_type_display_title( $default_point_type );
         if( !empty( $point_type ) ) {
-            return '<div class="badgeos-item-points">0 '.$point_type.'</div>';
+			return '<div class="badgeos-item-points badgeos-item-points-'.$points_type.' badgeos-item-points-'.$achievement_id.' badgeos-item-points-'.$points_type.'-'.$achievement_id.'"><span>0</span> '.$point_type.'</div>';
         } else {
-            return '<div class="badgeos-item-points">'.__( '0 Points', 'badgeos' ).'</div>';
+			return '<div class="badgeos-item-points badgeos-item-points-'.$points_type.' badgeos-item-points-'.$achievement_id.' badgeos-item-points-'.$points_type.'-'.$achievement_id.'"><span>0</span> '.__( 'Points', 'badgeos' ).'</div>';
         }
     }
 }

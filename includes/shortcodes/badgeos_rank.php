@@ -119,9 +119,8 @@ function badgeos_rank_shortcode( $atts = array() ) {
 	// If we're dealing with an rank post
 	if ( badgeos_is_rank( $rank ) ) {
         
+        $output .= '<div id="badgeos-rank-item-' . $rank->ID . '" class="badgeos-list-item badgeos-rank-item badgeos-rank-item-' . $rank->ID . '">';
         
-        $output .= '<div id="badgeos-list-item-' . $rank->ID . '" class="badgeos-list-item">';
-
         // Achievement Image
         if( $atts['show_thumb'] == 'true' ) {
             $output .= '<div class="badgeos-item-image">';
