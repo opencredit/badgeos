@@ -131,7 +131,7 @@ function badgeos_ob_profile_achivement_image( $badge_image, $achievement ) {
 	$badge_url = trailingslashit( $baseurl.'user_badges/'.$achievement->user_id );
 
 	if( ! empty( $achievement->image ) && file_exists( $badge_directory.$achievement->image ) ) {
-		return '<img src="'.$badge_url.$achievement->image.'" height="50" with="50" />';
+		return '<img class="wp-post-image wp-post-image" src="'.$badge_url.$achievement->image.'" height="50" width="50" />';
 	} 
 
 	return $badge_image;

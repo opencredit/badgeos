@@ -30,18 +30,18 @@ class earned_user_achievements_widget extends WP_Widget {
         ?>
             <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 			<p><label><?php _e( 'Number to display (0 = all)', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>"  type="text" value="<?php echo absint( $number ); ?>" /></label></p>
-        <p><label><?php _e( 'Hide following fields:', 'badgeos' ); ?></label></p>
-            <p>
-                <label for="remove_title_field">
-                    <input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'remove_title_field' ) );?>" id="<?php echo esc_attr( $this->get_field_name( 'remove_title_field' ) );?>" <?php echo $remove_title_field=='on'?'checked':'';?> />
-                    <?php _e( 'Title Field', 'badgeos' ); ?>
-                </label><br />
-                <label for="remove_thumb_field">
-                    <input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'remove_thumb_field' ) );?>" id="<?php echo esc_attr( $this->get_field_name( 'remove_thumb_field' ) );?>" <?php echo $remove_thumb_field=='on'?'checked':'';?> />
-                    <?php _e( 'Thumbnail Field', 'badgeos' ); ?>
-                </label><br />
-            </p>
-        <p><label><?php _e( 'Rank Section Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'rank_section_title' ) ); ?>"  type="text" value="<?php echo esc_attr( $rank_section_title ); ?>" /></label></p>
+			<p><label><?php _e( 'Hide following fields:', 'badgeos' ); ?></label></p>
+				<p>
+					<label for="remove_title_field">
+						<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'remove_title_field' ) );?>" id="<?php echo esc_attr( $this->get_field_name( 'remove_title_field' ) );?>" <?php echo $remove_title_field=='on'?'checked':'';?> />
+						<?php _e( 'Title Field', 'badgeos' ); ?>
+					</label><br />
+					<label for="remove_thumb_field">
+						<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'remove_thumb_field' ) );?>" id="<?php echo esc_attr( $this->get_field_name( 'remove_thumb_field' ) );?>" <?php echo $remove_thumb_field=='on'?'checked':'';?> />
+						<?php _e( 'Thumbnail Field', 'badgeos' ); ?>
+					</label><br />
+				</p>
+			<p><label><?php _e( 'Rank Section Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'rank_section_title' ) ); ?>"  type="text" value="<?php echo esc_attr( $rank_section_title ); ?>" /></label></p>
             <p><label><?php _e( 'Display only the following User Rank Types:', 'badgeos' ); ?></label></p>
 			<p>
 				<?php
@@ -207,19 +207,19 @@ class earned_user_achievements_widget extends WP_Widget {
 
                         <?php
 								echo '<ul class="widget-ranks-listing">';
-								$rank_width = '50'; 
-								if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
-									$rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
-								}
-								
-								$rank_height = '50';
-								if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
-									$rank_height = intval( $badgeos_settings['badgeos_rank_global_image_height'] );
-								}
+                    $rank_width = '50';
+                    if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
+                        $rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
+                    }
 
-								foreach ( $user_ranks as $rank ) {
-									
-									$img        = badgeos_get_rank_image( $rank->rank_id, $rank_width, $rank_height );
+                    $rank_height = '50';
+                    if( isset( $badgeos_settings['badgeos_rank_global_image_height'] ) && intval( $badgeos_settings['badgeos_rank_global_image_height'] ) > 0 ) {
+                        $rank_height = intval( $badgeos_settings['badgeos_rank_global_image_height'] );
+                    }
+
+                    foreach ( $user_ranks as $rank ) {
+
+                        $img        = badgeos_get_rank_image( $rank->rank_id, $rank_width, $rank_height );
 									$img_permalink = 'javascript:;';
 									if ( ! function_exists( 'post_exists' ) ) {
 										require_once( ABSPATH . 'wp-admin/includes/post.php' );
@@ -296,17 +296,18 @@ class earned_user_achievements_widget extends WP_Widget {
                                     $is_title_show = true;
                                 }
 
-								$achievement_width = '50'; 
-								if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
-									$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
-								}
-								
-								$achievement_height = '50';
-								if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
-									$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
-								}
+                                $achievement_width = '50';
+                                if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+                                    $achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+                                }
+
+                                $achievement_height = '50';
+                                if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+                                    $achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+                                }
 
                                 $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array($achievement_width, $achievement_height), 'wp-post-image');
+
                                 $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement);
 
                                 $img_permalink = 'javascript:;';
@@ -317,24 +318,33 @@ class earned_user_achievements_widget extends WP_Widget {
                                     $img_permalink = get_permalink($achievement->ID);
                                 }
 
+								$open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
+								if( $open_badge_enable_baking ) {
+									$badgeos_evidence_page_id	= get_option( 'badgeos_evidence_url' );
+									$badgeos_evidence_url 		= get_permalink( $badgeos_evidence_page_id );
+									$badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
+									$badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );
+									$badgeos_evidence_url  		= add_query_arg( 'uid', $achievement->user_id, $badgeos_evidence_url );
+									$img_permalink = $badgeos_evidence_url;
+								}
+
                                 $thumb = $img ? '<a class="badgeos-item-thumb" href="' . $img_permalink . '">' . $img . '</a>' : '';
                                 $class = 'widget-badgeos-item-title';
                                 $item_class = $thumb ? ' has-thumb' : '';
 
                                 $achievement_title = get_the_title($achievement->ID);
                                 if( empty( $achievement_title ) ) {
-                                    $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="javascript:;">'. esc_html( $achievement->achievement_title ) .'</a>';
+                                    $achievement_title = '<a class="widget-badgeos-item-title '. esc_attr( $class ) .'" href="'.esc_url($img_permalink).'">'. esc_html( $achievement->achievement_title ) .'</a>';
                                 } else {
                                     $permalink = get_permalink($achievement->ID);
-                                    $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="' . esc_url($permalink) . '">' . esc_html($achievement_title) . '</a>';
+                                    $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="' . esc_url($img_permalink) . '">' . esc_html($achievement_title) . '</a>';
                                 }
 
                                 // Setup credly data if giveable
-								$giveable = false;
-								if( badgeos_first_time_installed() ) {
-									$giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
-								}
-
+                                $giveable = false;
+                                if( badgeos_first_time_installed() ) {
+                                    $giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
+                                }
                                 $item_class .= $giveable ? ' share-credly addCredly' : '';
                                 $credly_ID = $giveable ? 'data-credlyid="' . absint($achievement->ID) . '"' : '';
 

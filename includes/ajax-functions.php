@@ -493,6 +493,17 @@ function badgeos_ajax_get_earned_achievements() {
         // Loop Achievements
         foreach ( $user_achievements as $achievement ) {
             $output = '<li><div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item">';
+            
+            $open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
+            $permalink                          = get_permalink( $achievement->ID );
+            if( $open_badge_enable_baking ) {
+                $badgeos_evidence_page_id	= get_option( 'badgeos_evidence_url' );
+                $badgeos_evidence_url 		= get_permalink( $badgeos_evidence_page_id );
+                $badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
+                $badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );
+                $badgeos_evidence_url  		= add_query_arg( 'uid', $achievement->user_id, $badgeos_evidence_url );
+                $permalink = $badgeos_evidence_url;
+            }
 
             // Achievement Image
             if( $show_thumb=='true' ) {
@@ -503,7 +514,7 @@ function badgeos_ajax_get_earned_achievements() {
                     $image_size = array( $image_width,  $image_height );
                 }
 
-                $output .= '<a href="' . get_permalink( $achievement->ID ) . '">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
+                $output .= '<a href="'.$permalink.'">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
                 $output .= '</div><!-- .badgeos-item-image -->';
             }
 
@@ -516,7 +527,7 @@ function badgeos_ajax_get_earned_achievements() {
                 if( empty( $title ) )
                     $title = $achievement->achievement_title;
 
-                $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( $achievement->ID ).'">'.$title.'</a></h2>';
+                $output .= '<h2 class="badgeos-item-title"><a href="'.$permalink.'">'.$title.'</a></h2>';
             }
 
             // Achievement Short Description
