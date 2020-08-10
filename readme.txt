@@ -4,7 +4,7 @@ Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
 Tested up to: 5.4.1
-Stable tag: 3.6
+Stable tag: 3.6.2
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -245,6 +245,29 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 
 == Changelog ==
 
+= 3.6.2 =
+* New: Removed the nomination and submission from BadgeOS Core
+* New: Added two new hooks to add new main tabs on settings page i.e. badgeos_settings_main_tab_header and badgeos_settings_main_tab_content
+* New: Added Unique Classes on front end on shortcodes to help hide content/apply styles
+* New: Provide a possibility to access Badge Evidence Page from User’s Dashboard through User Earned Achievement Shortcode and BadgeOS Earned Achievements Widget
+* New: Added a possibility to add Badge Evidence Page with a shortcode and Gutenberg block
+* New: Added 2 new action hooks on evidence page badgeos_evidence_after_left_column and badgeos_evidence_after_right_column
+* New: Added Ranks list Shortcode and Gutenberg block.
+* New: Added Single Rank Shortcode and Gutenberg block.
+* Fix: The bug of timezone not allowing automatic badge award on completing steps
+* Fix: The bug of Gutenberg due to which double points are awarded
+* Fix: Fixed the Download Link in user profile page 
+* Fix: Fixed the undefined error on expire message when clicking verify button in open badge portion
+* Fix: No records found issue is fixed in shortcodes
+
+= 3.6.1 =
+* New: Updated the BadgeOS Settings page layout
+* New: Added a link in OB Integration to recreate OB pages if someone missed it for the first time.
+* Fix: Fixed The error "TypeError: progressbar.progressbar is not a function" in console.
+* Fix: Added a dismiss button which will dismiss the Credly disconnection message forever
+* Fix: Fixed the achievement and rank images width/height issue in achievement and rank based shortcodes and widget
+* Fix: Fixed the error "badgeos_shortcode_embed_message not defined" in console
+
 = 3.6 =
 * New: Added option to make the earned badges compatible with OB standards
 * New: Added option to set achievements/ranks image sizes globally
@@ -254,7 +277,7 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 * New: Removed Credly integration for new installations
 * Fix: Disable the BadgeOS emails by default
 * Fix: Fixed multiple required steps badge issue
-* Fix: Conflict with The7 theme
+* Fix: Fixed conflict with theme the7
 * Fix: Replaced deprecated functions
 
 = 3.5.1 =

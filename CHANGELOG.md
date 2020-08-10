@@ -1,5 +1,53 @@
 ## Changelog
 
+= 3.6.2 =
+* New: Removed the nomination and submission from BadgeOS Core
+* New: Added two new hooks to add new main tabs on settings page i.e. badgeos_settings_main_tab_header and badgeos_settings_main_tab_content
+* New: Added Unique Classes on front end on shortcodes to help hide content/apply styles
+* New: Provide a possibility to access Badge Evidence Page from User’s Dashboard through User Earned Achievement Shortcode and BadgeOS Earned Achievements Widget
+* New: Added a possibility to add Badge Evidence Page with a shortcode and Gutenberg block
+* New: Added 2 new action hooks on evidence page badgeos_evidence_after_left_column and badgeos_evidence_after_right_column
+* New: Added Ranks list Shortcode and Gutenberg block.
+* New: Added Single Rank Shortcode and Gutenberg block.
+* Fix: The bug of timezone not allowing automatic badge award on completing steps
+* Fix: The bug of Gutenberg due to which double points are awarded
+* Fix: Fixed the Download Link in user profile page 
+* Fix: Fixed the undefined error on expire message when clicking verify button in open badge portion
+* Fix: No records found issue is fixed in shortcodes
+
+= 3.6.1 =
+* New: Updated the BadgeOS Settings page layout
+* New: Added a link in OB Integration to recreate OB pages if someone missed it for the first time.
+* Fix: Fixed The error "TypeError: progressbar.progressbar is not a function" in console.
+* Fix: Added a dismiss button which will dismiss the Credly disconnection message forever
+* Fix: Fixed the achievement and rank images width/height issue in achievement and rank based shortcodes and widget
+* Fix: Fixed the error "badgeos_shortcode_embed_message not defined" in console
+
+= 3.6 =
+* New: Added option to make the earned badges compatible with OB standards
+* New: Added option to set achievements/ranks image sizes globally
+* New: Added option to update image size from earned achievements/ranks shortcodes
+* New: Added option to update users points through ajax
+* New: Added user id parameter for earned achievements/ranks shortcodes
+* New: Removed Credly integration for new installations
+* Fix: Disable the BadgeOS emails by default
+* Fix: Fixed multiple required steps badge issue
+* Fix: Fixed conflict with theme the7
+* Fix: Replaced deprecated functions
+
+= 3.5.1 =
+* New: Added default (list/grid) view option for achievement list and user earned achievements/ranks shortcodes
+* New: Added option to send email on earning achievements/points/ranks
+* New: Added option to edit/update the header/footer and content of the email
+* Fix: Revamped achievement list shortcode
+* Fix: Revamped users earned points shortcode
+* Fix: Fixed WordPress  version ( below 5.0) compatibility issue
+* Fix: Enqueued CKEditor js code only on submission page to avoid conflicts
+* Fix: Revamped DB update script
+* Fix: Fixed WP deprecated function issue
+* Fix: Fixed Elementor plugin conflict
+* Fix: Revamped user achievement widgets
+
 #### 3.5
 - New: Added support for Gutenburg
 - New: Added option to display earned points/achievement/ranks with list/grid view
