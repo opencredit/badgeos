@@ -112,8 +112,8 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 
 	// If we're dealing with an achievement post
 	if ( badgeos_is_achievement( $achievement ) ) {
-		$output .= '<div id="badgeos-single-achievement-container" class="badgeos-single-achievement badgeos-single-achievement-'.$atts['id'].'">';  // necessary for the jquery click handler to be called
-		$output .= badgeos_render_achievement( $achievement, $atts['show_title'], $atts['show_thumb'], $atts['show_description'], $atts['show_steps'], $atts['image_width'], $atts['image_height'] );
+		$output .= '<div id="badgeos-single-achievement-container-'.$atts['id'].'" class="badgeos-single-achievement badgeos-single-achievement-'.$atts['id'].'">';  // necessary for the jquery click handler to be called
+        $output .= badgeos_render_achievement( $achievement, $atts['show_title'], $atts['show_thumb'], $atts['show_description'], $atts['show_steps'], $atts['image_width'], $atts['image_height'] );
 		$output .= '</div>';
 	}
 

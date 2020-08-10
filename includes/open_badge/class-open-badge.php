@@ -494,8 +494,11 @@ class BadgeOS_Open_Badge {
 	 */ 
 	function get_identity_id( $user_id, $entry_id, $achievement_id ) {
 		$user = get_user_by( 'ID', $user_id );
-
-		return 'sha256$' . hash('sha256', $user->user_email . $this->badgeos_salt);
+		$user_email = '';
+		if( $user ) {
+			$user_email = $user->user_email;
+		}
+		return 'sha256$' . hash('sha256',$user_email.$this->badgeos_salt);
 	}
 
 	/**
