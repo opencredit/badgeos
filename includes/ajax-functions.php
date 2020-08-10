@@ -154,11 +154,12 @@ function badgeos_ajax_get_ranks_list() {
 		while ( $rank_posts->have_posts() ) : $rank_posts->the_post();
             
             $user_ranks = badgeos_user_has_a_rank( get_the_ID(), $user_id );
-            $earned_this = 'badgeos_not_earned_rank';
+            $earned_this = 'badgeos_not_earned_rank badgeos_not_earned_rank_'.get_the_ID();
             if( count( $user_ranks ) > 0 ) {
-                $earned_this = 'badgeos_already_earned_rank';
+                $earned_this = 'badgeos_already_earned_rank badgeos_already_earned_rank_'.get_the_ID();
             }
-            $output = '<li><div id="badgeos-list-item-' . get_the_ID() . '" class="badgeos-list-item '.$earned_this.'">';
+            $output = '<li><div id="badgeos-list-item-' . get_the_ID() . '" class="badgeos-list-item badgeos-list-item-'.get_the_ID().' '.$earned_this.'">';
+
 
             // Achievement Image
             if( $show_thumb == 'true' ) {
@@ -315,7 +316,7 @@ function badgeos_ajax_get_earned_ranks() {
         // Loop ranks
         foreach ( $user_ranks as $rank ) {
 
-            $output = '<li><div id="badgeos-list-item-' . $rank->rank_id . '" class="badgeos-list-item">';
+            $output = '<li><div id="badgeos-list-item-' . $rank->rank_id . '" class="badgeos-list-item badgeos-earned-rank-item badgeos-earned-rank-item-'.$rank->rank_id.'">';
 
             // Achievement Image
             if( $show_thumb == 'true' ) {
@@ -492,8 +493,9 @@ function badgeos_ajax_get_earned_achievements() {
 
         // Loop Achievements
         foreach ( $user_achievements as $achievement ) {
-            $output = '<li><div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item">';
-            
+
+            $output = '<li><div id="badgeos-earned-list-item-'.$achievement->ID.'" class="badgeos-list-item badgeos-earned-list-item badgeos-earned-list-item-'.$achievement->ID.' badgeos-earned-list-item-'.$achievement->ID.'-'.$user_id.'">';
+
             $open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
             $permalink                          = get_permalink( $achievement->ID );
             if( $open_badge_enable_baking ) {
@@ -728,7 +730,7 @@ function badgeos_ajax_get_achievements() {
 		$achievement_posts = new WP_Query( $args );
 		$query_count += $achievement_posts->found_posts;
 		while ( $achievement_posts->have_posts() ) : $achievement_posts->the_post();
-            $achievements .= '<li>'.badgeos_render_achievement( get_the_ID(), $show_title, $show_thumb, $show_description, $show_steps, $image_width, $image_height ).'</li>';
+            $achievements .= '<li id="badgeos-achivements-list-item-'.get_the_ID().'" class="badgeos-achivements-list-item badgeos-achivements-list-item-'.get_the_ID().'">'.badgeos_render_achievement( get_the_ID(), $show_title, $show_thumb, $show_description, $show_steps, $image_width, $image_height ).'</li>';
 			$achievement_count++;
 		endwhile;
 
