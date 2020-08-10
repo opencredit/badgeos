@@ -640,6 +640,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 					<?php
 				}
 				?>
+				<?php do_action( 'badgeos_profile_rank_add_column_heading' ); ?>
 			</tr>
 		</thead>
 		<tbody>
@@ -711,6 +712,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 								<?php
 							}
 							?>
+							<?php do_action( 'badgeos_profile_rank_add_column_data', $rank ); ?>
 						</tr>
 						<?php
 					}
@@ -735,13 +737,10 @@ function badgeos_profile_user_ranks( $user = null ) {
 			<th><?php _e( 'Name', 'badgeos' ); ?></th>
 			<th><?php _e( 'Rank Type', 'badgeos' ); ?></th>
 			<th align="center" style="text-align:center !important;"><?php _e( 'Last Awarded', 'badgeos' ); ?></th>
-			<?php
-			if( $can_manage ) {
-				?>
+			<?php if( $can_manage ) { ?>
 				<th><?php _e( 'Action', 'badgeos' ); ?></th>
-				<?php
-			}
-			?>
+			<?php } ?>
+			<?php do_action( 'badgeos_profile_rank_add_column_heading' ); ?>
 		</tr>
 		</tfoot>
 	</table>
