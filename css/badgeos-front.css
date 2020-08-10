@@ -236,7 +236,25 @@ ul.badgeos-achievement-earners-list li {
 	padding: 5px;
 }
 
-.right_col .issue_date{
+.right_col .badgeos_user_name{
+	display: block;
+	font-size: 12px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+.right_col .badgeos_issuer_name{
+	display: block;
+	font-size: 12px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+.right_col .badgeos_issue_date{
+	display: block;
+	font-size: 12px;
+	color: #3b3c3d;
+	padding: 5px;
+}
+.right_col .badgeos_expiry_date{
 	display: block;
 	font-size: 12px;
 	color: #3b3c3d;

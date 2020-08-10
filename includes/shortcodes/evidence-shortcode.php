@@ -160,12 +160,13 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                     <p>
                         <?php echo $achievement->post_content;?>
                     </p>
-                    <div class="user_name"><strong><?php echo _e( 'Receiver', 'badgeos' );?>:</strong> <?php echo $user->display_name;?></div>
-                    <div class="issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
+                    <div class="badgeos_user_name"><strong><?php echo _e( 'Receiver', 'badgeos' );?>:</strong> <?php echo $user->display_name;?></div>
+                    <div class="badgeos_issuer_name"><strong><?php echo _e( 'Issuer', 'badgeos' );?>:</strong> <?php bloginfo( 'name' ); ?></div>
+                    <div class="badgeos_issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
                     <?php if( intval( $expiration ) > 0 ) { ?>
-                        <div class="issue_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( '+'.$expiration.' '.$expiration_type, strtotime( $rec->date_earned ) ) );?></div>
+                        <div class="badgeos_expiry_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( '+'.$expiration.' '.$expiration_type, strtotime( $rec->date_earned ) ) );?></div>
                     <?php } else { ?>
-                        <div class="issue_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo _e( 'None', 'badgeos' );?></div>
+                        <div class="badgeos_expiry_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo _e( 'None', 'badgeos' );?></div>
                     <?php } ?>
                     <?php echo apply_filters( 'badgeos_evidence_after_right_column', '', $achievement );?>
                 </div>
