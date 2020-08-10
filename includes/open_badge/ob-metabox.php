@@ -206,35 +206,41 @@ class open_badge_metabox {
 
         $entry_id = 0;
         if( ! empty( $_REQUEST['eid'] ) ) {
-            $entry_id  	        = sanitize_text_field( $_REQUEST['eid'] );
+            $entry_id = sanitize_text_field( $_REQUEST['eid'] );
         }
 
         $user_id = 0;
         if( ! empty( $_REQUEST['uid'] ) ) {
-            $user_id  	        = sanitize_text_field( $_REQUEST['uid'] );
+            $user_id = sanitize_text_field( $_REQUEST['uid'] );
         }
 
         $open_badge_expiration       = ( get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
         $open_badge_expiration_type  = ( get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
-
+        $msg = [];
         if( intval( $open_badge_expiration ) > 0 ) {
             $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
             if( count( $recs ) > 0 ) {
-                $badge_date = strtotime( $recs[ 0 ]->dateadded );
-                $badge_expiry = strtotime( '+'.$open_badge_expiration.' '.$open_badge_expiration_type, $badge_date );
-                if( $badge_expiry > time() ){
-                    $msg = array( 'type' => 'success', 'message' => __( 'Badge is not expired', 'badgeos' ) );
+                $badge_date = strtotime( $recs[ 0 ]->date_earned );
+                if( !empty( $badge_date ) ) {
+                    $badge_expiry = strtotime( '+'.$open_badge_expiration.' '.$open_badge_expiration_type, $badge_date );
+                    if( $badge_expiry > time() ){
+                        $msg = array( 'type' => 'success', 'message' => __( 'Badge is not expired', 'badgeos' ) );
+                    } else {
+                        $msg = array( 'type' => 'failed', 'message' => __( 'Badge is expired', 'badgeos' ) );
+                    }
                 } else {
                     $msg = array( 'type' => 'failed', 'message' => __( 'Badge is expired', 'badgeos' ) );
                 }
             } else {
                 $msg = array( 'type' => 'notfound', 'message' => __( 'Badge is not found', 'badgeos' ) );
             }
+
+            wp_send_json($msg);
         } else {
             wp_send_json(array( 'type' => 'success', 'message' => __( 'Badge is not expired', 'badgeos' ) ));
         }
 
-        wp_send_json($_REQUEST);
+        
     }
 
     /**
