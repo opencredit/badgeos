@@ -1,9 +1,8 @@
 jQuery(document).ready(function ($) {
 
-	/**
+    /**
 	 * For Tool Page
      */
-
     $('.open_badge_enable_baking_blk_field').change(function () {
         if ($(this).val() == '1') {
             $(this).parents('fieldset').find('.sub_ob_badgeos_blk_fields').css('display', 'block');
