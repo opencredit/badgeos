@@ -16,7 +16,9 @@ function badgeos_register_ob_evidence_shortcode() {
     foreach( $achievement_types as $type ) {
         $posts = get_posts( array( 'post_type' => $type->post_name, 'posts_per_page' =>	-1 ) );
         foreach( $posts as $post ) {
-            $post_list[ $post->ID ] = $post->post_title;
+            if( badgeos_get_option_open_badge_enable_baking($post->ID) ) {
+                $post_list[ $post->ID ] = $post->post_title;
+            }
         }
     }
     
@@ -34,13 +36,13 @@ function badgeos_register_ob_evidence_shortcode() {
             ),
             'user_id1' => array(
                 'name'              => __( 'Select User (Type 3 chars)', 'badgeos' ),
-				'description'       => __( 'Show only achievements earned by a specific user.', 'badgeos' ),
+				'description'       => __( 'Achievement Earned by.', 'badgeos' ),
                 'type'              => 'text',
                 'autocomplete_name' => 'user_id',
             ),
             'award_id1' => array(
                 'name'                  => __( 'Award Id', 'badgeos' ),
-				'description'           => __( 'Show only awarded achievements.', 'badgeos' ),
+				'description'           => __( 'User awarded achievement record.', 'badgeos' ),
                 'type'                  => 'text',
                 'autocomplete_name'     => 'award_id',
             ),
@@ -157,9 +159,11 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                 </div>
                 <div class="right_col">
                     <h3 class="title"><?php echo $rec->achievement_title;?></h3>        
-                    <p>
-                        <?php echo $achievement->post_content;?>
-                    </p>
+                    <?php if($achievement) {  ?>
+                        <p>
+                            <?php echo $achievement->post_content;?>
+                        </p>
+                    <?php } ?>
                     <div class="badgeos_user_name"><strong><?php echo _e( 'Receiver', 'badgeos' );?>:</strong> <?php echo $user->display_name;?></div>
                     <div class="badgeos_issuer_name"><strong><?php echo _e( 'Issuer', 'badgeos' );?>:</strong> <?php bloginfo( 'name' ); ?></div>
                     <div class="badgeos_issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
