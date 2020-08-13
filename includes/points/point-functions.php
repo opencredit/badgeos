@@ -208,3 +208,135 @@ function badgeos_award_user_points( $user_id = 0, $achievement_id = 0 ) {
 	}
 }
 add_action( 'badgeos_award_achievement', 'badgeos_award_user_points', 999, 2 );
+
+/**
+ * Return points image
+ *
+ * @param int $point_id
+ * @param string $point_width
+ * @param string $point_height
+ * 
+ * @return $point_image
+ */
+function badgeos_get_point_image( $point_id = 0, $point_width = '', $point_height = '' ) {
+    
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+ 
+    if( empty( $point_width ) ) {
+        $point_width = '32';
+        if( isset( $badgeos_settings['badgeos_point_global_image_width'] ) && intval( $badgeos_settings['badgeos_point_global_image_width'] ) > 0 ) {
+            $point_width = intval( $badgeos_settings['badgeos_point_global_image_width'] );
+        }
+    }
+    
+    if( empty( $point_height ) ) {
+        $point_height = '32';
+        if( isset( $badgeos_settings['badgeos_point_global_image_height'] ) && intval( $badgeos_settings['badgeos_point_global_image_height'] ) > 0 ) {
+            $point_height = intval( $badgeos_settings['badgeos_point_global_image_height'] );
+        }
+    }
+
+    $point_image = wp_get_attachment_image( get_post_thumbnail_id( $point_id ), array( $point_width, $point_height ) );
+    if( empty( $point_image ) ) {
+        $point_image = '<img src="'.badgeos_get_directory_url() . 'images/points-default-image.png" width="'.$point_width.'px" height="'.$point_height.'px" />';
+    }
+
+    return $point_image;
+}
+
+/**
+ * Set default point image on point post save
+ *
+ * @param integer $post_id The post ID of the post being saved
+ * @return mixed    post ID if nothing to do, void otherwise.
+ */
+function badgeos_points_set_default_thumbnail( $post_id ) {
+	global $pagenow;
+
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if (
+		! (
+			$badgeos_settings['points_main_post_type'] == get_post_type( $post_id )
+		)
+		|| ( defined('DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		|| ! current_user_can( 'edit_post', $post_id )
+		|| has_post_thumbnail( $post_id )
+		|| 'post-new.php' == $pagenow
+	) {
+		return $post_id;
+	}
+
+	$thumbnail_id = 0;
+	$point_type = '';
+
+	// Get the thumbnail of our parent achievement
+	if ( $badgeos_settings['points_main_post_type'] !== get_post_type( $post_id ) ) {
+		$point_type = get_page_by_path( get_post_type( $post_id ), OBJECT, $badgeos_settings['points_main_post_type'] );
+
+		if ( $point_type ) {
+			$thumbnail_id = get_post_thumbnail_id( $point_type->ID );
+		}
+	}
+
+	// If there is no thumbnail set, load in our default image
+	if ( empty( $thumbnail_id ) ) {
+		global $wpdb;
+
+		// Grab the default image
+		$directory_url = badgeos_get_directory_url();
+		$thumbnail_url = $directory_url. 'images/points-default-image.png';
+		$file = apply_filters( 'badgeos_default_achievement_post_thumbnail', $thumbnail_url );
+
+		// Check for an existing copy of our default image
+		$file_name = 'points-default-image';
+		$attachment = $wpdb->get_col(
+			$wpdb->prepare( 
+				"SELECT ID FROM $wpdb->posts WHERE post_type = '%s' AND guid LIKE '%%points-default-image%%' ", 'attachment'
+			)
+		);
+
+		if ( !empty( $attachment[0] ) ) {
+			$thumbnail_id = $attachment[0];
+		} else {
+			// Download file to temp location
+			$tmp = download_url( $file );
+
+			// Set variables for storage
+			// fix file filename for query strings
+			preg_match( '/[^\?]+\.(jpe?g|jpe|gif|png)\b/i', $file, $matches );
+			$file_array['name']     = basename( $matches[0] );
+			$file_array['tmp_name'] = $tmp;
+
+			// If error storing temporarily, unlink
+			if ( is_wp_error( $tmp ) ) {
+				@unlink( $file_array['tmp_name'] );
+				$file_array['tmp_name'] = '';
+			}
+
+			// Upload the image
+			$thumbnail_id = media_handle_sideload( $file_array, $post_id );
+		}
+		// If upload errored, unlink the image file
+		if ( empty( $thumbnail_id ) || is_wp_error( $thumbnail_id ) ) {
+			@unlink( $file_array['tmp_name'] );
+
+		// Otherwise, if the achievement type truly doesn't have
+		// a thumbnail already, set this as its thumbnail, too.
+		// We do this so that WP won't upload a duplicate version
+		// of this image for every single achievement of this type.
+		} elseif (
+			badgeos_is_achievement( $post_id )
+			&& is_object( $point_type )
+			&& ! get_post_thumbnail_id( $point_type->ID )
+		) {
+			set_post_thumbnail( $point_type->ID, $thumbnail_id );
+		}
+	}
+
+	// Finally, if we have an image, set the thumbnail for our achievement
+	if ( $thumbnail_id && ! is_wp_error( $thumbnail_id ) ) {
+		set_post_thumbnail( $post_id, $thumbnail_id );
+	}
+
+}
+add_action( 'save_post', 'badgeos_points_set_default_thumbnail' );

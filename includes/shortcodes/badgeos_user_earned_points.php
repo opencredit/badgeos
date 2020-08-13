@@ -99,6 +99,7 @@ function badgeos_earned_points_shortcode( $atts = array () ){
     // If we're dealing with multiple achievement types
     $credit_id = 0;
     $point_unit = 0;
+    $badge_image = '';
     if ( '' == $point_type ) {
         $post_type_plural = __( 'User Earned Points', 'badgeos' );
         $point_unit = 'Points';
@@ -119,17 +120,20 @@ function badgeos_earned_points_shortcode( $atts = array () ){
 
                 $point_unit = $post_type_plural;
             }
-        }
+            $badge_image = badgeos_get_point_image( $credit_id );
+			$badge_image = apply_filters( 'badgeos_profile_points_image', $badge_image, 'front-shortocde' , $point_obj  );
+        } 
     }
     $point = badgeos_get_points_by_type( $credit_id, $user_id );
     if( $show_title != 'false' ) {
         $maindiv = '<div id="badgeos_earned_point_'.$credit_id.'" class="badgeos_earned_point_main badgeos_earned_point_'.$credit_id.' badgeos_earned_point_'.$credit_id.'_'.$user_id.'" data-point_type="'.$point_type.'">';
-        $maindiv .= '<div class="badgeos_earned_point_title">'.$post_type_plural.'</div>';
+        $maindiv .= '<table><tr><td valign="top" width="15%" class="badgeos-points-image badgeos-points-image-'.$credit_id.'">'.$badge_image.'</td>';
+        $maindiv .= '<td valign="top" width="85%" class="badgeos-points-content badgeos-points-content-'.$credit_id.'"><div class="badgeos_earned_point_title">'.$post_type_plural.'</div>';
         $maindiv .= '<div class="badgeos_earned_point_detail">';
         $maindiv .= '<span class="point_value">'.$point.'</span> <span class="point_unit">'.$point_unit.'</span>';
         $maindiv .= '</div>';
         $maindiv .= apply_filters( 'badgeos_after_earned_point', '', $credit_id, $user_id );
-        $maindiv .= '</div>';
+        $maindiv .= '</td></tr></table></div>';
     } else {
         $maindiv = '<span class="point_value point_value_'.$credit_id.'">'.$point.'</span> <span class="point_unit">'.$point_unit.'</span>';
     }
