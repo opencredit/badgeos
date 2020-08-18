@@ -11,7 +11,9 @@
     $badgeos_achievement_global_image_height = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_height'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_height'] : '50';
     $badgeos_rank_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
     $badgeos_rank_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
-
+    $badgeos_point_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_width'] ) ) ? $badgeos_settings['badgeos_point_global_image_width'] : '32';
+    $badgeos_point_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_height'] ) ) ? $badgeos_settings['badgeos_point_global_image_height'] : '32';
+     
     $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
     $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
     $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
@@ -177,6 +179,20 @@
                             <label>
                                 <?php _e( 'Height:', 'badgeos' ); ?>
                                 <input type="number" id="badgeos_rank_global_image_height" value="<?php echo $badgeos_rank_global_image_height;?>" name="badgeos_settings[badgeos_rank_global_image_height]" />
+                            </label>
+                        </td>
+                    </tr>
+                    
+                    <tr valign="top">
+                        <th scope="row"><label for="badgeos_point_global_image_width"><?php _e( 'Point Image Size:', 'badgeos' ); ?></label></th>
+                        <td>
+                            <label>
+                                <?php _e( 'Width:', 'badgeos' ); ?>
+                                <input type="number" id="badgeos_point_global_image_width" value="<?php echo $badgeos_point_global_image_width;?>" name="badgeos_settings[badgeos_point_global_image_width]" />
+                            </label>
+                            <label>
+                                <?php _e( 'Height:', 'badgeos' ); ?>
+                                <input type="number" id="badgeos_point_global_image_height" value="<?php echo $badgeos_point_global_image_height;?>" name="badgeos_settings[badgeos_point_global_image_height]" />
                             </label>
                         </td>
                     </tr>

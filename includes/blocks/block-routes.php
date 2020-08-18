@@ -198,8 +198,8 @@ function badgeos_achievements_list( $data ) {
         'post_type'                => $types,
         'suppress_filters'         => false,
         'achievement_relationsihp' => 'any',
-        'posts_per_page' =>	-1,
-        'post_status'=> 'publish'
+        'posts_per_page'          =>	-1,
+        'post_status'             => 'publish'
     );
    
   // Get our achievement posts
