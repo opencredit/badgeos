@@ -30,6 +30,10 @@ function badgeos_get_user_achievements( $args = array() ) {
 		'end_date' => false, // A specific achievement type
 		'no_step' => false, // A specific achievement type
 		'since'            => 0,     // A specific timestamp to use in place of $limit_in_days
+		'pagination'	=> false,// if true the pagination will be applied
+		'limit'	=> 10,
+		'page'	=> 1,
+		'total_only' => false
 	);
 	$args = wp_parse_args( $args, $defaults );
 
@@ -88,8 +92,23 @@ function badgeos_get_user_achievements( $args = array() ) {
 		if( $args['end_date'] ) {
 			$where .= " AND date_earned <= '". $args['end_date']. "'";
 		}
-
-		$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where" );
+		
+		$user_achievements = [];
+		if( $args['total_only'] == true ) {
+			$user_achievements = $wpdb->get_var( "SELECT count(entry_id) as entry_id FROM $table_name WHERE $where" );
+		} else {
+			
+			$paginate_str = '';
+			if( $args['pagination'] == true ||  $args['pagination'] == 'true' ) { 
+				$offset = (intval( $args['page'] )-1) * intval( $args['limit'] );
+				if( $offset < 0 ) {
+					$offset = 0;
+				}
+				$paginate_str = ' limit '.$offset.', '.$args['limit'];
+			}
+			
+			$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where".$paginate_str );
+		}
 
 		return $user_achievements;
 	} else {
@@ -427,7 +446,11 @@ function badgeos_user_profile_data( $user = null ) {
             $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
             if( intval( $post_id ) == 0 ) {
 				$point_type = badgeos_points_type_display_title( $default_point_type );
-            }
+			}
+			
+			if( empty( $point_type ) ) {
+				$point_type = __( 'Points', 'badgeos' );
+			}
 
             echo '<td width="20%">'.intval( $achievement->points ).' '.$point_type.'</td>';
 
