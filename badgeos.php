@@ -201,7 +201,13 @@ class BadgeOS {
             $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
             $badgeos_admin_tools['email_general_footer_text']   = '';
             $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
-            $badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+			$badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+			$badgeos_admin_tools['email_general_background_color']   		= '#ffffff';
+			$badgeos_admin_tools['email_general_body_background_color']   	= '#f6f6f6';
+			$badgeos_admin_tools['email_general_body_text_color']   = '#000000';
+			$badgeos_admin_tools['email_general_footer_background_color']   = '#ffffff';
+			$badgeos_admin_tools['email_general_footer_text_color']   = '#000000';
+
 
             $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'yes';
             $badgeos_admin_tools['email_achievement_subject']   = __( 'Congratulation for earning an achievement', 'badgeos' );
@@ -393,8 +399,10 @@ class BadgeOS {
 
 		// Register styles
         wp_register_style( 'badgeos-jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
-        wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
-
+		wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
+		
+		wp_register_script('badgeos-jquery-mini-colorpicker-js', $this->directory_url . 'js/jquery.minicolors.js',"jquery", self::$version, true);
+		wp_register_style( 'badgeos-minicolorpicker_css', $this->directory_url.'css/jquery.minicolors.css', null, '' );
         wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
 
 		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
