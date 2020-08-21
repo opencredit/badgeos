@@ -136,7 +136,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row" valign="top"><label for="users"><?php _e( 'Footer Background Text Color', 'badgeos' ); ?></label></th>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Footer Text Color', 'badgeos' ); ?></label></th>
                         <td>
                             <input type="text" name="badgeos_tools[email_general_footer_text_color]" id="badgeos_tools_email_general_footer_text_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_footer_text_color'] )?$badgeos_admin_tools['email_general_footer_text_color']:'#000000'; ?>">
                         </td>
