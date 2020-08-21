@@ -41,6 +41,30 @@ jQuery(document).ready(function ($) {
         if (active_site_tab != '') {
             $('.badgeos_sidebar_tab_links').find('a[href="' + active_site_tab + '"]').click();
         }
+
+        if ($('.badgeos_mini_color_picker_ctrl').length > 0) {
+            $('.badgeos_mini_color_picker_ctrl').each(function () {
+                $(this).minicolors({
+                    control: $(this).attr('data-control') || 'hue',
+                    defaultValue: $(this).attr('data-defaultValue') || '',
+                    format: $(this).attr('data-format') || 'hex',
+                    keywords: $(this).attr('data-keywords') || '',
+                    inline: $(this).attr('data-inline') === 'true',
+                    letterCase: $(this).attr('data-letterCase') || 'lowercase',
+                    opacity: $(this).attr('data-opacity'),
+                    position: $(this).attr('data-position') || 'bottom',
+                    swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+                    change: function (value, opacity) {
+                        if (!value) return;
+                        if (opacity) value += ', ' + opacity;
+                        if (typeof console === 'object') {
+                            console.log(value);
+                        }
+                    },
+                    theme: 'bootstrap'
+                });
+            });
+        }
     });
 
     $('.badgeos_sidebar_tab_links a').on('click', function () {

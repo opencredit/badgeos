@@ -118,7 +118,6 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
         
                     $message = ob_get_contents();
                     ob_end_clean();
-                    
                     if( ! empty( $user_email ) ) {
                         wp_mail( $user_email, strip_tags( $email_subject ), $message, $headers );
                     }
@@ -128,6 +127,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
     }
 }
 add_action( 'badgeos_award_achievement', 'badgeos_send_achievements_email', 10, 6 );
+
 
 /**
  * Sends email when achievement step is awarded...

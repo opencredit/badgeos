@@ -1,3 +1,8 @@
+<?php
+  $badgeos_admin_tools                  = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+  $email_general_footer_background_color= !empty( $badgeos_admin_tools['email_general_footer_background_color'] )? $badgeos_admin_tools['email_general_footer_background_color'] : '#ffffff';
+  $email_general_footer_text_color        = !empty( $badgeos_admin_tools['email_general_footer_text_color'] )? $badgeos_admin_tools['email_general_footer_text_color'] : '#000000';
+?>                    
                     <?php
                       $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
                     ?>
@@ -10,8 +15,8 @@
             </table>
 
             <!-- START FOOTER -->
-            <div class="footer" style="clear: both; Margin-top: 10px; text-align: center; width: 100%;color: #777;">
-              <?php echo $badgeos_admin_tools['email_general_footer_text'];?>
+            <div class="footer" style="background-color:<?php echo $email_general_footer_background_color;?>;clear: both; text-align: center; width: 100%;color: <?php echo $email_general_footer_text_color;?>;">
+              <div style="padding:10px"><?php echo $badgeos_admin_tools['email_general_footer_text'];?></div>
             </div>
             <!-- END FOOTER -->
 

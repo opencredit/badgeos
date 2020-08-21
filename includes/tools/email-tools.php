@@ -29,6 +29,8 @@ $email_point_deducts_content = stripslashes( html_entity_decode( $email_point_de
 
 $email_point_awards_content = isset( $badgeos_admin_tools['email_point_awards_content'] ) ? $badgeos_admin_tools['email_point_awards_content'] : '';
 $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awards_content ) );
+wp_enqueue_script( 'badgeos-jquery-mini-colorpicker-js' );
+wp_enqueue_style( 'badgeos-minicolorpicker_css' );
 ?>
 <div id="email-tabs">
     <div class="tab-title"><?php _e( 'Email Tools', 'badgeos' ); ?></div>
@@ -107,6 +109,36 @@ $email_point_awards_content = stripslashes( html_entity_decode( $email_point_awa
                         <td>
                             <textarea name="badgeos_tools[email_general_footer_text]" rows="6" cols="60" id="badgeos_tools_email_general_footer_text"><?php echo isset( $badgeos_admin_tools['email_general_footer_text'] )?$badgeos_admin_tools['email_general_footer_text']:''; ?></textarea>`  
                             <span class="tool-hint"><?php _e( 'Text will be added on the footer of BadgeOS emails.', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Background Color', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_background_color]" id="badgeos_tools_email_general_background_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_background_color'] )?$badgeos_admin_tools['email_general_background_color']:'#ffffff'; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Text Color', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_body_text_color]" id="badgeos_tools_email_general_body_text_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_body_text_color'] )?$badgeos_admin_tools['email_general_body_text_color']:'#000000'; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Body Background Color', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_body_background_color]" id="badgeos_tools_email_general_body_background_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_body_background_color'] )?$badgeos_admin_tools['email_general_body_background_color']:'#f6f6f6'; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Footer Background Color', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_footer_background_color]" id="badgeos_tools_email_general_footer_background_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_footer_background_color'] )?$badgeos_admin_tools['email_general_footer_background_color']:'#ffffff'; ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="users"><?php _e( 'Footer Background Text Color', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_footer_text_color]" id="badgeos_tools_email_general_footer_text_color" class="form-control badgeos_mini_color_picker_ctrl" data-control="impcolor" value="<?php echo isset( $badgeos_admin_tools['email_general_footer_text_color'] )?$badgeos_admin_tools['email_general_footer_text_color']:'#000000'; ?>">
                         </td>
                     </tr>
                 </tbody>
