@@ -199,7 +199,9 @@ class BadgeOS {
         if ( empty( $badgeos_admin_tools ) ) {
             $badgeos_admin_tools['badgeos_tools_email_logo_url']   = '';
             $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
-            $badgeos_admin_tools['email_general_footer_text']   = '';
+			$badgeos_admin_tools['email_general_footer_text']   = '';
+			$badgeos_admin_tools['allow_unsubscribe_email']   = 'No';
+			$badgeos_admin_tools['unsubscribe_email_page']   = '0';
             $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
 			$badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
 			$badgeos_admin_tools['email_general_background_color']   		= '#ffffff';

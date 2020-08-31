@@ -18,36 +18,43 @@ function badgeos_register_api_end_points() {
     register_rest_route( 'badgeos', '/block-point-types', array(
       'methods' => 'GET', 
       'callback' => 'badgeos_block_point_types_list',
+      'permission_callback' => '__return_true',
     ) ); 
 
     register_rest_route( 'badgeos', '/block-achievements-award-list/(?P<achievement>[a-zA-Z0-9_-]+)/(?P<user_id>[a-zA-Z0-9_-]+)', array(
       'methods' => 'GET',
       'callback' => 'badgeos_block_achievements_award_list',
+      'permission_callback' => '__return_true',
     ) );
 
     register_rest_route( 'badgeos', '/ranks', array(
       'methods' => 'GET',
       'callback' => 'badgeos_block_ranks_list',
+      'permission_callback' => '__return_true',
     ) );
 
     register_rest_route( 'badgeos', '/achievement-types', array(
       'methods' => 'GET',
       'callback' => 'badgeos_achievement_types_list',
+      'permission_callback' => '__return_true',
     ) );
 
     register_rest_route( 'badgeos', '/achievements', array(
         'methods' => 'GET',
         'callback' => 'badgeos_achievements_list',
+        'permission_callback' => '__return_true',
     ) );
 
     register_rest_route( 'badgeos', '/rank-types', array(
       'methods' => 'GET',
       'callback' => 'badgeos_ranks_list',
+      'permission_callback' => '__return_true',
     ));
 
     register_rest_route( 'badgeos', '/user-lists', array(
       'methods' => 'GET',
       'callback' => 'badgeos_users_list_block',
+      'permission_callback' => '__return_true',
     ));
 }
 add_action( 'rest_api_init', 'badgeos_register_api_end_points' );

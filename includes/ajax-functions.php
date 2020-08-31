@@ -346,7 +346,6 @@ function badgeos_ajax_get_earned_ranks() {
                 }
             }
 
-            $output .= '</div><!-- .badgeos-item-description -->';
             $output .= apply_filters( 'badgeos_after_earned_ranks', '', $rank );
             $output .= '</div></li><!-- .badgeos-list-item -->';
 
