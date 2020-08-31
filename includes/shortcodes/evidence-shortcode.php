@@ -141,7 +141,8 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
         $basedir = trailingslashit( $dirs[ 'basedir' ] );
         $badge_directory = trailingslashit( $basedir.'user_badges/'.$user_id );
         $badge_url = trailingslashit( $baseurl.'user_badges/'.$user_id );
-        ob_start();
+        
+        ob_start();wp_enqueue_style( 'badgeos-font-awesome' );wp_enqueue_style( 'badgeos-front' );
         ?>
             <div class="evidence_main">
                 <div class="left_col">
@@ -175,12 +176,17 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                     <?php echo apply_filters( 'badgeos_evidence_after_right_column', '', $achievement );?>
                 </div>
             </div>
-            <div id="badgeos-open-badge-verification-popup-box" style="display:none">
-                <div class="badgeos-ob-verification-results">
-                    <ul id="badgeos-ob-verification-res-list">
-                    </ul>
+
+            <div id="modal" class="badgeos_verification_modal_popup">
+                <header class="badgeos_verification_popup_header">
+                    <h2><?php echo _e( 'Verification', 'badgeos' );?></h2>
+                    <span class="controls">
+                        <a href="#" class="badgeos_verification_close"></a>
+                    </span>
+                </header>
+                <div class="badgeos_verification_modal_panel">
+                    
                 </div>
-                
             </div>
         <?php
 

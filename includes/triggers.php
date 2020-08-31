@@ -25,8 +25,10 @@ function badgeos_get_activity_triggers() {
             'badgeos_wp_not_login'         => __( 'Not Login for X days', 'badgeos' ),
 			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
-			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ),
+			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ), 
+			'badgeos_visit_a_post'   => __( 'Visit a Post', 'badgeos' ),
 			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
+			'badgeos_visit_a_page'   => __( 'Visit a Page', 'badgeos' ),
 			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
 			// BadgeOS-specific
@@ -116,9 +118,7 @@ function badgeos_dynamic_trigger_event() {
 
     // Now determine if any badges are earned based on this trigger event
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_subtrigger_value' AND pm.meta_value = %s", $this_trigger) );
-    // echo $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger);
-    // print_r($triggered_achievements);
-    // exit;
+
     $is_any_or_all_trigger = false;
     if ( 'badgeos_unlock_all_' == substr( $this_trigger, 0, 19 ) ) {
         $is_any_or_all_trigger = true;
@@ -148,7 +148,7 @@ function badgeos_dynamic_trigger_event() {
                 if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'achivement', $this_trigger, $step_params, $args[ 1 ]) ) {
                     badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
                 }
-            }
+            } 
         }
     }
 
@@ -181,10 +181,10 @@ function badgeos_extract_array_from_query_params( $params ) {
  * @return mixed
  */
 function badgeos_trigger_event() {
-
+	
 	// Setup all our globals
 	global $user_ID, $blog_id, $wpdb;
-
+	
 	$site_id = $blog_id;
 
 	$args = func_get_args();
@@ -213,27 +213,57 @@ function badgeos_trigger_event() {
 
     // Now determine if any badges are earned based on this trigger event
     $triggered_achievements = $wpdb->get_results( $wpdb->prepare( "SELECT pm.post_id FROM $wpdb->postmeta as pm inner join $wpdb->posts as p on( pm.post_id = p.ID ) WHERE p.post_status = 'publish' and pm.meta_key = '_badgeos_trigger_type' AND pm.meta_value = %s", $this_trigger) );
-
+	
     $is_any_or_all_trigger = false;
     if ( 'badgeos_unlock_all_' == substr( $this_trigger, 0, 19 ) ) {
         $is_any_or_all_trigger = true;
     } else if ( 'badgeos_unlock_' == substr( $this_trigger, 0, 15 ) ) {
         $is_any_or_all_trigger = true;
     }
-    
-    if( count( $triggered_achievements ) > 0 || $is_any_or_all_trigger == true ) {
-        // Update hook count for this user
-        $new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
-
-        // Mark the count in the log entry
-        badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
-    }
-
-    foreach ( $triggered_achievements as $achievement ) {
+	
+	$specific_triggers = [ 'badgeos_visit_a_post', 'badgeos_visit_a_page' ];
+	if( count( $triggered_achievements ) > 0 || $is_any_or_all_trigger == true ) {
+		// Update hook count for this user
+		if( ! in_array( $this_trigger, $specific_triggers) ) {
+			$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
+			
+			// Mark the count in the log entry
+			badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+		}
+	}
+	$not_triggerred = true;
+	foreach ( $triggered_achievements as $achievement ) {
         $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
         if( count( $parents ) > 0 ) {
-            if( $parents[0]->post_status == 'publish' ) {
-                badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
+			if( $parents[0]->post_status == 'publish' ) {
+				$new_trigger_label = $this_trigger;
+				
+				// $visit_post = get_post_meta( $achievement->post_id, '_badgeos_visit_post', true );
+				// if( empty( $visit_post ) ) {
+				// 	$return = true;
+				// } else {
+				// 	if( $visit_post == get_the_ID()) {
+				// 		$return = true;
+				// 	} else {
+				// 		$return = false;
+				// 	}
+				// }
+				
+				if( $not_triggerred ) {
+					if( in_array( $this_trigger, $specific_triggers ) ) {
+					
+						$new_count = badgeos_update_user_trigger_count( $user_id, $this_trigger, $site_id, $args );
+						
+						// Mark the count in the log entry
+						badgeos_post_log_entry( null, $user_id, null, sprintf( __( '%1$s triggered %2$s (%3$dx)', 'badgeos' ), $user_data->user_login, $this_trigger, $new_count ) );
+			
+					}
+
+					$not_triggerred = false;
+				}
+				
+				
+				badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
             }
         }
     }
@@ -275,6 +305,10 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 		case 'badgeos_specific_new_comment' :
 			$user_id = $args[1];
 			break;
+		case 'badgeos_visit_a_post': 
+		case 'badgeos_visit_a_page':
+			$user_id = $args[0];
+			break;	
 		default :
 			$user_id = get_current_user_id();
 			break;
@@ -640,3 +674,66 @@ function badgeos_perform_event( $trigger, $user_id = 0, $args = array()) {
                 do_action( $trigger, $user_id, $args);
     }
 }
+
+function badgeos_fire_visit_a_post_trigger($content) {
+	global $wpdb, $post;
+    if( is_single() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
+		$my_post_id = $post->ID;
+        if ( $GLOBALS['post']->ID == $my_post_id ) {
+			$trigger_data = $wpdb->get_results( "SELECT p.post_id, pv.meta_value as visit_post FROM $wpdb->postmeta as p inner join $wpdb->postmeta as pv on( p.post_id=pv.post_id ) WHERE ( p.meta_key = '_badgeos_trigger_type' or p.meta_key = '_point_trigger_type' or p.meta_key = '_deduct_trigger_type' or p.meta_key = '_rank_trigger_type' ) and pv.meta_key = '_badgeos_visit_post' AND p.meta_value = 'badgeos_visit_a_post'" );
+			if( count( $trigger_data ) > 0 ) { 
+				$bool_empty = false;
+				foreach( $trigger_data as $data ) {
+					if( $data->visit_post == $my_post_id ) {
+						do_action( 'badgeos_visit_a_post', get_current_user_id(), absint( $data->post_id ), $my_post_id );
+						return $content;
+					}
+
+					if( empty( $data->visit_post ) ) {
+						$bool_empty = true;
+					}
+				}
+
+				if( $bool_empty ) {
+					do_action( 'badgeos_visit_a_post', get_current_user_id(), absint( $data->post_id ), $my_post_id );
+					return $content;
+				}
+			}
+        }
+	}
+	return $content;
+}
+add_filter('the_content', 'badgeos_fire_visit_a_post_trigger');
+
+
+function badgeos_fire_visit_a_page_trigger($content) {
+	
+	global $wpdb, $post;
+    if( is_page() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
+		$my_post_id = $post->ID;
+        if ( $GLOBALS['post']->ID == $my_post_id ) {
+			$trigger_data = $wpdb->get_results( "SELECT p.post_id, pv.meta_value as visit_post FROM $wpdb->postmeta as p inner join $wpdb->postmeta as pv on( p.post_id=pv.post_id ) WHERE ( p.meta_key = '_badgeos_trigger_type' or p.meta_key = '_point_trigger_type' or p.meta_key = '_deduct_trigger_type' or p.meta_key = '_rank_trigger_type' ) and pv.meta_key = '_badgeos_visit_page' AND p.meta_value = 'badgeos_visit_a_page'" );
+			if( count( $trigger_data ) > 0 ) { 
+				$bool_empty = false;
+				foreach( $trigger_data as $data ) {
+					if( $data->visit_post == $my_post_id ) {
+						do_action( 'badgeos_visit_a_page', get_current_user_id(), absint( $data->post_id ), $my_post_id );
+						return $content;
+					}
+
+					if( empty( $data->visit_post ) ) {
+						$bool_empty = true;
+					}
+				}
+				
+				if( $bool_empty ) {
+					do_action( 'badgeos_visit_a_page', get_current_user_id(), absint( $data->post_id ), $my_post_id );
+					return $content;
+				}
+			}
+        }
+	}
+	
+	return $content;
+}
+add_filter('the_content', 'badgeos_fire_visit_a_page_trigger');

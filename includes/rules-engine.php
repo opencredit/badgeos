@@ -238,7 +238,7 @@ function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_t
 	}
 	return $return;
 }
-add_filter( 'badgeos_user_has_access_to_achievement', 'badgeos_daily_visit_access', 16, 6 );
+add_filter( 'user_has_access_to_achievement', 'badgeos_daily_visit_access', 16, 6 );
 
 /**
  * Check if user has earned the multisteps access/earn daily visit.
@@ -788,6 +788,99 @@ function badgeos_user_deserves_step( $return = false, $user_id = 0, $step_id = 0
     return $return;
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_step', 10, 6 );
+
+
+/**
+ * Check if a user deserves a visit a post step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_achievement_step_posts_callback($return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = []) {
+    
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $step_id ) ) {
+		if( is_single() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
+			$my_post_id = $post->ID;
+			
+			$trigger_type = get_post_meta( absint( $step_id ), '_badgeos_trigger_type', true );
+			if ( $trigger_type == 'badgeos_visit_a_post' ) {
+				
+				$visit_post = get_post_meta( absint( $step_id ), '_badgeos_visit_post', true );
+				if( empty( $visit_post ) ) {
+					$return = true;
+				} else {
+					if( $visit_post ==  $my_post_id ) {
+						$return = true;
+					} else {
+						$return = false;
+					}
+				}
+			}
+		}
+	}
+    return $return;
+}
+add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_achievement_step_posts_callback', 10, 6 );
+
+/**
+ * Check if a user deserves a visit a page step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_achievement_step_pages_callback($return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = []) {
+    
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $step_id ) ) {
+		if( is_page() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
+			$my_post_id = $post->ID;
+			
+			$trigger_type = get_post_meta( absint( $step_id ), '_badgeos_trigger_type', true );
+			if ( $trigger_type == 'badgeos_visit_a_page' ) {
+				
+				$visit_post = get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
+				if( empty( $visit_post ) ) {
+					$return = true;
+				} else {
+					if( $visit_post ==  $my_post_id ) {
+						$return = true;
+					} else {
+						$return = false;
+					}
+				}
+			}
+		}
+	}
+    return $return;
+}
+add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_achievement_step_pages_callback', 10, 6 );
 
 /**
  * Count a user's relevant actions for a given step

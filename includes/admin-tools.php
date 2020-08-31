@@ -109,10 +109,18 @@ class Badgeos_Tools {
                     }
                 }
 
-                $badgeos_admin_tools['email_general_footer_text']   =  sanitize_text_field( $tools_data[ 'email_general_footer_text' ] );
-                $badgeos_admin_tools['email_general_from_name']     =  sanitize_text_field( $tools_data[ 'email_general_from_name' ] );
-                $badgeos_admin_tools['email_general_from_email']    =  sanitize_text_field( $tools_data[ 'email_general_from_email' ] );
-                update_option( 'badgeos_admin_tools',                  $badgeos_admin_tools );
+                $badgeos_admin_tools['email_general_footer_text']               =  sanitize_text_field( $tools_data[ 'email_general_footer_text' ] );
+                $badgeos_admin_tools['allow_unsubscribe_email']                 =  sanitize_text_field( $tools_data[ 'allow_unsubscribe_email' ] );
+                $badgeos_admin_tools['unsubscribe_email_page']                  =  sanitize_text_field( $tools_data[ 'unsubscribe_email_page' ] );
+                $badgeos_admin_tools['email_general_from_name']                 =  sanitize_text_field( $tools_data[ 'email_general_from_name' ] );
+                $badgeos_admin_tools['email_general_from_email']                =  sanitize_text_field( $tools_data[ 'email_general_from_email' ] );
+
+                $badgeos_admin_tools['email_general_footer_background_color']   =  sanitize_text_field( $tools_data[ 'email_general_footer_background_color' ] );
+                $badgeos_admin_tools['email_general_footer_text_color']         =  sanitize_text_field( $tools_data[ 'email_general_footer_text_color' ] );
+                $badgeos_admin_tools['email_general_background_color']          =  sanitize_text_field( $tools_data[ 'email_general_background_color' ] );
+                $badgeos_admin_tools['email_general_body_background_color']     =  sanitize_text_field( $tools_data[ 'email_general_body_background_color' ] );
+                $badgeos_admin_tools['email_general_body_text_color']           =  sanitize_text_field( $tools_data[ 'email_general_body_text_color' ] );
+                update_option( 'badgeos_admin_tools',                              $badgeos_admin_tools );
             }
         }
 

@@ -143,6 +143,10 @@ class BadgeOS {
 			$wpdb->query( $sql );
 		}
 
+		$table_name = $wpdb->prefix . 'p2p';
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+			update_option( 'p2p_storage', '' );
+		}
         // Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
@@ -159,7 +163,7 @@ class BadgeOS {
             update_option( 'badgeos_settings', $badgeos_settings );
         }
 
-        $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix . "badgeos_achievements' AND column_name = 'sub_nom_id'"  );
+        $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_achievements' AND column_name = 'sub_nom_id'"  );
         if(empty($row)){
             $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_achievements ADD sub_nom_id int(10) DEFAULT '0'");
         }
@@ -199,9 +203,17 @@ class BadgeOS {
         if ( empty( $badgeos_admin_tools ) ) {
             $badgeos_admin_tools['badgeos_tools_email_logo_url']   = '';
             $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
-            $badgeos_admin_tools['email_general_footer_text']   = '';
+			$badgeos_admin_tools['email_general_footer_text']   = '';
+			$badgeos_admin_tools['allow_unsubscribe_email']   = 'No';
+			$badgeos_admin_tools['unsubscribe_email_page']   = '0';
             $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
-            $badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+			$badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+			$badgeos_admin_tools['email_general_background_color']   		= '#ffffff';
+			$badgeos_admin_tools['email_general_body_background_color']   	= '#f6f6f6';
+			$badgeos_admin_tools['email_general_body_text_color']   = '#000000';
+			$badgeos_admin_tools['email_general_footer_background_color']   = '#ffffff';
+			$badgeos_admin_tools['email_general_footer_text_color']   = '#000000';
+
 
             $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'yes';
             $badgeos_admin_tools['email_achievement_subject']   = __( 'Congratulation for earning an achievement', 'badgeos' );
@@ -284,7 +296,7 @@ class BadgeOS {
         if( badgeos_first_time_installed() ) {
             require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
         }
-
+		
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
         require_once( $this->directory_path . 'includes/admin-tools.php' );
@@ -341,7 +353,8 @@ class BadgeOS {
         require_once( $this->directory_path . 'includes/open_badge/ob-integrations.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
-        require_once( $this->directory_path . 'includes/badgeos-emails.php' );
+		require_once( $this->directory_path . 'includes/badgeos-emails.php' );
+		require_once( $this->directory_path . 'includes/assets.php' );
 	}
 
 	/**
@@ -393,8 +406,10 @@ class BadgeOS {
 
 		// Register styles
         wp_register_style( 'badgeos-jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
-        wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
-
+		wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
+		
+		wp_register_script('badgeos-jquery-mini-colorpicker-js', $this->directory_url . 'js/jquery.minicolors.js',"jquery", self::$version, true);
+		wp_register_style( 'badgeos-minicolorpicker_css', $this->directory_url.'css/jquery.minicolors.css', null, '' );
         wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
 
 		$badgeos_front = file_exists( get_stylesheet_directory() .'/badgeos.css' )
@@ -498,7 +513,7 @@ class BadgeOS {
 	 * Activation hook for the plugin.
 	 */
 	function activate() {
-
+ 
 		// Include our important bits
 		$this->includes();
         $point_type = 'point_type';
@@ -587,14 +602,15 @@ class BadgeOS {
 		
 		// Create main menu
         add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
-
+		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
 		
 		if( badgeos_first_time_installed() ) {
 			add_submenu_page( 'badgeos_badgeos', __( 'Credly Integration', 'badgeos' ), __( 'Credly Integration', 'badgeos' ), $minimum_role, 'badgeos_sub_credly_integration', 'badgeos_credly_options_page' );
 		}
-
+		
+		add_submenu_page( 'badgeos_badgeos', __( 'Assets', 'badgeos' ), __( 'Assets', 'badgeos' ), $minimum_role, 'badgeos-assets', 'badgeos_assets_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'OB Integration', 'badgeos' ), __( 'OB Integration', 'badgeos' ), $minimum_role, 'badgeos-ob-integration', 'badgeos_ob_integration_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Add-Ons', 'badgeos' ), __( 'Add-Ons', 'badgeos' ), $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Help / Support', 'badgeos' ), __( 'Help / Support', 'badgeos' ), $minimum_role, 'badgeos_sub_help_support', 'badgeos_help_support_page' );

@@ -30,6 +30,10 @@ function badgeos_get_user_achievements( $args = array() ) {
 		'end_date' => false, // A specific achievement type
 		'no_step' => false, // A specific achievement type
 		'since'            => 0,     // A specific timestamp to use in place of $limit_in_days
+		'pagination'	=> false,// if true the pagination will be applied
+		'limit'	=> 10,
+		'page'	=> 1,
+		'total_only' => false
 	);
 	$args = wp_parse_args( $args, $defaults );
 
@@ -88,8 +92,23 @@ function badgeos_get_user_achievements( $args = array() ) {
 		if( $args['end_date'] ) {
 			$where .= " AND date_earned <= '". $args['end_date']. "'";
 		}
-
-		$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where" );
+		
+		$user_achievements = [];
+		if( $args['total_only'] == true ) {
+			$user_achievements = $wpdb->get_var( "SELECT count(entry_id) as entry_id FROM $table_name WHERE $where" );
+		} else {
+			
+			$paginate_str = '';
+			if( $args['pagination'] == true ||  $args['pagination'] == 'true' ) { 
+				$offset = (intval( $args['page'] )-1) * intval( $args['limit'] );
+				if( $offset < 0 ) {
+					$offset = 0;
+				}
+				$paginate_str = ' limit '.$offset.', '.$args['limit'];
+			}
+			
+			$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where".$paginate_str );
+		}
 
 		return $user_achievements;
 	} else {
@@ -223,7 +242,7 @@ function badgeos_update_user_achievements( $args = array() ) {
  */
 function badgeos_user_points_section( $user = null ) {
     $can_manage = current_user_can( badgeos_get_manager_capability() );
-
+	wp_enqueue_style( 'badgeos-admin-styles' );
 	/**
      * BadgeOS User Points
      */
@@ -236,35 +255,45 @@ function badgeos_user_points_section( $user = null ) {
         if ( is_array( $credit_types ) && ! empty( $credit_types ) ) {
             foreach ( $credit_types as $credit_type ) {
                 $earned_credits = badgeos_get_points_by_type( $credit_type->ID, $user->ID );
-                $post_type_plural = badgeos_points_type_display_title( $credit_type->ID );
+				$post_type_plural = badgeos_points_type_display_title( $credit_type->ID );
+				$badge_image = badgeos_get_point_image( $credit_type->ID, 50, 50 );
+				$badge_image = apply_filters( 'badgeos_profile_points_image', $badge_image, 'backend-profile' , $credit_type  );
                 ?>
-                <div class="badgeos-credits">
-                    <h3><?php echo $post_type_plural; ?></h3>
-                    <?php if( $can_manage ) {
-                        ?>
-                        <span class="badgeos-credit-edit"><?php echo _e( 'Edit', 'badgeos' ); ?></span>
-                        <?php
-                    }
-                    ?>
+                <div class="badgeos-credits"> 
+					<table>
+						<tr>
+							<td valign="top" width="15%"><?php echo $badge_image; ?></td>
+							<td valign="top" width="85%">
+								<h3><?php echo $post_type_plural; ?></h3>
+								<?php if( $can_manage ) {
+									?>
+										<span class="badgeos-credit-edit"><?php echo _e( 'Edit', 'badgeos' ); ?></span>
+									<?php
+								}
+								?>
 
-                    <div class="badgeos-earned-credit"><?php echo __( 'Total: ' ) .'<span id="badgeos-'.$credit_type->ID.'-credit-profile-label">'.$earned_credits; ?></span></div>
+								<div class="badgeos-earned-credit"><?php echo __( 'Total: ' ) .'<span id="badgeos-'.$credit_type->ID.'-credit-profile-label">'.$earned_credits; ?></span></div>
 
-                    <?php if( $can_manage ) {
-                        ?>
-                        <div class="badgeos-edit-credit-wrapper" style="display:none">
-                            <?php echo $post_type_plural; ?>
-                            <input type="number" class="badgeos-edit-credit" id="badgeos-<?php echo $credit_type->ID; ?>-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
-                            <input type="button" data-user_id="<?php echo $user->ID?>" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" data-admin_ajax="<?php echo admin_url( 'admin-ajax.php' ); ?>" data-points_id="<?php echo $credit_type->ID; ?>" class="badgeos-profile-points-update-button button button-primary" value="<?php echo _e( 'Update', 'badgeos' ); ?>" />
-                            <input type="button" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" class="badgeos-profile-points-cancel-button button button-primary" value="<?php echo _e( 'Cancel', 'badgeos' ); ?>" />
-                        </div>
-                        <?php
-                    } ?>
-                </div>
+								<?php if( $can_manage ) {
+									?>
+										<div class="badgeos-edit-credit-wrapper" style="display:none">
+											<?php echo $post_type_plural; ?>
+											<input type="number" class="badgeos-edit-credit" id="badgeos-<?php echo $credit_type->ID; ?>-credit" name="badgeos-<?php echo $credit_type->ID; ?>-credit" value="<?php echo (int) $earned_credits; ?>" />
+											<input type="button" data-user_id="<?php echo $user->ID?>" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" data-admin_ajax="<?php echo admin_url( 'admin-ajax.php' ); ?>" data-points_id="<?php echo $credit_type->ID; ?>" class="badgeos-profile-points-update-button button button-primary" value="<?php echo _e( 'Update', 'badgeos' ); ?>" />
+											<input type="button" data-field_id="badgeos-<?php echo $credit_type->ID; ?>-credit" class="badgeos-profile-points-cancel-button button button-primary" value="<?php echo _e( 'Cancel', 'badgeos' ); ?>" />
+										</div>
+									<?php
+								} ?>
+							</td>
+						</tr>
+					</table>
+            	</div>
                 <?php
             }
         }
         ?>
-    </div>
+	</div>
+	<div style="clear:both">&nbsp;</div>
     <?php
 }
 add_action( 'show_user_profile', 'badgeos_user_points_section' );
@@ -417,7 +446,11 @@ function badgeos_user_profile_data( $user = null ) {
             $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
             if( intval( $post_id ) == 0 ) {
 				$point_type = badgeos_points_type_display_title( $default_point_type );
-            }
+			}
+			
+			if( empty( $point_type ) ) {
+				$point_type = __( 'Points', 'badgeos' );
+			}
 
             echo '<td width="20%">'.intval( $achievement->points ).' '.$point_type.'</td>';
 

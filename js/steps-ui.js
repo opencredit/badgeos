@@ -26,6 +26,10 @@ jQuery(document).ready(function ($) {
     // Grab our selected trigger type and achievement selector
     var trigger_type = $(this).val();
     var achievement_selector = $(this).siblings(".select-achievement-type");
+
+    var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
+    var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
+
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
 
     // If we're working with achievements, show the achievement selecter (otherwise, hide it)
@@ -38,6 +42,19 @@ jQuery(document).ready(function ($) {
     } else {
       achievement_selector.hide();
     }
+
+    if ("badgeos_visit_a_page" == trigger_type) {
+      visit_page_selector.show();
+    } else {
+      visit_page_selector.hide();
+    }
+
+    if ("badgeos_visit_a_post" == trigger_type) {
+      visit_post_selector.show();
+    } else {
+      visit_post_selector.hide();
+    }
+
 
     if ("badgeos_wp_not_login" == trigger_type) {
       num_of_days.show();
@@ -170,7 +187,7 @@ function badgeos_update_steps(e) {
     action: "update_steps",
     steps: []
   };
-
+  var total_steps = 0;
   // Loop through each step and collect its data
   jQuery(".step-row").each(function () {
     // Cache our step object
@@ -198,6 +215,9 @@ function badgeos_update_steps(e) {
       )
       .serialize();
 
+    var visit_post_selector = step.find(".badgeos-select-visit-post").val();
+    var visit_page_selector = step.find(".badgeos-select-visit-page").val();
+
     // Setup our step object
     var step_details = {
       step_id: step.attr("data-step-id"),
@@ -207,6 +227,8 @@ function badgeos_update_steps(e) {
       achievement_type: step.find(".select-achievement-type").val(),
       num_of_days: step.find(".badgeos-num-of-days").val(),
       badgeos_subtrigger_id: selected_subtrigger_id,
+      visit_post: visit_post_selector,
+      visit_page: visit_page_selector,
       badgeos_subtrigger_value: selected_subtrigger,
       badgeos_fields_data: serialize_data,
       achievement_post:
@@ -221,7 +243,12 @@ function badgeos_update_steps(e) {
 
     // Add our relevant data to the array
     step_data.steps.push(step_details);
+    total_steps++;
   });
+
+  if (total_steps == 0) {
+    jQuery(".save-steps-spinner").hide();
+  }
 
   jQuery.post(ajaxurl, step_data, function (response) {
     // Parse our response and update our step titles

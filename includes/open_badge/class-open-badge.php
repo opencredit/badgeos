@@ -195,7 +195,6 @@ class BadgeOS_Open_Badge {
 				$directory_url = badgeos_get_directory_url();
 				$thumbnail_url = $directory_url. 'images/default_badge.png';
 			}
-			
 
 			$badgeos_assertion_url 	= get_permalink( $this->badgeos_assertion_page_id );
 			$badgeos_assertion_url  = add_query_arg( 'bg', $achievement_id, $badgeos_assertion_url );

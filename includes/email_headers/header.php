@@ -1,5 +1,8 @@
 <?php
-  $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+  $badgeos_admin_tools                  = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+  $email_general_background_color       = !empty( $badgeos_admin_tools['email_general_background_color'] )? $badgeos_admin_tools['email_general_background_color'] : '#ffffff';
+  $email_general_body_background_color  = !empty( $badgeos_admin_tools['email_general_body_background_color'] )? $badgeos_admin_tools['email_general_body_background_color'] : '#f6f6f6';
+  $email_general_body_text_color        = !empty( $badgeos_admin_tools['email_general_body_text_color'] )? $badgeos_admin_tools['email_general_body_text_color'] : '#000000';
 ?>
 <!doctype html>
 <html>
@@ -88,8 +91,8 @@
     }
     </style>
   </head>
-  <body class="" style="background-color: #f6f6f6; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
-    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
+  <body class="" style="background-color: <?php echo $email_general_body_background_color;?>; font-family: sans-serif; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: <?php echo $email_general_body_background_color;?>;">
       <tr>
         <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">&nbsp;</td>
         <td class="container" style="font-family: sans-serif; font-size: 14px; vertical-align: top; display: block; Margin: 0 auto; max-width: 580px; padding: 10px; width: 580px;">
@@ -97,7 +100,7 @@
 
             <!-- START CENTERED WHITE CONTAINER -->
             <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;"><?php _e('This is preheader text. Some clients will show this text as a preview.', 'badgeos');?></span>
-            <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
+            <table class="main" style="color:<?php echo $email_general_body_text_color;?>;border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: <?php echo $email_general_background_color;?>; border-radius: 3px;">
               <tr> 
                 <td class="wrapper" style="font-family: sans-serif; font-size: 14px; text-align: center; vertical-align: top; box-sizing: border-box; padding: 20px;">
                   <img src="<?php echo $badgeos_admin_tools['badgeos_tools_email_logo_url'];?>" width="80px" />

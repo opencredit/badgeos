@@ -150,7 +150,8 @@ class earned_user_achievements_widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		global $user_ID;
 
-		echo $args['before_widget'];
+		if( array_key_exists( 'before_widget', $args ) )
+			echo $args['before_widget'];
 
         $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$title = apply_filters( 'widget_title', $instance['title'] );
@@ -189,24 +190,35 @@ class earned_user_achievements_widget extends WP_Widget {
                 } else {
                     $point_title = '';
                 }
+				$badge_image = badgeos_get_point_image( $instance['total_points_type'] );
+				$badge_image = apply_filters( 'badgeos_profile_points_image', $badge_image, 'front-widget' , $instance['total_points_type']  );
 
-                ?>
+                ?> 
 			    <p class="badgeos-total-points">
-                    <?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
-                </p>
+					<table>
+						<tr>
+							<td valign="top" width="10%"><?php echo $badge_image; ?></td>
+							<td valign="top" width="90%">
+								<?php echo $point_title; ?>
+								<div class="badgeos-earned-credit"><?php echo number_format( $earned_points ); ?></span></div>
+							</td>
+						</tr>
+					</table>
+<!-- 				
+				<?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
+                </p> -->
 			<?php }
 			
 			if( isset( $instance['set_ranks'] ) && is_array( $instance['set_ranks'] ) && count( $instance['set_ranks'] ) > 0 ) {
 				$user_ranks = badgeos_get_user_ranks( array( 'rank_type'=> $instance['set_ranks'] ) );
 				if( isset( $user_ranks ) && count( $user_ranks ) > 0 ) {
 					?>
-						<p class="badgeos-user-ranks-main">
-                        <?php if( !empty( $rank_section_title ) ) { ?>
-                            <h3><?php echo $rank_section_title;?></h3>
-                        <?php } ?>
-
-                        <?php
-								echo '<ul class="widget-ranks-listing">';
+					<p class="badgeos-user-ranks-main">
+					<?php if( !empty( $rank_section_title ) ) { ?>
+						<h3><?php echo $rank_section_title;?></h3>
+					<?php } ?>
+					<?php
+					echo '<ul class="widget-ranks-listing">';
                     $rank_width = '50';
                     if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
                         $rank_width = intval( $badgeos_settings['badgeos_rank_global_image_width'] );
@@ -219,7 +231,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
                     foreach ( $user_ranks as $rank ) {
 
-                        $img        = badgeos_get_rank_image( $rank->rank_id, $rank_width, $rank_height );
+                        $img    = badgeos_get_rank_image( $rank->rank_id, $rank_width, $rank_height );
 									$img_permalink = 'javascript:;';
 									if ( ! function_exists( 'post_exists' ) ) {
 										require_once( ABSPATH . 'wp-admin/includes/post.php' );
@@ -326,7 +338,7 @@ class earned_user_achievements_widget extends WP_Widget {
 									$badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
 									$badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );
 									$badgeos_evidence_url  		= add_query_arg( 'uid', $achievement->user_id, $badgeos_evidence_url );
-									$img_permalink = $badgeos_evidence_url;
+									$img_permalink 				= $badgeos_evidence_url;
 								}
 
                                 $thumb = $img ? '<a class="badgeos-item-thumb" href="' . $img_permalink . '">' . $img . '</a>' : '';
@@ -382,7 +394,8 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		}
 
-		echo $args['after_widget'];
+		if( array_key_exists( 'after_widget', $args ) )
+			echo $args['after_widget'];
 	}
 
 }
