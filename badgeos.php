@@ -143,6 +143,10 @@ class BadgeOS {
 			$wpdb->query( $sql );
 		}
 
+		$table_name = $wpdb->prefix . 'p2p';
+		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
+			update_option( 'p2p_storage', '' );
+		}
         // Setup default BadgeOS options
 		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
         $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
@@ -597,7 +601,7 @@ class BadgeOS {
 		}
 		
 		// Create main menu
-        add_menu_page( 'BadgeOS', 'BadgeOS', 'manage_options', 'badgeos_badgeos', 'badgeos_settings_callbacl', $this->directory_url . 'images/badgeos_icon.png', 110 );
+        add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );

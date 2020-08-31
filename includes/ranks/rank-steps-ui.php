@@ -197,6 +197,34 @@ function badgeos_rank_req_steps_ui_html($step_id = 0, $post_id = 0 ) {
                 <input type="text" size="5" placeholder="<?php _e( 'Post ID', 'badgeos' ); ?>" value="<?php esc_attr_e( $requirements['achievement_post'] ); ?>" class="select-achievement-post select-achievement-post-<?php echo $step_id; ?>">
 
 		<?php do_action( 'badgeos_rank_req_steps_ui_html_after_achievement_post', $step_id, $post_id ); ?>
+		
+		<?php do_action( 'badgeos_steps_ui_html_before_ranks_visit_post', $step_id, $post_id ); ?>
+		<select class="badgeos-select-visit-post badgeos-select-visit-post-<?php echo $step_id; ?>">
+			<?php
+				$defaults = array(
+					'post_type'         => 'post',
+					'numberposts'       => -1,
+					'orderby'           => 'menu_order'
+				);
+				$posts = get_posts( $defaults );
+				echo '<option value="" selected>'.__( 'Any Post', 'badgeos' ).'</option>';
+				foreach ( $posts as $post ) {
+					echo '<option value="' . $post->ID . '" ' . selected( $post->ID, $requirements['visit_post'], false ) . '>' . ucfirst( $post->post_title ).'</option>';
+				}
+			?>
+		</select>
+		<?php do_action( 'badgeos_steps_ui_html_after_ranks_visit_post', $step_id, $post_id ); ?>
+		<select class="badgeos-select-visit-page badgeos-select-visit-page-<?php echo $step_id; ?>">
+			<?php
+				$pages = get_pages(); 
+				echo '<option value="" selected>'.__( 'Any Page', 'badgeos' ).'</option>';
+				foreach ( $pages as $page ) {
+					echo '<option value="' . $page->ID . '" ' . selected( $page->ID, trim( $requirements['visit_page'] ), false ) . '>' . ucfirst( $page->post_title ).'</option>';
+				}
+			?>
+		</select>
+		<?php do_action( 'badgeos_steps_ui_html_after_ranks_visit_page', $step_id, $post_id ); ?>
+
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_rank_req_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
 
@@ -226,7 +254,9 @@ function badgeos_get_rank_req_step_requirements($step_id = 0 ) {
         'achievement_post' 			=> get_post_meta( $step_id, 'achievement_post', true ),
         'badgeos_subtrigger_id' 	=> get_post_meta( $step_id, '_badgeos_subtrigger_id', true ),
         'badgeos_subtrigger_value' 	=> get_post_meta( $step_id, '_badgeos_rank_subtrigger_value', true ),
-        'badgeos_fields_data' 		=> get_post_meta( $step_id, '_badgeos_fields_data', true ),
+		'badgeos_fields_data' 		=> get_post_meta( $step_id, '_badgeos_fields_data', true ),
+		'visit_post' 				=> get_post_meta( $step_id, '_badgeos_visit_post', true ),
+		'visit_page' 				=> get_post_meta( $step_id, '_badgeos_visit_page', true ),
     );
 
     if( !empty( $requirements['badgeos_fields_data'] ) ) {
@@ -354,10 +384,12 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 			/**
              * Grab all of the relevant values of that step
              */
-			$step_id          = $step['step_id'];
-			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
-			//$credit_value   = ( ! empty( $step['credit_value'] ) ) ? $step['credit_value'] : 0;
-			$trigger_type     = $step['trigger_type'];
+			$step_id          	= $step['step_id'];
+			$required_count   	= ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
+			//$credit_value   	= ( ! empty( $step['credit_value'] ) ) ? $step['credit_value'] : 0;
+			$trigger_type     	= $step['trigger_type'];
+			$visit_post 		= $step['visit_post'];
+			$visit_page 		= $step['visit_page'];
 
             $achievement_post = '';
             if( array_key_exists( 'achievement_post', $step ) )
@@ -388,6 +420,20 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 					update_post_meta( $step_id, '_badgeos_achievement_post', absint( $step['achievement_post'] ) );
 					$title = sprintf( __( 'comment on post %d', 'badgeos' ),  $step['achievement_post'] );
 					break;
+				case 'badgeos_visit_a_post':
+					update_post_meta( $step_id, '_badgeos_visit_post', absint( $visit_post ) );
+					if( ! empty( $visit_post ) )
+						$title = sprintf( __( 'Visit a Post#%d', 'badgeos' ),  $visit_post );
+					else 
+						$title = __( 'Visit a Post', 'badgeos' );
+					break;	
+				case 'badgeos_visit_a_page':
+					update_post_meta( $step_id, '_badgeos_visit_page', absint( $visit_page ) );
+					if( ! empty( $visit_page ) )	
+						$title = sprintf( __( 'Visit a Page#%d', 'badgeos' ),  $visit_page );
+					else 
+						$title = __( 'Visit a Page', 'badgeos' );
+					break;	
 				default :
 					$triggers = get_badgeos_ranks_req_activity_triggers();
 					$title = $triggers[$trigger_type];

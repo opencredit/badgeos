@@ -43,7 +43,8 @@ jQuery(document).ready(function ($) {
      */
     var trigger_type = $(this).val();
     var achievement_selector = $(this).siblings(".select-achievement-type");
-
+    var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
+    var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
     /**
      * If we're working with dedpoint, show the achievement selecter (otherwise, hide it)
      */
@@ -55,6 +56,18 @@ jQuery(document).ready(function ($) {
       achievement_selector.show();
     } else {
       achievement_selector.hide();
+    }
+
+    if ("badgeos_visit_a_page" == trigger_type) {
+      visit_page_selector.show();
+    } else {
+      visit_page_selector.hide();
+    }
+
+    if ("badgeos_visit_a_post" == trigger_type) {
+      visit_post_selector.show();
+    } else {
+      visit_post_selector.hide();
     }
 
     $(".badgeos_dedpoint_step_fields").hide();
@@ -209,6 +222,8 @@ function badgeos_update_deduct_steps(e) {
     steps: []
   };
 
+  var total_steps = 0;
+
   /**
    * Loop through each step and collect its data
    */
@@ -218,7 +233,8 @@ function badgeos_update_deduct_steps(e) {
      */
     var step = jQuery(this);
     var trigger_type = step.find(".select-trigger-type").val();
-
+    var visit_post_selector = step.find(".badgeos-select-visit-post").val();
+    var visit_page_selector = step.find(".badgeos-select-visit-page").val();
     var selected_subtrigger = step
       .find(
         "#badgeos_dedpoint_step_dynamic_section_" +
@@ -251,6 +267,8 @@ function badgeos_update_deduct_steps(e) {
       badgeos_subtrigger_id: selected_subtrigger_id,
       badgeos_subtrigger_value: selected_subtrigger,
       badgeos_fields_data: serialize_data,
+      visit_post: visit_post_selector,
+      visit_page: visit_page_selector,
       achievement_post:
         "badgeos_specific_new_comment" === trigger_type
           ? step.find("input.select-achievement-post").val()
@@ -267,7 +285,13 @@ function badgeos_update_deduct_steps(e) {
      * Add our relevant data to the array
      */
     step_data.steps.push(step_details);
+
+    total_steps++;
   });
+
+  if (total_steps == 0) {
+    jQuery(".save-deduct-steps-spinner").hide();
+  }
 
   jQuery.post(ajaxurl, step_data, function (response) {
     /**

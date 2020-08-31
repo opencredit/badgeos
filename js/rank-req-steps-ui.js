@@ -1,7 +1,7 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
   $(".cmb2-id--ranks-unlock-with-points input[type=radio]").on(
     "click",
-    function() {
+    function () {
       show_hide_unlock_points();
     }
   );
@@ -25,11 +25,11 @@ jQuery(document).ready(function($) {
     /**
      * When the list order is updated
      */
-    update: function() {
+    update: function () {
       /**
        * Loop through each element
        */
-      $("#ranks_steps_list li").each(function(index, value) {
+      $("#ranks_steps_list li").each(function (index, value) {
         /**
          * Write it's current position to our hidden input value
          */
@@ -43,12 +43,14 @@ jQuery(document).ready(function($) {
   /**
    * Listen for our change to our trigger type selectors
    */
-  $("#ranks_steps_list").on("change", ".select-trigger-type", function() {
+  $("#ranks_steps_list").on("change", ".select-trigger-type", function () {
     /**
      * Grab our selected trigger type and achievement selector
      */
     var trigger_type = $(this).val();
     var achievement_selector = $(this).siblings(".select-achievement-post");
+    var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
+    var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
 
     /**
      * If we're working with achievements, show the achievement selecter (otherwise, hide it)
@@ -57,6 +59,18 @@ jQuery(document).ready(function($) {
       achievement_selector.show();
     } else {
       achievement_selector.hide();
+    }
+
+    if ("badgeos_visit_a_page" == trigger_type) {
+      visit_page_selector.show();
+    } else {
+      visit_page_selector.hide();
+    }
+
+    if ("badgeos_visit_a_post" == trigger_type) {
+      visit_post_selector.show();
+    } else {
+      visit_post_selector.hide();
     }
 
     $(".badgeos_achievements_step_fields").hide();
@@ -71,7 +85,7 @@ jQuery(document).ready(function($) {
     achievement_selector.change();
   });
 
-  $(".badgeos_achievements_step_ddl_dynamic").on("change", function() {
+  $(".badgeos_achievements_step_ddl_dynamic").on("change", function () {
     $(".badgeos_achievements_step_subddl_dynamic").hide();
     $(".badgeos_achievements_step_subtxt_dynamic").hide();
     main_trigger = $(this).data("trigger");
@@ -98,7 +112,7 @@ function badgeos_add_new_rank_req_step(achievement_id) {
       action: "add_rank_req_step",
       achievement_id: achievement_id
     },
-    function(response) {
+    function (response) {
       jQuery(response).appendTo("#ranks_steps_list");
 
       /**
@@ -136,7 +150,7 @@ function badgeos_delete_rank_req_step(step_id) {
       action: "delete_rank_req_step",
       step_id: step_id
     },
-    function(response) {
+    function (response) {
       jQuery(".step-" + step_id).remove();
     }
   );
@@ -151,30 +165,32 @@ function badgeos_update_rank_steps(e) {
     action: "update_ranks_req_steps",
     steps: []
   };
-
+  var total_steps = 0;
   /**
    * Loop through each step and collect its data
    */
-  jQuery("#ranks_steps_list .step-row").each(function() {
+  jQuery("#ranks_steps_list .step-row").each(function () {
     /**
      * Cache our step object
      */
     var step = jQuery(this);
     var trigger_type = step.find(".select-trigger-type").val();
+    var visit_post_selector = step.find(".badgeos-select-visit-post").val();
+    var visit_page_selector = step.find(".badgeos-select-visit-page").val();
 
     var selected_subtrigger = step
       .find(
         "#badgeos_achievements_step_dynamic_section_" +
-          trigger_type +
-          " .badgeos_achievements_step_ddl_dynamic"
+        trigger_type +
+        " .badgeos_achievements_step_ddl_dynamic"
       )
       .val();
 
     var selected_subtrigger_id = step
       .find(
         "#badgeos_achievements_step_dynamic_section_" +
-          trigger_type +
-          " .badgeos_achievements_step_ddl_dynamic"
+        trigger_type +
+        " .badgeos_achievements_step_ddl_dynamic"
       )
       .attr("id");
     var serialize_data = step
@@ -193,6 +209,8 @@ function badgeos_update_rank_steps(e) {
       trigger_type: trigger_type,
       badgeos_subtrigger_id: selected_subtrigger_id,
       badgeos_subtrigger_value: selected_subtrigger,
+      visit_post: visit_post_selector,
+      visit_page: visit_page_selector,
       badgeos_fields_data: serialize_data,
       achievement_post:
         "badgeos_specific_new_comment" === trigger_type
@@ -210,14 +228,19 @@ function badgeos_update_rank_steps(e) {
      * Add our relevant data to the array
      */
     step_data.steps.push(step_details);
+    total_steps++;
   });
 
-  jQuery.post(ajaxurl, step_data, function(response) {
+  if (total_steps == 0) {
+    jQuery(".save-ranks-steps-spinner").hide();
+  }
+
+  jQuery.post(ajaxurl, step_data, function (response) {
     /**
      * Parse our response and update our step titles
      */
     var titles = jQuery.parseJSON(response);
-    jQuery.each(titles, function(index, value) {
+    jQuery.each(titles, function (index, value) {
       jQuery("#step-" + index + "-title").val(value);
     });
 

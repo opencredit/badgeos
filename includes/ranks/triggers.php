@@ -21,8 +21,10 @@ function get_badgeos_ranks_req_activity_triggers() {
 			'badgeos_wp_login'     			=> __( 'Log in to Website', 'badgeos' ),
 			'badgeos_new_comment'  			=> __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
-			'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
-			'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
+            'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
+            'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
+            'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)
@@ -147,7 +149,7 @@ function badgeos_ranks_req_trigger_event() {
 	$site_id = $blog_id;
 
 	$args = func_get_args();
-
+    
 	/**
      * Grab our current trigger
      */
@@ -182,12 +184,16 @@ function badgeos_ranks_req_trigger_event() {
 							",
 							$this_trigger
 						) );
-	
+    
 	if( !empty( $triggered_ranks ) ) {
 		foreach ( $triggered_ranks as $rank ) { 
 			$parent_id = badgeos_get_parent_id( $rank->post_id );
 			if( absint($parent_id) > 0) { 
-				$new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
+                
+                if( apply_filters( 'badgeos_user_rank_trigger', true, $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args ) ) {
+                    $new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
+                }
+				    
 				badgeos_maybe_award_rank( $rank->post_id,$parent_id,$user_id, $this_trigger, $site_id, $args );
 				
 			} 
