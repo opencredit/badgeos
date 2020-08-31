@@ -509,7 +509,7 @@ class BadgeOS {
 	 * Activation hook for the plugin.
 	 */
 	function activate() {
-
+ 
 		// Include our important bits
 		$this->includes();
         $point_type = 'point_type';
@@ -597,8 +597,8 @@ class BadgeOS {
 		}
 		
 		// Create main menu
-        add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
-
+        add_menu_page( 'BadgeOS', 'BadgeOS', 'manage_options', 'badgeos_badgeos', 'badgeos_settings_callbacl', $this->directory_url . 'images/badgeos_icon.png', 110 );
+		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
 		

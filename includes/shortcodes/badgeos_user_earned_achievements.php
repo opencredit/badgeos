@@ -292,10 +292,15 @@ function badgeos_earned_achievements_shortcode( $atts = array () ){
 
     $maindiv = '<div class="badgeos_earned_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_search="'.$show_search.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $badges;
-    $maindiv .= '</div><div id="badgeos-open-badge-verification-popup-box" style="display:none">
-    <div class="badgeos-ob-verification-results">
-        <ul id="badgeos-ob-verification-res-list">
-        </ul>
+    $maindiv .= '</div><div id="modal" class="badgeos_verification_modal_popup">
+    <header class="badgeos_verification_popup_header">
+        <h2>'.__( 'Verification', 'badgeos' ).'</h2>
+        <span class="controls">
+            <a href="#" class="badgeos_verification_close"></a>
+        </span>
+    </header>
+    <div class="badgeos_verification_modal_panel">
+        
     </div>
 </div>';
 

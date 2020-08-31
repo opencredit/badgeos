@@ -291,6 +291,9 @@ ul.badgeos-achievement-earners-list li {
 #badgeos-ob-verification-res-list li.success{
 	color: green;
 }
+.badgeos-ob-finalsuccess{
+	color: green;
+}
 #badgeos-ob-verification-res-list li.error{
 	color: red;
 }
@@ -315,5 +318,171 @@ ul.badgeos-achievement-earners-list li {
 	#badgeos-achievements-container .grid li, #badgeos-list-ranks-container .grid li,
 	#badgeos-earned-ranks-container .grid li  {
     	width: 100%;
+	}
+}
+
+.badgeos_verification_modal_popup {
+	position: fixed;
+	visibility:hidden;
+	display:none;
+	left:35%;
+ 	top:5%;
+	width: 100%;
+	max-width: 480px;
+	height: auto;
+	background: #f8f8f8;
+	margin: 0 auto;
+	overflow: hidden;
+	line-height: 1.2;
+	font-family: Open Sans, sans-serif;
+	border: 2px solid #ccc;
+	z-index: 999999;
+}
+
+header.badgeos_verification_popup_header {
+	position: relative;
+	background-color: #fff;
+	border-bottom: 3px solid #000;
+	color: #000;
+	padding: 10px;
+}
+
+header.badgeos_verification_popup_header h2 {
+	margin: 0.3em;
+	color: #21208d;
+}
+
+header.badgeos_verification_popup_header .controls {
+	float: right;
+	position: relative;
+}
+
+.badgeos_verification_close {
+	right: 25px;
+	top: 10px;
+	width: 32px;
+	height: 32px;
+	opacity: 1;
+	background: #fff;
+}
+
+.badgeos_verification_close:hover {
+	opacity: 1;
+}
+
+.badgeos_verification_close:before, .badgeos_verification_close:after {
+	right: 7px;
+	content: '';
+	height: 21px;
+	width: 2px;
+	background-color: #333;
+	top: -31px;
+	position: absolute;
+}
+
+.badgeos_verification_close:before {
+	transform: rotate(45deg);
+}
+
+.badgeos_verification_close:after {
+	transform: rotate(-45deg);
+}
+
+.badgeos_verification_modal_panel {
+	background-color: #fff;
+	height: 20em;
+	overflow-y: scroll;
+	margin: 0.3em;
+}
+
+.badgeos_modal_badge {
+	padding: 0.3em;
+	margin: 1em;
+	clear: both;
+	overflow: hidden;
+}
+
+.badgeos_verification_modal_panel h1 {
+	margin-top: 0;
+}
+.badgeos_verification_checkbox {
+	float: left;
+	margin-right: 23px;
+}
+
+.badgeos_verification_checkbox i.fa-check {
+	font-family: FontAwesome;
+	color: #008000;
+}
+
+.badgeos_verification_checkbox i.fa-times {
+	font-family: FontAwesome;
+	color: #ff0000;
+	font-style: normal;
+}
+
+.badgeos_verification_badge_title {
+	border-bottom: 2px solid #ccc;
+	padding-bottom: 35px;
+}
+
+.badgeos_verification_badge_title .badgeos_verified {
+	font-weight: 800;
+}
+
+.badgeos_verification_modal_panel::-webkit-scrollbar {
+	width: 10px;
+}
+
+/* Track */
+.badgeos_verification_modal_panel::-webkit-scrollbar-track {
+	background: #f1f1f1; 
+}
+	
+/* Handle */
+.badgeos_verification_modal_panel::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 50px; 
+}
+
+/* Handle on hover */
+.badgeos_verification_modal_panel::-webkit-scrollbar-thumb:hover {
+	background: #555;
+	border-radius: 50px; 
+}
+
+@media only screen and (min-width: 461px) and (max-width: 760px) {
+	
+	.badgeos_verification_modal_panel {
+		height: 17em !important;
+	}
+
+	.badgeos_modal_badge .badge_desc {
+		width: 65% !important;
+	}
+ }
+
+
+@media only screen and (min-width: 180px) and (max-width: 460px) {
+
+	.badgeos_verification_modal_panel {
+		height: 19em;
+	}
+
+	.badgeos_modal_badge .badge_desc {
+		width: 56% !important;
+	}
+
+	.badgeos_modal_badge .badge_desc .badge_links a {
+		font-size: 10px;
+	}
+
+	.badgeos_modal_badge .badge_desc .badge_social_share_buttons {
+		float: left;
+	}
+
+	.badgeos_modal_badge .badge_desc .badge_social_share_buttons ul {
+		margin: 18px 0 0;
+		padding: 0;
 	}
 }

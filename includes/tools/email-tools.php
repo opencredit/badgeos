@@ -77,6 +77,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                 <?php _e( 'Point Deduct', 'badgeos' ); ?>
             </a>
         </li>
+        <?php do_action( 'badgeos_email_tools_settings_tab_header', $badgeos_admin_tools ); ?>
     </ul> 
     <div id="badgeos_tools_email_general">
         <form method="POST" class="badgeos_tools_email_general" action="" enctype="multipart/form-data">
@@ -391,4 +392,5 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
             <input type="submit" name="badgeos_tools_email_point_deducts_save" class="button button-primary" value="<?php _e( 'Save', 'badgeos' ); ?>">
         </form>
     </div>
+    <?php do_action( 'badgeos_email_tools_settings_tab_content', $badgeos_admin_tools ); ?>
 </div>
