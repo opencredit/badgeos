@@ -150,7 +150,8 @@ class earned_user_achievements_widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		global $user_ID;
 
-		echo $args['before_widget'];
+		if( array_key_exists( 'before_widget', $args ) )
+			echo $args['before_widget'];
 
         $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$title = apply_filters( 'widget_title', $instance['title'] );
@@ -393,7 +394,8 @@ class earned_user_achievements_widget extends WP_Widget {
 
 		}
 
-		echo $args['after_widget'];
+		if( array_key_exists( 'after_widget', $args ) )
+			echo $args['after_widget'];
 	}
 
 }

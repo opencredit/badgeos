@@ -718,7 +718,10 @@ jQuery(function ($) {
 			$('#open-badge-setting-section').show();
 	}).change();
 
-
+	$('.badgeos_verification_close').click(function () {
+		$(".badgeos_verification_modal_popup").fadeToggle();
+		$(".badgeos_verification_modal_popup").css({ "visibility": "hidden", "display": "none" });
+	});
 	function badgeos_ob_verification_process($this) {
 		$('#badgeos-ob-verification-res-list').html('');
 
@@ -726,7 +729,10 @@ jQuery(function ($) {
 		var entry_id = $($this).data('eid');
 		var user_id = $($this).data('uid');
 
-		tb_show('Verification', '#TB_inline?width=250&height=200&inlineId=badgeos-open-badge-verification-popup-box');
+		$(".badgeos_verification_modal_popup").fadeToggle();
+		$(".badgeos_verification_modal_popup").css({ "visibility": "visible", "display": "block" });
+
+		var return_result = 0;
 		$.ajax({
 			url: BadgeosCredlyData.ajax_url,
 			type: 'POST',
@@ -735,44 +741,102 @@ jQuery(function ($) {
 				bg: achievement_id,
 				eid: entry_id,
 				uid: user_id,
+				type: 'issued_on'
 			},
 			dataType: 'json',
 			success: function (returndata1) {
 				if (returndata1.type == 'success')
-					$('#badgeos-ob-verification-res-list').html('<li class="success">' + returndata1.message + '</li>');
+					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
 				else
-					$('#badgeos-ob-verification-res-list').html('<li class="error">' + returndata1.message + '</li>');
+					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
+
+				return_result += parseInt(returndata1.result);
 				$.ajax({
 					url: BadgeosCredlyData.ajax_url,
 					type: 'POST',
 					data: {
-						action: 'badgeos_validate_revoked',
+						action: 'badgeos_validate_open_badge',
 						bg: achievement_id,
 						eid: entry_id,
 						uid: user_id,
+						type: 'issued_by'
 					},
 					dataType: 'json',
 					success: function (returndata2) {
 
 						if (returndata2.type == 'success')
-							$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata2.message + '</li>');
+							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
 						else
-							$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata2.message + '</li>');
+							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
+
+						return_result += parseInt(returndata2.result);
+
 						$.ajax({
 							url: BadgeosCredlyData.ajax_url,
 							type: 'POST',
 							data: {
-								action: 'badgeos_validate_expiry',
+								action: 'badgeos_validate_open_badge',
 								bg: achievement_id,
 								eid: entry_id,
 								uid: user_id,
+								type: 'issued_using'
 							},
 							dataType: 'json',
 							success: function (returndata3) {
+
 								if (returndata3.type == 'success')
-									$('#badgeos-ob-verification-res-list').append('<li class="success">' + returndata3.message + '</li>');
+									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
 								else
-									$('#badgeos-ob-verification-res-list').append('<li class="error">' + returndata3.message + '</li>');
+									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
+
+								return_result += parseInt(returndata3.result);
+								$.ajax({
+									url: BadgeosCredlyData.ajax_url,
+									type: 'POST',
+									data: {
+										action: 'badgeos_validate_open_badge',
+										bg: achievement_id,
+										eid: entry_id,
+										uid: user_id,
+										type: 'issued_to'
+									},
+									dataType: 'json',
+									success: function (returndata4) {
+
+										if (returndata4.type == 'success')
+											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
+										else
+											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
+
+										return_result += parseInt(returndata4.result);
+										$.ajax({
+											url: BadgeosCredlyData.ajax_url,
+											type: 'POST',
+											data: {
+												action: 'badgeos_validate_open_badge',
+												bg: achievement_id,
+												eid: entry_id,
+												uid: user_id,
+												type: 'expiry_date'
+											},
+											dataType: 'json',
+											success: function (returndata5) {
+												if (returndata5.type == 'success')
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');
+												else
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');
+
+												return_result += parseInt(returndata5.result);
+
+												if (return_result < 5) {
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span class="badgeos_verified">' + returndata5.notverified_label + '</span></div></div>');
+												} else {
+													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span class="badgeos_verified">' + returndata5.verified_label + '</span></div></div>');
+												}
+											}
+										});
+									}
+								});
 							}
 						});
 					}

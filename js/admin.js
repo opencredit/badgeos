@@ -11,6 +11,14 @@ jQuery(document).ready(function ($) {
         }
     }).trigger("change");
 
+    $('#badgeos_tools_email_allow_unsubscribe_email').change(function () {
+        if ($(this).val() == 'Yes') {
+            $('.badgeos_tools_email_unsubscribe_page_fields').css('display', 'block');
+        } else {
+            $('.badgeos_tools_email_unsubscribe_page_fields').css('display', 'none');
+        }
+    }).trigger("change");
+
     $('.btn_badgeos_download_assets').click(function () {
         var self = $(this);
         self.attr("disabled", true);

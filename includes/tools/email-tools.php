@@ -77,6 +77,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                 <?php _e( 'Point Deduct', 'badgeos' ); ?>
             </a>
         </li>
+        <?php do_action( 'badgeos_email_tools_settings_tab_header', $badgeos_admin_tools ); ?>
     </ul> 
     <div id="badgeos_tools_email_general">
         <form method="POST" class="badgeos_tools_email_general" action="" enctype="multipart/form-data">
@@ -98,19 +99,39 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row" valign="top"><label for="all_users"><?php _e( 'From Email', 'badgeos' ); ?></label></th>
+                        <th scope="row" valign="top"><label><?php _e( 'From Email', 'badgeos' ); ?></label></th>
                         <td>
                             <input type="text" name="badgeos_tools[email_general_from_email]" value="<?php echo isset( $badgeos_admin_tools['email_general_from_email'] )?$badgeos_admin_tools['email_general_from_email']:''; ?>" id="badgeos_tools_email_general_from_email">
                             <span class="tool-hint"><?php _e( 'From email', 'badgeos' ); ?></span>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row" valign="top"><label for="users"><?php _e( 'Footer Text', 'badgeos' ); ?></label></th>
+                        <th scope="row" valign="top"><label><?php _e( 'Footer Text', 'badgeos' ); ?></label></th>
                         <td>
                             <textarea name="badgeos_tools[email_general_footer_text]" rows="6" cols="60" id="badgeos_tools_email_general_footer_text"><?php echo isset( $badgeos_admin_tools['email_general_footer_text'] )?$badgeos_admin_tools['email_general_footer_text']:''; ?></textarea>`  
                             <span class="tool-hint"><?php _e( 'Text will be added on the footer of BadgeOS emails.', 'badgeos' ); ?></span>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label for="badgeos_tools_email_allow_unsubscribe_email"><?php _e( 'Allow Unsubscribe', 'badgeos' ); ?></label></th>
+                        <td>
+                            <select id="badgeos_tools_email_allow_unsubscribe_email" name="badgeos_tools[allow_unsubscribe_email]">
+                                <option value="No" selected><?php _e( 'No', 'badgeos' ); ?></option>
+                                <option value="Yes" <?php echo isset( $badgeos_admin_tools['allow_unsubscribe_email'] ) && $badgeos_admin_tools['allow_unsubscribe_email']=='Yes'?'selected':''; ?>><?php _e( 'Yes', 'badgeos' ); ?></option>
+                            </select>
+                            <span class="tool-hint"><?php _e( 'This option will add unsubscribe link on the emails.', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label class="badgeos_tools_email_unsubscribe_page_fields" for="badgeos_tools_email_unsubscribe_page"><?php _e( 'Unsubscribe Redirect', 'badgeos' ); ?></label></th>
+                        <td>
+                            <div class="badgeos_tools_email_unsubscribe_page_fields">
+                                <?php wp_dropdown_pages( array( 'show_option_none' => __( 'Select Unsubscribe Page', 'badgeos' ), 'selected'=>$badgeos_admin_tools['unsubscribe_email_page'], 'name'=> 'badgeos_tools[unsubscribe_email_page]', 'id'=>'unsubscribe_email_page' ) ); ?>
+                                <span class="tool-hint"><?php _e( 'User will be redirected to the selected page after unsubscription.', 'badgeos' ); ?></span>
+                            </div>
+                        </td>
+                    </tr>
+                    
                     <tr>
                         <th scope="row" valign="top"><label for="users"><?php _e( 'Background Color', 'badgeos' ); ?></label></th>
                         <td>
@@ -371,4 +392,5 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
             <input type="submit" name="badgeos_tools_email_point_deducts_save" class="button button-primary" value="<?php _e( 'Save', 'badgeos' ); ?>">
         </form>
     </div>
+    <?php do_action( 'badgeos_email_tools_settings_tab_content', $badgeos_admin_tools ); ?>
 </div>
