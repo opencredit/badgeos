@@ -119,7 +119,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                                 <option value="No" selected><?php _e( 'No', 'badgeos' ); ?></option>
                                 <option value="Yes" <?php echo isset( $badgeos_admin_tools['allow_unsubscribe_email'] ) && $badgeos_admin_tools['allow_unsubscribe_email']=='Yes'?'selected':''; ?>><?php _e( 'Yes', 'badgeos' ); ?></option>
                             </select>
-                            <span class="tool-hint"><?php _e( 'This option will add unsubscribe link on the emails.', 'badgeos' ); ?></span>
+                            <span class="tool-hint"><?php _e( 'This option will add an "unsubscribe" link in the emails footer.', 'badgeos' ); ?></span>
                         </td>
                     </tr>
                     <tr>
@@ -127,7 +127,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         <td>
                             <div class="badgeos_tools_email_unsubscribe_page_fields">
                                 <?php wp_dropdown_pages( array( 'show_option_none' => __( 'Select Unsubscribe Page', 'badgeos' ), 'selected'=>$badgeos_admin_tools['unsubscribe_email_page'], 'name'=> 'badgeos_tools[unsubscribe_email_page]', 'id'=>'unsubscribe_email_page' ) ); ?>
-                                <span class="tool-hint"><?php _e( 'User will be redirected to the selected page after unsubscription.', 'badgeos' ); ?></span>
+                                <span class="tool-hint"><?php _e( 'Users will be redirected to this selected page after unsubscription.', 'badgeos' ); ?></span>
                             </div>
                         </td>
                     </tr>

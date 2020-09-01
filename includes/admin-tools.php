@@ -90,7 +90,7 @@ class Badgeos_Tools {
     function badgeos_tools_email_notice_success() {
         ?>
             <div class="notice notice-success is-dismissible">
-                <p><?php _e( 'BadeOS emails settings are saved.', 'badgeos' ); ?></p>
+                <p><?php _e( 'Settings Saved.', 'badgeos' ); ?></p>
             </div>
         <?php
     }
