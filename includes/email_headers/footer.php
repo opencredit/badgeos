@@ -26,7 +26,7 @@
             <div class="footer" style="background-color:<?php echo $email_general_footer_background_color;?>;clear: both; text-align: center; width: 100%;color: <?php echo $email_general_footer_text_color;?>;"> 
                 <div style="padding:10px"><?php echo $badgeos_admin_tools['email_general_footer_text'];?></div>
                 <?php if( trim( $allow_unsubscribe_email ) == 'Yes' ) { ?>
-                  <div style="padding:10px;color:#aaa;font-size:12px;"><?php  _e( 'Please, click', 'badgeos' ); ?> <a style="color:#aaa" href="<?php echo esc_url( $unsubcribe_url );?>"><?php  _e( 'here', 'badgeos' ); ?></a> <?php  _e( 'to unsubscibe from badgeos emails', 'badgeos' ); ?></div>
+                  <div style="padding:10px;color:#aaa;font-size:12px;"><?php  _e( 'If you wish to unsubscribe, please click', 'badgeos' ); ?> <a style="color:#aaa" href="<?php echo esc_url( $unsubcribe_url );?>"><?php  _e( 'here', 'badgeos' ); ?></a></div>
                 <?php } ?>
             </div>
             <!-- END FOOTER -->

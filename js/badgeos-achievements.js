@@ -745,7 +745,7 @@ jQuery(function ($) {
 			},
 			dataType: 'json',
 			success: function (returndata1) {
-				if (returndata1.type == 'success')
+				if (returndata1.type == 'success' && parseInt(returndata1.result) > 0)
 					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
 				else
 					$('.badgeos_verification_modal_panel').html('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata1.message + '</span></div></div>');
@@ -764,7 +764,7 @@ jQuery(function ($) {
 					dataType: 'json',
 					success: function (returndata2) {
 
-						if (returndata2.type == 'success')
+						if (returndata2.type == 'success' && parseInt(returndata2.result) > 0)
 							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
 						else
 							$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata2.message + '</span></div></div>');
@@ -784,7 +784,7 @@ jQuery(function ($) {
 							dataType: 'json',
 							success: function (returndata3) {
 
-								if (returndata3.type == 'success')
+								if (returndata3.type == 'success' && parseInt(returndata3.result) > 0)
 									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
 								else
 									$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata3.message + '</span></div></div>');
@@ -803,7 +803,7 @@ jQuery(function ($) {
 									dataType: 'json',
 									success: function (returndata4) {
 
-										if (returndata4.type == 'success')
+										if (returndata4.type == 'success' && parseInt(returndata4.result) > 0)
 											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
 										else
 											$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata4.message + '</span></div></div>');
@@ -821,7 +821,7 @@ jQuery(function ($) {
 											},
 											dataType: 'json',
 											success: function (returndata5) {
-												if (returndata5.type == 'success')
+												if (returndata5.type == 'success' && parseInt(returndata5.result) > 0)
 													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-check"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');
 												else
 													$('.badgeos_verification_modal_panel').append('<div class="badgeos_modal_badge"><div class="badgeos_verification_checkbox"><i class="fas fa-times"></i></div><div class="badgeos_verification_badge_title"><span>' + returndata5.message + '</span></div></div>');

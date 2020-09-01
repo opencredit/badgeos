@@ -210,7 +210,13 @@ class open_badge_metabox {
                     if( count( $recs ) > 0 ) {
                         $badge_date = strtotime( $recs[ 0 ]->date_earned );
                         if( !empty( $badge_date ) ) {
-                            $msg = array( 'type' => 'success', 'result' => 1, 'message' => __( 'Expiry date is', 'badgeos' ).' '.date( $date_format.' '.$time_format, $badge_date ) );
+
+                            $badge_expiry = strtotime( '+'.$open_badge_expiration.' '.$open_badge_expiration_type, $badge_date );
+                            if( $badge_expiry >= time() ) {
+                                $msg = array( 'type' => 'success', 'result' => 1, 'message' => __( 'Expiry date is', 'badgeos' ).' '.date( $date_format.' '.$time_format, $badge_expiry ) );
+                            } else {
+                                $msg = array( 'type' => 'success', 'result' => 0, 'message' => __( 'Badge is expired on', 'badgeos' ).' '.date( $date_format.' '.$time_format, $badge_expiry ) );
+                            }
                         } else {
                             $msg = array( 'type' => 'failed', 'result' => 0, 'message' => __( 'Badge is expired', 'badgeos' ) );
                         }
