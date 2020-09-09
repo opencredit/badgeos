@@ -73,7 +73,7 @@ class BadgeOS {
 
 	}
 
-/**
+	/**
 	 * This function will made the necessary changes on existing database to accomodate the points work
 	 */
 	function db_upgrade() {
@@ -355,6 +355,7 @@ class BadgeOS {
         require_once( $this->directory_path . 'includes/posts-functions.php' );
 		require_once( $this->directory_path . 'includes/badgeos-emails.php' );
 		require_once( $this->directory_path . 'includes/assets.php' );
+		require_once( $this->directory_path . 'includes/welcome.php' );
 	}
 
 	/**
@@ -408,6 +409,11 @@ class BadgeOS {
         wp_register_style( 'badgeos-jquery-ui-styles', $this->directory_url . 'css/jquery-ui.css' );
 		wp_register_script('badgeos-jquery-ui-js', ('https://code.jquery.com/ui/1.12.1/jquery-ui.js'),"jquery", self::$version, true);
 		
+		wp_register_style( 'badgeos-jquery-slick-styles', $this->directory_url . 'js/slick/slick.css' );
+		wp_register_style( 'badgeos-jquery-slick-theme-styles', $this->directory_url . 'js/slick/slick-theme.css' );
+		wp_register_script('badgeos-jquery-slick-js', $this->directory_url . 'js/slick/slick.min.js',"jquery", self::$version, true);
+		wp_register_script('badgeos-jquery-welcome-js', $this->directory_url . 'js/welcome.js',"jquery", self::$version, true);
+
 		wp_register_script('badgeos-jquery-mini-colorpicker-js', $this->directory_url . 'js/jquery.minicolors.js',"jquery", self::$version, true);
 		wp_register_style( 'badgeos-minicolorpicker_css', $this->directory_url.'css/jquery.minicolors.css', null, '' );
         wp_register_style( 'badgeos-admin-styles', $this->directory_url . 'css/admin.css', null, '' );
@@ -602,6 +608,7 @@ class BadgeOS {
 		
 		// Create main menu
         add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
+		add_submenu_page( 'badgeos_badgeos', __( 'Welcome', 'badgeos' ), __( 'Welcome', 'badgeos' ), $minimum_role, 'badgeos-welcome', 'badgeos_welcome_page', 0 );
 		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
