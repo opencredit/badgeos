@@ -1,6 +1,6 @@
 <?php 
     $badgeos_settings = get_option( 'badgeos_settings' );
-
+    
     //load settings
     $minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
     $debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';

@@ -33,17 +33,22 @@ if( ! function_exists( 'get_plugins' ) ) {
 
 $plugins = get_plugins();
 $active_plugins = get_option( 'active_plugins', array() );
+if( ! is_array( $active_plugins ) ) {
+    $active_plugins = [];
+}
+
 $active_plugins_output = '';
+if( isset( $active_plugins ) && count( $active_plugins ) > 0 ) {
+    foreach ( $plugins as $plugin_path => $plugin ) {
 
-foreach ( $plugins as $plugin_path => $plugin ) {
-
-    /**
-     * If the plugin isn't active, don't show it.
-     */
-    if ( ! in_array( $plugin_path, $active_plugins ) )
-        continue;
-
-    $active_plugins_output .= $plugin['Name'] . ' (' . $plugin['Version'] . ')' . '<br>';
+        /**
+         * If the plugin isn't active, don't show it.
+         */
+        if ( ! in_array( $plugin_path, $active_plugins ) )
+            continue;
+    
+        $active_plugins_output .= $plugin['Name'] . ' (' . $plugin['Version'] . ')' . '<br>';
+    }
 }
 
 $points_types = badgeos_get_point_types();
@@ -51,7 +56,7 @@ $points_types_output = '';
 
 if( !empty( $points_types ) ) {
     foreach( $points_types as $key => $item ) {
-        $points_types_output .= $item->post_title. ' - ' . get_post_meta($item->ID,'_credits_plural_name', true ) . ' - ' . $item->post_name . ' (#' . $item->ID  . ')' . '<br>';
+        $points_types_output .= $item->post_title. ' - ' . badgeos_utilities::get_post_meta($item->ID,'_credits_plural_name', true ) . ' - ' . $item->post_name . ' (#' . $item->ID  . ')' . '<br>';
     }
 }
 
@@ -136,7 +141,7 @@ function badgeos_get_hosting_provider() {
     return $host;
 }
 
-$badgeos_settings = get_option( 'badgeos_settings' );
+$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 
 $logs = wp_count_posts('badgeos-log-entry');
 $logs_exists = ( intval( $logs->publish ) > 0 ) ? true : false;
@@ -317,7 +322,7 @@ $remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall
                         <?php _e( 'Permalink Structure:', 'badgeos' ); ?>
                     </label>
                 </th>
-                <td><?php echo ( get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Default' ); ?></td>
+                <td><?php echo ( badgeos_utilities::get_option( 'permalink_structure' ) ? badgeos_utilities::get_option( 'permalink_structure' ) : 'Default' ); ?></td>
             </tr>
             <tr>
                 <th scope="row">

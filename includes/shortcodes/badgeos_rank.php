@@ -7,7 +7,7 @@
  */
 function badgeos_register_rank_shortcode() {
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $rank_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['ranks_main_post_type'],
         'posts_per_page' =>	-1,
@@ -113,7 +113,7 @@ function badgeos_rank_shortcode( $atts = array() ) {
 	wp_enqueue_script( 'badgeos-achievements' );
 
 	// get the post content and format the badge display
-	$rank = get_post( $atts['id'] );
+	$rank = badgeos_utilities::badgeos_get_post( $atts['id'] );
 	$output = '';
 
 	// If we're dealing with an rank post
@@ -141,7 +141,7 @@ function badgeos_rank_shortcode( $atts = array() ) {
 
         // Achievement Short Description
         if( $atts['show_description'] == 'true' ) {
-            $post = get_post( $rank->ID );
+            $post = badgeos_utilities::badgeos_get_post( $rank->ID );
             if( $post ) {
                 $output .= '<div class="badgeos-item-excerpt">';
                 $excerpt = !empty( $post->post_excerpt ) ? $post->post_excerpt : $post->post_content;

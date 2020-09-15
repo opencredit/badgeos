@@ -115,7 +115,7 @@ class CMB2_Show_Filters {
 		}
 
 		// Get current template
-		$current_template = get_post_meta( $object_id, '_wp_page_template', true );
+		$current_template = get_post_meta( $object_id, '_wp_page_template', true ); 
 
 		// See if there's a match
 		if ( $current_template && in_array( $current_template, (array) self::get_show_on_value( $meta_box_args ) ) ) {

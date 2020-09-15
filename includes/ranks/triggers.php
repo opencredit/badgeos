@@ -121,7 +121,7 @@ function badgeos_dynamic_ranks_req_trigger_event( ) {
         foreach ( $triggered_ranks as $rank ) {
             $parent_id = badgeos_get_parent_id( $rank->post_id );
             if( absint($parent_id) > 0) {
-                $step_params = get_post_meta( $rank->post_id, '_badgeos_fields_data', true );
+                $step_params = badgeos_utilities::get_post_meta( $rank->post_id, '_badgeos_fields_data', true );
                 $step_params = badgeos_extract_array_from_query_params( $step_params );
                 if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'ranks', $this_trigger, $step_params, $args[ 1 ]) ) {
                     $new_count = badgeos_ranks_update_user_trigger_count( $rank->post_id, $parent_id,$user_id, $this_trigger, $site_id, $args );
@@ -215,7 +215,7 @@ function badgeos_ranks_get_user_triggers( $step_id, $user_id = 0, $site_id = 0 )
 	/**
      * Grab all of the user's triggers
      */
-	$user_triggers = ( $array_exists = get_user_meta( $user_id, '_badgeos_ranks_triggers', true ) ) ? $array_exists : array();
+	$user_triggers = ( $array_exists = badgeos_utilities::get_user_meta( $user_id, '_badgeos_ranks_triggers', true ) ) ? $array_exists : array();
 
 
 	/**
@@ -309,7 +309,7 @@ function badgeos_ranks_update_user_trigger_count( $step_id, $rank_id, $user_id, 
 
 	$user_triggers[$site_id][$trigger."_".$step_id] = $trigger_count;
 
-	update_user_meta( $user_id, '_badgeos_ranks_triggers', $user_triggers );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_ranks_triggers', $user_triggers );
 
 	/**
      * Send back our trigger count for other purposes

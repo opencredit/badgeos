@@ -30,7 +30,7 @@ function badgeos_credits_type_metaboxes( ) {
 	/**
      * New Achievement Types
      */
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 	$cmb_obj = new_cmb2_box( array(
 			'id'            => 'points_type_data',

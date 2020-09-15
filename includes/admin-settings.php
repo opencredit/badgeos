@@ -43,7 +43,7 @@ function badgeos_settings_validate( $input = '' ) {
 	
     global $wpdb;
 	// Fetch existing settings
-	$original_settings = get_option( 'badgeos_settings' );
+	$original_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 	// Allow add-on settings to be sanitized
 	do_action( 'badgeos_settings_validate', $input );
 	
@@ -295,7 +295,7 @@ function badgeos_credly_get_api_key( $username = '', $password = '' ) {
 function badgeos_credly_get_api_key_error( $error = '' ) {
 
 	// Temporarily store our error message.
-	update_option( 'credly_api_key_error', $error );
+	badgeos_utilities::update_option( 'credly_api_key_error', $error );
 	return false;
 }
 
@@ -307,13 +307,13 @@ add_action( 'all_admin_notices', 'badgeos_credly_api_key_errors' );
  */
 function badgeos_credly_api_key_errors() {
 
-	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = get_option( 'credly_api_key_error' ) ) )
+	if ( get_current_screen()->id != 'badgeos_page_badgeos_sub_credly_integration' || !( $has_notice = badgeos_utilities::get_option( 'credly_api_key_error' ) ) )
 		return;
 
 	// If we have an error message, we'll display it
 	echo '<div id="message" class="error">'. $has_notice .'</div>';
 	// and then delete it
-	delete_option( 'credly_api_key_error' );
+	badgeos_utilities::delete_option( 'credly_api_key_error' );
 }
 
 /**
@@ -762,7 +762,7 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
 	// OR this is an existing achievement type post
 	// AND the text is "Featured Image"
 	// ...replace the string
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     if (
         (
             ( isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], badgeos_get_achievement_types_slugs() ) )
@@ -774,7 +774,7 @@ function badgeos_featured_image_metabox_title( $string = '' ) {
     elseif (
         (
             ( isset( $_GET['post_type'] ) && $badgeos_settings['achievement_main_post_type'] == $_GET['post_type'] )
-            || ( isset( $_GET['post'] ) && $badgeos_settings['achievement_main_post_type'] == get_post_type( $_GET['post'] ) )
+            || ( isset( $_GET['post'] ) && $badgeos_settings['achievement_main_post_type'] == badgeos_utilities::get_post_type( $_GET['post'] ) )
         ) && 'Featured Image' == $string
     )
         $string = __( 'Default Achievement Image', 'badgeos' );
@@ -794,10 +794,10 @@ add_filter( 'gettext', 'badgeos_featured_image_metabox_title' );
  * @return string           Potentially modified output.
  */
 function badgeos_featured_image_metabox_text( $content = '', $ID = 0 ) {
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     if ( badgeos_is_achievement( $ID ) )
 		$content = str_replace( 'featured image', __( 'achievement image', 'badgeos' ), $content );
-    elseif ( $badgeos_settings['achievement_main_post_type'] == get_post_type( $ID ) )
+    elseif ( $badgeos_settings['achievement_main_post_type'] == badgeos_utilities::get_post_type( $ID ) )
 		$content = str_replace( 'featured image', __( 'default achievement image', 'badgeos' ), $content );
 
 	return $content;
@@ -816,7 +816,7 @@ add_filter( 'admin_post_thumbnail_html', 'badgeos_featured_image_metabox_text', 
 function badgeos_media_modal_featured_image_text( $strings = array(), $post = null ) {
 
 	if ( is_object( $post ) ) {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( badgeos_is_achievement( $post->ID ) ) {
 			$strings['setFeaturedImageTitle'] = __( 'Set Achievement Image', 'badgeos' );
 			$strings['setFeaturedImage'] = __( 'Set achievement image', 'badgeos' );
@@ -838,6 +838,6 @@ add_filter( 'media_view_strings', 'badgeos_media_modal_featured_image_text', 10,
  * @return string User capability.
  */
 function badgeos_get_manager_capability() {
-	$badgeos_settings = get_option( 'badgeos_settings' );
+	$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 	return isset( $badgeos_settings[ 'minimum_role' ] ) ? $badgeos_settings[ 'minimum_role' ] : 'manage_options';
 }

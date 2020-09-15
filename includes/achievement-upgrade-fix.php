@@ -1,7 +1,7 @@
 <?php
 global $wpdb;
 
-$badgeos_settings = get_option( 'badgeos_settings' );
+$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : 0;
 
 $strQuery = "update ".$wpdb->prefix . "badgeos_achievements set point_type='".$default_point_type."' where point_type='0' or point_type=''";

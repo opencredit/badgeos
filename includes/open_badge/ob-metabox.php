@@ -151,8 +151,8 @@ class open_badge_metabox {
         if( ! empty( $_REQUEST['type'] ) ) {
             $type = sanitize_text_field( $_REQUEST['type'] );
         }
-        $date_format = get_option( 'date_format', true );
-        $time_format = get_option( 'time_format', true );
+        $date_format = badgeos_utilities::get_option( 'date_format', true );
+        $time_format = badgeos_utilities::get_option( 'time_format', true );
         
         $msg = array( 'type' => 'error', 'result' => 0,'message' => __( 'We are unable to serve ur request. Please, try back later.', 'badgeos' ) );
         
@@ -202,8 +202,8 @@ class open_badge_metabox {
                 }
                 break;
             case "expiry_date":
-                $open_badge_expiration       = ( get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
-                $open_badge_expiration_type  = ( get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
+                $open_badge_expiration       = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
+                $open_badge_expiration_type  = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
 
                 if( intval( $open_badge_expiration ) > 0 ) {
                     $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
@@ -261,10 +261,10 @@ class open_badge_metabox {
         global $post;
 
         $open_badge_enable_baking       = badgeos_get_option_open_badge_enable_baking($post->ID);
-        $open_badge_criteria            = ( get_post_meta( $post->ID, '_open_badge_criteria', true ) ? get_post_meta( $post->ID, '_open_badge_criteria', true ): '' );
-        $open_badge_include_evidence    = ( get_post_meta( $post->ID, '_open_badge_include_evidence', true ) ? get_post_meta( $post->ID, '_open_badge_include_evidence', true ) : 'false' );
-        $open_badge_expiration          = ( get_post_meta( $post->ID, '_open_badge_expiration', true ) ? get_post_meta( $post->ID, '_open_badge_expiration', true ) : '0' );
-        $open_badge_expiration_type     = ( get_post_meta( $post->ID, '_open_badge_expiration_type', true ) ? get_post_meta( $post->ID, '_open_badge_expiration_type', true ) : '0' );
+        $open_badge_criteria            = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_criteria', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_criteria', true ): '' );
+        $open_badge_include_evidence    = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_include_evidence', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_include_evidence', true ) : 'false' );
+        $open_badge_expiration          = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration', true ) : '0' );
+        $open_badge_expiration_type     = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration_type', true ) : '0' );
         ?>
             <input type="hidden" name="open_badge_nonce" value="<?php echo wp_create_nonce( 'open_badge' ); ?>" />
             <table class="form-table">
@@ -360,11 +360,11 @@ class open_badge_metabox {
      */
     private function open_badge_metabox_save_meta( $post_id = 0, $fields = array() ) {
 
-        update_post_meta( $post_id, '_open_badge_enable_baking', $fields['open_badge_enable_baking'] );
-        update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) ); //$fields['open_badge_criteria']
-        update_post_meta( $post_id, '_open_badge_include_evidence', $fields['open_badge_include_evidence'] );
-        update_post_meta( $post_id, '_open_badge_expiration', $fields['open_badge_expiration'] );
-        update_post_meta( $post_id, '_open_badge_expiration_type', $fields['open_badge_expiration_type'] );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_enable_baking', $fields['open_badge_enable_baking'] );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) ); //$fields['open_badge_criteria']
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_include_evidence', $fields['open_badge_include_evidence'] );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration', $fields['open_badge_expiration'] );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration_type', $fields['open_badge_expiration_type'] );
 
         return true;
     }

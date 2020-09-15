@@ -84,7 +84,7 @@ class scbPostMetabox {
 		echo $this->table( $form_fields, $form_data, $error_fields );
 		$this->after_form( $post );
 
-		delete_post_meta( $post->ID, '_error_data_' . $this->id );
+		badgeos_utilities::del_post_meta( $post->ID, '_error_data_' . $this->id );
 	}
 
 	public function table( $rows, $formdata, $errors = array() ) {
@@ -151,7 +151,7 @@ class scbPostMetabox {
 				'fields' => $is_valid->get_error_codes(),
 				'data' => $to_update
 			);
-			update_post_meta( $post_id, '_error_data_' . $this->id, $error_data );
+			badgeos_utilities::update_post_meta( $post_id, '_error_data_' . $this->id, $error_data );
 
 			$location = add_query_arg( 'message', 1, get_edit_post_link( $post_id, 'url' ) );
 			wp_redirect( apply_filters( 'redirect_post_location', $location, $post_id ) );
@@ -159,7 +159,7 @@ class scbPostMetabox {
 		}
 
 		foreach ( $to_update as $key => $value ) {
-			update_post_meta( $post_id, $key, $value );
+			badgeos_utilities::update_post_meta( $post_id, $key, $value );
 		}
 	}
 

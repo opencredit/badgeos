@@ -107,7 +107,7 @@ function badgeos_achievement_shortcode( $atts = array() ) {
 	wp_enqueue_script( 'badgeos-achievements' );
 
 	// get the post content and format the badge display
-	$achievement = get_post( $atts['id'] );
+	$achievement = badgeos_utilities::badgeos_get_post( $atts['id'] );
 	$output = '';
 
 	// If we're dealing with an achievement post

@@ -28,20 +28,20 @@ function badgeos_user_deserves_rank_step_count_callback( $return, $step_id = 0, 
     /**
      * Only override the $return data if we're working on a step
      */
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-	if ( trim( $settings['ranks_step_post_type'] ) == get_post_type( $step_id ) ) {
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if ( trim( $settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
 
         if( ! empty( $this_trigger ) && array_key_exists( $this_trigger, get_badgeos_ranks_req_activity_triggers() ) ) {
 
             /**
              * Get the required number of checkins for the step.
              */
-            $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+            $minimum_activity_count = absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
 
             /**
              * Grab the relevent activity for this step
              */
-            $current_trigger = get_post_meta( $step_id, '_rank_trigger_type', true );
+            $current_trigger = badgeos_utilities::get_post_meta( $step_id, '_rank_trigger_type', true );
             $relevant_count = absint( ranks_get_user_trigger_count( $step_id, $user_id, $current_trigger, $site_id, $args ) );
 
             /**
@@ -122,20 +122,20 @@ function badgeos_user_has_access_to_rank( $step_id = 0, $rank_id = 0, $user_id =
 function badgeos_user_has_access_to_rank_handler( $return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args ) {
 
 	if( trim( $this_trigger ) == 'badgeos_daily_visit' ) {
-		$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-		if ( trim( $settings['ranks_step_post_type'] ) != get_post_type( $step_id ) )
+		$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+		if ( trim( $settings['ranks_step_post_type'] ) != badgeos_utilities::get_post_type( $step_id ) )
 			return $return;
 
 		$meta_key = badgeos_daily_visit_add_step_status( $user_id, $step_id, 'rank' );
 
-		$badgeos_daily_visit_awarded_achivement = get_user_meta( $user_id, $meta_key, true );
+		$badgeos_daily_visit_awarded_achivement = badgeos_utilities::get_user_meta( $user_id, $meta_key, true );
 		if( trim( $badgeos_daily_visit_awarded_achivement ) == 'No' ) {
 			
-			$current_visit_date = get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
+			$current_visit_date = badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
 			$today = date("Y-m-d");
 			if( strtotime( $current_visit_date ) == strtotime( $today ) ) {
-				$req_count 		= get_post_meta( $step_id, '_badgeos_count', true );
-				$daily_visits 	= get_user_meta( $user_id, 'badgeos_daily_visits', true );
+				$req_count 		= badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true );
+				$daily_visits 	= badgeos_utilities::get_post_meta( $user_id, 'badgeos_daily_visits', true );
 				
 				if( intval( $req_count ) <= intval( $daily_visits ) ) {
 
@@ -154,11 +154,11 @@ function badgeos_user_has_access_to_rank_handler( $return, $step_id, $rank_id, $
 						$user_triggers = badgeos_ranks_get_user_triggers( $step_id, $user_id, $site_id );
 						$user_triggers[$site_id][$this_trigger."_".$step_id] = $trigger_count;
 
-						update_user_meta( $user_id, '_badgeos_ranks_triggers', $user_triggers );
+						badgeos_utilities::update_user_meta( $user_id, '_badgeos_ranks_triggers', $user_triggers );
 					
 					}
 
-					update_user_meta( $user_id, $meta_key, 'Yes' );
+					badgeos_utilities::update_user_meta( $user_id, $meta_key, 'Yes' );
 					$return = true;
 				} else {
 					$return = false;
@@ -195,18 +195,18 @@ function badgeos_user_deserves_rank_step_posts_callback($return, $step_id, $rank
     }
 	
 	// Only override the $return data if we're working on a step
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     
-    if( trim( $badgeos_settings['ranks_step_post_type'] ) == get_post_type( $step_id ) ) {
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
         
 		if( is_single() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
             
 			$my_post_id = $post->ID;
-			$trigger_type = get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+			$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
 			
 			if ( $trigger_type == 'badgeos_visit_a_post' ) {
 				
-				$visit_post = get_post_meta( absint( $step_id ), '_badgeos_visit_post', true );
+				$visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_post', true );
 				if( empty( $visit_post ) ) {
 					$return = true;
 				} else {
@@ -243,18 +243,18 @@ function badgeos_user_deserves_rank_step_pages_callback($return, $step_id, $rank
     }
 	
 	// Only override the $return data if we're working on a step
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' )) ? $exists : array();
     
-    if( trim( $badgeos_settings['ranks_step_post_type'] ) == get_post_type( $step_id ) ) {
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
         
 		if( is_page() && ! empty( $GLOBALS['post'] ) && is_user_logged_in() ) {
             
 			$my_post_id = $post->ID;
-			$trigger_type = get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+			$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
 			
 			if ( $trigger_type == 'badgeos_visit_a_page' ) {
 				
-				$visit_post = get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
+				$visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
 				if( empty( $visit_post ) ) {
 					$return = true;
 				} else {
@@ -285,11 +285,11 @@ add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_rank_step_
 function badgeos_maybe_award_rank( $step_id = 0, $rank_id = 0, $user_id = 0, $this_trigger = '', $site_id = 0, $args = array() ) {
     global $wpdb;
 
-    $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if( get_post_type( $step_id ) == trim( $settings['ranks_step_post_type'] ) ) {
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( badgeos_utilities::get_post_type( $step_id ) == trim( $settings['ranks_step_post_type'] ) ) {
         if ( apply_filters( 'badgeos_user_deserves_rank_step', $return_val=true, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args ) ) {
 
-            $minimum_activity_count = absint( get_post_meta( $step_id, '_badgeos_count', true ) );
+            $minimum_activity_count = absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
             $recs = $wpdb->get_results( $wpdb->prepare("SELECT id FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d", $step_id	) );
             if ( count( $recs ) <= $minimum_activity_count ) {
                 
