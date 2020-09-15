@@ -13,7 +13,7 @@
  */
 function badgeos_register_ranks_post_types() {
 
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( !empty( $settings ) ) {
 
 	    /**
@@ -98,7 +98,7 @@ add_action( 'init', 'badgeos_register_ranks_post_types' );
  */
 function badgeos_register_ranks_type_cpt() {
 
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( !empty( $settings ) ) {
 
 	    /**
@@ -115,7 +115,7 @@ function badgeos_register_ranks_type_cpt() {
 		foreach ( $rank_types as $rank_type ) {
 
 			$rank_name_singular = $rank_type->post_title;
-			$rank_name_plural   = get_post_meta( $rank_type->ID, '_badgeos_plural_name', true );
+			$rank_name_plural   = badgeos_utilities::get_post_meta( $rank_type->ID, '_badgeos_plural_name', true );
 			
 			if ( empty($rank_name_plural) )  {
                 $rank_name_plural = $rank_name_singular;
@@ -124,7 +124,7 @@ function badgeos_register_ranks_type_cpt() {
 			/**
              * Determine whether this achievement type should be visible in the menu
              */
-            $show_in_menu = get_post_meta( strtolower( $rank_type->ID ), '_badgeos_show_in_menu', true ) ? 'badgeos_ranks' : false;
+            $show_in_menu = badgeos_utilities::get_post_meta( strtolower( $rank_type->ID ), '_badgeos_show_in_menu', true ) ? 'badgeos_ranks' : false;
 
 			/**
              * Register the post type

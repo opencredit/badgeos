@@ -59,7 +59,7 @@ function badgeos_achievement_last_user_activity( $achievement_id = 0, $user_id =
 function badgeos_user_get_active_achievements( $user_id ) {
 
 	// Get the user's active achievements from meta
-	$achievements = get_user_meta( $user_id, '_badgeos_active_achievements', true );
+	$achievements = badgeos_utilities::get_user_meta( $user_id, '_badgeos_active_achievements', true );
 
 	// If there are no achievements
 	if ( empty( $achievements ) )
@@ -88,7 +88,7 @@ function badgeos_user_update_active_achievements( $user_id = 0, $achievements = 
 	}
 
 	// Update the user's active achievements meta
-	update_user_meta( $user_id, '_badgeos_active_achievements', $achievements );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_active_achievements', $achievements );
 
 	// Return our updated achievements array
 	return (array) $achievements;
@@ -124,8 +124,8 @@ function badgeos_user_get_active_achievement( $user_id = 0, $achievement_id = 0 
 function badgeos_user_add_active_achievement( $user_id = 0, $achievement_id = 0 ) {
 
 	// If achievement is a step, bail here
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $achievement_id ) )
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == badgeos_utilities::get_post_type( $achievement_id ) )
         return false;
 
 	// Get the user's active achievements
@@ -154,8 +154,8 @@ function badgeos_user_add_active_achievement( $user_id = 0, $achievement_id = 0 
 function badgeos_user_update_active_achievement( $user_id = 0, $achievement_id = 0, $achievement = null ) {
 
 	// If achievement is a step, bail here
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $achievement_id ) )
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == badgeos_utilities::get_post_type( $achievement_id ) )
         return false;
 
 	// If we weren't passed an object, get the latest version from meta
@@ -213,8 +213,8 @@ function badgeos_user_delete_active_achievement( $user_id = 0, $achievement_id =
 function badgeos_user_update_active_achievement_on_earnings( $user_id, $achievement_id ) {
 
 	// If achievement is a step, update its parent activity
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == get_post_type( $achievement_id ) ) {
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( trim( $badgeos_settings['achievement_step_post_type'] ) == badgeos_utilities::get_post_type( $achievement_id ) ) {
         $parent_achievement = badgeos_get_parent_of_achievement( $achievement_id );
 		if ( $parent_achievement ) {
 			badgeos_user_update_active_achievement( $user_id, $parent_achievement->ID );

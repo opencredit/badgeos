@@ -69,7 +69,7 @@ function badgeos_block_achievements_award_list($request) {
 
   global $wpdb;
 
-  $badgeos_settings   = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+  $badgeos_settings   = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
   $achievement_id     = sanitize_text_field( $request['achievement'] );
   $user_id            = sanitize_text_field( $request['user_id'] );
   $q                  = sanitize_text_field( $request['q'] );
@@ -105,7 +105,7 @@ function badgeos_block_achievements_award_list($request) {
  */
 function badgeos_block_ranks_list( $data ) {
   
-  $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+  $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
   $rank_types = get_posts( array(
       'post_type'      =>	$badgeos_settings['ranks_main_post_type'],
       'posts_per_page' =>	-1,
@@ -150,7 +150,7 @@ function badgeos_users_list_block( $data ) {
  */
 function badgeos_ranks_list( $data ) {
   
-  $badgeos_settings   = get_option( 'badgeos_settings' );
+  $badgeos_settings   = badgeos_utilities::get_option( 'badgeos_settings' );
   $rank_types  = get_posts( array(
       'post_type'      =>	$badgeos_settings['ranks_main_post_type'],
       'posts_per_page' =>	-1,
@@ -172,7 +172,7 @@ function badgeos_ranks_list( $data ) {
  */
 function badgeos_block_point_types_list( $data ) {
   
-  $badgeos_settings   = get_option( 'badgeos_settings' );
+  $badgeos_settings   = badgeos_utilities::get_option( 'badgeos_settings' );
   $achievement_types  = get_posts( array(
       'post_type'      =>	$badgeos_settings['points_main_post_type'],
       'posts_per_page' =>	-1,
@@ -195,7 +195,7 @@ function badgeos_block_point_types_list( $data ) {
 function badgeos_achievements_list( $data ) {
 
 
-  $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+  $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
   $types = badgeos_get_achievement_types_slugs();
   $step_key = array_search( trim( $badgeos_settings['achievement_step_post_type'] ), $types );
   if ( $step_key )
@@ -226,7 +226,7 @@ function badgeos_achievements_list( $data ) {
  */
 function badgeos_achievement_types_list( $data ) {
 
-  $badgeos_settings   = get_option( 'badgeos_settings' );
+  $badgeos_settings   = badgeos_utilities::get_option( 'badgeos_settings' );
   $achievement_types  = get_posts( array(
       'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
       'posts_per_page' =>	-1,

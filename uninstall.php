@@ -7,7 +7,7 @@
 if ( !defined( "WP_UNINSTALL_PLUGIN" ) )
     exit();
 
-$badgeos_settings = get_option( 'badgeos_settings' );
+$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 $remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
 
 /**

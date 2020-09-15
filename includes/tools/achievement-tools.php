@@ -9,7 +9,7 @@
  * @link https://badgeos.org
  */
 
-$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 $achievement_types = badgeos_get_achievement_types_slugs();
 $args = array(
     'role'         => '',

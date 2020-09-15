@@ -163,7 +163,7 @@ class Credly_Badge_Builder {
 
 		// Build continue param
 		$attachment_id = isset( $_REQUEST['attachment_id'] ) ? absint( $_REQUEST['attachment_id'] ) : 0;
-		$continue      = $attachment_id ? get_post_meta( $attachment_id, '_credly_badge_meta', true ) : null;
+		$continue      = $attachment_id ? badgeos_utilities::get_post_meta( $attachment_id, '_credly_badge_meta', true ) : null;
 
 		// Send back the link
 		wp_redirect( $this->generate_link( array( 'continue' => $continue ) ) );
@@ -266,11 +266,11 @@ class Credly_Badge_Builder {
 			return;
 
 		if ( ! empty( $badge_meta ) )
-			update_post_meta( $attachment_id, '_credly_badge_meta', $badge_meta );
+			badgeos_utilities::update_post_meta( $attachment_id, '_credly_badge_meta', $badge_meta );
 
 		if ( ! empty( $icon_meta ) ) {
-			update_post_meta( $attachment_id, '_credly_icon_meta', $icon_meta );
-			update_post_meta( $attachment_id, '_wp_attachment_image_alt', badgeos_badge_builder_get_icon_credit( $attachment_id ) );
+			badgeos_utilities::update_post_meta( $attachment_id, '_credly_icon_meta', $icon_meta );
+			badgeos_utilities::update_post_meta( $attachment_id, '_wp_attachment_image_alt', badgeos_badge_builder_get_icon_credit( $attachment_id ) );
 		}
 	}
 

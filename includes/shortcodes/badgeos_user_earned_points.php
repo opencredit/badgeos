@@ -8,7 +8,7 @@
 function badgeos_user_earned_points_shortcode() {
     global $wpdb;
     // Setup a custom array of achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $point_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['points_main_post_type'],
         'posts_per_page' =>	-1,
@@ -56,11 +56,11 @@ add_action( 'init', 'badgeos_user_earned_points_shortcode' );
 function get_post_by_name($post_name, $output = OBJECT) {
     global $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
     $post = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type=%s", $post_name, $badgeos_settings['points_main_post_type'] ));
     if ( $post )
-        return get_post($post, $output);
+        return badgeos_utilities::badgeos_get_post($post, $output);
 
     return null;
 }
@@ -110,7 +110,7 @@ function badgeos_earned_points_shortcode( $atts = array () ){
             $credit_id = $point_obj->ID;
             if( isset( $point_obj->ID ) ) {
 
-                $plural_name = get_post_meta( $point_obj->ID, '_point_plural_name', true );
+                $plural_name = badgeos_utilities::get_post_meta( $point_obj->ID, '_point_plural_name', true );
 
                 if( !empty( $plural_name ) ) {
                     $post_type_plural = $plural_name;

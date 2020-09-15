@@ -5,10 +5,10 @@
  */
 function badgeos_ob_install_pages_if_not_installed(){
 
-    $assertion_page = get_option( 'badgeos_assertion_url', false );
-    $json_page      = get_option( 'badgeos_json_url', false );
-    $issuer_page    = get_option( 'badgeos_issuer_url', false );
-    $evidence_page  = get_option( 'badgeos_evidence_url', false );
+    $assertion_page = badgeos_utilities::get_option( 'badgeos_assertion_url', false );
+    $json_page      = badgeos_utilities::get_option( 'badgeos_json_url', false );
+    $issuer_page    = badgeos_utilities::get_option( 'badgeos_issuer_url', false );
+    $evidence_page  = badgeos_utilities::get_option( 'badgeos_evidence_url', false );
 
     if( current_user_can('manage_options') && ( !badgeos_ob_is_page_exists( $assertion_page ) || !badgeos_ob_is_page_exists( $json_page ) || !badgeos_ob_is_page_exists( $issuer_page ) || !badgeos_ob_is_page_exists( $evidence_page ) ) ) { 
         $class = 'notice is-dismissible error';
@@ -28,7 +28,7 @@ function badgeos_ob_config_pages_func() {
     
     $page_created = false;
 
-    $assertion_page = get_option( 'badgeos_assertion_url', false );
+    $assertion_page = badgeos_utilities::get_option( 'badgeos_assertion_url', false );
 
     if( !badgeos_ob_is_page_exists( $assertion_page ) ) {
 
@@ -40,12 +40,12 @@ function badgeos_ob_config_pages_func() {
             'post_status' => 'publish',
         ]);
 
-        update_option( 'badgeos_assertion_url', $assertion_page_id );
+        badgeos_utilities::update_option( 'badgeos_assertion_url', $assertion_page_id );
 
         $page_created = true;
     }
 
-    $json_page = get_option( 'badgeos_json_url', false );
+    $json_page = badgeos_utilities::get_option( 'badgeos_json_url', false );
 
     if( !badgeos_ob_is_page_exists( $json_page ) ) {
         
@@ -57,12 +57,12 @@ function badgeos_ob_config_pages_func() {
             'post_status' => 'publish',
         ]);
 
-        update_option( 'badgeos_json_url', $json_page_id );
+        badgeos_utilities::update_option( 'badgeos_json_url', $json_page_id );
 
         $page_created = true;
     }
 
-    $issuer_page = get_option( 'badgeos_issuer_url', false );
+    $issuer_page = badgeos_utilities::get_option( 'badgeos_issuer_url', false );
 
     if( !badgeos_ob_is_page_exists( $issuer_page ) ) {
 
@@ -74,12 +74,12 @@ function badgeos_ob_config_pages_func() {
             'post_status' => 'publish',
         ]);
 
-        update_option( 'badgeos_issuer_url', $issuer_page_id );
+        badgeos_utilities::update_option( 'badgeos_issuer_url', $issuer_page_id );
 
         $page_created = true;
     }
 
-    $evidence_page = get_option( 'badgeos_evidence_url', false );
+    $evidence_page = badgeos_utilities::get_option( 'badgeos_evidence_url', false );
 
     if( !badgeos_ob_is_page_exists( $evidence_page ) ) {
 
@@ -91,7 +91,7 @@ function badgeos_ob_config_pages_func() {
             'post_status' => 'publish',
         ]);
 
-        update_option( 'badgeos_evidence_url', $evidence_page_id );
+        badgeos_utilities::update_option( 'badgeos_evidence_url', $evidence_page_id );
 
         $page_created = true;
     }

@@ -7,7 +7,7 @@ function badgeos_migrate_data_from_meta_to_db_callback() {
     if( $action == 'badgeos_migrate_data_from_meta_to_db' ) {
         $users = get_users( 'fields=ids' );
         foreach( $users as $user_id ) {
-            update_user_meta( $user_id, 'updated_achivements_meta_to_db', 'No' );
+            badgeos_utilities::update_user_meta( $user_id, 'updated_achivements_meta_to_db', 'No' );
         }
     }
     if ( ! wp_next_scheduled ( 'cron_migrate_data_from_meta_to_db' ) ) {
@@ -50,14 +50,14 @@ function badgeos_update_from_meta_to_db_callback() {
 
         global $wpdb;
 
-        $meta_to_db = get_user_meta( $user_id, 'updated_achivements_meta_to_db', true );
+        $meta_to_db = badgeos_utilities::get_user_meta( $user_id, 'updated_achivements_meta_to_db', true );
         if( $meta_to_db != 'Yes' ) {
-            $achievements = get_user_meta( $user_id, '_badgeos_achievements', true );
+            $achievements = badgeos_utilities::get_user_meta( $user_id, '_badgeos_achievements', true );
 
             if( is_array( $achievements ) && count( $achievements ) > 0 ) {
                 foreach( $achievements[$site_id] as $achievement ) {
 
-                    $badgeos_settings = get_option( 'badgeos_settings' );
+                    $badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
                     $point_id = 0;
                     $point_type = 0;
                     if( isset( $achievement->points ) ) {
@@ -110,14 +110,14 @@ function badgeos_update_from_meta_to_db_callback() {
                 }
             }
 
-            update_user_meta( $user_id, 'updated_achivements_meta_to_db', 'Yes' );
+            badgeos_utilities::update_user_meta( $user_id, 'updated_achivements_meta_to_db', 'Yes' );
         }
 
         $updated_count += 1;
     }
 
     if( count( $users ) == $updated_count) {
-        update_option( 'badgeos_all_achievement_db_updated', 'Yes' );
+        badgeos_utilities::update_option( 'badgeos_all_achievement_db_updated', 'Yes' );
     }
 
     $from_title = get_bloginfo( 'name' );

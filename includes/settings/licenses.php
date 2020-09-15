@@ -1,5 +1,5 @@
 <?php 
-    $badgeos_settings = get_option( 'badgeos_settings' );
+    $badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
     $badgeos_admin_side_tab 	= ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_license_tab';
     $licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
     if( count( $licensed_addons ) > 0 ) {

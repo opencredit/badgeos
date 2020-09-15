@@ -24,7 +24,7 @@
 function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked', $title = '' ) {
 
 
-    $plugin_setts = get_option( 'badgeos_settings' );
+    $plugin_setts = badgeos_utilities::get_option( 'badgeos_settings' );
     $log_post_id = 0;
 
     if( isset( $plugin_setts['log_entries'] ) ) {
@@ -62,7 +62,7 @@ function badgeos_post_log_entry( $object_id, $user_id = 0, $action = 'unlocked',
  */
   
 function badgeos_log_entry( $log_post_id, $args ) {
-	$plugin_setts = get_option( 'badgeos_settings' );
+	$plugin_setts = badgeos_utilities::get_option( 'badgeos_settings' );
     if( 'disabled' == $plugin_setts['log_entries'] ) {
         return null;
     }
@@ -70,7 +70,7 @@ function badgeos_log_entry( $log_post_id, $args ) {
 	// If we weren't explicitly given a title, let's build one
 	if ( empty( $args['title'] ) ) {
 		$user              = get_userdata( $args['user_id'] );
-		$achievement       = get_post( $args['object_id'] );
+		$achievement       = badgeos_utilities::badgeos_get_post( $args['object_id'] );
 		$achievement_types = badgeos_get_achievement_types();
 		$achievement_type  = ( $achievement && isset( $achievement_types[$achievement->post_type]['single_name'] ) ) ? $achievement_types[$achievement->post_type]['single_name'] : '';
 		$args['title']     = ! empty( $title ) ? $title : apply_filters( 'badgeos_log_entry_title', "{$user->user_login} {$args['action']} the \"{$achievement->post_title}\" {$achievement_type}", $args );
@@ -103,7 +103,7 @@ add_filter( 'badgeos_post_log_entry', 'badgeos_log_entry', 10, 2 );
  * @param integer $object_id   The connected objet ID
  */
 function badgeos_log_achievement_id( $log_post_id, $object_id ) {
-	update_post_meta( $log_post_id, '_badgeos_log_achievement_id', $object_id );
+	badgeos_utilities::update_post_meta( $log_post_id, '_badgeos_log_achievement_id', $object_id );
 }
 add_action( 'badgeos_create_log_entry', 'badgeos_log_achievement_id', 10, 2 );
 

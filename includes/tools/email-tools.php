@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
-$badgeos_admin_tools        = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+$badgeos_admin_tools        = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
 $email_achievement_content  = isset( $badgeos_admin_tools['email_achievement_content'] ) ? $badgeos_admin_tools['email_achievement_content'] : '';
 $email_achievement_content  = stripslashes( html_entity_decode( $email_achievement_content ) );
 

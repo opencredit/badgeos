@@ -27,7 +27,7 @@ function badgeos_achievment_type_metaboxes() {
 	// Setup our $post_id, if available
 	$post_id = isset( $_GET['post'] ) ? $_GET['post'] : 0;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 	// New Achievement Types
     $cmb_obj = new_cmb2_box( array(
@@ -94,7 +94,7 @@ function badgeos_achievment_metaboxes( ) {
     // Start with an underscore to hide fields from custom fields list
     $prefix = '_badgeos_';
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
     // Grab our achievement types as an array
     $achievement_types_temp = badgeos_get_achievement_types_slugs();

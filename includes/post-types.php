@@ -19,7 +19,7 @@ function badgeos_register_post_types() {
 	global $badgeos;
 
 	// Register our achievement Types CPT
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     register_post_type( $badgeos_settings['achievement_main_post_type'], array(
         'labels'             => array(
 			'name'               => __( 'Achievement Types', 'badgeos' ),
@@ -168,13 +168,14 @@ function badgeos_register_achievement_type( $achievement_name_singular = '', $ac
  */
 function badgeos_register_achievement_type_cpt() {
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Grab all of our achievement type posts
 	$achievement_types = get_posts( array(
 		'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
 		'posts_per_page' =>	-1,
+		'suppress_filters'  => false,
 	) );
-
+	
 	// Loop through each achievement type post and register it as a CPT
 	foreach ( $achievement_types as $achievement_type ) {
 
@@ -182,15 +183,17 @@ function badgeos_register_achievement_type_cpt() {
 		$achievement_name = $achievement_type->post_title;
 
 		// Update our post meta to use the achievement name, if it's empty
-		if ( $achievement_name != get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true ) ) update_post_meta( $achievement_type->ID, '_badgeos_singular_name', $achievement_name );
-		if ( ! get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true ) ) update_post_meta( $achievement_type->ID, '_badgeos_plural_name', $achievement_name );
+		if ( $achievement_name != badgeos_utilities::get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true ) ) 
+			badgeos_utilities::update_post_meta( $achievement_type->ID, '_badgeos_singular_name', $achievement_name );
+		if ( ! badgeos_utilities::get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true ) ) 
+			badgeos_utilities::update_post_meta( $achievement_type->ID, '_badgeos_plural_name', $achievement_name );
 
 		// Setup our singular and plural versions to use the corresponding meta
-		$achievement_name_singular = get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true );
-		$achievement_name_plural   = get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true );
+		$achievement_name_singular = badgeos_utilities::get_post_meta( $achievement_type->ID, '_badgeos_singular_name', true );
+		$achievement_name_plural   = badgeos_utilities::get_post_meta( $achievement_type->ID, '_badgeos_plural_name', true );
 
 		// Determine whether this achievement type should be visible in the menu
-		$show_in_menu = get_post_meta( $achievement_type->ID, '_badgeos_show_in_menu', true ) ? 'badgeos_badgeos' : false;
+		$show_in_menu = badgeos_utilities::get_post_meta( $achievement_type->ID, '_badgeos_show_in_menu', true ) ? 'badgeos_badgeos' : false;
 
         //filter school admin menu badgeOS start
         if(class_exists("BadgeOS_Group_Management") && function_exists('badgeos_get_user_role')){

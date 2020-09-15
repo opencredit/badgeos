@@ -99,7 +99,7 @@ function badgeos_reformat_entries( $content ) {
 	$newcontent .= badgeos_get_required_achievements_for_achievement_list( $badge_id );
 
 	// Include achievement earners, if this achievement supports it
-	if ( $show_earners = get_post_meta( $badge_id, '_badgeos_show_earners', true ) )
+	if ( $show_earners = badgeos_utilities::get_post_meta( $badge_id, '_badgeos_show_earners', true ) )
 		$newcontent .= badgeos_get_achievement_earners_list( $badge_id );
 
 	$newcontent .= '</div><!-- .achievement-wrap -->';
@@ -209,7 +209,7 @@ function badgeos_get_required_achievements_for_achievement_list_markup( $steps =
 		) ) ? 'user-has-earned' : 'user-has-not-earned';
 
 		// get step title and if it doesn't have a title get the step trigger type post-meta
-		$title = !empty( $step->post_title ) ? $step->post_title : get_post_meta( $step->ID, '_badgeos_trigger_type', true );
+		$title = !empty( $step->post_title ) ? $step->post_title : badgeos_utilities::get_post_meta( $step->ID, '_badgeos_trigger_type', true );
 		$step_output .= '<li class="'. apply_filters( 'badgeos_step_class', $earned_status, $step ) .'">'. apply_filters( 'badgeos_step_title_display', $title, $step ) . '</li>';
 	}
 	$post_type_object = get_post_type_object( $step->post_type );
@@ -266,7 +266,7 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 		$achievement_id = $post->ID;
 	}
 	
-	$points = get_post_meta( $achievement_id, '_badgeos_points', true );
+	$points = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_points', true );
 	
 	if( isset( $points ) &&  is_array( $points ) && count( $points ) > 0 ) {
 		$point_value 	= $points['_badgeos_points'];
@@ -279,7 +279,7 @@ function badgeos_achievement_points_markup( $achievement_id = 0 ) {
 			return '<div class="badgeos-item-points badgeos-item-points-'.$points_type.' badgeos-item-points-'.$achievement_id.' badgeos-item-points-'.$points_type.'-'.$achievement_id.'"><span>0</span> '.__( 'Points', 'badgeos' ).'</div>';
 		}
 	} else {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
         $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
         $point_type = badgeos_points_type_display_title( $default_point_type );
         if( !empty( $point_type ) ) {
@@ -321,7 +321,7 @@ function badgeos_render_earned_achievement_text( $achievement_id = 0, $user_id =
 
 	if ( badgeos_has_user_earned_achievement( $achievement_id, $user_id ) ) {
 		$earned_message .= '<div class="badgeos-achievement-earned"><p>' . __( 'You have earned this achievement!', 'badgeos' ) . '</p></div>';
-		if ( $congrats_text = get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) {
+		if ( $congrats_text = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_congratulations_text', true ) ) {
 			$earned_message .= '<div class="badgeos-achievement-congratulations">' . wpautop( $congrats_text ) . '</div>';
 		}
 	}
@@ -357,7 +357,7 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
 
     // If we were given an ID, get the post
     if ( is_numeric( $achievement ) )
-        $achievement = get_post( $achievement );
+        $achievement = badgeos_utilities::badgeos_get_post( $achievement );
 
     // make sure our JS and CSS is enqueued
     wp_enqueue_script( 'badgeos-achievements' );
@@ -384,7 +384,7 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
     // Each Achievement
     $output = '';
     //exclude step CPT entries from displaying in the widget
-    $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
+    $is_hidden = badgeos_utilities::get_post_meta( $achievement->ID, '_badgeos_hidden', true );
     if( $is_hidden != 'hidden' ) {
 
         $output .= '<div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
@@ -532,7 +532,7 @@ function badgeos_get_post_link_without_hidden_achievement($achievement_id, $rel)
 
 	$link = null;
 
-	$post = get_post($achievement_id);
+	$post = badgeos_utilities::badgeos_get_post($achievement_id);
 
 	//Check the ahievement
 	$achievement_id = ( badgeos_is_achievement($post) )? $post->ID : "";
@@ -564,7 +564,7 @@ function badgeos_get_next_previous_achievement_id($achievement_id , $rel ){
 	$access = false;
 
 	// Redirecting user page based on achievements
-	$post = get_post( absint( $achievement_id ));
+	$post = badgeos_utilities::badgeos_get_post( absint( $achievement_id ));
 
 	//Get hidden achievements ids
 	$hidden = badgeos_get_hidden_achievement_ids( $post->post_type );
@@ -630,7 +630,7 @@ function badgeos_generate_post_link_by_post_id( $post_id , $rel) {
 	global $post;
 
 	if(!empty($post_id))
-		$post = get_post($post_id);
+		$post = badgeos_utilities::badgeos_get_post($post_id);
 
     //Title of the post
 	$title = get_the_title( $post->ID );

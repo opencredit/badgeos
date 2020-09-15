@@ -23,10 +23,10 @@ class BadgeOS_Open_Badge {
 	 */
 	public function __construct() {
 
-		$this->badgeos_assertion_page_id	= get_option( 'badgeos_assertion_url' );
-		$this->badgeos_json_page_id 		= get_option( 'badgeos_json_url' );
-		$this->badgeos_evidence_page_id		= get_option( 'badgeos_evidence_url' );
-		$this->badgeos_issuer_page_id       = get_option( 'badgeos_issuer_url' );
+		$this->badgeos_assertion_page_id	= badgeos_utilities::get_option( 'badgeos_assertion_url' );
+		$this->badgeos_json_page_id 		= badgeos_utilities::get_option( 'badgeos_json_url' );
+		$this->badgeos_evidence_page_id		= badgeos_utilities::get_option( 'badgeos_evidence_url' );
+		$this->badgeos_issuer_page_id       = badgeos_utilities::get_option( 'badgeos_issuer_url' );
 	
 		add_filter( 'template_include', 	array( $this,'badgeos_template_pages' ) );
         add_action( 'admin_post_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
@@ -181,7 +181,7 @@ class BadgeOS_Open_Badge {
 	 */ 
 	public function badgeos_generate_assertion( $user_id, $entry_id, $achievement_id ) {
 		
-		$badge = get_post( $achievement_id );
+		$badge = badgeos_utilities::badgeos_get_post( $achievement_id );
 		if( $badge ) {
 
 			$post_content = $badge->post_content;
@@ -213,7 +213,7 @@ class BadgeOS_Open_Badge {
 
 			$identity_id = $this->get_identity_id( $user_id, $entry_id, $achievement_id );
 
-			$open_badge_include_evidence = ( get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) ? get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) : 'false' );
+			$open_badge_include_evidence = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) : 'false' );
 			
 			$result = array(
 				'@context'	=> 'https://w3id.org/openbadges/v2',
@@ -256,7 +256,7 @@ class BadgeOS_Open_Badge {
 	 */ 
 	public function badgeos_generate_badge( $user_id, $entry_id, $achievement_id ) {
 				
-		$badge = get_post( $achievement_id );
+		$badge = badgeos_utilities::badgeos_get_post( $achievement_id );
 		if( $badge ) {
 
 			$post_content = $badge->post_content;
@@ -333,8 +333,8 @@ class BadgeOS_Open_Badge {
 		
 		global $wpdb;
 		
-		$open_badge_expiration       = ( get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
-		$open_badge_expiration_type  = ( get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
+		$open_badge_expiration       = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
+		$open_badge_expiration_type  = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
 		
 		$badge_expiry = '';
 		
@@ -363,15 +363,15 @@ class BadgeOS_Open_Badge {
 		
 		global $wpdb;
 
-		$badge = get_post( $achievement_id );
+		$badge = badgeos_utilities::badgeos_get_post( $achievement_id );
 		if( $badge ) {
 			
-			//$open_badge_enable_baking       	= ( get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ? get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) : 'false' );
+			//$open_badge_enable_baking       	= ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) : 'false' );
 			$open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement_id);
-			$open_badge_criteria            	= ( get_post_meta( $achievement_id, '_open_badge_criteria', true ) ? get_post_meta( $achievement_id, '_open_badge_criteria', true ): '' );
-			$open_badge_include_evidence    	= ( get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) ? get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) : 'false' );
+			$open_badge_criteria            	= ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_criteria', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_criteria', true ): '' );
+			$open_badge_include_evidence    	= ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_include_evidence', true ) : 'false' );
 			
-			$open_badge_expiration  			= ( get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
+			$open_badge_expiration  			= ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
 			if( $open_badge_enable_baking ) {
 				
 				$date = new DateTime();

@@ -824,6 +824,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 		 * @param bool   $can_save Whether the current metabox can save.
 		 * @param object $cmb      The CMB2 instance
 		 */
+		$can_save = true;
 		return apply_filters( 'cmb2_can_save', $can_save, $this->cmb );
 	}
 

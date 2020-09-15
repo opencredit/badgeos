@@ -24,8 +24,8 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
     
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
-        $achievement_post_type = get_post_type( $achievement_id );
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
         $achievement_type = $badgeos_settings['achievement_main_post_type'];
         $post_obj = get_page_by_path( $achievement_post_type, OBJECT, $achievement_type );
         $parent_post_type = '';
@@ -34,7 +34,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
         }
         if ( trim( $achievement_type ) == trim( $parent_post_type ) ) {
             
-            $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             
             if( ! isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) || $badgeos_admin_tools['email_disable_earned_achievement_email'] == 'no' ) {
                 
@@ -142,9 +142,9 @@ function badgeos_unsubscribe_emails_callback() {
             return false;
         }
         
-        update_user_meta( sanitize_text_field( $_GET['user_id'] ), '_badgeos_can_notify_user', false );
+        badgeos_utilities::update_user_meta( sanitize_text_field( $_GET['user_id'] ), '_badgeos_can_notify_user', false );
 
-        $badgeos_admin_tools        = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+        $badgeos_admin_tools        = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
         $unsubscribe_email_page     = !empty( $badgeos_admin_tools['unsubscribe_email_page'] )? get_permalink( $badgeos_admin_tools['unsubscribe_email_page']) : site_url();
         
         //wp_redirect( $unsubscribe_email_page );
@@ -168,10 +168,10 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
     
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $achievement_post_type = get_post_type( $achievement_id );
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         if ( trim( $badgeos_settings['achievement_step_post_type'] ) == $achievement_post_type ) {
-            $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             
             if( ! isset( $badgeos_admin_tools['email_disable_achievement_steps_email'] ) || $badgeos_admin_tools['email_disable_achievement_steps_email'] == 'no' ) {
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
@@ -215,8 +215,8 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                        $date_format = get_option( 'date_format', true );
-                        $time_format = get_option( 'time_format', true );
+                        $date_format = badgeos_utilities::get_option( 'date_format', true );
+                        $time_format = badgeos_utilities::get_option( 'time_format', true );
 
                         $email_subject = str_replace('[step_title]', $step_title, $email_subject ); 
                         $email_subject = str_replace('[date_earned]', date( $date_format.' '.$time_format, strtotime($record['date_earned']) ), $email_subject );
@@ -277,10 +277,10 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
 
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $achievement_post_type = get_post_type( $rank_id );
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $achievement_post_type = badgeos_utilities::get_post_type( $rank_id );
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         if ( trim( $badgeos_settings['ranks_step_post_type'] ) == $achievement_post_type ) {
-            $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             
             if( ! isset( $badgeos_admin_tools['email_disable_rank_steps_email'] ) || $badgeos_admin_tools['email_disable_rank_steps_email'] == 'no' ) {
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_ranks where id='".$rank_entry_id."'", 'ARRAY_A' );
@@ -325,8 +325,8 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                        $date_format = get_option( 'date_format', true );
-                        $time_format = get_option( 'time_format', true );
+                        $date_format = badgeos_utilities::get_option( 'date_format', true );
+                        $time_format = badgeos_utilities::get_option( 'time_format', true );
 
                         $email_subject = str_replace('[rank_step_title]', $rank_title, $email_subject ); 
                         $email_subject = str_replace('[date_earned]', date( $date_format.' '.$time_format, strtotime($record['dateadded']) ), $email_subject );
@@ -386,14 +386,14 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
     
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $rank_main_type = $badgeos_settings['ranks_main_post_type'];
         $post_main_obj = get_page_by_path( $rank_type, OBJECT, $rank_main_type );
         
         if( $post_main_obj ) {
             $rank_post_type = $post_main_obj->post_type;
             if ( trim( $rank_main_type ) == trim( $rank_post_type ) ) {
-                $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+                $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
                 if( ! isset( $badgeos_admin_tools['email_disable_ranks_email'] ) || $badgeos_admin_tools['email_disable_ranks_email'] == 'no' ) {
         
                     $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_ranks where id='".$rank_entry_id."'", 'ARRAY_A' );
@@ -435,8 +435,8 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                        $date_format = get_option( 'date_format', true );
-                        $time_format = get_option( 'time_format', true );
+                        $date_format = badgeos_utilities::get_option( 'date_format', true );
+                        $time_format = badgeos_utilities::get_option( 'time_format', true );
 
                         $email_subject = str_replace('[rank_type]', $rank_type, $email_subject ); 
                         $email_subject = str_replace('[rank_title]', $rank_title, $email_subject ); 
@@ -503,14 +503,14 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
     
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $rank_main_type = $badgeos_settings['ranks_main_post_type'];
-        $post_main_obj = get_post( $credit_id );
+        $post_main_obj = badgeos_utilities::badgeos_get_post( $credit_id );
         
         if( $post_main_obj && $type == 'Award' ) {
             
             $point_post_type = $post_main_obj->post_type;
-            $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             if( ! isset( $badgeos_admin_tools['email_disable_point_awards_email'] ) || $badgeos_admin_tools['email_disable_point_awards_email'] == 'no' ) {
 
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_points where id='".$point_rec_id."'", 'ARRAY_A' );
@@ -549,8 +549,8 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
         
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                    $date_format = get_option( 'date_format', true );
-                    $time_format = get_option( 'time_format', true );
+                    $date_format = badgeos_utilities::get_option( 'date_format', true );
+                    $time_format = badgeos_utilities::get_option( 'time_format', true );
                     
                     $email_subject = str_replace('[credit]', $record[ 'credit' ], $email_subject ); 
                     $email_subject = str_replace('[point_title]', $point_title, $email_subject ); 
@@ -613,14 +613,14 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
     
     global $wpdb;
     if( badgeos_can_notify_user( $user_id ) ) {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $rank_main_type = $badgeos_settings['ranks_main_post_type'];
-        $post_main_obj = get_post( $credit_id );
+        $post_main_obj = badgeos_utilities::badgeos_get_post( $credit_id );
         
         if( $post_main_obj && $type == 'Deduct' ) {
             
             $point_post_type = $post_main_obj->post_type;
-            $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             if( ! isset( $badgeos_admin_tools['email_disable_point_deducts_email'] ) || $badgeos_admin_tools['email_disable_point_deducts_email'] == 'no' ) {
 
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_points where id='".$point_rec_id."'", 'ARRAY_A' );
@@ -659,8 +659,8 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
         
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                    $date_format = get_option( 'date_format', true );
-                    $time_format = get_option( 'time_format', true );
+                    $date_format = badgeos_utilities::get_option( 'date_format', true );
+                    $time_format = badgeos_utilities::get_option( 'time_format', true );
                     
                     $email_subject = str_replace('[credit]', $record[ 'credit' ], $email_subject ); 
                     $email_subject = str_replace('[point_title]', $point_title, $email_subject ); 

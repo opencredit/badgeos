@@ -108,7 +108,7 @@ class Badgeos_Tools {
             return false;
         }
         
-        $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+        $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
         
         if( ( isset( $_POST['action'] ) && $_POST['action']=='badgeos_tools_email_general' ) ) {
             
@@ -134,7 +134,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_general_background_color']          =  sanitize_text_field( $tools_data[ 'email_general_background_color' ] );
                 $badgeos_admin_tools['email_general_body_background_color']     =  sanitize_text_field( $tools_data[ 'email_general_body_background_color' ] );
                 $badgeos_admin_tools['email_general_body_text_color']           =  sanitize_text_field( $tools_data[ 'email_general_body_text_color' ] );
-                update_option( 'badgeos_admin_tools',                              $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools',                              $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -152,7 +152,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_achievement_content']               = htmlentities( $tools_data[ 'email_achievement_content' ] );
                 $badgeos_admin_tools['email_disable_earned_achievement_email']  = $email_disable_earned_achievement_email;
 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -170,7 +170,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_steps_achievement_content']        = htmlentities( $tools_data[ 'email_steps_achievement_content' ] );
                 $badgeos_admin_tools['email_disable_achievement_steps_email']  = $email_disable_achievement_steps_email;
 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -188,7 +188,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_ranks_content']        = htmlentities( $tools_data[ 'email_ranks_content' ] );
                 $badgeos_admin_tools['email_disable_ranks_email']  = $email_disable_ranks_email;
                 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -206,7 +206,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_steps_rank_content']        = htmlentities( $tools_data[ 'email_steps_rank_content' ] );
                 $badgeos_admin_tools['email_disable_rank_steps_email']  = $email_disable_rank_steps_email;
                 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -224,7 +224,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_point_awards_content']          = htmlentities( $tools_data[ 'email_point_awards_content' ] );
                 $badgeos_admin_tools['email_disable_point_awards_email']    = $email_disable_point_awards_email;
                 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -242,7 +242,7 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_point_deducts_content']          = htmlentities( $tools_data[ 'email_point_deducts_content' ] );
                 $badgeos_admin_tools['email_disable_point_deducts_email']    = $email_disable_point_deducts_email;
                 
-                update_option( 'badgeos_admin_tools', $badgeos_admin_tools ); 
+                badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools ); 
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
         }
@@ -293,7 +293,7 @@ class Badgeos_Tools {
             return false;
         }
 
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         if( ( isset( $_POST['achievement_bulk_award'] ) && wp_verify_nonce( $_POST['achievement_bulk_award'], 'achievement_bulk_award' ) ) ||
             ( isset( $_POST['achievement_bulk_revoke'] ) && wp_verify_nonce( $_POST['achievement_bulk_revoke'], 'achievement_bulk_revoke' ) )
