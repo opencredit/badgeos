@@ -42,7 +42,7 @@ function badgeos_ajax_get_achievements_award_list() {
 
     global $wpdb;
    
-    $badgeos_settings   = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings   = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_id     = sanitize_text_field( $_REQUEST['achievement_id'] );
     $user_id            = sanitize_text_field( $_REQUEST['user_id'] );
     $q                  = sanitize_text_field( $_REQUEST['q'] );
@@ -80,7 +80,7 @@ function badgeos_ajax_get_achievements_award_list() {
 function badgeos_ajax_get_ranks_list() {
     global $user_ID, $blog_id, $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
     
     // Setup our AJAX query vars
@@ -178,7 +178,7 @@ function badgeos_ajax_get_ranks_list() {
 
             // Achievement Short Description
             if( $show_description == 'true' ) {
-                $post = get_post( get_the_ID() );
+                $post = badgeos_utilities::badgeos_get_post( get_the_ID() );
                 if( $post ) {
                     $output .= '<div class="badgeos-item-excerpt">';
                     $excerpt = get_the_excerpt();
@@ -237,7 +237,7 @@ function badgeos_ajax_get_ranks_list() {
 function badgeos_ajax_get_earned_ranks() {
     global $user_ID, $blog_id, $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
 
     // Setup our AJAX query vars
@@ -395,7 +395,7 @@ function badgeos_ajax_get_earned_achievements() {
     global $user_ID, $blog_id, $wpdb;
 
     // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
 
     // Setup our AJAX query vars
@@ -498,7 +498,7 @@ function badgeos_ajax_get_earned_achievements() {
             $open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
             $permalink                          = get_permalink( $achievement->ID );
             if( $open_badge_enable_baking ) {
-                $badgeos_evidence_page_id	= get_option( 'badgeos_evidence_url' );
+                $badgeos_evidence_page_id	= badgeos_utilities::get_option( 'badgeos_evidence_url' );
                 $badgeos_evidence_url 		= get_permalink( $badgeos_evidence_page_id );
                 $badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
                 $badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );
@@ -594,7 +594,7 @@ function badgeos_ajax_get_achievements() {
 	global $user_ID, $blog_id;
 
     // Convert $type to properly support multiple achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
 
     $earned_ids = [];
@@ -671,9 +671,9 @@ function badgeos_ajax_get_achievements() {
 	foreach( $sites as $site_blog_id ) {
 
 		// If we're not polling the current site, switch to the site we're polling
-		if ( $blog_id != $site_blog_id ) {
-			switch_to_blog( $site_blog_id );
-		}
+		// if ( $blog_id != $site_blog_id ) {
+		// 	switch_to_blog( $site_blog_id );
+		// }
 
 		// Grab our earned badges (used to filter the query)
 		$earned_ids = badgeos_get_user_earned_achievement_ids( $user_id, $type );
@@ -845,7 +845,7 @@ function badgeos_ajax_get_users() {
 function badgeos_ajax_get_achievements_select2() {
 	global $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Pull back the search string
     $search = isset( $_REQUEST['q'] ) ? $wpdb->esc_like( $_REQUEST['q'] ) : '';
 	$achievement_types = isset( $_REQUEST['post_type'] ) && 'all' !== $_REQUEST['post_type']
@@ -886,7 +886,7 @@ function badgeos_ajax_get_achievement_types() {
 		die();
 	}
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = array_diff( badgeos_get_achievement_types_slugs(), array( trim( $badgeos_settings['achievement_step_post_type'] ) ) ); 
     $matches = preg_grep( "/{$_REQUEST['q']}/", $achievement_types );
 	$found = array_map( 'get_post_type_object', $matches );

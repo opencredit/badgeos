@@ -88,7 +88,7 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 	public function test_badgeos_is_debug_mode_true() {
 
 		// Set debug mode to true
-		$settings = get_option( 'badgeos_settings' );
+		$settings = badgeos_utilities::get_option( 'badgeos_settings' );
 		$settings['debug_mode'] = true;
 		update_option( 'badgeos_settings', $settings );
 
@@ -101,7 +101,7 @@ class BadgeOS_Core_Test extends WP_UnitTestCase {
 	public function test_badgeos_is_debug_mode_false() {
 
 		// Set debug mode to false
-		$settings = get_option( 'badgeos_settings' );
+		$settings = badgeos_utilities::get_option( 'badgeos_settings' );
 		$settings['debug_mode'] = false;
 		update_option( 'badgeos_settings', $settings );
 

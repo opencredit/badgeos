@@ -255,7 +255,7 @@ class CMB2_Field extends CMB2_Base {
 		 *
 		 * @since 2.0.0
 		 *
-		 * @param mixed $value     The value get_metadata() should
+		 * @param mixed $value     The value badgeos_get_meta_data() should
 		 *                         return - a single metadata value,
 		 *                         or an array of values.
 		 *
@@ -288,9 +288,9 @@ class CMB2_Field extends CMB2_Base {
 
 		// If no override, get value normally
 		if ( 'cmb2_field_no_override_val' === $data ) {
-			$data = 'options-page' === $a['type']
+			$data = 'options-page' === $a['type'] 
 				? cmb2_options( $a['id'] )->get( $a['field_id'] )
-				: get_metadata( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
+				: badgeos_get_meta_data( $a['type'], $a['id'], $a['field_id'], ( $a['single'] || $a['repeat'] ) );
 		}
 
 		if ( $this->group ) {

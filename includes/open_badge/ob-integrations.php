@@ -16,10 +16,10 @@ function badgeos_ob_integration_page() {
         wp_enqueue_script( 'badgeos-jquery-ui-js' );
         wp_enqueue_script( 'badgeos-convert-credly-achievements' );
     }
-    $badgeos_assertion_url 		= get_option( 'badgeos_assertion_url' );
-    $badgeos_json_url 			= get_option( 'badgeos_json_url' );
-    $badgeos_issuer_url 		= get_option( 'badgeos_issuer_url' ); 
-    $badgeos_evidence_url 		= get_option( 'badgeos_evidence_url' );
+    $badgeos_assertion_url 		= badgeos_utilities::get_option( 'badgeos_assertion_url' );
+    $badgeos_json_url 			= badgeos_utilities::get_option( 'badgeos_json_url' );
+    $badgeos_issuer_url 		= badgeos_utilities::get_option( 'badgeos_issuer_url' ); 
+    $badgeos_evidence_url 		= badgeos_utilities::get_option( 'badgeos_evidence_url' );
     ?>
     <div class="wrap">
         <div id="icon-options-general" class="icon32"></div>
@@ -73,10 +73,10 @@ function badgeos_ob_integration_page() {
             </table>
             <?php wp_nonce_field( 'bos_ob_settings', 'ob_settings_field' ); ?>
             <?php
-                $assertion_page = get_option( 'badgeos_assertion_url', false );
-                $json_page      = get_option( 'badgeos_json_url', false );
-                $issuer_page    = get_option( 'badgeos_issuer_url', false );
-                $evidence_page  = get_option( 'badgeos_evidence_url', false );
+                $assertion_page = badgeos_utilities::get_option( 'badgeos_assertion_url', false );
+                $json_page      = badgeos_utilities::get_option( 'badgeos_json_url', false );
+                $issuer_page    = badgeos_utilities::get_option( 'badgeos_issuer_url', false );
+                $evidence_page  = badgeos_utilities::get_option( 'badgeos_evidence_url', false );
                 if( current_user_can('manage_options') && ( !badgeos_ob_is_page_exists( $assertion_page ) || !badgeos_ob_is_page_exists( $json_page ) || !badgeos_ob_is_page_exists( $issuer_page ) || !badgeos_ob_is_page_exists( $evidence_page ) ) ) { 
                     $config_link = 'admin-post.php?action=badgeos_config_pages';
                     $message = __( '<strong>Please, click <a href="'.$config_link.'">here</a> to configure/create missing open badge pages.</strong>', 'badgeos' );
@@ -149,19 +149,19 @@ function badgeos_ob_save_settings() {
     if ( isset( $_POST['ob_settings_field'] ) && check_admin_referer( 'bos_ob_settings', 'ob_settings_field' ) ) {
 
         if( isset( $_POST[ 'badgeos_assertion_url' ] ) && ! empty( $_POST[ 'badgeos_assertion_url' ] ) ) {
-            update_option( 'badgeos_assertion_url', sanitize_text_field( $_POST[ 'badgeos_assertion_url' ] ) );
+            badgeos_utilities::update_option( 'badgeos_assertion_url', sanitize_text_field( $_POST[ 'badgeos_assertion_url' ] ) );
         }
 
         if( isset( $_POST[ 'badgeos_issuer_url' ] ) && ! empty( $_POST[ 'badgeos_issuer_url' ] ) ) {
-            update_option( 'badgeos_issuer_url', sanitize_text_field( $_POST[ 'badgeos_issuer_url' ] ) );
+            badgeos_utilities::update_option( 'badgeos_issuer_url', sanitize_text_field( $_POST[ 'badgeos_issuer_url' ] ) );
         }
 
         if( isset( $_POST[ 'badgeos_json_url' ] ) && ! empty( $_POST[ 'badgeos_json_url' ] ) ) {
-            update_option( 'badgeos_json_url', sanitize_text_field( $_POST[ 'badgeos_json_url' ] ) );
+            badgeos_utilities::update_option( 'badgeos_json_url', sanitize_text_field( $_POST[ 'badgeos_json_url' ] ) );
         }
 
         if( isset( $_POST[ 'badgeos_evidence_url' ] ) && ! empty( $_POST[ 'badgeos_evidence_url' ] ) ) {
-            update_option( 'badgeos_evidence_url', sanitize_text_field( $_POST[ 'badgeos_evidence_url' ] ) );
+            badgeos_utilities::update_option( 'badgeos_evidence_url', sanitize_text_field( $_POST[ 'badgeos_evidence_url' ] ) );
         }
        
         add_action('admin_notices', 'badgeos_ob_save_settings_notification' );

@@ -1,5 +1,5 @@
 <?php 
-    $badgeos_settings = get_option( 'badgeos_settings' );  
+    $badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );  
     $badgeos_admin_side_tab 	= ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_db_upgrades_settings'; 
 ?>
 <div id="badgeos-setting-tabs">
@@ -37,7 +37,7 @@
                 <tr valign="top">
                     <td>
                         <?php
-                        $is_badgeos_all_achievement_db_updated = get_option( 'badgeos_all_achievement_db_updated', 'No' );
+                        $is_badgeos_all_achievement_db_updated = badgeos_utilities::get_option( 'badgeos_all_achievement_db_updated', 'No' );
                         if( $is_badgeos_all_achievement_db_updated!='Yes' ) {
                             ?>
                             <input type="button" id="badgeos_migrate_meta_to_db" class="button-primary" value="<?php _e( 'Upgrade 3.0 DB', 'badgeos' ); ?>" />

@@ -10,7 +10,7 @@ function badgeos_ob_get_all_non_achievements() {
 	global $wpdb;
 
 	$table_name = $wpdb->prefix . 'badgeos_achievements';
-	$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+	$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
 	$step_type = trim( $badgeos_settings['achievement_step_post_type'] );
 	$query = "SELECT * 
 				FROM        $table_name 
@@ -24,7 +24,7 @@ function badgeos_ob_get_all_non_achievements() {
 	foreach($results as $result) {
 
 		$achievement_id = $result->ID;
-		//$open_badge_enable_baking = ( get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ? get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) : 'false' );
+		//$open_badge_enable_baking = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) : 'false' );
 		$open_badge_enable_baking = badgeos_get_option_open_badge_enable_baking($achievement_id);
 
 		if($open_badge_enable_baking) {
@@ -38,7 +38,7 @@ function badgeos_ob_get_all_non_achievements() {
 function badgeos_get_option_open_badge_enable_baking($post_id) {
 
 	//Check existing post meta
-	$open_badge_enable_baking = get_post_meta( $post_id, '_open_badge_enable_baking', true );
+	$open_badge_enable_baking = badgeos_utilities::get_post_meta( $post_id, '_open_badge_enable_baking', true );
 
 	$open_badge_enable_baking = sanitize_text_field($open_badge_enable_baking);
 
@@ -56,7 +56,7 @@ function get_badgeos_ob_achievements($entry_id,$achievement_id,$user_id) {
 	global $wpdb;
 
 	$table_name = $wpdb->prefix . 'badgeos_achievements';
-	$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+	$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
 	$step_type = trim( $badgeos_settings['achievement_step_post_type'] );
 	$results = $wpdb->get_col( $wpdb->prepare(
 		"
@@ -147,13 +147,13 @@ function badgeos_ob_profile_add_column( $achievement ) {
 	$badge_directory = trailingslashit( $basedir.'user_badges/'.$achievement->user_id );
 	$badge_url = trailingslashit( $baseurl.'user_badges/'.$achievement->user_id );
 	
-	$badgeos_evidence_page_id		= get_option( 'badgeos_evidence_url' );
+	$badgeos_evidence_page_id		= badgeos_utilities::get_option( 'badgeos_evidence_url' );
 
 	echo '<td>';
 	$open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
 	$is_pipe_sign = false;
 	if( $open_badge_enable_baking ) {
-		$badgeos_evidence_page_id	= get_option( 'badgeos_evidence_url' );
+		$badgeos_evidence_page_id	= badgeos_utilities::get_option( 'badgeos_evidence_url' );
 		$badgeos_evidence_url 		= get_permalink( $badgeos_evidence_page_id );
 		$badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
 		$badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );
@@ -250,7 +250,7 @@ add_action( 'init', 'badgeos_ob_process_user_data' );
  */ 
 function badgeos_ob_achievements_record_type( $rec_type, $achievement_id, $user_id ) {
 
-	//$enable_baking = get_post_meta( $achievement_id, '_open_badge_enable_baking', true );
+	//$enable_baking = badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_enable_baking', true );
 	$enable_baking = badgeos_get_option_open_badge_enable_baking($achievement_id);
 
 	if( $enable_baking  ) {
@@ -274,7 +274,7 @@ function badgeos_ob_png_only_note( $html ) {
 	$pt = get_current_screen()->post_type;
 	
 	//if ( $pt != 'post') return;
-	$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array(); 		
+	$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 		
 	$achievement_types = get_posts( array(
 		'post_type'      =>	trim( $badgeos_settings['achievement_main_post_type'] ),
 		'posts_per_page' =>	-1,
@@ -316,7 +316,7 @@ function badgeos_convertable_credly_achievements_list_count() {
 	if( count( $result ) > 0 ) {
 		foreach( $result as $res ) {
 
-			$enable_baking = get_post_meta( $res['ID'], '_open_badge_enable_baking', true );
+			$enable_baking = badgeos_utilities::get_post_meta( $res['ID'], '_open_badge_enable_baking', true );
 			if( $enable_baking != 'true' )
 				$recs[] = $res['ID'];
 		}
@@ -331,21 +331,21 @@ function badgeos_convert_credly_achievements_2_open_badge_callback() {
 	global $wpdb;
 	$post_id 		= sanitize_text_field( $_REQUEST[ 'ID' ] );
 	$disable_credly = sanitize_text_field( $_REQUEST[ 'disable_credly' ] );
-	$achievement = get_post( $post_id );
+	$achievement = badgeos_utilities::badgeos_get_post( $post_id );
 	if( $achievement ) {
 		
-		update_post_meta( $post_id, '_open_badge_enable_baking', 'true' );
-		update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_enable_baking', 'true' );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
 
-		update_post_meta( $post_id, '_open_badge_include_evidence', ( get_post_meta( $post_id, '_badgeos_credly_include_evidence', true ) ? get_post_meta( $post_id, '_badgeos_credly_include_evidence', true ): 'false' ) );
-        update_post_meta( $post_id, '_open_badge_expiration', ( get_post_meta( $post_id, '_badgeos_credly_expiration', true ) ? get_post_meta( $post_id, '_badgeos_credly_expiration', true ) : '0' ) );
-		update_post_meta( $post_id, '_open_badge_expiration_type', 'Day' );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_include_evidence', ( badgeos_utilities::get_post_meta( $post_id, '_badgeos_credly_include_evidence', true ) ? badgeos_utilities::get_post_meta( $post_id, '_badgeos_credly_include_evidence', true ): 'false' ) );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration', ( badgeos_utilities::get_post_meta( $post_id, '_badgeos_credly_expiration', true ) ? badgeos_utilities::get_post_meta( $post_id, '_badgeos_credly_expiration', true ) : '0' ) );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration_type', 'Day' );
 		
-		update_post_meta( $post_id, '_open_badge_updated_from_credly', 'true' );
-		update_post_meta( $post_id, '_open_badge_updated_from_credly_at', current_time( 'mysql' ) );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_updated_from_credly', 'true' );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_updated_from_credly_at', current_time( 'mysql' ) );
 
 		if( $disable_credly == 'true' ) {
-			update_post_meta( $post_id, '_badgeos_send_to_credly', 'false' );
+			badgeos_utilities::update_post_meta( $post_id, '_badgeos_send_to_credly', 'false' );
 		}
 
 		wp_send_json( array( "type" => "success" ) );
@@ -360,11 +360,11 @@ function badgeos_open_badge_metabox_save( $post_id = 0 ) {
 	// Verify nonce
 	if ( isset( $_POST['badgeos_ob_quick_bulk_edit_action'] ) && $_POST['badgeos_ob_quick_bulk_edit_action'] == 'yes' ) {
 
-		update_post_meta( $post_id, '_open_badge_enable_baking', $_POST['open_badge_enable_baking'] == '1'?'true':'false' );
-        update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
-        update_post_meta( $post_id, '_open_badge_include_evidence', $_POST['open_badge_include_evidence'] == '1'?'true':'false' );
-        update_post_meta( $post_id, '_open_badge_expiration', sanitize_text_field( $_POST['open_badge_expiration'] ) );
-        update_post_meta( $post_id, '_open_badge_expiration_type', sanitize_text_field( $_POST['open_badge_expiration_type'] ) );
+		badgeos_utilities::update_post_meta( $post_id, '_open_badge_enable_baking', $_POST['open_badge_enable_baking'] == '1'?'true':'false' );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_include_evidence', $_POST['open_badge_include_evidence'] == '1'?'true':'false' );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration', sanitize_text_field( $_POST['open_badge_expiration'] ) );
+        badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration_type', sanitize_text_field( $_POST['open_badge_expiration_type'] ) );
 	}
 }
 add_action( 'save_post', 'badgeos_open_badge_metabox_save' );
@@ -381,21 +381,21 @@ function badgeos_ob_bulk_action_handler(   ) {
 			foreach( $post_ids as $post_id ) {
 				
 				if( isset( $_REQUEST['open_badge_enable_baking']  ) ) {
-					update_post_meta( $post_id, '_open_badge_enable_baking', $_REQUEST['open_badge_enable_baking'] == '1'?'true':'false' );
+					badgeos_utilities::update_post_meta( $post_id, '_open_badge_enable_baking', $_REQUEST['open_badge_enable_baking'] == '1'?'true':'false' );
 				}
 
-				update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
+				badgeos_utilities::update_post_meta( $post_id, '_open_badge_criteria', get_permalink( $post_id ) );
 				
 				if( isset( $_REQUEST['open_badge_include_evidence']  ) ) {
-					update_post_meta( $post_id, '_open_badge_include_evidence', $_REQUEST['open_badge_include_evidence'] == '1'?'true':'false' );
+					badgeos_utilities::update_post_meta( $post_id, '_open_badge_include_evidence', $_REQUEST['open_badge_include_evidence'] == '1'?'true':'false' );
 				}
 
 				if( isset( $_REQUEST['open_badge_expiration']  ) && !empty( $_REQUEST['open_badge_expiration']  ) ) {
-					update_post_meta( $post_id, '_open_badge_expiration', sanitize_text_field( $_REQUEST['open_badge_expiration'] ) );
+					badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration', sanitize_text_field( $_REQUEST['open_badge_expiration'] ) );
 				}
 
 				if( isset( $_REQUEST['open_badge_expiration_type']  ) && !empty( $_REQUEST['open_badge_expiration_type']  ) ) {
-					update_post_meta( $post_id, '_open_badge_expiration_type', sanitize_text_field( $_REQUEST['open_badge_expiration_type'] ) );
+					badgeos_utilities::update_post_meta( $post_id, '_open_badge_expiration_type', sanitize_text_field( $_REQUEST['open_badge_expiration_type'] ) );
 				}
 			}
 		}
@@ -417,10 +417,10 @@ function badgeos_ob_quick_edit_custom_box($column_name, $post_type ) {
 	if( '_open_badge_enable_baking' == $column_name ) {
 		
 		$achievement_types 				= badgeos_get_achievement_types_slugs();
-		$open_badge_enable_baking 		= get_post_meta( $post->ID, '_open_badge_enable_baking', true ); 
-		$open_badge_include_evidence    = ( get_post_meta( $post->ID, '_open_badge_include_evidence', true ) ? get_post_meta( $post->ID, '_open_badge_include_evidence', true ) : 'false' );
-		$open_badge_expiration          = ( get_post_meta( $post->ID, '_open_badge_expiration', true ) ? get_post_meta( $post->ID, '_open_badge_expiration', true ) : '0' );
-		$open_badge_expiration_type     = ( get_post_meta( $post->ID, '_open_badge_expiration_type', true ) ? get_post_meta( $post->ID, '_open_badge_expiration_type', true ) : '0' );
+		$open_badge_enable_baking 		= badgeos_utilities::get_post_meta( $post->ID, '_open_badge_enable_baking', true ); 
+		$open_badge_include_evidence    = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_include_evidence', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_include_evidence', true ) : 'false' );
+		$open_badge_expiration          = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration', true ) : '0' );
+		$open_badge_expiration_type     = ( badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_open_badge_expiration_type', true ) : '0' );
 	
 		if ( in_array( $post_type, $achievement_types ) ) {
 			?>	
@@ -499,12 +499,12 @@ function badgeos_ob_admin_post_columns_data( $column_name, $id ) {
 	// if you have to populate more that one columns, use switch()
 	switch( $column_name ) :
 		case '_open_badge_enable_baking': {
-			$open_badge_enable_baking = get_post_meta( $id, '_open_badge_enable_baking', true );
+			$open_badge_enable_baking = badgeos_utilities::get_post_meta( $id, '_open_badge_enable_baking', true );
 			echo $open_badge_enable_baking=='true'?__( 'Yes', 'badgeos' ):__( 'No', 'badgeos' );
 			break;
 		}
 		case '_badgeos_send_to_credly': {
-			$send_to_credly = get_post_meta( $id, '_badgeos_send_to_credly', true );
+			$send_to_credly = badgeos_utilities::get_post_meta( $id, '_badgeos_send_to_credly', true );
 			echo $send_to_credly=='true'?__( 'Yes', 'badgeos' ):__( 'No', 'badgeos' );
 			break;
 		}

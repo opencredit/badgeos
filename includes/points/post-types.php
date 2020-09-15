@@ -18,7 +18,7 @@
 function badgeos_register_points_post_types() {
 	global $badgeos;
 	
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	if ( !empty( $settings ) ) {
 		$minimum_role = badgeos_get_manager_capability();
 

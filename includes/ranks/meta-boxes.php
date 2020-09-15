@@ -27,7 +27,7 @@ function badgeos_ranks_type_metaboxes( ) {
 	/**
      * New Achievement Types
      */
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	$cmb_obj = new_cmb2_box( array(
 			'id'            => 'rankstypedata',
 			'title'         => esc_html__( 'Ranks Data', 'badgeos' ),
@@ -62,6 +62,7 @@ function badgeos_rank_plural_name_save_meta( $updated, $action, $cmb )
 	$page_title = get_the_title( $object_id );
 	if( empty( $value ) )
 		update_post_meta( $object_id, '_badgeos_plural_name', $page_title );
+
 }
 add_action( 'cmb2_save_field__badgeos_plural_name', 'badgeos_rank_plural_name_save_meta', 10, 3 );
 
@@ -74,7 +75,7 @@ function badgeos_point_plural_name_save_meta( $updated, $action, $cmb )
 	$object_id 	= $cmb->object_id;
 	$page_title = get_the_title( $object_id );
 	if( empty( $value ) )
-		update_post_meta( $object_id, '_point_plural_name', $page_title );
+		badgeos_utilities::update_post_meta( $object_id, '_point_plural_name', $page_title );
 }
 add_action( 'cmb2_save_field__point_plural_name', 'badgeos_point_plural_name_save_meta', 10, 3 );
 

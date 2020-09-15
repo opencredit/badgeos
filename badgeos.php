@@ -70,7 +70,19 @@ class BadgeOS {
 
         //add action for adding ckeditor script
         add_action('wp_footer', array( $this, 'frontend_scripts' ));
+		
+		//Template redirect hook
+		add_action( 'activated_plugin', array( $this, 'activation_redirect' ), 10, 2 );
 
+	}
+
+	/**
+	 * This function will redirect to templates on activation
+	 */
+	function activation_redirect( $plugin, $network_wide ) {
+		if( trim( $this->basename ) == trim( $plugin ) ) {
+			exit( wp_redirect( 'admin.php?page=badgeos-welcome'  ) );
+		}
 	}
 
 	/**
@@ -142,14 +154,15 @@ class BadgeOS {
 			);";
 			$wpdb->query( $sql );
 		}
-
+		
+		require_once( $this->directory_path . 'includes/utilities.php' );
 		$table_name = $wpdb->prefix . 'p2p';
 		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
-			update_option( 'p2p_storage', '' );
+			badgeos_utilities::update_option( 'p2p_storage', '' );
 		}
-        // Setup default BadgeOS options
-		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-        $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+		// Setup default BadgeOS options
+		$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
         if( !isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) || !isset( $badgeos_settings['achievement_main_post_type'] ) || empty( $badgeos_settings['achievement_main_post_type'] ) ) {
 
             if( ! isset( $badgeos_settings['achievement_step_post_type'] ) || empty( $badgeos_settings['achievement_step_post_type'] ) ) {
@@ -160,7 +173,7 @@ class BadgeOS {
                 $badgeos_settings['achievement_main_post_type']     = 'achievement-type';
             }
 
-            update_option( 'badgeos_settings', $badgeos_settings );
+            badgeos_utilities::update_option( 'badgeos_settings', $badgeos_settings );
         }
 
         $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_achievements' AND column_name = 'sub_nom_id'"  );
@@ -168,7 +181,7 @@ class BadgeOS {
             $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_achievements ADD sub_nom_id int(10) DEFAULT '0'");
         }
 
-        $badgeos_rec_title_updated = ( $exists = get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
+        $badgeos_rec_title_updated = ( $exists = badgeos_utilities::get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
         if( $badgeos_rec_title_updated == 'No' ) {
 
             $strQuery = 'ALTER TABLE '.$wpdb->prefix . 'badgeos_achievements MODIFY achievement_title TEXT DEFAULT NULL;';
@@ -177,7 +190,7 @@ class BadgeOS {
             $strQuery = 'ALTER TABLE '.$wpdb->prefix . 'badgeos_ranks MODIFY rank_title TEXT DEFAULT NULL;';
             $wpdb->query( $strQuery );
 
-            update_option( 'badgeos_rec_title_updated', 'Yes' );
+            badgeos_utilities::update_option( 'badgeos_rec_title_updated', 'Yes' );
         }
 
         if ( $badgeos_settings ) {
@@ -197,7 +210,7 @@ class BadgeOS {
 			if( !isset( $badgeos_settings['points_deduct_post_type'] ) && empty( $badgeos_settings['points_deduct_post_type'] ) )
 				$badgeos_settings['points_deduct_post_type']   = 'point_deduct';
 
-			update_option( 'badgeos_settings', $badgeos_settings );
+			badgeos_utilities::update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
         if ( empty( $badgeos_admin_tools ) ) {
@@ -268,7 +281,7 @@ class BadgeOS {
             $email_point_deducts_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_point_deducts_content']   = $email_point_deducts_content;
 
-            update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
+			badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
         }
     }
 
@@ -283,6 +296,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Editor_Shortcodes.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Shortcode.php' );
+		require_once( $this->directory_path . 'includes/utilities.php' );
 
         /**
          * WP blocks (page builder)
@@ -382,7 +396,7 @@ class BadgeOS {
 		if( badgeos_first_time_installed() ) {
 			wp_register_script( 'badgeos-convert-credly-achievements', $this->directory_url . 'js/convert-credly-achievements.js', array( 'jquery' ), $this::$version, true );
 		}
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         $badgeos_tools_email_tab = '';
         if( isset( $_REQUEST['badgeos_tools_email_tab'] ) && !empty( $_REQUEST['badgeos_tools_email_tab'] ) ) {
@@ -454,7 +468,7 @@ class BadgeOS {
 
 		// Grab all our registered achievement types and loop through them
 		$achievement_types = badgeos_get_achievement_types_slugs();
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
 		if ( is_array( $achievement_types ) && ! empty( $achievement_types ) ) {
 			foreach ( $achievement_types as $achievement_type ) {
@@ -500,7 +514,7 @@ class BadgeOS {
 	 * Register custom WordPress image size(s)
 	 */
 	function register_image_sizes() {
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         $achievement_width = '50';
         if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
@@ -535,12 +549,12 @@ class BadgeOS {
 				'post_author'  => 1,
 				'post_type'    => $achievement_type,
 			) );
-			update_post_meta( $badge_post_id, '_badgeos_singular_name', __( 'Badge', 'badgeos' ) );
-			update_post_meta( $badge_post_id, '_badgeos_show_in_menu', true );
+			badgeos_utilities::update_post_meta( $badge_post_id, '_badgeos_singular_name', __( 'Badge', 'badgeos' ) );
+			badgeos_utilities::update_post_meta( $badge_post_id, '_badgeos_show_in_menu', true );
 		}
 
 		// Setup default BadgeOS options
-		$badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+		$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if ( empty( $badgeos_settings ) ) {
 			$badgeos_settings['minimum_role']     				= 'manage_options';
             $badgeos_settings['submission_manager_role'] 		= 'manage_options';
@@ -562,11 +576,11 @@ class BadgeOS {
             $badgeos_settings['badgeos_rank_global_image_width']    		= '50';
             $badgeos_settings['badgeos_rank_global_image_height']    		= '50';
 
-            update_option( 'badgeos_settings', $badgeos_settings );
+            badgeos_utilities::update_option( 'badgeos_settings', $badgeos_settings );
 		}
 
 		// Setup default Credly options
-		$credly_settings = (array) get_option( 'credly_settings', array() );
+		$credly_settings = (array) badgeos_utilities::get_option( 'credly_settings', array() );
 
 		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credly_enable' ] ) ) {
 			$credly_settings['credly_enable']                      = 'true';
@@ -622,7 +636,7 @@ class BadgeOS {
 		add_submenu_page( 'badgeos_badgeos', __( 'Add-Ons', 'badgeos' ), __( 'Add-Ons', 'badgeos' ), $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Help / Support', 'badgeos' ), __( 'Help / Support', 'badgeos' ), $minimum_role, 'badgeos_sub_help_support', 'badgeos_help_support_page' );
 
-        $settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
         if ( ! empty( $settings ) ) {
             $query = wp_count_posts( trim( $settings['ranks_main_post_type'] ) );
             $rank_types = get_posts( array(
@@ -633,7 +647,7 @@ class BadgeOS {
 
             $rank_menu = false;
             foreach( $rank_types as $rank_type ) {
-                $show_in_menu = get_post_meta( $rank_type->ID, '_badgeos_show_in_menu', true );
+                $show_in_menu = badgeos_utilities::get_post_meta( $rank_type->ID, '_badgeos_show_in_menu', true );
                 if( 'on' == $show_in_menu ) {
                     $rank_menu = true;
                 }
@@ -752,7 +766,7 @@ function badgeos_get_directory_url() {
 function badgeos_is_debug_mode() {
 
 	//get setting for debug mode
-	$badgeos_settings = get_option( 'badgeos_settings' );
+	$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
 	$debug_mode = ( !empty( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
 
 	if ( $debug_mode == 'enabled' ) {
@@ -784,12 +798,23 @@ if ( ! function_exists('badgeos_write_log')) {
  * @return bool
  */
 function badgeos_first_time_installed() {
-	
-	$credly_settings = (array) get_option( 'credly_settings', array() );
+	require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
+	$credly_settings = (array) badgeos_utilities::get_option( 'credly_settings', array() );
 
 	if ( isset( $credly_settings ) && is_array( $credly_settings ) && count( $credly_settings ) > 0 ) {
 		return true;
 	}
 
 	return false;
+}
+
+/**
+ * Check if credly is enabled
+ *
+ * @return bool
+ */
+function badgeos_get_meta_data( $type, $object_id, $meta_key = '', $single = false) {
+
+	return badgeos_utilities::get_post_meta( $object_id, $meta_key, $single );
+	//return get_metadata( $type, $object_id, $meta_key, $single );
 }

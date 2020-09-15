@@ -1,5 +1,5 @@
 <?php
-  $badgeos_admin_tools                  = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+  $badgeos_admin_tools                  = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
   $email_general_background_color       = !empty( $badgeos_admin_tools['email_general_background_color'] )? $badgeos_admin_tools['email_general_background_color'] : '#ffffff';
   $email_general_body_background_color  = !empty( $badgeos_admin_tools['email_general_body_background_color'] )? $badgeos_admin_tools['email_general_body_background_color'] : '#f6f6f6';
   $email_general_body_text_color        = !empty( $badgeos_admin_tools['email_general_body_text_color'] )? $badgeos_admin_tools['email_general_body_text_color'] : '#000000';
