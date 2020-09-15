@@ -73,6 +73,7 @@ class BadgeOS {
 		
 		//Template redirect hook
 		add_action( 'activated_plugin', array( $this, 'activation_redirect' ), 10, 2 );
+
 	}
 
 	/**

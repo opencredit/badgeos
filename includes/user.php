@@ -973,7 +973,6 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	$sites = badgeos_get_network_site_ids();
 	foreach( $sites as $site_blog_id ) {
 
-
 		// Merge earned achievements to our achievement type array
 		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
 		if ( is_array($achievement_types) ) {

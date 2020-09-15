@@ -472,7 +472,7 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
             if ( trim( $rank_main_type ) == trim( $rank_post_type ) ) {
                 $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
 
-                 $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_cc_list', 'cc' );
+                $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_cc_list', 'cc' );
                 $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_bcc_list', 'bcc' );
 
                 if( ! isset( $badgeos_admin_tools['email_disable_ranks_email'] ) || $badgeos_admin_tools['email_disable_ranks_email'] == 'no' ) {
@@ -609,6 +609,7 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
             
             $point_post_type = $post_main_obj->post_type;
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+
             $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_awards_cc_list', 'cc' );
             $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_awards_bcc_list', 'bcc' );
 
