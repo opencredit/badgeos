@@ -230,7 +230,7 @@ function badgeos_get_required_achievements_for_achievement_list_markup( $steps =
  * @since  1.0.0
  * @param  string $title Our step title
  * @param  object $step  Our step's post object
- * @return string        Our potentially udated title
+ * @return string Our potentially udated title
  */
 function badgeos_step_link_title_to_achievement( $title = '', $step = null ) {
 

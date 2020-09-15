@@ -93,7 +93,6 @@ class BadgeOS {
 		global $wpdb;
 
 		$point_type = 'point_type';
-		
 		$table_name = $wpdb->prefix . "badgeos_achievements";
 		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
 			$sql = "CREATE TABLE " . $table_name . " (
@@ -120,7 +119,7 @@ class BadgeOS {
          */
 		$table_name = $wpdb->prefix . 'badgeos_points';
 		if($wpdb->get_var("show tables like '$table_name'") != $table_name) {
-			$sql = "CREATE TABLE " . $table_name . " (
+			$sql = "CREATE TABLE ".$table_name." (
 				`id` int(10) NOT NULL AUTO_INCREMENT,
 				`achievement_id` int(10) DEFAULT '0',
 				`credit_id` int(10) DEFAULT '0',
@@ -221,49 +220,50 @@ class BadgeOS {
 			$badgeos_admin_tools['unsubscribe_email_page']   = '0';
             $badgeos_admin_tools['email_general_from_name']   = get_bloginfo( 'name' );
 			$badgeos_admin_tools['email_general_from_email']   = get_bloginfo( 'admin_email' );
+			$badgeos_admin_tools['email_general_cc_list']   = '';
+			$badgeos_admin_tools['email_general_bcc_list']   = '';
+
 			$badgeos_admin_tools['email_general_background_color']   		= '#ffffff';
 			$badgeos_admin_tools['email_general_body_background_color']   	= '#f6f6f6';
-			$badgeos_admin_tools['email_general_body_text_color']   = '#000000';
+			$badgeos_admin_tools['email_general_body_text_color']   		= '#000000';
 			$badgeos_admin_tools['email_general_footer_background_color']   = '#ffffff';
-			$badgeos_admin_tools['email_general_footer_text_color']   = '#000000';
-
+			$badgeos_admin_tools['email_general_footer_text_color']   		= '#000000';
 
             $badgeos_admin_tools['email_disable_earned_achievement_email']   = 'yes';
             $badgeos_admin_tools['email_achievement_subject']   = __( 'Congratulation for earning an achievement', 'badgeos' );
-
+			$badgeos_admin_tools['email_achievement_cc_list']   = '';
+			$badgeos_admin_tools['email_achievement_bcc_list']   = '';
             $email_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
             $email_achievement_content .= '<p>'.__( 'You have earned a new achievement i.e. "[achievement_title]". [points] points are also added in your point balance.', 'badgeos' ).'</p>';
             $email_achievement_content .= '<p>[achievement_image]</p>';
-
             $badgeos_admin_tools['email_achievement_content']   = $email_achievement_content;
 
             $badgeos_admin_tools['email_disable_achievement_steps_email']   = 'yes';
             $badgeos_admin_tools['email_steps_achievement_subject']   = __( 'Congratulation for earning an achievement step', 'badgeos' );
-
+			$badgeos_admin_tools['email_achievement_steps_cc_list']   = '';
+			$badgeos_admin_tools['email_achievement_steps_bcc_list']   = '';
             $email_steps_achievement_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
             $email_steps_achievement_content .= '<p>'.__( 'You have earned a new achievement step i.e. "[step_title]".', 'badgeos' ).'</p>';
             $email_steps_achievement_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_steps_achievement_content']   = $email_steps_achievement_content;
 
-
             $badgeos_admin_tools['email_disable_ranks_email']   = 'yes';
             $badgeos_admin_tools['email_ranks_subject']   = __( 'Congratulation for earning a rank', 'badgeos' );
-
+			$badgeos_admin_tools['email_ranks_cc_list']   = '';
+			$badgeos_admin_tools['email_ranks_bcc_list']   = '';
             $email_ranks_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
             $email_ranks_content .= '<p>'.__( 'You have earned a new rank i.e. "[rank_title]".', 'badgeos' ).'</p>';
             $email_ranks_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_ranks_content']   = $email_ranks_content;
 
-
             $badgeos_admin_tools['email_disable_rank_steps_email']   = 'yes';
             $badgeos_admin_tools['email_steps_rank_subject']   = __( 'Congratulation for earning a rank step', 'badgeos' );
-
+			$badgeos_admin_tools['email_ranks_steps_cc_list']   = '';
+			$badgeos_admin_tools['email_ranks_steps_bcc_list']   = '';
             $email_steps_rank_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
             $email_steps_rank_content .= '<p>'.__( 'You have earned a new rank step i.e. "[rank_step_title]".', 'badgeos' ).'</p>';
             $email_steps_rank_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_steps_rank_content']   = $email_steps_rank_content;
-
-
             $badgeos_admin_tools['email_disable_point_awards_email']   = 'yes';
             $badgeos_admin_tools['email_point_awards_subject']   = __( 'Congratulation for earning new points', 'badgeos' );
 
@@ -271,15 +271,17 @@ class BadgeOS {
             $email_point_awards_content .= '<p>'.__( 'You have earned [credit] [point_title] at [date_earned].', 'badgeos' ).'</p>';
             $email_point_awards_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_point_awards_content']   = $email_point_awards_content;
-
+			$badgeos_admin_tools['email_point_awards_cc_list']   = '';
+			$badgeos_admin_tools['email_point_awards_bcc_list']   = '';
 
             $badgeos_admin_tools['email_disable_point_deducts_email']   = 'yes';
             $badgeos_admin_tools['email_point_deducts_subject']   = '[credit] [point_title] '.__( 'are deducted', 'badgeos' );
-
             $email_point_deducts_content =  '<p>'.__( 'Dear', 'badgeos' ).' [user_name]</p>';
             $email_point_deducts_content .= '<p>[credit] [point_title] '.__( 'are deducted from your balace at', 'badgeos' ).' [date_earned].</p>';
             $email_point_deducts_content .= '<p>'.__( 'Thanks.', 'badgeos' ).'</p>';
             $badgeos_admin_tools['email_point_deducts_content']   = $email_point_deducts_content;
+			$badgeos_admin_tools['email_point_deducts_cc_list']          = '';
+            $badgeos_admin_tools['email_point_deducts_bcc_list']         = '';
 
 			badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
         }

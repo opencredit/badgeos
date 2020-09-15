@@ -709,7 +709,7 @@ class CMB2_hookup extends CMB2_Hookup_Base {
 	 */
 	public function save_post( $post_id, $post = false ) {
 
-		$post_type = $post ? $post->post_type : get_post_type( $post_id );
+		$post_type = $post ? $post->post_type : badgeos_utilities::get_post_type( $post_id );
 
 		$do_not_pass_go = (
 			! $this->can_save( $post_type )

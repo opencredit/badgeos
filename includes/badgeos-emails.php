@@ -8,6 +8,24 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  */
 
+ function badgeos_bcc_cc_emails( $badgeos_admin_tools, $field_id, $type ) {
+    
+    $email_list = '';
+    if( array_key_exists( $field_id, $badgeos_admin_tools ) &&  !empty( $badgeos_admin_tools[ $field_id ] ) ) {
+        $email_list = $badgeos_admin_tools[ $field_id ];
+    } elseif( $type == 'cc' ) {
+        $email_list = $badgeos_admin_tools[ 'email_general_cc_list' ];
+    } elseif( $type == 'bcc' ) {
+        $email_list = $badgeos_admin_tools[ 'email_general_bcc_list' ];
+    }
+
+    if( ! empty( $email_list) ) {
+        $email_list = explode( ',', $email_list ); 
+    }
+
+    return $email_list;
+ }
+
 /**
  * Sends email when achievement is awarded...
  * 
@@ -23,11 +41,13 @@
 function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigger, $site_id, $args, $entry_id ) {
     
     global $wpdb;
+    
     if( badgeos_can_notify_user( $user_id ) ) {
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
         $achievement_type = $badgeos_settings['achievement_main_post_type'];
         $post_obj = get_page_by_path( $achievement_post_type, OBJECT, $achievement_type );
+        
         $parent_post_type = '';
         if( $post_obj ) {
             $parent_post_type = $post_obj->post_type;
@@ -36,18 +56,18 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
             
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_bcc_list', 'bcc' );
+
             if( ! isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) || $badgeos_admin_tools['email_disable_earned_achievement_email'] == 'no' ) {
                 
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
-                
                 if( count( $results ) > 0 ) {
                     $record = $results[ 0 ];
                     $achievement_type 	= $record[ 'post_type' ];
                     $type_title  = $post_obj->post_title;
-                    
                     $step_type = trim( $badgeos_settings['achievement_step_post_type'] );
                     if( ! empty( $achievement_type ) && trim( $achievement_type ) != $step_type ) {
-            
                         $email_subject = $badgeos_admin_tools['email_achievement_subject'];
                         if( empty( $email_subject ) ) {
                             $email_subject      = __( 'Congratulation for earning an achievement', 'badgeos' );
@@ -81,6 +101,21 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
+                        if( count( $email_cc_list ) > 0 ) {
+                            foreach( $email_cc_list as $cc_id ) {
+                                if( !empty( $cc_id ) ) {
+                                    $headers[] = 'Cc: '.$cc_id;
+                                }
+                            }
+                        }
+                        
+                        if( count( $email_bcc_list ) > 0 ) {
+                            foreach( $email_bcc_list as $bcc_id ) {
+                                if( !empty( $bcc_id ) ) {
+                                    $headers[] = 'Bcc: '.$bcc_id;
+                                }
+                            }
+                        }
             
                         $email_subject = str_replace('[achievement_type]', $type_title, $email_subject ); 
                         $email_subject = str_replace('[achievement_title]', $achievement_title, $email_subject ); 
@@ -116,8 +151,10 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         include( 'email_headers/footer.php' );
             
                         $message = ob_get_contents();
-                        ob_end_clean();
+                        ob_end_clean();echo $message;
                         if( ! empty( $user_email ) ) {
+
+
                             wp_mail( $user_email, strip_tags( $email_subject ), $message, $headers );
                         }
                     }
@@ -172,7 +209,10 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         if ( trim( $badgeos_settings['achievement_step_post_type'] ) == $achievement_post_type ) {
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
-            
+
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_steps_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_steps_bcc_list', 'bcc' );
+
             if( ! isset( $badgeos_admin_tools['email_disable_achievement_steps_email'] ) || $badgeos_admin_tools['email_disable_achievement_steps_email'] == 'no' ) {
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
                 if( count( $results ) > 0 ) {
@@ -215,6 +255,23 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
+
+                        if( count( $email_cc_list ) > 0 ) {
+                            foreach( $email_cc_list as $cc_id ) {
+                                if( !empty( $cc_id ) ) {
+                                    $headers[] = 'Cc: '.$cc_id;
+                                }
+                            }
+                        }
+                        
+                        if( count( $email_bcc_list ) > 0 ) {
+                            foreach( $email_bcc_list as $bcc_id ) {
+                                if( !empty( $bcc_id ) ) {
+                                    $headers[] = 'Bcc: '.$bcc_id;
+                                }
+                            }
+                        }
+
                         $date_format = badgeos_utilities::get_option( 'date_format', true );
                         $time_format = badgeos_utilities::get_option( 'time_format', true );
 
@@ -281,7 +338,10 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         if ( trim( $badgeos_settings['ranks_step_post_type'] ) == $achievement_post_type ) {
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
-            
+                        
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_steps_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_steps_bcc_list', 'bcc' );
+
             if( ! isset( $badgeos_admin_tools['email_disable_rank_steps_email'] ) || $badgeos_admin_tools['email_disable_rank_steps_email'] == 'no' ) {
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_ranks where id='".$rank_entry_id."'", 'ARRAY_A' );
                 if( count( $results ) > 0 ) {
@@ -325,6 +385,23 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
+
+                        if( count( $email_cc_list ) > 0 ) {
+                            foreach( $email_cc_list as $cc_id ) {
+                                if( !empty( $cc_id ) ) {
+                                    $headers[] = 'Cc: '.$cc_id;
+                                }
+                            }
+                        }
+                        
+                        if( count( $email_bcc_list ) > 0 ) {
+                            foreach( $email_bcc_list as $bcc_id ) {
+                                if( !empty( $bcc_id ) ) {
+                                    $headers[] = 'Bcc: '.$bcc_id;
+                                }
+                            }
+                        }
+
                         $date_format = badgeos_utilities::get_option( 'date_format', true );
                         $time_format = badgeos_utilities::get_option( 'time_format', true );
 
@@ -394,6 +471,10 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
             $rank_post_type = $post_main_obj->post_type;
             if ( trim( $rank_main_type ) == trim( $rank_post_type ) ) {
                 $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+
+                $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_cc_list', 'cc' );
+                $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_ranks_bcc_list', 'bcc' );
+
                 if( ! isset( $badgeos_admin_tools['email_disable_ranks_email'] ) || $badgeos_admin_tools['email_disable_ranks_email'] == 'no' ) {
         
                     $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_ranks where id='".$rank_entry_id."'", 'ARRAY_A' );
@@ -435,6 +516,23 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
+
+                        if( count( $email_cc_list ) > 0 ) {
+                            foreach( $email_cc_list as $cc_id ) {
+                                if( !empty( $cc_id ) ) {
+                                    $headers[] = 'Cc: '.$cc_id;
+                                }
+                            }
+                        }
+                        
+                        if( count( $email_bcc_list ) > 0 ) {
+                            foreach( $email_bcc_list as $bcc_id ) {
+                                if( !empty( $bcc_id ) ) {
+                                    $headers[] = 'Bcc: '.$bcc_id;
+                                }
+                            }
+                        }
+
                         $date_format = badgeos_utilities::get_option( 'date_format', true );
                         $time_format = badgeos_utilities::get_option( 'time_format', true );
 
@@ -511,6 +609,10 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
             
             $point_post_type = $post_main_obj->post_type;
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_awards_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_awards_bcc_list', 'bcc' );
+
             if( ! isset( $badgeos_admin_tools['email_disable_point_awards_email'] ) || $badgeos_admin_tools['email_disable_point_awards_email'] == 'no' ) {
 
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_points where id='".$point_rec_id."'", 'ARRAY_A' );
@@ -549,6 +651,23 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
         
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
+
+                    if( count( $email_cc_list ) > 0 ) {
+                        foreach( $email_cc_list as $cc_id ) {
+                            if( !empty( $cc_id ) ) {
+                                $headers[] = 'Cc: '.$cc_id;
+                            }
+                        }
+                    }
+                    
+                    if( count( $email_bcc_list ) > 0 ) {
+                        foreach( $email_bcc_list as $bcc_id ) {
+                            if( !empty( $bcc_id ) ) {
+                                $headers[] = 'Bcc: '.$bcc_id;
+                            }
+                        }
+                    }
+
                     $date_format = badgeos_utilities::get_option( 'date_format', true );
                     $time_format = badgeos_utilities::get_option( 'time_format', true );
                     
@@ -621,6 +740,10 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
             
             $point_post_type = $post_main_obj->post_type;
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_deducts_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_point_deducts_bcc_list', 'bcc' );
+
             if( ! isset( $badgeos_admin_tools['email_disable_point_deducts_email'] ) || $badgeos_admin_tools['email_disable_point_deducts_email'] == 'no' ) {
 
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_points where id='".$point_rec_id."'", 'ARRAY_A' );
@@ -659,6 +782,22 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
         
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
+                    if( count( $email_cc_list ) > 0 ) {
+                        foreach( $email_cc_list as $cc_id ) {
+                            if( !empty( $cc_id ) ) {
+                                $headers[] = 'Cc: '.$cc_id;
+                            }
+                        }
+                    }
+                    
+                    if( count( $email_bcc_list ) > 0 ) {
+                        foreach( $email_bcc_list as $bcc_id ) {
+                            if( !empty( $bcc_id ) ) {
+                                $headers[] = 'Bcc: '.$bcc_id;
+                            }
+                        }
+                    }
+
                     $date_format = badgeos_utilities::get_option( 'date_format', true );
                     $time_format = badgeos_utilities::get_option( 'time_format', true );
                     
