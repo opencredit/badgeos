@@ -6,7 +6,7 @@
 
 function cmb2_get_state_options( $value = false ) {
 	
-	$settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	$credits = get_posts( array(
 		'post_type'         =>	trim( $settings['points_main_post_type'] ),
 		'posts_per_page'    =>	-1,
@@ -19,7 +19,7 @@ function cmb2_get_state_options( $value = false ) {
 	else
 		$state_options = '<option value="0" selected>'.__( 'Point Type', 'badgeos' ).'</option>';
 	foreach ( $credits as $credit ) {
-        $plural_name = get_post_meta( $credit->ID, '_point_plural_name', true );
+        $plural_name = badgeos_utilities::get_post_meta( $credit->ID, '_point_plural_name', true );
         $post_type_plural  = '';
         if( ! empty( $plural_name ) ) {
             $post_type_plural = $plural_name;

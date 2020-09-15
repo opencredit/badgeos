@@ -10,7 +10,7 @@ function badgeos_migrate_fields_points_to_point_types_callback() {
     if( $action !== 'badgeos_migrate_fields_points_to_point_types' &&  $action !== 'badgeos_migrate_fields_points_to_point_types' ) {
         exit;
     }
-    $badgeos_settings = get_option( 'badgeos_settings' );
+    $badgeos_settings       = badgeos_utilities::get_option( 'badgeos_settings' );
     $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
 
     if( ! empty( $default_point_type ) ) {
@@ -37,7 +37,7 @@ add_action( 'cron_badgeos_update_old_points_to_point_types', 'cron_badgeos_updat
 
 function badgeos_update_old_points_to_point_types() {
 
-    $badgeos_settings = get_option( 'badgeos_settings' );
+    $badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
     $default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
     if( ! empty( $default_point_type ) ) {
         // Grab all of our achievement type posts
@@ -57,20 +57,20 @@ function badgeos_update_old_points_to_point_types() {
             foreach( $achievements as $achievement ) {
 
                 $achievement_id = $achievement->ID;
-                $points            = get_post_meta( $achievement_id, '_badgeos_points', true );
+                $points            = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_points', true );
                 if( isset( $points ) && ( ! is_array( $points ) || empty($points) ) ) {
                     $points_array = array();
                     $points_array[ '_badgeos_points' ] = intval( $points );
                     $points_array[ '_badgeos_points_type' ] = $default_point_type;
-                    update_post_meta( $achievement_id, '_badgeos_points', $points_array );
+                    badgeos_utilities::update_post_meta( $achievement_id, '_badgeos_points', $points_array );
                 }
 
-                $points_required   = get_post_meta( $achievement_id, '_badgeos_points_required', true );
+                $points_required   = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_points_required', true );
                 if( isset( $points_required ) && ( ! is_array( $points_required ) || empty($points_required) ) ) {
                     $points_req_array = array();
                     $points_req_array[ '_badgeos_points_required' ] = intval( $points_required );
                     $points_req_array[ '_badgeos_points_required_type' ] = $default_point_type;
-                    update_post_meta( $achievement_id, '_badgeos_points_required', $points_req_array );
+                    badgeos_utilities::update_post_meta( $achievement_id, '_badgeos_points_required', $points_req_array );
                 }
             }
         }

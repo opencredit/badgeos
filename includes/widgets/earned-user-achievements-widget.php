@@ -25,7 +25,7 @@ class earned_user_achievements_widget extends WP_Widget {
         $remove_thumb_field = ( isset( $instance['remove_thumb_field'] ) ) ? $instance['remove_thumb_field'] : '';
         $rank_section_title = ( isset( $instance['rank_section_title'] ) ) ? $instance['rank_section_title'] : '';
         $achievement_section_title = ( isset( $instance['achievement_section_title'] ) ) ? $instance['achievement_section_title'] : '';
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         ?>
             <p><label><?php _e( 'Title', 'badgeos' ); ?>: <input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"  type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
@@ -153,7 +153,7 @@ class earned_user_achievements_widget extends WP_Widget {
 		if( array_key_exists( 'before_widget', $args ) )
 			echo $args['before_widget'];
 
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 		$title = apply_filters( 'widget_title', $instance['title'] );
 
         $remove_title_field = isset( $instance['remove_title_field'] ) ? $instance['remove_title_field'] : '';
@@ -181,7 +181,7 @@ class earned_user_achievements_widget extends WP_Widget {
 			if ( $instance['point_total'] == 'on' && !empty( $instance['total_points_type'] ) ) {
 				$earned_points = badgeos_get_points_by_type( $instance['total_points_type'], get_current_user_id() );
                 if( $show_title ) {
-                    $plural_name = get_post_meta( $instance['total_points_type'], '_point_plural_name', true );
+                    $plural_name = badgeos_utilities::get_post_meta( $instance['total_points_type'], '_point_plural_name', true );
                     if( !empty( $plural_name ) ) {
                         $point_title = $plural_name;
                     } else {
@@ -294,10 +294,10 @@ class earned_user_achievements_widget extends WP_Widget {
 					//if $set_achievements is not an array it means nothing is set so show all achievements
 					if ( is_array( $set_achievements ) && in_array( $achievement->post_type, $set_achievements ) ) {
 
-                        $is_hidden = get_post_meta( $achievement->ID, '_badgeos_hidden', true );
+                        $is_hidden = badgeos_utilities::get_post_meta( $achievement->ID, '_badgeos_hidden', true );
 
                         if( $is_hidden != 'hidden' ) {
-                            if (get_post_type($achievement->ID) != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                            if (badgeos_utilities::get_post_type($achievement->ID) != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
 
                                 if( $is_title_show == false ) {
                                     echo '<p class="badgeos-user-achievements-main">';
@@ -333,7 +333,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
 								$open_badge_enable_baking       	= badgeos_get_option_open_badge_enable_baking($achievement->ID);
 								if( $open_badge_enable_baking ) {
-									$badgeos_evidence_page_id	= get_option( 'badgeos_evidence_url' );
+									$badgeos_evidence_page_id	= badgeos_utilities::get_option( 'badgeos_evidence_url' );
 									$badgeos_evidence_url 		= get_permalink( $badgeos_evidence_page_id );
 									$badgeos_evidence_url 		= add_query_arg( 'bg', $achievement->ID, $badgeos_evidence_url );
 									$badgeos_evidence_url  		= add_query_arg( 'eid', $achievement->entry_id, $badgeos_evidence_url );

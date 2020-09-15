@@ -266,7 +266,7 @@ function p2p_delete_connection( $p2p_id ) {
 }
 
 function p2p_get_meta( $p2p_id, $key = '', $single = false ) {
-	return get_metadata( 'p2p', $p2p_id, $key, $single );
+	return badgeos_get_meta_data( 'p2p', $p2p_id, $key, $single );
 }
 
 function p2p_update_meta( $p2p_id, $key, $value, $prev_value = '' ) {

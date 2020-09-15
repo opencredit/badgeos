@@ -41,7 +41,7 @@ class BadgeOS_Credly {
     function __construct() {
 
         // Set our options based on our Credly settings
-        $this->credly_settings = (array) get_option( 'credly_settings', array() );
+        $this->credly_settings = (array) badgeos_utilities::get_option( 'credly_settings', array() );
 
 		$default_settings = array(
 			'api_key' => '',
@@ -85,7 +85,7 @@ class BadgeOS_Credly {
         // Set our user settings
 		if ( is_user_logged_in() ) {
 			$this->user_id             = get_current_user_id();
-			$this->user_enabled        = ( 'false' === get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
+			$this->user_enabled        = ( 'false' === badgeos_utilities::get_user_meta( $this->user_id, 'credly_user_enable', true ) ? 'false' : 'true' );
 
 			// Hook in to WordPress
 			$this->hooks();
@@ -318,7 +318,7 @@ class BadgeOS_Credly {
 
         $categories        = ( $fields['credly_categories'] ? implode( ',',  $fields['credly_categories'] ) : '' );
 
-        $badge_builder_meta = get_post_meta( $badge_id, '_credly_badge_meta', true );
+        $badge_builder_meta = badgeos_utilities::get_post_meta( $badge_id, '_credly_badge_meta', true );
 
         $args = array(
             'attachment'        => $attachment, // base64 encoded string
@@ -524,7 +524,7 @@ class BadgeOS_Credly {
         // Check if we have a numeric user id, if not get current user
         $user_id = ( is_numeric( $user_id ) ? $user_id : $this->user_id );
 
-        $updated = update_user_meta( $user_id, 'credly_user_enable', $value );
+        $updated = badgeos_utilities::update_user_meta( $user_id, 'credly_user_enable', $value );
 
         return $updated;
 
@@ -539,7 +539,7 @@ class BadgeOS_Credly {
      */
     public function credly_profile_setting_force_enable() {
 
-        $enabled = get_user_meta( $this->user_id, 'credly_user_enable', true );
+        $enabled = badgeos_utilities::get_user_meta( $this->user_id, 'credly_user_enable', true );
 
         if ( empty( $enabled ) )
             $this->credly_profile_setting_update_meta();
@@ -661,7 +661,7 @@ class BadgeOS_Credly {
     private function credly_user_set_id( $id = '' ) {
 
         if ( ! empty( $id ) )
-            update_user_meta( $this->user_id, 'credly_user_id', $id );
+        badgeos_utilities::update_user_meta( $this->user_id, 'credly_user_id', $id );
 
     }
 
@@ -721,12 +721,12 @@ class BadgeOS_Credly {
 
         $credly_user_id = $this->credly_get_user_id( $user_id );
 
-        $credly_badge_id = get_post_meta( $badge_id, '_badgeos_credly_badge_id', true );
+        $credly_badge_id = badgeos_utilities::get_post_meta( $badge_id, '_badgeos_credly_badge_id', true );
 
         $testimonial = credly_fieldmap_get_field_value( $badge_id, $this->field_testimonial );
         $testimonial = ( strlen( $testimonial ) > 1000 ? ( substr( $testimonial, 0, 996 ) . '...' ) : $testimonial );
 
-        $credly_enable_notification = get_post_meta( $badge_id, '_badgeos_credly_enable_notification', true );
+        $credly_enable_notification = badgeos_utilities::get_post_meta( $badge_id, '_badgeos_credly_enable_notification', true );
         $this->send_email = $credly_enable_notification == 'false'? 0 : 1 ;
 
         if ( is_numeric( $credly_user_id ) ) {
@@ -830,7 +830,7 @@ class BadgeOS_Credly {
      */
     public function badge_metabox_add() {
 
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
         $achievement_types_temp = badgeos_get_achievement_types_slugs();
         $achievement_types = array();
         if( $achievement_types_temp ) {
@@ -861,16 +861,16 @@ class BadgeOS_Credly {
         global $post;
 
         //Check existing post meta
-        $send_to_credly             = ( get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) ? get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) : 'false' );
-        $credly_include_evidence    = ( get_post_meta( $post->ID, '_badgeos_credly_include_evidence', true ) ? get_post_meta( $post->ID, '_badgeos_credly_include_evidence', true ): 'false' );
-        $credly_include_testimonial = ( get_post_meta( $post->ID, '_badgeos_credly_include_testimonial', true ) ? get_post_meta( $post->ID, '_badgeos_credly_include_testimonial', true ) : 'false' );
-        $credly_expiration          = ( get_post_meta( $post->ID, '_badgeos_credly_expiration', true ) ? get_post_meta( $post->ID, '_badgeos_credly_expiration', true ) : '0' );
-        $credly_is_giveable         = ( get_post_meta( $post->ID, '_badgeos_credly_is_giveable', true ) ? get_post_meta( $post->ID, '_badgeos_credly_is_giveable', true ) : 'false' );
-        $credly_categories          = maybe_unserialize( get_post_meta( $post->ID, '_badgeos_credly_categories', true ) );
-        $credly_badge_id            = get_post_meta( $post->ID, '_badgeos_credly_badge_id', true );
+        $send_to_credly             = ( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_badgeos_send_to_credly', true ) : 'false' );
+        $credly_include_evidence    = ( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_include_evidence', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_include_evidence', true ): 'false' );
+        $credly_include_testimonial = ( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_include_testimonial', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_include_testimonial', true ) : 'false' );
+        $credly_expiration          = ( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_expiration', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_expiration', true ) : '0' );
+        $credly_is_giveable         = ( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_is_giveable', true ) ? badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_is_giveable', true ) : 'false' );
+        $credly_categories          = maybe_unserialize( badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_categories', true ) );
+        $credly_badge_id            = badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_badge_id', true );
 
 
-        $credly_enable_notification = get_post_meta( $post->ID, '_badgeos_credly_enable_notification', true );
+        $credly_enable_notification = badgeos_utilities::get_post_meta( $post->ID, '_badgeos_credly_enable_notification', true );
     ?>
         <input type="hidden" name="credly_details_nonce" value="<?php echo wp_create_nonce( 'credly_details' ); ?>" />
         <div class="box-credly-alert">
@@ -993,7 +993,7 @@ class BadgeOS_Credly {
 
         // Update our meta value with our returned Credly badge ID
         if ( isset( $credly_badge ) )
-            update_post_meta( $post_id, '_badgeos_credly_badge_id', $credly_badge );
+            badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_badge_id', $credly_badge );
 
         return $post_id;
 
@@ -1035,13 +1035,13 @@ class BadgeOS_Credly {
      */
     private function badge_metabox_save_meta( $post_id = 0, $fields = array() ) {
 
-        update_post_meta( $post_id, '_badgeos_send_to_credly', $fields['send_to_credly'] );
-        update_post_meta( $post_id, '_badgeos_credly_include_evidence', $fields['credly_include_evidence'] );
-        update_post_meta( $post_id, '_badgeos_credly_enable_notification', $fields['credly_enable_notification'] );
-        update_post_meta( $post_id, '_badgeos_credly_include_testimonial', $fields['credly_include_testimonial'] );
-        update_post_meta( $post_id, '_badgeos_credly_expiration', $fields['credly_expiration'] );
-        update_post_meta( $post_id, '_badgeos_credly_is_giveable', $fields['credly_is_giveable'] );
-        update_post_meta( $post_id, '_badgeos_credly_categories', $fields['credly_categories'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_send_to_credly', $fields['send_to_credly'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_include_evidence', $fields['credly_include_evidence'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_enable_notification', $fields['credly_enable_notification'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_include_testimonial', $fields['credly_include_testimonial'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_expiration', $fields['credly_expiration'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_is_giveable', $fields['credly_is_giveable'] );
+        badgeos_utilities::update_post_meta( $post_id, '_badgeos_credly_categories', $fields['credly_categories'] );
 
         return true;
 
@@ -1160,8 +1160,8 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
         case 'featured_image':
             $value = get_post_thumbnail_id( $post_id );
             if ( ! $value ) {
-                $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-                $parent_achievement = get_page_by_path( get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
+                $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+                $parent_achievement = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
                 $value = get_post_thumbnail_id( $parent_achievement->ID );
             }
 
@@ -1173,7 +1173,7 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
             break;
 
 		case 'congratulations_text':
-            $value = get_post_meta( $post_id, '_badgeos_congratulations_text', true );
+            $value = badgeos_utilities::get_post_meta( $post_id, '_badgeos_congratulations_text', true );
 
             break;
 
@@ -1183,7 +1183,7 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
             break;
 
         default:
-            $value = get_post_meta( $post_id, $field, true );
+            $value = badgeos_utilities::get_post_meta( $post_id, $field, true );
 
             break;
     }
@@ -1202,10 +1202,10 @@ function credly_fieldmap_get_field_value( $post_id, $field = '' ) {
 function credly_is_achievement_giveable( $achievement_id = 0, $user_id = 0 ) {
 
     // Check if "send to credly" is enabled
-    $is_sendable = get_post_meta( $achievement_id, '_badgeos_send_to_credly', true );
+    $is_sendable = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_send_to_credly', true );
 
     // Get Credly badge ID
-    $credly_badge_id = get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
+    $credly_badge_id = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_credly_badge_id', true );
 
     // If send to credly is ON, and badge ID is set, badge is givable
     if ( 'true' == $is_sendable && ! empty( $credly_badge_id ) ){
@@ -1366,7 +1366,7 @@ add_action( 'post_credly_user_badge', 'badgeos_log_user_sent_achievement_to_cred
 
 
 function badgeos_credly_disconnection_notice() {
-    $badgeos_credly_update_disconnection_status = get_option( 'badgeos_credly_update_disconnection_status' );
+    $badgeos_credly_update_disconnection_status = badgeos_utilities::get_option( 'badgeos_credly_update_disconnection_status' );
     if( $badgeos_credly_update_disconnection_status!='shown' ) {
         echo '<div id="message" class="notice badgeos-credly-disconnection-notice is-dismissible error">';
         echo '<p>' . __( "It's time! Migrate from Classic Credly now and take advantage of the all new stand alone BadgeOS plugin - <a href='https://badgeos.org/good-news-what-credly-sunsetting-means-for-badgeos-users/'>Read more!</a> ", "badgeos" ). '</p>';
@@ -1376,7 +1376,6 @@ function badgeos_credly_disconnection_notice() {
 add_action( 'admin_notices', 'badgeos_credly_disconnection_notice' );
 
 function badgeos_credly_update_disconnection_status_notice() {
-    update_option( 'badgeos_credly_update_disconnection_status', 'shown' );
-
+    badgeos_utilities::update_option( 'badgeos_credly_update_disconnection_status', 'shown' );
 }
 add_action( 'wp_ajax_badgeos_credly_update_disconnection_status', 'badgeos_credly_update_disconnection_status_notice' );

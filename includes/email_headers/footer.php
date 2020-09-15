@@ -1,6 +1,6 @@
 <?php
   
-  $badgeos_admin_tools                  = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+  $badgeos_admin_tools                  = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
   $email_general_footer_background_color= !empty( $badgeos_admin_tools['email_general_footer_background_color'] )? $badgeos_admin_tools['email_general_footer_background_color'] : '#ffffff';
   $email_general_footer_text_color        = !empty( $badgeos_admin_tools['email_general_footer_text_color'] )? $badgeos_admin_tools['email_general_footer_text_color'] : '#000000';
   $allow_unsubscribe_email        = !empty( $badgeos_admin_tools['allow_unsubscribe_email'] )? $badgeos_admin_tools['allow_unsubscribe_email'] : 'No';
@@ -12,7 +12,7 @@
 	), $unsubscribe_email_page );
 ?>                    
                     <?php
-                      $badgeos_admin_tools = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+                      $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
                     ?>
                    <br>
                   

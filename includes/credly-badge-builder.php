@@ -34,8 +34,8 @@ function badgeos_get_badge_builder_link( $args ) {
 function badgeos_badge_builder_filter_thumbnail_metabox( $content, $post_id ) {
 
     // Only add a link to achievement and achievement type posts
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
-    if ( badgeos_is_achievement( $post_id ) || $badgeos_settings['achievement_main_post_type'] == get_post_type( $post_id ) ) {
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if ( badgeos_is_achievement( $post_id ) || $badgeos_settings['achievement_main_post_type'] == badgeos_utilities::get_post_type( $post_id ) ) {
         // If no thumbnail, output standard badge builder link
 		if ( ! has_post_thumbnail( $post_id ) ) {
 			$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'link_text' => __( 'Use Credly Badge Builder', 'badgeos' ) ) ) . '</p>';
@@ -43,7 +43,7 @@ function badgeos_badge_builder_filter_thumbnail_metabox( $content, $post_id ) {
 		// output a "continue editing" link
 		} else {
 			$attachment_id = get_post_thumbnail_id( $post_id );
-			$continue = get_post_meta( $attachment_id, '_credly_badge_meta', true );
+			$continue = badgeos_utilities::get_post_meta( $attachment_id, '_credly_badge_meta', true );
 			if ( $continue )
 				$content .= '<p>' . badgeos_get_badge_builder_link( array( 'post_id' => $post_id, 'attachment_id' => $attachment_id, 'link_text' => __( 'Edit in Credly Badge Builder', 'badgeos' ), 'continue' => $continue ) ) . '</p>';
 		}
@@ -67,7 +67,7 @@ add_filter( 'admin_post_thumbnail_html', 'badgeos_badge_builder_filter_thumbnail
 function badgeos_badge_builder_get_icon_credit( $attachment_id = 0 ) {
 
 	// If image has badge builder icon meta
-	if ( $icon_meta = get_post_meta( $attachment_id, '_credly_icon_meta', true ) ) {
+	if ( $icon_meta = badgeos_utilities::get_post_meta( $attachment_id, '_credly_icon_meta', true ) ) {
 		$icon_meta = (array) maybe_unserialize( $icon_meta );
 		$credit = sprintf(
 			__( 'Badge icon "%1$s (%2$s)" provided by %3$s under %4$s', 'badgeos' ),

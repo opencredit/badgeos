@@ -62,7 +62,7 @@ function badgeos_download_and_configure_asset() {
     if( ! empty( $assets_id ) ) {
         if( $assets[$assets_id] ) {
 
-            $downloaded_assets_id = get_option( 'badgeos_restapi_'.$assets_id  );
+            $downloaded_assets_id = badgeos_utilities::get_option( 'badgeos_restapi_'.$assets_id  );
             if( trim( $downloaded_assets_id ) != 'downloaded' ) {
                 if( !empty( $assets[$assets_id]->asset_url ) ) { 
                     // If the function it's not available, require it.
@@ -106,7 +106,7 @@ function badgeos_download_and_configure_asset() {
                             $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
                             wp_update_attachment_metadata( $attach_id, $attach_data );
                         }
-                        update_option( 'badgeos_restapi_'.$assets_id, 'downloaded'  );
+                        badgeos_utilities::update_option( 'badgeos_restapi_'.$assets_id, 'downloaded'  );
                         echo 'done';
                     } else {
                         echo __( 'Invalid zip archive provided.', 'badgeos' ) ;
@@ -118,10 +118,10 @@ function badgeos_download_and_configure_asset() {
                 echo __( 'Asset is already downloaded on your media gallery.', 'badgeos' );
             }
         } else {
-            echo __( 'Asset is not available.', 'badgeos' );
+            echo __( "Sorry, we're unable to reach the server right now please try later.", 'badgeos' );
         }
     } else {
-        echo __( 'Asset is not available.', 'badgeos' );
+        echo __( "Sorry, we're unable to reach the server right now please try later.", 'badgeos' );
     }
     exit;
 }

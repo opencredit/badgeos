@@ -76,7 +76,7 @@ function badgeos_get_user_achievements( $args = array() ) {
 			}
 		}
 
-        $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 		if( $args['no_step'] ) {
             $where .= " AND post_type != '".trim( $badgeos_settings['achievement_step_post_type'] )."'";
 		}
@@ -113,7 +113,7 @@ function badgeos_get_user_achievements( $args = array() ) {
 		return $user_achievements;
 	} else {
 		// Grab the user's current achievements
-		$achievements = ( $earned_items = get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? (array) $earned_items : array();
+		$achievements = ( $earned_items = badgeos_utilities::get_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', true ) ) ? (array) $earned_items : array();
 
 		// If we want all sites (or no specific site), return the full array
 		if ( empty( $achievements ) || empty( $args['site_id']) || 'all' == $args['site_id'] )
@@ -220,7 +220,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 			
 			return $wpdb->insert_id;
 		}	else {
-			update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements );
+			badgeos_utilities::update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements );
 			
 			do_action( 'badgeos_achievements_new_added', $rec_type, $new_achievement->ID, absint( $args['user_id'] ), 0 );
 
@@ -229,7 +229,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 	} else {
 		
 		// Finally, update our user meta
-		$is_saved = update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements);
+		$is_saved = badgeos_utilities::update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements);
         do_action( 'badgeos_achievements_new_added', '', 0, absint( $args['user_id'] ), 0 );
 		return $is_saved;
 	}
@@ -364,7 +364,7 @@ function badgeos_user_profile_data( $user = null ) {
 
 	$achievement_ids = array();
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     echo '<h2>' . __( 'BadgeOS Email Notifications', 'badgeos' ) . '</h2>';
     echo '<table class="form-table">';
     echo '<tr>';
@@ -513,7 +513,7 @@ function delete_badgeos_bulk_achievements_records( ){
 
 	global $wpdb;
 
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $user_recs = $_POST['achievements'];
     $user_id = $_POST['user_id'];
     if( is_array( $user_recs ) && count( $user_recs ) > 0 ) {
@@ -611,13 +611,13 @@ function badgeos_save_user_profile_fields( $user_id = 0 ) {
      * Update Rank Type Filter Field
      */
     $rank_type_filter = ( isset( $_POST['badgeos_ranks_filter'] ) ? $_POST['badgeos_ranks_filter'] : 'all' );
-    update_user_meta( $user_id, '_badgeos_ranks_filter', $rank_type_filter );
+    badgeos_utilities::update_user_meta( $user_id, '_badgeos_ranks_filter', $rank_type_filter );
 
     /**
      * Update Achievement Type Filter Field
      */
     $rank_type_filter = ( isset( $_POST['badgeos_achievement_filter'] ) ? $_POST['badgeos_achievement_filter'] : 'all' );
-	update_user_meta( $user_id, '_badgeos_achievement_filter', $rank_type_filter );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_achievement_filter', $rank_type_filter );
 
 }
 add_action( 'personal_options_update', 'badgeos_save_user_profile_fields' );
@@ -632,7 +632,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 
 	$rank_types = badgeos_get_rank_types_slugs_detailed();
 	$can_manage = current_user_can( badgeos_get_manager_capability() );
-	$selected = get_user_meta( $user->ID, '_badgeos_ranks_filter', true );
+	$selected = badgeos_utilities::get_user_meta( $user->ID, '_badgeos_ranks_filter', true );
 	if( empty( $selected ) ) {
         $selected = 'all';
     }
@@ -705,7 +705,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 							<td><?php echo $rank->rank_title; ?></td>
 							<td><?php echo $rank->rank_type; ?></td>
 							<?php
-							$last_awarded = get_user_meta( $user->ID, '_badgeos_'.$rank->rank_type.'_rank', true );
+							$last_awarded = badgeos_utilities::get_user_meta( $user->ID, '_badgeos_'.$rank->rank_type.'_rank', true );
 							?>
 							<td class="last-awarded" align="center">
 								<?php
@@ -719,7 +719,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 								?>
 								<td>
 									<?php
-									$rank_post = get_post( $rank->rank_id );
+									$rank_post = badgeos_utilities::badgeos_get_post( $rank->rank_id );
 									if( $rank->priority > 0 ) {
 										$prev_rank_id = ( !is_null( badgeos_get_prev_rank_id( absint( $rank->rank_id ) ) ) ? badgeos_get_prev_rank_id( absint( $rank->rank_id ) ) : '' );
 										?>
@@ -815,7 +815,7 @@ function badgeos_profile_award_achievement( $user = null, $achievement_ids = arr
 
 	// Grab our achivement types
 	$achievement_types = badgeos_get_achievement_types();
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	?>
 
 	<h2><?php _e( 'Award an Achievement', 'badgeos' ); ?></h2>
@@ -973,21 +973,11 @@ function badgeos_get_network_achievement_types_for_user( $user_id ) {
 	$sites = badgeos_get_network_site_ids();
 	foreach( $sites as $site_blog_id ) {
 
-		// If we're polling a different blog, switch to it
-		if ( $blog_id != $site_blog_id ) {
-			switch_to_blog( $site_blog_id );
-		}
-
 		// Merge earned achievements to our achievement type array
 		$achievement_types = badgeos_get_user_earned_achievement_types( $user_id );
 		if ( is_array($achievement_types) ) {
 			$all_achievement_types = array_merge($achievement_types,$all_achievement_types);
 		}
-	}
-
-	if ( is_multisite() ) {
-		// Restore the original blog so the sky doesn't fall
-		switch_to_blog( $cached_id );
 	}
 
 	// Pare down achievement type list so we return no duplicates
@@ -1009,8 +999,8 @@ function badgeos_can_notify_user( $user_id = 0 ) {
 	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
-
-    return get_user_meta( $user_id, '_badgeos_can_notify_user', true )? true:false;
+	
+    return badgeos_utilities::get_user_meta( $user_id, '_badgeos_can_notify_user', true )? true:false;
 }
 
 /**
@@ -1023,7 +1013,7 @@ function badgeos_can_notify_user( $user_id = 0 ) {
  */
 function badgeos_update_can_notify_user_field( $user_id ){
 
-    update_user_meta( $user_id, '_badgeos_can_notify_user', 1 );
+    badgeos_utilities::update_user_meta( $user_id, '_badgeos_can_notify_user', 1 );
 }
 add_action( 'user_register', 'badgeos_update_can_notify_user_field', 10, 1 );
 
@@ -1041,7 +1031,7 @@ function badgeos_save_email_notify_field( $user_id ) {
         return false;
     }
 
-    update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
+    badgeos_utilities::update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
 }
 add_action( 'personal_options_update', 'badgeos_save_email_notify_field' );
 add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );

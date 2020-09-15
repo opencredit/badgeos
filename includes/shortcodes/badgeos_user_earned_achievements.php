@@ -8,7 +8,7 @@
 function badgeos_user_earned_achievements_shortcode() {
     global $wpdb;
     // Setup a custom array of achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,

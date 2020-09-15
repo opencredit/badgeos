@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
-$badgeos_admin_tools        = ( $exists = get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+$badgeos_admin_tools        = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
 $email_achievement_content  = isset( $badgeos_admin_tools['email_achievement_content'] ) ? $badgeos_admin_tools['email_achievement_content'] : '';
 $email_achievement_content  = stripslashes( html_entity_decode( $email_achievement_content ) );
 
@@ -106,6 +106,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr>
                     <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_general_cc_list'] )?$badgeos_admin_tools['email_general_cc_list']:''; ?>" id="badgeos_tools_email_general_cc_list">
+                            <span class="tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_general_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_general_bcc_list'] )?$badgeos_admin_tools['email_general_bcc_list']:''; ?>" id="badgeos_tools_email_general_bcc_list">
+                            <span class="tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row" valign="top"><label><?php _e( 'Footer Text', 'badgeos' ); ?></label></th>
                         <td>
                             <textarea name="badgeos_tools[email_general_footer_text]" rows="6" cols="60" id="badgeos_tools_email_general_footer_text"><?php echo isset( $badgeos_admin_tools['email_general_footer_text'] )?$badgeos_admin_tools['email_general_footer_text']:''; ?></textarea>`  
@@ -192,6 +206,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr>
                     <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_achievement_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_achievement_cc_list'] )?$badgeos_admin_tools['email_achievement_cc_list']:''; ?>" id="badgeos_tools_email_achievement_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_achievement_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_achievement_bcc_list'] )?$badgeos_admin_tools['email_achievement_bcc_list']:''; ?>" id="badgeos_tools_email_achievement_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row" valign="top"><label for="badgeos_tools_email_achievement_content"><?php _e( 'Content', 'badgeos' ); ?></label></th>
                         <td>
                             <?php wp_editor( $email_achievement_content, 'badgeos_tools_email_achievement_content', array('media_buttons' => true, 'editor_height' => 500, 'textarea_rows' => 20, 'textarea_name' => 'badgeos_tools[email_achievement_content]' ) ); ?>
@@ -228,6 +256,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                             <span class="tool-hint"><?php _e( 'Email Subject', 'badgeos' ); ?></span>
                         </td>
                     </tr> 
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_achievement_steps_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_achievement_steps_cc_list'] )?$badgeos_admin_tools['email_achievement_steps_cc_list']:''; ?>" id="badgeos_tools_email_achievement_steps_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_achievement_steps_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_achievement_steps_bcc_list'] )?$badgeos_admin_tools['email_achievement_steps_bcc_list']:''; ?>" id="badgeos_tools_email_achievement_steps_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
                     <tr>
                         <th scope="row" valign="top"><label for="badgeos_tools_email_steps_achievement_content"><?php _e( 'Content', 'badgeos' ); ?></label></th>
                         <td>
@@ -266,6 +308,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr> 
                     <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_ranks_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_ranks_cc_list'] )?$badgeos_admin_tools['email_ranks_cc_list']:''; ?>" id="badgeos_tools_email_ranks_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_ranks_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_ranks_bcc_list'] )?$badgeos_admin_tools['email_ranks_bcc_list']:''; ?>" id="badgeos_tools_email_ranks_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row" valign="top"><label for="badgeos_tools_email_ranks_content"><?php _e( 'Content', 'badgeos' ); ?></label></th>
                         <td>
                             <?php wp_editor( $email_ranks_content, 'badgeos_tools_email_ranks_content', array('media_buttons' => true, 'editor_height' => 500, 'textarea_rows' => 20, 'textarea_name' => 'badgeos_tools[email_ranks_content]' ) ); ?>
@@ -303,6 +359,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr> 
                     <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_ranks_steps_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_ranks_steps_cc_list'] )?$badgeos_admin_tools['email_ranks_steps_cc_list']:''; ?>" id="badgeos_tools_email_ranks_steps_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_ranks_steps_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_ranks_steps_bcc_list'] )?$badgeos_admin_tools['email_ranks_steps_bcc_list']:''; ?>" id="badgeos_tools_email_ranks_steps_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row" valign="top"><label for="badgeos_tools_email_steps_rank_content"><?php _e( 'Content', 'badgeos' ); ?></label></th>
                         <td>
                             <?php wp_editor( $email_steps_rank_content, 'badgeos_tools_email_steps_rank_content', array('media_buttons' => true, 'editor_height' => 500, 'textarea_rows' => 20, 'textarea_name' => 'badgeos_tools[email_steps_rank_content]' ) ); ?>
@@ -337,6 +407,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                             <input type="text" class="badgeos_tools_email_achievement_field" name="badgeos_tools[email_point_awards_subject]" value="<?php echo isset( $badgeos_admin_tools['email_point_awards_subject'] )?$badgeos_admin_tools['email_point_awards_subject']:''; ?>" size="50" id="badgeos_tools_email_point_awards_subject" />
                             <p><b><?php _e( 'Shortcodes', 'badgeos' ); ?>:</b> [point_title], [date_earned], [credit], [user_email], [user_name]</p>
                             <span class="tool-hint"><?php _e( 'Email Subject', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_point_awards_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_point_awards_cc_list'] )?$badgeos_admin_tools['email_point_awards_cc_list']:''; ?>" id="badgeos_tools_email_point_awards_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_point_awards_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_point_awards_bcc_list'] )?$badgeos_admin_tools['email_point_awards_bcc_list']:''; ?>" id="badgeos_tools_email_point_awards_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
                         </td>
                     </tr> 
                     <tr>
@@ -376,6 +460,20 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                             <span class="tool-hint"><?php _e( 'Email Subject', 'badgeos' ); ?></span>
                         </td>
                     </tr> 
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'CC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_point_deducts_cc_list]" value="<?php echo isset( $badgeos_admin_tools['email_point_deducts_cc_list'] )?$badgeos_admin_tools['email_point_deducts_cc_list']:''; ?>" id="badgeos_tools_email_point_deducts_cc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'BCC', 'badgeos' ); ?></label></th>
+                        <td>
+                            <input type="text" name="badgeos_tools[email_point_deducts_bcc_list]" value="<?php echo isset( $badgeos_admin_tools['email_point_deducts_bcc_list'] )?$badgeos_admin_tools['email_point_deducts_bcc_list']:''; ?>" id="badgeos_tools_email_point_deducts_bcc_list">
+                            <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Comma separated list of emails', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
                     <tr>
                         <th scope="row" valign="top"><label for="badgeos_tools_email_point_deducts_content"><?php _e( 'Content', 'badgeos' ); ?></label></th>
                         <td>

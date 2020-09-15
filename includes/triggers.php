@@ -142,7 +142,7 @@ function badgeos_dynamic_trigger_event() {
 
             if( $parents[0]->post_status == 'publish' ) {
 
-                $step_params = get_post_meta( $achievement->post_id, '_badgeos_fields_data', true );
+                $step_params = badgeos_utilities::get_post_meta( $achievement->post_id, '_badgeos_fields_data', true );
                 $step_params = badgeos_extract_array_from_query_params( $step_params );
 
                 if( apply_filters("badgeos_check_dynamic_trigger_filter", true, 'achivement', $this_trigger, $step_params, $args[ 1 ]) ) {
@@ -238,7 +238,7 @@ function badgeos_trigger_event() {
 			if( $parents[0]->post_status == 'publish' ) {
 				$new_trigger_label = $this_trigger;
 				
-				// $visit_post = get_post_meta( $achievement->post_id, '_badgeos_visit_post', true );
+				// $visit_post = badgeos_utilities::get_post_meta( $achievement->post_id, '_badgeos_visit_post', true );
 				// if( empty( $visit_post ) ) {
 				// 	$return = true;
 				// } else {
@@ -328,7 +328,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 function badgeos_get_user_triggers( $user_id = 0, $site_id = 0 ) {
 
 	// Grab all of the user's triggers
-	$user_triggers = ( $array_exists = get_user_meta( $user_id, '_badgeos_triggered_triggers', true ) ) ? $array_exists : array( $site_id => array() );
+	$user_triggers = ( $array_exists = badgeos_utilities::get_user_meta( $user_id, '_badgeos_triggered_triggers', true ) ) ? $array_exists : array( $site_id => array() );
 
 	// Use current site ID if site ID is not set, AND not explicitly set to false
 	if ( ! $site_id && false !== $site_id ) {
@@ -405,7 +405,7 @@ function badgeos_update_user_trigger_count( $user_id, $trigger, $site_id = 0, $a
     if( ! isset( $user_triggers[$site_id]['any-achievement'] ) )
         $user_triggers[$site_id]['any-achievement'] = 0;
 
-    update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
 	// Send back our trigger count for other purposes
 	return $trigger_count;
@@ -430,8 +430,8 @@ function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id )
 
     $args = array();
 
-    $times 			= absint( get_post_meta( $step_id, '_badgeos_count', true ) );
-    $trigger 		= get_post_meta( $step_id, '_badgeos_trigger_type', true );
+    $times 			= absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
+    $trigger 		= badgeos_utilities::get_post_meta( $step_id, '_badgeos_trigger_type', true );
 
     // Grab the current count and increase it by 1
     $trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $trigger, $site_id, $args ) );
@@ -443,7 +443,7 @@ function badgeos_decrement_user_trigger_count( $user_id, $step_id, $del_ach_id )
     // Update the triggers arary with the new count
     $user_triggers = badgeos_get_user_triggers( $user_id, false );
     $user_triggers[$site_id][$trigger] = $trigger_count;
-    update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+    badgeos_utilities::update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
     do_action( 'badgeos_decrement_user_trigger_count', $user_id, $step_id, $trigger, $del_ach_id, $site_id );
 
@@ -484,7 +484,7 @@ function badgeos_reset_user_trigger_count( $user_id, $trigger, $site_id = 0 ) {
 	}
 
 	// Finally, update our user meta
-	update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_triggered_triggers', $user_triggers );
 
 }
 
@@ -513,7 +513,7 @@ function badgeos_publish_listener( $post_id = 0 ) {
 		return;
 
 	// Trigger a badgeos_new_{$post_type} action
-	$post = get_post( $post_id );
+	$post = badgeos_utilities::badgeos_get_post( $post_id );
 	do_action( "badgeos_new_{$post->post_type}", $post_id, $post->post_author, $post );
 
 }
@@ -548,7 +548,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 
     if( $trigger_data ) {
         foreach( $trigger_data as $data ) {
-            $post_specific_id = get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
+            $post_specific_id = badgeos_utilities::get_post_meta( absint( $data->post_id ), '_badgeos_achievement_post', true );
             if( absint( $post_specific_id ) == absint($comment[ 'comment_post_ID' ]) ) {
                 do_action( 'badgeos_specific_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
                 break;
@@ -580,7 +580,7 @@ function badgeos_login_trigger( $user_login, $user ) {
     do_action( 'badgeos_wp_not_login', $user_login, $user );
     do_action( 'badgeos_wp_login', $user_login, $user );
 
-    update_user_meta( $user_id, '_badgeos_last_login', time() );
+    badgeos_utilities::update_user_meta( $user_id, '_badgeos_last_login', time() );
 
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
@@ -601,21 +601,21 @@ function badgeos_daily_visit_trigger( $user_login, $user ) {
 		return;
 	}
 	$user_id = $user->ID;
-	$current_visit_date = get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
+	$current_visit_date = badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
 	$today = date("Y-m-d");
 	
 	if( !empty( $current_visit_date ) ) {
 		if( strtotime( $current_visit_date ) == strtotime($today) ) {
-			$daily_visits = get_user_meta( $user_id, 'badgeos_daily_visits', true );
-			update_user_meta( $user_id, 'badgeos_daily_visits', intval( $daily_visits ) + 1 );
+			$daily_visits = badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visits', true );
+			badgeos_utilities::update_user_meta( $user_id, 'badgeos_daily_visits', intval( $daily_visits ) + 1 );
 		} else {
-			update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
-			update_user_meta( $user_id,'badgeos_daily_visits', 1 );
+			badgeos_utilities::update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
+			badgeos_utilities::update_user_meta( $user_id,'badgeos_daily_visits', 1 );
 			badgeos_daily_visit_steps_reset( $user_id );
 		}
 	} else {
-		update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
-		update_user_meta( $user_id,'badgeos_daily_visits', 1 );
+		badgeos_utilities::update_user_meta( $user_id,'badgeos_daily_visit_date', $today);
+		badgeos_utilities::update_user_meta( $user_id,'badgeos_daily_visits', 1 );
 		badgeos_daily_visit_steps_reset( $user_id );
 	}
 	
@@ -636,7 +636,7 @@ function badgeos_daily_visit_steps_reset( $user_id ) {
 	$recs = $wpdb->get_results(  "SELECT * FROM {$wpdb->usermeta} where meta_key like 'badgeos_daily_visit_step_%' and user_id=".intval($user_id) );
 	if( count( $recs ) > 0 ) {
 		foreach( $recs  as $rec ){
-			update_user_meta( intval($user_id), trim( $rec->meta_key), 'No' );
+			badgeos_utilities::update_user_meta( intval($user_id), trim( $rec->meta_key), 'No' );
 		}
 	}
 }
@@ -653,10 +653,10 @@ function badgeos_daily_visit_add_step_status( $user_id, $step_id, $type='achieve
 
 	$key = 'badgeos_daily_visit_step_'.$step_id.'_'.$type;
 
-	$badgeos_visit = get_user_meta( $user_id, $key, true );
+	$badgeos_visit = badgeos_utilities::get_user_meta( $user_id, $key, true );
 	
 	if( empty( $badgeos_visit ) ) {
-		update_user_meta( $user_id, $key, 'No' );
+		badgeos_utilities::update_user_meta( $user_id, $key, 'No' );
 	}
 	return $key;
 }

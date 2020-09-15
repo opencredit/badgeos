@@ -84,7 +84,9 @@ function badgeos_welcome_page() {
                             <h3><?php _e( 'Assets', 'badgeos' );?></h3>
                         </div>
                             <div class="badgeos_assets_list slider multiple-items">
-                                <?php foreach( $assets as $key => $asset ) { ?>
+                                <?php 
+                                if( isset( $assets ) && count($assets) > 0 ) {
+                                    foreach( $assets as $key => $asset ) { ?>
                                     <div class="multiple">
                                     <?php if( $asset->active == 'Yes' ) { ?>
                                             <div class="badgeos_asset">
@@ -107,7 +109,9 @@ function badgeos_welcome_page() {
                                             </div>
                                     <?php } ?>
                                     </div>
-                                <?php } ?>
+                                <?php } 
+                                }
+                            ?>
                         </div>
                     </div>
                     <div class="clearfix"></div>

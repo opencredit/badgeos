@@ -16,14 +16,14 @@ class P2P_Tools_Page extends scbAdminPage {
 		if ( !current_user_can( 'manage_options' ) )
 			return;
 
-		$current_ver = get_option( 'p2p_storage' );
+		$current_ver = badgeos_utilities::get_option( 'p2p_storage' );
 
 		if ( $current_ver == P2P_Storage::$version )
 			return;
 
 		P2P_Storage::install();
 
-		update_option( 'p2p_storage', P2P_Storage::$version );
+		badgeos_utilities::update_option( 'p2p_storage', P2P_Storage::$version );
 	}
 
 	function form_handler() {

@@ -237,7 +237,7 @@ class scbForms {
 		$key = (array) $args['name'];
 		$key = end( $key );
 
-		$value = get_metadata( $meta_type, $object_id, $key, $single );
+		$value = badgeos_get_meta_data( $meta_type, $object_id, $key, $single );
 
 		return self::input_with_value( $args, $value );
 	}
@@ -255,7 +255,7 @@ class scbForms {
 			if ( 'checkbox' == $field_args['type'] ) {
 				$new_values = isset( $data[$key] ) ? $data[$key] : array();
 
-				$old_values = get_metadata( $meta_type, $object_id, $key );
+				$old_values = badgeos_get_meta_data( $meta_type, $object_id, $key );
 
 				foreach ( array_diff( $new_values, $old_values ) as $value )
 					add_metadata( $meta_type, $object_id, $key, $value );

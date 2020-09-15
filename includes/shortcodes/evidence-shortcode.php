@@ -5,7 +5,7 @@
 function badgeos_register_ob_evidence_shortcode() {
     
     // Setup a custom array of achievement types
-    $badgeos_settings = ( $exists = get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
         'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
         'posts_per_page' =>	-1,
@@ -128,11 +128,11 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
 
         $rec = $recs[0];
 
-        $expiration          = ( get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
-        $expiration_type     = ( get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : 'Day' );
+        $expiration          = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
+        $expiration_type     = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : 'Day' );
 
         $user = get_user_by( 'ID', $rec->user_id );
-        $achievement = get_post( $rec->ID );
+        $achievement = badgeos_utilities::badgeos_get_post( $rec->ID );
         wp_enqueue_style( 'badgeos-front' );
         wp_enqueue_script( 'badgeos-achievements' ); 
         
@@ -167,9 +167,9 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                     <?php } ?>
                     <div class="badgeos_user_name"><strong><?php echo _e( 'Receiver', 'badgeos' );?>:</strong> <?php echo $user->display_name;?></div>
                     <div class="badgeos_issuer_name"><strong><?php echo _e( 'Issuer', 'badgeos' );?>:</strong> <?php bloginfo( 'name' ); ?></div>
-                    <div class="badgeos_issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
+                    <div class="badgeos_issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( badgeos_utilities::get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
                     <?php if( intval( $expiration ) > 0 ) { ?>
-                        <div class="badgeos_expiry_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo date( get_option('date_format'), strtotime( '+'.$expiration.' '.$expiration_type, strtotime( $rec->date_earned ) ) );?></div>
+                        <div class="badgeos_expiry_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo date( badgeos_utilities::get_option('date_format'), strtotime( '+'.$expiration.' '.$expiration_type, strtotime( $rec->date_earned ) ) );?></div>
                     <?php } else { ?>
                         <div class="badgeos_expiry_date"><strong><?php echo _e( 'Expiry Date', 'badgeos' );?>:</strong> <?php echo _e( 'None', 'badgeos' );?></div>
                     <?php } ?>
