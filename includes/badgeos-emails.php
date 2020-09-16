@@ -151,7 +151,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         include( 'email_headers/footer.php' );
             
                         $message = ob_get_contents();
-                        ob_end_clean();echo $message;
+                        ob_end_clean();
                         if( ! empty( $user_email ) ) {
 
 
