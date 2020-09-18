@@ -14,9 +14,9 @@
     if( array_key_exists( $field_id, $badgeos_admin_tools ) &&  !empty( $badgeos_admin_tools[ $field_id ] ) ) {
         $email_list = $badgeos_admin_tools[ $field_id ];
     } elseif( $type == 'cc' ) {
-        $email_list = $badgeos_admin_tools[ 'email_general_cc_list' ];
+        $email_list = isset( $badgeos_admin_tools[ 'email_general_cc_list' ] ) ? badgeos_admin_tools[ 'email_general_cc_list' ] : '';
     } elseif( $type == 'bcc' ) {
-        $email_list = $badgeos_admin_tools[ 'email_general_bcc_list' ];
+        $email_list = isset( $badgeos_admin_tools[ 'email_general_bcc_list' ] ) ? badgeos_admin_tools[ 'email_general_bcc_list' ] : '';
     }
 
     if( ! empty( $email_list) ) {
@@ -101,7 +101,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
             
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                        if( count( $email_cc_list ) > 0 ) {
+                        if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                             foreach( $email_cc_list as $cc_id ) {
                                 if( !empty( $cc_id ) ) {
                                     $headers[] = 'Cc: '.$cc_id;
@@ -109,7 +109,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                             }
                         }
                         
-                        if( count( $email_bcc_list ) > 0 ) {
+                        if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                             foreach( $email_bcc_list as $bcc_id ) {
                                 if( !empty( $bcc_id ) ) {
                                     $headers[] = 'Bcc: '.$bcc_id;
@@ -151,7 +151,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         include( 'email_headers/footer.php' );
             
                         $message = ob_get_contents();
-                        ob_end_clean();echo $message;
+                        ob_end_clean();
                         if( ! empty( $user_email ) ) {
 
 
@@ -256,7 +256,7 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
-                        if( count( $email_cc_list ) > 0 ) {
+                        if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                             foreach( $email_cc_list as $cc_id ) {
                                 if( !empty( $cc_id ) ) {
                                     $headers[] = 'Cc: '.$cc_id;
@@ -264,7 +264,7 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
                             }
                         }
                         
-                        if( count( $email_bcc_list ) > 0 ) {
+                        if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                             foreach( $email_bcc_list as $bcc_id ) {
                                 if( !empty( $bcc_id ) ) {
                                     $headers[] = 'Bcc: '.$bcc_id;
@@ -386,7 +386,7 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
-                        if( count( $email_cc_list ) > 0 ) {
+                        if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                             foreach( $email_cc_list as $cc_id ) {
                                 if( !empty( $cc_id ) ) {
                                     $headers[] = 'Cc: '.$cc_id;
@@ -394,7 +394,7 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
                             }
                         }
                         
-                        if( count( $email_bcc_list ) > 0 ) {
+                        if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                             foreach( $email_bcc_list as $bcc_id ) {
                                 if( !empty( $bcc_id ) ) {
                                     $headers[] = 'Bcc: '.$bcc_id;
@@ -517,7 +517,7 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
                         $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                         $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
-                        if( count( $email_cc_list ) > 0 ) {
+                        if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                             foreach( $email_cc_list as $cc_id ) {
                                 if( !empty( $cc_id ) ) {
                                     $headers[] = 'Cc: '.$cc_id;
@@ -525,7 +525,7 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
                             }
                         }
                         
-                        if( count( $email_bcc_list ) > 0 ) {
+                        if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                             foreach( $email_bcc_list as $bcc_id ) {
                                 if( !empty( $bcc_id ) ) {
                                     $headers[] = 'Bcc: '.$bcc_id;
@@ -652,7 +652,7 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
 
-                    if( count( $email_cc_list ) > 0 ) {
+                    if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                         foreach( $email_cc_list as $cc_id ) {
                             if( !empty( $cc_id ) ) {
                                 $headers[] = 'Cc: '.$cc_id;
@@ -660,7 +660,7 @@ function badgeos_send_points_award_email( $user_id, $credit_id, $achievement_id,
                         }
                     }
                     
-                    if( count( $email_bcc_list ) > 0 ) {
+                    if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                         foreach( $email_bcc_list as $bcc_id ) {
                             if( !empty( $bcc_id ) ) {
                                 $headers[] = 'Bcc: '.$bcc_id;
@@ -782,7 +782,7 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
         
                     $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
                     $headers[] = 'Content-Type: text/html; charset=UTF-8';
-                    if( count( $email_cc_list ) > 0 ) {
+                    if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
                         foreach( $email_cc_list as $cc_id ) {
                             if( !empty( $cc_id ) ) {
                                 $headers[] = 'Cc: '.$cc_id;
@@ -790,7 +790,7 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
                         }
                     }
                     
-                    if( count( $email_bcc_list ) > 0 ) {
+                    if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
                         foreach( $email_bcc_list as $bcc_id ) {
                             if( !empty( $bcc_id ) ) {
                                 $headers[] = 'Bcc: '.$bcc_id;

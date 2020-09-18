@@ -60,7 +60,7 @@ function badgeos_rank_plural_name_save_meta( $updated, $action, $cmb )
 	$value 		= $cmb->value;
 	$object_id 	= $cmb->object_id;
 	$page_title = get_the_title( $object_id );
-	if( empty( $value ) )
+	if( empty( $value ) && !empty( $page_title ) && trim( strtolower( $page_title ) ) != 'auto draft' )
 		update_post_meta( $object_id, '_badgeos_plural_name', $page_title );
 
 }
@@ -74,7 +74,7 @@ function badgeos_point_plural_name_save_meta( $updated, $action, $cmb )
 	$value 		= $cmb->value;
 	$object_id 	= $cmb->object_id;
 	$page_title = get_the_title( $object_id );
-	if( empty( $value ) )
+	if( empty( $value ) && !empty( $page_title ) && trim( strtolower( $page_title ) ) != 'auto draft' )
 		badgeos_utilities::update_post_meta( $object_id, '_point_plural_name', $page_title );
 }
 add_action( 'cmb2_save_field__point_plural_name', 'badgeos_point_plural_name_save_meta', 10, 3 );

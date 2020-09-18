@@ -933,86 +933,6 @@ function badgeos_get_rank_requirements( $rank_id = 0, $post_status = 'publish' )
 }
 
 /**
- * Return rank post thumbnail
- *
- * @param int $post_id
- * @param string $image_size
- * @param string $class
- * @return bool|string
- */
-function badgeos_get_rank_post_thumbnail( $post_id = 0, $image_size = 'badgeos-rank', $class = 'badgeos-rank-thumbnail' ) {
-
-    /**
-     * Get our rank thumbnail
-     */
-    $image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
-
-    /**
-     * If we don't have an image.
-     */
-    if ( ! $image ) {
-
-        /**
-         * Grab our rank type's post thumbnail
-         */
-        $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
-        $rank = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, trim( $settings['ranks_main_post_type'] ) );
-        $image = is_object( $rank ) ? get_the_post_thumbnail( $rank->ID, $image_size, array( 'class' => $class ) ) : false;
-
-        /**
-         * If we still have no image
-         */
-        if ( ! $image ) {
-
-            /**
-             * If we already have an array for image size
-             */
-            if ( is_array( $image_size ) ) {
-
-                /**
-                 * Write our sizes to an associative array
-                 */
-                $image_sizes['width'] = $image_size[0];
-                $image_sizes['height'] = $image_size[1];
-
-                /**
-                 * Otherwise, attempt to grab the width/height from our specified image size
-                 */
-            } else {
-                global $_wp_additional_image_sizes;
-                if ( isset( $_wp_additional_image_sizes[$image_size] ) )
-                    $image_sizes = $_wp_additional_image_sizes[$image_size];
-            }
-
-            /**
-             * If we can't get the defined width/height, set our own
-             */
-            if ( empty( $image_sizes ) ) {
-                $image_sizes = array(
-                    'width'  => 100,
-                    'height' => 100
-                );
-            }
-
-            /**
-             * Available filter: 'badgeos_default_rank_post_thumbnail'
-             */
-            $default_thumbnail = apply_filters( 'badgeos_default_rank_post_thumbnail', '', $rank, $image_sizes );
-
-            if( ! empty( $default_thumbnail ) ) {
-                $image = '<img src="' . $default_thumbnail . '" width="' . $image_sizes['width'] . '" height="' . $image_sizes['height'] . '" class="' . $class . '">';
-            }
-
-        }
-    }
-
-    /**
-     * Return our image tag
-     */
-    return $image;
-}
-
-/**
  * Return rank earners list
  *
  * @param int $rank_id
@@ -1886,9 +1806,13 @@ function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = 
     }
 
     $ranks_image = wp_get_attachment_image( get_post_thumbnail_id( $rank_id ), array( $rank_width, $rank_height ) );
-
+    
+    $ranks_image = apply_filters( 'badgeos_rank_post_thumbnail', $ranks_image, $rank_id, $rank_width, $rank_height );
+    
     if( empty( $ranks_image ) ) {
-        $ranks_image = '<img src="'.badgeos_get_directory_url() . 'images/rank-default.png" width="'.$rank_width.'px" height="'.$rank_height.'px" />';
+        
+        $default_image = apply_filters( 'badgeos_default_rank_post_thumbnail', badgeos_get_directory_url() . 'images/rank-default.png', $rank_id, $rank_width, $rank_height );
+        $ranks_image = '<img src="'.$default_image.'" width="'.$rank_width.'px" height="'.$rank_height.'px" />';
     }
 
     return $ranks_image;

@@ -81,11 +81,13 @@ function badgeos_welcome_page() {
                     </div>
                     <div class="badgeos_assets_panel badgeos_assets">
                         <div class="badgeos_assets_panel_title">
-                            <h3><?php _e( 'Assets', 'badgeos' );?></h3>
+                            <?php if( isset( $assets ) ) { ?>
+                                <h3><?php _e( 'Assets', 'badgeos' );?></h3>
+                            <?php } ?>
                         </div>
                             <div class="badgeos_assets_list slider multiple-items">
                                 <?php 
-                                if( isset( $assets ) && count($assets) > 0 ) {
+                                if( isset( $assets ) ) {
                                     foreach( $assets as $key => $asset ) { ?>
                                     <div class="multiple">
                                     <?php if( $asset->active == 'Yes' ) { ?>

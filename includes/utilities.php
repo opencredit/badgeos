@@ -46,11 +46,12 @@ class badgeos_utilities {
 
         $settings = [];
         self::$instance = new self;
-        if( self::$instance->is_network_wide_active() ) {
-            $settings = get_site_option( $option_name );
-        } else {
+        // if( self::$instance->is_network_wide_active() ) {
+        //     echo 'hellow';
+        //     $settings = get_site_option( $option_name );
+        // } else {
             $settings = get_option( $option_name );
-        }
+        // }
 
         return $settings;
     }
@@ -65,12 +66,12 @@ class badgeos_utilities {
      */
     static function update_option( $option_name, $value = false ) {
 
-        self::$instance = new self;
-        if( self::$instance->is_network_wide_active() ) {
-            return update_site_option( $option_name, $value );
-        } else {
+        // self::$instance = new self;
+        // if( self::$instance->is_network_wide_active() ) {
+        //     return update_site_option( $option_name, $value );
+        // } else {
             return update_option( $option_name, $value );
-        }
+        //}
     }
 
     /**
