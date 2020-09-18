@@ -708,46 +708,44 @@ add_action( 'trash_post', 'badgeos_bust_points_based_achievements_cache' );
  * @return string              Our formatted image tag
  */
 function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size='', $class = 'badgeos-item-thumbnail' ) {
-
+	
+	$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	
+	$achievement_width = '50';
+	$achievement_height = '50';
+	
 	// Get our badge thumbnail
+	if ( empty( $image_size ) ) {
+		if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+			$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+		}
+
+		if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+			$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+		}
+
+		$image_size = [ $achievement_width, $achievement_height ];
+	} 
+
 	$image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
 
 	// If we don't have an image...
 	if ( ! $image ) {
-
+		
 		// Grab our achievement type's post thumbnail
-        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
-        $achievement = get_page_by_path( badgeos_utilities::get_post_type(), OBJECT, $badgeos_settings['achievement_main_post_type'] );
+        $achievement = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
 
         $image = is_object( $achievement ) ? get_the_post_thumbnail( $achievement->ID, $image_size, array( 'class' => $class ) ) : false;
 
 		// If we still have no image, use one from Credly
 		if ( ! $image ) {
-
-			// If we already have an array for image size
-			if ( is_array( $image_size ) ) {
-				// Write our sizes to an associative array
-				$image_sizes['width'] = $image_size[0];
-				$image_sizes['height'] = $image_size[1];
-
-			// Otherwise, attempt to grab the width/height from our specified image size
-			} else {
-				global $_wp_additional_image_sizes;
-				if ( isset( $_wp_additional_image_sizes[$image_size] ) )
-					$image_sizes = $_wp_additional_image_sizes[$image_size];
-			}
-
-			// If we can't get the defined width/height, set our own
-			if ( empty( $image_sizes ) ) {
-				$image_sizes = array(
-					'width'  => 100,
-					'height' => 100
-				);
-			}
-
 			// Available filter: 'badgeos_default_achievement_post_thumbnail'
-			$image = '<img src="' . apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' ) . '" width="' . $image_sizes['width'] . '" height="' . $image_sizes['height'] . '" class="' . $class .'">';
-
+			if( ! empty( $image_size ) && is_array( $image_size ) ) {
+				$achievement_width = $image_size[0];
+				$achievement_height = $image_size[1];
+			}
+			
+			$image = '<img src="' . apply_filters( 'badgeos_default_achievement_post_thumbnail', 'https://credlyapp.s3.amazonaws.com/badges/af2e834c1e23ab30f1d672579d61c25a_15.png' ) . '" width="' . $achievement_width . '" height="' . $achievement_height. '" class="' . $class .'">';
 		}
 	}
 

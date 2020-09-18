@@ -414,7 +414,7 @@ function badgeos_user_profile_data( $user = null ) {
                 echo '<td width="5%" style="text-align:center;"><input type="checkbox" id="badgeos_ach_check_indi_'.$achievement->ID.'" value="'.$achievement->ID.'_'.$ach_index.'_'.$ent_id.'" name="badgeos_ach_check_indis[]" /></td>';
             }
             $badge_image = badgeos_get_achievement_post_thumbnail( $achievement->ID, array( 50, 50 ) );
-            $badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement  );
+            $badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement, array( 50, 50 )  );
 
             echo '<td width="20%">'.$badge_image.'</td>';
             echo '<td width="55%">';

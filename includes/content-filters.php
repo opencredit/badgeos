@@ -78,16 +78,16 @@ function badgeos_reformat_entries( $content ) {
 	// Check if current user has earned this achievement
 	$newcontent .= badgeos_render_earned_achievement_text( $badge_id, get_current_user_id() );
 
-    $badge_image = badgeos_get_achievement_post_thumbnail( $badge_id, 'boswp-badgeos-achievement' );
+    $badge_image = badgeos_get_achievement_post_thumbnail( $badge_id, '' );
 	
 	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $badge_id ) ) );
 	$class = count( $achievements ) > 0 ? ' earned' : '';
 	
 	if( trim( $class ) == 'earned' ) {
 		$achievement = $achievements[ 0 ];
-		$badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement  );
+		$badge_image = apply_filters( 'badgeos_profile_achivement_image', $badge_image, $achievement, []  );
 	}
-					
+			
 	$newcontent .= '<div class="alignleft badgeos-item-image">'. $badge_image .'</div>';
 	$newcontent .= $title;
 
@@ -392,7 +392,7 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
         // Achievement Image
         if( $show_thumb == 'true' ) {
             $output .= '<div class="badgeos-item-image">';
-            $image_size = 'boswp-badgeos-achievement';
+            $image_size = '';
             if( !empty( $image_width ) || !empty( $image_height) ) {
                 $image_size = array( $image_width,  $image_height );
             }

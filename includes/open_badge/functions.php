@@ -122,7 +122,7 @@ add_filter( 'badgeos_default_achievement_post_thumbnail', 'badgeos_ob_default_ac
  * 
  * @return $file
  */ 
-function badgeos_ob_profile_achivement_image( $badge_image, $achievement ) {
+function badgeos_ob_profile_achivement_image( $badge_image, $achievement, $image_size=[] ) {
 	
 	$dirs = wp_upload_dir();
 	$baseurl = trailingslashit( $dirs[ 'baseurl' ] );
@@ -131,13 +131,30 @@ function badgeos_ob_profile_achivement_image( $badge_image, $achievement ) {
 	$badge_url = trailingslashit( $baseurl.'user_badges/'.$achievement->user_id );
 
 	if( ! empty( $achievement->image ) && file_exists( $badge_directory.$achievement->image ) ) {
-		return '<img class="wp-post-image wp-post-image" src="'.$badge_url.$achievement->image.'" height="50" width="50" />';
+		$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+		
+		$achievement_width = '50';
+		$achievement_height = '50';
+		if( is_array( $image_size )  && count( $image_size ) == 2 ) {
+			$achievement_width = $image_size[0];
+			$achievement_height = $image_size[1];
+		} else {
+			if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
+				$achievement_width = intval( $badgeos_settings['badgeos_achievement_global_image_width'] );
+			}
+			if( isset( $badgeos_settings['badgeos_achievement_global_image_height'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_height'] ) > 0 ) {
+				$achievement_height = intval( $badgeos_settings['badgeos_achievement_global_image_height'] );
+			}
+		}
+		
+
+		return '<img class="wp-post-image wp-post-image" src="'.$badge_url.$achievement->image.'" width="'.$achievement_width.'px" height="'.$achievement_height.'px" />';
 	} 
 
 	return $badge_image;
 	
 }
-add_filter( 'badgeos_profile_achivement_image', 'badgeos_ob_profile_achivement_image', 10, 2 );
+add_filter( 'badgeos_profile_achivement_image', 'badgeos_ob_profile_achivement_image', 10, 3 );
 
 function badgeos_ob_profile_add_column( $achievement ) {
 	

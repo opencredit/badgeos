@@ -321,7 +321,7 @@ class earned_user_achievements_widget extends WP_Widget {
 
                                 $img = badgeos_get_achievement_post_thumbnail($achievement->ID, array($achievement_width, $achievement_height), 'wp-post-image');
 
-                                $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement);
+                                $img = apply_filters('badgeos_profile_achivement_image', $img, $achievement, []);
 
                                 $img_permalink = 'javascript:;';
                                 if (!function_exists('post_exists')) {

@@ -510,11 +510,11 @@ function badgeos_ajax_get_earned_achievements() {
             if( $show_thumb=='true' ) {
                 $output .= '<div class="badgeos-item-image">';
 
-                $image_size = 'boswp-badgeos-achievement';
+                $image_size = '';
                 if( !empty( $image_width ) || !empty( $image_height) ) {
                     $image_size = array( $image_width,  $image_height );
                 }
-
+                
                 $output .= '<a href="'.$permalink.'">' . badgeos_get_achievement_post_thumbnail( $achievement->ID, $image_size ) . '</a>';
                 $output .= '</div><!-- .badgeos-item-image -->';
             }
