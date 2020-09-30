@@ -23,8 +23,10 @@ function get_badgeos_ranks_req_activity_triggers() {
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
             'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)

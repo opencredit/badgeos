@@ -11,17 +11,20 @@
  function badgeos_bcc_cc_emails( $badgeos_admin_tools, $field_id, $type ) {
     
     $email_list = '';
-    if( array_key_exists( $field_id, $badgeos_admin_tools ) &&  !empty( $badgeos_admin_tools[ $field_id ] ) ) {
-        $email_list = $badgeos_admin_tools[ $field_id ];
-    } elseif( $type == 'cc' ) {
-        $email_list = isset( $badgeos_admin_tools[ 'email_general_cc_list' ] ) ? badgeos_admin_tools[ 'email_general_cc_list' ] : '';
-    } elseif( $type == 'bcc' ) {
-        $email_list = isset( $badgeos_admin_tools[ 'email_general_bcc_list' ] ) ? badgeos_admin_tools[ 'email_general_bcc_list' ] : '';
+    if( isset($badgeos_admin_tools) &&  is_array($badgeos_admin_tools) && count( $badgeos_admin_tools ) > 0 ) {
+        if( array_key_exists( $field_id, $badgeos_admin_tools ) &&  !empty( $badgeos_admin_tools[ $field_id ] ) ) {
+            $email_list = $badgeos_admin_tools[ $field_id ];
+        } elseif( $type == 'cc' ) {
+            $email_list = isset( $badgeos_admin_tools[ 'email_general_cc_list' ] ) ? $badgeos_admin_tools[ 'email_general_cc_list' ] : '';
+        } elseif( $type == 'bcc' ) {
+            $email_list = isset( $badgeos_admin_tools[ 'email_general_bcc_list' ] ) ? $badgeos_admin_tools[ 'email_general_bcc_list' ] : '';
+        }
+    
+        if( ! empty( $email_list) ) {
+            $email_list = explode( ',', $email_list ); 
+        }
     }
-
-    if( ! empty( $email_list) ) {
-        $email_list = explode( ',', $email_list ); 
-    }
+    
 
     return $email_list;
  }

@@ -434,12 +434,26 @@ function badgeos_update_steps_ajax_handler() {
 					else 
 						$title = __( 'Visit a Post', 'badgeos' );
 					break;	
+				case 'badgeos_award_author_on_visit_post':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_visit_post', absint( $visit_post ) );
+					if( ! empty( $visit_post ) )
+						$title = sprintf( __( 'Author on Visit a Post#%d', 'badgeos' ),  $visit_post );
+					else 
+						$title = __( 'Author on Visit a Post', 'badgeos' );
+					break;	
 				case 'badgeos_visit_a_page':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_visit_page', absint( $visit_page ) );
 					if( !empty( $visit_page ) )	
 						$title = sprintf( __( 'Visit a Page#%d', 'badgeos' ),  $visit_page );
 					else 
 						$title = __( 'Visit a Page', 'badgeos' );
+					break;
+				case 'badgeos_award_author_on_visit_page':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_visit_page', absint( $visit_page ) );
+					if( !empty( $visit_page ) )	
+						$title = sprintf( __( 'Author on Visit a Page#%d', 'badgeos' ),  $visit_page );
+					else 
+						$title = __( 'Author on Visit a Page', 'badgeos' );
 					break;	
                 default :
 					$triggers = badgeos_get_activity_triggers();

@@ -200,7 +200,7 @@ class BadgeOS {
             $badgeos_settings['points_main_post_type']     		= $point_type;
             $badgeos_settings['points_award_post_type']    		= 'point_award';
             $badgeos_settings['points_deduct_post_type']   		= 'point_deduct';
-
+			$badgeos_settings['date_of_birth_from']   			= 'profile';
             $badgeos_settings['remove_data_on_uninstall']   	= null;
 
             $badgeos_settings['badgeos_achievement_global_image_width']    	= '50';
@@ -572,7 +572,7 @@ class BadgeOS {
             $badgeos_settings['points_deduct_post_type']   		= 'point_deduct';
 
             $badgeos_settings['remove_data_on_uninstall']   	= null;
-
+			$badgeos_settings['date_of_birth_from']   			= 'profile';
             $badgeos_settings['badgeos_achievement_global_image_width']    	= '50';
             $badgeos_settings['badgeos_achievement_global_image_height']    = '50';
             $badgeos_settings['badgeos_rank_global_image_width']    		= '50';
@@ -668,7 +668,10 @@ class BadgeOS {
 
         // Load scripts
         $screen = get_current_screen();
-        if( $screen->id == 'badgeos_page_badgeos_tools' ) {
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('jquery-ui-datepicker'); 
+
+		if( $screen->id == 'badgeos_page_badgeos_tools' ) {
             wp_enqueue_script( 'badgeos-admin-tools-js' );
             $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
             wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );

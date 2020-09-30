@@ -382,3 +382,99 @@ function badgeos_ranks_cancel_update_trigger_count($increment, $user_id, $step_i
 	return $increment;
 }
 add_filter( 'badgeos_ranks_update_user_trigger_count', 'badgeos_ranks_cancel_update_trigger_count', 0, 7 );
+
+/**
+ * Check if user deserves hai visit a page step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_author_rank_step_pages_callback($return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args) {
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' )) ? $exists : array();
+    
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+        
+		if( is_page() && ! empty( $GLOBALS['post'] ) ) {
+            
+			$my_post_id = $post->ID;
+			$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+			
+			if ( $trigger_type == 'badgeos_award_author_on_visit_page' ) {
+				
+				$visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
+				if( empty( $visit_post ) ) {
+					$return = true;
+				} else {
+					if( $visit_post ==  $my_post_id ) {
+						$return = true;
+					} else {
+						$return = false;
+					}
+				}
+			}
+        }
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_author_rank_step_pages_callback', 20, 7 );
+
+/**
+ * Check if user deserves hai visit a post step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_author_rank_step_posts_callback($return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args) {
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+        
+		if( is_single() && ! empty( $GLOBALS['post'] ) ) {
+            
+			$my_post_id = $post->ID;
+			$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+			
+			if ( $trigger_type == 'badgeos_award_author_on_visit_post' ) {
+				
+				$visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_post', true );
+				if( empty( $visit_post ) ) {
+					$return = true;
+				} else {
+					if( $visit_post ==  $my_post_id ) {
+						$return = true;
+					} else {
+						$return = false;
+					}
+				}
+			}
+        }
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_author_rank_step_posts_callback', 20, 7 );

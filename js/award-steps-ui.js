@@ -58,13 +58,13 @@ jQuery(document).ready(function ($) {
       achievement_selector.hide();
     }
 
-    if ("badgeos_visit_a_page" == trigger_type) {
+    if ("badgeos_visit_a_page" == trigger_type || "badgeos_award_author_on_visit_page" == trigger_type) {
       visit_page_selector.show();
     } else {
       visit_page_selector.hide();
     }
 
-    if ("badgeos_visit_a_post" == trigger_type) {
+    if ("badgeos_visit_a_post" == trigger_type || "badgeos_award_author_on_visit_post" == trigger_type) {
       visit_post_selector.show();
     } else {
       visit_post_selector.hide();

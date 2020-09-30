@@ -389,4 +389,10 @@ jQuery(document).ready(function ($) {
         $.post(admin_js.ajax_url, data, function (response) {
         });
     });
+
+    $('#badgeos_date_of_birth').datepicker({
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+    });
 });
