@@ -174,9 +174,13 @@ function badgeos_achievment_metaboxes( ) {
         'id'   => $prefix . 'show_earners',
         'type' => 'checkbox',
     ));
+    $note_text = __( 'Displayed after achievement is earned. If you would like the message to appear as a pop-up, please install <a href="https://badgeos.org/downloads/congratulations/" target="_blank">Congratulations Add-On</a>.', 'badgeos' );
+    $note_text .= "<br>";
+    $note_text .= __( ' If sending to Credly, a great place for a testimonial for those who complete this achievement. ', 'badgeos' );
+    
     $cmb_obj->add_field(array(
-        'name' => __( 'Congratulations Text', 'badgeos' ),
-        'desc' => __( 'Displayed after achievement is earned. If sending to Credly, a great place for a testimonial for those who complete this achievement.', 'badgeos' ),
+        'name' => __( 'Congratulations Text', 'badgeos' ), 
+        'desc' => $note_text,
         'id'   => $prefix . 'congratulations_text',
         'type' => 'textarea',
     ));

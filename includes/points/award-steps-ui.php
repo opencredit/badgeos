@@ -228,7 +228,8 @@ function badgeos_award_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 			?>
 		</select>
 		<?php do_action( 'badgeos_steps_ui_html_after_paward_visit_page', $step_id, $post_id ); ?>
-
+		<input type="number" size="5" min="0" placeholder="<?php _e( 'Years', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_years'] ) > 0 ? intval( $requirements['num_of_years'] ): "1" ); ?>" class="badgeos-num-of-years badgeos-num-of-years-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_point_award_steps_ui_html_after_num_of_years', $step_id, $post_id ); ?>
 		<input class="point-value" type="number" size="3" maxlength="3" value="<?php echo $requirements['_point_value']; ?>" placeholder="<?php _e( 'Points', 'badgeos' ); ?>">	
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_award_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
@@ -263,6 +264,7 @@ function badgeos_get_award_step_requirements( $step_id = 0 ) {
 		'badgeos_fields_data' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_fields_data', true ),
 		'visit_post' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_post', true ),
 		'visit_page' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_page', true ),
+		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
     );
 
     if( !empty( $requirements['badgeos_fields_data'] ) ) {
@@ -396,6 +398,7 @@ function badgeos_update_award_steps_ajax_handler() {
 			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
 			$point_value   = ( ! empty( $step['point_value'] ) ) ? $step['point_value'] : 0;
 			$trigger_type     = $step['trigger_type'];
+			$num_of_years		= $step['num_of_years'];
 			$visit_post 		= $step['visit_post'];
 			$visit_page 		= $step['visit_page'];
 
@@ -419,7 +422,7 @@ function badgeos_update_award_steps_ajax_handler() {
              */
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
 			badgeos_utilities::del_post_meta( $step_id, '_badgeos_achievement_post' );
-
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_years' );
 			/**
              * Flip between our requirement types and make an appropriate connection
              */
@@ -437,6 +440,13 @@ function badgeos_update_award_steps_ajax_handler() {
 						$title = sprintf( __( 'Visit a Post#%d', 'badgeos' ),  $visit_post );
 					else 
 						$title = __( 'Visit a Post', 'badgeos' );
+					break;
+				case 'badgeos_on_completing_num_of_year':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_years', absint( $num_of_years ) );
+					if( ! empty( $num_of_years ) )
+						$title = sprintf( __( 'on completing %d year(s)', 'badgeos' ),  $num_of_years );
+					else 
+						$title = __( 'on completing number of year(s)', 'badgeos' );
 					break;
 				case 'badgeos_award_author_on_visit_post':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_visit_post', absint( $visit_post ) );

@@ -45,6 +45,7 @@ jQuery(document).ready(function ($) {
     var achievement_selector = $(this).siblings(".select-achievement-type");
     var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
     var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
+    var num_of_years = $(this).siblings(".badgeos-num-of-years");
     /**
      * If we're working with awardpoint, show the achievement selecter (otherwise, hide it)
      */
@@ -68,6 +69,12 @@ jQuery(document).ready(function ($) {
       visit_post_selector.show();
     } else {
       visit_post_selector.hide();
+    }
+
+    if ("badgeos_on_completing_num_of_year" == trigger_type) {
+      num_of_years.show();
+    } else {
+      num_of_years.hide();
     }
 
     $(".badgeos_awardpoint_step_fields").hide();
@@ -264,6 +271,7 @@ function badgeos_update_award_steps(e) {
       badgeos_subtrigger_value: selected_subtrigger,
       badgeos_fields_data: serialize_data,
       visit_post: visit_post_selector,
+      num_of_years: step.find(".badgeos-num-of-years").val(),
       visit_page: visit_page_selector,
       achievement_post:
         "badgeos_specific_new_comment" === trigger_type

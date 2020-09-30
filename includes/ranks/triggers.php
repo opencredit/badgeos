@@ -28,7 +28,8 @@ function get_badgeos_ranks_req_activity_triggers() {
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
             'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
-			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );
