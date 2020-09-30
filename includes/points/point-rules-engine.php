@@ -584,6 +584,7 @@ function badgeos_maybe_unlock_user_rank( $user_id, $type, $points_earned, $credi
 	
 	if( $ranks ) {
         foreach( $ranks as $rank ){
+            
             badgeos_update_user_rank( array(
                 'user_id'           => $user_id,
                 'site_id'           => get_current_blog_id(),
@@ -998,7 +999,6 @@ function badgeos_points_validate_user_dob( $return, $step_id, $credit_parent_id,
 
             $awarded_year = badgeos_utilities::get_user_meta( absint( $user_id ), '_badgeos_date_of_birth_last_awarded', true );
             $strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."' and Year(dateadded)='".date('Y')."'";
-            
             $points = $wpdb->get_results( $strQuery );
             if( count( $points ) > 0 ) {
                 $return = false;

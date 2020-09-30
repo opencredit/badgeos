@@ -555,7 +555,7 @@ class Badgeos_Tools {
                         } else {
                             $users_to_award = ( isset( $_POST['badgeos_tools']['award_users'] ) ? $_POST['badgeos_tools']['award_users'] : '' );
                         }
-
+                        
                         foreach( $users_to_award as $user_id ) {
                             badgeos_update_user_rank( array(
                                 'user_id'           => $user_id,

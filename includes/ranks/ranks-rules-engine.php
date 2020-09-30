@@ -292,8 +292,8 @@ function badgeos_maybe_award_rank( $step_id = 0, $rank_id = 0, $user_id = 0, $th
             $minimum_activity_count = absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
             $recs = $wpdb->get_results( $wpdb->prepare("SELECT id FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d", $step_id	) );
             if ( count( $recs ) <= $minimum_activity_count ) {
-                
-                badgeos_update_user_rank( array(
+				
+				badgeos_update_user_rank( array(
                     'user_id'           => $user_id,
                     'site_id'           => get_current_blog_id(),
                     'rank_id'           => $step_id,
