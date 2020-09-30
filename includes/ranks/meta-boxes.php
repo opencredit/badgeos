@@ -112,16 +112,23 @@ function badgeos_ranks_type_data_metaboxes( ) {
 			'id'   => $prefix . 'congratulations_text',
 			'type' => 'hidden',
 		));
+	$cmb_obj->add_field(array(
+		'name' => __( 'Points Awarded', 'badgeos' ),
+		'desc' => ' '.__( 'Points awarded for earning this rank (optional). Leave empty if no points are awarded.', 'badgeos' ),
+		'id'   => $prefix . 'points',
+		'type' => 'credit_field',
+	));
+	
 	$cmb_obj->add_field( array(
-			'name'    => __( 'Allow reach with points?', 'badgeos' ),
-			'id'      => $prefix . 'unlock_with_points',
-			'type'    => 'radio_inline',
-			'options' => array(
-				'Yes' => __( 'Yes', 'cmb2' ),
-				'No'   => __( 'No', 'cmb2' )
-			),
-			'default' => 'Yes',
-		) );
+		'name'    => __( 'Allow reach with points?', 'badgeos' ),
+		'id'      => $prefix . 'unlock_with_points',
+		'type'    => 'radio_inline',
+		'options' => array(
+			'Yes' => __( 'Yes', 'cmb2' ),
+			'No'   => __( 'No', 'cmb2' )
+		),
+		'default' => 'Yes',
+	) );
 	$cmb_obj->add_field(array(
 			'name' => __( 'Points to Unlock', 'badgeos' ),
 			'desc' => ' '.__( 'Points required for earning this achievement.', 'badgeos' ),

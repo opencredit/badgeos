@@ -1473,11 +1473,12 @@ function badgeos_award_rank_using_get_param() {
     $rank_id = ( isset( $_GET['rank_id'] ) ? $_GET['rank_id'] : 0 );
 
     if( $user_id != 0 && $rank_id != 0 ) {
+        
         badgeos_update_user_rank( array(
             'user_id'           => $user_id,
             'site_id'           => get_current_blog_id(),
             'rank_id'           => (int) $rank_id,
-            'credit_id'         => 0,
+            'credit_id'         =>  0,
             'credit_amount'     => 0,
             'admin_id'          => ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ),
         )  );
@@ -1579,7 +1580,15 @@ function badgeos_add_rank( $args = array() ) {
      */
     $new_rank = $args['new_rank'];
     if( $new_rank !== false ) {
-
+        
+        if( ( ! isset( $args['credit_id'] ) || intval( $args['credit_id'] ) == 0 ) || ( ! isset( $args['credit_amount'] ) || intval( $args['credit_amount'] ) == 0 ) ) {
+            $points = badgeos_utilities::get_post_meta( $new_rank->ID, '_ranks_points', true );
+            if( array_key_exists( '_ranks_points', $points ) && array_key_exists( '_ranks_points_type', $points ) )  {
+                $args['credit_amount']  = $points['_ranks_points'];
+                $args['credit_id']	    = $points['_ranks_points_type'];
+            } 
+        }
+        
         /**
          * Available action to trigger
          * Before awarding
@@ -1629,6 +1638,11 @@ function badgeos_add_rank( $args = array() ) {
             $args['this_trigger'],
             $rank_entry_id
         );
+
+        if( ( isset( $args['credit_id'] ) && intval( $args['credit_id'] ) > 0 ) && ( isset( $args['credit_amount'] ) && intval( $args['credit_amount'] ) > 0 ) ) {
+            badgeos_award_credit( $args['credit_id'], $args['user_id'], 'Award', $args['credit_amount'], 'user_ranks_awarded_points', $user_id, '', $new_rank->ID );
+        }
+        
 
         return $wpdb->insert_id;
     }

@@ -33,6 +33,7 @@ function badgeos_get_activity_triggers() {
 			'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
+			'badgeos_on_completing_num_of_year' => __( 'Completing the number of years', 'badgeos' ),
 			// BadgeOS-specific
 			'specific-achievement' => __( 'Specific Achievement of Type', 'badgeos' ),
 			'any-achievement'      => __( 'Any Achievement of Type', 'badgeos' ),
@@ -296,6 +297,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 		case 'badgeos_specific_new_comment' :
 			$user_id = $args[1];
 			break;
+		case 'badgeos_on_completing_num_of_year':
 		case 'badgeos_award_author_on_visit_post': 
 		case 'badgeos_award_author_on_visit_page': 
 		case 'badgeos_visit_a_post': 
@@ -578,6 +580,11 @@ function badgeos_login_trigger( $user_login, $user ) {
 	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_points_on_birthday'" );
 	if( count( $trigger_data ) > 0 ) { 
 		do_action( 'badgeos_points_on_birthday', $user_id, $user );
+	}
+
+	$num_of_years_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_year'" );
+	if( count( $num_of_years_data ) > 0 ) { 
+		do_action( 'badgeos_on_completing_num_of_year', $user_id, $user );
 	}
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );

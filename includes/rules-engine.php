@@ -1029,3 +1029,67 @@ function badgeos_user_deserves_award_achievement_to_author_on_visit_a_page($retu
     return $return;
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_award_achievement_to_author_on_visit_a_page', 10, 6 );
+
+
+/**
+ * Check if a user deserves a number of years trigger step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_award_number_of_year_since_trigger($return = false, $user_id = 0, $step_id = 0, $this_trigger = '', $site_id = 0, $args = []) {
+    
+	global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    if( trim( $badgeos_settings['achievement_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+		$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_trigger_type', true );
+		if ( $trigger_type == 'badgeos_on_completing_num_of_year' ) {
+
+			$reg_date = get_userdata($user_id)->user_registered;
+			$num_of_years = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
+			$strQuery = "select * from ".$wpdb->prefix . "badgeos_achievements where ID='".$step_id."' and user_id='".$user_id."' order by date_earned desc limit 1";
+			$achivements = $wpdb->get_results( $strQuery );
+			badgeos_write_log($achivements);
+			if( count($achivements) > 0) {
+
+			} else if( intval( $num_of_years ) > 0 ) {
+
+				$reg_date = strtotime( "+".$num_of_years." year", strtotime( $reg_date ) );
+				badgeos_write_log(date('Y-m-d H:i:s',$reg_date));
+				if( time() > $reg_date ) {
+					$return = true;	
+				}
+			} else {
+				$return = false;
+			}
+
+			badgeos_write_log("number_of_year_since 4:".$user_id.":".$step_id);
+			// $visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
+			// if( empty( $visit_post ) ) {
+			// 	$return = true;
+			// } else {
+			// 	if( $visit_post ==  $my_post_id ) {
+			// 		$return = true;
+			// 	} else {
+			// 		$return = false;
+			// 	}
+			// }
+		}
+		
+	}
+
+    return $return;
+}
+add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_award_number_of_year_since_trigger', 10, 6 );

@@ -820,5 +820,4 @@ function badgeos_first_time_installed() {
 function badgeos_get_meta_data( $type, $object_id, $meta_key = '', $single = false) {
 
 	return badgeos_utilities::get_post_meta( $object_id, $meta_key, $single );
-	//return get_metadata( $type, $object_id, $meta_key, $single );
 }

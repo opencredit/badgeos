@@ -665,6 +665,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 				<th><?php _e( 'Image', 'badgeos' ); ?></th>
 				<th><?php _e( 'Name', 'badgeos' ); ?></th>
 				<th><?php _e( 'Rank Type', 'badgeos' ); ?></th>
+				<th><?php _e( 'Points', 'badgeos' ); ?></th>
 				<th align="center" style="text-align:center !important;"><?php _e( 'Last Awarded', 'badgeos' ); ?></th>
 				<?php
 				if( $can_manage ) {
@@ -696,6 +697,17 @@ function badgeos_profile_user_ranks( $user = null ) {
 
 				if( $user_ranks ) {
 					foreach( $user_ranks as $rank ) {
+						
+						$point_type = badgeos_points_type_display_title( $rank->credit_id ); 
+						$default_point_type 	= ( ! empty ( $badgeos_settings['default_point_type'] ) ) ? $badgeos_settings['default_point_type'] : '';
+						if( intval( $rank->rank_id ) == 0 ) {
+							$point_type = badgeos_points_type_display_title( $default_point_type );
+						}
+						
+						if( empty( $point_type ) ) {
+							$point_type = __( 'Points', 'badgeos' );
+						}
+
 						?>
 						<tr class="<?php echo $rank->rank_type; ?> ">
 							<?php
@@ -704,6 +716,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 							<td><?php echo $ranks_image; ?></td>
 							<td><?php echo $rank->rank_title; ?></td>
 							<td><?php echo $rank->rank_type; ?></td>
+							<td><?php echo $rank->credit_amount.' '.$point_type; ?></td>
 							<?php
 							$last_awarded = badgeos_utilities::get_user_meta( $user->ID, '_badgeos_'.$rank->rank_type.'_rank', true );
 							?>
@@ -750,7 +763,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 						<?php
 					}
 				} else {
-					$colpan = ( $can_manage ) ? 5 : 4;
+					$colpan = ( $can_manage ) ? 6 : 5;
 					?>
 					<tr class="no-awarded-rank">
 						<td colspan="<?php echo $colpan; ?>">
