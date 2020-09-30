@@ -478,3 +478,53 @@ function badgeos_user_deserves_author_rank_step_posts_callback($return, $step_id
     return $return;
 }
 add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_author_rank_step_posts_callback', 20, 7 );
+
+/**
+ * Check if user deserves a number of years step
+ *
+ * @param $return
+ * @param $step_id
+ * @param $rank_id
+ * @param $user_id
+ * @param $this_trigger
+ * @param $site_id
+ * @param $args
+ * 
+ * @return bool|void
+ */
+function badgeos_user_deserves_number_of_year_rank_step_callback($return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args) {
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+		$trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+		if ( $trigger_type == 'badgeos_on_completing_num_of_year' ) {
+				
+			$reg_date = get_userdata($user_id)->user_registered;
+			$num_of_years = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_years', true );
+			$strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
+			$ranks = $wpdb->get_results( $strQuery );
+			$return = false;
+			if( count($ranks) > 0) {
+				$reg_date = strtotime( "+".$num_of_years." year", strtotime( $ranks[0]->actual_date_earned ) );
+				if( time() > $reg_date ) {
+					$GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date);
+					$return = true;	
+				} 
+			} else if( intval( $num_of_years ) > 0 ) {
+				$reg_date = strtotime( "+".$num_of_years." year", strtotime( $reg_date ) );
+				if( time() > $reg_date ) {
+					$GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date );
+					$return = true;	
+				}
+			}
+		}
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_number_of_year_rank_step_callback', 20, 7 );

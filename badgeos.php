@@ -35,6 +35,34 @@ class BadgeOS {
 	 */
 	public static $version = '3.6.5';
 
+	/**
+	 * BadgeOS Achievement Date
+	 *
+	 * @var string
+	 */
+	public $achievement_date;
+
+	/**
+	 * BadgeOS Rank Date
+	 *
+	 * @var string
+	 */
+	public $rank_date;
+
+	/**
+	 * BadgeOS Point Award Date
+	 *
+	 * @var string
+	 */
+	public $mysql_award_points;
+
+	/**
+	 * BadgeOS Point Deduct Date
+	 *
+	 * @var string
+	 */
+	public $mysql_deduct_points;
+	
 	function __construct() {
 		// Define plugin constants
 		$this->basename       = plugin_basename( __FILE__ );
@@ -109,6 +137,7 @@ class BadgeOS {
 				`this_trigger` varchar(100) DEFAULT NULL,
 				`image` varchar(50) DEFAULT NULL,
 				`site_id` int(10) DEFAULT '0',
+				`actual_date_earned` timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,						
 				`date_earned` timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,						
 				PRIMARY KEY (`entry_id`)
 			);";
@@ -130,6 +159,7 @@ class BadgeOS {
 				`type` enum('Award','Deduct','Utilized') DEFAULT NULL,
 				`this_trigger` varchar(100) DEFAULT NULL,
 				`credit` int(10) DEFAULT NULL,
+				`actual_date_earned` timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,
 				`dateadded` timestamp NULL DEFAULT NULL,							
 				PRIMARY KEY (`id`)
 			);";
@@ -149,6 +179,7 @@ class BadgeOS {
 				`admin_id` int(10) DEFAULT '0',
 				`this_trigger` varchar(100) DEFAULT NULL,
 				`priority` int(10) NOT NULL,
+				`actual_date_earned` timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP,
 				`dateadded` timestamp NULL DEFAULT NULL,							
 				PRIMARY KEY (`id`)
 			);";
@@ -167,7 +198,24 @@ class BadgeOS {
         $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_achievements' AND column_name = 'sub_nom_id'"  );
         if(empty($row)){
             $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_achievements ADD sub_nom_id int(10) DEFAULT '0'");
+		}
+		
+		//actuall date earned field on all of the tables
+		$row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_achievements' AND column_name = 'actual_date_earned'"  );
+        if(empty($row)){
+            $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_achievements ADD actual_date_earned timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP");
+		}
+		
+		$row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_points' AND column_name = 'actual_date_earned'"  );
+        if(empty($row)){
+            $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_points ADD actual_date_earned timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP");
+		}
+		
+		$row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$wpdb->prefix."badgeos_ranks' AND column_name = 'actual_date_earned'"  );
+        if(empty($row)){
+            $wpdb->query("ALTER TABLE ".$wpdb->prefix . "badgeos_ranks ADD actual_date_earned timestamp NULL DEFAULT NULL DEFAULT CURRENT_TIMESTAMP");
         }
+		////////////////////////////////////////////////
 
         $badgeos_rec_title_updated = ( $exists = badgeos_utilities::get_option( 'badgeos_rec_title_updated' ) ) ? $exists : 'No';
         if( $badgeos_rec_title_updated == 'No' ) {

@@ -45,6 +45,7 @@ jQuery(document).ready(function ($) {
     var achievement_selector = $(this).siblings(".select-achievement-type");
     var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
     var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
+    var num_of_years = $(this).siblings(".badgeos-num-of-years");
     /**
      * If we're working with dedpoint, show the achievement selecter (otherwise, hide it)
      */
@@ -56,6 +57,12 @@ jQuery(document).ready(function ($) {
       achievement_selector.show();
     } else {
       achievement_selector.hide();
+    }
+
+    if ("badgeos_on_completing_num_of_year" == trigger_type) {
+      num_of_years.show();
+    } else {
+      num_of_years.hide();
     }
 
     if ("badgeos_visit_a_page" == trigger_type || "badgeos_award_author_on_visit_page" == trigger_type) {
@@ -264,6 +271,7 @@ function badgeos_update_deduct_steps(e) {
       point_value: step.find(".point-value").val(),
       trigger_type: trigger_type,
       achievement_type: step.find(".select-achievement-type").val(),
+      num_of_years: step.find(".badgeos-num-of-years").val(),
       badgeos_subtrigger_id: selected_subtrigger_id,
       badgeos_subtrigger_value: selected_subtrigger,
       badgeos_fields_data: serialize_data,

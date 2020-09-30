@@ -1030,7 +1030,6 @@ function badgeos_user_deserves_award_achievement_to_author_on_visit_a_page($retu
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_award_achievement_to_author_on_visit_a_page', 10, 6 );
 
-
 /**
  * Check if a user deserves a number of years trigger step
  *
@@ -1058,38 +1057,66 @@ function badgeos_user_deserves_award_number_of_year_since_trigger($return = fals
 		if ( $trigger_type == 'badgeos_on_completing_num_of_year' ) {
 
 			$reg_date = get_userdata($user_id)->user_registered;
-			$num_of_years = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
-			$strQuery = "select * from ".$wpdb->prefix . "badgeos_achievements where ID='".$step_id."' and user_id='".$user_id."' order by date_earned desc limit 1";
+			$num_of_years = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_years', true );
+			$strQuery = "select * from ".$wpdb->prefix . "badgeos_achievements where ID='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
 			$achivements = $wpdb->get_results( $strQuery );
-			badgeos_write_log($achivements);
+			$return = false;
 			if( count($achivements) > 0) {
-
+				$reg_date = strtotime( "+".$num_of_years." year", strtotime( $achivements[0]->actual_date_earned ) );
+				if( time() > $reg_date ) {
+					$GLOBALS['badgeos']->achievement_date = date( 'Y-m-d H:i:s', $reg_date);
+					$return = true;	
+				} 
 			} else if( intval( $num_of_years ) > 0 ) {
 
 				$reg_date = strtotime( "+".$num_of_years." year", strtotime( $reg_date ) );
-				badgeos_write_log(date('Y-m-d H:i:s',$reg_date));
 				if( time() > $reg_date ) {
+					$GLOBALS['badgeos']->achievement_date = date( 'Y-m-d H:i:s', $reg_date );
 					$return = true;	
 				}
-			} else {
-				$return = false;
 			}
-
-			badgeos_write_log("number_of_year_since 4:".$user_id.":".$step_id);
-			// $visit_post = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_visit_page', true );
-			// if( empty( $visit_post ) ) {
-			// 	$return = true;
-			// } else {
-			// 	if( $visit_post ==  $my_post_id ) {
-			// 		$return = true;
-			// 	} else {
-			// 		$return = false;
-			// 	}
-			// }
 		}
-		
 	}
 
     return $return;
 }
 add_filter( 'user_deserves_achievement', 'badgeos_user_deserves_award_number_of_year_since_trigger', 10, 6 );
+
+/**
+ * Returns the wordpress date time
+ *
+ * @param $timestamp
+ * 
+ * @return $timestamp
+ */
+function badgeos_default_datetime( $type='' ) {
+	
+	$timestamp = current_time( 'mysql' );
+
+	if( ! empty( $type ) && ! empty( $timestamp ) ) {
+		switch( $type ) {
+			case "mysql_achievements":
+				if( ! empty( $GLOBALS['badgeos']->achievement_date ) )
+					$timestamp = $GLOBALS['badgeos']->achievement_date;
+				$GLOBALS['badgeos']->achievement_date = '';
+				break;
+			case "mysql_award_points":
+				if( ! empty( $GLOBALS['badgeos']->mysql_award_points ) )
+					$timestamp = $GLOBALS['badgeos']->mysql_award_points;
+				$GLOBALS['badgeos']->mysql_award_points = '';
+				break;
+			case "mysql_deduct_points":
+				if( ! empty( $GLOBALS['badgeos']->mysql_deduct_points ) )
+					$timestamp = $GLOBALS['badgeos']->mysql_deduct_points;
+				$GLOBALS['badgeos']->mysql_deduct_points = '';
+				break;
+			case "mysql_ranks":
+				if( ! empty( $GLOBALS['badgeos']->rank_date ) )
+					$timestamp = $GLOBALS['badgeos']->rank_date;
+				$GLOBALS['badgeos']->rank_date = '';
+				break;
+		}
+	}
+
+	return $timestamp;
+}

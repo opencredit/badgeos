@@ -1583,10 +1583,12 @@ function badgeos_add_rank( $args = array() ) {
         
         if( ( ! isset( $args['credit_id'] ) || intval( $args['credit_id'] ) == 0 ) || ( ! isset( $args['credit_amount'] ) || intval( $args['credit_amount'] ) == 0 ) ) {
             $points = badgeos_utilities::get_post_meta( $new_rank->ID, '_ranks_points', true );
-            if( array_key_exists( '_ranks_points', $points ) && array_key_exists( '_ranks_points_type', $points ) )  {
-                $args['credit_amount']  = $points['_ranks_points'];
-                $args['credit_id']	    = $points['_ranks_points_type'];
-            } 
+            if( is_array( $points ) && count( $points ) > 0 ) {
+                if( array_key_exists( '_ranks_points', $points ) && array_key_exists( '_ranks_points_type', $points ) )  {
+                    $args['credit_amount']  = $points['_ranks_points'];
+                    $args['credit_id']	    = $points['_ranks_points_type'];
+                } 
+            }
         }
         
         /**
@@ -1616,6 +1618,7 @@ function badgeos_add_rank( $args = array() ) {
             'admin_id'              => $args['admin_id'],
             'this_trigger'          => $args['this_trigger'],
             'priority'              => $priority,
+            'actual_date_earned'    => badgeos_default_datetime( 'mysql_ranks' ),
             'dateadded'             => current_time( 'mysql' )
         ));
 
@@ -1640,7 +1643,7 @@ function badgeos_add_rank( $args = array() ) {
         );
 
         if( ( isset( $args['credit_id'] ) && intval( $args['credit_id'] ) > 0 ) && ( isset( $args['credit_amount'] ) && intval( $args['credit_amount'] ) > 0 ) ) {
-            badgeos_award_credit( $args['credit_id'], $args['user_id'], 'Award', $args['credit_amount'], 'user_ranks_awarded_points', $user_id, '', $new_rank->ID );
+            badgeos_award_credit( $args['credit_id'], $args['user_id'], 'Award', $args['credit_amount'], 'user_ranks_awarded_points', $args['user_id'], '', $new_rank->ID );
         }
         
 

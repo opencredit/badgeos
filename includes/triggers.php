@@ -33,7 +33,7 @@ function badgeos_get_activity_triggers() {
 			'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
-			'badgeos_on_completing_num_of_year' => __( 'Completing the number of years', 'badgeos' ),
+			'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
 			// BadgeOS-specific
 			'specific-achievement' => __( 'Specific Achievement of Type', 'badgeos' ),
 			'any-achievement'      => __( 'Any Achievement of Type', 'badgeos' ),

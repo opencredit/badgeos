@@ -213,6 +213,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 				'site_id'               => $args['site_id'],
 				'image'          		=> $new_achievement->image,
 				'rec_type'          	=> $rec_type,
+				'actual_date_earned'    => badgeos_default_datetime( 'mysql_achievements' ),
                 'date_earned'           => current_time( 'mysql' )
 			));
 			
@@ -782,6 +783,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 			<th><?php _e( 'Image', 'badgeos' ); ?></th>
 			<th><?php _e( 'Name', 'badgeos' ); ?></th>
 			<th><?php _e( 'Rank Type', 'badgeos' ); ?></th>
+			<th><?php _e( 'Points', 'badgeos' ); ?></th>
 			<th align="center" style="text-align:center !important;"><?php _e( 'Last Awarded', 'badgeos' ); ?></th>
 			<?php if( $can_manage ) { ?>
 				<th><?php _e( 'Action', 'badgeos' ); ?></th>
