@@ -52,45 +52,44 @@ function badgeos_welcome_page() {
                             <span><?php _e( 'Version', 'badgeos' );?> <?php echo BadgeOS::$version;?></span>
                         </div>
                     </div>
-                    <div class="badgeos_welcome_addons_panel">
-                        <div class="badgeos_addons_panel_title">
-                            <h3><?php _e( 'Most Popular Add-ons', 'badgeos' );?></h3>
-                        </div>
-                        <div class="badgeos_welcome_addons_list">
-                            <div class="badgeos_welcome_addons_list_ul slider multiple-items">
-                                <?php foreach( $addons as $key => $addon ) { ?>
-                                    <div class="multiple">
-                                        <div class="badgeos_welcome_addon">
-                                            <div class="badgeos_addon_welcome_thumb">
-                                                <img src="<?php echo $addon->thumb;?>">
-                                                <div class="badgeos_addon_welcome_btn">
-                                                    <a href="<?php echo $addon->link;?>"><?php _e( 'Read More', 'badgeos' );?></a>
+                    <?php if( isset($addons) && is_array( $addons ) && count( $addons ) > 0 ) { ?>
+                        <div class="badgeos_welcome_addons_panel">
+                            <div class="badgeos_addons_panel_title">
+                                <h3><?php _e( 'Most Popular Add-ons', 'badgeos' );?></h3>
+                            </div>
+                            <div class="badgeos_welcome_addons_list">
+                                <div class="badgeos_welcome_addons_list_ul slider multiple-items">
+                                    <?php foreach( $addons as $key => $addon ) { ?>
+                                        <div class="multiple">
+                                            <div class="badgeos_welcome_addon">
+                                                <div class="badgeos_addon_welcome_thumb">
+                                                    <img src="<?php echo $addon->thumb;?>">
+                                                    <div class="badgeos_addon_welcome_btn">
+                                                        <a href="<?php echo $addon->link;?>"><?php _e( 'Read More', 'badgeos' );?></a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="badgeos_welcome_on_content">
-                                                <div class="badgeos_add-on_name"><?php echo $addon->title;?></div>
-                                                <div class="badgeos_add_on_desc">
-                                                    <p><?php echo $addon->content;?></p>
+                                                <div class="badgeos_welcome_on_content">
+                                                    <div class="badgeos_add-on_name"><?php echo $addon->title;?></div>
+                                                    <div class="badgeos_add_on_desc">
+                                                        <p><?php echo $addon->content;?></p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php } ?>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="badgeos_assets_panel badgeos_assets">
-                        <div class="badgeos_assets_panel_title">
-                            <?php if( isset( $assets ) ) { ?>
+                    <?php } ?>
+                    <?php if( isset($assets) && is_array( $assets ) && count( $assets ) > 0 ) { ?>
+                        <div class="badgeos_assets_panel badgeos_assets">
+                            <div class="badgeos_assets_panel_title">
                                 <h3><?php _e( 'Assets', 'badgeos' );?></h3>
-                            <?php } ?>
-                        </div>
+                            </div>
                             <div class="badgeos_assets_list slider multiple-items">
-                                <?php 
-                                if( isset( $assets ) ) {
-                                    foreach( $assets as $key => $asset ) { ?>
+                                <?php foreach( $assets as $key => $asset ) { ?>
                                     <div class="multiple">
-                                    <?php if( $asset->active == 'Yes' ) { ?>
+                                        <?php if( $asset->active == 'Yes' ) { ?>
                                             <div class="badgeos_asset">
                                                 <img src="<?php echo $asset->image;?>" alt="<?php echo $asset->title;?>" >
                                                 <div class="badgeos_asset_content">
@@ -105,17 +104,15 @@ function badgeos_welcome_page() {
                                                             <?php _e( 'Download', 'badgeos' ); ?>
                                                         </button>
                                                         <img id="btn_badgeos_download_assets_loader" style="width:16px;background-color:#000000; visibility:hidden;" src="<?php echo $root_url.'/images/welcome-ajax-loader.gif';?>" />
-                                                        
                                                     </div>
                                                 </div>
                                             </div>
-                                    <?php } ?>
+                                        <?php } ?>
                                     </div>
-                                <?php } 
-                                }
-                            ?>
+                                <?php } ?>
+                            </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <div class="clearfix"></div>
                     <div class="badgeos_quick_links">
                         <h3><?php _e( 'Quick Links', 'badgeos' );?></h3>

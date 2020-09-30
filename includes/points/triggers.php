@@ -22,10 +22,13 @@ function get_badgeos_points_award_activity_triggers() {
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
             'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
-			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'Points on User Birthday', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->award_points_activity_triggers );
@@ -45,8 +48,10 @@ function get_badgeos_points_deduct_activity_triggers() {
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
             'badgeos_visit_a_post'          => __( 'Visit a Post', 'badgeos' ),
+            'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
 		)
@@ -281,7 +286,7 @@ function badgeos_points_award_trigger_event() {
     }
 
     $triggered_points = '';
-	if( 'badgeos_specific_new_comment' == $this_trigger ) {
+    if( 'badgeos_specific_new_comment' == $this_trigger ) {
         $trigger_data = $wpdb->get_results( "SELECT post_id, meta_value FROM $wpdb->postmeta WHERE ( meta_key = '_badgeos_trigger_type' or meta_key = '_point_trigger_type' ) AND meta_value = 'badgeos_specific_new_comment'" );
         if( $trigger_data ) {
             $comment_post_id = $args[3]['comment_post_ID'];
@@ -293,9 +298,9 @@ function badgeos_points_award_trigger_event() {
                      */
                     $triggered_points = $wpdb->get_results( $wpdb->prepare(
                         "SELECT p.ID as post_id 
-        FROM $wpdb->postmeta AS pm
-        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
-        ",
+                            FROM $wpdb->postmeta AS pm
+                            INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+                        ",
                         $this_trigger
                     ) );
                     break;
@@ -309,18 +314,18 @@ function badgeos_points_award_trigger_event() {
          */
         $triggered_points = $wpdb->get_results( $wpdb->prepare(
             "SELECT p.ID as post_id 
-        FROM $wpdb->postmeta AS pm
-        INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
-        ",
+                FROM $wpdb->postmeta AS pm
+                INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = %s
+            ",
             $this_trigger
         ) );
     }
-
+    
 	if( !empty( $triggered_points ) ) {
 		foreach ( $triggered_points as $point ) { 
 
 			$parent_point_id = badgeos_get_parent_id( $point->post_id );
-
+            
 			/**
 			 * Update hook count for this user
 			 */

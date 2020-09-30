@@ -1031,7 +1031,39 @@ function badgeos_save_email_notify_field( $user_id ) {
         return false;
     }
 
-    badgeos_utilities::update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_can_notify_user', sanitize_text_field($_POST['_badgeos_can_notify_user'] ) );
+	badgeos_utilities::update_user_meta( $user_id, '_badgeos_date_of_birth', sanitize_text_field($_POST['badgeos_date_of_birth'] ) );
 }
 add_action( 'personal_options_update', 'badgeos_save_email_notify_field' );
 add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );
+
+
+/**
+ * Show custom user profile fields
+ * 
+ * @param  object $profileuser A WP_User object
+ * @return void
+ */
+function badgeos_dob_profile_fields( $profileuser ) {
+	
+	$badgeos_settings = get_option( 'badgeos_settings' );
+    $date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+    
+	if( ! class_exists( 'BuddyPress' ) || $date_of_birth_from == 'profile' ) {
+		?>
+			<table class="form-table">
+				<tr>
+					<th>
+						<label for="user_location"><?php _e( 'Date Of Birth', 'badgeos' ); ?></label>
+					</th>
+					<td>
+						<input type="text" readonly="readonly" name="badgeos_date_of_birth" id="badgeos_date_of_birth" value="<?php echo esc_attr( get_the_author_meta( '_badgeos_date_of_birth', $profileuser->ID ) ); ?>" class="regular-text" />
+					</td>
+				</tr>
+			</table>
+		<?php
+	}
+
+}
+add_action( 'show_user_profile', 'badgeos_dob_profile_fields', 0, 1 );
+add_action( 'edit_user_profile', 'badgeos_dob_profile_fields', 0, 1 );

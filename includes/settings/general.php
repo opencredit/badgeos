@@ -18,7 +18,7 @@
     $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
     $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
     $badgeos_admin_side_tab 	= ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_general_settings';
-
+    $date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
     ob_start();
     do_action( 'badgeos_settings', $badgeos_settings );
     $addon_contents = ob_get_clean();
@@ -98,6 +98,17 @@
                             </select>
                         </td>
                     </tr>
+                    <?php if( class_exists( 'BuddyPress' )  ) { ?>
+                        <tr valign="top">
+                            <th scope="row"><label for="date_of_birth_from"><?php _e( 'DOB From:', 'badgeos' ); ?></label></th>
+                            <td>
+                                <select id="badgeos_date_of_birth_from" name="badgeos_settings[date_of_birth_from]">
+                                    <option value="profile" selected><?php _e( 'Profile Page', 'badgeos' ) ?></option>
+                                    <option value="buddypress" <?php selected( $date_of_birth_from, 'buddypress' ); ?>><?php _e( 'Buddypress', 'badgeos' ) ?></option>
+                                </select>
+                            </td>
+                        </tr>
+                    <?php } ?>
                     <?php
                     if ( is_super_admin() ){
                         if ( is_multisite() ) {
