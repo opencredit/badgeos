@@ -344,7 +344,7 @@
     padding: 20px;
     text-align: center;
     text-decoration: none;
-    width: 48%;
+  
   }
   .buttons {
     padding: 0 20px 20px;
@@ -798,5 +798,8 @@
       text-align: center;
       margin-bottom: 20px;
     }
+  }
+  .badgeos_please_rate .badgeos-btn-need-help{
+    width:140px;
   }
   

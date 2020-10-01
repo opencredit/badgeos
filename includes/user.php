@@ -764,7 +764,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 						<?php
 					}
 				} else {
-					$colpan = ( $can_manage ) ? 6 : 5;
+					$colpan = ( $can_manage ) ? 7 : 6;
 					?>
 					<tr class="no-awarded-rank">
 						<td colspan="<?php echo $colpan; ?>">
@@ -1051,7 +1051,13 @@ function badgeos_save_email_notify_field( $user_id ) {
 }
 add_action( 'personal_options_update', 'badgeos_save_email_notify_field' );
 add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );
+add_action( 'user_register', 'badgeos_register_save_email_notify_field', 10, 1 );
 
+function badgeos_register_save_email_notify_field( $user_id ) {
+	if (isset($_POST['badgeos_date_of_birth']) && !empty( $_POST['badgeos_date_of_birth'] ) ) {
+		badgeos_utilities::update_user_meta( $user_id, '_badgeos_date_of_birth', sanitize_text_field($_POST['badgeos_date_of_birth'] ) );
+	}
+}
 
 /**
  * Show custom user profile fields
@@ -1060,6 +1066,11 @@ add_action( 'edit_user_profile_update', 'badgeos_save_email_notify_field' );
  * @return void
  */
 function badgeos_dob_profile_fields( $profileuser ) {
+	
+	if(is_string( $profileuser ) === true){
+        $profileuser = new stdClass();//create a new
+        $profileuser->ID = -9999;
+    }
 	
 	$badgeos_settings = get_option( 'badgeos_settings' );
     $date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
@@ -1082,3 +1093,5 @@ function badgeos_dob_profile_fields( $profileuser ) {
 }
 add_action( 'show_user_profile', 'badgeos_dob_profile_fields', 0, 1 );
 add_action( 'edit_user_profile', 'badgeos_dob_profile_fields', 0, 1 );
+add_action( 'user_new_form', 'badgeos_dob_profile_fields' );
+add_action( 'network_user_new_form', 'badgeos_dob_profile_fields' );

@@ -81,7 +81,7 @@ function badgeos_welcome_page() {
                             </div>
                         </div>
                     <?php } ?>
-                    <?php if( isset($assets) && is_array( $assets ) && count( $assets ) > 0 ) { ?>
+                    <?php if( isset($assets) && is_object($assets) ) { ?>
                         <div class="badgeos_assets_panel badgeos_assets">
                             <div class="badgeos_assets_panel_title">
                                 <h3><?php _e( 'Assets', 'badgeos' );?></h3>
@@ -131,6 +131,13 @@ function badgeos_welcome_page() {
                         <h3><?php _e( 'Please rate us', 'badgeos' );?></h3>
                         <hr>
                         <p><?php _e( 'Please rate BadgeOS', 'badgeos' );?> <a href="https://wordpress.org/plugins/badgeos/">★★★★★</a> on <a href="https://wordpress.org/plugins/badgeos/"><?php _e( 'WordPress.org', 'badgeos' );?></a> <?php _e( 'to help us continue growing and improving! Thank you from the BadgeOS team!', 'badgeos' );?></p>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="badgeos_please_rate">
+                        <h3><?php _e( 'Need any help?', 'badgeos' );?></h3>
+                        <hr>
+                        <p><?php _e( 'Need any help configuring this plugin or designing a reward system for your needs? Get in touch with an expert!', 'badgeos' );?></p>
+                        <p><a class="button button-primary badgeos-btn-need-help" href="https://badgeos.org/services/game-reward-design/" aria-label="Activate bbPress" data-name="bbPress 2.6.5">Get Help</a></p>
                     </div>
                 </div>
             </div>

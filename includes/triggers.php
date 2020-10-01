@@ -297,6 +297,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 		case 'badgeos_specific_new_comment' :
 			$user_id = $args[1];
 			break;
+		case 'badgeos_points_on_birthday':
 		case 'badgeos_on_completing_num_of_year':
 		case 'badgeos_award_author_on_visit_post': 
 		case 'badgeos_award_author_on_visit_page': 

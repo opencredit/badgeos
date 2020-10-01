@@ -20,30 +20,31 @@ function badgeos_assets_page( ) {
     echo '<div class="badgeos_assets">';
     echo '<h1>'.__( 'Assets', 'badgeos' ).'</h1>';
     $root_url = badgeos_get_directory_url();
-    foreach( $assets as $key => $asset ) {
-        if( $asset->active == 'Yes' ) {
-            ?>
-                <div class="badgeos_item badgeos_item_<?php echo $key;?>">
-                    <div class="badgeos-assets-image">
-                        <img src="<?php echo $asset->image;?>" alt="<?php echo $asset->title;?>" style="width:100%">
+    if( isset( $assets ) && is_object( $assets ) && count( $assets ) > 0 ) { 
+        foreach( $assets as $key => $asset ) {
+            if( $asset->active == 'Yes' ) {
+                ?>
+                    <div class="badgeos_item badgeos_item_<?php echo $key;?>">
+                        <div class="badgeos-assets-image">
+                            <img src="<?php echo $asset->image;?>" alt="<?php echo $asset->title;?>" style="width:100%">
+                        </div>
+                        <h2><?php echo $asset->title;?></h2>
+                        <div class="badgeos-item-description"><?php echo $asset->description;?></div>
+                        <div class="badgeos-assets-message-divs">
+                            <div class="badgeos_download_asset_success_message" style="display:none"><?php _e( 'Thank you for downloading the pack! The icons are in your media files and you can use them for your badges, points, or ranks', 'badgeos' ); ?></div>
+                            <div class="badgeos_download_asset_failed_message" style="display:none"></div>
+                        </div>
+                        <p class="badgeos-item-button">
+                            <input type="hidden" name="badgeos_assets_id" class="badgeos_assets_id" id="badgeos_assets_id" value="<?php echo $key;?>" />
+                            <button class="btn_badgeos_download_assets" data-ajax_url="<?php echo admin_url( 'admin-ajax.php' ); ?>">
+                                <?php _e( 'Download', 'badgeos' ); ?>
+                                <img id="btn_badgeos_download_assets_loader" style="background-color:#000000; visibility:hidden;" src="<?php echo $root_url.'/images/ajax-loader.gif';?>" />
+                            </button>
+                        </p>
                     </div>
-                    <h2><?php echo $asset->title;?></h2>
-                    <div class="badgeos-item-description"><?php echo $asset->description;?></div>
-                    <div class="badgeos-assets-message-divs">
-                        <div class="badgeos_download_asset_success_message" style="display:none"><?php _e( 'Thank you for downloading the pack! The icons are in your media files and you can use them for your badges, points, or ranks', 'badgeos' ); ?></div>
-                        <div class="badgeos_download_asset_failed_message" style="display:none"></div>
-                    </div>
-                    <p class="badgeos-item-button">
-                        <input type="hidden" name="badgeos_assets_id" class="badgeos_assets_id" id="badgeos_assets_id" value="<?php echo $key;?>" />
-                        <button class="btn_badgeos_download_assets" data-ajax_url="<?php echo admin_url( 'admin-ajax.php' ); ?>">
-                            <?php _e( 'Download', 'badgeos' ); ?>
-                            <img id="btn_badgeos_download_assets_loader" style="background-color:#000000; visibility:hidden;" src="<?php echo $root_url.'/images/ajax-loader.gif';?>" />
-                        </button>
-                    </p>
-                </div>
-            <?php
+                <?php
+            }
         }
-        
     }
     echo '</div>';
 }
