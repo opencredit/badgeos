@@ -196,20 +196,20 @@ function badgeos_daily_visit_access( $return, $user_id, $achievement_id, $this_t
         }
 		
 		$meta_key = badgeos_daily_visit_add_step_status( $user_id, $achievement_id, 'achievement' );
-		
 		$badgeos_daily_visit_awarded_achivement = badgeos_utilities::get_user_meta( $user_id, $meta_key, true );
+		
 		if( trim( $badgeos_daily_visit_awarded_achivement ) == 'No' ) {
-			
 			$current_visit_date = badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visit_date', true );
+		
 			$today = date("Y-m-d");
 			if( strtotime( $current_visit_date ) == strtotime( $today ) )  {
+		
 				$req_count 		= badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_count', true );
-				$daily_visits 	= badgeos_utilities::get_post_meta( $user_id, 'badgeos_daily_visits', true );
-
+				$daily_visits 	= badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visits', true );
+		
 				if( intval( $req_count ) <= intval( $daily_visits ) ) {
-					
 					$trigger_count = absint( badgeos_get_user_trigger_count( $user_id, $this_trigger, $site_id, $args ) );
-
+					
 					for( $i = 0; $i < intval( $req_count ); $i++) {
 						
 						/**

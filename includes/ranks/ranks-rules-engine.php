@@ -135,7 +135,7 @@ function badgeos_user_has_access_to_rank_handler( $return, $step_id, $rank_id, $
 			$today = date("Y-m-d");
 			if( strtotime( $current_visit_date ) == strtotime( $today ) ) {
 				$req_count 		= badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true );
-				$daily_visits 	= badgeos_utilities::get_post_meta( $user_id, 'badgeos_daily_visits', true );
+				$daily_visits 	= badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visits', true );
 				
 				if( intval( $req_count ) <= intval( $daily_visits ) ) {
 

@@ -785,7 +785,7 @@ Shortcode Embed styles
 .badgeos-welcome-container {
 	max-width: calc(100% - 161px);
 	width: 100%;
-	margin-left: 20px;
+	margin-left: 80px;
 	margin-top: 32px;
 }
 
@@ -838,14 +838,14 @@ Shortcode Embed styles
 .badgeos_welcome_addons_list .slick-prev {
     display: block !important;
     position: absolute;
-    right: 54px !important;
+    right: 100px !important;
     top: -27px;
     left: auto;
 }
 
 .badgeos_welcome_addons_list .slick-prev:before {
     color: #222;
-    font-size: 30px;
+    font-size: 20px;
     content: "\f053";
     font-family: 'fontAwesome';
 }
@@ -859,21 +859,21 @@ Shortcode Embed styles
 
 .badgeos_welcome_addons_list .slick-next:before {
     color: #222;
-    font-size: 30px;
+    font-size: 20px;
     content: "\f054";
     font-family: 'fontAwesome';
 }
 
 
 .badgeos_welcome_addon img {
-	width: 94%;
+	width: 100%;
 }
 
 .badgeos_welcome_addon {
 	display: flex;
 	padding: 1em;
 	border: 1px solid #ccc;
-	height: 15em;
+	min-height: 15em;
 }
 
 .badgeos_welcome_addons_panel {
@@ -887,8 +887,12 @@ Shortcode Embed styles
 
 .badgeos_welcome_on_content .badgeos_add-on_name {
 	color: #ed1f6e;
-	font-size: 17px;
+	font-size: 20px;
 	line-height: 1.5;
+}
+
+.badgeos_addon_welcome_btn {
+    text-align: center;
 }
 
 .badgeos_addon_welcome_btn a {
@@ -896,7 +900,7 @@ Shortcode Embed styles
 	padding: 0.5em 1em;
 	font-size: 12px;
 	white-space: nowrap;
-	background-color: #E1E1E1;
+	background-color: #F7F7F7;
 	color: black;
 	border: 1px solid #ADADAD;
 }
@@ -906,14 +910,14 @@ Shortcode Embed styles
 .badgeos_assets_list .slick-prev {
     display: block !important;
     position: absolute;
-    right: 54px !important;
+    right: 100px !important;
     top: -27px;
     left: auto;
 }
 
 .badgeos_assets_list .slick-prev:before {
     color: #222;
-    font-size: 30px;
+    font-size: 20px;
     content: "\f053";
     font-family: 'fontAwesome';
 }
@@ -927,7 +931,7 @@ Shortcode Embed styles
 
 .badgeos_assets_list .slick-next:before {
     color: #222;
-    font-size: 30px;
+    font-size: 20px;
     content: "\f054";
     font-family: 'fontAwesome';
 }
@@ -985,6 +989,20 @@ Shortcode Embed styles
 	line-height: 2.2;
 }
 /* Please Rate section*/
+.badgeos_please_rate, .badgeos_need_help {
+	background: #fff;
+	padding: 1em;
+	border: 1px solid #000;
+	margin-bottom: 55px;
+}
+
+.bos-need-help {
+    width: 120px;
+}
+
+.badgeos_please_rate p, .badgeos_need_help p {
+	font-size: inherit;
+}
 
 .badgeos_please_rate {
 	background: #fff;
@@ -1019,7 +1037,15 @@ Shortcode Embed styles
 
 	.badgeos_dashboard_heading .badgeos_dashboard_title {
 		display: block;
-		margin-bottom: 35px;
+		margin: 0 20px;
 	}
+
+	.badgeos_dashboard_heading .badgeos_dashboard_title span {
+		line-height: 4;
+		margin: 0 20px;
+	}
+}
+.badgeos_please_rate .badgeos-btn-need-help{
+	width:140px;
 }
 /**************end welcome page************************/

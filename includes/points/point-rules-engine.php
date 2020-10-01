@@ -358,7 +358,7 @@ function badgeos_points_daily_visit_access( $return, $step_id, $credit_parent_id
             
 			if( strtotime( $current_visit_date ) == strtotime( $today ) ) {
 				$req_count 		= badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true );
-				$daily_visits 	= badgeos_utilities::get_post_meta( $user_id, 'badgeos_daily_visits', true );
+				$daily_visits 	= badgeos_utilities::get_user_meta( $user_id, 'badgeos_daily_visits', true );
                 
 				if( intval( $req_count ) <= intval( $daily_visits ) ) {
 
@@ -1009,15 +1009,15 @@ function badgeos_points_validate_user_dob( $return, $step_id, $credit_parent_id,
                 $dob = bp_profile_field_data( 'field=Birthday' );
             }
 
-            $awarded_year = badgeos_utilities::get_user_meta( absint( $user_id ), '_badgeos_date_of_birth_last_awarded', true );
             $strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."' and Year(dateadded)='".date('Y')."'";
             $points = $wpdb->get_results( $strQuery );
             if( count( $points ) > 0 ) {
                 $return = false;
             } else{
                 if( ! empty( $dob ) ) {
-                    if( strtotime( $dob ) <= time()  ) {
-                        badgeos_utilities::update_user_meta( absint( $user_id ), '_badgeos_date_of_birth_last_awarded', date('Y') );
+                    $dob_array = explode( '-', $dob );
+                    $new_dob = date( 'Y' )."-".$dob_array[1]."-".$dob_array[2];
+                    if( strtotime( $new_dob ) <= time()  ) {
                         $return = true;
                     } else {
                         $return = false;

@@ -391,7 +391,7 @@ jQuery(document).ready(function ($) {
     });
 
     $('#badgeos_date_of_birth').datepicker({
-        dateFormat: "mm-dd-yy",
+        dateFormat: "yy-mm-dd",
         changeMonth: true,
         changeYear: true,
     });
