@@ -33,6 +33,8 @@ function badgeos_get_user_achievements( $args = array() ) {
 		'pagination'	=> false,// if true the pagination will be applied
 		'limit'	=> 10,
 		'page'	=> 1,
+		'orderby' => 'entry_id',
+		'order' => 'ASC',
 		'total_only' => false
 	);
 	$args = wp_parse_args( $args, $defaults );
@@ -107,7 +109,12 @@ function badgeos_get_user_achievements( $args = array() ) {
 				$paginate_str = ' limit '.$offset.', '.$args['limit'];
 			}
 			
-			$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where".$paginate_str );
+			$order_str = '';
+			if( !empty( $args['orderby'] ) &&  !empty( $args['order'] ) ) {
+				$order_str = " ORDER BY ".$args['orderby']." ".$args['order'];
+			}
+			$user_achievements = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where ".$order_str.' '.$paginate_str );
+
 		}
 
 		return $user_achievements;
@@ -683,7 +690,7 @@ function badgeos_profile_user_ranks( $user = null ) {
 			if( empty( $rank_types ) && $can_manage ) {
 				?>
 				<tr>
-					<td colspan="5">
+					<td colspan="6">
 						<span class="description">
 							<?php echo sprintf( __( 'No rank types configured, visit %s to configure some rank types.', 'badgeos' ), '<a href="' . admin_url( 'edit.php?post_type=rank-type' ) . '">' . __( 'this page', 'badgeos' ) . '</a>' ); ?>
 						</span>
