@@ -129,6 +129,36 @@ ul.badgeos-achievement-earners-list li {
 	position: relative;
 }
 
+/*Single widgets ranks, points */
+.badgeos-user-ranks-main .widget-ranks-listing {
+	list-style: none;
+    margin: 0px;
+    padding: 10px;
+    background: #fff;
+}
+.badgeos-user-ranks-main .widget-badgeos-item-title{
+	margin-left: 1em;
+}
+.badgeos_earned_points_only td {
+	text-align: center;
+	padding:0px;
+}
+.badgeos_earned_points_only .badgeos_earned_points_widget_image {
+    background-color:#ffffff;
+}
+.badgeos_earned_points_only .badgeos_earned_points_widget_image img {
+	margin-left: auto;
+	margin-right: auto;
+}
+.badgeos_earned_points_only .points_widget_title {
+    background-color:#59ADC7;
+    color:#ffffff;
+}
+.badgeos_earned_points_only .badgeos-earned-credit {
+    background-color:#ffffff;
+    color:#59ADC7;
+    font-weight:bold;
+}
 .badgeos_earned_point_main .badgeos_earned_point_title {
 	margin: 0;
 	color: black;
