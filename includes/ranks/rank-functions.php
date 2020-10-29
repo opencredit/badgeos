@@ -466,14 +466,13 @@ function badgeos_get_lowest_priority_rank_id( $rank_type = null ) {
 
     global $wpdb;
 
-    $posts = GamiPress()->db->posts;
 
     /**
      * Get the lowest priority rank
      */
     $rank_id = $wpdb->get_var( $wpdb->prepare(
         "SELECT p.ID
-        FROM {$posts} AS p
+        FROM {$wpdb->posts} AS p
         WHERE p.post_type = %s
          AND p.post_status = %s
         ORDER BY menu_order ASC
@@ -767,7 +766,9 @@ function badgeos_get_user_ranks( $args = array() ) {
         'no_steps'          => true,
         'pagination'	    => false,// if true the pagination will be applied
 		'limit'	            => 10,
-		'page'	            => 1,
+        'page'	            => 1, 
+        'orderby'           => 'id',
+		'order'             => 'ASC',
 		'total_only'        => false
     );
     $args = wp_parse_args( $args, $defaults );
@@ -841,7 +842,12 @@ function badgeos_get_user_ranks( $args = array() ) {
             $paginate_str = ' limit '.$offset.', '.$args['limit'];
         }
         
-        $user_ranks = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where".$paginate_str );
+        $order_str = '';
+        if( !empty( $args['orderby'] ) &&  !empty( $args['order'] ) ) {
+            $order_str = " ORDER BY ".$args['orderby']." ".$args['order'];
+        }
+
+        $user_ranks = $wpdb->get_results( "SELECT * FROM $table_name WHERE $where ".$order_str.' '.$paginate_str );
     }
 
     return $user_ranks;
@@ -1789,9 +1795,6 @@ function badgeos_get_transient($transient ) {
  */
 function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
 
-    /**
-     * If GamiPress is installed network wide, get transient from network
-     */
     set_transient( $transient, $value, $expiration );
 }
 
