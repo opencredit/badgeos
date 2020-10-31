@@ -851,11 +851,11 @@ if ( ! function_exists('badgeos_write_log')) {
  * @return bool
  */
 function badgeos_first_time_installed() {
-	require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
-	$credly_settings = badgeos_utilities::get_option( 'credly_settings' );
-	if ( isset( $credly_settings ) && is_array( $credly_settings ) && count( $credly_settings ) > 0 ) {
-		return true;
-	}
+	// require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
+	// $credly_settings = badgeos_utilities::get_option( 'credly_settings' );
+	// if ( isset( $credly_settings ) && is_array( $credly_settings ) && count( $credly_settings ) > 0 ) {
+	// 	return true;
+	// }
 
 	return false;
 }

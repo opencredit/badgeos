@@ -238,7 +238,6 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_disable_point_awards_email']    = $email_disable_point_awards_email;
                 $badgeos_admin_tools['email_point_awards_cc_list']          = sanitize_text_field( $tools_data[ 'email_point_awards_cc_list' ] );
                 $badgeos_admin_tools['email_point_awards_bcc_list']         = sanitize_text_field( $tools_data[ 'email_point_awards_bcc_list' ] );
-
                 badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools );
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
@@ -258,7 +257,6 @@ class Badgeos_Tools {
                 $badgeos_admin_tools['email_disable_point_deducts_email']    = $email_disable_point_deducts_email;
                 $badgeos_admin_tools['email_point_deducts_cc_list']          = sanitize_text_field( $tools_data[ 'email_point_deducts_cc_list' ] );
                 $badgeos_admin_tools['email_point_deducts_bcc_list']         = sanitize_text_field( $tools_data[ 'email_point_deducts_bcc_list' ] );
-                
                 badgeos_utilities::update_option( 'badgeos_admin_tools', $badgeos_admin_tools ); 
                 add_action( 'admin_notices', [ $this, 'badgeos_tools_email_notice_success'] );
             }
@@ -555,7 +553,7 @@ class Badgeos_Tools {
                         } else {
                             $users_to_award = ( isset( $_POST['badgeos_tools']['award_users'] ) ? $_POST['badgeos_tools']['award_users'] : '' );
                         }
-                        
+
                         foreach( $users_to_award as $user_id ) {
                             badgeos_update_user_rank( array(
                                 'user_id'           => $user_id,
