@@ -7,14 +7,14 @@ function badgeos_register_ob_evidence_shortcode() {
     // Setup a custom array of achievement types
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $achievement_types = get_posts( array(
-        'post_type'      =>	$badgeos_settings['achievement_main_post_type'],
-        'posts_per_page' =>	-1,
+        'post_type'      => $badgeos_settings['achievement_main_post_type'],
+        'posts_per_page' => -1,
         'post_status'=> 'publish'
     ) );
 
     $post_list = array();
     foreach( $achievement_types as $type ) {
-        $posts = get_posts( array( 'post_type' => $type->post_name, 'posts_per_page' =>	-1 ) );
+        $posts = get_posts( array( 'post_type' => $type->post_name, 'posts_per_page' => -1 ) );
         foreach( $posts as $post ) {
             if( badgeos_get_option_open_badge_enable_baking($post->ID) ) {
                 $post_list[ $post->ID ] = $post->post_title;
@@ -23,31 +23,31 @@ function badgeos_register_ob_evidence_shortcode() {
     }
     
     badgeos_register_shortcode( array(
-		'name'            => __( 'Achievement Evidence', 'badgeos' ),
-		'slug'            => 'badgeos_evidence',
-		'output_callback' => 'badgeos_openbadge_evidence_shortcode',
-		'description'     => __( "Render a single achievement's evidence.", 'badgeos' ),
-		'attributes'      => array(
-			'achievement' => array(
-				'name'          => __( 'Achievement', 'badgeos' ),
-				'description'   => __( 'Achievement ID to show.', 'badgeos' ),
+        'name'            => __( 'Achievement Evidence', 'badgeos' ),
+        'slug'            => 'badgeos_evidence',
+        'output_callback' => 'badgeos_openbadge_evidence_shortcode',
+        'description'     => __( "Render a single achievement's evidence.", 'badgeos' ),
+        'attributes'      => array(
+            'achievement' => array(
+                'name'          => __( 'Achievement', 'badgeos' ),
+                'description'   => __( 'Achievement ID to show.', 'badgeos' ),
                 'type'          => 'select',
                 'values'        => $post_list
             ),
             'user_id1' => array(
                 'name'              => __( 'Select User (Type 3 chars)', 'badgeos' ),
-				'description'       => __( 'Achievement Earned by.', 'badgeos' ),
+                'description'       => __( 'Achievement Earned by.', 'badgeos' ),
                 'type'              => 'text',
                 'autocomplete_name' => 'user_id',
             ),
             'award_id1' => array(
                 'name'                  => __( 'Award Id', 'badgeos' ),
-				'description'           => __( 'User awarded achievement record.', 'badgeos' ),
+                'description'           => __( 'User awarded achievement record.', 'badgeos' ),
                 'type'                  => 'text',
                 'autocomplete_name'     => 'award_id',
             ),
-		),
-	) );
+        ),
+    ) );
 }
 add_action( 'init', 'badgeos_register_ob_evidence_shortcode' );
 
@@ -55,7 +55,7 @@ add_action( 'init', 'badgeos_register_ob_evidence_shortcode' );
  * Single Achievement Shortcode.
  *
  * @param  array $atts Shortcode attributes.
- * @return string 	   HTML markup.
+ * @return string      HTML markup.
  */
 function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
 
@@ -67,32 +67,32 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
     /**
      * get the post id
      */
-	$atts = shortcode_atts( array(
+    $atts = shortcode_atts( array(
       'show_sharing_opt' => 'Yes',
       'achievement' => 0,
       'user_id' => 0,
       'award_id' => 0
-	), $atts, 'badgeos_evidence' ); 
+    ), $atts, 'badgeos_evidence' ); 
     
     $achievement_id = 0;
     if( ! empty( $_REQUEST['bg'] ) ) {
-        $achievement_id 	= sanitize_text_field( $_REQUEST['bg'] );
+        $achievement_id     = sanitize_text_field( $_REQUEST['bg'] );
     } else if( intval( $atts['achievement'] ) > 0 ) {
-        $achievement 	= sanitize_text_field( $atts['achievement'] );
+        $achievement    = sanitize_text_field( $atts['achievement'] );
     }
     
     $entry_id = 0;
     if( ! empty( $_REQUEST['eid'] ) ) {
-        $entry_id  	= sanitize_text_field( $_REQUEST['eid'] );
+        $entry_id   = sanitize_text_field( $_REQUEST['eid'] );
     } else if( intval( $atts['award_id'] ) > 0 ) {
-        $entry_id 	= sanitize_text_field( $atts['award_id'] );
+        $entry_id   = sanitize_text_field( $atts['award_id'] );
     }
     
     $user_id = 0;
     if( ! empty( $_REQUEST['uid'] ) ) {
-        $user_id  	        = sanitize_text_field( $_REQUEST['uid'] );
+        $user_id            = sanitize_text_field( $_REQUEST['uid'] );
     } else if( intval( $atts['user_id'] ) > 0 ) {
-        $user_id 	= sanitize_text_field( $atts['user_id'] );
+        $user_id    = sanitize_text_field( $atts['user_id'] );
     }
     
     $where = '';
@@ -100,7 +100,7 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
     /**
      * return if entry_id not specified
      */
-	if ( empty( $entry_id )  || intval( $entry_id ) < 1  ) {
+    if ( empty( $entry_id )  || intval( $entry_id ) < 1  ) {
         return;
     } else {
         $where .= " and entry_id='" . $entry_id . "'";  
@@ -128,8 +128,8 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
 
         $rec = $recs[0];
 
-        $expiration          = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
-        $expiration_type     = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : 'Day' );
+        $expiration          = ( badgeos_utilities::get_post_meta( $rec->ID, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $rec->ID, '_open_badge_expiration', true ) : '0' );
+        $expiration_type     = ( badgeos_utilities::get_post_meta( $rec->ID, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $rec->ID, '_open_badge_expiration_type', true ) : 'Day' );
 
         $user = get_user_by( 'ID', $rec->user_id );
         $achievement = badgeos_utilities::badgeos_get_post( $rec->ID );
@@ -198,5 +198,5 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
     /**
      * Return our rendered achievement
      */
-	return $output;
+    return $output;
 }
