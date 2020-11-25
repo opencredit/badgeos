@@ -535,6 +535,10 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
 		$comment = get_object_vars( $comment );
 	}
 
+	if ( get_user_meta( (int) $comment[ 'user_id' ], 'comment_approved_'.$comment_ID, true ) == $comment_ID ) {
+		return;
+	}
+
 	// Check if comment is approved
 	if ( 1 != (int) $comment[ 'comment_approved' ] ) {
 		return;
@@ -553,6 +557,7 @@ function badgeos_approved_comment_listener( $comment_ID, $comment ) {
     }
 
 	do_action( 'badgeos_new_comment', (int) $comment_ID, (int) $comment[ 'user_id' ], $comment[ 'comment_post_ID' ], $comment );
+	update_user_meta( (int) $comment[ 'user_id' ], 'comment_approved_'.$comment_ID, (int) $comment_ID );
 }
 add_action( 'comment_approved_comment', 'badgeos_approved_comment_listener', 0, 2 );
 add_action( 'wp_insert_comment', 'badgeos_approved_comment_listener', 0, 2 );
