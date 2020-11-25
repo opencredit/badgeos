@@ -224,7 +224,7 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         <td>
                             <?php wp_editor( $email_achievement_content, 'badgeos_tools_email_achievement_content', array('media_buttons' => true, 'editor_height' => 500, 'textarea_rows' => 20, 'textarea_name' => 'badgeos_tools[email_achievement_content]' ) ); ?>
                             <span class="badgeos_tools_email_achievement_field tool-hint"><?php _e( 'Content', 'badgeos' ); ?></span>
-                            <p><b><?php _e( 'Shortcodes', 'badgeos' ); ?>:</b> [achievement_type], [date_earned], [achievement_title], [achievement_link], [achievement_image], [points], [user_email], [user_name], [user_profile_link]</p>
+                            <p><b><?php _e( 'Shortcodes', 'badgeos' ); ?>:</b> [achievement_type], [date_earned], [achievement_title], [achievement_link], [achievement_image], [points], [user_email], [user_name], [user_profile_link], [evidence]</p>
                         </td>
                     </tr>
                 </tbody>

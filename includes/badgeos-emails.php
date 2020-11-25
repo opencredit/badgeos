@@ -67,9 +67,22 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
                 if( count( $results ) > 0 ) {
                     $record = $results[ 0 ];
-                    $achievement_type 	= $record[ 'post_type' ];
+                    $achievement_type   = $record[ 'post_type' ];
                     $type_title  = $post_obj->post_title;
                     $step_type = trim( $badgeos_settings['achievement_step_post_type'] );
+                    $issue_date = $record[ 'date_earned' ];
+                    $rec_type = $record[ 'rec_type' ];
+                    $rec_date_earned = $record['date_earned'];                    
+                    $date_format = badgeos_utilities::get_option( 'date_format', true );
+                    $time_format = badgeos_utilities::get_option( 'time_format', true );
+                    if( get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ) {
+                        $evidence_page_id           = get_option( 'badgeos_evidence_url' );
+                        $badgeos_evidence_url       = get_permalink( $evidence_page_id );
+                        $badgeos_evidence_url       = add_query_arg( 'bg',  $record[ 'ID' ],        $badgeos_evidence_url );
+                        $badgeos_evidence_url       = add_query_arg( 'eid', $record[ 'entry_id' ],  $badgeos_evidence_url );
+                        $badgeos_evidence_url       = add_query_arg( 'uid', $record[ 'user_id' ],   $badgeos_evidence_url );    
+                    }
+                       
                     if( ! empty( $achievement_type ) && trim( $achievement_type ) != $step_type ) {
                         $email_subject = $badgeos_admin_tools['email_achievement_subject'];
                         if( empty( $email_subject ) ) {
@@ -89,8 +102,8 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                             $from_title = $badgeos_admin_tools['email_general_from_email'];
                         }
     
-                        $achievement_title 	= $record[ 'achievement_title' ];
-                        $points 			= $record[ 'points' ];
+                        $achievement_title  = $record[ 'achievement_title' ];
+                        $points             = $record[ 'points' ];
                         $achievement_image = badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' );
                     
                         $user_to_title = '';
@@ -119,7 +132,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                                 }
                             }
                         }
-            
+                    
                         $email_subject = str_replace('[achievement_type]', $type_title, $email_subject ); 
                         $email_subject = str_replace('[achievement_title]', $achievement_title, $email_subject ); 
                         $email_subject = str_replace('[points]', $points, $email_subject );
@@ -133,14 +146,15 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         $email_content = str_replace('\"','"', $email_content);
             
                         $email_content = str_replace('[achievement_type]', $type_title, $email_content ); 
-                        $email_content = str_replace('[achievement_title]', $achievement_title, $email_content ); 
+                        $email_content = str_replace('[achievement_title]', $achievement_title, $email_content );
+                        $email_content = str_replace('[date_earned]', date( $date_format.' '.$time_format, strtotime($record['date_earned']) ), $email_content );  
                         $email_content = str_replace('[achievement_link]', get_permalink($achievement_id), $email_content ); 
                         $email_content = str_replace('[points]', $points, $email_content ); 
                         $email_content = str_replace('[user_email]', $user_email, $email_content ); 
                         $email_content = str_replace('[user_name]', $user_to_title, $email_content ); 
                         $email_content = str_replace('[achievement_image]', $achievement_image, $email_content ); 
                         $email_content = str_replace('[user_profile_link]', get_edit_profile_url( $to_user_id ), $email_content ); 
-    
+                        $email_content = str_replace('[evidence]', badgeos_include_evidence_in_email( $achievement_id, $issue_date, $rec_type, $badgeos_evidence_url, $rec_date_earned ), $email_content);
                         include( 'email_headers/header.php' );
                         ?>
                             <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
@@ -169,14 +183,41 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
 add_action( 'badgeos_award_achievement', 'badgeos_send_achievements_email', 10, 6 );
 
 /**
+ * return evidence for earned achievement email notifications...
+ * 
+ * @return none
+ */
+function badgeos_include_evidence_in_email( $achievement_id, $issue_date, $rec_type, $url, $rec_date_earned ) {
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+    $content = '';
+    if ( get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) == true && $rec_type == 'open_badge' ) { 
+        $expiration = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
+    
+        $expiration_type = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : 'Day' );
+
+        $content .= '<p style="font:normal 12px/120% Arial,sans-serif;color:#737373;margin:20px 0 0 0;letter-spacing:0.1em">Issuer:'. get_bloginfo( 'name' ).'</p>';
+        $content .= '<p style="font:normal 12px/120% Arial,sans-serif;color:#737373;margin:10px 0 0 0;letter-spacing:0.1em">Issue Date:'.date( 'Y-m-d', strtotime( $issue_date ) ).'</p>';    
+        
+        if( intval( $expiration ) > 0 ) {
+            $expiry_date = strtotime( '+'.$expiration.' '.$expiration_type, strtotime( $rec_date_earned ) );
+            $content .= '<p style="font:normal 12px/120% Arial,sans-serif;color:#737373;margin:10px 0 0 0;letter-spacing:0.1em">Expiry Date:'.date( 'Y-m-d', $expiry_date ).'</p>';
+        }
+        
+        $content .= '<p style="font:normal 12px/120% Arial,sans-serif;color:#737373;margin:10px 0 0 0;letter-spacing:0.1em"><a href="'. $url.'">View Evidence</a></p>';
+      
+        return $content;
+    }
+}
+
+/**
  * Unsubscribe email notifications...
  * 
  * @return none
  */
 function badgeos_unsubscribe_emails_callback() {
     
-	// Process revoking achievement from a user
-	if ( isset( $_GET['action'] ) && 'badgeos_unsubscribe_email' == trim( $_GET['action'] ) ) {
+    // Process revoking achievement from a user
+    if ( isset( $_GET['action'] ) && 'badgeos_unsubscribe_email' == trim( $_GET['action'] ) ) {
         $user_id = sanitize_text_field( $_GET['user_id'] );
         if ( !current_user_can( 'edit_user', $user_id ) ) {
             return false;
@@ -245,7 +286,7 @@ function badgeos_send_achievements_step_email( $user_id, $achievement_id, $this_
 
                         $step_title = get_the_title( $achievement_id );
                         if( empty( $step_title ) )
-                            $step_title 	= $record[ 'achievement_title' ];
+                            $step_title     = $record[ 'achievement_title' ];
                         
                         $user_to_title = '';
                         $user_email = '';
@@ -375,7 +416,7 @@ function badgeos_send_rank_step_email( $user_id, $rank_id, $rank_type, $credit_i
 
                         $rank_title = get_the_title( $rank_id );
                         if( empty( $rank_title ) )
-                            $rank_title 	= $record[ 'rank_title' ];
+                            $rank_title     = $record[ 'rank_title' ];
                         
                         $user_to_title = '';
                         $user_email = '';
@@ -506,7 +547,7 @@ function badgeos_send_rank_email( $user_id, $rank_id, $rank_type, $credit_id, $c
 
                         $rank_title = get_the_title( $rank_id );
                         if( empty( $rank_title ) )
-                            $rank_title 	= $record[ 'rank_title' ];
+                            $rank_title     = $record[ 'rank_title' ];
                         
                         $user_to_title = '';
                         $user_email = '';
