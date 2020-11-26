@@ -194,19 +194,29 @@ class earned_user_achievements_widget extends WP_Widget {
 				$badge_image = apply_filters( 'badgeos_profile_points_image', $badge_image, 'front-widget' , $instance['total_points_type']  );
 
                 ?> 
-			    <p class="badgeos-total-points">
+			   <div class="badgeos_earned_points_only">
 					<table>
 						<tr>
-							<td valign="top" width="10%"><?php echo $badge_image; ?></td>
-							<td valign="top" width="90%">
-								<?php echo $point_title; ?>
-								<div class="badgeos-earned-credit"><?php echo number_format( $earned_points ); ?></span></div>
+							<td width="100%">
+								<div class="badgeos_earned_points_widget_image">
+									<?php echo $badge_image; ?> 
+								</div>
+								<div class="badgeos_earned_points_widget">
+									<div class="badgeos-earned-credit">
+										<span><?php echo number_format( $earned_points ); ?></span>
+									</div>	
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="points_widget_title">
+									<?php echo $point_title; ?>
+								</div>
 							</td>
 						</tr>
 					</table>
-<!-- 				
-				<?php echo sprintf( __( 'My Total %s: %s', 'badgeos' ), $point_title ,'<strong>' . number_format( $earned_points ) . '</strong>' ); ?>
-                </p> -->
+                </div> 
 			<?php }
 			
 			if( isset( $instance['set_ranks'] ) && is_array( $instance['set_ranks'] ) && count( $instance['set_ranks'] ) > 0 ) {
