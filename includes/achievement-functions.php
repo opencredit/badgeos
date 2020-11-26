@@ -713,6 +713,7 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size='', $
 	
 	$achievement_width = '50';
 	$achievement_height = '50';
+	$badgeos_not_earned_image_id = get_post_meta( $post_id, '_badgeos_not_earned_thumbnail', true );
 	
 	// Get our badge thumbnail
 	if ( empty( $image_size ) ) {
@@ -729,6 +730,20 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size='', $
 
 	$image = get_the_post_thumbnail( $post_id, $image_size, array( 'class' => $class ) );
 
+	if ( isset( $_GET['user_id'] ) ) {
+		$user_id = absint( $_GET['user_id'] );
+	} else {
+		$user_id = 0;
+	}
+	
+	// not earned post image
+	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $post_id ),'user_id' => $user_id ) );
+	$class = count( $achievements ) > 0 ? ' earned' : '';
+	if ( ! empty( $badgeos_not_earned_image_id ) && trim( $class ) != 'earned' ) {
+		$image_url = wp_get_attachment_image_src( $badgeos_not_earned_image_id, $image_size )[0];
+		$image = '<img src="'.$image_url. '" width="' . $achievement_width . '" height="' . $achievement_height. '" class="' . $class .'">';
+	}
+	
 	// If we don't have an image...
 	if ( ! $image ) {
 		
