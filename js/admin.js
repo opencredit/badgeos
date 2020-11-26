@@ -395,4 +395,56 @@ jQuery(document).ready(function ($) {
         changeMonth: true,
         changeYear: true,
     });
+
+    // Uploading files
+    var file_frame;
+
+    // not earned image js
+    $.fn.upload_listing_image = function( button ) {
+        var button_id = button.attr('id');
+        var field_id = button_id.replace( '_button', '' );
+
+        // If the media frame already exists, reopen it.
+        if ( file_frame ) {
+          file_frame.open();
+          return;
+        }
+
+        // Create the media frame.
+        file_frame = wp.media.frames.file_frame = wp.media({
+          title: $( this ).data( 'uploader_title' ),
+          button: {
+            text: $( this ).data( 'uploader_button_text' ),
+          },
+          multiple: false
+        });
+
+        // When an image is selected, run a callback.
+        file_frame.on( 'select', function() {
+          var attachment = file_frame.state().get('selection').first().toJSON();
+          $( '#' + field_id ).val(attachment.id);
+          $( '#not_earned_image_div img' ).attr( 'src', attachment.url );
+          $( '#not_earned_image_div img' ).show();
+          $( '#' + button_id ).attr( 'id', 'remove_not_earned_image_button' );
+          $( '#remove_not_earned_image_button' ).text( 'Remove image' );
+        });
+
+        // Finally, open the modal
+        file_frame.open();
+    };
+
+    $('#not_earned_image_div').on( 'click', '#upload_not_earned_image_button', function( event ) {
+        event.preventDefault();
+        $.fn.upload_listing_image( $(this) );
+    });
+
+    $('#not_earned_image_div').on( 'click', '#remove_not_earned_image_button', function( event ) {
+        event.preventDefault();
+        $( '#upload_not_earned_image' ).val( '' );
+        $( '#not_earned_image_div img' ).attr( 'src', '' );
+        $( '#not_earned_image_div img' ).attr( 'srcset', '' );
+        $( '#not_earned_image_div img' ).hide();
+        $( this ).attr( 'id', 'upload_not_earned_image_button' );
+        $( '#upload_not_earned_image_button' ).text( 'Set image' );
+    });
 });
