@@ -873,6 +873,7 @@ Shortcode Embed styles
 	display: flex;
 	padding: 1em;
 	border: 1px solid #ccc;
+	min-height: 17em;
 	min-height: 15em;
 }
 
