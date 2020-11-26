@@ -202,8 +202,9 @@ class open_badge_metabox {
                 }
                 break;
             case "expiry_date":
-                $open_badge_expiration       = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration', true ) : '0' );
-                $open_badge_expiration_type  = ( badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $achievement_id, '_open_badge_expiration_type', true ) : '0' );
+                $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
+                $open_badge_expiration       = ( badgeos_utilities::get_post_meta( $recs[0]->ID, '_open_badge_expiration', true ) ? badgeos_utilities::get_post_meta( $recs[0]->ID, '_open_badge_expiration', true ) : '0' );
+                $open_badge_expiration_type  = ( badgeos_utilities::get_post_meta( $recs[0]->ID, '_open_badge_expiration_type', true ) ? badgeos_utilities::get_post_meta( $recs[0]->ID, '_open_badge_expiration_type', true ) : '0' );
 
                 if( intval( $open_badge_expiration ) > 0 ) {
                     $recs = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'" );
