@@ -374,7 +374,7 @@ function badgeos_settings_page() {
  * @since 1.0.0
  */
 function badgeos_license_settings() {
-	$original_settings = badgeos_utilities::get_option( 'badgeos_settings' );
+
 	// Get our licensed add-ons
 	$licensed_addons = apply_filters( 'badgeos_licensed_addons', array() );
 
@@ -382,7 +382,7 @@ function badgeos_license_settings() {
 	if ( ! empty( $licensed_addons ) ) {
 
 		// Output the header for licenses
-		echo '<tr><td colspan="2"><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
+		echo '<tr><td colspan="2"><hr/><h2>' . __( 'BadgeOS Add-on Licenses', 'badgeos' ) . '</h2></td></tr>';
 
 		// Sort our licenses alphabetially
 		ksort( $licensed_addons );
@@ -390,23 +390,17 @@ function badgeos_license_settings() {
 		// Output each individual licensed product
 		foreach ( $licensed_addons as $slug => $addon ) {
 			$status = ! empty( $addon['license_status'] ) ? $addon['license_status'] : 'inactive';
-			if ( ! empty ( $original_settings['licenses'][$slug] ) && in_array($status, array('valid', 'inactive') ) ) {
-				$original_settings['licenses'][$slug .'-license_status'] = 'valid';
-			} else {
-				$original_settings['licenses'][$slug .'-license_status'] = $status;
-			}
-			echo "<br/>";
 			echo '<tr valign="top">';
 			echo '<th scope="row">';
 			echo '<label for="badgeos_settings[licenses][' . $slug . ']">' . urldecode( $addon['item_name'] ) . ': </label></th>';
 			echo '<td>';
-			echo '<input type="text" size="30" name="badgeos_settings[licenses][' . $slug . ']" id="badgeos_settings[licenses][' . $slug . ']" value="' . $original_settings['licenses'][$slug] . '" />';
-			echo '<input type="hidden" name="badgeos_settings[licenses][' . $slug .'-license_status]" value="'.$original_settings['licenses'][$slug .'-license_status'].'" />';
-			echo ' <span class="badgeos-license-status ' . $original_settings['licenses'][$slug.'-license_status'] . '">' . sprintf( __( 'License Status: %s' ), '<strong>' . ucfirst( $original_settings['licenses'][$slug.'-license_status'] ) . '</strong>' ) . '</span>';
+			echo '<input type="text" size="30" name="badgeos_settings[licenses][' . $slug . ']" id="badgeos_settings[licenses][' . $slug . ']" value="' . $addon['license'] . '" />';
+			echo ' <span class="badgeos-license-status ' . $status . '">' . sprintf( __( 'License Status: %s' ), '<strong>' . ucfirst( $status ) . '</strong>' ) . '</span>';
 			echo '</td>';
 			echo '</tr>';
 		}
 	}
+
 }
 add_action( 'badgeos_license_settings', 'badgeos_license_settings', 0 );
 
