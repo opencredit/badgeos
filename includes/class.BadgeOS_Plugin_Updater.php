@@ -75,9 +75,13 @@ class BadgeOS_Plugin_Updater {
 	 */
 	public function validate_license( $input ) {
 
+		$original_settings = badgeos_utilities::get_option( 'badgeos_settings' );
+		
+		$original_settings['licenses'][$this->slug] = isset( $input['licenses'][$this->slug] ) ? sanitize_text_field( $input['licenses'][$this->slug] ) : $original_settings['licenses'][$this->slug];
+
 		// Activate our license if we have license data
-		if ( isset( $input['licenses'][$this->slug] ) && ! empty( $input['licenses'][$this->slug] ) )
-			$this->activate_license( $input['licenses'][$this->slug] );
+		if ( isset( $original_settings['licenses'][$this->slug] ) && ! empty( $original_settings['licenses'][$this->slug] ) )
+			$this->activate_license( $original_settings['licenses'][$this->slug] );
 
 		// Otherwise, deactivate the previous license
 		else
