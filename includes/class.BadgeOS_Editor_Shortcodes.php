@@ -33,10 +33,10 @@ class BadgeOS_Editor_Shortcodes {
         global $pagenow;
 	    $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
         wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
-        wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2.css' );
+        wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . "js/select2/select2$min.css" );
 
-        wp_enqueue_style( 'badgeos-juqery-ui-css', $this->directory_url . 'css/jquery-ui.css' );
-        wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . 'css/autocomplete.css' );
+        wp_enqueue_style( 'badgeos-juqery-ui-css', $this->directory_url . "css/jquery-ui$min.css" );
+        wp_enqueue_style( 'badgeos-juqery-autocomplete-css', $this->directory_url . "css/autocomplete$min.css" );
 		
         if ( $pagenow == 'post.php' || $pagenow == 'post-new.php' ) {
             wp_enqueue_script( 'badgeos-jquery-ui-js' );

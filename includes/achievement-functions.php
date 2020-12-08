@@ -1384,7 +1384,10 @@ function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
         if ( !empty( $attachment[0] ) ) {
             $thumbnail_id = $attachment[0];
         } else {
-            // Download file to temp location
+			// Download file to temp location
+			require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+			require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+			require_once(ABSPATH . "wp-admin" . '/includes/media.php');
             $tmp = download_url( $file );
 
             // Set variables for storage
