@@ -50,18 +50,6 @@ function badgeos_achievment_type_metaboxes() {
         'id'      => $prefix . 'show_in_menu',
         'type'	 => 'checkbox',
     ));
-    
-    if( badgeos_first_time_installed() ) {
-        $cmb_obj->add_field(array(
-            'name' => __( 'Default Badge Image', 'badgeos' ),
-            'desc' => esc_html__(  sprintf(
-                __( 'To set a default image, use the <strong>Default Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.', 'badgeos' ),
-                badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) )
-            ), 'cmb2' ),
-            'id'   => $prefix . 'upload_badge_image_achievement',
-            'type' => 'text_only',
-        ));
-    }
 }
 add_action( 'cmb2_admin_init', 'badgeos_achievment_type_metaboxes' );
 
@@ -122,20 +110,6 @@ function badgeos_achievment_metaboxes( ) {
         'show_names' => true, // Show field names on the left
     ) );
     
-    if( badgeos_first_time_installed() ) {
-        $cmb_obj->add_field(array(
-            'name' => __( 'Upload Badge Image', 'badgeos' ),
-            'desc' => sprintf(
-                __( '<p>To set an image use the <strong>Achievement Image</strong> metabox to the right. For best results, use a square .png file with a transparent background, at least 200x200 pixels. Or, design a badge using the %1$s.</p><p>If no image is specified, this achievement will default to the %2$s featured image.</p>', 'badgeos' ),
-                badgeos_get_badge_builder_link( array( 'link_text' => __( 'Credly Badge Builder', 'badgeos' ) ) ),
-                '<a href="' . admin_url('edit.php?post_type=' . $badgeos_settings[ 'achievement_main_post_type' ] ) . '">' . __( 'Achievement Type\'s', 'badgeos' ) . '</a>'
-
-            ),
-            'id'   => $prefix . 'upload_badge_image_achievement',
-            'type' => 'text_only',
-        ));
-    }
-
     $cmb_obj->add_field(array(
         'name' => __( 'Points Awarded', 'badgeos' ),
         'desc' => ' '.__( 'Points awarded for earning this achievement (optional). Leave empty if no points are awarded.', 'badgeos' ),
@@ -175,8 +149,6 @@ function badgeos_achievment_metaboxes( ) {
         'type' => 'checkbox',
     ));
     $note_text = __( 'Displayed after achievement is earned. If you would like the message to appear as a pop-up, please install <a href="https://badgeos.org/downloads/congratulations/" target="_blank">Congratulations Add-On</a>.', 'badgeos' );
-    $note_text .= "<br>";
-    $note_text .= __( ' If sending to Credly, a great place for a testimonial for those who complete this achievement. ', 'badgeos' );
     
     $cmb_obj->add_field(array(
         'name' => __( 'Congratulations Text', 'badgeos' ), 

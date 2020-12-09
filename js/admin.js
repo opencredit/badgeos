@@ -1,8 +1,4 @@
 jQuery(document).ready(function ($) {
-
-    /**
-	 * For Tool Page
-     */
     $('.open_badge_enable_baking_blk_field').change(function () {
         if ($(this).val() == '1') {
             $(this).parents('fieldset').find('.sub_ob_badgeos_blk_fields').css('display', 'block');
@@ -285,11 +281,6 @@ jQuery(document).ready(function ($) {
 
     }).change();
 
-    $('[href="#show-api-key"]').click(function (event) {
-        event.preventDefault();
-        $('#credly-settings tr, #credly-settings .toggle').toggle();
-    });
-
     // Throw a warning on Achievement Type editor if title is > 20 characters
     $('#titlewrap').on('keyup', 'input[name=post_title]', function () {
 
@@ -311,14 +302,6 @@ jQuery(document).ready(function ($) {
             }
         }
     });
-
-    // Show notification custom message input if setting is enabled
-    $('#credly_badge_sendemail_add_message').change(function () {
-        if ('true' == $(this).val())
-            $('.credly-notifications-message').show();
-        else
-            $('.credly-notifications-message').hide();
-    }).change();
 
     $('#delete_log_entries').click(function () {
         var confirmation = confirm('It will delete all the log entries');
@@ -380,16 +363,6 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $('.badgeos-credly-disconnection-notice .notice-dismiss').on('click', function (e) {
-        e.preventDefault();
-
-        var data = {
-            'action': 'badgeos_credly_update_disconnection_status'
-        };
-        $.post(admin_js.ajax_url, data, function (response) {
-        });
-    });
-
     $('#badgeos_date_of_birth').datepicker({
         dateFormat: "yy-mm-dd",
         changeMonth: true,
@@ -400,51 +373,51 @@ jQuery(document).ready(function ($) {
     var file_frame;
 
     // not earned image js
-    $.fn.upload_listing_image = function( button ) {
+    $.fn.upload_listing_image = function (button) {
         var button_id = button.attr('id');
-        var field_id = button_id.replace( '_button', '' );
+        var field_id = button_id.replace('_button', '');
 
         // If the media frame already exists, reopen it.
-        if ( file_frame ) {
-          file_frame.open();
-          return;
+        if (file_frame) {
+            file_frame.open();
+            return;
         }
 
         // Create the media frame.
         file_frame = wp.media.frames.file_frame = wp.media({
-          title: $( this ).data( 'uploader_title' ),
-          button: {
-            text: $( this ).data( 'uploader_button_text' ),
-          },
-          multiple: false
+            title: $(this).data('uploader_title'),
+            button: {
+                text: $(this).data('uploader_button_text'),
+            },
+            multiple: false
         });
 
         // When an image is selected, run a callback.
-        file_frame.on( 'select', function() {
-          var attachment = file_frame.state().get('selection').first().toJSON();
-          $( '#' + field_id ).val(attachment.id);
-          $( '#not_earned_image_div img' ).attr( 'src', attachment.url );
-          $( '#not_earned_image_div img' ).show();
-          $( '#' + button_id ).attr( 'id', 'remove_not_earned_image_button' );
-          $( '#remove_not_earned_image_button' ).text( 'Remove image' );
+        file_frame.on('select', function () {
+            var attachment = file_frame.state().get('selection').first().toJSON();
+            $('#' + field_id).val(attachment.id);
+            $('#not_earned_image_div img').attr('src', attachment.url);
+            $('#not_earned_image_div img').show();
+            $('#' + button_id).attr('id', 'remove_not_earned_image_button');
+            $('#remove_not_earned_image_button').text('Remove image');
         });
 
         // Finally, open the modal
         file_frame.open();
     };
 
-    $('#not_earned_image_div').on( 'click', '#upload_not_earned_image_button', function( event ) {
+    $('#not_earned_image_div').on('click', '#upload_not_earned_image_button', function (event) {
         event.preventDefault();
-        $.fn.upload_listing_image( $(this) );
+        $.fn.upload_listing_image($(this));
     });
 
-    $('#not_earned_image_div').on( 'click', '#remove_not_earned_image_button', function( event ) {
+    $('#not_earned_image_div').on('click', '#remove_not_earned_image_button', function (event) {
         event.preventDefault();
-        $( '#upload_not_earned_image' ).val( '' );
-        $( '#not_earned_image_div img' ).attr( 'src', '' );
-        $( '#not_earned_image_div img' ).attr( 'srcset', '' );
-        $( '#not_earned_image_div img' ).hide();
-        $( this ).attr( 'id', 'upload_not_earned_image_button' );
-        $( '#upload_not_earned_image_button' ).text( 'Set image' );
+        $('#upload_not_earned_image').val('');
+        $('#not_earned_image_div img').attr('src', '');
+        $('#not_earned_image_div img').attr('srcset', '');
+        $('#not_earned_image_div img').hide();
+        $(this).attr('id', 'upload_not_earned_image_button');
+        $('#upload_not_earned_image_button').text('Set image');
     });
 });

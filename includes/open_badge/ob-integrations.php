@@ -9,13 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function badgeos_ob_integration_page() {
-    
-    if( badgeos_first_time_installed() ) {
-        wp_enqueue_style( 'badgeos-jquery-ui-styles' );
-        wp_enqueue_style( 'badgeos-admin-styles' );
-        wp_enqueue_script( 'badgeos-jquery-ui-js' );
-        wp_enqueue_script( 'badgeos-convert-credly-achievements' );
-    }
+
     $badgeos_assertion_url 		= badgeos_utilities::get_option( 'badgeos_assertion_url' );
     $badgeos_json_url 			= badgeos_utilities::get_option( 'badgeos_json_url' );
     $badgeos_issuer_url 		= badgeos_utilities::get_option( 'badgeos_issuer_url' ); 
@@ -95,7 +89,7 @@ function badgeos_ob_integration_page() {
         </form>
         <?php
 
-        $non_ob_conversion_progress = get_transient('non_ob_conversion_progress'); //check if background conversion process is running
+        $non_ob_conversion_progress = 0;get_transient('non_ob_conversion_progress'); //check if background conversion process is running
         $non_os_badgeos_achievements = badgeos_ob_get_all_non_achievements();
 
         $message = 'Please click on "Convert Achievements" button below to convert existing non-open standard user\'s achievements into open standards.';
@@ -116,30 +110,7 @@ function badgeos_ob_integration_page() {
                 <div style="clear: both;"></div>
             </div> 
         </div>
-        <?php
-            if( badgeos_first_time_installed() ) {
-                $message = 'Please click on "Migrate Credly Achievements" button below to migrate existing credly achievements to open badge achievements.';
-        ?>
-            <div class="open_badge_convert_wrapper">
-                <h3><?php _e( 'Migrate Credly Achievements', 'badgeos'); ?></h3>
-                <div id="convert_credly_to_ob_button_message">
-                    <p><?php _e( $message, 'badgeos'); ?></p>
-                    <p><input type="checkbox" id="badgeos_disable_send_credly_option" name="badgeos_disable_send_credly_option" value="yes" > <?php _e('Disable Credly.', 'badgeos'); ?></p>
-                    <input type="button" id="badgeos_convert_credly_achievements" class="button-primary" value="<?php _e( 'Migrate Credly Achievements', 'badgeos'); ?>" />
-                </div>
-                <div id="conversion_credly_to_open_badge_in_progress" style="display: none;">
-                    <div style="float: left; margin-right:10px;"><img src="<?php echo admin_url( 'images/spinner.gif' ); ?>"> <?php _e( 'Loading..', 'badgeos'); ?></div>
-                </div> 
-                <div id="conversion_credly_to_open_badge_no_rec_found" style="display: none;">
-                    <p><?php _e('No achievements found that needs to be converted from credly to open badge.', 'badgeos'); ?></p>
-                </div>
-                <div class='box box-wide' id='badgeos_ob_import_processing_box' style='display:none'>
-                    <div id='badgeos_ob_normal_progress_bar' style='display:none'>
-                        <div id='progressbar'><div class='progress-label'><?php _e('Loading...', 'badgeos'); ?></div></div>
-                    </div>
-                </div>
-            </div>   
-            <?php } ?>
+        
         </div>
     <?php
 }

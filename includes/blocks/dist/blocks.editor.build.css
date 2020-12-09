@@ -1,9 +1,255 @@
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.bos-block-inspector label.bos-block-inspector__label{max-width:100%}.bos-block-inspector .bos-block-inspector__control{width:100%}.bos-block-inspector .bos-block-inspector__control>div>div{margin-top:0px}.bos-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.bos-block-inspector label.bos-block-inspector__label{max-width:100%}.bos-block-inspector .bos-block-inspector__control{width:100%}.bos-block-inspector .bos-block-inspector__control>div>div{margin-top:0px}.bos-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.bos-block-inspector label.bos-block-inspector__label{max-width:100%}.bos-block-inspector .bos-block-inspector__control{width:100%}.bos-block-inspector .bos-block-inspector__control>div>div{margin-top:0px}.bos-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
-.wp-block-bos-block-blocks{background:#bada55;border:0.2rem solid #292929;color:#292929;margin:0 auto;max-width:740px;padding:2rem}.secure-block-inspector .is-opened{min-height:100% !important}.secure-block-inspector label.secure-block-inspector__label{max-width:100%}.secure-block-inspector .secure-block-inspector__control{width:100%}.secure-block-inspector .secure-block-inspector__control>div>div{margin-top:0px}.secure-block-inspector .muted{opacity:.6}
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.bos-block-inspector label.bos-block-inspector__label {
+  max-width: 100%; }
+
+.bos-block-inspector .bos-block-inspector__control {
+  width: 100%; }
+  .bos-block-inspector .bos-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.bos-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.secure-block-inspector .is-opened {
+  min-height: 100% !important; }
+
+.secure-block-inspector label.secure-block-inspector__label {
+  max-width: 100%; }
+
+.secure-block-inspector .secure-block-inspector__control {
+  width: 100%; }
+  .secure-block-inspector .secure-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.secure-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.secure-block-inspector .is-opened {
+  min-height: 100% !important; }
+
+.secure-block-inspector label.secure-block-inspector__label {
+  max-width: 100%; }
+
+.secure-block-inspector .secure-block-inspector__control {
+  width: 100%; }
+  .secure-block-inspector .secure-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.secure-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.bos-block-inspector label.bos-block-inspector__label {
+  max-width: 100%; }
+
+.bos-block-inspector .bos-block-inspector__control {
+  width: 100%; }
+  .bos-block-inspector .bos-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.bos-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.secure-block-inspector .is-opened {
+  min-height: 100% !important; }
+
+.secure-block-inspector label.secure-block-inspector__label {
+  max-width: 100%; }
+
+.secure-block-inspector .secure-block-inspector__control {
+  width: 100%; }
+  .secure-block-inspector .secure-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.secure-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.secure-block-inspector .is-opened {
+  min-height: 100% !important; }
+
+.secure-block-inspector label.secure-block-inspector__label {
+  max-width: 100%; }
+
+.secure-block-inspector .secure-block-inspector__control {
+  width: 100%; }
+  .secure-block-inspector .secure-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.secure-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.bos-block-inspector label.bos-block-inspector__label {
+  max-width: 100%; }
+
+.bos-block-inspector .bos-block-inspector__control {
+  width: 100%; }
+  .bos-block-inspector .bos-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.bos-block-inspector .muted {
+  opacity: .6; }
+/**
+ * #.# Common SCSS
+ *
+ * Can include things like variables and mixins
+ * that are used across the project.
+*/
+/**
+ * #.# Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+.wp-block-bos-block-blocks {
+  background: #bada55;
+  border: 0.2rem solid #292929;
+  color: #292929;
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 2rem; }
+
+.secure-block-inspector .is-opened {
+  min-height: 100% !important; }
+
+.secure-block-inspector label.secure-block-inspector__label {
+  max-width: 100%; }
+
+.secure-block-inspector .secure-block-inspector__control {
+  width: 100%; }
+  .secure-block-inspector .secure-block-inspector__control > div > div {
+    margin-top: 0px; }
+
+.secure-block-inspector .muted {
+  opacity: .6; }

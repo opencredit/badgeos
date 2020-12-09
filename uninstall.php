@@ -106,11 +106,8 @@ foreach( $sites as $site_blog_id ) {
     /**
      * Delete user BadgeOS meta
      */
-    $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = 'credly_user_enable';");
     $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = '_badgeos_triggered_triggers';");
-    $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = 'credly_user_enable';");
     $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = '_badgeos_can_notify_user';");
-    $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = 'credly_user_id';");
     $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = '_badgeos_achievements';");
     $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = '_badgeos_active_achievements';");
     $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = '_badgeos_points';");
@@ -118,12 +115,9 @@ foreach( $sites as $site_blog_id ) {
     /**
      * Delete BadgeOS options
      */
-    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'credly_api_key_error';");
     $wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'badgeos_settings';");
-    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name = 'credly_settings';");
     $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='widget_p2p';");
     $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='widget_earned_user_achievements_widget';");
-    $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='widget_credly_credit_issuer_widget';");
     $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='p2p_storage';");
     $wpdb->query("DELETE FROM $wpdb->options WHERE option_name ='badgeos_admin_tools';");
 

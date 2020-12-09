@@ -161,9 +161,8 @@ There is NO WARRANTY for this software, express or implied, including the implie
 1. Upload 'badgeos' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Visit the BadgeOS menu to add Badges/ranks and set up new Achievement/Point/Rank types.
-4. Enter Credly credentials for the badge Issuer in the Credly Integration settings to enable the free Credly Badge Builder and badge sharing. (First get a [free account](https://credly.com/#!/create-account "Create a free Credly account") at Credly.com if you do not have one.)
-5. Use the BadgeOS Shortcode button available from any content editor in our site to turn any page or post into a part of your achievement or engagement system. For example, add lists of badges or other achievements, submission lists, a single badge and much more. Visit the Help/Support section of the BadgeOS menu for more information on available shortcodes.
-6. See video tutorials about BadgeOS at: [http://badgeos.org/support/tutorials/](http://badgeos.org/support/tutorials/ "BadgeOS Tutorials")
+4. Use the BadgeOS Shortcode button available from any content editor in our site to turn any page or post into a part of your achievement or engagement system. For example, add lists of badges or other achievements, submission lists, a single badge and much more. Visit the Help/Support section of the BadgeOS menu for more information on available shortcodes.
+5. See video tutorials about BadgeOS at: [http://badgeos.org/support/tutorials/](http://badgeos.org/support/tutorials/ "BadgeOS Tutorials")
 
 
 == Frequently Asked Questions ==

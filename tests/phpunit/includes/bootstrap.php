@@ -8,10 +8,6 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU AGPL v3.0
  * @link https://credly.com
  */
-
-ini_set('display_errors','on');
-error_reporting(E_ALL);
-
 /**
  * Set `WP_TESTS_DIR` to the base directory of WordPress:
  * `svn export http://develop.svn.wordpress.org/trunk/ /tmp/wordpress-tests`

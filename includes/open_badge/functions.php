@@ -326,7 +326,7 @@ function badgeos_ob_get_achievement_entry($entry_id) {
 
 function badgeos_convertable_credly_achievements_list_count() {
 	
-	global $wpdb;
+	global $wpdb; 
 	
 	$result = $wpdb->get_results("SELECT p.ID FROM `".$wpdb->prefix."posts` as p inner JOIN ".$wpdb->prefix."postmeta as pm on( p.ID=pm.post_id AND pm.meta_key='_badgeos_send_to_credly' ) where pm.meta_value='true' ", ARRAY_A);
 	$recs = array();

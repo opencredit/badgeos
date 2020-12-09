@@ -366,28 +366,13 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
     // check if user has earned this Achievement, and add an 'earned' class
     $earned_status = badgeos_get_user_achievements( array( 'user_id' => $user_ID, 'achievement_id' => absint( $achievement->ID ) ) ) ? 'user-has-earned' : 'user-has-not-earned';
 
-    // Setup our credly classes
-    $credly_class = '';
-    $credly_ID = '';
-
-    $giveable = false;
-    if( badgeos_first_time_installed() ) {
-        $giveable = credly_is_achievement_giveable( $achievement->ID, $user_ID );
-    }
-
-    // If the achievement is earned and givable, override our credly classes
-    if ( 'user-has-earned' == $earned_status && $giveable ) {
-        $credly_class = ' share-credly addCredly';
-        $credly_ID = 'data-credlyid="'. absint( $achievement->ID ) .'"';
-    }
-
     // Each Achievement
     $output = '';
     //exclude step CPT entries from displaying in the widget
     $is_hidden = badgeos_utilities::get_post_meta( $achievement->ID, '_badgeos_hidden', true );
     if( $is_hidden != 'hidden' ) {
 
-        $output .= '<div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item '. $earned_status . $credly_class .'"'. $credly_ID .'>';
+        $output .= '<div id="badgeos-list-item-' . $achievement->ID . '" class="badgeos-list-item '. $earned_status.'">';
 
         // Achievement Image
         if( $show_thumb == 'true' ) {

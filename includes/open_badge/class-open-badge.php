@@ -27,13 +27,12 @@ class BadgeOS_Open_Badge {
 		$this->badgeos_json_page_id 		= badgeos_utilities::get_option( 'badgeos_json_url' );
 		$this->badgeos_evidence_page_id		= badgeos_utilities::get_option( 'badgeos_evidence_url' );
 		$this->badgeos_issuer_page_id       = badgeos_utilities::get_option( 'badgeos_issuer_url' );
-	
+		ini_set( 'display_errors', 'On' );
+		error_reporting(E_ALL);
 		add_filter( 'template_include', 	array( $this,'badgeos_template_pages' ) );
         add_action( 'admin_post_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
         add_action( 'wp_ajax_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
         add_action( 'cron_convert_badges_to_open_standards', array( $this,'cron_convert_badges_to_open_standards_cb' ), 10, 2 ); //Scheduler
-
-        //$this->add_bulk_option();
     }
 
     function cron_convert_badges_to_open_standards_cb($non_os_badgeos_achievements, $is_last) {
@@ -76,7 +75,7 @@ class BadgeOS_Open_Badge {
                 $i = 0;
                 $total_chunks = count($non_os_badgeos_achievements_chunks);
                 $is_last_chunk = false;
-
+				
                 foreach ($non_os_badgeos_achievements_chunks as $non_os_badgeos_achievements) {
 
                     if( $i == $total_chunks-1 ) {
