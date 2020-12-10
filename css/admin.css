@@ -636,9 +636,7 @@ Shortcode Embed styles
 	clear: left;
 	width: 100%;
 }
-#conversion_credly_to_open_badge_in_progress {
-	margin: 15px auto;
-}
+
 #ldqie_normal_progress_loader {
 	margin: 10px auto;
 }
@@ -657,30 +655,6 @@ Shortcode Embed styles
 	text-shadow: 1px 1px 0 #fff;
 }
 
-.box-credly-alert {
-	padding: 20px;
-	background-color: #f44336;
-	color: white;
-}
-
-.box-credly-alert .closebtn {
-	margin-left: 15px;
-	color: white;
-	font-weight: bold;
-	float: right;
-	font-size: 22px;
-	line-height: 20px;
-	cursor: pointer;
-	transition: 0.3s;
-  }
-  
-  .box-credly-alert .closebtn:hover {
-	color: black;
-}
-.box-credly-alert a {
-	color: #fff;
-	text-decoration: underline;
-}
 .badgeos_settings_license_tab{
 	vertical-align: top;
 	padding: 10px;

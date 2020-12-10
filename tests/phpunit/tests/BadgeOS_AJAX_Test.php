@@ -17,9 +17,4 @@ class BadgeOS_AJAX_Test extends WP_UnitTestCase {
 	 */
 	public function test_badgeos_ajax_update_feedback() {}
 
-	/**
-	 * @covers badgeos_send_to_credly_handler()
-	 */
-	public function test_badgeos_send_to_credly_handler() {}
-
 }

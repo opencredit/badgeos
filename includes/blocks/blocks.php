@@ -309,28 +309,6 @@ function badgeos_render_user_earned_achievement_block( $attributes ) {
 }
 
 /**
- * Renders the credly assertion page block
- *
- * @param $attributes
- *
- * @return output html
- */
-function badgeos_render_credly_assertion_page_blocks( $attributes ) {
-
-    $param = '';
-    if( !empty( $attributes['width'] ) && intval( $attributes['width'] ) > 0 ) {
-        $param .= ' width="'.sanitize_text_field( $attributes['width'] ).'"';
-    }
-    if( !empty( $attributes['height'] ) ) {
-        $param .= ' height="'.sanitize_text_field( $attributes['height'] ).'"';
-    }
-    if( !empty( $attributes['CID'] ) ) {
-        $param .= ' CID="'.sanitize_text_field( $attributes['CID'] ).'"';
-    }
-
-    return do_shortcode( '[credly_assertion_page '.$param.']' );
-}
-/**
  * Renders the ranks list block
  *
  * @param $attributes
@@ -923,26 +901,7 @@ function badgeos_render_my_php_block(  ) {
             ),
         )
     ));
-
-    register_block_type( 'bos/block-credly-assertion-page-block', array(
-        'render_callback' => 'badgeos_render_credly_assertion_page_blocks',
-        'category' => 'badgeos-blocks',
-        'attributes' => array(
-            'width' => array(
-                'type' => 'string',
-                'default'=> '560'
-            ),
-            'height' => array(
-                'type' => 'string',
-                'default'=> '1000'
-            ),
-            'CID' => array(
-                'type' => 'string',
-                'default'=> ''
-            ),
-        )
-    ));
-
+    
     register_block_type( 'bos/badgeos-evidence-block', array(
         'render_callback' => 'badgeos_render_evidence_blocks',
         'category' => 'badgeos-blocks',

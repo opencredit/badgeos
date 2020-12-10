@@ -89,10 +89,6 @@ class BadgeOS {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		
-		if( badgeos_first_time_installed() ) {
-			add_action( 'init', array( $this, 'credly_init' ) );
-		}
-		
 		require_once( $this->directory_path . 'includes/utilities.php' );
 		$badgeos_db_update_v_338 = ( $exists = badgeos_utilities::get_option( 'badgeos_db_update_v_338' ) ) ? $exists : 'No';
 		//if(  $badgeos_db_update_v_338 != 'Yes' ) 
@@ -362,10 +358,6 @@ class BadgeOS {
             require_once( $this->directory_path . 'includes/blocks/blocks.php' );
             require_once( $this->directory_path . 'includes/blocks/src/init.php' );
         }
-
-        if( badgeos_first_time_installed() ) {
-            require_once( $this->directory_path . 'includes/class.Credly_Badge_Builder.php' );
-        }
 		
 		require_once( $this->directory_path . 'includes/post-types.php' );
 		require_once( $this->directory_path . 'includes/admin-settings.php' );
@@ -416,10 +408,6 @@ class BadgeOS {
 		
 		require_once( $this->directory_path . 'includes/rules-engine.php' );
 		require_once( $this->directory_path . 'includes/user.php' );
-        if( badgeos_first_time_installed() ) {
-            require_once( $this->directory_path . 'includes/credly.php' );
-            require_once( $this->directory_path . 'includes/credly-badge-builder.php' );
-        }
         require_once( $this->directory_path . 'includes/open_badge/ob-integrations.php' );
 		require_once( $this->directory_path . 'includes/widgets.php' );
         require_once( $this->directory_path . 'includes/posts-functions.php' );
@@ -440,20 +428,8 @@ class BadgeOS {
         wp_register_script( 'badgeos-admin-tools-js', $this->directory_url . "js/tools$min.js", array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
         wp_register_script( 'badgeos-admin-js', $this->directory_url . "js/admin$min.js", array( 'jquery', 'jquery-ui-tabs' ), $this::$version, true );
         wp_enqueue_style('badgeos-font-awesome', '//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-        if( badgeos_first_time_installed() ) {
-            wp_register_script( 'badgeos-credly', $this->directory_url . 'js/credly.js' );
-        }
-
         wp_register_script( 'badgeos-achievements', $this->directory_url . "js/badgeos-achievements$min.js", array( 'jquery' ), $this::$version, true );
-
-        if( badgeos_first_time_installed() ) {
-            wp_register_script( 'credly-badge-builder', $this->directory_url . "js/credly-badge-builder.js", array( 'jquery' ), $this::$version, true );
-		}
-		
         wp_register_script( 'badgeos-ob-integrations', $this->directory_url . "js/ob-integrations$min.js", array( 'jquery' ), $this::$version, true );
-		if( badgeos_first_time_installed() ) {
-			wp_register_script( 'badgeos-convert-credly-achievements', $this->directory_url . "js/convert-credly-achievements.js", array( 'jquery' ), $this::$version, true );
-		}
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         $badgeos_tools_email_tab = '';
@@ -636,22 +612,6 @@ class BadgeOS {
 
             badgeos_utilities::update_option( 'badgeos_settings', $badgeos_settings );
 		}
-
-		// Setup default Credly options
-		$credly_settings = (array) badgeos_utilities::get_option( 'credly_settings', array() );
-
-		if ( empty( $credly_settings ) || !isset( $credly_settings[ 'credly_enable' ] ) ) {
-			$credly_settings['credly_enable']                      = 'true';
-			$credly_settings['credly_badge_title']                 = 'post_title';
-			$credly_settings['credly_badge_description']           = 'post_body';
-			$credly_settings['credly_badge_short_description']     = 'post_excerpt';
-			$credly_settings['credly_badge_criteria']              = '';
-			$credly_settings['credly_badge_image']                 = 'featured_image';
-			$credly_settings['credly_badge_testimonial']           = 'congratulations_text';
-			$credly_settings['credly_badge_evidence']              = 'permalink';
-			$credly_settings['credly_badge_sendemail_add_message'] = 'false';
-			//update_option( 'credly_settings', $credly_settings );
-		}
 		
 		$this->db_upgrade();
 		
@@ -685,11 +645,6 @@ class BadgeOS {
 		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
-		
-		if( badgeos_first_time_installed() ) {
-			add_submenu_page( 'badgeos_badgeos', __( 'Credly Integration', 'badgeos' ), __( 'Credly Integration', 'badgeos' ), $minimum_role, 'badgeos_sub_credly_integration', 'badgeos_credly_options_page' );
-		}
-		
 		add_submenu_page( 'badgeos_badgeos', __( 'Assets', 'badgeos' ), __( 'Assets', 'badgeos' ), $minimum_role, 'badgeos-assets', 'badgeos_assets_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'OB Integration', 'badgeos' ), __( 'OB Integration', 'badgeos' ), $minimum_role, 'badgeos-ob-integration', 'badgeos_ob_integration_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Add-Ons', 'badgeos' ), __( 'Add-Ons', 'badgeos' ), $minimum_role, 'badgeos_sub_add_ons', 'badgeos_add_ons_page' );
@@ -738,10 +693,6 @@ class BadgeOS {
         wp_enqueue_style( 'badgeos-font-awesome' );
 		wp_enqueue_script( 'badgeos-admin-js' );
 
-		if( badgeos_first_time_installed() ) {
-			wp_enqueue_script( 'badgeos-credly' );
-		}
-
         wp_enqueue_script( 'badgeos-ob-integrations' );
 
 		// Load styles
@@ -754,17 +705,11 @@ class BadgeOS {
 	 * Frontend scripts and styles
 	 */
 	function frontend_scripts() {
-
+		
 		$data = array(
-			'ajax_url'        => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
-			'message'         => __( 'Would you like to display this badge on social networks and add it to your lifelong badge collection?', 'badgeos' ),
-			'confirm'         => __( 'Yes, send to Credly', 'badgeos' ),
-			'cancel'          => __( 'Cancel', 'badgeos' ),
-			'share'           => __( 'Share on Credly!', 'badgeos' ),
-			'localized_error' => __( 'Error:', 'badgeos' ),
-			'errormessage'    => __( 'Error: Timed out', 'badgeos' )
+			'ajax_url'        => esc_url( admin_url( 'admin-ajax.php', 'relative' ) )			
 		);
-		wp_localize_script( 'badgeos-achievements', 'BadgeosCredlyData', $data );
+		wp_localize_script( 'badgeos-achievements', 'BadgeosData', $data );
 
         wp_enqueue_style( 'badgeos-font-awesome' );
 	}
@@ -776,17 +721,6 @@ class BadgeOS {
 		global $wp_rewrite;
 		flush_rewrite_rules();
 	}
-
-	/**
-	 * Initialize Credly API
-	 */
-	function credly_init() {
-
-		// Initalize the CredlyAPI class
-		$GLOBALS['badgeos_credly'] = new BadgeOS_Credly();
-
-	}
-
 }
 $GLOBALS['badgeos'] = new BadgeOS();
 
@@ -855,22 +789,7 @@ if ( ! function_exists('badgeos_write_log')) {
 }
 
 /**
- * Check if credly is enabled
- *
- * @return bool
- */
-function badgeos_first_time_installed() {
-	// require_once( plugin_dir_path( __FILE__ ) . 'includes/utilities.php' );
-	// $credly_settings = badgeos_utilities::get_option( 'credly_settings' );
-	// if ( isset( $credly_settings ) && is_array( $credly_settings ) && count( $credly_settings ) > 0 ) {
-	// 	return true;
-	// }
-
-	return false;
-}
-
-/**
- * Check if credly is enabled
+ * Get the post meta
  *
  * @return bool
  */

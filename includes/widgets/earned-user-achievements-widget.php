@@ -363,15 +363,7 @@ class earned_user_achievements_widget extends WP_Widget {
                                     $achievement_title = '<a class="widget-badgeos-item-title ' . esc_attr($class) . '" href="' . esc_url($img_permalink) . '">' . esc_html($achievement_title) . '</a>';
                                 }
 
-                                // Setup credly data if giveable
-                                $giveable = false;
-                                if( badgeos_first_time_installed() ) {
-                                    $giveable = credly_is_achievement_giveable($achievement->ID, $user_ID);
-                                }
-                                $item_class .= $giveable ? ' share-credly addCredly' : '';
-                                $credly_ID = $giveable ? 'data-credlyid="' . absint($achievement->ID) . '"' : '';
-
-                                echo '<li id="widget-achievements-listing-item-' . absint($achievement->ID) . '" ' . $credly_ID . ' class="widget-achievements-listing-item' . esc_attr($item_class) . '">';
+                                echo '<li id="widget-achievements-listing-item-' . absint($achievement->ID) . '" class="widget-achievements-listing-item' . esc_attr($item_class) . '">';
                                 if( $show_thumb ) {
                                     echo $thumb;
                                 }
@@ -408,32 +400,4 @@ class earned_user_achievements_widget extends WP_Widget {
 			echo $args['after_widget'];
 	}
 
-}
-
-add_action( 'wp_ajax_achievement_send_to_credly', 'badgeos_send_to_credly_handler' );
-add_action( 'wp_ajax_nopriv_achievement_send_to_credly', 'badgeos_send_to_credly_handler' );
-
-/**
- * hook in our credly ajax function
- */
-function badgeos_send_to_credly_handler() {
-
-	if ( ! isset( $_REQUEST['ID'] ) ) {
-		echo json_encode( sprintf( '<strong class="error">%s</strong>', __( 'Error: Sorry, nothing found.', 'badgeos' ) ) );
-		die();
-	}
-
-	$send_to_credly = $GLOBALS['badgeos_credly']->post_credly_user_badge( get_current_user_id(), $_REQUEST['ID'] );
-
-	if ( $send_to_credly ) {
-
-		echo json_encode( sprintf( '<strong class="success">%s</strong>', __( 'Success: Sent to Credly!', 'badgeos' ) ) );
-		die();
-
-	} else {
-
-		echo json_encode( sprintf( '<strong class="error">%s</strong>', __( 'Error: Sorry, Send to Credly Failed.', 'badgeos' ) ) );
-		die();
-
-	}
 }

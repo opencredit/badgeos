@@ -307,7 +307,6 @@ jQuery(function ($) {
 					$mainobj.find('#badgeos_achievements_offset').val(response.data.offset);
 					$mainobj.find('#badgeos_achievements_count').val(response.data.badge_count);
 
-					credlyize();
 					//hide/show load more button
 					if (response.data.query_count <= response.data.offset) {
 						$mainobj.find('.achievements_list_load_more').hide();
@@ -528,155 +527,6 @@ jQuery(function ($) {
 
 	});
 
-	// Credly popup functionality
-	if ('undefined' != typeof BadgeosCredlyData) {
-		// credly markup
-		var credly = '<div class="credly-share-popup" style="display: none;"><div class="credly-wrap"><span>'
-			+ BadgeosCredlyData.message + '</span><div class="badgeos-spinner"></div>'
-			+ '<span class="credly-message" style="display: none;"><strong class="error">'
-			+ BadgeosCredlyData.errormessage + '</strong></span>'
-			+ '<input type="submit" class="credly-button credly-send" value="' + BadgeosCredlyData.confirm + '"/>'
-			+ '<a class="credly-button credly-cancel" href="#">' + BadgeosCredlyData.cancel + '</a>'
-			+ '<div style="clear: both;"></div></div><div style="clear: both;"></div></div>';
-
-		// add credly popup to dom
-		$body.append(credly);
-		credly = $('.credly-share-popup');
-
-		var credlyMessage = $('.credly-message');
-		var credlySpinner = $('.badgeos-spinner');
-		var credlySend = $('.credly-button.credly-send');
-		var spinnerTimer;
-
-		// make a function so we can call it from our ajax success functions
-		function credlyize() {
-
-			$('.share-credly.addCredly').append('<a class="credly-share" style="display: none;" href="#" title="'
-				+ BadgeosCredlyData.share + '"></a>').removeClass('addCredly');
-
-		}
-
-		credlyize();
-
-		// add credly share button to achievements in widget
-		$body.on('click', '.credly-share', function (event) {
-
-			event.preventDefault();
-
-			credlyHide();
-			var el = $(this);
-			var parent = el.parent();
-			var width = parent.outerWidth();
-			var elPosition = el.offset();
-			var id = parent.data('credlyid');
-
-			// move credly popup
-			credly.width(width).css({
-				top: Math.floor(elPosition.top - credly.outerHeight()), left: Math.floor(elPosition.left)
-			}).show().data('credlyid', id);
-
-		});
-
-		$body.on('click', '.credly-button.credly-cancel', function (event) {
-
-			// Cancel Credly popup
-			event.preventDefault();
-
-			credlyHide();
-
-		}).on('click', '.credly-button.credly-send', function (event) {
-
-			// Our Credly button handler
-			event.preventDefault();
-
-			credlySend.hide();
-			credlySpinner.show();
-
-			badgeos_send_to_credly(credly.data('credlyid'));
-
-		});
-
-		// reset hidden credly elements
-		function credlyHide() {
-
-			clearTimeout(spinnerTimer);
-
-			credly.hide();
-			credlySend.show();
-			credlySpinner.hide();
-
-			credlyMessage.hide().css({ opacity: 1.0 }).html(BadgeosCredlyData.errormessage);
-
-		}
-
-		// Our Credly AJAX call
-		function badgeos_send_to_credly(ID) {
-
-			$.ajax({
-				type: 'post',
-				dataType: 'json',
-				url: BadgeosCredlyData.ajax_url,
-				data: {
-					'action': 'achievement_send_to_credly',
-					'ID': ID
-				},
-				success: function (response) {
-
-					// hide our loading spinner
-					credlySpinner.hide();
-
-					// show our 'saved' notification briefly
-					credlyMessage.fadeTo('fast', 1).animate({ opacity: 1.0 }, 2000).fadeTo('slow', 0).html(response);
-
-					setTimeout(function () {
-
-						credlyHide();
-
-					}, 2200);
-
-				},
-				error: function (x, t, m) {
-
-					if (t === 'timeout') {
-						credlySpinner.hide();
-						credlyMessage.show();
-
-						setTimeout(function () {
-
-							credlyMessage.animate({ opacity: 0 }, 500);
-
-							setTimeout(function () {
-
-								credlyMessage.hide().css({ opacity: 1.0 });
-								credlySend.show();
-
-							}, 600);
-
-						}, 1100);
-					}
-					else {
-						// hide our loading spinner
-						credlySpinner.hide();
-
-						// show our 'saved' notification briefly
-						var html = '<strong class="error">' + BadgeosCredlyData.localized_error + ' ' + t + '</strong>';
-
-						credlyMessage.fadeTo('fast', 1).animate({ opacity: 1.0 }, 2000).fadeTo('slow', 0).html(html);
-
-						setTimeout(function () {
-
-							credlyHide();
-
-						}, 2200);
-					}
-
-				}
-
-			});
-
-		}
-	}
-
 	badgeos_ajax_earned_achievement_list();
 	badgeos_ajax_earned_ranks_list();
 	badgeos_ajax_ranks_list();
@@ -687,7 +537,7 @@ jQuery(function ($) {
 		var entry_id = button.val();
 
 		return $.ajax({
-			url: BadgeosCredlyData.ajax_url,
+			url: BadgeosData.ajax_url,
 			type: 'POST',
 			dataType: 'json',
 			data: {
@@ -734,7 +584,7 @@ jQuery(function ($) {
 
 		var return_result = 0;
 		$.ajax({
-			url: BadgeosCredlyData.ajax_url,
+			url: BadgeosData.ajax_url,
 			type: 'POST',
 			data: {
 				action: 'badgeos_validate_open_badge',
@@ -752,7 +602,7 @@ jQuery(function ($) {
 
 				return_result += parseInt(returndata1.result);
 				$.ajax({
-					url: BadgeosCredlyData.ajax_url,
+					url: BadgeosData.ajax_url,
 					type: 'POST',
 					data: {
 						action: 'badgeos_validate_open_badge',
@@ -772,7 +622,7 @@ jQuery(function ($) {
 						return_result += parseInt(returndata2.result);
 
 						$.ajax({
-							url: BadgeosCredlyData.ajax_url,
+							url: BadgeosData.ajax_url,
 							type: 'POST',
 							data: {
 								action: 'badgeos_validate_open_badge',
@@ -791,7 +641,7 @@ jQuery(function ($) {
 
 								return_result += parseInt(returndata3.result);
 								$.ajax({
-									url: BadgeosCredlyData.ajax_url,
+									url: BadgeosData.ajax_url,
 									type: 'POST',
 									data: {
 										action: 'badgeos_validate_open_badge',
@@ -810,7 +660,7 @@ jQuery(function ($) {
 
 										return_result += parseInt(returndata4.result);
 										$.ajax({
-											url: BadgeosCredlyData.ajax_url,
+											url: BadgeosData.ajax_url,
 											type: 'POST',
 											data: {
 												action: 'badgeos_validate_open_badge',
