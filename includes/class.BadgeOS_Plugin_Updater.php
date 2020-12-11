@@ -221,7 +221,8 @@ class BadgeOS_Plugin_Updater {
 		$api_params = array(
 			'edd_action' => 'activate_license',
 			'license'    => trim( $license ),
-			'item_name'  => urlencode( $this->item_name )
+			'item_name'  => urlencode( $this->item_name ),
+			'url'        => home_url()
 		);
 
 		// Call the remote API
@@ -265,7 +266,8 @@ class BadgeOS_Plugin_Updater {
 		$api_params = array(
 			'edd_action' => 'deactivate_license',
 			'license'    => $license,
-			'item_name'  => urlencode( $this->item_name ) // the name of our product in EDD
+			'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
+			'url'        => home_url()
 		);
 
 		// Call the custom API.
@@ -300,7 +302,8 @@ class BadgeOS_Plugin_Updater {
 		$api_params = array(
 			'edd_action' => 'check_license',
 			'license'    => $license,
-			'item_name'  => urlencode( $this->item_name )
+			'item_name'  => urlencode( $this->item_name ),
+			'url'        => home_url()
 		);
 
 		// Call the custom API.
