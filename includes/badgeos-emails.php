@@ -887,3 +887,152 @@ function badgeos_send_points_deduct_email( $user_id, $credit_id, $achievement_id
 }
 add_action( 'badgeos_after_award_points', 'badgeos_send_points_deduct_email', 10, 8 );
 add_action( 'badgeos_after_revoke_points', 'badgeos_send_points_deduct_email', 10, 8 );
+
+
+/**
+ * Sends bulk email when achievement are awarded in bulk from tools page [ achievement page ]...
+ * 
+ * @param $rec_type
+ * @param $achievement_id
+ * @param $user_id
+ * @param $entry_id
+ * 
+ * @return none
+ */ 
+function badgeos_send_bulk_achievements_email( $rec_type, $achievement_id, $user_id, $entry_id ) {
+    
+    global $wpdb;
+    
+    if( badgeos_can_notify_user( $user_id ) ) {
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
+        $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
+        $achievement_type = $badgeos_settings['achievement_main_post_type'];
+        $post_obj = get_page_by_path( $achievement_post_type, OBJECT, $achievement_type );
+        
+        $parent_post_type = '';
+        if( $post_obj ) {
+            $parent_post_type = $post_obj->post_type;
+        }
+        if ( trim( $achievement_type ) == trim( $parent_post_type ) ) {
+            
+            $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
+            
+            $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_cc_list', 'cc' );
+            $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_bcc_list', 'bcc' );
+
+            if( ! isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) || $badgeos_admin_tools['email_disable_earned_achievement_email'] == 'no' ) {
+                
+                $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
+                if( count( $results ) > 0 ) {
+                    $record = $results[ 0 ];
+                    $achievement_type   = $record[ 'post_type' ];
+                    $type_title  = $post_obj->post_title;
+                    $step_type = trim( $badgeos_settings['achievement_step_post_type'] );
+                    $issue_date = $record[ 'date_earned' ];
+                    $rec_type = $record[ 'rec_type' ];
+                    $rec_date_earned = $record['date_earned'];                    
+                    $date_format = badgeos_utilities::get_option( 'date_format', true );
+                    $time_format = badgeos_utilities::get_option( 'time_format', true );
+                    if( get_post_meta( $achievement_id, '_open_badge_enable_baking', true ) ) {
+                        $evidence_page_id           = get_option( 'badgeos_evidence_url' );
+                        $badgeos_evidence_url       = get_permalink( $evidence_page_id );
+                        $badgeos_evidence_url       = add_query_arg( 'bg',  $record[ 'ID' ],        $badgeos_evidence_url );
+                        $badgeos_evidence_url       = add_query_arg( 'eid', $record[ 'entry_id' ],  $badgeos_evidence_url );
+                        $badgeos_evidence_url       = add_query_arg( 'uid', $record[ 'user_id' ],   $badgeos_evidence_url );    
+                    }
+                       
+                    if( ! empty( $achievement_type ) && trim( $achievement_type ) != $step_type ) {
+                        $email_subject = $badgeos_admin_tools['email_achievement_subject'];
+                        if( empty( $email_subject ) ) {
+                            $email_subject      = __( 'Congratulation for earning an achievement', 'badgeos' );
+                        }
+                        
+                        $email_content  = $badgeos_admin_tools['email_achievement_content'];
+                        
+                        $from_title = get_bloginfo( 'name' );
+                        $from_email = get_bloginfo( 'admin_email' );
+                        
+                        if( !empty( $badgeos_admin_tools['email_general_from_name'] ) ) {
+                            $from_title = $badgeos_admin_tools['email_general_from_name'];
+                        }
+    
+                        if( !empty( $badgeos_admin_tools['email_general_from_email'] ) ) {
+                            $from_title = $badgeos_admin_tools['email_general_from_email'];
+                        }
+    
+                        $achievement_title  = $record[ 'achievement_title' ];
+                        $points             = $record[ 'points' ];
+                        $achievement_image = badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' );
+                    
+                        $user_to_title = '';
+                        $user_email = '';
+                        $to_user_id = $record[ 'user_id'];
+                        $user_to = get_user_by( 'ID', $record[ 'user_id'] );
+                        if( $user_to ) {
+                            $user_to_title = $user_to->display_name;
+                            $user_email = $user_to->user_email;
+                        }
+            
+                        $headers[] = 'From: '.$from_title.' <'.$from_email.'>';
+                        $headers[] = 'Content-Type: text/html; charset=UTF-8';
+                        if( is_array( $email_cc_list ) && count( $email_cc_list ) > 0 ) {
+                            foreach( $email_cc_list as $cc_id ) {
+                                if( !empty( $cc_id ) ) {
+                                    $headers[] = 'Cc: '.$cc_id;
+                                }
+                            }
+                        }
+                        
+                        if( is_array( $email_bcc_list ) &&  count( $email_bcc_list ) > 0 ) {
+                            foreach( $email_bcc_list as $bcc_id ) {
+                                if( !empty( $bcc_id ) ) {
+                                    $headers[] = 'Bcc: '.$bcc_id;
+                                }
+                            }
+                        }
+                    
+                        $email_subject = str_replace('[achievement_type]', $type_title, $email_subject ); 
+                        $email_subject = str_replace('[achievement_title]', $achievement_title, $email_subject ); 
+                        $email_subject = str_replace('[points]', $points, $email_subject );
+                        $email_subject = str_replace('[user_email]', $user_email, $email_subject );
+                        $email_subject = str_replace('[user_name]', $user_to_title, $email_subject );
+    
+                        ob_start();
+                        
+                        $email_content  = stripslashes( html_entity_decode( $email_content ) );
+                        $email_content = str_replace("\'","'", $email_content);
+                        $email_content = str_replace('\"','"', $email_content);
+            
+                        $email_content = str_replace('[achievement_type]', $type_title, $email_content ); 
+                        $email_content = str_replace('[achievement_title]', $achievement_title, $email_content );
+                        $email_content = str_replace('[date_earned]', date( $date_format.' '.$time_format, strtotime($record['date_earned']) ), $email_content );  
+                        $email_content = str_replace('[achievement_link]', get_permalink($achievement_id), $email_content ); 
+                        $email_content = str_replace('[points]', $points, $email_content ); 
+                        $email_content = str_replace('[user_email]', $user_email, $email_content ); 
+                        $email_content = str_replace('[user_name]', $user_to_title, $email_content ); 
+                        $email_content = str_replace('[achievement_image]', $achievement_image, $email_content ); 
+                        $email_content = str_replace('[user_profile_link]', get_edit_profile_url( $to_user_id ), $email_content ); 
+                        $email_content = str_replace('[evidence]', badgeos_include_evidence_in_email( $achievement_id, $issue_date, $rec_type, $badgeos_evidence_url, $rec_date_earned ), $email_content);
+                        include( 'email_headers/header.php' );
+                        ?>
+                            <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                                <tr>
+                                    <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
+                                        <?php echo $email_content; ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        <?php
+                        include( 'email_headers/footer.php' );
+                        $message = ob_get_contents();
+                        ob_end_clean();
+                        if( ! empty( $user_email ) ) {
+                            wp_mail( $user_email, strip_tags( $email_subject ), $message, $headers );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+add_action( 'badgeos_achievements_new_added', 'badgeos_send_bulk_achievements_email', 10, 4 );
