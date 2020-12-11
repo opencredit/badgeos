@@ -687,7 +687,7 @@ class BadgeOS {
             wp_enqueue_script( 'badgeos-admin-tools-js' );
             $min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
             wp_enqueue_script( 'badgeos-select2', $this->directory_url . "js/select2/select2$min.js", array( 'jquery' ), '', true );
-            wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . 'js/select2/select2$min.css' );
+            wp_enqueue_style( 'badgeos-select2-css', $this->directory_url . "js/select2/select2$min.css" );
         }
 
         wp_enqueue_style( 'badgeos-font-awesome' );
