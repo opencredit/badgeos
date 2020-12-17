@@ -288,9 +288,8 @@ add_filter( 'badgeos_achievements_record_type', 'badgeos_ob_achievements_record_
  */
 function badgeos_ob_png_only_note( $html ) {
 	
-	$pt = get_current_screen()->post_type;
-	
-	//if ( $pt != 'post') return;
+	//$pt = get_current_screen()->post_type;
+	$pt = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : '';
 	$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 		
 	$achievement_types = get_posts( array(
 		'post_type'      =>	trim( $badgeos_settings['achievement_main_post_type'] ),
