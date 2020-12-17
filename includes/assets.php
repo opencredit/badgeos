@@ -20,7 +20,7 @@ function badgeos_assets_page( ) {
     echo '<div class="badgeos_assets">';
     echo '<h1>'.__( 'Assets', 'badgeos' ).'</h1>';
     $root_url = badgeos_get_directory_url();
-    if( isset( $assets ) && is_object( $assets ) && count( $assets ) > 0 ) { 
+    if( is_object( $assets ) && isset( $assets ) ) { 
         foreach( $assets as $key => $asset ) {
             if( $asset->active == 'Yes' ) {
                 ?>
