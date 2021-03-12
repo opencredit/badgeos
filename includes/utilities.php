@@ -57,20 +57,8 @@ class badgeos_utilities {
      * @return mixed
      */
     static function get_option( $option_name ) {
-
         $settings = [];
-        self::$instance = new self;
-        // if( self::$instance->is_network_wide_active() ) {
-        //     switch_to_blog( get_main_site_id() );
-        //     if ( self::$instance->ms_show_settings_across_network() ){
-        //         $settings = get_option( $option_name );
-        //     }
-        //     restore_current_blog();
-            // $settings = get_site_option( $option_name );
-        // } else {
-            $settings = get_option( $option_name );
-        // }
-
+        $settings = get_option( $option_name );
         return $settings;
     }
 
@@ -83,17 +71,7 @@ class badgeos_utilities {
      * @return mixed
      */
     static function update_option( $option_name, $value = false ) {
-        // self::$instance = new self;
-        // if( self::$instance->is_network_wide_active() ) {
-        //     switch_to_blog( get_main_site_id() );
-        //     if ( self::$instance->ms_show_settings_across_network() ){
-        //         $settings = update_option( $option_name, $value );
-        //     }
-        //     restore_current_blog();
-        //     // $settings = get_site_option( $option_name );
-        // } else {
-            $settings = update_option( $option_name, $value );
-        // }
+        $settings = update_option( $option_name, $value );
         return $settings;
     }
 
@@ -184,24 +162,8 @@ class badgeos_utilities {
      * @return mixed
      */
     static function get_post_meta( $post_id, $meta_key = '', $single = true ) {
-        
-        self::$instance = new self;
-        if( self::$instance->is_network_wide_active() ) {
-
-            // Switch to main site
-            // switch_to_blog( get_current_blog_id() );
-
-            // Get the post meta
-            $value = get_post_meta( $post_id, $meta_key, $single );
-            // Restore current site
-           // restore_current_blog();
-
-            return $value;
-
-        } else {
-            $value = get_post_meta( $post_id, $meta_key, $single );
-            return $value ;
-        }
+        $value = get_post_meta( $post_id, $meta_key, $single );
+        return $value;
     }
 
     /**
@@ -218,16 +180,8 @@ class badgeos_utilities {
 
         self::$instance = new self;
         if( self::$instance->is_network_wide_active() && ! is_main_site() ) {
-
-            // Switch to main site
-            // switch_to_blog( get_current_blog_id() );
             $result = update_post_meta( $post_id, $meta_key, $meta_value, $prev_value );
-
-            // Restore current site
-            // restore_current_blog();
-
             return $result;
-
         } else {
             return update_post_meta( $post_id, $meta_key, $meta_value, $prev_value );
         }
@@ -246,16 +200,8 @@ class badgeos_utilities {
 
         self::$instance = new self;
         if( self::$instance->is_network_wide_active() && ! is_main_site() ) {
-
-            // Switch to main site
-            // switch_to_blog( get_main_site_id() );
-
             $result = delete_post_meta( $post_id, $meta_key, $meta_value );
-            /// Restore current site
-            // restore_current_blog();
-
             return $result;
-
         } else {
             $result = delete_post_meta( $post_id, $meta_key, $meta_value );
             return $result;
@@ -278,20 +224,7 @@ class badgeos_utilities {
         }
         
         global $wpdb;
-
-        self::$instance = new self;
-        // if( self::$instance->is_network_wide_active() && ! is_main_site() ) {
-
-        //     $post = $wpdb->get_row( $wpdb->prepare(
-        //         "SELECT * FROM ".$wpdb->prefix."posts WHERE ID = %d",
-        //         absint( $post_id )
-        //     ) );
-
-        //     return $post;
-
-        // } else {
-            return get_post( $post_id );
-        // }
+        return get_post( $post_id );
     }
 
     /**
@@ -302,19 +235,7 @@ class badgeos_utilities {
      * @return false|WP_Post 
      */
     static function get_post_type( $post_id ) {
-
-        // if we got a post object, then return their field
-        // if( is_multisite() ) {
-        //     switch_to_blog( get_current_blog_id() );
-        // }
-
         $result = get_post_type( $post_id );
-        
-        // Restore current site
-        // if( is_multisite() ) {
-        //     restore_current_blog();
-        // }
-
         return $result;
     }
 }

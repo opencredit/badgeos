@@ -56,7 +56,6 @@ jQuery(document).ready(function ($) {
 
         var points = $("#" + field_id).val();
         var ajaxURL = self.data('admin_ajax');
-        console.log(ajaxURL);
 
         var data = {
             'action': 'badgeos_user_profile_update_points',
@@ -68,7 +67,6 @@ jQuery(document).ready(function ($) {
 
         jQuery.post(ajaxURL, data, function (response) {
             if (response.success) {
-                console.log(response.data.new_points);
                 $("#" + field_id + '-profile-label').html(response.data.new_points);
             }
 
@@ -262,7 +260,6 @@ jQuery(document).ready(function ($) {
                 $('#wpbody-content .wrap').prepend('<div class="notice notice-warning is-dismissible"><p>' + response + '</p></div>');
             }
         });
-        console.log(chkArray);
     });
     function click_to_dismiss(div_id) {
         $("#".div_id).remove();
