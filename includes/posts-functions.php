@@ -105,3 +105,53 @@ function badgeos_get_post( $post_id ) {
     global $wpdb;
     return badgeos_utilities::badgeos_get_post( $post_id );
 }
+
+function badgeos_clone_entries_of_ranks_to_multisite_setup( $post_id, $post_object ) {
+    global $post;
+    global $wpdb;
+    
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $rank_type = $badgeos_settings['ranks_main_post_type'];
+
+    if ( ! empty( $post->ID ) ){
+        $post_id = $post->ID;
+    } else if ( isset( $_GET['post'] ) ){
+        $post_id = $_GET['post'];
+    }
+
+    $get_post   = get_post( $post_id, ARRAY_A );                    // post object
+    $post_type  = get_post_type( $post_id );                        // badgeos post type
+    $post_title = get_the_title( $post_id );                        // post title
+    $post_meta   = get_post_meta( $post_id );                       // post meta
+    $all_network_ids = badgeos_get_network_site_ids();              // multisite network ids
+    $current_blog_id = get_current_blog_id();                       // current blog id
+
+    // update network ids array with blog ids where data will be copied
+    // avoid multiple copies of post on same site
+    if ( ($key = array_search( $current_blog_id, $all_network_ids ) ) !== false ) {
+        unset( $all_network_ids[$key] );
+    }
+
+    // check if we are copying badges post only 
+    if ( in_array( $post_type, badgeos_get_rank_types_slugs() ) ||
+        in_array( $post_type, array( $rank_type ) ) ){
+        foreach ( $all_network_ids as $id ) {
+            switch_to_blog( $id );
+            if ( ! post_exists( $post_title ) ) {
+                $get_post['ID'] = ''; // empty id field, to tell wordpress that this will be a new post
+                $get_post['post_status'] = 'publish'; // empty id field, to tell wordpress that this will be a new post
+                $inserted_post_id = wp_insert_post( $get_post ); // insert the post
+                update_post_meta($inserted_post_id,'post_meta', $post_meta);
+                foreach ( $post_meta as $key => $value ) {
+                    update_post_meta( $inserted_post_id, $key, $value[0] );
+                }
+                update_post_meta( $inserted_post_id, '_badgeos_show_in_menu', 'on'); 
+            }
+            restore_current_blog();
+        }   
+    }
+    
+    // switch to current blog
+    switch_to_blog( $current_blog_id );
+}
+add_action( 'save_post', 'badgeos_clone_entries_of_ranks_to_multisite_setup', 15, 2 );

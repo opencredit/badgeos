@@ -52,15 +52,18 @@ jQuery(document).ready(function ($) {
         var points_id = self.data('points_id');
         var field_id = self.data('field_id');
         var user_id = self.data('user_id');
+        var blog_id = self.data('blog_id');
 
         var points = $("#" + field_id).val();
         var ajaxURL = self.data('admin_ajax');
+        console.log(ajaxURL);
 
         var data = {
             'action': 'badgeos_user_profile_update_points',
             'points_id': points_id,
             'points': points,
-            'user_id': user_id
+            'user_id': user_id,
+            'blog_id': blog_id,
         };
 
         jQuery.post(ajaxURL, data, function (response) {
@@ -96,7 +99,7 @@ jQuery(document).ready(function ($) {
     });
 
     /**
-	 * For user profile page
+     * For user profile page
      * Revoke Ranks
      */
     $('body').on('click', 'table.badgeos-rank-table .revoke-rank', function () {
@@ -149,11 +152,13 @@ jQuery(document).ready(function ($) {
         var ajaxURL = self.attr('data-admin_ajax');
         var userID = self.attr('data-user-id');
         var rankType = self.attr('data-rank-filter');
+        var blog_id = self.attr('data-blog-id');
 
         var data = {
             'action': 'user_profile_display_award_list',
             'user_id': userID,
-            'rank_filter': rankType
+            'rank_filter': rankType,
+            'blog_id': blog_id
         };
 
         jQuery.post(ajaxURL, data, function (response) {
@@ -240,11 +245,12 @@ jQuery(document).ready(function ($) {
         var self = $(this);
         var chkArray = [];
         var badgeos_user_id = $('#badgeos_user_id').val();
+        var blog_id = $('#blog_id').val();
         $('input[name="badgeos_ach_check_indis[]"]:checked').each(function () {
             chkArray.push($(this).val());
         });
         var data = {
-            action: 'delete_badgeos_bulk_achievements', achievements: chkArray, user_id: badgeos_user_id
+            action: 'delete_badgeos_bulk_achievements', achievements: chkArray, user_id: badgeos_user_id, blog_id: blog_id
         };
 
         self.siblings('#revoke-badges-loader').show();
