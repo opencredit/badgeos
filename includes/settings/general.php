@@ -5,20 +5,26 @@
     $minimum_role = ( isset( $badgeos_settings['minimum_role'] ) ) ? $badgeos_settings['minimum_role'] : 'manage_options';
     $debug_mode = ( isset( $badgeos_settings['debug_mode'] ) ) ? $badgeos_settings['debug_mode'] : 'disabled';
     $log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
-    $ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+    
+    // multisite settings
+    $ms_show_all_achievements   = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
+    // $ms_show_all_settings       = ( isset( $badgeos_settings['ms_show_all_settings'] ) ) ? $badgeos_settings['ms_show_all_settings'] : 'disabled';
+    // $ms_show_all_ranks          = ( isset( $badgeos_settings['ms_show_all_ranks'] ) ) ? $badgeos_settings['ms_show_all_ranks'] : 'disabled';
+    // $ms_show_all_points         = ( isset( $badgeos_settings['ms_show_all_points'] ) ) ? $badgeos_settings['ms_show_all_points'] : 'disabled';
+
     $remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
-    $badgeos_achievement_global_image_width 	= ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
+    $badgeos_achievement_global_image_width     = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
     $badgeos_achievement_global_image_height = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_height'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_height'] : '50';
-    $badgeos_rank_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
-    $badgeos_rank_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
-    $badgeos_point_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_width'] ) ) ? $badgeos_settings['badgeos_point_global_image_width'] : '32';
-    $badgeos_point_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_height'] ) ) ? $badgeos_settings['badgeos_point_global_image_height'] : '32';
+    $badgeos_rank_global_image_width        = ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
+    $badgeos_rank_global_image_height       = ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
+    $badgeos_point_global_image_width       = ( ! empty ( $badgeos_settings['badgeos_point_global_image_width'] ) ) ? $badgeos_settings['badgeos_point_global_image_width'] : '32';
+    $badgeos_point_global_image_height      = ( ! empty ( $badgeos_settings['badgeos_point_global_image_height'] ) ) ? $badgeos_settings['badgeos_point_global_image_height'] : '32';
      
-    $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
-    $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
-    $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
-    $badgeos_admin_side_tab 	= ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_general_settings';
-    $date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+    $achievement_list_default_view  = ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
+    $earned_achievements_shortcode_default_view     = ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
+    $earned_ranks_shortcode_default_view    = ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
+    $badgeos_admin_side_tab     = ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_general_settings';
+    $date_of_birth_from     = ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
     ob_start();
     do_action( 'badgeos_settings', $badgeos_settings );
     $addon_contents = ob_get_clean();
@@ -48,6 +54,16 @@
                     <?php _e( 'Thumbnail Sizes', 'badgeos' ); ?>
                 </a>
             </li>
+            <!-- multisite settings tab -->
+            <?php if ( is_multisite() && is_main_site() ) { ?>
+            <li>
+                <a href="#badgeos_settings_multisite_settings">
+                    &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-sitemap" aria-hidden="true"></i>&nbsp;&nbsp;
+                    <?php _e( 'Multisite Settings', 'badgeos' ); ?>
+                </a>
+            </li>
+            <?php } ?>
+
             <?php if( ! empty( $addon_contents ) ) { ?>
                 <li>
                     <a href="#badgeos_settings_addon_settings">
@@ -109,22 +125,7 @@
                             </td>
                         </tr>
                     <?php } ?>
-                    <?php
-                    if ( is_super_admin() ){
-                        if ( is_multisite() ) {
-                        ?>
-                            <tr valign="top"><th scope="row"><label for="debug_mode"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
-                                <td>
-                                    <select id="debug_mode" name="badgeos_settings[ms_show_all_achievements]">
-                                        <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
-                                        <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
-                                    </select>
-                                </td>
-                            </tr>
-                        <?php
-                        }
-                    }
-                    do_action( 'badgeos_general_settings_fields', $badgeos_settings ); ?>
+                    <?php do_action( 'badgeos_general_settings_fields', $badgeos_settings ); ?>
                 </tbody>
             </table>
             <input type="submit" name="badgeos_settings_update_btn" class="button button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>">
@@ -212,6 +213,26 @@
             </table>
             <input type="submit" name="badgeos_settings_update_btn" class="button button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>">
         </div>
+        <?php if( is_super_admin() && is_multisite() && is_main_site() ) { ?>
+        <div id="badgeos_settings_multisite_settings">
+            <table cellspacing="0">
+                <tbody>
+                <!-- multisite settings -->
+                <tr valign="top"><th scope="row"><label for="ms_show_all_achievements"><?php _e( 'Show achievements earned across all sites on the network:', 'badgeos' ); ?></label></th>
+                    <td>
+                        <select id="ms_show_all_achievements" name="badgeos_settings[ms_show_all_achievements]">
+                            <option value="disabled" <?php selected( $ms_show_all_achievements, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+                            <option value="enabled" <?php selected( $ms_show_all_achievements, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+                        </select>
+                    </td>
+                </tr>
+                    <?php do_action( 'badgeos_general_settings_multisite_fields', $badgeos_settings ); ?>
+                </tbody>
+            </table>
+            <input type="submit" name="badgeos_settings_update_btn" class="button button-primary" value="<?php _e( 'Save Settings', 'badgeos' ); ?>">
+        </div>
+        <?php } ?>
+
         <?php if( ! empty( $addon_contents ) ) { ?>
             <div id="badgeos_settings_addon_settings">
                 <table cellspacing="0">

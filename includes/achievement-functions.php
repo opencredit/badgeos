@@ -840,13 +840,13 @@ function badgeos_get_achievement_earners_list( $achievement_id = 0 ) {
 /**
  * Check if admin settings are set to show all achievements across a multisite network
  *
- * @since  1.2.0
+ * @since  3.6.10
  * @return boolean
  */
 function badgeos_ms_show_all_achievements(){
 	$ms_show_all_achievements = NULL;
 	if ( is_multisite() ) {
-    	$badgeos_settings = badgeos_utilities::get_option( 'badgeos_settings' );
+    	$badgeos_settings = badgeos_utilities::get_main_site_option( 'badgeos_settings' );
     	$ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
     	if( 'enabled' == $ms_show_all_achievements )
     		return true;
@@ -862,7 +862,7 @@ function badgeos_ms_show_all_achievements(){
  */
 function badgeos_get_network_site_ids() {
 	global $wpdb;
-    if( badgeos_ms_show_all_achievements() ) {
+    if( is_multisite() && badgeos_ms_show_all_achievements() ) {
         $blog_ids = $wpdb->get_results( "SELECT blog_id FROM " . $wpdb->base_prefix . "blogs" );
 		foreach ($blog_ids as $key => $value ) {
             $sites[] = $value->blog_id;

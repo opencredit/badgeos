@@ -161,12 +161,30 @@ function badgeos_register_achievement_type( $achievement_name_singular = '', $ac
 }
 
 /**
- * Register each of our achievement Types as CPTs
+ * Register each of our achievement Types as CPTs on all multisite network
  *
  * @since  1.0.0
  * @return void
  */
 function badgeos_register_achievement_type_cpt() {
+	if ( badgeos_ms_show_all_achievements() ) {
+		// switch blogs and register post_types on all networks
+		$badgeos_sites = badgeos_get_network_site_ids();
+		$current_blog_id = get_current_blog_id();
+		foreach( $badgeos_sites as $bos_site ) {
+			switch_to_blog( $bos_site ); 
+			badgeos_register_achievement_post_type();
+			restore_current_blog();		
+		}
+		switch_to_blog( $current_blog_id );
+	} else {
+		badgeos_register_achievement_post_type();		
+	}
+}
+add_action( 'init', 'badgeos_register_achievement_type_cpt', 8 );
+
+
+function badgeos_register_achievement_post_type(){
 
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 	// Grab all of our achievement type posts
@@ -235,7 +253,5 @@ function badgeos_register_achievement_type_cpt() {
 
 		// Register the Achievement type
 		badgeos_register_achievement_type( strtolower( $achievement_name_singular ), strtolower( $achievement_name_plural ) );
-
 	}
 }
-add_action( 'init', 'badgeos_register_achievement_type_cpt', 8 );
