@@ -45,6 +45,7 @@ function get_badgeos_points_deduct_activity_triggers() {
 	$GLOBALS['badgeos']->deduct_points_activity_triggers = apply_filters( 'badgeos_deduct_points_activity_triggers',
 		array(
 			'badgeos_wp_login'     			=> __( 'Log in to Website', 'badgeos' ),
+            'badgeos_wp_not_login'          => __( 'Not Login for X days', 'badgeos' ),
 			'badgeos_new_comment'  			=> __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' 	=> __( 'Comment on a specific post', 'badgeos' ),
             'badgeos_new_post'     			=> __( 'Publish a new post', 'badgeos' ),
