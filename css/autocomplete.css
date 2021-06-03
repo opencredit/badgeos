@@ -176,9 +176,9 @@ only screen and (min-resolution: 144dpi) {
     width: auto;
 }
 
-.invisible {
+/*.invisible {
     visibility: hidden;
-}
+}*/
 
 .clearfix:before,
 .clearfix:after {
