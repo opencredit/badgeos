@@ -122,7 +122,7 @@ class Badgeos_Tools {
                         $badgeos_admin_tools['badgeos_tools_email_logo_dir'] = $file_dir[ 'file' ];
                     }
                 }
-
+				$badgeos_admin_tools['badgeos_tools_email_preheader_text']      = sanitize_text_field( $tools_data['badgeos_tools_email_preheader_text'] );
                 $badgeos_admin_tools['email_general_footer_text']               =  sanitize_text_field( $tools_data[ 'email_general_footer_text' ] );
                 $badgeos_admin_tools['allow_unsubscribe_email']                 =  sanitize_text_field( $tools_data[ 'allow_unsubscribe_email' ] );
                 $badgeos_admin_tools['unsubscribe_email_page']                  =  sanitize_text_field( $tools_data[ 'unsubscribe_email_page' ] );
@@ -337,6 +337,7 @@ class Badgeos_Tools {
 
                         foreach( $users_to_award as $user_ids ) {
                             badgeos_update_user_achievements( array( 'user_id' => $user_ids, 'new_achievements' => array( $achievement_object ) ) );
+							badgeos_update_users_points( $user_ids, 0, get_current_user_id(), $achievement_id );
                         }
                     }
                 }
