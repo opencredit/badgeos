@@ -2,7 +2,7 @@
 /**
 * Plugin Name: BadgeOS
 * Plugin URI: http://www.badgeos.org/
-* Description: BadgeOS lets your site’s users complete tasks and earn badges that recognize their achievement.  Define achievements and choose from a range of options that determine when they're complete.  Badges are Mozilla Open Badges (OBI) compatible through integration with the “Open Credit” API by Credly, the free web service for issuing, earning and sharing badges for lifelong achievement.
+* Description: BadgeOS lets your site’s users complete tasks and earn badges, ranks, and points that recognize their achievement. Define achievements and choose from a range of options that determine when they're complete. Badges are Mozilla Open Badges (OBI) compatible so the users can easily validate the earned badges.
 * Author: LearningTimes
 * Version: 3.6.9
 * Author URI: https://credly.com/
@@ -263,6 +263,7 @@ class BadgeOS {
         if ( empty( $badgeos_admin_tools ) ) {
             $badgeos_admin_tools['badgeos_tools_email_logo_url']   = '';
             $badgeos_admin_tools['badgeos_tools_email_logo_dir']   = '';
+			$badgeos_admin_tools['badgeos_tools_email_preheader_text']   = '';
 			$badgeos_admin_tools['email_general_footer_text']   = '';
 			$badgeos_admin_tools['allow_unsubscribe_email']   = 'No';
 			$badgeos_admin_tools['unsubscribe_email_page']   = '0';
