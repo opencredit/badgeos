@@ -7,18 +7,22 @@
     $log_entries = ( isset( $badgeos_settings['log_entries'] ) ) ? $badgeos_settings['log_entries'] : 'disabled';
     $ms_show_all_achievements = ( isset( $badgeos_settings['ms_show_all_achievements'] ) ) ? $badgeos_settings['ms_show_all_achievements'] : 'disabled';
     $remove_data_on_uninstall = ( isset( $badgeos_settings['remove_data_on_uninstall'] ) ) ? $badgeos_settings['remove_data_on_uninstall'] : '';
-    $badgeos_achievement_global_image_width 	= ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
+    // not earned image settings
+    $badgeos_not_earned_image = ( isset ( $badgeos_settings['badgeos_not_earned_image'] ) ) ? $badgeos_settings['badgeos_not_earned_image'] : 'disabled';
+    $badgeos_achievement_global_image_width     = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_width'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_width'] : '50';
     $badgeos_achievement_global_image_height = ( ! empty ( $badgeos_settings['badgeos_achievement_global_image_height'] ) ) ? $badgeos_settings['badgeos_achievement_global_image_height'] : '50';
-    $badgeos_rank_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
-    $badgeos_rank_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
-    $badgeos_point_global_image_width 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_width'] ) ) ? $badgeos_settings['badgeos_point_global_image_width'] : '32';
-    $badgeos_point_global_image_height 		= ( ! empty ( $badgeos_settings['badgeos_point_global_image_height'] ) ) ? $badgeos_settings['badgeos_point_global_image_height'] : '32';
+    $badgeos_rank_global_image_width        = ( ! empty ( $badgeos_settings['badgeos_rank_global_image_width'] ) ) ? $badgeos_settings['badgeos_rank_global_image_width'] : '50';
+    $badgeos_rank_global_image_height       = ( ! empty ( $badgeos_settings['badgeos_rank_global_image_height'] ) ) ? $badgeos_settings['badgeos_rank_global_image_height'] : '50';
+    $badgeos_point_global_image_width       = ( ! empty ( $badgeos_settings['badgeos_point_global_image_width'] ) ) ? $badgeos_settings['badgeos_point_global_image_width'] : '32';
+    $badgeos_point_global_image_height      = ( ! empty ( $badgeos_settings['badgeos_point_global_image_height'] ) ) ? $badgeos_settings['badgeos_point_global_image_height'] : '32';
      
-    $achievement_list_default_view 	= ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
-    $earned_achievements_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
-    $earned_ranks_shortcode_default_view 	= ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
-    $badgeos_admin_side_tab 	= ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_general_settings';
-    $date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+    $achievement_list_default_view  = ( ! empty ( $badgeos_settings['achievement_list_shortcode_default_view'] ) ) ? $badgeos_settings['achievement_list_shortcode_default_view'] : 'list';
+    $earned_achievements_shortcode_default_view     = ( ! empty ( $badgeos_settings['earned_achievements_shortcode_default_view'] ) ) ? $badgeos_settings['earned_achievements_shortcode_default_view'] : 'list';
+    $earned_ranks_shortcode_default_view    = ( ! empty ( $badgeos_settings['earned_ranks_shortcode_default_view'] ) ) ? $badgeos_settings['earned_ranks_shortcode_default_view'] : 'list';
+    $badgeos_admin_side_tab     = ( ! empty ( $badgeos_settings['side_tab'] ) ) ? $badgeos_settings['side_tab'] : '#badgeos_settings_general_settings';
+    $date_of_birth_from     = ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+
+    
     ob_start();
     do_action( 'badgeos_settings', $badgeos_settings );
     $addon_contents = ob_get_clean();
@@ -95,6 +99,14 @@
                             <select id="log_entries" name="badgeos_settings[log_entries]">
                                 <option value="disabled" <?php selected( $log_entries, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
                                 <option value="enabled" <?php selected( $log_entries, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr valign="top"><th scope="row"><label for="badgeos_not_earned_image"><?php _e( 'Not Earned Image Option:', 'badgeos' ); ?></label></th>
+                        <td>
+                            <select id="badgeos_not_earned_image" name="badgeos_settings[badgeos_not_earned_image]">
+                                <option value="disabled" <?php selected( $badgeos_not_earned_image, 'disabled' ); ?>><?php _e( 'Disabled', 'badgeos' ) ?></option>
+                                <option value="enabled" <?php selected( $badgeos_not_earned_image, 'enabled' ); ?>><?php _e( 'Enabled', 'badgeos' ) ?></option>
                             </select>
                         </td>
                     </tr>

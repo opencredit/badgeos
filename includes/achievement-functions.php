@@ -714,7 +714,6 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size='', $
 	$achievement_width = '50';
 	$achievement_height = '50';
 	$badgeos_not_earned_image_id = get_post_meta( $post_id, '_badgeos_not_earned_thumbnail', true );
-	
 	// Get our badge thumbnail
 	if ( empty( $image_size ) ) {
 		if( isset( $badgeos_settings['badgeos_achievement_global_image_width'] ) && intval( $badgeos_settings['badgeos_achievement_global_image_width'] ) > 0 ) {
@@ -739,9 +738,11 @@ function badgeos_get_achievement_post_thumbnail( $post_id = 0, $image_size='', $
 	// not earned post image
 	$achievements = badgeos_get_user_achievements( array( 'achievement_id' => absint( $post_id ),'user_id' => $user_id ) );
 	$class = count( $achievements ) > 0 ? ' earned' : '';
-	if ( ! empty( $badgeos_not_earned_image_id ) && trim( $class ) != 'earned' ) {
-		$image_url = wp_get_attachment_image_src( $badgeos_not_earned_image_id, $image_size )[0];
-		$image = '<img src="'.$image_url. '" width="' . $achievement_width . '" height="' . $achievement_height. '" class="' . $class .'">';
+	if ( isset( $badgeos_settings['badgeos_not_earned_image'] ) && $badgeos_settings['badgeos_not_earned_image'] == 'enabled' ){
+		if ( ! empty( $badgeos_not_earned_image_id ) && trim( $class ) != 'earned' ) {
+			$image_url = wp_get_attachment_image_src( $badgeos_not_earned_image_id, $image_size )[0];
+			$image = '<img src="'.$image_url. '" width="' . $achievement_width . '" height="' . $achievement_height. '" class="' . $class .'">';
+		}
 	}
 	
 	// If we don't have an image...
@@ -1260,12 +1261,17 @@ add_filter( 'post_updated_messages', 'badgeos_achievement_type_update_messages' 
 
 
 /**
- * Add image not earned badge image metabox for achivement-types.
+ * Add image not earned badge image metabox for achivement-types | rank-types.
  * @since 3.6.8
  */
 function badgeos_not_earned_image_add_metabox () {
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+ 	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
+    	return;
+    }
     $achievement_main_post_type = $badgeos_settings['achievement_main_post_type'];
+    $rank_main_post_type = $badgeos_settings['ranks_main_post_type'];
+    
     add_meta_box( 
         'not_earned_image_div', 
         __( 'Not Earned Image', 'badgeos' ), 
@@ -1274,18 +1280,32 @@ function badgeos_not_earned_image_add_metabox () {
         'side', 
         'low'
     );
+
+    add_meta_box( 
+        'not_earned_image_div', 
+        __( 'Not Earned Image', 'badgeos' ), 
+        'badgeos_not_earned_image_metabox_cb', 
+        array( $rank_main_post_type , badgeos_get_rank_types_slugs() ), 
+        'side', 
+        'low'
+    );
 }
 add_action( 'add_meta_boxes', 'badgeos_not_earned_image_add_metabox' );
 
 /**
- * Callback function for not earned badge image metabox for achivement-types.
+ * Callback function for not earned badge image metabox for achivement-types | rank-types.
  * @param integer $post_id The post ID of the post being saved
  * @since 3.6.8
  */
 function badgeos_not_earned_image_metabox_cb ( $post ) {
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+ 	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
+    	return;
+    }
+    
 	global $content_width, $_wp_additional_image_sizes;
 	$post_id = $post->ID;
-    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
     $old_content_width = $content_width;
     $content_width = 254;
@@ -1296,6 +1316,15 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
     // Get the thumbnail of our parent achievement
     if ( empty( $image_id ) && $badgeos_settings['achievement_main_post_type'] !== badgeos_utilities::get_post_type( $post_id ) ) {
         $achievement_type = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['achievement_main_post_type'] );
+
+        if ( $achievement_type ) {
+            $image_id = get_post_meta( $achievement_type->ID, '_badgeos_not_earned_thumbnail', true );
+        }
+    }
+
+    // Get the thumbnail of our parent achievement
+    if ( empty( $image_id ) && $badgeos_settings['rank_main_post_type'] !== badgeos_utilities::get_post_type( $post_id ) ) {
+        $achievement_type = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['rank_main_post_type'] );
 
         if ( $achievement_type ) {
             $image_id = get_post_meta( $achievement_type->ID, '_badgeos_not_earned_thumbnail', true );
@@ -1335,11 +1364,17 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
  * @return mixed    post ID if nothing to do, void otherwise.
  */
 function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
-    if ( ! empty( $_POST['_badgeos_not_earned_thumbnail'] ) && isset( $_POST['_badgeos_not_earned_thumbnail'] ) ) {
+    
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
+    	return;
+    }
+
+    if ( ! isset( $_POST['_badgeos_not_earned_thumbnail'] ) ) {
         update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', absint( $_POST['_badgeos_not_earned_thumbnail'] ) );
         return;
     }
-    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    
     $thumbnail_id = 0;
     $achievement_type = '';
     // Get the thumbnail of our parent achievement
@@ -1351,6 +1386,16 @@ function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
         	update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', $thumbnail_id );
         }
     }
+
+    // Get the thumbnail of our parent achievement
+    if ( empty( $image_id ) && $badgeos_settings['ranks_main_post_type'] !== badgeos_utilities::get_post_type( $post_id ) ) {
+        $achievement_type = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['ranks_main_post_type'] );
+
+        if ( $achievement_type ) {
+            $image_id = get_post_meta( $achievement_type->ID, '_badgeos_not_earned_thumbnail', true );
+        }
+    }
+
     // If there is no thumbnail set, load in our default image
     if ( empty( $thumbnail_id ) ) {
         global $wpdb;

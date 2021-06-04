@@ -242,6 +242,7 @@ class BadgeOS {
             $badgeos_settings['submission_manager_role'] 		= 'manage_options';
             $badgeos_settings['submission_email'] 				= 'enabled';
             $badgeos_settings['debug_mode']       				= 'disabled';
+			$badgeos_settings['badgeos_not_earned_image']       = 'disabled';
             $badgeos_settings['ranks_main_post_type']       	= 'rank_types';
             $badgeos_settings['ranks_step_post_type']       	= 'rank_requirement';
 

@@ -130,11 +130,11 @@ function badgeos_get_user_rank_id( $user_id = null, $rank_type = '' ) {
          */
         $current_rank_id = $wpdb->get_var( $wpdb->prepare(
             "SELECT p.ID
-			FROM {$wpdb->posts} AS p
-			WHERE p.post_type = %s
-			 AND p.post_status = %s
-			ORDER BY menu_order ASC
-			LIMIT 1",
+            FROM {$wpdb->posts} AS p
+            WHERE p.post_type = %s
+             AND p.post_status = %s
+            ORDER BY menu_order ASC
+            LIMIT 1",
             $rank_type,
             'publish'
         ) );
@@ -538,11 +538,11 @@ function badgeos_revoke_rank_from_user_account( $user_id = 0, $rank_id = 0 ) {
  */
 function badgeos_log_users_ranks( $rank_id, $user_id, $action, $admin_id = 0  ) {
 
-	/**
+    /**
      * Setup our user objects
      */
-	$user  = get_userdata( $user_id );
-	$admin = get_userdata( $admin_id );
+    $user  = get_userdata( $user_id );
+    $admin = get_userdata( $admin_id );
     $rank = badgeos_utilities::badgeos_get_post( $rank_id );
 
     if( $action == 'Revoked'){
@@ -563,18 +563,18 @@ function badgeos_log_users_ranks( $rank_id, $user_id, $action, $admin_id = 0  ) 
          }
     }
 
-	/**
+    /**
      * Create a log entry
      */
-	$log_entry_id = badgeos_post_log_entry( $rank_id, $user_id, $action, $log_message );
+    $log_entry_id = badgeos_post_log_entry( $rank_id, $user_id, $action, $log_message );
 
-	/**
+    /**
      * Add relevant meta to our log entry
      */
-	badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_rank_id', $rank_id );
+    badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_rank_id', $rank_id );
     badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_user_id', $user_id );
     badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_action', $action );
-	if ( $admin_id ) {
+    if ( $admin_id ) {
         badgeos_utilities::update_post_meta( $log_entry_id, '_badgeos_admin_id', $admin_id );
     }
 }
@@ -650,8 +650,8 @@ function badgeos_earn_achivement_by_rank( $user_id, $new_rank, $old_rank, $admin
 
     global $blog_id, $wpdb;
 
-	$site_id = $blog_id;
-	$args = func_get_args();
+    $site_id = $blog_id;
+    $args = func_get_args();
     $achievement_types = badgeos_get_achievement_types_slugs();
     if( count ( $achievement_types ) ) {
 
@@ -681,38 +681,38 @@ add_action( 'badgeos_update_user_rank', 'badgeos_earn_achivement_by_rank',10, 5 
  */
 function badgeos_get_rank_based_achievements() {
 
-	global $wpdb;
+    global $wpdb;
 
-	$achievements = badgeos_get_transient( 'badgeos_rank_based_achievements' );
+    $achievements = badgeos_get_transient( 'badgeos_rank_based_achievements' );
 
-	if ( empty( $achievements ) ) {
+    if ( empty( $achievements ) ) {
 
-		$posts    	= $wpdb->prefix.'posts';
-		$postmeta 	= $wpdb->prefix.'postmeta';
+        $posts      = $wpdb->prefix.'posts';
+        $postmeta   = $wpdb->prefix.'postmeta';
 
-		/**
+        /**
          * Grab posts that can be earned by unlocking the given achievement
          */
-		$achievements = $wpdb->get_results( $wpdb->prepare(
-			"SELECT *
-			FROM   {$posts} as posts
-			LEFT JOIN {$postmeta} AS m1 ON ( posts.ID = m1.post_id AND m1.meta_key = %s )
-			LEFT JOIN {$postmeta} AS m2 ON ( posts.ID = m2.post_id AND m2.meta_key = %s )
-			WHERE m1.meta_value = %s
-				OR m2.meta_value = %s",
-			'_badgeos_trigger_type',
-			'_badgeos_earned_by',
-			'earn-rank',
-			'rank'
-		) );
+        $achievements = $wpdb->get_results( $wpdb->prepare(
+            "SELECT *
+            FROM   {$posts} as posts
+            LEFT JOIN {$postmeta} AS m1 ON ( posts.ID = m1.post_id AND m1.meta_key = %s )
+            LEFT JOIN {$postmeta} AS m2 ON ( posts.ID = m2.post_id AND m2.meta_key = %s )
+            WHERE m1.meta_value = %s
+                OR m2.meta_value = %s",
+            '_badgeos_trigger_type',
+            '_badgeos_earned_by',
+            'earn-rank',
+            'rank'
+        ) );
 
-		/**
+        /**
          * Store these posts to a transient for 1 days
          */
-		badgeos_set_transient( 'badgeos_rank_based_achievements', $achievements, 60*60*24 );
-	}
+        badgeos_set_transient( 'badgeos_rank_based_achievements', $achievements, 60*60*24 );
+    }
 
-	return (array) maybe_unserialize( $achievements );
+    return (array) maybe_unserialize( $achievements );
 }
 
 /**
@@ -723,25 +723,25 @@ function badgeos_get_rank_based_achievements() {
  */
 function badgeos_build_rank_object( $rank_id = 0 ) {
 
-	/**
+    /**
      * Grab the new rank's $post data, and bail if it doesn't exist
      */
-	$rank = badgeos_utilities::badgeos_get_post( $rank_id );
-	if ( is_null( $rank ) )
-		return false;
+    $rank = badgeos_utilities::badgeos_get_post( $rank_id );
+    if ( is_null( $rank ) )
+        return false;
 
-	/**
+    /**
      * Setup a new object for the rank
      */
-	$_object = new stdClass;
-	$_object->ID = $rank_id;
-	$_object->post_type = $rank->post_type;
+    $_object = new stdClass;
+    $_object->ID = $rank_id;
+    $_object->post_type = $rank->post_type;
     $_object->date_earned = time();
 
-	/**
+    /**
      * Return our rank object, available filter so we can extend it elsewhere
      */
-	return apply_filters( 'rank_object', $_object, $rank_id );
+    return apply_filters( 'rank_object', $_object, $rank_id );
 }
 
 /**
@@ -761,15 +761,15 @@ function badgeos_get_user_ranks( $args = array() ) {
         'rank_id'           => false,
         'rank_type'         => false,
         'start_date'        => false, // A specific achievement type
-		'end_date'          => false, // A specific achievement type
+        'end_date'          => false, // A specific achievement type
         'since'             => 0,
         'no_steps'          => true,
-        'pagination'	    => false,// if true the pagination will be applied
-		'limit'	            => 10,
-        'page'	            => 1, 
+        'pagination'        => false,// if true the pagination will be applied
+        'limit'             => 10,
+        'page'              => 1, 
         'orderby'           => 'id',
-		'order'             => 'ASC',
-		'total_only'        => false
+        'order'             => 'ASC',
+        'total_only'        => false
     );
     $args = wp_parse_args( $args, $defaults );
 
@@ -994,12 +994,12 @@ function badgeos_get_rank_earners( $rank_id = 0 ) {
     }
 
     $earners = $wpdb->get_col( $wpdb->prepare( "
-		SELECT u.user_id
-		FROM {$wpdb->usermeta} AS u
-		WHERE  meta_key = %s
-		       AND meta_value LIKE %s
-		GROUP BY u.user_id
-	",
+        SELECT u.user_id
+        FROM {$wpdb->usermeta} AS u
+        WHERE  meta_key = %s
+               AND meta_value LIKE %s
+        GROUP BY u.user_id
+    ",
         $meta,
         $rank_id
     ) );
@@ -1049,11 +1049,11 @@ function badgeos_get_rank_priority( $rank_id = 0 ) {
          */
         $last = $wpdb->get_var( $wpdb->prepare(
             "SELECT p.menu_order
-			FROM {$wpdb->posts} AS p
-			WHERE p.post_type = %s
-			 AND p.post_status = %s
-			ORDER BY menu_order DESC
-			LIMIT 1",
+            FROM {$wpdb->posts} AS p
+            WHERE p.post_type = %s
+             AND p.post_status = %s
+            ORDER BY menu_order DESC
+            LIMIT 1",
             $rank_type,
             'publish'
         ) );
@@ -1079,8 +1079,8 @@ function badgeos_flush_rewrite_on_published_rank( $new_status, $old_status, $pos
     }
 
     $rank_types = get_posts( array(
-        'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
-        'posts_per_page' =>	-1,
+        'post_type'      => trim( $settings['ranks_main_post_type'] ),
+        'posts_per_page' => -1,
     ) );
     foreach ( $rank_types as $rank_type ) {
         if ( trim( $rank_type->post_name ) === $post->post_type && 'publish' === $new_status && 'publish' !== $old_status ) {
@@ -1139,14 +1139,14 @@ add_filter( 'wp_insert_post_data' , 'badgeos_maybe_update_rank_type' , 99, 2 );
  */
 function badgeos_get_rank_types_list() {
 
-	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
-	$rank_types = get_posts( array(
-		'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
-		'posts_per_page' =>	-1,
-	) );
-	
-	return $rank_types;
+    $rank_types = get_posts( array(
+        'post_type'      => trim( $settings['ranks_main_post_type'] ),
+        'posts_per_page' => -1,
+    ) );
+    
+    return $rank_types;
 }
 
 /**
@@ -1156,19 +1156,19 @@ function badgeos_get_rank_types_list() {
  */
 function badgeos_get_rank_types_slugs_detailed() {
 
-	$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
-	$rank_types = get_posts( array(
-		'post_type'      =>	trim( $settings['ranks_main_post_type'] ),
-		'posts_per_page' =>	-1,
-	) );
-	$main = array();
-	foreach ( $rank_types as $rtype ) {
-		$plural_name = badgeos_utilities::get_post_meta( $rtype->ID, '_badgeos_plural_name', true );
-		$main[ $rtype->post_name ] = array( 'singular_name' => $rtype->post_title, 'plural_name' => $plural_name );
-	}
-	
-	return $main;
+    $rank_types = get_posts( array(
+        'post_type'      => trim( $settings['ranks_main_post_type'] ),
+        'posts_per_page' => -1,
+    ) );
+    $main = array();
+    foreach ( $rank_types as $rtype ) {
+        $plural_name = badgeos_utilities::get_post_meta( $rtype->ID, '_badgeos_plural_name', true );
+        $main[ $rtype->post_name ] = array( 'singular_name' => $rtype->post_title, 'plural_name' => $plural_name );
+    }
+    
+    return $main;
 }
 
 /**
@@ -1262,10 +1262,10 @@ function badgeos_update_earned_meta_rank_types( $original_type = '', $new_type =
 
     $wpdb->get_results( $wpdb->prepare(
         "
-		UPDATE $wpdb->usermeta
-		SET meta_key = %s
-		WHERE meta_key = %s
-		",
+        UPDATE $wpdb->usermeta
+        SET meta_key = %s
+        WHERE meta_key = %s
+        ",
         "_badgeos_{$new_type}_rank",
         "_badgeos_{$original_type}_rank"
     ) );
@@ -1592,7 +1592,7 @@ function badgeos_add_rank( $args = array() ) {
             if( is_array( $points ) && count( $points ) > 0 ) {
                 if( array_key_exists( '_ranks_points', $points ) && array_key_exists( '_ranks_points_type', $points ) )  {
                     $args['credit_amount']  = $points['_ranks_points'];
-                    $args['credit_id']	    = $points['_ranks_points_type'];
+                    $args['credit_id']      = $points['_ranks_points_type'];
                 } 
             }
         }
@@ -1656,7 +1656,7 @@ function badgeos_add_rank( $args = array() ) {
         return $wpdb->insert_id;
     }
 
-	return false;
+    return false;
 }
 
 /**
@@ -1716,7 +1716,7 @@ function badgeos_remove_rank( $ranks = array() ) {
     );
 
     foreach( $requirements as $req ) {
-        $recs = $wpdb->get_results( $wpdb->prepare("SELECT id, this_trigger FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d and user_id=%d", $req->ID, $args['user_id']	) );
+        $recs = $wpdb->get_results( $wpdb->prepare("SELECT id, this_trigger FROM ".$wpdb->prefix."badgeos_ranks where rank_id = %d and user_id=%d", $req->ID, $args['user_id']  ) );
         if( count( $recs ) > 0 ) {
             $trigger = $recs[0]->this_trigger;
 
@@ -1753,23 +1753,23 @@ function badgeos_remove_rank( $ranks = array() ) {
  */
 function badgeos_get_rank_types_slugs() {
 
-	/**
+    /**
      * Assume we have no registered achievement types
      */
-	$ranks_type_slugs = array();
+    $ranks_type_slugs = array();
 
-	/**
+    /**
      * If we do have any achievement types, loop through each and add their slug to our array
      */
-	if ( isset( $GLOBALS['badgeos']->ranks_types ) && ! empty( $GLOBALS['badgeos']->ranks_types ) ) {
-		foreach ( $GLOBALS['badgeos']->ranks_types as $slug => $data )
-			$ranks_type_slugs[] = $slug;
-	}
+    if ( isset( $GLOBALS['badgeos']->ranks_types ) && ! empty( $GLOBALS['badgeos']->ranks_types ) ) {
+        foreach ( $GLOBALS['badgeos']->ranks_types as $slug => $data )
+            $ranks_type_slugs[] = $slug;
+    }
 
-	/**
+    /**
      * Finally, return our data
      */
-	return $ranks_type_slugs;
+    return $ranks_type_slugs;
 }
 
 /**
@@ -1810,7 +1810,8 @@ function badgeos_set_transient( $transient, $value, $expiration = 0 ) {
 function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = '' ) {
     
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
- 
+    $badgeos_not_earned_image_id = get_post_meta( $rank_id, '_badgeos_not_earned_thumbnail', true );
+    
     if( intval( $rank_width ) == 0 ) {
         $rank_width = '50';
         if( isset( $badgeos_settings['badgeos_rank_global_image_width'] ) && intval( $badgeos_settings['badgeos_rank_global_image_width'] ) > 0 ) {
@@ -1826,6 +1827,16 @@ function badgeos_get_rank_image( $rank_id = 0, $rank_width = '', $rank_height = 
     }
 
     $ranks_image = wp_get_attachment_image( get_post_thumbnail_id( $rank_id ), array( $rank_width, $rank_height ) );
+    $user_earned_ranks = badgeos_get_user_ranks( array( 'user_id' => get_current_user_id(), 'rank_id' => $rank_id ) );
+    
+    // show not earned image if user have not earned rank yet    
+    if ( count( $user_earned_ranks ) < 1 && ! current_user_can( 'administrator' ) ) {
+        if ( isset( $badgeos_settings['badgeos_not_earned_image'] ) && $badgeos_settings['badgeos_not_earned_image'] == 'enabled' ){
+            $default_image = wp_get_attachment_image_src( $badgeos_not_earned_image_id, array( $rank_width, $rank_height ) )[0];
+            $rank_image = '<img src="'.$default_image.'" width="'.$rank_width.'px" height="'.$rank_height.'px" />';
+            return $rank_image;
+        }
+    }
     
     $ranks_image = apply_filters( 'badgeos_rank_post_thumbnail', $ranks_image, $rank_id, $rank_width, $rank_height );
     
