@@ -1100,3 +1100,27 @@ function badgeos_points_number_of_year_access( $return, $step_id, $credit_parent
     return $return;
 }
 add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_number_of_year_access', 10, 8 );
+
+function badgeos_points_not_login_for_number_of_days( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ){
+	// Prevent user from earning steps with no parents
+	if( $this_trigger == 'badgeos_wp_not_login' ) {
+		$last_login_timestamp = badgeos_utilities::get_user_meta( $user_id, '_badgeos_last_login', true );
+		if( !empty( $last_login_timestamp ) && intval( $last_login_timestamp ) > 0 ) {
+		    $earlier = new DateTime();
+		    $earlier->setTimestamp($last_login_timestamp);
+
+		    $later = new DateTime();
+
+		    $days 			= $later->diff($earlier)->format("%a");
+		    $num_of_days 	= badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days', true );
+		    if( intval( $days ) > intval( $num_of_days ) ) {
+		        $return = true;
+		    } else {
+		        $return = false;
+		    }
+		}
+	}
+
+	return $return;
+}
+add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_not_login_for_number_of_days', 10, 8 );
