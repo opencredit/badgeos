@@ -20,7 +20,7 @@ class scbCron {
 	 *                          string $schedule OR number $interval
 	 *                          array $callback_args (optional)
 	 */
-	function __construct( $file = false, $args ) {
+	function __construct( $file = false, $args = array() ) {
 
 		// Set time & schedule
 		if ( isset( $args['time'] ) )
