@@ -120,6 +120,13 @@ wp_enqueue_style( 'badgeos-minicolorpicker_css' );
                         </td>
                     </tr>
                     <tr>
+                        <th scope="row" valign="top"><label><?php _e( 'Preheader Text', 'badgeos' ); ?></label></th>
+                        <td>
+                            <textarea name="badgeos_tools[badgeos_tools_email_preheader_text]" rows="6" cols="60" id="badgeos_tools_email_preheader_text"><?php echo isset( $badgeos_admin_tools['badgeos_tools_email_preheader_text'] )?$badgeos_admin_tools['badgeos_tools_email_preheader_text']:''; ?></textarea>`  
+                            <span class="tool-hint"><?php _e( 'Text will be added in preheader of BadgeOS emails.', 'badgeos' ); ?></span>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="row" valign="top"><label><?php _e( 'Footer Text', 'badgeos' ); ?></label></th>
                         <td>
                             <textarea name="badgeos_tools[email_general_footer_text]" rows="6" cols="60" id="badgeos_tools_email_general_footer_text"><?php echo isset( $badgeos_admin_tools['email_general_footer_text'] )?$badgeos_admin_tools['email_general_footer_text']:''; ?></textarea>`  
