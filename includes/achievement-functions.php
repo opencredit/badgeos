@@ -145,7 +145,7 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  * @param  object $query_object The complete query object
  * @return string 				The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where = '', $query_object ) {
+function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
