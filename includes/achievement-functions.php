@@ -145,7 +145,7 @@ function badgeos_get_achievements_children_join( $join = '', $query_object = nul
  * @param  object $query_object The complete query object
  * @return string 				The updated query "where" string
  */
-function badgeos_get_achievements_children_where( $where = '', $query_object ) {
+function badgeos_get_achievements_children_where( $where = '', $query_object = '' ) {
 	global $wpdb;
 	if ( isset( $query_object->query_vars['achievement_relationship'] ) && $query_object->query_vars['achievement_relationship'] == 'required' )
 		$where .= " AND p2pm1.meta_key ='Required'";
@@ -1323,8 +1323,8 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
     }
 
     // Get the thumbnail of our parent achievement
-    if ( empty( $image_id ) && $badgeos_settings['rank_main_post_type'] !== badgeos_utilities::get_post_type( $post_id ) ) {
-        $achievement_type = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['rank_main_post_type'] );
+    if ( empty( $image_id ) && $badgeos_settings['ranks_main_post_type'] !== badgeos_utilities::get_post_type( $post_id ) ) {
+        $achievement_type = get_page_by_path( badgeos_utilities::get_post_type( $post_id ), OBJECT, $badgeos_settings['ranks_main_post_type'] );
 
         if ( $achievement_type ) {
             $image_id = get_post_meta( $achievement_type->ID, '_badgeos_not_earned_thumbnail', true );
@@ -1366,13 +1366,24 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
 function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
     
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if ( isset ( $_GET['post_type'] ) ){
+		if ( $_GET['post_type'] == $badgeos_settings['points_main_post_type'] ) {
+			return;
+		}
+	}
+
+	if ( isset ( $_GET['post'] ) ) {
+		if ( get_post_type( $_GET['post'] ) == $badgeos_settings['points_main_post_type'] ) {
+			return;
+		}
+	}
+
 	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
     	return;
     }
 
-    if ( ! isset( $_POST['_badgeos_not_earned_thumbnail'] ) ) {
+    if ( isset( $_POST['_badgeos_not_earned_thumbnail'] ) ) {
         update_post_meta( $post_id, '_badgeos_not_earned_thumbnail', absint( $_POST['_badgeos_not_earned_thumbnail'] ) );
-        return;
     }
     
     $thumbnail_id = 0;
