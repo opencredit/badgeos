@@ -1,10 +1,10 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, farooqabdullah, adeelraza_786hotmailcom
+Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, farooqabdullah, adeelraza_786hotmailcom, mohammad.karrar1995@hotmail.com
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.4.1
-Stable tag: 3.6.2
+Tested up to: 5.7.2
+Stable tag: 3.6.10
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -243,6 +243,63 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.10 =
+* New: Added not login for x days trigger in point deduct
+* New: Added not earned image feature for ranks
+* New: Added preheader text field tools/emails for badgeos emails
+* New: Added settings for enable/disable not earned image feature for badges/ranks
+* Fix: Customizer disabled items with astra theme
+* Fix: Points not awarding issue in bulk achievement award
+
+= 3.6.9 =
+Fix: Fixed single site license activation issue on multiple sites.
+New: Added bulk achievement emails support for bulk rewarding achievements.
+Fix: Fixed select box css issue related to tools page bulk achievement.
+Fix: Database installation script will only run when there are new database updates or user is activating the badgeos.
+Fix: Added minified badgeos css and js files with support of SCRIPT_DEBUG constant for debugging.
+Fix: Removed Credly code from the system.
+
+= 3.6.8 =
+New: Added an option to define a Not Earned Badge Icon for display on Badge Page
+New: Added new shortcode to display badge evidence information on achievement earned email.
+Fix: Fixed evidence shortcode output.
+Fix: Fixed multiple badge award issue on editing same comments.
+Fix: Fixed license key issue for badgeos-addons.
+
+= 3.6.7 =
+New: Added User Ranks Widget
+New: Added User Points Widget
+Fix: Disables Credly Integration
+
+= 3.6.6 =
+New: Award users for completing the number of years
+New: Award points to users for user’s birthday
+New: Award author when a user visits post/page
+New: Award points when a certain rank is achieved
+Fix: Updated Congratulations message note
+Fix: Daily Visit Website trigger is not working
+Fix: Fix UI issues in Welcome screen
+
+= 3.6.5 =
+New: Added a Welcome page
+New: Added Global and individual BCC and CC options on badgeos emails
+New: Added multi-site support
+
+= 3.6.4 =
+New: Open Badge Verification pop-up enhancements to add issuer, issued by, expire date and issue date
+New: Add option for users to unsubscribe from Earned Achievement and other configurable emails
+New: Add a new trigger visit Any/specific post/page
+New: Added two new action hooks for tools/email page i.e. badgeos_email_tools_settings_tab_header and badgeos_email_tools_settings_tab_content
+Fix: Fixed a notice on api end-points due to new updates on wordpress 5.5
+Fix: Fixed the user earned ranks shortcode design.
+Fix: Added Save Settings message on the admin side of badgeos emails
+
+= 3.6.3 =
+New: Adds Assets section to get stock images for badges/ranks/points
+New: Adds thumbnail support in user earned points
+New: Adds Color configuration for making Branded Email templates
+New: Adds Pagination support for User earned Ranks and User earned achievements functions
 
 = 3.6.2 =
 * New: Removed the nomination and submission from BadgeOS Core
