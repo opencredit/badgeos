@@ -681,7 +681,8 @@ function badgeos_ajax_get_achievements() {
 			'posts_per_page' =>	$limit,
 			'offset'         => $offset,
 			'post_status'    => 'publish',
-			'post__not_in'   => $hidden
+            'post__not_in'   => $hidden,
+			'post__in'       => $hidden
 		);
 
         if( ! is_array( $args[ 'post__not_in' ] ) ) {
