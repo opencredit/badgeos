@@ -63,7 +63,6 @@ class open_badge_metabox {
      * Convert to existing normal Badge to Open Badge Standard
      */
     public function convert_to_open_badge() {
-        ini_set( 'display_errors', 1 );error_reporting(E_ALL);
         if( !wp_doing_ajax() ) return;
 
         if( !isset($_POST['entry_id']) ) return;

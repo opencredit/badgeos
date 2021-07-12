@@ -27,8 +27,7 @@ class BadgeOS_Open_Badge {
 		$this->badgeos_json_page_id 		= badgeos_utilities::get_option( 'badgeos_json_url' );
 		$this->badgeos_evidence_page_id		= badgeos_utilities::get_option( 'badgeos_evidence_url' );
 		$this->badgeos_issuer_page_id       = badgeos_utilities::get_option( 'badgeos_issuer_url' );
-		ini_set( 'display_errors', 'On' );
-		error_reporting(E_ALL);
+
 		add_filter( 'template_include', 	array( $this,'badgeos_template_pages' ) );
         add_action( 'admin_post_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
         add_action( 'wp_ajax_convert_badges_to_open_standards', 	array( $this,'convert_badges_to_open_standards' ) );
