@@ -1271,21 +1271,16 @@ function badgeos_not_earned_image_add_metabox () {
     }
     $achievement_main_post_type = $badgeos_settings['achievement_main_post_type'];
     $rank_main_post_type = $badgeos_settings['ranks_main_post_type'];
-    
-    add_meta_box( 
-        'not_earned_image_div', 
-        __( 'Not Earned Image', 'badgeos' ), 
-        'badgeos_not_earned_image_metabox_cb', 
-        array( $achievement_main_post_type , badgeos_get_achievement_types_slugs() ), 
-        'side', 
-        'low'
-    );
+
+    $achievements_post_type = array_merge( array($achievement_main_post_type ), badgeos_get_achievement_types_slugs() );
+    $ranks_post_type = array_merge( array($rank_main_post_type ), badgeos_get_rank_types_slugs() );
+    $badgeos_post_types = array_merge( $achievements_post_type, $ranks_post_type );
 
     add_meta_box( 
         'not_earned_image_div', 
         __( 'Not Earned Image', 'badgeos' ), 
         'badgeos_not_earned_image_metabox_cb', 
-        array( $rank_main_post_type , badgeos_get_rank_types_slugs() ), 
+        $badgeos_post_types, 
         'side', 
         'low'
     );
@@ -1366,17 +1361,6 @@ function badgeos_not_earned_image_metabox_cb ( $post ) {
 function badgeos_set_default_not_earned_image_thumbnail( $post_id ) {
     
     $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
-	if ( isset ( $_GET['post_type'] ) ){
-		if ( $_GET['post_type'] == $badgeos_settings['points_main_post_type'] ) {
-			return;
-		}
-	}
-
-	if ( isset ( $_GET['post'] ) ) {
-		if ( get_post_type( $_GET['post'] ) == $badgeos_settings['points_main_post_type'] ) {
-			return;
-		}
-	}
 
 	if ( ! isset( $badgeos_settings['badgeos_not_earned_image'] ) || $badgeos_settings['badgeos_not_earned_image'] == 'disabled' ) {
     	return;
