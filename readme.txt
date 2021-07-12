@@ -1,10 +1,10 @@
 === BadgeOS ===
-Contributors: badgeos, learningtimes, asahitechnologies, wooninjas, rahilwazir, farooqabdullah, adeelraza_786hotmailcom, mohammad.karrar1995@hotmail.com
+Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
 Tested up to: 5.7.2
-Stable tag: 3.6.10
+Stable tag: 3.6.11
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -243,6 +243,13 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.11 =
+* Fix: Debug option issue
+* Fix: Widgets warning issues
+* Fix: Achievement list shortcode issue
+* Fix: Trigger step title visibility issue in achievments/ranks/points 
+* Fix: Appearence of not earned image metabox on every post/page
 
 = 3.6.10 =
 * New: Added not login for x days trigger in point deduct
