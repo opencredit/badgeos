@@ -98,9 +98,11 @@ class earned_user_ranks_widget extends WP_Widget {
 		$instance['set_ranks'] = array_map( 'sanitize_text_field', $new_instance['set_ranks'] );
 		$instance['total_points_type'] = sanitize_text_field( $new_instance['total_points_type'] );
 		$instance['point_total'] = ( ! empty( $new_instance['point_total'] ) ) ? sanitize_text_field( $new_instance['point_total'] ) : '';
-		$instance['remove_title_field'] = sanitize_text_field( $new_instance['remove_title_field'] );
-        $instance['remove_thumb_field'] = sanitize_text_field( $new_instance['remove_thumb_field'] );
-        $instance['rank_section_title'] = sanitize_text_field( $new_instance['rank_section_title'] );
+		
+        $instance['remove_title_field'] = ( ! empty( $new_instance['remove_title_field'] ) ) ? sanitize_text_field( $new_instance['remove_title_field'] ) : '';
+        $instance['remove_thumb_field'] = ( ! empty( $new_instance['remove_thumb_field'] ) ) ? sanitize_text_field( $new_instance['remove_thumb_field'] ) : '';
+
+        $instance['rank_section_title'] = ( ! empty( $new_instance['rank_section_title'] ) ) ? sanitize_text_field( $new_instance['rank_section_title'] ) : '';
 
         return $instance;
 	}
