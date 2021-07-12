@@ -137,11 +137,12 @@ class earned_user_achievements_widget extends WP_Widget {
 		$instance['point_total'] = ( ! empty( $new_instance['point_total'] ) ) ? sanitize_text_field( $new_instance['point_total'] ) : '';
 		$instance['set_achievements'] = array_map( 'sanitize_text_field', $new_instance['set_achievements'] );
 
-        $instance['remove_title_field'] = sanitize_text_field( $new_instance['remove_title_field'] );
-        $instance['remove_thumb_field'] = sanitize_text_field( $new_instance['remove_thumb_field'] );
+        $instance['remove_title_field'] = ( ! empty( $new_instance['remove_title_field'] ) ) ? sanitize_text_field( $new_instance['remove_title_field'] ) : '';
+        $instance['remove_thumb_field'] = ( ! empty( $new_instance['remove_thumb_field'] ) ) ? sanitize_text_field( $new_instance['remove_thumb_field'] ) : '';
 
-        $instance['rank_section_title'] = sanitize_text_field( $new_instance['rank_section_title'] );
-        $instance['achievement_section_title'] = sanitize_text_field( $new_instance['achievement_section_title'] );
+        $instance['rank_section_title'] = ( ! empty( $new_instance['rank_section_title'] ) ) ? sanitize_text_field( $new_instance['rank_section_title'] ) : '';
+
+        $instance['achievement_section_title'] = ( ! empty( $new_instance['achievement_section_title'] ) ) ? sanitize_text_field( $new_instance['achievement_section_title'] ) : '';
 
         return $instance;
 	}
