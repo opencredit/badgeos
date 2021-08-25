@@ -157,6 +157,12 @@ function badgeos_achievment_metaboxes( ) {
         'type' => 'textarea',
     ));
     $cmb_obj->add_field(array(
+        'name' => __( 'Revoke Badge', 'badgeos' ),
+        'desc' => ' '.__( 'revoke, this badge if the points are deducted.', 'badgeos' ),
+        'id'   => $prefix . 'revoke_badge_point_loss',
+        'type' => 'checkbox',
+    ));
+    $cmb_obj->add_field(array(
         'name' => __( 'Maximum Earnings', 'badgeos' ),
         'desc' => ' '.__( 'Number of times a user can earn this badge (set to -1 for no maximum).', 'badgeos' ),
         'id'   => $prefix . 'maximum_earnings',
@@ -172,6 +178,13 @@ function badgeos_achievment_metaboxes( ) {
             'show' => __( 'Show to User', 'badgeos' ),
             'hidden' => __( 'Hidden to User', 'badgeos' )
         ),
+    ));
+    $cmb_obj->add_field(array(
+        'name' => __( 'Revoke Badge', 'badgeos' ),
+        'desc' => ' '.__( 'Revoke this badge when user looses points', 'badgeos' ),
+        'id'   => $prefix . 'revoke_badge_point_loss',
+        'type' => 'checkbox',
+        'std' => '1',
     ));
 
 }
