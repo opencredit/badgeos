@@ -32,6 +32,7 @@ jQuery(document).ready(function ($) {
 
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
+    var num_of_days_login = $(this).siblings(".badgeos-num-of-days-login");
 
     // If we're working with achievements, show the achievement selecter (otherwise, hide it)
     if (
@@ -67,6 +68,15 @@ jQuery(document).ready(function ($) {
     } else {
       num_of_days.hide();
     }
+
+    if ("badgeos_wp_login_x_days" == trigger_type) {
+      num_of_days_login.show();
+    } else {
+      num_of_days_login.hide();
+    }
+
+
+
     $(".badgeos_achievements_step_fields").hide();
     $(".badgeos_achievements_step_ddl_dynamic").hide();
     $("#badgeos_achievements_step_ddl_dynamic_" + trigger_type)
@@ -233,6 +243,7 @@ function badgeos_update_steps(e) {
       achievement_type: step.find(".select-achievement-type").val(),
       num_of_years: step.find(".badgeos-num-of-years").val(),
       num_of_days: step.find(".badgeos-num-of-days").val(),
+      num_of_days_login: step.find(".badgeos-num-of-days-login").val(),
       badgeos_subtrigger_id: selected_subtrigger_id,
       visit_post: visit_post_selector,
       visit_page: visit_page_selector,
