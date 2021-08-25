@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.7.2
-Stable tag: 3.6.11
+Tested up to: 5.8
+Stable tag: 3.6.12
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -243,6 +243,13 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.12 =
+* New: Option added in achievements to get revoked on point deduct
+* New: Added login for x days trigger in achievement
+* Fix: Not earned image saving issue
+* Fix: Duplicate achievement/rank email issues
+* Fix: Minor CSS issues
 
 = 3.6.11 =
 * Fix: Debug option issue
