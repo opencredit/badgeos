@@ -848,7 +848,7 @@ Shortcode Embed styles
 	padding: 1em;
 	border: 1px solid #ccc;
 	min-height: 17em;
-	min-height: 15em;
+	height: 17em;
 }
 
 .badgeos_welcome_addons_panel {
@@ -1022,5 +1022,15 @@ Shortcode Embed styles
 }
 .badgeos_please_rate .badgeos-btn-need-help{
 	width:140px;
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1300px) {
+	.badgeos_welcome_addon .badgeos_add_on_desc p {
+		font-size: 11px;
+	}
+
+	.badgeos_welcome_addon {
+		height: 17em; 
+	}
 }
 /**************end welcome page************************/
