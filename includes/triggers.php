@@ -21,15 +21,16 @@ function badgeos_get_activity_triggers() {
 	$badgeos->activity_triggers = apply_filters( 'badgeos_activity_triggers',
 		array(
 			// WordPress-specific  
-			'badgeos_wp_login'             => __( 'Log in to Website', 'badgeos' ),
+            'badgeos_wp_login'             => __( 'Log in to Website', 'badgeos' ),
+			'badgeos_wp_login_x_days'      => __( 'Log in for X days', 'badgeos' ),
             'badgeos_wp_not_login'         => __( 'Not Login for X days', 'badgeos' ),
-			'badgeos_new_comment'  => __( 'Comment on a post', 'badgeos' ),
+			'badgeos_new_comment'          => __( 'Comment on a post', 'badgeos' ),
 			'badgeos_specific_new_comment' => __( 'Comment on a specific post', 'badgeos' ),
-			'badgeos_new_post'     => __( 'Publish a new post', 'badgeos' ), 
-			'badgeos_visit_a_post'   => __( 'Visit a Post', 'badgeos' ),
+			'badgeos_new_post'             => __( 'Publish a new post', 'badgeos' ), 
+			'badgeos_visit_a_post'         => __( 'Visit a Post', 'badgeos' ),
 			'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
-			'badgeos_new_page'     => __( 'Publish a new page', 'badgeos' ),
-			'badgeos_visit_a_page'   => __( 'Visit a Page', 'badgeos' ),
+			'badgeos_new_page'             => __( 'Publish a new page', 'badgeos' ),
+			'badgeos_visit_a_page'         => __( 'Visit a Page', 'badgeos' ),
 			'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
@@ -277,6 +278,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 
 	switch ( $trigger ) {
 		case 'badgeos_wp_login' :
+        case 'badgeos_wp_login_x_days':
         case 'badgeos_wp_not_login':
 			$user_data = get_user_by( 'login', $args[ 0 ] );
 			$user_id = $user_data->ID;
@@ -581,6 +583,7 @@ function badgeos_login_trigger( $user_login, $user ) {
     $user_id = intval( $user->ID );
     do_action( 'badgeos_wp_not_login', $user_login, $user );
     do_action( 'badgeos_wp_login', $user_login, $user );
+    do_action( 'badgeos_wp_login_x_days', $user_login, $user );
 
 	badgeos_utilities::update_user_meta( $user_id, '_badgeos_last_login', time() );
 	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_points_on_birthday'" );
