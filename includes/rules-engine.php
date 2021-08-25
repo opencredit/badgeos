@@ -492,7 +492,6 @@ function badgeos_maybe_award_additional_achievements_to_user( $user_id = 0, $ach
 add_action( 'badgeos_award_achievement', 'badgeos_maybe_award_additional_achievements_to_user', 10, 2 );
 
 
-
 /**
  * Check if a user has unlocked all achievements of a given type
  *
@@ -650,6 +649,45 @@ function badgeos_user_has_access_to_not_login_step( $return = false, $user_id = 
     return $return;
 }
 add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_not_login_step', 10, 6 );
+
+/**
+ * Checks if a user is allowed to work on a given step
+ *
+ * @since  1.0.0
+ * @param  bool    $return   The default return value
+ * @param  integer $user_id  The given user's ID
+ * @param  integer $step_id  The given step's post ID
+ * @return bool              True if user has access to step, false otherwise
+ */
+function badgeos_user_has_access_to_login_x_days_step( $return = false, $user_id = 0, $step_id = 0, $this_trigger='', $site_id=0, $args=array() ) {
+
+    // Prevent user from earning steps with no parents
+    if( $this_trigger == 'badgeos_wp_login_x_days' ) {
+
+        $last_login_timestamp = badgeos_utilities::get_user_meta( $user_id, '_badgeos_last_login', true );
+        if( !empty( $last_login_timestamp ) && intval( $last_login_timestamp ) > 0 ) {
+
+            $earlier = new DateTime();
+            $earlier->setTimestamp($last_login_timestamp);
+
+            $later = new DateTime();
+
+            $days 			= $later->diff($earlier)->format("%a");
+            $num_of_days 	= badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days_login', true );
+            if( intval( $days ) >= intval( $num_of_days ) ) {
+                $return = true;
+            } else {
+                $return = false;
+            }
+        }
+    }
+
+    // Send back our eligigbility
+    return $return;
+}
+add_filter( 'user_has_access_to_achievement', 'badgeos_user_has_access_to_login_x_days_step', 10, 6 );
+
+
 
 /**
  * Checks if a user is allowed to work on a given step
@@ -1093,7 +1131,7 @@ function badgeos_default_datetime( $type='' ) {
 	
 	$timestamp = current_time( 'mysql' );
 
-	if( ! empty( $type ) && ! empty( $timestamp ) ) {
+	if( ! empty( $type ) && ! empty( $timestamp ) ) { 
 		switch( $type ) {
 			case "mysql_achievements":
 				if( ! empty( $GLOBALS['badgeos']->achievement_date ) )
