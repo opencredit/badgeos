@@ -170,9 +170,8 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         $message = ob_get_contents();
                         ob_end_clean();
                         if( ! empty( $user_email ) ) {
-
-
                             wp_mail( $user_email, strip_tags( $email_subject ), $message, $headers );
+                            add_post_meta( 11,'test', 1 );
                         }
                     }
                 }
@@ -903,7 +902,7 @@ function badgeos_send_bulk_achievements_email( $rec_type, $achievement_id, $user
     
     global $wpdb;
     
-    if( badgeos_can_notify_user( $user_id ) ) {
+    if( badgeos_can_notify_user( $user_id ) && $_GET['page'] == 'badgeos_tools' ) {
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
         $achievement_type = $badgeos_settings['achievement_main_post_type'];
