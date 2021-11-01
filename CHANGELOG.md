@@ -1,5 +1,18 @@
 ## Changelog
 
+= 3.6.13 =
+* New: Option last earned added in achievement list shortcode filter 
+* New: New trigger After completing the number of day added in achievement / rank / points
+* New: New trigger After completing the number of month added in achievement / rank / points
+* New: More filters added for extending evidence shortcode content
+
+= 3.6.12 =
+* New: Option added in achievements to get revoked on point deduct
+* New: Added login for x days trigger in achievement
+* Fix: Not earned image saving issue
+* Fix: Duplicate achievement/rank email issues
+* Fix: Minor CSS issues
+
 = 3.6.11 =
 * Fix: Debug option issue
 * Fix: Widgets warning issues
