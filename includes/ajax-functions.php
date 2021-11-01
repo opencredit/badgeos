@@ -694,7 +694,12 @@ function badgeos_ajax_get_achievements() {
 			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
 		}elseif( $filter == 'not-completed' ) {
 			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
-		}
+		}elseif( $filter == 'last-earned' ) {
+            $total = $earned_ids;
+            $last_earned = array_pop( $total );
+            $args[ 'post__not_in' ] = $total;
+            $args[ 'post__in' ] = array( $last_earned );
+        } 
 
 		if ( '' !== $meta_key && '' !== $meta_value ) {
 			$args[ 'meta_key' ] = $meta_key;
