@@ -281,6 +281,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 					if ( $user_ID > 0 ) {
 						$badges .= '<option value="completed">' . sprintf( __( 'Completed %s', 'badgeos' ), $post_type_plural );
 						$badges .= '<option value="not-completed">' . sprintf( __( 'Not Completed %s', 'badgeos' ), $post_type_plural );
+						$badges .= '<option value="last-earned">' . sprintf( __( 'Last Earned %s', 'badgeos' ), $post_type_plural );
 					}
 					// TODO: if show_points is true "Badges by Points"
 					// TODO: if dev adds a custom taxonomy to this post type then load all of the terms to filter by
