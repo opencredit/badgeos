@@ -33,6 +33,7 @@ jQuery(document).ready(function ($) {
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
     var x_number_of_users = $(this).siblings(".badgeos-x-number-of-users");
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
+    var num_of_months = $(this).siblings(".badgeos-num-of-months");
     var num_of_days_login = $(this).siblings(".badgeos-num-of-days-login");
 
     // If we're working with achievements, show the achievement selecter (otherwise, hide it)

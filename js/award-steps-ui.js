@@ -91,6 +91,12 @@ jQuery(document).ready(function ($) {
       num_of_months.hide();
     }
 
+    if ("badgeos_on_completing_num_of_month" == trigger_type) {
+      num_of_months.show();
+    } else {
+      num_of_months.hide();
+    }
+
     if ("badgeos_wp_login" == trigger_type || "badgeos_on_completing_num_of_day" == trigger_type) {
       num_of_days.show();
     } else {

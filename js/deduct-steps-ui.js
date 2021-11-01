@@ -99,6 +99,12 @@ jQuery(document).ready(function ($) {
       num_of_months.hide();
     }
 
+    if ("badgeos_on_completing_num_of_month" == trigger_type) {
+      num_of_months.show();
+    } else {
+      num_of_months.hide();
+    }
+
     if ("badgeos_visit_a_page" == trigger_type || "badgeos_award_author_on_visit_page" == trigger_type) {
       visit_page_selector.show();
     } else {

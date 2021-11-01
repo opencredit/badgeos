@@ -275,6 +275,9 @@ function badgeos_deduct_steps_ui_html($step_id = 0, $post_id = 0 ) {
 		<input type="number" size="5" min="0" placeholder="<?php _e( 'Months', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_months'] ) > 0 ? intval( $requirements['num_of_months'] ): "1" ); ?>" class="badgeos-num-of-months badgeos-num-of-months-<?php echo $step_id; ?>">
 		<?php do_action( 'badgeos_point_deduct_steps_ui_html_after_num_of_months', $step_id, $post_id ); ?>
 
+		<input type="number" size="5" min="0" placeholder="<?php _e( 'Months', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_months'] ) > 0 ? intval( $requirements['num_of_months'] ): "1" ); ?>" class="badgeos-num-of-months badgeos-num-of-months-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_point_deduct_steps_ui_html_after_num_of_months', $step_id, $post_id ); ?>
+
 		<input class="point-value" type="number" size="3" maxlength="3" value="<?php echo $requirements['_point_value']; ?>" placeholder="<?php _e( 'Points', 'badgeos' ); ?>">		
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_deduct_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
@@ -313,7 +316,7 @@ function badgeos_get_deduct_step_requirements($step_id = 0 ) {
 		'num_of_months'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
 		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
 		'x_number_of_users' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true ),
-    'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
+    	'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
 		'remove_rank' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_rank', true ),
 		'remove_achivement' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_achivement', true ),
     );
