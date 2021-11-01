@@ -3,8 +3,8 @@ Contributors: badgeos, learningtimes, wooninjas
 Donate link: http://badgeos.org/contribute/donate/
 Tags: badge, badges, openbadges, learningtimes, OBI, mozilla, open badges, achievement, award, reward, engagement, submission, nomination, API, open credit, credit
 Requires at least: 4.0
-Tested up to: 5.8
-Stable tag: 3.6.12
+Tested up to: 5.8.1
+Stable tag: 3.6.13
 License: GNU AGPLv3
 License URI: http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -243,6 +243,12 @@ Thanks for asking!  Please do share back code modifications or enhancements you 
 15. Ranks data
 
 == Changelog ==
+
+= 3.6.13 =
+* New: Option last earned added in achievement list shortcode filter 
+* New: New trigger After completing the number of day added in achievement / rank / points
+* New: New trigger After completing the number of month added in achievement / rank / points
+* New: More filters added for extending evidence shortcode content
 
 = 3.6.12 =
 * New: Option added in achievements to get revoked on point deduct
