@@ -110,7 +110,7 @@ function badgeos_rank_req_steps_ui_html($step_id = 0, $post_id = 0 ) {
      * Grab our step's requirements and measurement
      */
 	$requirements      = badgeos_get_rank_req_step_requirements( $step_id );
-	$total_count             = !empty( $requirements['count'] ) ? $requirements['count'] : 1;
+	$total_count       = !empty( $requirements['count'] ) ? $requirements['count'] : 1;
 	$achievement_types = badgeos_get_rank_types_slugs();
 	
     $dynamic_triggers = array();
@@ -225,8 +225,14 @@ function badgeos_rank_req_steps_ui_html($step_id = 0, $post_id = 0 ) {
 		</select>
 		<?php do_action( 'badgeos_steps_ui_html_after_ranks_visit_page', $step_id, $post_id ); ?>
 		
-		<input type="number" size="5" min="0" placeholder="<?php _e( 'Years', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_years'] ) > 0 ? intval( $requirements['num_of_years'] ): "1" ); ?>" class="badgeos-num-of-years badgeos-num-of-years-<?php echo $step_id; ?>">
+		<input type="number" size="5" min="1" placeholder="<?php _e( 'Years', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_years'] ) > 0 ? intval( $requirements['num_of_years'] ): "1" ); ?>" class="badgeos-num-of-years badgeos-num-of-years-<?php echo $step_id; ?>">
 		<?php do_action( 'badgeos_rank_steps_ui_html_after_num_of_years', $step_id, $post_id ); ?>
+
+		<input type="number" size="5" min="1" placeholder="<?php _e( 'Months', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_months'] ) > 0 ? intval( $requirements['num_of_months'] ): "1" ); ?>" class="badgeos-num-of-months badgeos-num-of-months-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_rank_steps_ui_html_after_num_of_months', $step_id, $post_id ); ?>
+
+		<input type="number" size="5" min="1" placeholder="<?php _e( 'Days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) > 0 ? intval( $requirements['num_of_days'] ): "1" ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_rank_steps_ui_html_after_num_of_days', $step_id, $post_id ); ?>
 
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $total_count; ?>" placeholder="1">
 		<?php echo apply_filters( 'badgeos_rank_req_steps_ui_html_count_text', __( 'time(s).', 'badgeos' ), $step_id, $post_id ); ?>
@@ -261,6 +267,8 @@ function badgeos_get_rank_req_step_requirements($step_id = 0 ) {
 		'visit_post' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_post', true ),
 		'visit_page' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_page', true ),
 		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
+		'num_of_months' 			=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
+		'num_of_days' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days', true ),
     );
 
     if( !empty( $requirements['badgeos_fields_data'] ) ) {
@@ -395,6 +403,8 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 			$visit_post 		= $step['visit_post'];
 			$visit_page 		= $step['visit_page'];
 			$num_of_years		= $step['num_of_years'];
+			$num_of_months		= $step['num_of_months'];
+			$num_of_days		= $step['num_of_days'];
             $achievement_post = '';
             if( array_key_exists( 'achievement_post', $step ) )
                 $achievement_post = $step['achievement_post'];
@@ -459,6 +469,20 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 					else 
 						$title = __( 'on completing number of year(s)', 'badgeos' );
 					break;
+				case 'badgeos_on_completing_num_of_month':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_months', absint( $num_of_months ) );
+					if( ! empty( $num_of_months ) )
+						$title = sprintf( __( 'on completing %d month(s)', 'badgeos' ),  $num_of_months );
+					else 
+						$title = __( 'on completing number of month(s)', 'badgeos' );
+					break;
+				case 'badgeos_on_completing_num_of_day':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_days', absint( $num_of_days ) );
+					if( ! empty( $num_of_days ) )
+						$title = sprintf( __( 'on completing %d day(s)', 'badgeos' ),  $num_of_days );
+					else 
+						$title = __( 'on completing number of day(s)', 'badgeos' );
+					break;		
 				default :
 					$triggers = get_badgeos_ranks_req_activity_triggers();
 					$title = $triggers[$trigger_type];

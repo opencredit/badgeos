@@ -52,6 +52,8 @@ jQuery(document).ready(function ($) {
     var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
     var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
+    var num_of_months = $(this).siblings(".badgeos-num-of-months");
+    var num_of_days = $(this).siblings(".badgeos-num-of-days");
     /**
      * If we're working with achievements, show the achievement selecter (otherwise, hide it)
      */
@@ -65,6 +67,18 @@ jQuery(document).ready(function ($) {
       num_of_years.show();
     } else {
       num_of_years.hide();
+    }
+
+    if ("badgeos_on_completing_num_of_month" == trigger_type) {
+      num_of_months.show();
+    } else {
+      num_of_months.hide();
+    }
+
+    if ("badgeos_on_completing_num_of_day" == trigger_type) {
+      num_of_days.show();
+    } else {
+      num_of_days.hide();
     }
 
     if ("badgeos_visit_a_page" == trigger_type || "badgeos_award_author_on_visit_page" == trigger_type) {
@@ -219,6 +233,8 @@ function badgeos_update_rank_steps(e) {
       visit_page: visit_page_selector,
       badgeos_fields_data: serialize_data,
       num_of_years: step.find(".badgeos-num-of-years").val(),
+      num_of_months: step.find(".badgeos-num-of-months").val(),
+      num_of_days: step.find(".badgeos-num-of-days").val(),
       achievement_post:
         "badgeos_specific_new_comment" === trigger_type
           ? step.find("input.select-achievement-post").val()

@@ -32,6 +32,7 @@ jQuery(document).ready(function ($) {
 
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
+    var num_of_months = $(this).siblings(".badgeos-num-of-months");
     var num_of_days_login = $(this).siblings(".badgeos-num-of-days-login");
 
     // If we're working with achievements, show the achievement selecter (otherwise, hide it)
@@ -63,7 +64,13 @@ jQuery(document).ready(function ($) {
       num_of_years.hide();
     }
 
-    if ("badgeos_wp_not_login" == trigger_type) {
+    if ("badgeos_on_completing_num_of_month" == trigger_type) {
+      num_of_months.show();
+    } else {
+      num_of_months.hide();
+    }
+
+    if ("badgeos_wp_not_login" == trigger_type || "badgeos_on_completing_num_of_day" == trigger_type) {
       num_of_days.show();
     } else {
       num_of_days.hide();
@@ -242,6 +249,7 @@ function badgeos_update_steps(e) {
       trigger_type: trigger_type,
       achievement_type: step.find(".select-achievement-type").val(),
       num_of_years: step.find(".badgeos-num-of-years").val(),
+      num_of_months: step.find(".badgeos-num-of-months").val(),
       num_of_days: step.find(".badgeos-num-of-days").val(),
       num_of_days_login: step.find(".badgeos-num-of-days-login").val(),
       badgeos_subtrigger_id: selected_subtrigger_id,

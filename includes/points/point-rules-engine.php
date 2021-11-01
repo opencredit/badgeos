@@ -1101,6 +1101,140 @@ function badgeos_points_number_of_year_access( $return, $step_id, $credit_parent
 }
 add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_number_of_year_access', 10, 8 );
 
+/**
+ * Validate whether or not a user has completed all requirements for a number of month step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $step_id 		The given award step ID to verify
+ * @param  integer $credit_parent_id    The given step's parent credit ID
+ * @param  integer $user_id    			The user id
+ * @param  string  $type   				The type
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_points_number_of_month_access( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ) {
+    
+    global $wpdb, $post;
+    if( ! $return ) {
+        return $return;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $step_type = trim( badgeos_utilities::get_post_type( $step_id ) );
+   
+    if( in_array( $step_type, array( trim( $settings['points_award_post_type'] ), trim( $settings['points_deduct_post_type'] ) ) ) ) {
+        
+        if( $step_type == trim( $settings['points_award_post_type'] ) ) {
+            $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_point_trigger_type', true );
+        } else {
+            $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_deduct_trigger_type', true );
+        }
+
+		if ( $trigger_type == 'badgeos_on_completing_num_of_month' ) {
+				
+            $reg_date = strtotime( get_userdata($user_id)->user_registered );
+			$num_of_months = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_months', true );
+			$strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
+			$points = $wpdb->get_results( $strQuery );
+			$return = false;
+			if( count($points) > 0) {
+				$reg_date = strtotime( "+".$num_of_months." month", strtotime( $points[0]->actual_date_earned ) );
+				if( time() > $reg_date ) {
+                    if( $type == 'Award' ) {
+                        $GLOBALS['badgeos']->mysql_award_points = date( 'Y-m-d H:i:s', $reg_date);
+                    } else {
+                        $GLOBALS['badgeos']->mysql_deduct_points = date( 'Y-m-d H:i:s', $reg_date);
+                    }
+					
+					$return = true;	
+				} 
+			} else if( intval( $num_of_months ) > 0 ) {
+				$reg_date = strtotime( "+".$num_of_months." month", $reg_date );
+				if( time() > $reg_date ) {
+                    if( $type == 'Award' ) {
+                        $GLOBALS['badgeos']->mysql_award_points = date( 'Y-m-d H:i:s', $reg_date);
+                    } else {
+                        $GLOBALS['badgeos']->mysql_deduct_points = date( 'Y-m-d H:i:s', $reg_date);
+                    }
+					$return = true;	
+				}
+			}
+        }
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_number_of_month_access', 10, 8 );
+
+/**
+ * Validate whether or not a user has completed all requirements for a number of day step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $step_id 		The given award step ID to verify
+ * @param  integer $credit_parent_id    The given step's parent credit ID
+ * @param  integer $user_id    			The user id
+ * @param  string  $type   				The type
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_points_number_of_day_access( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ) {
+    
+    global $wpdb, $post;
+    if( ! $return ) {
+        return $return;
+    }
+	
+	// Only override the $return data if we're working on a step
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $step_type = trim( badgeos_utilities::get_post_type( $step_id ) );
+   
+    if( in_array( $step_type, array( trim( $settings['points_award_post_type'] ), trim( $settings['points_deduct_post_type'] ) ) ) ) {
+        
+        if( $step_type == trim( $settings['points_award_post_type'] ) ) {
+            $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_point_trigger_type', true );
+        } else {
+            $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_deduct_trigger_type', true );
+        }
+
+		if ( $trigger_type == 'badgeos_on_completing_num_of_day' ) {
+				
+            $reg_date = strtotime( get_userdata($user_id)->user_registered );
+			$num_of_days = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_days', true );
+			$strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
+			$points = $wpdb->get_results( $strQuery );
+			$return = false;
+			if( count($points) > 0) {
+				$reg_date = strtotime( "+".$num_of_days." day", strtotime( $points[0]->actual_date_earned ) );
+				if( time() > $reg_date ) {
+                    if( $type == 'Award' ) {
+                        $GLOBALS['badgeos']->mysql_award_points = date( 'Y-m-d H:i:s', $reg_date);
+                    } else {
+                        $GLOBALS['badgeos']->mysql_deduct_points = date( 'Y-m-d H:i:s', $reg_date);
+                    }
+					
+					$return = true;	
+				} 
+			} else if( intval( $num_of_days ) > 0 ) {
+				$reg_date = strtotime( "+".$num_of_days." day", $reg_date );
+				if( time() > $reg_date ) {
+                    if( $type == 'Award' ) {
+                        $GLOBALS['badgeos']->mysql_award_points = date( 'Y-m-d H:i:s', $reg_date);
+                    } else {
+                        $GLOBALS['badgeos']->mysql_deduct_points = date( 'Y-m-d H:i:s', $reg_date);
+                    }
+					$return = true;	
+				}
+			}
+        }
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_number_of_day_access', 10, 8 );
+
 function badgeos_points_not_login_for_number_of_days( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ){
 	// Prevent user from earning steps with no parents
 	if( $this_trigger == 'badgeos_wp_not_login' ) {

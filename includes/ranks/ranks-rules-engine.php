@@ -528,3 +528,77 @@ function badgeos_user_deserves_number_of_year_rank_step_callback($return, $step_
     return $return;
 }
 add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_number_of_year_rank_step_callback', 20, 7 );
+
+function badgeos_user_deserves_number_of_month_rank_step_callback($return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args) {
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+    
+    // Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+        $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+        if ( $trigger_type == 'badgeos_on_completing_num_of_month' ) {
+                
+            $reg_date = strtotime( get_userdata($user_id)->user_registered );
+            $num_of_months = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_months', true );
+            $strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
+            $ranks = $wpdb->get_results( $strQuery );
+            $return = false;
+            if( count($ranks) > 0) {
+                $reg_date = strtotime( "+".$num_of_months." month", strtotime( $ranks[0]->actual_date_earned ) );
+                if( time() > $reg_date ) {
+                    $GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date);
+                    $return = true; 
+                } 
+            } else if( intval( $num_of_months ) > 0 ) {
+                $reg_date = strtotime( "+".$num_of_months." month", $reg_date );
+                if( time() > $reg_date ) {
+                    $GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date );
+                    $return = true; 
+                }
+            }
+        }
+    }
+    return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_number_of_month_rank_step_callback', 20, 7 );
+
+function badgeos_user_deserves_number_of_day_rank_step_callback($return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args) {
+    global $wpdb, $post;
+    if( ! $return ) {
+        return false;
+    }
+    
+    // Only override the $return data if we're working on a step
+    $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    
+    if( trim( $badgeos_settings['ranks_step_post_type'] ) == badgeos_utilities::get_post_type( $step_id ) ) {
+        $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_rank_trigger_type', true );
+        if ( $trigger_type == 'badgeos_on_completing_num_of_day' ) {
+                
+            $reg_date = strtotime( get_userdata($user_id)->user_registered );
+            $num_of_days = badgeos_utilities::get_post_meta( absint( $step_id ), '_badgeos_num_of_days', true );
+            $strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$step_id."' and user_id='".$user_id."' order by actual_date_earned desc limit 1";
+            $ranks = $wpdb->get_results( $strQuery );
+            $return = false;
+            if( count($ranks) > 0) {
+                $reg_date = strtotime( "+".$num_of_days." day", strtotime( $ranks[0]->actual_date_earned ) );
+                if( time() > $reg_date ) {
+                    $GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date);
+                    $return = true; 
+                } 
+            } else if( intval( $num_of_days ) > 0 ) {
+                $reg_date = strtotime( "+".$num_of_days." day", $reg_date );
+                if( time() > $reg_date ) {
+                    $GLOBALS['badgeos']->rank_date = date( 'Y-m-d H:i:s', $reg_date );
+                    $return = true; 
+                }
+            }
+        }
+    }
+    return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_deserves_number_of_day_rank_step_callback', 20, 7 );

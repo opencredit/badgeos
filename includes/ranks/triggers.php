@@ -30,6 +30,8 @@ function get_badgeos_ranks_req_activity_triggers() {
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
             'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
+            'badgeos_on_completing_num_of_month' => __( 'After completing the number of month', 'badgeos' ),
+            'badgeos_on_completing_num_of_day' => __( 'After completing the number of day', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );
