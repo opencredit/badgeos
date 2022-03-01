@@ -4,7 +4,7 @@
 * Plugin URI: http://www.badgeos.org/
 * Description: BadgeOS lets your site’s users complete tasks and earn badges, ranks, and points that recognize their achievement. Define achievements and choose from a range of options that determine when they're complete. Badges are Mozilla Open Badges (OBI) compatible so the users can easily validate the earned badges.
 * Author: LearningTimes
-* Version: 3.6.13
+* Version: 3.7.0
 * Author URI: https://credly.com/
 * License: GNU AGPL
 * Text Domain: badgeos
@@ -32,7 +32,7 @@ class BadgeOS {
 	 *
 	 * @var string
 	 */
-	public static $version = '3.6.13';
+	public static $version = '3.7.0';
 
 	/**
 	 * BadgeOS Achievement Date
@@ -351,7 +351,8 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Shortcode.php' );
 		require_once( $this->directory_path . 'includes/utilities.php' );
-
+		require_once( $this->directory_path . 'includes/library/vendor/autoload.php' );
+		
         /**
          * WP blocks (page builder)
          */
@@ -398,7 +399,7 @@ class BadgeOS {
         require_once( $this->directory_path . 'includes/open_badge/functions.php' );
         require_once( $this->directory_path . 'includes/open_badge/class-open-badge.php' );
         require_once( $this->directory_path . 'includes/open_badge/ob-metabox.php' );
-
+		require_once( $this->directory_path . 'includes/import-data.php' );
         require_once( $this->directory_path . 'includes/ranks/rank-steps-ui.php' );
 		require_once( $this->directory_path . 'includes/ranks/triggers.php' );
 		require_once( $this->directory_path . 'includes/ranks/ranks-rules-engine.php' );
@@ -644,7 +645,6 @@ class BadgeOS {
 		// Create main menu
         add_menu_page( 'BadgeOS', 'BadgeOS', $main_item_role, 'badgeos_badgeos', 'badgeos_settings', $this->directory_url . 'images/badgeos_icon.png', 110 );
 		add_submenu_page( 'badgeos_badgeos', __( 'Welcome', 'badgeos' ), __( 'Welcome', 'badgeos' ), $minimum_role, 'badgeos-welcome', 'badgeos_welcome_page', 0 );
-		
 		// Create submenu items
 		add_submenu_page( 'badgeos_badgeos', __( 'BadgeOS Settings', 'badgeos' ), __( 'Settings', 'badgeos' ), $minimum_role, 'badgeos_settings', 'badgeos_settings_page' );
 		add_submenu_page( 'badgeos_badgeos', __( 'Assets', 'badgeos' ), __( 'Assets', 'badgeos' ), $minimum_role, 'badgeos-assets', 'badgeos_assets_page' );

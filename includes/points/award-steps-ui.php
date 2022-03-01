@@ -276,6 +276,7 @@ function badgeos_get_award_step_requirements( $step_id = 0 ) {
 		'visit_page' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_page', true ),
 		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
 		'x_number_of_users' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true ),
+   	'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
 		'num_of_months' 			=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
 		'num_of_days' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days', true ),
     );
@@ -407,10 +408,10 @@ function badgeos_update_award_steps_ajax_handler() {
 			/**
              * Grab all of the relevant values of that step
              */
-			$step_id          = $step['step_id'];
-			$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
-			$point_value   = ( ! empty( $step['point_value'] ) ) ? $step['point_value'] : 0;
-			$trigger_type     = $step['trigger_type'];
+			$step_id          	= $step['step_id'];
+			$required_count   	= ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
+			$point_value   		= ( ! empty( $step['point_value'] ) ) ? $step['point_value'] : 0;
+			$trigger_type     	= $step['trigger_type'];
 			$num_of_years		= $step['num_of_years'];
 			$x_number_of_users	= $step['x_number_of_users'];
 			$num_of_months		= $step['num_of_months'];
@@ -467,7 +468,12 @@ function badgeos_update_award_steps_ajax_handler() {
 					break;
 				case 'badgeos_on_the_first_x_users':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users', absint( $x_number_of_users ) );
-					if( ! empty( $x_number_of_users ) )
+    			$x_number_of_users_date = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true );
+					if( empty( $x_number_of_users_date ) )	{
+						badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users_date', date('Y-m-d') );
+					}
+
+          if( ! empty( $x_number_of_users ) )
 						$title = sprintf( __( 'The first %d user(s)', 'badgeos' ),  $x_number_of_users );
 					else 
 						$title = __( 'The first X user(s)', 'badgeos' );

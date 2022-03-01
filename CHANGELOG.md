@@ -1,5 +1,23 @@
 ## Changelog
 
+= 3.7.0 =
+* New: Added "On User Birthday" trigger on achievements, ranks, and points award.
+* New: Added a tick mark on the last earned ranks single and listing shortcodes.
+* New: Added a tick mark on the last earned achievements single and listing shortcodes.
+* New: Added "Remove a Rank" and "Remove an Achievement" triggers on points deduct.
+* New: Added "Achievement to the first X users" trigger on Achievements.
+* New: Added "Points to the first X users" trigger on Points.
+* New: Added "Rank to the first X users" trigger on Ranks.
+* New: Added two new filters i.e "badgeos_attachment_email" and "badgeos_evidence_page_content" on evidence page.
+* New: Added wpautop() function on evidence page content.
+* New: Added wpautop() function on evidence page content.
+* New: Added the Achievement, Rank, and Points award Emails on the bulk award.
+* New: Added the option to add a badge and have it achievable by doing 1 step out of many ones under the achievement's required section.
+* Fixed: Updated the existing filters of the evidence page.
+* Fixed: Improved the existing triggers.
+* Fixed: Made the plugin compatible with the latest WordPress.
+* Fixed: Minor Issues.
+
 = 3.6.13 =
 * New: Option last earned added in achievement list shortcode filter 
 * New: New trigger After completing the number of day added in achievement / rank / points

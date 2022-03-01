@@ -44,7 +44,6 @@
 function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigger, $site_id, $args, $entry_id ) {
     
     global $wpdb;
-    
     if( badgeos_can_notify_user( $user_id ) ) {
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
@@ -55,15 +54,15 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
         if( $post_obj ) {
             $parent_post_type = $post_obj->post_type;
         }
+        
         if ( trim( $achievement_type ) == trim( $parent_post_type ) ) {
             
             $badgeos_admin_tools = ( $exists = badgeos_utilities::get_option( 'badgeos_admin_tools' ) ) ? $exists : array();
             
             $email_cc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_cc_list', 'cc' );
             $email_bcc_list = badgeos_bcc_cc_emails( $badgeos_admin_tools, 'email_achievement_bcc_list', 'bcc' );
-
-            if( ! isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) || $badgeos_admin_tools['email_disable_earned_achievement_email'] == 'no' ) {
                 
+            if( ! isset( $badgeos_admin_tools['email_disable_earned_achievement_email'] ) || $badgeos_admin_tools['email_disable_earned_achievement_email'] == 'no' ) {
                 $results = $wpdb->get_results( "select * from ".$wpdb->prefix."badgeos_achievements where entry_id='".$entry_id."'", 'ARRAY_A' );
                 if( count( $results ) > 0 ) {
                     $record = $results[ 0 ];
@@ -171,7 +170,7 @@ function badgeos_send_achievements_email( $user_id, $achievement_id, $this_trigg
                         ob_end_clean();
                         if( ! empty( $user_email ) ) {
                             wp_mail( $user_email, strip_tags( $email_subject ), $message, $headers );
-                            add_post_meta( 11,'test', 1 );
+                            
                         }
                     }
                 }
@@ -902,7 +901,7 @@ function badgeos_send_bulk_achievements_email( $rec_type, $achievement_id, $user
     
     global $wpdb;
     
-    if( badgeos_can_notify_user( $user_id ) && $_GET['page'] == 'badgeos_tools' ) {
+    if( badgeos_can_notify_user( $user_id ) && isset( $_GET['page'] ) && $_GET['page'] == 'badgeos_tools' ) {
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array(); 
         $achievement_post_type = badgeos_utilities::get_post_type( $achievement_id );
         $achievement_type = $badgeos_settings['achievement_main_post_type'];

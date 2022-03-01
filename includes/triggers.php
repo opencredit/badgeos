@@ -83,6 +83,7 @@ function badgeos_load_activity_triggers() {
                 }
             }
         } else {
+			
             add_action( $trigger, 'badgeos_trigger_event', 10, 20 );
         }
     }
@@ -192,7 +193,7 @@ function badgeos_trigger_event() {
 	
 	// Setup all our globals
 	global $user_ID, $blog_id, $wpdb;
-	
+
 	$site_id = $blog_id;
 
 	$args = func_get_args();
@@ -240,8 +241,10 @@ function badgeos_trigger_event() {
 		}
 	}
 	$not_triggerred = true;
+	
 	foreach ( $triggered_achievements as $achievement ) {
         $parents = badgeos_get_achievements( array( 'parent_of' => $achievement->post_id ) );
+
         if( count( $parents ) > 0 ) {
 			if( $parents[0]->post_status == 'publish' ) {
 				$new_trigger_label = $this_trigger;
@@ -259,12 +262,10 @@ function badgeos_trigger_event() {
 					$not_triggerred = false;
 				}
 				
-				
 				badgeos_maybe_award_achievement_to_user( $achievement->post_id, $user_id, $this_trigger, $site_id, $args );
             }
         }
     }
-
 	return $args[ 0 ];
 
 }
@@ -311,6 +312,7 @@ function badgeos_trigger_get_user_id( $trigger = '', $args = array() ) {
 		case 'badgeos_award_author_on_visit_page': 
 		case 'badgeos_visit_a_post': 
 		case 'badgeos_visit_a_page':
+		case 'badgeos_on_the_first_x_users':
 			$user_id = $args[0];
 			break;	
 		default :
@@ -590,33 +592,34 @@ function badgeos_login_trigger( $user_login, $user ) {
     do_action( 'badgeos_wp_not_login', $user_login, $user );
     do_action( 'badgeos_wp_login', $user_login, $user );
     do_action( 'badgeos_wp_login_x_days', $user_login, $user );
-
+	
+	
+	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND ( pm.meta_key  = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_the_first_x_users'" );
+	if( count( $trigger_data ) > 0 ) { 
+		do_action( 'badgeos_on_the_first_x_users', $user_id, $user );
+	}
 	badgeos_utilities::update_user_meta( $user_id, '_badgeos_last_login', time() );
 	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND (pm.meta_key = '_point_trigger_type' || pm.meta_key = '_deduct_trigger_type' || pm.meta_key = '_badgeos_trigger_type' || pm.meta_key = '_rank_trigger_type') ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_points_on_birthday'" );
 	if( count( $trigger_data ) > 0 ) { 
 		do_action( 'badgeos_points_on_birthday', $user_id, $user );
 	}
-
+	
 	$num_of_years_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_year'" );
 	if( count( $num_of_years_data ) > 0 ) { 
 		do_action( 'badgeos_on_completing_num_of_year', $user_id, $user );
-	}
 
+	}	
     $num_of_months_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_month'" );
     if( count( $num_of_months_data ) > 0 ) { 
-        do_action( 'badgeos_on_completing_num_of_month', $user_id, $user );
+		  do_action( 'badgeos_on_completing_num_of_month', $user_id, $user );
+
     }
 
     $num_of_days_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_day'" );
     if( count( $num_of_days_data ) > 0 ) { 
         do_action( 'badgeos_on_completing_num_of_day', $user_id, $user );
     }
-	
-	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND ( pm.meta_key  = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_the_first_x_users'" );
-	//echo "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND ( pm.meta_key  = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_the_first_x_users'";exit;
-	if( count( $trigger_data ) > 0 ) { 
-		do_action( 'badgeos_on_the_first_x_users', $user_id, $user );
-	}
+
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
 

@@ -303,7 +303,6 @@ class Badgeos_Tools {
     public function badgeos_award_reward_achievements(){
 
         global $wpdb;
-
         if( ! $_POST || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
             return false;
         }
@@ -334,10 +333,11 @@ class Badgeos_Tools {
                         } else {
                             $users_to_award = ( isset( $_POST['badgeos_tools']['award_users'] ) ? $_POST['badgeos_tools']['award_users'] : '' );
                         }
-
-                        foreach( $users_to_award as $user_ids ) {
+ 
+                        foreach( $users_to_award as $user_ids ) { 
                             badgeos_update_user_achievements( array( 'user_id' => $user_ids, 'new_achievements' => array( $achievement_object ) ) );
-							badgeos_update_users_points( $user_ids, 0, get_current_user_id(), $achievement_id );
+							badgeos_update_users_points( $user_ids, 0, get_current_user_id(), $achievement_id ); 
+
                         }
                     }
                 }
@@ -481,7 +481,10 @@ class Badgeos_Tools {
                         $users_to_award = ( isset( $_POST['badgeos_tools']['award_users'] ) ? $_POST['badgeos_tools']['award_users'] : '' );
                     }
                     foreach( $users_to_award as $user_id ) {
-                        badgeos_award_credit( $credit_type_to_award, $user_id, 'Award', $credit_amount, 'admin_bulk_award', get_current_user_id(), '', '' );
+                        $enrty_id = badgeos_award_credit( $credit_type_to_award, $user_id, 'Award', $credit_amount, 'admin_bulk_award', get_current_user_id(), '', '' );
+
+                        badgeos_send_points_award_email( $user_id, $credit_type_to_award, 0, 'Award', $credit_amount, 'admin_bulk_award', 0, $enrty_id );
+
                     }
                 }
             }
@@ -556,7 +559,7 @@ class Badgeos_Tools {
                         }
 
                         foreach( $users_to_award as $user_id ) {
-                            badgeos_update_user_rank( array(
+                            $rank_entry_id = badgeos_update_user_rank( array(
                                 'user_id'           => $user_id,
                                 'site_id'           => get_current_blog_id(),
                                 'rank_id'           => (int) $rank_id,
@@ -565,6 +568,7 @@ class Badgeos_Tools {
                                 'credit_amount'     => 0,
                                 'admin_id'          => ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ),
                             )  );
+                            badgeos_send_rank_email( $user_id, $rank_id, get_post_type($rank_id), 0, 0, ( current_user_can( 'administrator' ) ? get_current_user_id() : 0 ), 'admin_awarded', $rank_entry_id );
                         }
                     }
                 }

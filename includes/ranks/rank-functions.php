@@ -615,7 +615,7 @@ function badgeos_update_user_rank( $args = array() ) {
     }
 
     $rank_object = badgeos_build_rank_object( $args['rank_id'] );
-    badgeos_add_rank( array(
+    $rank_entry_id = badgeos_add_rank( array(
             'user_id'        => $args['user_id'],
             'new_rank'       => $rank_object,
             'this_trigger'   => $args['this_trigger'],
@@ -635,6 +635,7 @@ function badgeos_update_user_rank( $args = array() ) {
             badgeos_maybe_award_achievement_to_user( $achievement->ID, $args['user_id'] );
         }
     }
+    return $rank_entry_id;
 }
 
 /**

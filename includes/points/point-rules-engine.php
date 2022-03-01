@@ -544,7 +544,7 @@ add_filter( 'credit_update_user_trigger_count', 'credit_cancel_update_trigger_co
  */
 function badgeos_award_credit( $credit_post_id, $user_id, $target, $points, $this_trigger, $admin_id, $credit_step_id, $achievement_id ) {
 
-    badgeos_add_credit( $credit_post_id, $user_id, $target, $points, $this_trigger, $admin_id , $credit_step_id , $achievement_id );
+    $enrty_id = badgeos_add_credit( $credit_post_id, $user_id, $target, $points, $this_trigger, $admin_id , $credit_step_id , $achievement_id );
 
     $total_points = badgeos_recalc_total_points( $user_id);
 
@@ -563,6 +563,8 @@ function badgeos_award_credit( $credit_post_id, $user_id, $target, $points, $thi
             badgeos_maybe_award_achievement_to_user( $achievement->ID, $user_id );
         }
     }
+
+    return $enrty_id;
 }
 
 /**
@@ -1236,40 +1238,42 @@ add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_validate_user_d
 function badgeos_points_validate_x_user( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ) {
     
     global $wpdb;
-    badgeos_write_log ( 'points - start - x1' );
+
     if( ! $return ) {
         return $return;
     }
-    badgeos_write_log ( 'points - start - x1.1' );
-
-	// Only override the $return data if we're working on a step
+    
+	  // Only override the $return data if we're working on a step
     $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $step_type = trim( badgeos_utilities::get_post_type( $step_id ) );
-    badgeos_write_log ( $step_type.' == '.trim( $settings['points_award_post_type'] ));
+
 
     if( $step_type == trim( $settings['points_award_post_type'] )  ) {
         $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_point_trigger_type', true );
         
         if ( $trigger_type == 'badgeos_on_the_first_x_users' ) {
 
+            $x_number_of_users_date = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true );
+            if( ! check_data_registered( $user_id, $x_number_of_users_date ) ) {
+                return false;
+            }
+
             $x_number_of_users = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true );
             $count = absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
             if( intval( $x_number_of_users ) > 0 ) {
                 $strQuery = "select id from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."'";
-                badgeos_write_log ( 'points - x_users - '. $strQuery );
                 $total_points = $wpdb->get_results( $strQuery );
                 if( count( $total_points ) > intval( $x_number_of_users ) ) {
-                    badgeos_write_log ( 'points - x_users - x2' );$return = false;
+                    $return = false;
                 }
             }
 
             $strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."'";
-            badgeos_write_log ( 'points - x_users - '. $strQuery );
             $my_points = $wpdb->get_results( $strQuery );
             if( count( $my_points ) >= intval( $count ) ) {
-                badgeos_write_log ( 'points - x_users - x3' );$return = false;
+                $return = false;
             }
-            badgeos_write_log ( 'points - x_users - x4' );
+
             $return = true;
         }
 	}

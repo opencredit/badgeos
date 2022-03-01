@@ -189,25 +189,29 @@ function badgeos_user_meets_x_user_rank_trigger_requirement( $return, $step_id, 
         $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
 
         if ( trim( $badgeos_settings['ranks_step_post_type'] ) != badgeos_utilities::get_post_type( $step_id ) ) {
-            badgeos_write_log ( 'rank - x_users - x1' );
             return false;
         }
+
+		$x_number_of_users_date = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true );
+		if( ! check_data_registered( $user_id, $x_number_of_users_date ) ) {
+			return false;
+		}
 		
 		$x_number_of_users = badgeos_utilities::get_post_meta( $rank_id, '_badgeos_x_number_of_users', true );
 		$count = absint( badgeos_utilities::get_post_meta( $rank_id, '_badgeos_count', true ) );
 		if( intval( $x_number_of_users ) > 0 ) {
-			echo $strQuery = "select id from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."'";
+
+			$strQuery = "select id from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."'";
 			$total_ranks = $wpdb->get_results( $strQuery );
 			if( count( $total_ranks ) > intval( $x_number_of_users ) ) {
-				badgeos_write_log ( 'rank - x_users - x2' );$return = false;
+				$return = false;
 			}
 		}
 
 		$strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."' and user_id='".$user_id."'";
-		badgeos_write_log ( 'rank - x_users - '.$strQuery );
-        $my_ranks = $wpdb->get_results( $strQuery );
+    	$my_ranks = $wpdb->get_results( $strQuery );
 		if( count( $my_ranks ) >= intval( $count ) ) {
-			badgeos_write_log ( 'rank - x_users - x3' );$return = false;
+			$return = false;
 		}
 		
 		$return = true;
