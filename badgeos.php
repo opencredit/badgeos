@@ -351,7 +351,7 @@ class BadgeOS {
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Plugin_Updater.php' );
 		require_once( $this->directory_path . 'includes/class.BadgeOS_Shortcode.php' );
 		require_once( $this->directory_path . 'includes/utilities.php' );
-		require_once( $this->directory_path . 'includes/library/vendor/autoload.php' );
+		
 		
         /**
          * WP blocks (page builder)
@@ -399,7 +399,7 @@ class BadgeOS {
         require_once( $this->directory_path . 'includes/open_badge/functions.php' );
         require_once( $this->directory_path . 'includes/open_badge/class-open-badge.php' );
         require_once( $this->directory_path . 'includes/open_badge/ob-metabox.php' );
-		require_once( $this->directory_path . 'includes/import-data.php' );
+		
         require_once( $this->directory_path . 'includes/ranks/rank-steps-ui.php' );
 		require_once( $this->directory_path . 'includes/ranks/triggers.php' );
 		require_once( $this->directory_path . 'includes/ranks/ranks-rules-engine.php' );
