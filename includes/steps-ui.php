@@ -233,6 +233,9 @@ function badgeos_steps_ui_html( $step_id = 0, $post_id = 0 ) {
 				
 				<input type="number" size="5" min="1" placeholder="<?php _e( 'Years', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_years'] ) > 0 ? intval( $requirements['num_of_years'] ): "1" ); ?>" class="badgeos-num-of-years badgeos-num-of-years-<?php echo $step_id; ?>">
 				<?php do_action( 'badgeos_steps_ui_html_after_num_of_years', $step_id, $post_id ); ?>
+				
+				<input type="number" size="5" min="1" placeholder="<?php _e( 'X Users', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['x_number_of_users'] ) > 0 ? intval( $requirements['x_number_of_users'] ): "" ); ?>" class="badgeos-x-number-of-users badgeos-x-number-of-users-<?php echo $step_id; ?>">
+				<?php do_action( 'badgeos_steps_ui_html_after_x_number_of_users', $step_id, $post_id ); ?>
 
 				<input type="number" size="5" min="1" placeholder="<?php _e( 'days', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_days'] ) > 0 ? intval( $requirements['num_of_days'] ): "1" ); ?>" class="badgeos-num-of-days badgeos-num-of-days-<?php echo $step_id; ?>">
 				<?php do_action( 'badgeos_steps_ui_html_after_num_of_days', $step_id, $post_id ); ?>
@@ -272,6 +275,8 @@ function badgeos_get_step_requirements( $step_id = 0 ) {
 		'num_of_days'      			=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days', true ),
 		'num_of_days_login'      	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days_login', true ),
 		'num_of_years'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
+		'x_number_of_users'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true ),
+		
 		'num_of_months'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
         'achievement_post' 			=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_achievement_post', true ),
         'badgeos_subtrigger_id' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_subtrigger_id', true ),
@@ -391,6 +396,7 @@ function badgeos_update_steps_ajax_handler() {
 			$visit_post 		= $step['visit_post'];
 			$visit_page 		= $step['visit_page'];
 			$num_of_years		= $step['num_of_years'];
+			$x_number_of_users  = $step['x_number_of_users'];
 			$num_of_months		= $step['num_of_months'];
 			$num_of_days		= $step['num_of_days'];
 			$num_of_days_login	= $step['num_of_days_login'];
@@ -410,6 +416,7 @@ function badgeos_update_steps_ajax_handler() {
             badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_days' );
             badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_days_login' );
 			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_years' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_x_number_of_users' );
 			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_months' );
 			// Flip between our requirement types and make an appropriate connection
 			switch ( $trigger_type ) {
@@ -454,6 +461,13 @@ function badgeos_update_steps_ajax_handler() {
 						$title = sprintf( __( 'on completing %d year(s)', 'badgeos' ),  $num_of_years );
 					else 
 						$title = __( 'on completing number of year(s)', 'badgeos' );
+					break;
+				case 'badgeos_on_the_first_x_users':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users', absint( $x_number_of_users ) );
+					if( ! empty( $x_number_of_users ) )
+						$title = sprintf( __( 'The first %d user(s)', 'badgeos', 'badgeos' ),  $x_number_of_users );
+					else 
+						$title = __( 'The first X user(s)', 'badgeos' );
 					break;
 				case 'badgeos_on_completing_num_of_month':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_months', absint( $num_of_months ) );

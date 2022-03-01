@@ -87,10 +87,10 @@ add_action( 'init', 'badgeos_register_achievement_shortcode' );
  * @return string 	   HTML markup.
  */
 function badgeos_achievement_shortcode( $atts = array() ) {
-
+    global $wpdb;
 	// get the post id
 	$atts = shortcode_atts( array(
-        'id' => get_the_ID(),
+        'id' => '',
         'show_title'  => 'true',
         'show_thumb'  => 'true',
         'show_description'  => 'true',
@@ -98,6 +98,15 @@ function badgeos_achievement_shortcode( $atts = array() ) {
         'image_width' => '',
         'image_height' => '',
     ), $atts, 'badgeos_achievement' );
+
+    // return if post id not specified
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if ( empty($atts['id']) ) {
+        $achievements = $wpdb->get_results( $wpdb->prepare( "select * from ".$wpdb->prefix."badgeos_achievements where post_type!=%s and user_id=%d order by actual_date_earned desc limit 1", trim( $settings['achievement_step_post_type'] ), get_current_user_id() ) );
+        if( count( $achievements ) > 0 ) {
+            $atts['id'] = $achievements[0]->ID;
+        }
+    }
 
 	// return if post id not specified
 	if ( empty($atts['id']) )

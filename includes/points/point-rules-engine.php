@@ -679,6 +679,194 @@ function badgeos_add_credit( $credit_id, $user_id, $type, $new_points, $this_tri
 }
 
 /**
+ * Add points to user balance and in db.
+ *
+ * @param  integer $credit_id      	Credit type ID
+ * @param  integer $user_id      	User id to whome we will assign it
+ * @param  string $type      		Action type i.e. Award and Deduct
+ * @param  integer $new_points      Points which needs to be added or removed.
+ * @param  string $this_trigger     Event which occured
+ * @param  integer $admin_id  		Admin id if assigned by admin
+ * @param  integer $step_id  		step id if it is performed due to credit type step event
+ * @param  integer $achievement_id  The achievement ID if points are awarded due to an achievement.
+ * @return integer record id if inserted successfully.
+ */
+function badgeos_after_award_points_remove_ranks( $user_id=1, $credit_id=27, $achievement_id=0, $type='Deduct', $new_points=0, $this_trigger='badgeos_remove_achievment_on_point_deduct', $step_id=0, $record_id = 0 ) {
+    global $wpdb;
+    if( $type == 'Deduct' ) {
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+        $results = $wpdb->get_results( 
+            $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}badgeos_points WHERE user_id=%d", $user_id )
+        );
+
+        $total_points = 0;
+        foreach( $results as $res ) {
+    
+            if( $res->type == 'Deduct' || $res->type == 'Utilized' ){
+                $total_points += floatval( $res->credit );
+            }
+        }
+        
+        if( $total_points > 0 ) {
+            
+            $trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_deduct_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_remove_achievment_on_point_deduct'" );
+            if( count( $trigger_data ) > 0 ) { 
+                
+                foreach( $trigger_data as $trigger ) {
+                    $point_value = absint( badgeos_utilities::get_post_meta( $trigger->post_id, '_point_value', true ) );
+                    $count  = absint( badgeos_utilities::get_post_meta( $trigger->post_id, '_badgeos_count', true ) );
+                    if( $count < 0 ) {
+                        $count = 1;
+                    }
+                    $remove_achivement = badgeos_utilities::get_post_meta( $trigger->post_id, '_badgeos_remove_achivement', true );
+                    
+                    $point_recs = $wpdb->get_results( 
+                        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}badgeos_points WHERE step_id=%d and this_trigger='badgeos_remove_achievment_on_point_deduct' and user_id=%d", $trigger->post_id, $user_id )
+                    );
+                    
+                    
+                    $already_awarded = count($point_recs );
+                    $req_points = ($point_value * $already_awarded) + $point_value;
+                    if( $already_awarded < $count ) {
+                        
+                        if( $total_points > $req_points ) {
+                            $achievements = array();
+                            $entries = array();
+                            $indexes = array();
+
+                            $i=0;
+                            $my_achievements = badgeos_get_user_achievements( array( 'user_id' => $user_id, 'achievement_id'=>$remove_achivement ) );
+                            
+                            foreach( $my_achievements as $rec ) {
+                                $achievements[] = $rec->ID;
+                                $indexes[] = $i++;
+                                $entries[] = $rec->entry_id;
+                            }
+
+                            $index = 0;
+                            $new_achievements = array();
+                            $delete_achievement = array();
+                            foreach( $my_achievements as $my_achs ) {
+                                if( $my_achs->post_type != trim( $badgeos_settings['achievement_step_post_type'] ) ) {
+                                    if( in_array( $index, $indexes ) && in_array( $my_achs->ID, $achievements ) ) {
+                                        $delete_achievement[] = $my_achs->ID;
+                                    } else {
+                                        $new_achievements[] = $my_achs;
+                                    }
+                                    $index += 1;
+                                } else {
+                                    $new_achievements[] = $my_achs;
+                                }
+                            }
+                            
+                            foreach( $my_achievements as $del_ach_id ) {
+                                $children = badgeos_get_achievements( array( 'children_of' => $del_ach_id) );
+                                foreach( $children as $child ) {
+                                    foreach( $new_achievements as $index => $item ) {
+
+                                        if( $child->ID == $item->ID ) {
+                                            unset( $new_achievements[ $index ] );
+                                            $new_achievements = array_values( $new_achievements );
+                                            $table_name = $wpdb->prefix . "badgeos_achievements";
+                                            if($wpdb->get_var("show tables like '$table_name'") == $table_name) {
+                                                $where = " where user_id='".intval($user_id)."' and entry_id = '".intval($item->entry_id)."'";
+                                                $wpdb->get_results('delete from '.$wpdb->prefix.'badgeos_achievements '.$where.' limit 1' );
+                                            }
+                                            badgeos_decrement_user_trigger_count( $user_id, $child->ID, $del_ach_id );
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            $new_achievements = array_values( $new_achievements );
+
+                            // Update user's earned achievements
+                            badgeos_update_user_achievements( array( 'user_id' => $user_id, 'all_achievements' => $new_achievements ) );
+
+                            foreach( $entries as $key => $entry ) {
+                                $where = array( 'user_id' => $user_id );
+
+                                if( $entry != 0 ) {
+                                    $where['entry_id'] = $entry;
+                                }
+                                do_action( 'badgeos_before_revoke_achievement_from_point_deduct', $user_id, intval( $achievements[$key] ), $entry );
+
+                                $table_name = $wpdb->prefix . "badgeos_achievements";
+                                if($wpdb->get_var("show tables like '$table_name'") == $table_name) {
+                                    $wpdb->delete( $table_name, $where );
+                                }
+                                do_action( 'badgeos_after_revoke_achievement_from_point_deduct', $user_id, intval( $achievements[$key] ), $entry );
+                            }
+
+                            $wpdb->insert($wpdb->prefix.'badgeos_points', array(
+                                'credit_id' => $credit_id,
+                                'step_id' => $trigger->post_id,
+                                'admin_id' => 0,
+                                'user_id' => $user_id,
+                                'achievement_id' => 0,
+                                'type' => $type,
+                                'credit' => 0,
+                                'actual_date_earned' => badgeos_default_datetime( 'mysql_deduct_points' ),
+                                'dateadded' => current_time( 'mysql' ),
+                                'this_trigger' =>  'badgeos_remove_achievment_on_point_deduct'
+                            ));
+
+                            // Available hook for taking further action when an achievement is revoked
+                            do_action( 'badgeos_revoke_achievements_from_point_deduct', $user_id, $achievements, $entries );
+                        }
+                    }
+                }
+            }
+            
+            //badgeos_remove_rank_on_point_deduct
+            $trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_deduct_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_remove_rank_on_point_deduct'" );
+            if( count( $trigger_data ) > 0 ) { 
+                foreach( $trigger_data as $trigger ) {
+                    
+                    $point_value = absint( badgeos_utilities::get_post_meta( $trigger->post_id, '_point_value', true ) );
+                    $count  = absint( badgeos_utilities::get_post_meta( $trigger->post_id, '_badgeos_count', true ) );
+                    if( $count < 0 ) {
+                        $count = 1;
+                    }
+                    $remove_rank = badgeos_utilities::get_post_meta( $trigger->post_id, '_badgeos_remove_rank', true );
+                    
+                    $point_recs = $wpdb->get_results( 
+                        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}badgeos_points WHERE step_id=%d and this_trigger='badgeos_remove_rank_on_point_deduct' and user_id=%d", $trigger->post_id, $user_id )
+                    );
+
+                    $already_awarded = count($point_recs );
+                    $req_points = ($point_value * $already_awarded) + $point_value;
+                    if( $already_awarded < $count ) {
+                        
+                        if( $total_points > $req_points ) {
+                            badgeos_remove_rank( array(
+                                'user_id'       => $user_id,
+                                'rank_id'       => $remove_rank,
+                            ) );
+
+                            $wpdb->insert($wpdb->prefix.'badgeos_points', array(
+                                'credit_id' => $credit_id,
+                                'step_id' => $trigger->post_id,
+                                'admin_id' => 0,
+                                'user_id' => $user_id,
+                                'achievement_id' => 0,
+                                'type' => $type,
+                                'credit' => 0,
+                                'actual_date_earned' => badgeos_default_datetime( 'mysql_deduct_points' ),
+                                'dateadded' => current_time( 'mysql' ),
+                                'this_trigger' =>  'badgeos_remove_rank_on_point_deduct'
+                            ));
+                        }
+                    }
+                } 
+            }
+        }
+    }
+}
+//add_action( 'init', 'badgeos_after_award_points_remove_ranks', 10, 8 );
+add_action( 'badgeos_after_award_points', 'badgeos_after_award_points_remove_ranks', 10, 8 );
+
+/**
  * Remove points from user balance and in db.
  *
  * @param  integer $credit_id      	Credit type ID
@@ -1031,6 +1219,63 @@ function badgeos_points_validate_user_dob( $return, $step_id, $credit_parent_id,
     return $return;
 }
 add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_validate_user_dob', 10, 8 );
+
+/**
+ * Validate whether or not a user has completed all requirements for a visit a page step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $step_id 		The given award step ID to verify
+ * @param  integer $credit_parent_id    The given step's parent credit ID
+ * @param  integer $user_id    			The user id
+ * @param  string  $type   				The type
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_points_validate_x_user( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ) {
+    
+    global $wpdb;
+    badgeos_write_log ( 'points - start - x1' );
+    if( ! $return ) {
+        return $return;
+    }
+    badgeos_write_log ( 'points - start - x1.1' );
+
+	// Only override the $return data if we're working on a step
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+    $step_type = trim( badgeos_utilities::get_post_type( $step_id ) );
+    badgeos_write_log ( $step_type.' == '.trim( $settings['points_award_post_type'] ));
+
+    if( $step_type == trim( $settings['points_award_post_type'] )  ) {
+        $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_point_trigger_type', true );
+        
+        if ( $trigger_type == 'badgeos_on_the_first_x_users' ) {
+
+            $x_number_of_users = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true );
+            $count = absint( badgeos_utilities::get_post_meta( $step_id, '_badgeos_count', true ) );
+            if( intval( $x_number_of_users ) > 0 ) {
+                $strQuery = "select id from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."'";
+                badgeos_write_log ( 'points - x_users - '. $strQuery );
+                $total_points = $wpdb->get_results( $strQuery );
+                if( count( $total_points ) > intval( $x_number_of_users ) ) {
+                    badgeos_write_log ( 'points - x_users - x2' );$return = false;
+                }
+            }
+
+            $strQuery = "select * from ".$wpdb->prefix . "badgeos_points where step_id='".$step_id."' and user_id='".$user_id."'";
+            badgeos_write_log ( 'points - x_users - '. $strQuery );
+            $my_points = $wpdb->get_results( $strQuery );
+            if( count( $my_points ) >= intval( $count ) ) {
+                badgeos_write_log ( 'points - x_users - x3' );$return = false;
+            }
+            badgeos_write_log ( 'points - x_users - x4' );
+            $return = true;
+        }
+	}
+    return $return;
+}
+add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_validate_x_user', 10, 8 );
 
 
 /**
