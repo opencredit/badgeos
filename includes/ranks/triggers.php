@@ -26,6 +26,7 @@ function get_badgeos_ranks_req_activity_triggers() {
             'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'On User Birthday', 'badgeos' ),
             'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),

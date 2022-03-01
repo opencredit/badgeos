@@ -34,6 +34,7 @@ function badgeos_get_activity_triggers() {
 			'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     	=> __( 'Register to the website', 'badgeos' ),
 			'badgeos_daily_visit'   => __( 'Daily visit website', 'badgeos' ),
+			'badgeos_points_on_birthday'    => __( 'On User Birthday', 'badgeos' ),
             'badgeos_on_completing_num_of_day' => __( 'After completing the number of days', 'badgeos' ),
             'badgeos_on_completing_num_of_month' => __( 'After completing the number of months', 'badgeos' ),
 			'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
@@ -590,7 +591,7 @@ function badgeos_login_trigger( $user_login, $user ) {
     do_action( 'badgeos_wp_login_x_days', $user_login, $user );
 
 	badgeos_utilities::update_user_meta( $user_id, '_badgeos_last_login', time() );
-	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND pm.meta_key = '_point_trigger_type' ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_points_on_birthday'" );
+	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND (pm.meta_key = '_point_trigger_type' || pm.meta_key = '_deduct_trigger_type' || pm.meta_key = '_badgeos_trigger_type' || pm.meta_key = '_rank_trigger_type') ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_points_on_birthday'" );
 	if( count( $trigger_data ) > 0 ) { 
 		do_action( 'badgeos_points_on_birthday', $user_id, $user );
 	}

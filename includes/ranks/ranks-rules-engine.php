@@ -107,6 +107,66 @@ function badgeos_user_has_access_to_rank( $step_id = 0, $rank_id = 0, $user_id =
 }
 
 /**
+ * Validate whether or not a user has completed all requirements for a visit a page step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $step_id 		    The given rank step ID to verify
+ * @param  integer $rank_id 		    The given rank ID to verify
+ * @param  integer $user_id    			The user id
+
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_user_meets_birthday_rank_trigger_requirement( $return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args=array() ) {
+    
+    global $wpdb;
+    
+    if( trim( $this_trigger ) == 'badgeos_points_on_birthday' ) {
+
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        if ( trim( $badgeos_settings['ranks_step_post_type'] ) != badgeos_utilities::get_post_type( $step_id ) ) {
+            return false;
+        }
+		
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		$date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+		$dob = '';
+		if( ! class_exists( 'BuddyPress' ) || $date_of_birth_from == 'profile' ) {
+			$dob = badgeos_utilities::get_user_meta( absint( $user_id ), '_badgeos_date_of_birth', true );
+		} else {
+			$dob = bp_profile_field_data( 'field=Birthday' );
+		}
+
+		$strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."' and user_id='".$user_id."' and Year(dateadded)='".date('Y')."'";
+		$ranks = $wpdb->get_results( $strQuery );
+		if( count( $ranks ) > 0 ) {
+			$return = false;
+		} else{
+            
+			if( ! empty( $dob ) ) {
+				$dob_array = explode( '-', $dob );
+				$new_dob = date( 'Y' )."-".$dob_array[1]."-".$dob_array[2];
+                if( strtotime( $new_dob ) <= time()  ) {
+					$return = true;
+				} else {
+                    $return = false;
+				}
+			} else {
+				$return = false;
+			}
+            
+		}
+        
+	}
+	
+	return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_meets_birthday_rank_trigger_requirement', 10, 7 );
+
+/**
  * Validate whether or not a user has completed all requirements for a step.
  *
  * @param  integer $return        		True / False

@@ -28,7 +28,7 @@ function get_badgeos_points_award_activity_triggers() {
             'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
-            'badgeos_points_on_birthday'    => __( 'Points on User Birthday', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'On User Birthday', 'badgeos' ),
             'badgeos_on_completing_num_of_year'  => __( 'After completing the number of years', 'badgeos' ),
             'badgeos_on_completing_num_of_month' => __( 'After completing the number of months', 'badgeos' ),
             'badgeos_on_completing_num_of_day'   => __( 'After completing the number of days', 'badgeos' ),

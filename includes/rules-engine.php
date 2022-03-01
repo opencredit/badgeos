@@ -175,6 +175,62 @@ function badgeos_user_meets_points_requirement( $return = false, $user_id = 0, $
 add_filter( 'user_deserves_achievement', 'badgeos_user_meets_points_requirement', 10, 3 );
 
 /**
+ * Validate whether or not a user has completed all requirements for a visit a page step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $user_id    			The user id
+ * @param  integer $achievement_id 		The given award step ID to verify
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_user_meets_birthday_trigger_requirement( $return, $user_id, $achievement_id, $this_trigger, $site_id = 0, $args = array() ) {
+    
+    global $wpdb;
+    //echo $return.', '.$user_id.', '.$achievement_id.', '.$this_trigger.', '.$site_id;exit;
+    if( trim( $this_trigger ) == 'badgeos_points_on_birthday' ) {
+
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        if ( trim( $badgeos_settings['achievement_step_post_type'] ) != badgeos_utilities::get_post_type( $achievement_id ) ) {
+            return false;
+        }
+		
+		$badgeos_settings = get_option( 'badgeos_settings' );
+		$date_of_birth_from 	= ( ! empty ( $badgeos_settings['date_of_birth_from'] ) ) ? $badgeos_settings['date_of_birth_from'] : 'profile';
+		$dob = '';
+		if( ! class_exists( 'BuddyPress' ) || $date_of_birth_from == 'profile' ) {
+			$dob = badgeos_utilities::get_user_meta( absint( $user_id ), '_badgeos_date_of_birth', true );
+		} else {
+			$dob = bp_profile_field_data( 'field=Birthday' );
+		}
+
+		$strQuery = "select * from ".$wpdb->prefix . "badgeos_achievements where ID='".$achievement_id."' and user_id='".$user_id."' and Year(date_earned)='".date('Y')."'";
+		$achievements = $wpdb->get_results( $strQuery );
+		if( count( $achievements ) > 0 ) {
+			$return = false;
+		} else{
+			if( ! empty( $dob ) ) {
+				$dob_array = explode( '-', $dob );
+				$new_dob = date( 'Y' )."-".$dob_array[1]."-".$dob_array[2];
+				
+				if( strtotime( $new_dob ) <= time()  ) {
+					$return = true;
+				} else {
+					$return = false;
+				}
+			} else {
+				$return = false;
+			}
+		}
+	}
+	
+	return $return;
+}
+add_filter( 'user_has_access_to_achievement', 'badgeos_user_meets_birthday_trigger_requirement', 10, 6 );
+
+/**
  * Check if user may access/earn daily visit.
  *
  * @param  integer $return        	True / False
