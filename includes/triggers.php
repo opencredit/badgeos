@@ -617,6 +617,12 @@ function badgeos_login_trigger( $user_login, $user ) {
     if( count( $num_of_days_data ) > 0 ) { 
         do_action( 'badgeos_on_completing_num_of_day', $user_id, $user );
     }
+	
+	$trigger_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND ( pm.meta_key  = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_the_first_x_users'" );
+	//echo "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id AND ( pm.meta_key  = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) ) where p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_the_first_x_users'";exit;
+	if( count( $trigger_data ) > 0 ) { 
+		do_action( 'badgeos_on_the_first_x_users', $user_id, $user );
+	}
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
 

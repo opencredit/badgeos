@@ -208,7 +208,7 @@ function badgeos_user_meets_x_user_rank_trigger_requirement( $return, $step_id, 
 		}
 
 		$strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."' and user_id='".$user_id."'";
-    $my_ranks = $wpdb->get_results( $strQuery );
+    	$my_ranks = $wpdb->get_results( $strQuery );
 		if( count( $my_ranks ) >= intval( $count ) ) {
 			$return = false;
 		}
