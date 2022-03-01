@@ -481,6 +481,10 @@ header.badgeos_verification_popup_header .controls {
 	border-radius: 50px; 
 }
 
+.badgeos-last-earned-checkmark{
+	color:green;
+}
+
 @media only screen and (min-width: 461px) and (max-width: 760px) {
 	
 	.badgeos_verification_modal_panel {

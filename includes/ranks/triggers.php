@@ -26,10 +26,14 @@ function get_badgeos_ranks_req_activity_triggers() {
             'badgeos_award_author_on_visit_post'   => __( 'Award author when a user visits post', 'badgeos' ),
             'badgeos_new_page'     			=> __( 'Publish a new page', 'badgeos' ),
             'badgeos_visit_a_page'          => __( 'Visit a Page', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'On User Birthday', 'badgeos' ),
             'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
             'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
+            'badgeos_on_completing_num_of_month' => __( 'After completing the number of month', 'badgeos' ),
+            'badgeos_on_completing_num_of_day' => __( 'After completing the number of day', 'badgeos' ),
+            'badgeos_on_the_first_x_users' => __( 'Rank to the first X users', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );

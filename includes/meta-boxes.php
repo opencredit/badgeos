@@ -148,8 +148,8 @@ function badgeos_achievment_metaboxes( ) {
         'id'   => $prefix . 'show_earners',
         'type' => 'checkbox',
     ));
-    $note_text = __( 'Displayed after achievement is earned. If you would like the message to appear as a pop-up, please install <a href="https://badgeos.org/downloads/congratulations/" target="_blank">Congratulations Add-On</a>.', 'badgeos' );
     
+    $note_text = __( 'Displayed after achievement is earned. If you would like the message to appear as a pop-up, please install <a href="https://badgeos.org/downloads/congratulations/" target="_blank">Congratulations Add-On</a>.', 'badgeos' );
     $cmb_obj->add_field(array(
         'name' => __( 'Congratulations Text', 'badgeos' ), 
         'desc' => $note_text,
@@ -170,6 +170,13 @@ function badgeos_achievment_metaboxes( ) {
         'std' => '1',
     ));
     $cmb_obj->add_field(array(
+        'name' => __( 'Award badge on achieving 1 step out of many', 'badgeos' ),
+        'desc' => ' '.__( 'Achievement is achievable by doing 1 step out of many ones under the required section.', 'badgeos' ),
+        'id'   => $prefix . 'award_by_one_step_out_of_many',
+        'type' => 'checkbox',
+        'std' => '1',
+    ));
+    $cmb_obj->add_field(array(
         'name'    => __( 'Hidden?', 'badgeos' ),
         'desc'    => '',
         'id'      => $prefix . 'hidden',
@@ -179,13 +186,7 @@ function badgeos_achievment_metaboxes( ) {
             'hidden' => __( 'Hidden to User', 'badgeos' )
         ),
     ));
-    $cmb_obj->add_field(array(
-        'name' => __( 'Revoke Badge', 'badgeos' ),
-        'desc' => ' '.__( 'Revoke this badge when user looses points', 'badgeos' ),
-        'id'   => $prefix . 'revoke_badge_point_loss',
-        'type' => 'checkbox',
-        'std' => '1',
-    ));
+    
 
 }
 add_action( 'cmb2_admin_init', 'badgeos_achievment_metaboxes' );

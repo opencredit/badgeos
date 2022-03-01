@@ -28,8 +28,11 @@ function get_badgeos_points_award_activity_triggers() {
             'badgeos_award_author_on_visit_page'   => __( 'Award author when a user visits page', 'badgeos' ),
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
-            'badgeos_points_on_birthday'    => __( 'Points on User Birthday', 'badgeos' ),
-            'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
+            'badgeos_points_on_birthday'    => __( 'On User Birthday', 'badgeos' ),
+            'badgeos_on_completing_num_of_year'  => __( 'After completing the number of years', 'badgeos' ),
+            'badgeos_on_completing_num_of_month' => __( 'After completing the number of months', 'badgeos' ),
+            'badgeos_on_completing_num_of_day'   => __( 'After completing the number of days', 'badgeos' ),
+            'badgeos_on_the_first_x_users' => __( 'Points to the first X users', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->award_points_activity_triggers );
@@ -57,6 +60,10 @@ function get_badgeos_points_deduct_activity_triggers() {
 			'user_register'     			=> __( 'Register to the website', 'badgeos' ),
             'badgeos_daily_visit'     		=> __( 'Daily visit website', 'badgeos' ),
             'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
+            'badgeos_on_completing_num_of_month' => __( 'After completing the number of months', 'badgeos' ),
+            'badgeos_on_completing_num_of_day'   => __( 'After completing the number of days', 'badgeos' ),
+            'badgeos_remove_achievment_on_point_deduct'  => __( 'Remove an Achievement', 'badgeos' ),
+            'badgeos_remove_rank_on_point_deduct'   => __( 'Remove a Rank', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->deduct_points_activity_triggers );

@@ -225,7 +225,7 @@ function badgeos_update_user_achievements( $args = array() ) {
 			));
 			
 			do_action( 'badgeos_achievements_new_added', $rec_type, $new_achievement->ID, absint( $args['user_id'] ), $wpdb->insert_id );
-			
+			badgeos_send_achievements_email( absint( $args['user_id'] ), $new_achievement->ID, $new_achievement->trigger, $args['site_id'], $args, $wpdb->insert_id );
 			return $wpdb->insert_id;
 		}	else {
 			badgeos_utilities::update_user_meta( absint( $args['user_id'] ), '_badgeos_achievements', $achievements );

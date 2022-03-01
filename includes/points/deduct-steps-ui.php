@@ -89,7 +89,7 @@ function badgeos_deduct_steps_ui_meta_box($post  = null) {
  * @return string           The concatenated HTML input for the step
  */
 function badgeos_deduct_steps_ui_html($step_id = 0, $post_id = 0 ) {
-
+	global $wpdb;
 	/**
      * Grab our step's requirements and measurement
      */
@@ -179,15 +179,15 @@ function badgeos_deduct_steps_ui_html($step_id = 0, $post_id = 0 ) {
                 <?php do_action( 'badgeos_deduct_steps_ui_html_after_dynamic_trigger_type', $step_id, $post_id ); ?>
 
                 <select class="select-achievement-type select-achievement-type-<?php echo $step_id; ?>">
-			<?php
-				foreach ( $achievement_types as $achievement_type ) {
-					if ( $settings['points_deduct_post_type'] == $achievement_type ){
-						continue;
-					}
-					echo '<option value="' . $achievement_type . '" ' . selected( $requirements['achievement_type'], $achievement_type, false ) . '>' . ucfirst( $achievement_type ) . '</option>';
-				}
-			?>
-		</select>
+					<?php
+						foreach ( $achievement_types as $achievement_type ) {
+							if ( $settings['points_deduct_post_type'] == $achievement_type ){
+								continue;
+							}
+							echo '<option value="' . $achievement_type . '" ' . selected( $requirements['achievement_type'], $achievement_type, false ) . '>' . ucfirst( $achievement_type ) . '</option>';
+						}
+					?>
+				</select> 
 
 		<?php do_action( 'badgeos_deduct_steps_ui_html_after_achievement_type', $step_id, $post_id ); ?>
 
@@ -213,6 +213,44 @@ function badgeos_deduct_steps_ui_html($step_id = 0, $post_id = 0 ) {
 				}
 			?>
 		</select>
+		<?php do_action( 'badgeos_steps_ui_html_before_remove_achivement_post', $step_id, $post_id ); ?>
+		<select class="badgeos-select-remove-achivement badgeos-select-remove-achivement-<?php echo $step_id; ?>">
+			<?php
+				$achievement_types = $wpdb->get_results( "SELECT `ID`, `post_title`, post_name FROM $wpdb->posts WHERE post_type = '".$settings['achievement_main_post_type']."';" );
+				if( is_array( $achievement_types ) && !empty( $achievement_types ) && !is_null( $achievement_types ) ) {
+					foreach( $achievement_types as $achievement_type ) {
+						echo '<optgroup label="'.$achievement_type->post_title.'">';
+							$achievements = get_posts( array(
+								'post_type'      =>	$achievement_type->post_name,
+								'posts_per_page' =>	-1,
+							) );
+							foreach ( $achievements as $achievement ) {
+								echo '<option value="' . $achievement->ID . '" ' . selected( $achievement->ID, $requirements['remove_achivement'], false ) . '>' . ucfirst( $achievement->post_title ).'</option>';
+							}
+						echo '</optgroup>';
+					}
+				}
+			?>
+		</select>
+		<?php do_action( 'badgeos_steps_ui_html_before_remove_rank_post', $step_id, $post_id ); ?>
+		<select class="badgeos-select-remove-rank badgeos-select-remove-rank-<?php echo $step_id; ?>">
+			<?php
+				$rank_types = $wpdb->get_results( "SELECT `ID`, `post_title`, post_name FROM $wpdb->posts WHERE post_type = '".$settings['ranks_main_post_type']."';" );
+				if( is_array( $rank_types ) && !empty( $rank_types ) && !is_null( $rank_types ) ) {
+					foreach( $rank_types as $rank_type ) {
+						echo '<optgroup label="'.$rank_type->post_title.'">';
+							$ranks = get_posts( array(
+								'post_type'      =>	$rank_type->post_name,
+								'posts_per_page' =>	-1,
+							) );
+							foreach ( $ranks as $rank ) {
+								echo '<option value="' . $rank->ID . '" ' . selected( $rank->ID, $requirements['remove_achivement'], false ) . '>' . ucfirst( $rank->post_title ).'</option>';
+							}
+						echo '</optgroup>';
+					}
+				}
+				?>
+		</select>
 		<?php do_action( 'badgeos_steps_ui_html_after_pdeduct_visit_post', $step_id, $post_id ); ?>
 		<select class="badgeos-select-visit-page badgeos-select-visit-page-<?php echo $step_id; ?>">
 			<?php
@@ -230,6 +268,12 @@ function badgeos_deduct_steps_ui_html($step_id = 0, $post_id = 0 ) {
 
 		<input type="number" size="5" min="0" placeholder="<?php _e( 'Years', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_years'] ) > 0 ? intval( $requirements['num_of_years'] ): "1" ); ?>" class="badgeos-num-of-years badgeos-num-of-years-<?php echo $step_id; ?>">
 		<?php do_action( 'badgeos_point_deduct_steps_ui_html_after_num_of_years', $step_id, $post_id ); ?>
+		
+		<input type="number" size="5" min="0" placeholder="<?php _e( 'X Users', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['x_number_of_users'] ) > 0 ? intval( $requirements['x_number_of_users'] ): "" ); ?>" class="badgeos-x-number-of-users badgeos-x-number-of-users-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_rank_steps_ui_html_after_x_number_of_users', $step_id, $post_id ); ?>
+
+		<input type="number" size="5" min="0" placeholder="<?php _e( 'Months', 'badgeos' ); ?>" value="<?php esc_attr_e( intval( $requirements['num_of_months'] ) > 0 ? intval( $requirements['num_of_months'] ): "1" ); ?>" class="badgeos-num-of-months badgeos-num-of-months-<?php echo $step_id; ?>">
+		<?php do_action( 'badgeos_point_deduct_steps_ui_html_after_num_of_months', $step_id, $post_id ); ?>
 
 		<input class="point-value" type="number" size="3" maxlength="3" value="<?php echo $requirements['_point_value']; ?>" placeholder="<?php _e( 'Points', 'badgeos' ); ?>">		
 		<input class="required-count" type="text" size="3" maxlength="3" value="<?php echo $count; ?>" placeholder="1">
@@ -266,7 +310,12 @@ function badgeos_get_deduct_step_requirements($step_id = 0 ) {
 		'visit_post' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_post', true ),
 		'visit_page' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_visit_page', true ),
 		'num_of_days'      			=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_days', true ),
-		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true )
+		'num_of_months'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
+		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
+		'x_number_of_users' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true ),
+    'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
+		'remove_rank' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_rank', true ),
+		'remove_achivement' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_achivement', true ),
     );
 
     if( !empty( $requirements['badgeos_fields_data'] ) ) {
@@ -400,7 +449,11 @@ function badgeos_update_deduct_steps_ajax_handler() {
 			$visit_post 		= $step['visit_post'];
 			$visit_page 		= $step['visit_page'];
 			$num_of_years		= $step['num_of_years'];
+			$remove_achivement	= $step['remove_achivement'];
+			$remove_rank		= $step['remove_rank'];
+			$x_number_of_users	= $step['x_number_of_users'];
 			$num_of_days		= $step['num_of_days'];			
+			$num_of_months		= $step['num_of_months'];			
 			$trigger_type     	= $step['trigger_type'];
 			$achievement_type 	= $step['achievement_type'];
 
@@ -420,6 +473,11 @@ function badgeos_update_deduct_steps_ajax_handler() {
 			$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->p2p WHERE p2p_to=%d", $step_id ) );
 			badgeos_utilities::del_post_meta( $step_id, '_badgeos_achievement_post' );
 			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_years' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_days' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_num_of_months' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_x_number_of_users' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_remove_rank' );
+			badgeos_utilities::del_post_meta( $step_id, '_badgeos_remove_achivement' );
 			/**
              * Flip between our requirement types and make an appropriate connection
              */
@@ -469,6 +527,37 @@ function badgeos_update_deduct_steps_ajax_handler() {
 					else 
 						$title = __( 'on completing number of year(s)', 'badgeos' );
 					break;
+				case 'badgeos_on_completing_num_of_month':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_months', absint( $num_of_months ) );
+					if( ! empty( $num_of_months ) )
+						$title = sprintf( __( 'on completing %d month(s)', 'badgeos' ),  $num_of_months );
+					else 
+						$title = __( 'on completing number of month(s)', 'badgeos' );
+					break;
+					$required_count   = ( ! empty( $step['required_count'] ) ) ? $step['required_count'] : 1;
+					$point_value   = ( ! empty( $step['point_value'] ) ) ? $step['point_value'] : 0;
+										
+				case 'badgeos_remove_achievment_on_point_deduct':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_remove_achivement', absint( $remove_achivement ) );
+					if( ! empty( $remove_achivement ) )
+						$title = sprintf( __( "Remove '%s' achievement on '%d' points deduction", 'badgeos' ),  get_the_title($remove_achivement),  $point_value );
+					else 
+						$title = __( 'Remove achievement on points deduction', 'badgeos' );
+					break;
+				case 'badgeos_remove_rank_on_point_deduct':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_remove_rank', absint( $remove_rank ) );
+					if( ! empty( $remove_rank ) )
+						$title = sprintf( __( "Remove '%s' rank on '%d' points deduction", 'badgeos' ),  get_the_title($remove_rank),  $point_value );
+					else 
+						$title = __( 'Remove rank on points deduction', 'badgeos' );
+					break;
+				case 'badgeos_on_completing_num_of_day':
+					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_days', absint( $num_of_days ) );
+					if( ! empty( $num_of_days ) )
+						$title = sprintf( __( 'on completing %d day(s)', 'badgeos' ),  $num_of_days );
+					else 
+						$title = __( 'on completing number of day(s)', 'badgeos' );
+					break;		
 				case 'badgeos_wp_not_login':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_num_of_days', absint( $num_of_days ) );
 					if( ! empty( $num_of_days ) )

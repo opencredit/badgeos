@@ -123,6 +123,13 @@ function badgeos_ajax_get_ranks_list() {
         $ranks = '<div class="badgeos-arrange-buttons"><button class="list buttons '.($earned_ranks_shortcode_default_view=='list'?'selected':'').'"><i class="fa fa-bars"></i> '.__( 'List', 'badgeos' ).'</button><button class="grid buttons '.($earned_ranks_shortcode_default_view=='grid'?'selected':'').'"><i class="fa fa-th-large"></i> '.__( 'Grid', 'badgeos' ).'</button></div><ul class="ls_grid_container '.$earned_ranks_shortcode_default_view.'">';
     }
 
+    $last_earned_id = 0;
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	$last_rank = $wpdb->get_results( $wpdb->prepare( "select * from ".$wpdb->prefix."badgeos_ranks where rank_type!=%s and user_id=%d order by actual_date_earned desc limit 1", trim( $settings['ranks_step_post_type'] ), $user_ID ) );
+    if( count( $last_rank ) > 0 ) {
+        $last_earned_id = $last_rank[0]->rank_id;
+    }
+
     $ranks_count = 0;
 
     // If we're polling all sites, grab an array of site IDs
@@ -170,10 +177,14 @@ function badgeos_ajax_get_ranks_list() {
 
             // Achievement Content
             $output .= '<div class="badgeos-item-detail">';
-
+            
+            $check_mark = '';
             if( $show_title == 'true' ) {
                 // Achievement Title
-                $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( get_the_ID() ).'">'.get_the_title().'</a></h2>';
+                if( $last_earned_id == get_the_ID() ) {
+					$check_mark = '<span class="badgeos-last-earned-checkmark"> &#10004</span>';
+				}
+                $output .= '<h2 class="badgeos-item-title"><a href="'.get_permalink( get_the_ID() ).'">'.get_the_title().$check_mark.'</a></h2>';
             }
 
             // Achievement Short Description
@@ -694,7 +705,12 @@ function badgeos_ajax_get_achievements() {
 			$args[ 'post__in' ] = array_merge( array( 0 ), $earned_ids );
 		}elseif( $filter == 'not-completed' ) {
 			$args[ 'post__not_in' ] = array_merge( $hidden, $earned_ids );
-		}
+		}elseif( $filter == 'last-earned' ) {
+            $total = $earned_ids;
+            $last_earned = array_pop( $total );
+            $args[ 'post__not_in' ] = $total;
+            $args[ 'post__in' ] = array( $last_earned );
+        } 
 
 		if ( '' !== $meta_key && '' !== $meta_value ) {
 			$args[ 'meta_key' ] = $meta_key;

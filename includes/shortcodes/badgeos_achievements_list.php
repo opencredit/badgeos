@@ -281,6 +281,7 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
 					if ( $user_ID > 0 ) {
 						$badges .= '<option value="completed">' . sprintf( __( 'Completed %s', 'badgeos' ), $post_type_plural );
 						$badges .= '<option value="not-completed">' . sprintf( __( 'Not Completed %s', 'badgeos' ), $post_type_plural );
+						$badges .= '<option value="last-earned">' . sprintf( __( 'Last Earned %s', 'badgeos' ), $post_type_plural );
 					}
 					// TODO: if show_points is true "Badges by Points"
 					// TODO: if dev adds a custom taxonomy to this post type then load all of the terms to filter by
@@ -325,7 +326,6 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
     $maindiv = '<div class="badgeos_achievement_main_container" data-url="'.esc_url( admin_url( 'admin-ajax.php', 'relative' ) ).'" data-type="'.$type.'" data-limit="'.$limit.'" data-show_child="'.$show_child.'" data-show_parent="'.$show_parent.'" data-show_filter="'.$show_filter.'" data-show_search="'.$show_search.'" data-group_id="'.$group_id.'" data-user_id="'.$user_id.'" data-wpms="'.$wpms.'" data-orderby="'.$orderby.'" data-order="'.$order.'" data-include="'.$include.'" data-exclude="'.$exclude.'" data-meta_key="'.$meta_key.'" data-meta_value="'.$meta_value.'" data-show_title="'.$show_title.'" data-show_thumb="'.$show_thumb.'" data-show_description="'.$show_description.'" data-show_steps="'.$show_steps.'" data-default_view="'.$default_view.'" data-image_width="'.$image_width.'" data-image_height="'.$image_height.'">';
     $maindiv .= $badges;
     $maindiv .= '</div>';
-
 
     // Reset Post Data
 	wp_reset_postdata();
