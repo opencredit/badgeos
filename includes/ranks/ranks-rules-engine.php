@@ -200,6 +200,7 @@ function badgeos_user_meets_x_user_rank_trigger_requirement( $return, $step_id, 
 		$x_number_of_users = badgeos_utilities::get_post_meta( $rank_id, '_badgeos_x_number_of_users', true );
 		$count = absint( badgeos_utilities::get_post_meta( $rank_id, '_badgeos_count', true ) );
 		if( intval( $x_number_of_users ) > 0 ) {
+
 			$strQuery = "select id from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."'";
 			$total_ranks = $wpdb->get_results( $strQuery );
 			if( count( $total_ranks ) > intval( $x_number_of_users ) ) {

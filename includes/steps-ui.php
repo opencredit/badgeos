@@ -463,6 +463,7 @@ function badgeos_update_steps_ajax_handler() {
 					break;
 				case 'badgeos_on_the_first_x_users':
 					badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users', absint( $x_number_of_users ) );
+
 					$x_number_of_users_date = badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true );
 					if( empty( $x_number_of_users_date ) )	{
 						badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users_date', date('Y-m-d') );

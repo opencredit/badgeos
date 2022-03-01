@@ -316,7 +316,7 @@ function badgeos_get_deduct_step_requirements($step_id = 0 ) {
 		'num_of_months'      		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_months', true ),
 		'num_of_years' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_num_of_years', true ),
 		'x_number_of_users' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users', true ),
-    	'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
+   	'x_number_of_users_date' 	=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_x_number_of_users_date', true ),
 		'remove_rank' 				=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_rank', true ),
 		'remove_achivement' 		=> badgeos_utilities::get_post_meta( $step_id, '_badgeos_remove_achivement', true ),
     );

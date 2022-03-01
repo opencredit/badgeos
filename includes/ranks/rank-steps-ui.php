@@ -484,6 +484,7 @@ function badgeos_update_ranks_req_steps_ajax_handler() {
 					if( empty( $x_number_of_users_date ) )	{
 						badgeos_utilities::update_post_meta( $step_id, '_badgeos_x_number_of_users_date', date('Y-m-d') );
 					}
+
 					if( ! empty( $x_number_of_users ) )
 						$title = sprintf( __( 'The first %d user(s)', 'badgeos' ),  $x_number_of_users );
 					else 

@@ -607,16 +607,19 @@ function badgeos_login_trigger( $user_login, $user ) {
 	$num_of_years_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_year'" );
 	if( count( $num_of_years_data ) > 0 ) { 
 		do_action( 'badgeos_on_completing_num_of_year', $user_id, $user );
+
 	}	
     $num_of_months_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_month'" );
     if( count( $num_of_months_data ) > 0 ) { 
-		do_action( 'badgeos_on_completing_num_of_month', $user_id, $user );
+		  do_action( 'badgeos_on_completing_num_of_month', $user_id, $user );
+
     }
 
     $num_of_days_data = $wpdb->get_results( "SELECT p.ID as post_id FROM $wpdb->postmeta AS pm INNER JOIN $wpdb->posts AS p ON ( p.ID = pm.post_id ) where  ( pm.meta_key = '_badgeos_trigger_type' or pm.meta_key = '_point_trigger_type' or pm.meta_key = '_deduct_trigger_type' or pm.meta_key = '_rank_trigger_type' ) and  p.post_status = 'publish' AND pm.meta_value = 'badgeos_on_completing_num_of_day'" );
     if( count( $num_of_days_data ) > 0 ) { 
         do_action( 'badgeos_on_completing_num_of_day', $user_id, $user );
     }
+
 }
 add_action( 'wp_login', 'badgeos_login_trigger', 0, 2 );
 

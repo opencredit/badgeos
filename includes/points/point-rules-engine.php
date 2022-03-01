@@ -1238,13 +1238,15 @@ add_filter( 'badgeos_user_has_access_to_points', 'badgeos_points_validate_user_d
 function badgeos_points_validate_x_user( $return, $step_id, $credit_parent_id, $user_id, $type, $this_trigger, $site_id, $args ) {
     
     global $wpdb;
+
     if( ! $return ) {
         return $return;
     }
     
-	// Only override the $return data if we're working on a step
+	  // Only override the $return data if we're working on a step
     $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
     $step_type = trim( badgeos_utilities::get_post_type( $step_id ) );
+
 
     if( $step_type == trim( $settings['points_award_post_type'] )  ) {
         $trigger_type = badgeos_utilities::get_post_meta( absint( $step_id ), '_point_trigger_type', true );
@@ -1263,7 +1265,6 @@ function badgeos_points_validate_x_user( $return, $step_id, $credit_parent_id, $
                 $total_points = $wpdb->get_results( $strQuery );
                 if( count( $total_points ) > intval( $x_number_of_users ) ) {
                     $return = false;
-
                 }
             }
 
