@@ -231,6 +231,56 @@ function badgeos_user_meets_birthday_trigger_requirement( $return, $user_id, $ac
 add_filter( 'user_has_access_to_achievement', 'badgeos_user_meets_birthday_trigger_requirement', 10, 6 );
 
 /**
+ * Validate whether or not a user has completed all requirements for a visit a page step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $user_id    			The user id
+ * @param  integer $achievement_id 		The given award step ID to verify
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_on_the_first_x_users_callback( $return, $user_id, $achievement_id, $this_trigger, $site_id = 0, $args = array() ) {
+    
+    global $wpdb;
+	// if( ! $return ) {
+	// 	return $return;
+	// }
+    if( trim( $this_trigger ) == 'badgeos_on_the_first_x_users' ) {
+		$badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+        if ( trim( $badgeos_settings['achievement_step_post_type'] ) != badgeos_utilities::get_post_type( $achievement_id ) ) {
+            badgeos_write_log ( 'achivement - x_users - x1' );
+			$return = false;
+        }
+		
+		$x_number_of_users = badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_x_number_of_users', true );
+		$count = absint( badgeos_utilities::get_post_meta( $achievement_id, '_badgeos_count', true ) );
+		if( intval( $x_number_of_users ) > 0 ) {
+			$strQuery = "select id from ".$wpdb->prefix . "badgeos_achievements where ID='".$achievement_id."'";
+			badgeos_write_log ( 'achivement - x_users - '. $strQuery );
+			$total_achievements = $wpdb->get_results( $strQuery );
+			if( count( $total_achievements ) > intval( $x_number_of_users ) ) {
+				badgeos_write_log ( 'achivement - x_users - x2' );$return = false;
+			}
+		}
+
+		$strQuery = "select * from ".$wpdb->prefix . "badgeos_achievements where ID='".$achievement_id."' and user_id='".$user_id."'";
+		badgeos_write_log ( 'achivement - x_users - '. $strQuery );
+		$my_achievements = $wpdb->get_results( $strQuery );
+		if( count( $my_achievements ) >= intval( $count ) ) {
+			badgeos_write_log ( 'achivement - x_users - x3' );$return = false;
+		}
+		badgeos_write_log ( 'achivement - x_users - x4' );
+		$return = true;
+	}
+	badgeos_write_log ( 'achivement - x_users - x5' );
+	return $return;
+}
+add_filter( 'user_has_access_to_achievement', 'badgeos_on_the_first_x_users_callback', 10, 6 );
+
+
+/**
  * Check if user may access/earn daily visit.
  *
  * @param  integer $return        	True / False

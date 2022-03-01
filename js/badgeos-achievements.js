@@ -260,8 +260,6 @@ jQuery(function ($) {
 		var data_image_width = $mainobj.attr("data-image_width");
 		var data_image_height = $mainobj.attr("data-image_height");
 
-		$mainobj.find('div.badgeos-spinner').show();
-
 		$.ajax({
 			url: data_ajaxurl,
 			data: {

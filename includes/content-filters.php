@@ -353,7 +353,7 @@ function badgeos_has_user_earned_achievement( $achievement_id = 0, $user_id = 0 
  */
 function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $show_thumb = 'true', $show_description = 'true', $show_steps = 'true', $image_width = '', $image_height = '' ) {
 
-    global $user_ID;
+    global $user_ID, $wpdb;
 
     // If we were given an ID, get the post
     if ( is_numeric( $achievement ) )
@@ -388,9 +388,21 @@ function badgeos_render_achievement( $achievement = 0, $show_title = 'true', $sh
         // Achievement Content
         $output .= '<div class="badgeos-item-description">';
 
+		
+
         // Achievement Title
         if( $show_title == 'true' ) {
-            $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a></h2>';
+			$last_earned_id = 0;
+			$check_mark = '';
+			$settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+			$last_achievements = $wpdb->get_results( $wpdb->prepare( "select * from ".$wpdb->prefix."badgeos_achievements where post_type!=%s and user_id=%d order by actual_date_earned desc limit 1", trim( $settings['achievement_step_post_type'] ), $user_ID ) );
+			if( count( $last_achievements ) > 0 ) {
+				$last_earned_id = $last_achievements[0]->ID;
+				if( $last_earned_id == $achievement->ID ) {
+					$check_mark = '<span class="badgeos-last-earned-checkmark"> &#10004</span>';
+				}
+			}
+            $output .= '<h2 class="badgeos-item-title"><a href="' . get_permalink( $achievement->ID ) . '">' . get_the_title( $achievement->ID ) .'</a>'.$check_mark.'</h2>';
         }
 
         // Achievement Short Description

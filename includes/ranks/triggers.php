@@ -33,6 +33,7 @@ function get_badgeos_ranks_req_activity_triggers() {
             'badgeos_on_completing_num_of_year' => __( 'After completing the number of years', 'badgeos' ),
             'badgeos_on_completing_num_of_month' => __( 'After completing the number of month', 'badgeos' ),
             'badgeos_on_completing_num_of_day' => __( 'After completing the number of day', 'badgeos' ),
+            'badgeos_on_the_first_x_users' => __( 'Rank to the first X users', 'badgeos' ),
 		)
 	);
     return apply_filters( 'badgeos_activity_triggers_for_all', $GLOBALS['badgeos']->badgeos_ranks_req_activity_triggers );

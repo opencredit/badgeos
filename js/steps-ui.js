@@ -31,6 +31,7 @@ jQuery(document).ready(function ($) {
     var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
 
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
+    var x_number_of_users = $(this).siblings(".badgeos-x-number-of-users");
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
     var num_of_months = $(this).siblings(".badgeos-num-of-months");
     var num_of_days_login = $(this).siblings(".badgeos-num-of-days-login");
@@ -62,6 +63,12 @@ jQuery(document).ready(function ($) {
       num_of_years.show();
     } else {
       num_of_years.hide();
+    }
+
+    if ("badgeos_on_the_first_x_users" == trigger_type) {
+      x_number_of_users.show();
+    } else {
+      x_number_of_users.hide();
     }
 
     if ("badgeos_on_completing_num_of_month" == trigger_type) {
@@ -249,6 +256,7 @@ function badgeos_update_steps(e) {
       trigger_type: trigger_type,
       achievement_type: step.find(".select-achievement-type").val(),
       num_of_years: step.find(".badgeos-num-of-years").val(),
+      x_number_of_users: step.find(".badgeos-x-number-of-users").val(),
       num_of_months: step.find(".badgeos-num-of-months").val(),
       num_of_days: step.find(".badgeos-num-of-days").val(),
       num_of_days_login: step.find(".badgeos-num-of-days-login").val(),

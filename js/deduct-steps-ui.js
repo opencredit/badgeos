@@ -46,11 +46,27 @@ jQuery(document).ready(function ($) {
     var visit_post_selector = $(this).siblings(".badgeos-select-visit-post");
     var visit_page_selector = $(this).siblings(".badgeos-select-visit-page");
     var num_of_years = $(this).siblings(".badgeos-num-of-years");
+    var x_number_of_users = $(this).siblings(".badgeos-x-number-of-users");
+
+    var remove_rank = $(this).siblings(".badgeos-select-remove-rank");
+    var remove_achivement = $(this).siblings(".badgeos-select-remove-achivement");
     var num_of_days = $(this).siblings(".badgeos-num-of-days");
     var num_of_months = $(this).siblings(".badgeos-num-of-months");
     /**
      * If we're working with dedpoint, show the achievement selecter (otherwise, hide it)
      */
+    if ("badgeos_remove_rank_on_point_deduct" == trigger_type) {
+      remove_rank.show();
+    } else {
+      remove_rank.hide();
+    }
+
+    if ("badgeos_remove_achievment_on_point_deduct" == trigger_type) {
+      remove_achivement.show();
+    } else {
+      remove_achivement.hide();
+    }
+
     if (
       "any-achievement" == trigger_type ||
       "all-achievements" == trigger_type ||
@@ -72,7 +88,11 @@ jQuery(document).ready(function ($) {
     } else {
       num_of_years.hide();
     }
-
+    if ("badgeos_on_the_first_x_users" == trigger_type) {
+      x_number_of_users.show();
+    } else {
+      x_number_of_users.hide();
+    }
     if ("badgeos_on_completing_num_of_month" == trigger_type) {
       num_of_months.show();
     } else {
@@ -285,6 +305,9 @@ function badgeos_update_deduct_steps(e) {
       point_value: step.find(".point-value").val(),
       trigger_type: trigger_type,
       achievement_type: step.find(".select-achievement-type").val(),
+      remove_rank: step.find(".badgeos-select-remove-rank").val(),
+      remove_achivement: step.find(".badgeos-select-remove-achivement").val(),
+      x_number_of_users: step.find(".badgeos-x-number-of-users").val(),
       num_of_years: step.find(".badgeos-num-of-years").val(),
       num_of_days: step.find(".badgeos-num-of-days").val(),
       num_of_months: step.find(".badgeos-num-of-months").val(),

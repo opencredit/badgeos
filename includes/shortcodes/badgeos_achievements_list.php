@@ -327,7 +327,6 @@ function badgeos_achievements_list_shortcode( $atts = array () ){
     $maindiv .= $badges;
     $maindiv .= '</div>';
 
-
     // Reset Post Data
 	wp_reset_postdata();
 

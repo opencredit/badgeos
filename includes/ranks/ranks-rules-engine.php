@@ -166,6 +166,57 @@ function badgeos_user_meets_birthday_rank_trigger_requirement( $return, $step_id
 }
 add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_meets_birthday_rank_trigger_requirement', 10, 7 );
 
+
+/**
+ * Validate whether or not a user has completed all requirements for a visit a page step.
+ *
+ * @param  integer $return        		True / False
+ * @param  integer $step_id 		    The given rank step ID to verify
+ * @param  integer $rank_id 		    The given rank ID to verify
+ * @param  integer $user_id    			The user id
+
+ * @param  string  $this_trigger   		The trigger
+ * @param  integer $site_id        		The triggered site id
+ * @param  array   $args           		The triggered args
+ * @return bool                    		True if user has completed achievement, false otherwise
+ */
+function badgeos_user_meets_x_user_rank_trigger_requirement( $return, $step_id, $rank_id, $user_id, $this_trigger, $site_id, $args=array() ) {
+    
+    global $wpdb;
+    
+    if( trim( $this_trigger ) == 'badgeos_on_the_first_x_users' ) {
+
+        $badgeos_settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+
+        if ( trim( $badgeos_settings['ranks_step_post_type'] ) != badgeos_utilities::get_post_type( $step_id ) ) {
+            badgeos_write_log ( 'rank - x_users - x1' );
+            return false;
+        }
+		
+		$x_number_of_users = badgeos_utilities::get_post_meta( $rank_id, '_badgeos_x_number_of_users', true );
+		$count = absint( badgeos_utilities::get_post_meta( $rank_id, '_badgeos_count', true ) );
+		if( intval( $x_number_of_users ) > 0 ) {
+			echo $strQuery = "select id from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."'";
+			$total_ranks = $wpdb->get_results( $strQuery );
+			if( count( $total_ranks ) > intval( $x_number_of_users ) ) {
+				badgeos_write_log ( 'rank - x_users - x2' );$return = false;
+			}
+		}
+
+		$strQuery = "select * from ".$wpdb->prefix . "badgeos_ranks where rank_id='".$rank_id."' and user_id='".$user_id."'";
+		badgeos_write_log ( 'rank - x_users - '.$strQuery );
+        $my_ranks = $wpdb->get_results( $strQuery );
+		if( count( $my_ranks ) >= intval( $count ) ) {
+			badgeos_write_log ( 'rank - x_users - x3' );$return = false;
+		}
+		
+		$return = true;
+        
+	}
+	
+	return $return;
+}
+add_filter( 'badgeos_user_deserves_rank_step', 'badgeos_user_meets_x_user_rank_trigger_requirement', 10, 7 );
 /**
  * Validate whether or not a user has completed all requirements for a step.
  *

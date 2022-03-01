@@ -94,10 +94,12 @@ add_action( 'init', 'badgeos_register_rank_shortcode' );
  * @return string 	   HTML markup.
  */
 function badgeos_rank_shortcode( $atts = array() ) {
-
+    
+    global $wpdb;
+    
 	// get the post id
 	$atts = shortcode_atts( array(
-        'id' => get_the_ID(),
+        'id' => '',
         'show_title'  => 'true',
         'show_thumb'  => 'true',
         'show_description'  => 'true',
@@ -106,9 +108,17 @@ function badgeos_rank_shortcode( $atts = array() ) {
     ), $atts, 'badgeos_rank' );
 
 	// return if post id not specified
-	if ( empty($atts['id']) )
-	  return;
-
+    $settings = ( $exists = badgeos_utilities::get_option( 'badgeos_settings' ) ) ? $exists : array();
+	if ( empty($atts['id']) ) {
+        $ranks = $wpdb->get_results( $wpdb->prepare( "select * from ".$wpdb->prefix."badgeos_ranks where rank_type!=%s and user_id=%d order by actual_date_earned desc limit 1", trim( $settings['ranks_step_post_type'] ), get_current_user_id() ) );
+        if( count( $ranks ) > 0 ) {
+            $atts['id'] = $ranks[0]->rank_id;
+        }
+    }
+    
+    if ( empty($atts['id']) ) {
+        return false;
+    }
 	wp_enqueue_style( 'badgeos-front' );
 	wp_enqueue_script( 'badgeos-achievements' );
 
