@@ -149,7 +149,7 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                     <?php if( ! empty( $rec->image ) && file_exists( $badge_directory.$rec->image ) ) { ?>
                         <img src="<?php echo $badge_url.$rec->image;?>" with="100%" />
                     <?php } else { ?>
-                        <?php echo badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' ); ?>
+                        <?php echo apply_filters( 'badgeos_attachment_email', badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' ), $achievement_id ); ?>
                     <?php  } ?>
                     
                     <div class="verification"> 
@@ -161,14 +161,14 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
                 <div class="right_col">
                     <h3 class="title"><?php echo $rec->achievement_title;?></h3>        
                     <?php $content = ''; ?>
-                    <?php echo apply_filters( 'badgeos_evidence_before_post_content', $content, $achievement );?>
+                    <?php echo apply_filters( 'badgeos_evidence_before_post_content','', $content, $achievement );?>
                     <?php if( $achievement ) {  ?>
                     <?php $content = $achievement->post_content; ?>    
                         <p>
-                            <?php echo $content; ?>
+                            <?php echo wpautop( $content ); ?>
                         </p>
                     <?php } ?>
-                    <?php echo apply_filters( 'badgeos_evidence_after_post_content', $content, $achievement );?>
+                    <?php echo apply_filters( 'badgeos_evidence_after_post_content','',  $content, $achievement );?>
                     <div class="badgeos_user_name"><strong><?php echo _e( 'Receiver', 'badgeos' );?>:</strong> <?php echo $user->display_name;?></div>
                     <div class="badgeos_issuer_name"><strong><?php echo _e( 'Issuer', 'badgeos' );?>:</strong> <?php bloginfo( 'name' ); ?></div>
                     <div class="badgeos_issue_date"><strong><?php echo _e( 'Issue Date', 'badgeos' );?>:</strong> <?php echo date( badgeos_utilities::get_option('date_format'), strtotime( $rec->date_earned ) );?></div>
@@ -196,7 +196,7 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
 
         $output = ob_get_clean();
 
-        return $output;
+        return apply_filters( 'badgeos_evidence_page_content', $output, $achievement  );
     }
     
     /**
