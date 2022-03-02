@@ -147,9 +147,9 @@ function badgeos_openbadge_evidence_shortcode( $atts = array() ) {
             <div class="evidence_main">
                 <div class="left_col">
                     <?php if( ! empty( $rec->image ) && file_exists( $badge_directory.$rec->image ) ) { ?>
-                        <img src="<?php echo $badge_url.$rec->image;?>" with="100%" />
+                        <?php echo apply_filters( 'badgeos_attachment_image', '<img src="'.$badge_url.$rec->image.'" with="100%" />', $achievement_id ); ?>
                     <?php } else { ?>
-                        <?php echo apply_filters( 'badgeos_attachment_email', badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' ), $achievement_id ); ?>
+                        <?php echo apply_filters( 'badgeos_attachment_image', badgeos_get_achievement_post_thumbnail( $achievement_id, 'full' ), $achievement_id ); ?>
                     <?php  } ?>
                     
                     <div class="verification"> 
