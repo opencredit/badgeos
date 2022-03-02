@@ -8,7 +8,7 @@
 * New: Added "Achievement to the first X users" trigger on Achievements.
 * New: Added "Points to the first X users" trigger on Points.
 * New: Added "Rank to the first X users" trigger on Ranks.
-* New: Added two new filters i.e "badgeos_attachment_email" and "badgeos_evidence_page_content" on evidence page.
+* New: Added two new filters i.e "badgeos_attachment_image" and "badgeos_evidence_page_content" on evidence page.
 * New: Added wpautop() function on evidence page content.
 * New: Added wpautop() function on evidence page content.
 * New: Added the Achievement, Rank, and Points award Emails on the bulk award.
